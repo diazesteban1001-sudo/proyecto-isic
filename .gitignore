@@ -4,6 +4,10 @@ data/
 # Configuracion local de Claude Code (permisos por maquina)
 .claude/settings.local.json
 
+# Andamio de verificacion: servidor estatico para mirar informe/demo.html
+# en el navegador. El entregable abre con doble clic, no lo necesita.
+.claude/launch.json
+
 # Python
 __pycache__/
 *.py[cod]

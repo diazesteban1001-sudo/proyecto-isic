@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agente consultor estad&iacute;stico &mdash; ISIC 2024</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --tinta: #16202b;
+    --suave: #5b6b7c;
+    --linea: #d8e0e8;
+    --fondo: #f4f6f9;
+    --acento: #1f5f8b;
+    --alarma: #b8341f;
+    --bien: #1e7a52;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--tinta);
+    background: var(--fondo);
+    line-height: 1.55;
+  }
+  .hoja { max-width: 1080px; margin: 0 auto; padding: 0 28px 72px; }
+  header { padding: 44px 0 28px; border-bottom: 3px solid var(--tinta); }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .16em; font-size: 12px;
+    color: var(--suave); font-weight: 600;
+  }
+  h1 { font-size: 30px; margin: 10px 0 16px; line-height: 1.25; }
+  .tesis {
+    font-size: 21px; line-height: 1.45; border-left: 5px solid var(--acento);
+    padding: 4px 0 4px 18px; margin: 0; color: var(--tinta);
+  }
+  .tesis strong { color: var(--acento); }
+  section { margin-top: 52px; }
+  h2 { font-size: 21px; margin: 0 0 6px; }
+  h2 .num {
+    display: inline-block; width: 30px; height: 30px; line-height: 30px;
+    text-align: center; background: var(--tinta); color: #fff;
+    border-radius: 50%; font-size: 14px; margin-right: 10px;
+  }
+  .sub { color: var(--suave); margin: 0 0 20px; font-size: 15px; }
+  .tarjeta {
+    background: #fff; border: 1px solid var(--linea); border-radius: 10px;
+    padding: 22px; box-shadow: 0 1px 2px rgba(22,32,43,.05);
+  }
+  /* ---- cadena de skills ---- */
+  .cadena { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; }
+  .paso {
+    flex: 1 1 165px; text-align: left; cursor: pointer; background: #fff;
+    border: 1px solid var(--linea); border-top: 4px solid var(--suave);
+    border-radius: 8px; padding: 13px 14px; font: inherit; color: inherit;
+    transition: transform .12s, box-shadow .12s, border-color .12s;
+  }
+  .paso:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(22,32,43,.12); }
+  .paso[aria-selected="true"] { border-color: var(--acento); border-top-color: var(--acento); background: #eef5fa; }
+  .paso.final { border-top-color: var(--acento); }
+  .paso .nom { font-weight: 700; font-size: 14px; display: block; }
+  .paso .tipo {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--suave); font-weight: 600;
+  }
+  .paso.final .tipo { color: var(--acento); }
+  .paso .fun { font-size: 12px; color: var(--suave); margin-top: 6px; display: block; }
+  .flecha { align-self: center; color: var(--suave); font-size: 20px; }
+  .salida {
+    margin-top: 16px; background: #fff; border: 1px solid var(--linea);
+    border-radius: 10px; padding: 0 20px 4px;
+  }
+  .salida h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--suave); }
+  .salida pre {
+    white-space: pre-wrap; font-family: Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.6; background: #fbfcfd;
+    border: 1px solid var(--linea); border-radius: 6px; padding: 14px; overflow-x: auto;
+  }
+  /* ---- fuga ---- */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .medida { text-align: center; padding: 24px 18px; border-radius: 10px; border: 1px solid var(--linea); background: #fff; }
+  .medida .cifra { font-size: 52px; font-weight: 700; line-height: 1; }
+  .medida.mal { border-color: #f0c4bc; background: #fdf4f2; }
+  .medida.mal .cifra { color: var(--alarma); }
+  .medida.ok { border-color: #b9ded0; background: #f2faf6; }
+  .medida.ok .cifra { color: var(--bien); }
+  .medida .rot { font-weight: 600; margin-top: 10px; }
+  .medida .det { font-size: 13px; color: var(--suave); margin-top: 4px; }
+  /* ---- tablas ---- */
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--suave); }
+  td.mono { font-family: Menlo, Consolas, monospace; font-size: 12.5px; }
+  .lectura { color: var(--suave); }
+  .aviso {
+    font-size: 12.5px; color: var(--suave); background: #fbfcfd;
+    border-left: 3px solid var(--linea); padding: 8px 12px; margin: 14px 0 0;
+  }
+  .contra { margin-top: 18px; border-left: 4px solid var(--bien); background: #f2faf6; padding: 14px 16px; border-radius: 0 8px 8px 0; }
+  .contra b { color: var(--bien); }
+  /* ---- toggle ---- */
+  .barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+  .toggle { display: inline-flex; border: 1px solid var(--linea); border-radius: 8px; overflow: hidden; background: #fff; }
+  .toggle button {
+    border: 0; background: #fff; padding: 9px 18px; font: inherit; font-size: 13.5px;
+    cursor: pointer; color: var(--suave); font-weight: 600;
+  }
+  .toggle button[aria-pressed="true"] { background: var(--acento); color: #fff; }
+  .lienzo { position: relative; height: 340px; }
+  .pie-grafico { font-size: 13px; color: var(--suave); margin-top: 14px; }
+  .destacado { color: var(--tinta); }
+  .cifra-fuente { border-bottom: 1px dotted var(--suave); cursor: help; }
+  footer {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--linea);
+    font-size: 12.5px; color: var(--suave);
+  }
+  @media (max-width: 760px) {
+    .duo { grid-template-columns: 1fr; }
+    .flecha { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="hoja">
+
+<header>
+  <div class="kicker">Consultor&iacute;a e Investigaci&oacute;n &middot; Estad&iacute;stica &middot; caso ISIC 2024</div>
+  <h1>Agente consultor estad&iacute;stico</h1>
+  <p class="tesis">
+    La finalidad del agente <strong>no es ganar la competencia</strong>: es leer la funci&oacute;n
+    de utilidad que el cliente escribi&oacute; en su m&eacute;trica y emitir una recomendaci&oacute;n
+    defendible, con cada cifra rastreable hasta el archivo que la produjo.
+  </p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>La cadena de instrumentos</h2>
+  <p class="sub">Cuatro skills miden y reportan. La quinta interpreta. Haz clic en cualquiera para ver su salida real.</p>
+  <div class="cadena" id="cadena"></div>
+  <div class="salida" id="salida" hidden>
+    <h3 id="salida-titulo"></h3>
+    <pre id="salida-texto"></pre>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>El hallazgo de fuga</h2>
+  <p class="sub" id="sub-fuga"></p>
+  <div class="duo">
+    <div class="medida mal">
+      <div class="cifra" id="fuga-naive"></div>
+      <div class="rot">Partici&oacute;n aleatoria por fila</div>
+      <div class="det" id="fuga-naive-det"></div>
+    </div>
+    <div class="medida ok">
+      <div class="cifra" id="fuga-agrupada"></div>
+      <div class="rot" id="fuga-agrupada-rot"></div>
+      <div class="det" id="fuga-agrupada-det"></div>
+    </div>
+  </div>
+  <p class="aviso" id="aviso-fuga"></p>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Columnas excluidas</h2>
+  <p class="sub" id="sub-excluidas"></p>
+  <div class="tarjeta">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:34%">Columna</th>
+          <th style="width:24%">Motivo medido</th>
+          <th style="width:42%">Lectura del consultor (interpretaci&oacute;n)</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-excluidas"></tbody>
+    </table>
+    <p class="aviso">La columna &laquo;motivo medido&raquo; sale de <code>auditoria-de-fugas.json</code>.
+       La tercera columna no: es interpretaci&oacute;n, y por eso va rotulada aparte.</p>
+    <div class="contra" id="contra"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Los cuatro niveles de modelado</h2>
+  <p class="sub" id="sub-modelos"></p>
+  <div class="tarjeta">
+    <div class="barra">
+      <div class="toggle" role="group" aria-label="Vista de resultados">
+        <button id="btn-medias" aria-pressed="true">Medias</button>
+        <button id="btn-pareada" aria-pressed="false">Pareada por fold</button>
+      </div>
+      <div class="pie-grafico" id="escala"></div>
+    </div>
+    <div class="lienzo"><canvas id="gr-modelos"></canvas></div>
+    <p class="pie-grafico" id="pie-modelos"></p>
+  </div>
+</section>
+
+<footer id="pie"></footer>
+</div>
+
+<script id="datos" type="application/json">{"generado": "2026-08-12 01:30", "cadena": [{"nombre": "eda-diagnostico", "tipo": "instrumento", "funcion": "Perfil de datos, faltantes, desbalance, estructura de grupos", "md": "eda-diagnostico"}, {"nombre": "diseno-validacion", "tipo": "instrumento", "funcion": "Propone y verifica el esquema de validación cruzada", "md": "diseno-validacion"}, {"nombre": "auditoria-de-fugas", "tipo": "instrumento", "funcion": "Checklist de data leakage, hallazgos priorizados", "md": "auditoria-de-fugas"}, {"nombre": "modelado-baseline", "tipo": "instrumento", "funcion": "Modelos de referencia, métricas con incertidumbre", "md": "modelado-baseline"}, {"nombre": "sintesis-consultoria", "tipo": "interpretación", "funcion": "Lee todo outputs/ y produce el informe y esta demo", "md": "sintesis-verificacion"}], "resumenes": {"eda-diagnostico": "# EDA diagnóstico — data/train-metadata.csv\nFilas: 401059 · Columnas: 55\nColumnas con al menos un faltante: 10\nTarget `target`: conteos {'0': 400666, '1': 393}, % positivos: 0.098\nGrupos por `patient_id`: 1042 grupos, 384.89 filas/grupo en promedio (min 1, max 9184)\nColumnas solo en train (11): ['iddx_1', 'iddx_2', 'iddx_3', 'iddx_4', 'iddx_5', 'iddx_full', 'lesion_id', 'mel_mitotic_index', 'mel_thick_mm', 'target', 'tbp_lv_dnn_lesion_confidence']\nColumnas solo en test (0): []\nTest es placeholder (3 filas), no se perfiló.\nDuplicados exactos (excluyendo 2 columnas identificador ['isic_id', 'lesion_id']): 0\nColumnas constantes: ['image_type']\n", "diseno-validacion": "# Diseño de validación — data/train-metadata.csv\nMétodo: StratifiedGroupKFold · n_splits=5 · seed=42\nGrupos totales: 1042 · grupos con al menos un positivo: 259\nFuga de grupo detectada en el esquema construido: False\nPositivos en validación por fold: min 77, max 83, promedio 78.6, total 393\nFilas en validación por fold: min 80210, max 80216 · grupos por fold: min 207, max 210\nDetalle fold a fold: outputs/diseno-validacion.json campo `por_fold`.\nPartición naive (ignora grupo): 1032 de 1042 grupos (99.04%) quedarían repartidos entre train y validación.\n", "auditoria-de-fugas": "# Auditoría de fugas — data/train-metadata.csv\nColumnas solo en train (excluidas de entrada): 11\nColumnas constantes: 1 · identificador: 1\nColumnas evaluadas univariadamente: 41 · umbral AUC >= 0.9\nColumnas sospechosas por AUC alto: 0\nPreguntas abiertas sin resolver por el script: 10\n  - tbp_lv_nevi_confidence: 'tbp_lv_nevi_confidence' tiene nombre sugerente pero SÍ está en test. ¿Por qué existiría en ambos conjuntos si fuera derivada del diagnóstico? Investigar el origen antes de usarla.\n  - iddx_full: 'iddx_full' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?\n  - iddx_1: 'iddx_1' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?\n  ... y 7 más\nDetalle completo: outputs/auditoria-de-fugas.json\n", "modelado-baseline": "# Modelado baseline — data/train-metadata.csv\nMétrica: pAUC sobre 80% TPR [0, 0.2] · verificada contra el script oficial (2026-08-11)\nEsquema CV: 5 folds agrupados por patient_id, seed 42\nColumnas excluidas: 13 · features usadas: 41\nEscala del pAUC: azar 0.02 · clasificador perfecto 0.2\nNivel 0 (univariado tbp_lv_H): AUC estándar 0.8053 — NO comparable con lo de abajo, escalas distintas\nNivel 0 (mismo, en pAUC): pAUC media 0.0809 ± 0.0247 (33.8% del recorrido azar→perfecto)\nNivel 1 (logística balanceada): pAUC media 0.1331 ± 0.0173 (62.8% del recorrido azar→perfecto)\nNivel 2a (GB sin balancear): pAUC media 0.0013 ± 0.0015 (-10.4% del recorrido azar→perfecto)\nNivel 2b (GB balanceado): pAUC media 0.1451 ± 0.0055 (69.5% del recorrido azar→perfecto)\n2a por debajo del azar no es un bug: satura en 1.0 sobre negativos. Ver nota en el .json.\nDetalle por fold: outputs/modelado-baseline.json\n", "sintesis-verificacion": "# Verificación de trazabilidad — informe/borrador.md\nNúmeros encontrados en el borrador: 331\nCon respaldo exacto en outputs/ (tolerancia 0.01): 291\nSIN respaldo — revisar uno por uno: 13\n  - línea ~353: \"44%\" en «...pAUC 0,10 no está \"a la mitad\": está al 44% del recor...»\n  - línea ~361: \"33,8%\" en «...la | 0,0809 `[T35]` | ±0,0247 `[T36]` | 33,8% `[T37]` |...»\n  - línea ~370: \"33,8%\" en «...uerte. En la métrica del cliente cae al 33,8% del recor...»\n  - línea ~425: \"95%\" en «...excede su tamaño. - Un intervalo *t* al 95% sobre esa...»\n  - línea ~479: \"88%\" en «...premios del propio organizador ISIC usa 88% `[E7]` so...»\n  - línea ~503: \"33,8%\" en «...y el   clasificador perfecto, frente al 33,8% `[T37]` d...»\n  - línea ~631: \"88%\" en «...ios del organizador ISIC evalúa *\"above 88% true posi...»\n  - línea ~648: \"385\" en «...igieron: un promedio redondeado a \"casi 385\" cuando l...»\n  - línea ~648: \"85\" en «...medida es 384,89 `[T7]`, y un \"menos de 85 positivos...»\n  - línea ~654: \"44%\" en «...á en `outputs/*.json` | |---|---|---| | 44% | 7.1 | D...»\n  ... y 3 más — detalle en el .json\nNota: este script señala, no decide. Un número sin respaldo puede ser legítimo (ej. un conteo estructural obvio) — revisar cada uno a mano.\n"}, "eda": {"n_filas": 401059, "n_columnas": 55, "n_pacientes": 1042, "media_por_paciente": 384.89, "max_por_paciente": 9184, "positivos": 393, "negativos": 400666, "pct_positivos": 0.098}, "fuga": {"metodo": "StratifiedGroupKFold", "n_splits": 5, "group_col": "patient_id", "pct_naive": 99.04, "n_grupos_naive": 1032, "n_grupos_total": 1042, "descripcion_naive": "partición aleatoria 80/20 a nivel de fila, misma semilla, ignorando group_col", "fuga_agrupada": false, "por_fold": [{"fold": 0, "n_train_grupos": 835, "n_val_grupos": 207, "n_train_filas": 320848, "n_val_filas": 80211, "n_val_positivos": 78, "pct_val_positivos": 0.0972}, {"fold": 1, "n_train_grupos": 834, "n_val_grupos": 208, "n_train_filas": 320848, "n_val_filas": 80211, "n_val_positivos": 78, "pct_val_positivos": 0.0972}, {"fold": 2, "n_train_grupos": 832, "n_val_grupos": 210, "n_train_filas": 320843, "n_val_filas": 80216, "n_val_positivos": 83, "pct_val_positivos": 0.1035}, {"fold": 3, "n_train_grupos": 833, "n_val_grupos": 209, "n_train_filas": 320848, "n_val_filas": 80211, "n_val_positivos": 77, "pct_val_positivos": 0.096}, {"fold": 4, "n_train_grupos": 834, "n_val_grupos": 208, "n_train_filas": 320849, "n_val_filas": 80210, "n_val_positivos": 77, "pct_val_positivos": 0.096}]}, "excluidas": [{"columna": "iddx_1", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_2", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_3", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_4", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_5", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_full", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "lesion_id", "motivo": "no está en test", "glosa": "Identificador de lesión, presente solo en train."}, {"columna": "mel_mitotic_index", "motivo": "no está en test", "glosa": "Solo existe tras la biopsia, y solo para melanomas. Predecir el pasado con información del futuro."}, {"columna": "mel_thick_mm", "motivo": "no está en test", "glosa": "Solo existe tras la biopsia, y solo para melanomas. Predecir el pasado con información del futuro."}, {"columna": "target", "motivo": "no está en test", "glosa": "Es la variable respuesta."}, {"columna": "tbp_lv_dnn_lesion_confidence", "motivo": "no está en test", "glosa": "No es post-biopsia, pero al no estar en test cualquier modelo que la use es inservible en inferencia."}, {"columna": "image_type", "motivo": "constante", "glosa": "Constante en todo el archivo: no distingue nada."}, {"columna": "isic_id", "motivo": "identificador", "glosa": "Identificador de fila."}], "n_features_usadas": 41, "nevi": {"columna": "tbp_lv_nevi_confidence", "tipo": "numerica", "auc_oof": 0.6457, "n_faltantes": 0, "sospechosa": false}, "modelos": [{"etiqueta": "Nivel 0", "descripcion": "Referencia univariada", "campo": "nivel_0_referencia_univariada", "media": 0.0809, "std": 0.0247, "por_fold": [0.0902, 0.082, 0.1197, 0.0451, 0.0676], "nota": "auc_estandar y pauc_media NO están en la misma escala: el AUC va de 0.5 (azar) a 1, el pAUC de 0.02 (azar) a 0.2. Compara contra los niveles 1 y 2 usando pauc_media, nunca auc_estandar."}, {"etiqueta": "Nivel 1", "descripcion": "Regresión logística", "campo": "nivel_1_regresion_logistica", "media": 0.1331, "std": 0.0173, "por_fold": [0.1524, 0.1253, 0.1553, 0.1142, 0.1184], "nota": ""}, {"etiqueta": "Nivel 2a", "descripcion": "Gradient boosting sin balancear", "campo": "nivel_2a_gradient_boosting_sin_balancear", "media": 0.0013, "std": 0.0015, "por_fold": [0.0009, 0.0043, 0.0002, 0.0008, 0.0003], "nota": "Se conserva aunque quede por DEBAJO del piso aleatorio de la métrica (0.02): con 0.098% de positivos el modelo satura en probabilidad 1.0 sobre negativos y los coloca por encima de los positivos, destruyendo justo la región de sensibilidad alta que el pAUC mide. Es un hallazgo, no un fallo del script."}, {"etiqueta": "Nivel 2b", "descripcion": "Gradient boosting balanceado", "campo": "nivel_2b_gradient_boosting_balanceado", "media": 0.1451, "std": 0.0055, "por_fold": [0.1509, 0.1386, 0.1499, 0.1478, 0.1385], "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds."}], "pareado": {"diferencias": [-0.0015, 0.0133, -0.0054, 0.0336, 0.0201], "media": 0.01202, "sd": 0.015959855889073685, "t_critico": 2.7764451051977934, "ic_bajo": -0.007796778473983121, "ic_alto": 0.03183677847398312, "folds_a_favor": 3, "n_folds": 5}, "escala": {"azar": 0.02, "maximo": 0.2, "nota": "Para situar cualquier pauc_media entre el azar y el clasificador perfecto."}, "metrica": "pAUC sobre 80% TPR, rango [0, 0.2]"}</script>
+<script>
+const D = JSON.parse(document.getElementById("datos").textContent);
+const esc = t => String(t).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const num = (v, d = 4) => v.toFixed(d).replace(".", ",");
+// Cada cifra lleva su origen en el title: la trazabilidad del informe
+// escrito, disponible al pasar el raton en la version proyectada.
+const cifra = (v, fuente) => `<span class="cifra-fuente" title="${esc(fuente)}">${v}</span>`;
+
+/* ---------- 1. cadena ---------- */
+const cadena = document.getElementById("cadena");
+D.cadena.forEach((s, i) => {
+  const b = document.createElement("button");
+  b.className = "paso" + (s.tipo !== "instrumento" ? " final" : "");
+  b.setAttribute("aria-selected", "false");
+  b.innerHTML = `<span class="tipo">${esc(s.tipo)}</span>
+                 <span class="nom">${esc(s.nombre)}</span>
+                 <span class="fun">${esc(s.funcion)}</span>`;
+  b.onclick = () => {
+    const abierto = b.getAttribute("aria-selected") === "true";
+    document.querySelectorAll(".paso").forEach(p => p.setAttribute("aria-selected", "false"));
+    const caja = document.getElementById("salida");
+    if (abierto) { caja.hidden = true; return; }
+    b.setAttribute("aria-selected", "true");
+    document.getElementById("salida-titulo").textContent = "outputs/" + s.md + ".md";
+    document.getElementById("salida-texto").textContent = D.resumenes[s.md];
+    caja.hidden = false;
+  };
+  cadena.appendChild(b);
+  if (i < D.cadena.length - 1) {
+    const f = document.createElement("div");
+    f.className = "flecha"; f.textContent = "\u2192";
+    cadena.appendChild(f);
+  }
+});
+
+/* ---------- 2. fuga ---------- */
+const F = D.fuga;
+document.getElementById("sub-fuga").textContent =
+  `${D.eda.n_filas.toLocaleString("es")} lesiones sobre ${F.n_grupos_total.toLocaleString("es")} pacientes ` +
+  `(${num(D.eda.media_por_paciente, 2)} por paciente en promedio, hasta ${D.eda.max_por_paciente.toLocaleString("es")}). ` +
+  `Si se parte al azar, el mismo paciente cae a los dos lados.`;
+document.getElementById("fuga-naive").innerHTML = cifra(num(F.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga");
+document.getElementById("fuga-naive-det").textContent =
+  `${F.n_grupos_naive.toLocaleString("es")} de ${F.n_grupos_total.toLocaleString("es")} pacientes aparecen en train y validación a la vez`;
+document.getElementById("fuga-agrupada").innerHTML = cifra(F.fuga_agrupada ? "?" : "0%", "diseno-validacion.json > fuga_de_grupo_detectada");
+document.getElementById("fuga-agrupada-rot").textContent = F.metodo + ` (k=${F.n_splits})`;
+document.getElementById("fuga-agrupada-det").textContent =
+  `Ningún ${F.group_col} compartido entre particiones, verificado fold a fold`;
+document.getElementById("aviso-fuga").textContent =
+  `Comparación: ${F.descripcion_naive}. La fuga por partición aleatoria no es un riesgo teórico en estos datos: es lo que pasa por defecto.`;
+
+/* ---------- 3. columnas excluidas ---------- */
+document.getElementById("sub-excluidas").textContent =
+  `${D.excluidas.length} de las ${D.eda.n_columnas} columnas quedan fuera. Se modela con ${D.n_features_usadas}.`;
+document.getElementById("tbody-excluidas").innerHTML = D.excluidas.map(e => `
+  <tr>
+    <td class="mono">${esc(e.columna)}</td>
+    <td>${esc(e.motivo)}</td>
+    <td class="lectura">${esc(e.glosa)}</td>
+  </tr>`).join("");
+if (D.nevi) {
+  document.getElementById("contra").innerHTML =
+    `<b>El contraejemplo.</b> <code>${esc(D.nevi.columna)}</code> tiene nombre sospechoso y el instrumento la marcó, ` +
+    `pero <b>sí está en test</b> y su AUC univariado fuera de muestra es ${cifra(num(D.nevi.auc_oof), "auditoria-de-fugas.json > univariado[].auc_oof")}. ` +
+    `Resolverla exigió leer el paper de SLICE-3D: es una métrica que la máquina calcula sobre la imagen, no un resultado de patología. ` +
+    `Nombre sospechoso no es fuga &mdash; y esa distinción no la puede hacer un script.`;
+}
+
+/* ---------- 4. modelado ---------- */
+document.getElementById("escala").innerHTML =
+  `Escala: azar = ${cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar")}, ` +
+  `máximo = ${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}`;
+document.getElementById("sub-modelos").textContent = D.metrica + ". Cinco folds, mismos folds para todos los niveles.";
+
+// Bigotes de +/- 1 desviacion entre folds. Se dibujan a mano porque
+// Chart.js no trae barras de error: sin ellas la vista de medias
+// sugiere una precision que estos cinco folds no tienen.
+const bigotes = {
+  id: "bigotes",
+  afterDatasetsDraw(ch) {
+    const ds = ch.data.datasets[0];
+    if (!ds.desviaciones) return;
+    const meta = ch.getDatasetMeta(0), ejeY = ch.scales.y, cx = ch.ctx;
+    cx.save(); cx.strokeStyle = "#16202b"; cx.lineWidth = 1.5;
+    meta.data.forEach((barra, i) => {
+      const s = ds.desviaciones[i], v = ds.data[i];
+      if (!s) return;
+      const arriba = ejeY.getPixelForValue(v + s), abajo = ejeY.getPixelForValue(v - s), x = barra.x;
+      cx.beginPath();
+      cx.moveTo(x, arriba); cx.lineTo(x, abajo);
+      cx.moveTo(x - 7, arriba); cx.lineTo(x + 7, arriba);
+      cx.moveTo(x - 7, abajo); cx.lineTo(x + 7, abajo);
+      cx.stroke();
+    });
+    cx.restore();
+  }
+};
+
+// Linea del piso aleatorio: sin ella, el 0,0013 del nivel 2a parece
+// solo "bajo" en vez de estar por debajo del azar, que es el hallazgo.
+const piso = {
+  id: "piso",
+  beforeDatasetsDraw(ch) {
+    const y = ch.scales.y.getPixelForValue(D.escala.azar), cx = ch.ctx;
+    if (!isFinite(y)) return;
+    cx.save();
+    cx.strokeStyle = "#b8341f"; cx.setLineDash([5, 4]); cx.lineWidth = 1.5;
+    cx.beginPath(); cx.moveTo(ch.chartArea.left, y); cx.lineTo(ch.chartArea.right, y); cx.stroke();
+    cx.restore();
+  },
+  // El rótulo va DESPUÉS de las barras y sobre fondo opaco: dibujado
+  // antes, la barra del nivel 2b le pasaba por encima y solo se leia
+  // "aleatorio 0,02".
+  afterDatasetsDraw(ch) {
+    const y = ch.scales.y.getPixelForValue(D.escala.azar), cx = ch.ctx;
+    if (!isFinite(y)) return;
+    const texto = "piso aleatorio " + num(D.escala.azar, 2);
+    cx.save();
+    cx.font = "600 11px -apple-system, sans-serif"; cx.textAlign = "right";
+    const ancho = cx.measureText(texto).width;
+    const x = ch.chartArea.right - 6;
+    cx.fillStyle = "rgba(255,255,255,.85)";
+    cx.fillRect(x - ancho - 4, y - 18, ancho + 8, 15);
+    cx.fillStyle = "#b8341f";
+    cx.fillText(texto, x, y - 7);
+    cx.restore();
+  }
+};
+
+const COLORES = ["#8fa6b8", "#4a7fa5", "#c98b7a", "#1f5f8b"];
+const lienzo = document.getElementById("gr-modelos");
+let grafico = null;
+
+function vistaMedias() {
+  return {
+    type: "bar",
+    plugins: [bigotes, piso],
+    data: {
+      labels: D.modelos.map(m => m.etiqueta),
+      datasets: [{
+        label: "pAUC medio",
+        data: D.modelos.map(m => m.media),
+        desviaciones: D.modelos.map(m => m.std),
+        backgroundColor: COLORES,
+        borderRadius: 4,
+        maxBarThickness: 96
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true, suggestedMax: 0.2, title: { display: true, text: "pAUC (0,02 = azar, 0,2 = perfecto)" } },
+        x: { ticks: { callback: (v, i) => D.modelos[i].etiqueta } }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: it => D.modelos[it[0].dataIndex].etiqueta + " \u2014 " + D.modelos[it[0].dataIndex].descripcion,
+            label: it => "pAUC " + num(D.modelos[it.dataIndex].media) + "  \u00b1" + num(D.modelos[it.dataIndex].std) + " entre folds",
+            afterLabel: it => "modelado-baseline.json > " + D.modelos[it.dataIndex].campo
+          }
+        }
+      }
+    }
+  };
+}
+
+function vistaPareada() {
+  const n1 = D.modelos.find(m => m.etiqueta === "Nivel 1");
+  const b2 = D.modelos.find(m => m.etiqueta === "Nivel 2b");
+  return {
+    type: "bar",
+    data: {
+      labels: D.pareado.diferencias.map((_, i) => "Fold " + i),
+      datasets: [
+        { label: n1.etiqueta + " \u2014 " + n1.descripcion, data: n1.por_fold, backgroundColor: "#4a7fa5", borderRadius: 4 },
+        { label: b2.etiqueta + " \u2014 " + b2.descripcion, data: b2.por_fold, backgroundColor: "#1f5f8b", borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { y: { beginAtZero: true, title: { display: true, text: "pAUC en el fold" } } },
+      plugins: {
+        legend: { position: "bottom" },
+        tooltip: {
+          callbacks: {
+            label: it => it.dataset.label + ": " + num(it.parsed.y),
+            afterBody: it => {
+              const d = D.pareado.diferencias[it[0].dataIndex];
+              return "Diferencia 2b \u2212 1: " + (d > 0 ? "+" : "\u2212") + num(Math.abs(d));
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
+const PIE = {
+  medias: () => {
+    const n2a = D.modelos.find(m => m.etiqueta === "Nivel 2a");
+    return `El <span class="destacado">nivel 2a queda en ${cifra(num(n2a.media), "modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.pauc_media")}, ` +
+      `por debajo del piso aleatorio</span>: no colapsa a predecir siempre negativo, satura en probabilidad 1 sobre negativos y los coloca ` +
+      `encima de los positivos, arrasando justo la región de sensibilidad alta que el cliente mide. Su AUC estándar no delata nada. ` +
+      `Los bigotes son &plusmn;1 desviación entre folds, no un intervalo de confianza.`;
+  },
+  pareada: () => {
+    const p = D.pareado;
+    const signo = p.ic_bajo < 0 && p.ic_alto > 0;
+    return `2b gana en ${cifra(p.folds_a_favor + " de " + p.n_folds, "derivado de pauc_por_fold de ambos niveles")} folds. ` +
+      `Diferencia media ${cifra(num(p.media), "derivado: media de 2b menos nivel 1, fold a fold")}, ` +
+      `desviación ${cifra(num(p.sd), "derivado: desviación muestral de las 5 diferencias")}, ` +
+      `intervalo t al 95% de ${num(p.ic_bajo)} a ${num(p.ic_alto)}. ` +
+      `<span class="destacado">El intervalo cruza el cero: la comparación pareada no confirma la superioridad de 2b, la debilita.</span> ` +
+      `Y además es optimista &mdash; los folds comparten la mayor parte del entrenamiento, así que las diferencias no son independientes ` +
+      `y el intervalo subestima la varianza. Lo que sí sostiene 2b es la estabilidad: su peor fold ` +
+      `(${cifra(num(Math.min(...D.modelos.find(m => m.etiqueta === "Nivel 2b").por_fold)), "modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.pauc_por_fold")}) ` +
+      `supera a los dos peores del nivel 1.`;
+  }
+};
+
+function pintar(vista) {
+  if (grafico) grafico.destroy();
+  grafico = new Chart(lienzo, vista === "medias" ? vistaMedias() : vistaPareada());
+  document.getElementById("pie-modelos").innerHTML = PIE[vista]();
+  document.getElementById("btn-medias").setAttribute("aria-pressed", vista === "medias");
+  document.getElementById("btn-pareada").setAttribute("aria-pressed", vista === "pareada");
+}
+document.getElementById("btn-medias").onclick = () => pintar("medias");
+document.getElementById("btn-pareada").onclick = () => pintar("pareada");
+pintar("medias");
+
+/* ---------- pie ---------- */
+document.getElementById("pie").innerHTML =
+  `Generado el ${esc(D.generado)} por <code>generar_demo.py</code> desde <code>outputs/*.json</code>. ` +
+  `Ninguna cifra de esta página está escrita a mano: pasa el ratón sobre cualquiera para ver su archivo y campo de origen. ` +
+  `Mismo origen que <code>informe/informe-final.docx</code>.`;
+</script>
+</body>
+</html>

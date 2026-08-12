@@ -1,6 +1,6 @@
 ---
 name: sintesis-consultoria
-description: Lee todo outputs/*.json, cruza los hallazgos de las cuatro skills instrumento, y redacta el informe final de consultoría como documento Word. A diferencia de las demás skills del proyecto, esta SÍ interpreta — es su función. Pero cada cifra que aparezca en el informe debe rastrearse hasta un campo específico de un archivo de outputs/, nunca inventarse ni recordarse de memoria. Úsala solo al final, cuando las cuatro skills instrumento ya corrieron sobre los datos reales.
+description: Lee todo outputs/*.json, cruza los hallazgos de las cuatro skills instrumento, y produce los entregables de consultoría — el informe final en Word y la demo interactiva en HTML para la presentación en vivo. A diferencia de las demás skills del proyecto, esta SÍ interpreta — es su función. Pero cada cifra que aparezca en cualquiera de los dos entregables debe rastrearse hasta un campo específico de un archivo de outputs/, nunca inventarse ni recordarse de memoria. Úsala solo al final, cuando las cuatro skills instrumento ya corrieron sobre los datos reales.
 ---
 
 # Síntesis de Consultoría
@@ -27,7 +27,7 @@ sintético de prueba):
 Si falta alguno, dilo explícitamente y detente. No redactes el informe
 con huecos rellenados de memoria.
 
-## Proceso, en dos fases obligatorias
+## Proceso, en fases
 
 ### Fase 1 — Borrador en Markdown
 
@@ -103,10 +103,53 @@ Solo después de que la trazabilidad esté limpia:
    convirtiéndolo a PDF para inspección visual antes de darlo por
    terminado — no asumas que el formato salió bien sin mirarlo.
 
+### Fase 4 — Demo interactiva en HTML
+
+El informe escrito no es la única forma de entregar la síntesis. La
+defensa del trabajo se hace en vivo, y ahí un documento de 17 páginas
+es el formato equivocado: nadie lee una tabla de trazabilidad
+proyectada. `informe/demo.html` es **la misma síntesis en otro
+soporte** — mismos datos, mismas cifras, mismo alcance— presentada
+para ser mirada en una pantalla durante diez minutos.
+
+Que sea un artefacto de esta skill y no una tarea aparte es
+deliberado: si el HTML se construyera por fuera, tendría su propia
+copia de los números y se desincronizaría del informe en la primera
+corrección. Un solo origen (`outputs/*.json`), dos presentaciones.
+
+Se genera con un script, nunca escribiendo el HTML a mano:
+
+```bash
+python .claude/skills/sintesis-consultoria/scripts/generar_demo.py \
+  --outputs-dir outputs/ \
+  --salida informe/demo.html
+```
+
+Reglas, idénticas a las del informe escrito:
+
+- **Ningún número tecleado en el HTML.** El script lee `outputs/*.json`
+  y embebe los valores al generar el archivo. Un número escrito a mano
+  en la plantilla es una cifra inventada, exactamente igual que en el
+  `.docx`.
+- **Mismo alcance de interpretación.** La demo puede ordenar, resaltar
+  y comparar lo medido; no puede afirmar nada que el informe no
+  sostenga. Donde muestre una lectura y no una medición —el porqué de
+  una columna excluida, por ejemplo— debe marcarlo como tal en la
+  propia página.
+- **Autocontenida.** Los datos van embebidos como JSON en el archivo,
+  no se leen con `fetch` en tiempo real: tiene que abrir con doble clic
+  desde una USB, sin servidor y sin depender de rutas relativas. Las
+  librerías de gráficos van por CDN.
+- **Se verifica mirándola**, igual que el `.docx`: abrir en el
+  navegador, accionar los controles interactivos y confirmar que
+  renderiza, no solo que el archivo se escribió.
+
 ## Contrato de salida
 
 - `informe/borrador.md` — el borrador revisable.
-- `informe/informe-final.docx` — el entregable.
+- `informe/informe-final.docx` — el entregable escrito.
+- `informe/demo.html` — el entregable para la presentación en vivo:
+  la misma síntesis, generada desde el mismo `outputs/*.json`.
 - `outputs/sintesis-verificacion.json` y `.md` — resultado de la
   verificación de trazabilidad (números señalados, resueltos o
   justificados).
