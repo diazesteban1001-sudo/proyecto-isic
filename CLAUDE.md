@@ -256,6 +256,25 @@ por clase. Un fold sin un solo positivo hace que la métrica ni siquiera esté
 definida — el script oficial lanza `ValueError` si `y_true` tiene una sola
 clase. `diseno-validacion` tiene ahí su primera verificación obligatoria.
 
+**Tercera nota — `auditoria-de-fugas` ya tiene su primer hallazgo, y es real.**
+Verificado contra los CSV descargados el 2026-08-11: `train-metadata.csv` tiene
+**55 columnas** y `test-metadata.csv` solo **44**. Las 11 que sobran en train:
+
+```
+target, lesion_id, iddx_full, iddx_1, iddx_2, iddx_3, iddx_4, iddx_5,
+mel_mitotic_index, mel_thick_mm, tbp_lv_dnn_lesion_confidence
+```
+
+Tres familias, con implicaciones distintas:
+- `iddx_*` es la taxonomía diagnóstica — es la etiqueta con otro nombre.
+- `mel_mitotic_index` y `mel_thick_mm` solo existen tras la biopsia, y solo para
+  melanomas. Usarlas es predecir el pasado con información del futuro.
+- `tbp_lv_dnn_lesion_confidence` no es post-biopsia, pero al no estar en test
+  cualquier modelo que la use es inservible en inferencia.
+
+Un modelo entrenado con todas las columnas numéricas sin mirar da AUC casi
+perfecto y es inútil. Es el ejemplo canónico para el informe.
+
 ---
 
 ## Decisiones tomadas
@@ -288,7 +307,13 @@ script— como plantilla de referencia para las demás.
       (2026-08-11)
 - [ ] Copiar la página *Code Requirements* de Kaggle a `referencias/` para
       cerrar límites de cómputo e internet en las entregas
-- [ ] Descargar los datos a `data/`
+- [x] Descargar la metadata a `data/` (2026-08-11 — `train-metadata.csv`
+      257 MB / 401.059 filas / 55 columnas, `test-metadata.csv` 3 filas /
+      44 columnas). Cifras del paper confirmadas contra los datos reales:
+      393 positivos (0,098%), 1.042 pacientes.
+- [ ] Descargar `train-image.hdf5` (1,21 GiB) cuando lleguemos al modelado con
+      imágenes. Entorno: `.venv/` con Kaggle CLI 2.2.4; token en
+      `~/.kaggle/access_token`
 - [ ] Escribir las 5 skills
 - [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
 - [ ] Preparar demo en vivo: plantear una pregunta al agente y que invoque las
