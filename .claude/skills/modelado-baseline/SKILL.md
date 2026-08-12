@@ -23,13 +23,24 @@ mejor" ni qué hacer después. Eso lo hace el agente al leer
 
 ## Por qué tres niveles, y qué es cada uno
 
-**Nivel 0 — referencia univariada.** No se re-entrena nada: se toma la
+**Nivel 0 — referencia univariada.** No se entrena nada: se toma la
 columna con mayor AUC individual ya calculada por `auditoria-de-fugas`
-(en ISIC, `tbp_lv_H` con AUC ≈ 0.80). Sirve como piso mínimo — cualquier
-modelo combinado que apenas lo empate no está justificando su propia
-complejidad. Importante: ese número es AUC estándar (rango [0,1]), NO
-pAUC (rango [0, 0.2]). No son comparables en la misma escala; se
-reportan por separado, con la advertencia explícita.
+(en ISIC, `tbp_lv_H` con AUC ≈ 0.80) y se usa cruda como predictor,
+imputada con la mediana del fold de entrenamiento. Sirve como piso
+mínimo — cualquier modelo combinado que apenas lo empate no está
+justificando su propia complejidad.
+
+Se reportan **dos** números para este nivel: el AUC estándar que viene
+del reporte de fugas (rango [0.5, 1]) y el pAUC calculado aquí sobre los
+mismos folds (rango [0.02, 0.2]). No son la misma escala y no se pueden
+comparar entre sí. **Solo el pAUC es comparable con los niveles 1 y 2.**
+Sin ese segundo número el `.md` invitaba a comparar 0.8053 contra 0.1331,
+que es precisamente el error que la advertencia pretendía evitar.
+
+Que ambos existan es informativo por sí solo: en ISIC, `tbp_lv_H` recorre
+el 61% del camino azar→perfecto en AUC estándar pero solo el 33.8% en
+pAUC. Su señal no está donde la sensibilidad es clínicamente aceptable, y
+eso solo se ve mirando la métrica del cliente.
 
 **Nivel 1 — regresión logística balanceada.** El baseline estadístico
 propiamente dicho: interpretable, con `class_weight="balanced"` porque
@@ -41,11 +52,26 @@ de `max_iter` y el pAUC reportado sería el del optimizador detenido a
 medio camino, no el del modelo. El nivel 2 no se escala: a un modelo de
 árboles le da igual.
 
-**Nivel 2 — gradient boosting.** Cota superior realista de lo que la
-metadata tabular puede lograr, sin tocar las imágenes. Usa
-`HistGradientBoostingClassifier` de scikit-learn por defecto (ya está
-instalado, maneja NaN nativamente); si LightGBM está disponible se
-puede usar en su lugar, pero no es una dependencia nueva obligatoria.
+**Nivel 2 — gradient boosting, en dos variantes.** Cota superior realista
+de lo que la metadata tabular puede lograr, sin tocar las imágenes. Usa
+`HistGradientBoostingClassifier` de scikit-learn (ya está instalado,
+maneja NaN nativamente). Se corre **dos veces**, y la única diferencia
+entre las dos es `class_weight`:
+
+- **2a — sin balancear** (`class_weight=None`). En ISIC da pAUC ≈ 0.0013,
+  *por debajo del piso aleatorio de la métrica* (0.02). No es un fallo del
+  script y no se borra: con 0.098% de positivos el modelo satura en
+  probabilidad 1.0 sobre un puñado de negativos y los coloca por encima de
+  los positivos reales, destruyendo justo la región de sensibilidad alta
+  que el pAUC mide. Su AUC estándar (0.67) no deja ver el problema; el
+  pAUC sí. Es el hallazgo más citable de esta skill.
+- **2b — balanceado** (`class_weight="balanced"`). Mismo modelo, misma
+  semilla, mismos folds.
+
+Se conservan las dos porque el contraste es el resultado. Reportar solo
+2b escondería que el desbalance no se manifiesta como "el modelo predice
+siempre negativo" —el diagnóstico que uno espera— sino como confianza
+máxima mal colocada, que es un modo de fallo distinto y peor.
 
 No hay nivel 3. Añadir más modelos aquí es empezar a optimizar el
 leaderboard, que no es el objetivo del proyecto — eso queda fuera del
@@ -93,10 +119,10 @@ python .claude/skills/modelado-baseline/scripts/train_and_evaluate.py \
 ## Contrato de salida
 
 - `outputs/modelado-baseline.json` — resultados completos por nivel y fold.
-- `outputs/modelado-baseline.md` — resumen legible, máximo 15 líneas
-  (fijas por diseño: no crece con `--n-splits`, los folds se resumen
-  como min/max/media, no uno por línea — lección aprendida de
-  diseno-validacion).
+- `outputs/modelado-baseline.md` — resumen legible, máximo 15 líneas.
+  Son 12 fijas: una por nivel, sin ningún bucle sobre folds, así que no
+  crece con `--n-splits` (verificado con 2 y 5). El detalle fold a fold
+  vive en el `.json` — lección aprendida de `diseno-validacion`.
 
 ### Campos del JSON
 
@@ -110,25 +136,42 @@ python .claude/skills/modelado-baseline/scripts/train_and_evaluate.py \
   "n_features_usadas": int,
   "nivel_0_referencia_univariada": {
     "columna": str, "auc_estandar": float,
-    "nota": "AUC estándar, NO pAUC — no comparable directamente con niveles 1 y 2"
+    "pauc_por_fold": [float, ...], "pauc_media": float, "pauc_std": float,
+    "nota": str
   },
   "nivel_1_regresion_logistica": {
     "pauc_por_fold": [float, ...],
     "pauc_media": float, "pauc_std": float
   },
-  "nivel_2_gradient_boosting": {
-    "modelo": "HistGradientBoostingClassifier" | "LightGBM",
-    "pauc_por_fold": [float, ...],
-    "pauc_media": float, "pauc_std": float
+  "nivel_2a_gradient_boosting_sin_balancear": {
+    "modelo": str, "pauc_por_fold": [float, ...],
+    "pauc_media": float, "pauc_std": float, "nota": str
+  },
+  "nivel_2b_gradient_boosting_balanceado": {
+    "modelo": str, "pauc_por_fold": [float, ...],
+    "pauc_media": float, "pauc_std": float, "nota": str
+  },
+  "escala_de_referencia_pauc": {
+    "azar": float, "maximo": float, "nota": str
   }
 }
 ```
 
+`escala_de_referencia_pauc` existe para que nadie tenga que recordar que
+el azar en esta métrica es 0.02 y no 0. El `.md` la usa para expresar
+cada nivel como porcentaje del recorrido azar→perfecto, que es la única
+forma honesta de decir "este modelo es mejor que aquel" cuando el rango
+útil de la métrica no empieza en cero.
+
 ## No interpretes aquí
 
-- "El nivel 2 ganó, es el mejor modelo" → el agente decide si la
+- "El nivel 2b ganó, es el mejor modelo" → el agente decide si la
   diferencia justifica la complejidad adicional, considerando
   interpretabilidad y el argumento clínico de la tesis.
+- "El nivel 2a demuestra que el gradient boosting no sirve aquí" → lo
+  que muestra es qué pasa sin ajustar por el desbalance, con
+  hiperparámetros por defecto y sin tocar las imágenes. Generalizar eso
+  a la familia de modelos es del agente, y probablemente sea falso.
 - "Con esto ya se puede pasar a producción" → fuera del alcance total
   de este proyecto y de esta skill.
 - "El desempeño es (in)suficiente" → sin una referencia externa (no

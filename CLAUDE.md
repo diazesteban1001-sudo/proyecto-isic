@@ -114,6 +114,31 @@ Este `CLAUDE.md` se actualiza al cerrar cada sesión: decisiones tomadas, estado
 actual, siguiente paso. Una conversación por tarea, no una para todo. Commit
 frecuente.
 
+### 5. Código que parece muerto: conectarlo antes de borrarlo
+
+**Antes de eliminar un import, una variable o una rama que parezcan sin uso,
+comprobar si conectarlos cambia el resultado.** Si lo cambia, no era código
+sobrante: era una corrección a medio cablear, y borrarla habría consolidado el
+defecto en vez de limpiarlo.
+
+Esta regla existe porque el patrón ya apareció tres veces, y las tres el código
+inerte marcaba el sitio exacto de un defecto real:
+
+| Dónde | Qué parecía | Qué era en realidad |
+|---|---|---|
+| `eda-diagnostico`, `duplicados_exactos` | Un chequeo que siempre daba 0 | Incluía la clave primaria, así que no podía detectar nada. Vacío de contenido, no correcto. |
+| `auditoria-de-fugas`, `preguntas_abiertas()` | Una rama que nunca se ejecutaba | `auc_alto is None` sobre un `.get(..., False)`. Se comía 9 de las 10 preguntas, incluida `tbp_lv_dnn_lesion_confidence`. |
+| `modelado-baseline`, `StandardScaler` | Un import muerto | La logística no convergía sin escalar. El pAUC reportado era el del optimizador detenido, no el del modelo. |
+
+El contraejemplo también importa: el `StratifiedKFold` de `diseno-validacion`
+sí era un import muerto y se borró sin más. La regla no es "nunca borres", es
+**"comprueba primero, y que la comprobación sea empírica"** — correr el código
+con y sin la pieza, y comparar. Si no cambia nada, fuera.
+
+Corolario para las skills instrumento: un chequeo que no puede fallar no vale
+nada. Cuando se escriba uno, forzar deliberadamente el caso que debería
+detectar y confirmar que se dispara.
+
 ---
 
 ## Estructura del repositorio

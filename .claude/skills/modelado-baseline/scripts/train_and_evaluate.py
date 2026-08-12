@@ -40,7 +40,13 @@ except ImportError:
 from sklearn.model_selection import GroupKFold
 
 
-def pauc_above_tpr(y_true, y_score, min_tpr=0.80):
+# Constante del proyecto: Kaggle evalua el pAUC sobre 80% TPR, rango [0, 0.2]
+# (referencias/kaggle-evaluation.md). Los premios del organizador ISIC usan
+# 0.88 sobre el mismo algoritmo; no es la evaluacion que replicamos.
+MIN_TPR = 0.80
+
+
+def pauc_above_tpr(y_true, y_score, min_tpr=MIN_TPR):
     """pAUC sobre min_tpr. Transcripción del algoritmo oficial del
     organizador (`p_auc_tpr`), copia versionada en
     `referencias/isic-primary-metric-pauc.py.md`. Verificado el 2026-08-11.
@@ -131,6 +137,20 @@ def evaluar_modelo(df, target_col, folds, numericas, categoricas, modelo_fn, esc
     return paucs
 
 
+def evaluar_columna_sola(df, col, target_col, folds):
+    """pAUC del nivel 0: la columna cruda como predictor, imputada con la
+    mediana del fold de entrenamiento. No entrena nada. Se prueba en ambas
+    direcciones porque una columna puede predecir bien 'al revés' — el
+    criterio es el mismo que usa auditoria-de-fugas con max(auc, 1-auc)."""
+    y = df[target_col].values
+    paucs = []
+    for train_idx, val_idx in folds:
+        mediana = df[col].iloc[train_idx].median()
+        s = df[col].iloc[val_idx].fillna(mediana).values
+        paucs.append(max(pauc_above_tpr(y[val_idx], s), pauc_above_tpr(y[val_idx], -s)))
+    return paucs
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True)
@@ -169,14 +189,24 @@ def main():
     numericas, categoricas = preparar_features(df, columnas_excluidas, args.target_col, args.group_col)
     folds = construir_folds(df, args.group_col, args.target_col, args.n_splits, args.seed)
 
-    # Nivel 0: referencia univariada, tomada del reporte de fugas, sin re-entrenar.
+    # Nivel 0: referencia univariada. La columna y su AUC estándar vienen del
+    # reporte de fugas; el pAUC se calcula aquí, sobre los mismos folds, porque
+    # sin él no hay forma de comparar el piso univariado con los niveles 1 y 2.
     univariado = reporte_fugas.get("univariado", [])
     if univariado:
         mejor = max(univariado, key=lambda u: u["auc_oof"])
+        paucs_0 = evaluar_columna_sola(df, mejor["columna"], args.target_col, folds)
         nivel_0 = {
             "columna": mejor["columna"],
             "auc_estandar": mejor["auc_oof"],
-            "nota": "AUC estándar, NO pAUC — no comparable directamente con niveles 1 y 2",
+            "pauc_por_fold": [round(float(p), 4) for p in paucs_0],
+            "pauc_media": round(float(np.mean(paucs_0)), 4),
+            "pauc_std": round(float(np.std(paucs_0)), 4),
+            "nota": (
+                "auc_estandar y pauc_media NO están en la misma escala: el AUC va "
+                "de 0.5 (azar) a 1, el pAUC de 0.02 (azar) a 0.2. Compara contra "
+                "los niveles 1 y 2 usando pauc_media, nunca auc_estandar."
+            ),
         }
     else:
         nivel_0 = {"columna": None, "auc_estandar": None, "nota": "sin datos univariados en el reporte de fugas"}
@@ -187,11 +217,19 @@ def main():
 
     paucs_1 = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_logreg, escalar=True)
 
-    # Nivel 2: gradient boosting.
+    # Nivel 2a: gradient boosting sin ajustar por el desbalance. Se conserva
+    # deliberadamente aunque colapse — el colapso ES el hallazgo, y borrarlo
+    # dejaria el informe sin el contraste con 2b.
     def modelo_gb():
         return HistGradientBoostingClassifier(random_state=args.seed)
 
-    paucs_2 = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_gb)
+    paucs_2a = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_gb)
+
+    # Nivel 2b: el mismo modelo, unica diferencia class_weight="balanced".
+    def modelo_gb_balanceado():
+        return HistGradientBoostingClassifier(random_state=args.seed, class_weight="balanced")
+
+    paucs_2b = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_gb_balanceado)
 
     resultado = {
         "esquema_cv": {"group_col": args.group_col, "n_splits": args.n_splits, "seed": args.seed},
@@ -206,11 +244,30 @@ def main():
             "pauc_media": round(float(np.mean(paucs_1)), 4),
             "pauc_std": round(float(np.std(paucs_1)), 4),
         },
-        "nivel_2_gradient_boosting": {
-            "modelo": "HistGradientBoostingClassifier",
-            "pauc_por_fold": [round(float(p), 4) for p in paucs_2],
-            "pauc_media": round(float(np.mean(paucs_2)), 4),
-            "pauc_std": round(float(np.std(paucs_2)), 4),
+        "nivel_2a_gradient_boosting_sin_balancear": {
+            "modelo": "HistGradientBoostingClassifier(class_weight=None)",
+            "pauc_por_fold": [round(float(p), 4) for p in paucs_2a],
+            "pauc_media": round(float(np.mean(paucs_2a)), 4),
+            "pauc_std": round(float(np.std(paucs_2a)), 4),
+            "nota": (
+                "Se conserva aunque quede por DEBAJO del piso aleatorio de la "
+                "métrica (0.02): con 0.098% de positivos el modelo satura en "
+                "probabilidad 1.0 sobre negativos y los coloca por encima de los "
+                "positivos, destruyendo justo la región de sensibilidad alta que "
+                "el pAUC mide. Es un hallazgo, no un fallo del script."
+            ),
+        },
+        "nivel_2b_gradient_boosting_balanceado": {
+            "modelo": "HistGradientBoostingClassifier(class_weight='balanced')",
+            "pauc_por_fold": [round(float(p), 4) for p in paucs_2b],
+            "pauc_media": round(float(np.mean(paucs_2b)), 4),
+            "pauc_std": round(float(np.std(paucs_2b)), 4),
+            "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds.",
+        },
+        "escala_de_referencia_pauc": {
+            "azar": round(0.5 * (1 - MIN_TPR) ** 2, 4),
+            "maximo": round(1 - MIN_TPR, 4),
+            "nota": "Para situar cualquier pauc_media entre el azar y el clasificador perfecto.",
         },
     }
 
@@ -224,17 +281,30 @@ def main():
     lineas.append("Métrica: pAUC sobre 80% TPR [0, 0.2] · verificada contra el script oficial (2026-08-11)")
     lineas.append(f"Esquema CV: {args.n_splits} folds agrupados por {args.group_col}, seed {args.seed}")
     lineas.append(f"Columnas excluidas: {len(columnas_excluidas)} · features usadas: {resultado['n_features_usadas']}")
-    lineas.append(
-        f"Nivel 0 (univariado, AUC estándar no pAUC): {nivel_0['columna']} = {nivel_0['auc_estandar']}"
-    )
-    lineas.append(
-        f"Nivel 1 (regresión logística balanceada): pAUC media {resultado['nivel_1_regresion_logistica']['pauc_media']} "
-        f"± {resultado['nivel_1_regresion_logistica']['pauc_std']}"
-    )
-    lineas.append(
-        f"Nivel 2 (gradient boosting): pAUC media {resultado['nivel_2_gradient_boosting']['pauc_media']} "
-        f"± {resultado['nivel_2_gradient_boosting']['pauc_std']}"
-    )
+    azar = resultado["escala_de_referencia_pauc"]["azar"]
+    maximo = resultado["escala_de_referencia_pauc"]["maximo"]
+    lineas.append(f"Escala del pAUC: azar {azar} · clasificador perfecto {maximo}")
+
+    def linea_nivel(etiqueta, bloque):
+        # Numero fijo de lineas: una por nivel, sin bucles sobre folds.
+        pct = 100 * (bloque["pauc_media"] - azar) / (maximo - azar)
+        return (
+            f"{etiqueta}: pAUC media {bloque['pauc_media']} ± {bloque['pauc_std']} "
+            f"({pct:.1f}% del recorrido azar→perfecto)"
+        )
+
+    if nivel_0.get("pauc_media") is not None:
+        lineas.append(
+            f"Nivel 0 (univariado {nivel_0['columna']}): AUC estándar {nivel_0['auc_estandar']} "
+            f"— NO comparable con lo de abajo, escalas distintas"
+        )
+        lineas.append(linea_nivel("Nivel 0 (mismo, en pAUC)", nivel_0))
+    else:
+        lineas.append("Nivel 0: sin datos univariados en el reporte de fugas.")
+    lineas.append(linea_nivel("Nivel 1 (logística balanceada)", resultado["nivel_1_regresion_logistica"]))
+    lineas.append(linea_nivel("Nivel 2a (GB sin balancear)", resultado["nivel_2a_gradient_boosting_sin_balancear"]))
+    lineas.append(linea_nivel("Nivel 2b (GB balanceado)", resultado["nivel_2b_gradient_boosting_balanceado"]))
+    lineas.append("2a por debajo del azar no es un bug: satura en 1.0 sobre negativos. Ver nota en el .json.")
     lineas.append("Detalle por fold: outputs/modelado-baseline.json")
 
     with open(f"{args.out}.md", "w", encoding="utf-8") as f:

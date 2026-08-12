@@ -1,0 +1,82 @@
+{
+  "esquema_cv": {
+    "group_col": "patient_id",
+    "n_splits": 5,
+    "seed": 42
+  },
+  "metrica": "pAUC sobre 80% TPR, rango [0, 0.2]",
+  "metrica_verificada_contra_fuente_oficial": true,
+  "metrica_fuente": "referencias/isic-primary-metric-pauc.py.md (p_auc_tpr, ISIC/MSKCC), verificado 2026-08-11",
+  "columnas_excluidas": [
+    "iddx_1",
+    "iddx_2",
+    "iddx_3",
+    "iddx_4",
+    "iddx_5",
+    "iddx_full",
+    "lesion_id",
+    "mel_mitotic_index",
+    "mel_thick_mm",
+    "target",
+    "tbp_lv_dnn_lesion_confidence",
+    "image_type",
+    "isic_id"
+  ],
+  "n_features_usadas": 41,
+  "nivel_0_referencia_univariada": {
+    "columna": "tbp_lv_H",
+    "auc_estandar": 0.8053,
+    "pauc_por_fold": [
+      0.0902,
+      0.082,
+      0.1197,
+      0.0451,
+      0.0676
+    ],
+    "pauc_media": 0.0809,
+    "pauc_std": 0.0247,
+    "nota": "auc_estandar y pauc_media NO están en la misma escala: el AUC va de 0.5 (azar) a 1, el pAUC de 0.02 (azar) a 0.2. Compara contra los niveles 1 y 2 usando pauc_media, nunca auc_estandar."
+  },
+  "nivel_1_regresion_logistica": {
+    "pauc_por_fold": [
+      0.1524,
+      0.1253,
+      0.1553,
+      0.1142,
+      0.1184
+    ],
+    "pauc_media": 0.1331,
+    "pauc_std": 0.0173
+  },
+  "nivel_2a_gradient_boosting_sin_balancear": {
+    "modelo": "HistGradientBoostingClassifier(class_weight=None)",
+    "pauc_por_fold": [
+      0.0009,
+      0.0043,
+      0.0002,
+      0.0008,
+      0.0003
+    ],
+    "pauc_media": 0.0013,
+    "pauc_std": 0.0015,
+    "nota": "Se conserva aunque quede por DEBAJO del piso aleatorio de la métrica (0.02): con 0.098% de positivos el modelo satura en probabilidad 1.0 sobre negativos y los coloca por encima de los positivos, destruyendo justo la región de sensibilidad alta que el pAUC mide. Es un hallazgo, no un fallo del script."
+  },
+  "nivel_2b_gradient_boosting_balanceado": {
+    "modelo": "HistGradientBoostingClassifier(class_weight='balanced')",
+    "pauc_por_fold": [
+      0.1509,
+      0.1386,
+      0.1499,
+      0.1478,
+      0.1385
+    ],
+    "pauc_media": 0.1451,
+    "pauc_std": 0.0055,
+    "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds."
+  },
+  "escala_de_referencia_pauc": {
+    "azar": 0.02,
+    "maximo": 0.2,
+    "nota": "Para situar cualquier pauc_media entre el azar y el clasificador perfecto."
+  }
+}
