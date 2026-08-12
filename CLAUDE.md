@@ -122,27 +122,89 @@ tienden a sub-activarse).
 
 ---
 
-## Sobre el problema — POR VERIFICAR
+## Sobre el problema — VERIFICADO PARCIALMENTE (2026-08-11)
 
-Todo lo de esta sección debe confirmarse contra la página oficial de la
-competencia antes de usarse. Está escrito de memoria y puede estar desactualizado
-o ser incorrecto.
+**Limitación de la verificación, declarada por honestidad:** las páginas de
+Kaggle (`/overview`, `/overview/evaluation`, `/data`, `/rules`) se renderizan
+enteramente con JavaScript y devuelven solo el esqueleto HTML a cualquier
+cliente sin navegador — incluidos los snapshots del Internet Archive. Lo único
+recuperable directamente de Kaggle fue la etiqueta `<meta>` del HTML servido.
+Todo lo demás se verificó contra **fuentes primarias del propio organizador
+(ISIC / MSKCC)**, no contra Kaggle. Se indica la URL en cada punto.
 
-- [ ] Objetivo: detectar lesiones malignas confirmadas por histología
-- [ ] Insumo: recortes de fotografía corporal total 3D (calidad baja, tipo
-      dispositivo casero, NO dermatoscopio clínico)
-- [ ] Metadata tabular disponible: tamaño, color, forma, ubicación, edad, sexo
-- [ ] Desbalance de clases extremo
-- [ ] **Observaciones agrupadas por paciente** ← crítico
-- [ ] Métrica: AUC parcial restringido a zona de sensibilidad alta
-- [ ] Confirmar umbral exacto de sensibilidad de la métrica
-- [ ] Confirmar reglas de uso de datos externos
+- [x] Objetivo: *"Identify cancers among skin lesions cropped from 3D total body
+      photographs"* (etiqueta `<meta name="description">` del HTML servido por
+      https://www.kaggle.com/competitions/isic-2024-challenge/overview)
+- [x] **Corrección importante — la etiqueta NO es simétrica.** Los positivos sí
+      son de patología: lesiones *"diagnosed as either melanoma, basal cell
+      carcinoma, or squamous cell carcinoma within 3 months of 3D TBP capture"*.
+      Los negativos NO: *"most never underwent a skin biopsy"* y se asumen
+      benignos por evaluación clínica del dermatólogo
+      (https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/).
+      → La clase negativa tiene ruido de etiqueta estructural. Va al informe
+      como limitación, no como nota al pie.
+- [x] Insumo: recortes de 15mm×15mm de fotografía corporal total 3D, resolución
+      media 133px×133px, *"comparable in optical resolution to smartphone
+      images"*, con *"fewer morphologic features than dermoscopic images"*
+      (https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/)
+- [x] Metadata tabular: 40+ campos — edad, sexo, sitio anatómico, diámetro,
+      área, perímetro, color en L*A*B*, asimetría de borde y forma, puntajes de
+      confianza, modalidad de captura (XP vs. luz blanca)
+      (https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/)
+- [x] Desbalance de clases extremo, con cifras: **401.059 lesiones únicas —
+      393 malignas (0,1%), 400.552 benignas (99,9%), 114 indeterminadas**.
+      Dentro de las malignas: 157 melanomas, 163 carcinomas basocelulares,
+      73 espinocelulares (https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/;
+      el conteo de 401.059 imágenes lo corrobora
+      https://challenge.isic-archive.com/data/2024/)
+- [x] **Observaciones agrupadas por paciente** ← crítico. **1.042 pacientes** de
+      siete centros dermatológicos; *"Numerous tiles can be associated to the
+      same patient with the metadata element patient_id"*
+      (https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/).
+      Refuerzo independiente: uno de los premios secundarios oficiales es
+      *"top-15 retrieval sensitivity"* calculada **por paciente**
+      (https://github.com/ISIC-Research/Challenge-2024-Metrics)
+- [x] Métrica: AUC parcial (pAUC) restringido a la región **por encima** de un
+      TPR mínimo. Justificación textual del organizador: *"there are regions in
+      the ROC space where the values of TPR are unacceptable in clinical
+      practice"* (https://github.com/ISIC-Research/Challenge-2024-Metrics).
+      El script oficial `PrimaryMetric-pAUC.py` implementa el umbral como
+      **parámetro** `min_tpr`, invirtiendo las etiquetas y usando
+      `max_fpr = |1 - min_tpr|` sobre `sklearn.metrics.roc_curve`
+      (https://raw.githubusercontent.com/ISIC-Research/Challenge-2024-Metrics/main/PrimaryMetric-pAUC.py)
+- [ ] **Umbral exacto de sensibilidad — DISCREPANCIA SIN RESOLVER.** No
+      verificable sin login contra la página de evaluación de Kaggle. Las dos
+      cifras en circulación:
+      - **88% TPR**, rango de puntaje `[0.00, 0.12]` — repositorio oficial del
+        organizador, para *"the leaderboard prizes"*, sin commits posteriores a
+        2024-06-12 (https://github.com/ISIC-Research/Challenge-2024-Metrics)
+      - **80% TPR**, rango `[0.0, 0.2]` — lo que reportan participantes y
+        literatura derivada
+      - *Evidencia indirecta a favor del 80%:* un artículo sobre la competencia
+        reporta *"a pAUC of 0.1755"*, valor **imposible** bajo la definición de
+        88%, cuya cota superior es 0,12 (https://arxiv.org/abs/2506.03420).
+      - **Acción:** confirmar leyendo `/overview/evaluation` con sesión
+        iniciada, o reproducir el puntaje con ambos umbrales sobre un
+        submission conocido. Hasta entonces, `min_tpr` se trata como parámetro
+        explícito del proyecto, nunca como constante hardcodeada.
+- [ ] Reglas de uso de datos externos — **no verificable sin login** (la página
+      `/rules` de Kaggle exige aceptar las reglas). No se completa de memoria.
+- [x] Licencia del dataset: dos variantes, estándar CC-BY-NC y *"Permissive"*
+      CC-BY (https://challenge.isic-archive.com/data/2024/)
 
 **Nota metodológica clave:** la agrupación por paciente hace que
 `auditoria-de-fugas` tenga algo real que encontrar. Si se parten los datos al
 azar, lesiones del mismo paciente caen en entrenamiento y validación, y la
 métrica sale inflada. Error clásico, verificable, y material de primera para el
-informe.
+informe. Con 401.059 lesiones sobre 1.042 pacientes —≈385 lesiones por paciente
+en promedio— la fuga por partición aleatoria no es un riesgo teórico: es la
+partición por defecto.
+
+**Segunda nota metodológica, regalada por los datos:** con 393 positivos
+repartidos entre 1.042 pacientes, cualquier partición debe además estratificar
+por clase. Un fold sin un solo positivo hace que la métrica ni siquiera esté
+definida — el script oficial lanza `ValueError` si `y_true` tiene una sola
+clase. `diseno-validacion` tiene ahí su primera verificación obligatoria.
 
 ---
 
@@ -169,7 +231,11 @@ script— como plantilla de referencia para las demás.
 ### Pendientes
 
 - [ ] Instalar Claude Code y verificar qué incluye el plan actual
-- [ ] Verificar la sección "Sobre el problema" contra la fuente oficial
+- [x] Verificar la sección "Sobre el problema" contra la fuente oficial
+      (2026-08-11 — hecho contra fuentes del organizador ISIC/MSKCC; queda
+      pendiente lo que exige login en Kaggle)
+- [ ] Con sesión de Kaggle iniciada: cerrar el umbral de la métrica (80% vs 88%
+      TPR) y las reglas de datos externos
 - [ ] Descargar los datos a `data/`
 - [ ] Escribir las 5 skills
 - [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
