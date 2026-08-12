@@ -1,6 +1,9 @@
 # Datos de la competencia: no se versionan
 data/
 
+# Configuracion local de Claude Code (permisos por maquina)
+.claude/settings.local.json
+
 # Python
 __pycache__/
 *.py[cod]
