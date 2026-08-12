@@ -350,12 +350,51 @@ sí se contestan con la Tercera nota.
 
 ## Estado actual
 
-**Fase:** diseño. Ninguna skill escrita todavía.
+**Fase:** las cuatro skills instrumento están completas, corridas sobre los
+datos reales y auditadas. Falta la de interpretación.
+
+| Skill | Estado | Salida en `outputs/` |
+|---|---|---|
+| `eda-diagnostico` | completa, auditada (`3cc3a03`) | `.json` + `.md` |
+| `diseno-validacion` | completa, auditada (`3df25fc`, `a53b199`) | `.json` + `.md` |
+| `auditoria-de-fugas` | completa, auditada (`958cee0`) | `.json` + `.md` |
+| `modelado-baseline` | completa, auditada (`50ba80d`, `30fbff5`, `ad22ba0`) | `.json` + `.md` |
+| `sintesis-consultoria` | **no escrita** | — |
+
+Ninguna se dio por buena sin correrla contra `data/train-metadata.csv` y
+encontrarle defectos. Las cuatro tenían al menos uno. El detalle de cada
+corrección está en el historial de commits, que es parte del entregable.
+
+### Hallazgos vivos para el informe
+
+Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
+train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, ambos trazables a
+`outputs/modelado-baseline.json`:
+
+1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
+   Nivel 2a da pAUC 0.0013, *por debajo del piso aleatorio de la métrica* (0.02),
+   mientras su AUC estándar es 0.6685 y no delata nada. No colapsa a "predecir
+   siempre negativo" —el diagnóstico de manual— sino que satura en probabilidad
+   1.0 sobre negativos y los coloca encima de los positivos, arrasando justo la
+   región de sensibilidad alta. Con `class_weight="balanced"` (2b): 0.1451.
+   La métrica del cliente ve el problema; la métrica por defecto no.
+
+2. **2b no solo es mejor que la logística: es más estable.** Desviación entre
+   folds de **±0.0055** frente a **±0.0173** del Nivel 1 — la logística varía
+   más del triple. Con 393 positivos repartidos en 5 folds (77–83 por fold,
+   según `outputs/diseno-validacion.json`), esa dispersión es grande respecto a
+   la diferencia de medias (0.1451 vs 0.1331), así que la comparación de medias
+   sola no sostiene un "2b gana". *Salvedad al citarlo:* es dispersión fold a
+   fold sobre folds no independientes, no un intervalo de confianza. Cuantificar
+   la incertidumbre como es debido es trabajo del informe, no de la skill.
 
 ### Siguiente paso
 
-Escribir `eda-diagnostico/SKILL.md` completo —frontmatter, contrato de salida y
-script— como plantilla de referencia para las demás.
+Escribir `sintesis-consultoria`. Es la única skill de interpretación y el
+entregable estrella: lee todo `outputs/` y produce el informe, con cada cifra
+trazable a un archivo (regla 2). A diferencia de las otras cuatro, no mide nada
+y por tanto no lleva contrato de 15 líneas ni advertencia de "no interpretes
+aquí" — es exactamente donde sí toca interpretar.
 
 ### Pendientes
 
@@ -374,7 +413,10 @@ script— como plantilla de referencia para las demás.
 - [ ] Descargar `train-image.hdf5` (1,21 GiB) cuando lleguemos al modelado con
       imágenes. Entorno: `.venv/` con Kaggle CLI 2.2.4; token en
       `~/.kaggle/access_token`
-- [ ] Escribir las 5 skills
+- [x] Escribir las 4 skills instrumento y auditarlas contra los datos reales
+      (2026-08-12 — `eda-diagnostico`, `diseno-validacion`, `auditoria-de-fugas`,
+      `modelado-baseline`; las cuatro con defectos encontrados y corregidos)
+- [ ] Escribir `sintesis-consultoria`, la quinta
 - [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
 - [ ] Preparar demo en vivo: plantear una pregunta al agente y que invoque las
       skills frente a la clase
