@@ -13,3 +13,6 @@ venv/
 
 # macOS
 .DS_Store
+
+# PDF de verificacion visual del entregable: se regenera desde el .docx
+informe/*.pdf
