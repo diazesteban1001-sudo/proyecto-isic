@@ -275,6 +275,41 @@ Tres familias, con implicaciones distintas:
 Un modelo entrenado con todas las columnas numéricas sin mirar da AUC casi
 perfecto y es inútil. Es el ejemplo canónico para el informe.
 
+**Cuarta nota — `tbp_lv_nevi_confidence`: RESUELTA como legítima (2026-08-11).**
+La corrida de `auditoria-de-fugas` sobre los datos reales dejó una sola pregunta
+abierta que no se contestaba con lo ya documentado aquí: `tbp_lv_nevi_confidence`
+tiene nombre sospechoso (contiene "confidence") pero **sí está en test**, y da
+AUC univariado fuera de muestra de **0.6457**
+(`outputs/auditoria-de-fugas.json`). El script no puede resolver el origen de una
+columna; el agente sí, leyendo la fuente.
+
+El paper de SLICE-3D la define (copia literal en
+`referencias/slice3d-metadata-tbp-lv.md`, tomada de
+https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/ el 2026-08-11):
+
+> "Nevus confidence score (0–100 scale) is a convolutional neural network
+> classifier estimated probability that the lesion is a nevus."
+
+El prefijo `lv` es *Lesion Visualizer*, el software de Canfield Scientific que
+acompaña al equipo de fotografía 3D: todas las `tbp_lv_*` son métricas que la
+máquina calcula sobre la captura, no resultados de patología. **Es una variable
+legítima:** deriva de la imagen, está disponible en test, y por tanto es
+computable en inferencia real. Su AUC moderado es exactamente lo que se espera
+de un clasificador de nevus, no la firma de una fuga.
+
+*Salvedad para el informe, no para el modelado:* el paper no dice si las ~57.000
+lesiones con que se entrenó ese clasificador se solapan con SLICE-3D. Si se
+solaparan, el score arrastraría de forma indirecta etiquetas de dermatólogo
+sobre las mismas lesiones. No verificable con la fuente disponible, y no cambia
+la decisión —el criterio operativo es la disponibilidad en inferencia—, pero va
+declarado como supuesto.
+
+*Por qué esto va al informe:* es el caso donde la separación instrumento/
+consultor se ve funcionando. El instrumento marcó la columna y se detuvo en una
+pregunta honesta; resolverla exigió leer una fuente externa y distinguir "nombre
+sospechoso" de "fuga". Las otras nueve preguntas abiertas de esa misma corrida
+sí se contestan con la Tercera nota.
+
 ---
 
 ## Decisiones tomadas
