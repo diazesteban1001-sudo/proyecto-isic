@@ -27,6 +27,32 @@ inaceptable. El agente debe *entender* eso, no solo optimizarlo. Esa distinción
 —entre optimizar una métrica y comprender por qué esa métrica— es el argumento
 central del informe.
 
+**Esto no es una lectura nuestra: la propia página de evaluación lo dice.**
+Kaggle justifica la métrica en términos clínicos, no estadísticos
+(`referencias/kaggle-evaluation.md`):
+
+> "The receiver operating characteristic (ROC) curve illustrates the diagnostic
+> ability of a given binary classifier system as its discrimination threshold is
+> varied. However, there are regions in the ROC space where the values of TPR
+> are unacceptable in clinical practice. Systems that aid in diagnosing cancers
+> are required to be highly-sensitive, so this metric focuses on the area under
+> the ROC curve AND above 80% TPR. Hence, scores range from [0.0, 0.2]."
+
+La frase *"unacceptable in clinical practice"* es el eje del informe. El
+organizador no eligió el pAUC por conveniencia estadística: descartó
+explícitamente una región del espacio ROC por inaceptable para el cliente. La
+función de utilidad está escrita en la definición de la métrica, y el trabajo
+del consultor es leerla ahí antes de optimizar nada.
+
+**Corolario — la métrica principal no agota la utilidad del cliente.** Los
+premios secundarios oficiales fueron *"Top-15 Retrieval Sensitivity"* y
+*"Model Efficiency"*, con 7.500 USD cada uno (`referencias/kaggle-rules.md`).
+El primero mide el desempeño **por paciente**, no por lesión; el segundo premia
+el tiempo de inferencia. Es decir: el cliente también valoraba la unidad de
+análisis clínica correcta y el costo de despliegue —dos cosas que el pAUC no
+captura—. Un consultor que solo reporta el pAUC está respondiendo una parte de
+la pregunta y omitiendo que el propio cliente señaló las otras.
+
 ---
 
 ## Arquitectura
@@ -102,9 +128,15 @@ proyecto-isic/
 │   ├── auditoria-de-fugas/SKILL.md
 │   └── sintesis-consultoria/SKILL.md
 ├── data/                  ← en .gitignore, los datos NO se versionan
+├── referencias/           ← copias literales de fuentes oficiales, SÍ versionadas
 ├── outputs/               ← salidas de cada skill (.json + .md)
 └── informe/
 ```
+
+`referencias/` existe porque Kaggle no es legible por el agente (JavaScript +
+sesión). Las copias se toman manualmente, se anota fuente y fecha en la cabecera
+del archivo, y se versionan. Así una cita a Kaggle sigue siendo trazable a un
+archivo del repositorio y no a la memoria del agente.
 
 Anatomía de cada skill:
 
@@ -122,15 +154,18 @@ tienden a sub-activarse).
 
 ---
 
-## Sobre el problema — VERIFICADO PARCIALMENTE (2026-08-11)
+## Sobre el problema — VERIFICADO (2026-08-11)
 
-**Limitación de la verificación, declarada por honestidad:** las páginas de
-Kaggle (`/overview`, `/overview/evaluation`, `/data`, `/rules`) se renderizan
-enteramente con JavaScript y devuelven solo el esqueleto HTML a cualquier
-cliente sin navegador — incluidos los snapshots del Internet Archive. Lo único
-recuperable directamente de Kaggle fue la etiqueta `<meta>` del HTML servido.
-Todo lo demás se verificó contra **fuentes primarias del propio organizador
-(ISIC / MSKCC)**, no contra Kaggle. Se indica la URL en cada punto.
+**Procedencia de la verificación:** las páginas de Kaggle se renderizan
+enteramente con JavaScript y no devuelven contenido a un cliente sin navegador
+ni sesión —tampoco vía Internet Archive—, así que el agente no puede leerlas por
+su cuenta. Se resolvió con copias literales tomadas manualmente con sesión
+iniciada, versionadas en `referencias/`: son ahora la fuente citable para todo
+lo que dice Kaggle. El resto se verificó contra fuentes primarias del
+organizador (ISIC / MSKCC). Cada punto indica su fuente.
+
+**Regla operativa:** si Kaggle y el organizador ISIC dicen cosas distintas, para
+este proyecto manda Kaggle — es la evaluación que estamos replicando.
 
 - [x] Objetivo: *"Identify cancers among skin lesions cropped from 3D total body
       photographs"* (etiqueta `<meta name="description">` del HTML servido por
@@ -172,23 +207,38 @@ Todo lo demás se verificó contra **fuentes primarias del propio organizador
       **parámetro** `min_tpr`, invirtiendo las etiquetas y usando
       `max_fpr = |1 - min_tpr|` sobre `sklearn.metrics.roc_curve`
       (https://raw.githubusercontent.com/ISIC-Research/Challenge-2024-Metrics/main/PrimaryMetric-pAUC.py)
-- [ ] **Umbral exacto de sensibilidad — DISCREPANCIA SIN RESOLVER.** No
-      verificable sin login contra la página de evaluación de Kaggle. Las dos
-      cifras en circulación:
-      - **88% TPR**, rango de puntaje `[0.00, 0.12]` — repositorio oficial del
-        organizador, para *"the leaderboard prizes"*, sin commits posteriores a
-        2024-06-12 (https://github.com/ISIC-Research/Challenge-2024-Metrics)
-      - **80% TPR**, rango `[0.0, 0.2]` — lo que reportan participantes y
-        literatura derivada
-      - *Evidencia indirecta a favor del 80%:* un artículo sobre la competencia
-        reporta *"a pAUC of 0.1755"*, valor **imposible** bajo la definición de
-        88%, cuya cota superior es 0,12 (https://arxiv.org/abs/2506.03420).
-      - **Acción:** confirmar leyendo `/overview/evaluation` con sesión
-        iniciada, o reproducir el puntaje con ambos umbrales sobre un
-        submission conocido. Hasta entonces, `min_tpr` se trata como parámetro
-        explícito del proyecto, nunca como constante hardcodeada.
-- [ ] Reglas de uso de datos externos — **no verificable sin login** (la página
-      `/rules` de Kaggle exige aceptar las reglas). No se completa de memoria.
+- [x] **Umbral exacto de sensibilidad — CERRADO: 80% TPR, rango `[0.0, 0.2]`.**
+      *"Submissions are evaluated on partial area under the ROC curve (pAUC)
+      above 80% true positive rate (TPR) for binary classification of malignant
+      examples."* (`referencias/kaggle-evaluation.md`, copia literal de
+      https://www.kaggle.com/competitions/isic-2024-challenge/overview/evaluation
+      tomada con sesión iniciada el 2026-08-11)
+      → **`min_tpr = 0.80` es la constante del proyecto.**
+- [x] **La discrepancia 80/88 no era una contradicción: son dos evaluaciones
+      distintas.** El 88% TPR (rango `[0.00, 0.12]`) corresponde al esquema de
+      premios del ISIC Challenge
+      (https://github.com/ISIC-Research/Challenge-2024-Metrics); el 80% TPR
+      (rango `[0.0, 0.2]`) es el leaderboard de Kaggle
+      (`referencias/kaggle-evaluation.md`). Mismo script, mismo parámetro
+      `min_tpr`, dos valores para dos evaluaciones con dueños distintos.
+      **Nosotros usamos la de Kaggle.**
+      *Detalle para el informe:* al justificar la métrica, Kaggle escribe
+      *"required to be highly-sensitive"* y el repo del organizador escribe
+      *"required to be highly-specific"* sobre la misma restricción. Dado que
+      el umbral acota el TPR, la redacción de Kaggle es la correcta. Ejemplo
+      real y pequeño de por qué el consultor lee la fuente en vez de confiar en
+      la primera formulación que encuentra.
+- [x] Reglas de uso de datos externos — **permitidos con condiciones**:
+      *"External Data (...) must be publicly available and equally accessible to
+      use by all participants of the Competition for purposes of the competition
+      at no cost to the other participants."* (`referencias/kaggle-rules.md`,
+      §7.C). Los datos de la competencia son CC BY-NC 4.0, uso no comercial y
+      académico. Herramientas de AutoML permitidas con licencia apropiada (§A.2).
+- [ ] Límites de cómputo y acceso a internet en las entregas — **NO VERIFICADO.**
+      Falta la página *Code Requirements* de Kaggle, que no está en
+      `referencias/`. Ni la página de evaluación ni la de reglas mencionan
+      tiempo máximo de ejecución, tipo de hardware ni si el notebook de
+      inferencia corre sin internet. No se completa de memoria.
 - [x] Licencia del dataset: dos variantes, estándar CC-BY-NC y *"Permissive"*
       CC-BY (https://challenge.isic-archive.com/data/2024/)
 
@@ -232,10 +282,12 @@ script— como plantilla de referencia para las demás.
 
 - [ ] Instalar Claude Code y verificar qué incluye el plan actual
 - [x] Verificar la sección "Sobre el problema" contra la fuente oficial
-      (2026-08-11 — hecho contra fuentes del organizador ISIC/MSKCC; queda
-      pendiente lo que exige login en Kaggle)
-- [ ] Con sesión de Kaggle iniciada: cerrar el umbral de la métrica (80% vs 88%
-      TPR) y las reglas de datos externos
+      (2026-08-11 — fuentes del organizador ISIC/MSKCC + copias literales de
+      Kaggle en `referencias/`)
+- [x] Cerrar el umbral de la métrica (80% TPR) y las reglas de datos externos
+      (2026-08-11)
+- [ ] Copiar la página *Code Requirements* de Kaggle a `referencias/` para
+      cerrar límites de cómputo e internet en las entregas
 - [ ] Descargar los datos a `data/`
 - [ ] Escribir las 5 skills
 - [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
