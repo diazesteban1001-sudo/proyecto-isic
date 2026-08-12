@@ -1,0 +1,72 @@
+{
+  "numeros_en_borrador": 331,
+  "numeros_con_respaldo_en_outputs": 291,
+  "numeros_sin_respaldo": [
+    {
+      "valor": "44%",
+      "contexto": "pAUC 0,10 no está \"a la mitad\": está al 44% del recor",
+      "linea_aprox": 353
+    },
+    {
+      "valor": "33,8%",
+      "contexto": "la | 0,0809 `[T35]` | ±0,0247 `[T36]` | 33,8% `[T37]` |",
+      "linea_aprox": 361
+    },
+    {
+      "valor": "33,8%",
+      "contexto": "uerte. En la métrica del cliente cae al 33,8% del recor",
+      "linea_aprox": 370
+    },
+    {
+      "valor": "95%",
+      "contexto": "excede su tamaño. - Un intervalo *t* al 95% sobre esa",
+      "linea_aprox": 425
+    },
+    {
+      "valor": "88%",
+      "contexto": "premios del propio organizador ISIC usa 88% `[E7]` so",
+      "linea_aprox": 479
+    },
+    {
+      "valor": "33,8%",
+      "contexto": "y el   clasificador perfecto, frente al 33,8% `[T37]` d",
+      "linea_aprox": 503
+    },
+    {
+      "valor": "88%",
+      "contexto": "ios del organizador ISIC evalúa *\"above 88% true posi",
+      "linea_aprox": 631
+    },
+    {
+      "valor": "385",
+      "contexto": "igieron: un promedio redondeado a \"casi 385\" cuando l",
+      "linea_aprox": 648
+    },
+    {
+      "valor": "85",
+      "contexto": "medida es 384,89 `[T7]`, y un \"menos de 85 positivos",
+      "linea_aprox": 648
+    },
+    {
+      "valor": "44%",
+      "contexto": "á en `outputs/*.json` | |---|---|---| | 44% | 7.1 | D",
+      "linea_aprox": 654
+    },
+    {
+      "valor": "33,8%",
+      "contexto": "delo del proyecto obtuvo ese valor. | | 33,8% (×3) | 7.",
+      "linea_aprox": 655
+    },
+    {
+      "valor": "88%",
+      "contexto": "e desde `[T35]`, `[T33]` y `[T34]`. | | 88% | 8, punt",
+      "linea_aprox": 656
+    },
+    {
+      "valor": "95%",
+      "contexto": "e este proyecto. Trazable a `[E7]`. | | 95% | 7.4 | N",
+      "linea_aprox": 657
+    }
+  ],
+  "tolerancia_redondeo": 0.01
+}
