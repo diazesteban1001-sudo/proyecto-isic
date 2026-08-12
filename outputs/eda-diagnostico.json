@@ -1,0 +1,330 @@
+{
+  "fuente": {
+    "archivo": "data/train-metadata.csv",
+    "fecha_ejecucion": "2026-08-12T03:32:01.545412+00:00",
+    "n_filas": 401059,
+    "n_columnas": 55
+  },
+  "tipos": {
+    "isic_id": "str",
+    "target": "int64",
+    "patient_id": "str",
+    "age_approx": "float64",
+    "sex": "str",
+    "anatom_site_general": "str",
+    "clin_size_long_diam_mm": "float64",
+    "image_type": "str",
+    "tbp_tile_type": "str",
+    "tbp_lv_A": "float64",
+    "tbp_lv_Aext": "float64",
+    "tbp_lv_B": "float64",
+    "tbp_lv_Bext": "float64",
+    "tbp_lv_C": "float64",
+    "tbp_lv_Cext": "float64",
+    "tbp_lv_H": "float64",
+    "tbp_lv_Hext": "float64",
+    "tbp_lv_L": "float64",
+    "tbp_lv_Lext": "float64",
+    "tbp_lv_areaMM2": "float64",
+    "tbp_lv_area_perim_ratio": "float64",
+    "tbp_lv_color_std_mean": "float64",
+    "tbp_lv_deltaA": "float64",
+    "tbp_lv_deltaB": "float64",
+    "tbp_lv_deltaL": "float64",
+    "tbp_lv_deltaLB": "float64",
+    "tbp_lv_deltaLBnorm": "float64",
+    "tbp_lv_eccentricity": "float64",
+    "tbp_lv_location": "str",
+    "tbp_lv_location_simple": "str",
+    "tbp_lv_minorAxisMM": "float64",
+    "tbp_lv_nevi_confidence": "float64",
+    "tbp_lv_norm_border": "float64",
+    "tbp_lv_norm_color": "float64",
+    "tbp_lv_perimeterMM": "float64",
+    "tbp_lv_radial_color_std_max": "float64",
+    "tbp_lv_stdL": "float64",
+    "tbp_lv_stdLExt": "float64",
+    "tbp_lv_symm_2axis": "float64",
+    "tbp_lv_symm_2axis_angle": "int64",
+    "tbp_lv_x": "float64",
+    "tbp_lv_y": "float64",
+    "tbp_lv_z": "float64",
+    "attribution": "str",
+    "copyright_license": "str",
+    "lesion_id": "str",
+    "iddx_full": "str",
+    "iddx_1": "str",
+    "iddx_2": "str",
+    "iddx_3": "str",
+    "iddx_4": "str",
+    "iddx_5": "str",
+    "mel_mitotic_index": "str",
+    "mel_thick_mm": "float64",
+    "tbp_lv_dnn_lesion_confidence": "float64"
+  },
+  "faltantes": {
+    "isic_id": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "target": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "patient_id": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "age_approx": {
+      "n": 2798,
+      "pct": 0.698
+    },
+    "sex": {
+      "n": 11517,
+      "pct": 2.872
+    },
+    "anatom_site_general": {
+      "n": 5756,
+      "pct": 1.435
+    },
+    "clin_size_long_diam_mm": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "image_type": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_tile_type": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_A": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_Aext": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_B": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_Bext": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_C": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_Cext": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_H": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_Hext": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_L": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_Lext": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_areaMM2": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_area_perim_ratio": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_color_std_mean": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_deltaA": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_deltaB": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_deltaL": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_deltaLB": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_deltaLBnorm": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_eccentricity": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_location": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_location_simple": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_minorAxisMM": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_nevi_confidence": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_norm_border": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_norm_color": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_perimeterMM": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_radial_color_std_max": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_stdL": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_stdLExt": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_symm_2axis": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_symm_2axis_angle": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_x": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_y": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "tbp_lv_z": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "attribution": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "copyright_license": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "lesion_id": {
+      "n": 379001,
+      "pct": 94.5
+    },
+    "iddx_full": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "iddx_1": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "iddx_2": {
+      "n": 399991,
+      "pct": 99.734
+    },
+    "iddx_3": {
+      "n": 399994,
+      "pct": 99.734
+    },
+    "iddx_4": {
+      "n": 400508,
+      "pct": 99.863
+    },
+    "iddx_5": {
+      "n": 401058,
+      "pct": 100.0
+    },
+    "mel_mitotic_index": {
+      "n": 401006,
+      "pct": 99.987
+    },
+    "mel_thick_mm": {
+      "n": 400996,
+      "pct": 99.984
+    },
+    "tbp_lv_dnn_lesion_confidence": {
+      "n": 0,
+      "pct": 0.0
+    }
+  },
+  "desbalance_target": {
+    "columna_target": "target",
+    "conteos": {
+      "0": 400666,
+      "1": 393
+    },
+    "pct_positivos": 0.098
+  },
+  "estructura_grupos": {
+    "columna_grupo": "patient_id",
+    "n_grupos": 1042,
+    "n_filas": 401059,
+    "filas_por_grupo": {
+      "min": 1,
+      "max": 9184,
+      "media": 384.89,
+      "mediana": 241.5
+    }
+  },
+  "columnas_solo_en_train": [
+    "iddx_1",
+    "iddx_2",
+    "iddx_3",
+    "iddx_4",
+    "iddx_5",
+    "iddx_full",
+    "lesion_id",
+    "mel_mitotic_index",
+    "mel_thick_mm",
+    "target",
+    "tbp_lv_dnn_lesion_confidence"
+  ],
+  "columnas_solo_en_test": [],
+  "test_is_placeholder": true,
+  "test_perfil": null,
+  "duplicados_exactos": 0,
+  "duplicados_columnas_excluidas": [
+    "isic_id",
+    "lesion_id"
+  ],
+  "constantes": [
+    "image_type"
+  ]
+}
