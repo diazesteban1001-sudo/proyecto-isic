@@ -1,0 +1,370 @@
+{
+  "esquema_cv": {
+    "group_col": "patient_id",
+    "n_splits": 5,
+    "seed": 42
+  },
+  "columnas_solo_en_train": [
+    "iddx_1",
+    "iddx_2",
+    "iddx_3",
+    "iddx_4",
+    "iddx_5",
+    "iddx_full",
+    "lesion_id",
+    "mel_mitotic_index",
+    "mel_thick_mm",
+    "target",
+    "tbp_lv_dnn_lesion_confidence"
+  ],
+  "columnas_constantes": [
+    "image_type"
+  ],
+  "columnas_identificador": [
+    "isic_id"
+  ],
+  "columnas_nombre_sospechoso": [
+    "tbp_lv_nevi_confidence",
+    "iddx_full",
+    "iddx_1",
+    "iddx_2",
+    "iddx_3",
+    "iddx_4",
+    "iddx_5",
+    "mel_mitotic_index",
+    "mel_thick_mm",
+    "tbp_lv_dnn_lesion_confidence"
+  ],
+  "umbral_auc_sospechoso": 0.9,
+  "univariado": [
+    {
+      "columna": "tbp_lv_H",
+      "tipo": "numerica",
+      "auc_oof": 0.8053,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_deltaB",
+      "tipo": "numerica",
+      "auc_oof": 0.7541,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_Hext",
+      "tipo": "numerica",
+      "auc_oof": 0.7195,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_B",
+      "tipo": "numerica",
+      "auc_oof": 0.712,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_stdLExt",
+      "tipo": "numerica",
+      "auc_oof": 0.6622,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_Aext",
+      "tipo": "numerica",
+      "auc_oof": 0.6586,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_nevi_confidence",
+      "tipo": "numerica",
+      "auc_oof": 0.6457,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_A",
+      "tipo": "numerica",
+      "auc_oof": 0.6382,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_minorAxisMM",
+      "tipo": "numerica",
+      "auc_oof": 0.6272,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_perimeterMM",
+      "tipo": "numerica",
+      "auc_oof": 0.6231,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_areaMM2",
+      "tipo": "numerica",
+      "auc_oof": 0.618,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_radial_color_std_max",
+      "tipo": "numerica",
+      "auc_oof": 0.616,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_norm_color",
+      "tipo": "numerica",
+      "auc_oof": 0.6156,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_Bext",
+      "tipo": "numerica",
+      "auc_oof": 0.615,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_y",
+      "tipo": "numerica",
+      "auc_oof": 0.6141,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "attribution",
+      "tipo": "categorica",
+      "auc_oof": 0.6128,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_location",
+      "tipo": "categorica",
+      "auc_oof": 0.6123,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "clin_size_long_diam_mm",
+      "tipo": "numerica",
+      "auc_oof": 0.6104,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_color_std_mean",
+      "tipo": "numerica",
+      "auc_oof": 0.6098,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_location_simple",
+      "tipo": "categorica",
+      "auc_oof": 0.5947,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_tile_type",
+      "tipo": "categorica",
+      "auc_oof": 0.591,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "copyright_license",
+      "tipo": "categorica",
+      "auc_oof": 0.5832,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "anatom_site_general",
+      "tipo": "categorica",
+      "auc_oof": 0.5803,
+      "n_faltantes": 5756,
+      "sospechosa": false
+    },
+    {
+      "columna": "age_approx",
+      "tipo": "numerica",
+      "auc_oof": 0.5703,
+      "n_faltantes": 2798,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_z",
+      "tipo": "numerica",
+      "auc_oof": 0.568,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_C",
+      "tipo": "numerica",
+      "auc_oof": 0.5653,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_deltaLB",
+      "tipo": "numerica",
+      "auc_oof": 0.564,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_deltaL",
+      "tipo": "numerica",
+      "auc_oof": 0.5618,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_stdL",
+      "tipo": "numerica",
+      "auc_oof": 0.5603,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_norm_border",
+      "tipo": "numerica",
+      "auc_oof": 0.5531,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_eccentricity",
+      "tipo": "numerica",
+      "auc_oof": 0.5528,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_deltaLBnorm",
+      "tipo": "numerica",
+      "auc_oof": 0.5492,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_area_perim_ratio",
+      "tipo": "numerica",
+      "auc_oof": 0.5432,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_x",
+      "tipo": "numerica",
+      "auc_oof": 0.5243,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_L",
+      "tipo": "numerica",
+      "auc_oof": 0.5231,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_symm_2axis",
+      "tipo": "numerica",
+      "auc_oof": 0.5213,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_symm_2axis_angle",
+      "tipo": "numerica",
+      "auc_oof": 0.5076,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_deltaA",
+      "tipo": "numerica",
+      "auc_oof": 0.5071,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "sex",
+      "tipo": "categorica",
+      "auc_oof": 0.5055,
+      "n_faltantes": 11517,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_Lext",
+      "tipo": "numerica",
+      "auc_oof": 0.5024,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_Cext",
+      "tipo": "numerica",
+      "auc_oof": 0.5014,
+      "n_faltantes": 0,
+      "sospechosa": false
+    }
+  ],
+  "preguntas_abiertas": [
+    {
+      "columna": "tbp_lv_nevi_confidence",
+      "pregunta": "'tbp_lv_nevi_confidence' tiene nombre sugerente pero SÍ está en test. ¿Por qué existiría en ambos conjuntos si fuera derivada del diagnóstico? Investigar el origen antes de usarla."
+    },
+    {
+      "columna": "iddx_full",
+      "pregunta": "'iddx_full' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "iddx_1",
+      "pregunta": "'iddx_1' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "iddx_2",
+      "pregunta": "'iddx_2' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "iddx_3",
+      "pregunta": "'iddx_3' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "iddx_4",
+      "pregunta": "'iddx_4' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "iddx_5",
+      "pregunta": "'iddx_5' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "mel_mitotic_index",
+      "pregunta": "'mel_mitotic_index' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "mel_thick_mm",
+      "pregunta": "'mel_thick_mm' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    },
+    {
+      "columna": "tbp_lv_dnn_lesion_confidence",
+      "pregunta": "'tbp_lv_dnn_lesion_confidence' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?"
+    }
+  ]
+}
