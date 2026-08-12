@@ -109,12 +109,19 @@ def codificar_fold(df, numericas, categoricas, target_col, train_idx, val_idx):
     return X_train.values, X_val.values
 
 
-def evaluar_modelo(df, target_col, folds, numericas, categoricas, modelo_fn):
+def evaluar_modelo(df, target_col, folds, numericas, categoricas, modelo_fn, escalar=False):
     y = df[target_col].values
     paucs = []
     for train_idx, val_idx in folds:
         X_train, X_val = codificar_fold(df, numericas, categoricas, target_col, train_idx, val_idx)
         y_train, y_val = y[train_idx], y[val_idx]
+
+        if escalar:
+            # Las features van de std 0.12 a std 408; sin escalar, la
+            # logistica no converge en max_iter y su pAUC no es el del
+            # modelo sino el del optimizador a medio camino.
+            scaler = StandardScaler().fit(X_train)
+            X_train, X_val = scaler.transform(X_train), scaler.transform(X_val)
 
         modelo = modelo_fn()
         modelo.fit(X_train, y_train)
@@ -178,7 +185,7 @@ def main():
     def modelo_logreg():
         return LogisticRegression(class_weight="balanced", max_iter=1000)
 
-    paucs_1 = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_logreg)
+    paucs_1 = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_logreg, escalar=True)
 
     # Nivel 2: gradient boosting.
     def modelo_gb():

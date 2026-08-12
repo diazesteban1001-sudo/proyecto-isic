@@ -34,7 +34,12 @@ reportan por separado, con la advertencia explícita.
 **Nivel 1 — regresión logística balanceada.** El baseline estadístico
 propiamente dicho: interpretable, con `class_weight="balanced"` porque
 sin ajustar por el desbalance (393 positivos en 401,059 filas) el
-modelo colapsa a predecir siempre negativo.
+modelo colapsa a predecir siempre negativo. Las features se estandarizan
+con `StandardScaler` ajustado solo con el fold de entrenamiento: sin eso
+—las escalas van de std 0.12 a std 408— la logística no converge dentro
+de `max_iter` y el pAUC reportado sería el del optimizador detenido a
+medio camino, no el del modelo. El nivel 2 no se escala: a un modelo de
+árboles le da igual.
 
 **Nivel 2 — gradient boosting.** Cota superior realista de lo que la
 metadata tabular puede lograr, sin tocar las imágenes. Usa
