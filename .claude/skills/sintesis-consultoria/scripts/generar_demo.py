@@ -28,11 +28,67 @@ from scipy import stats
 # resultados propio: se le asocia el de la verificación de trazabilidad,
 # que es lo que esta skill sí produce como evidencia de su trabajo.
 CADENA = [
-    ("eda-diagnostico", "instrumento", "Perfil de datos, faltantes, desbalance, estructura de grupos", "eda-diagnostico"),
-    ("diseno-validacion", "instrumento", "Propone y verifica el esquema de validación cruzada", "diseno-validacion"),
-    ("auditoria-de-fugas", "instrumento", "Checklist de data leakage, hallazgos priorizados", "auditoria-de-fugas"),
-    ("modelado-baseline", "instrumento", "Modelos de referencia, métricas con incertidumbre", "modelado-baseline"),
-    ("sintesis-consultoria", "interpretación", "Lee todo outputs/ y produce el informe y esta demo", "sintesis-verificacion"),
+    {
+        "nombre": "eda-diagnostico",
+        "tipo": "instrumento",
+        "funcion": "Perfil de datos, faltantes, desbalance, estructura de grupos",
+        "md": "eda-diagnostico",
+        "mide": "Estructura del archivo, tipos, faltantes por columna, desbalance de la "
+                "respuesta, tamaño de los grupos y qué columnas existen en train pero no en test.",
+        "porque": "Ninguna decisión de diseño posterior se puede tomar sin esto. El esquema de "
+                  "validación depende de la estructura de grupos, y la auditoría de fugas parte "
+                  "de la lista de columnas asimétricas.",
+    },
+    {
+        "nombre": "diseno-validacion",
+        "tipo": "instrumento",
+        "funcion": "Propone y verifica el esquema de validación cruzada",
+        "md": "diseno-validacion",
+        "mide": "Construye los folds agrupando por paciente y estratificando por clase, y después "
+                "comprueba que ningún paciente cruce de un lado al otro. Además cuantifica cuánta "
+                "fuga habría producido no hacerlo.",
+        "porque": "Proponer un esquema es barato; verificarlo es lo que lo convierte en evidencia. "
+                  "Sin la comparación contra la partición ingenua, «hay que agrupar por paciente» "
+                  "es una recomendación de manual y no un hallazgo sobre estos datos.",
+    },
+    {
+        "nombre": "auditoria-de-fugas",
+        "tipo": "instrumento",
+        "funcion": "Chequeos de fuga estructural y escaneo univariado",
+        "md": "auditoria-de-fugas",
+        "mide": "Dos cosas distintas: fuga estructural —columnas ausentes en test, constantes, "
+                "identificadores— y fuga oculta, entrenando un modelo por columna sobre los folds "
+                "agrupados para ver si alguna predice el objetivo sospechosamente bien.",
+        "porque": "Es el instrumento adversario: existe para encontrar defectos, no para "
+                  "confirmar que todo está bien. Un chequeo que no puede fallar no vale nada.",
+    },
+    {
+        "nombre": "modelado-baseline",
+        "tipo": "instrumento",
+        "funcion": "Modelos de referencia con la métrica oficial",
+        "md": "modelado-baseline",
+        "mide": "Cuatro niveles de referencia sobre los mismos folds, evaluados con la métrica "
+                "oficial de la competencia y no con la de por defecto, reportando el resultado de "
+                "cada fold y no solo la media.",
+        "porque": "Los niveles existen para acotar: sin la referencia univariada no se sabe "
+                  "cuánto aporta combinar columnas, y sin el modelo desbalanceado no se ve que "
+                  "omitir el ajuste de clase produce un fallo silencioso.",
+    },
+    {
+        "nombre": "sintesis-consultoria",
+        "tipo": "interpretación",
+        "funcion": "Lee todo outputs/ y produce el informe y esta demo",
+        # No mide nada, así que no tiene un .md de resultados propio: se le
+        # asocia el de la verificación de trazabilidad, que es la evidencia
+        # de que hizo su trabajo.
+        "md": "sintesis-verificacion",
+        "mide": "Nada. Es la única skill que interpreta: cruza los cuatro instrumentos, resuelve "
+                "sus contradicciones y emite la recomendación. Lo que sí verifica es a sí misma, "
+                "extrayendo cada número del informe y comprobando que tenga respaldo en outputs/.",
+        "porque": "Es el trabajo del consultor, y está separado de los instrumentos a propósito: "
+                  "un instrumento que interpretara sus propios resultados tendería a "
+                  "justificarlos.",
+    },
 ]
 
 # Glosas por familia de columna. NO son medición: el JSON dice que una
@@ -142,22 +198,55 @@ def construir_datos(outputs_dir):
     )
 
     resumenes = {}
-    for _, _, _, archivo_md in CADENA:
-        ruta = os.path.join(outputs_dir, f"{archivo_md}.md")
-        resumenes[archivo_md] = leer(ruta) if os.path.exists(ruta) else "(sin archivo)"
+    for skill in CADENA:
+        ruta = os.path.join(outputs_dir, f"{skill['md']}.md")
+        resumenes[skill["md"]] = leer(ruta) if os.path.exists(ruta) else "(sin archivo)"
+
+    mejor_univariada = max(auditoria["univariado"], key=lambda u: u["auc_oof"])
+    positivos_por_fold = [f["n_val_positivos"] for f in validacion["por_fold"]]
+    verificacion = json.loads(leer(os.path.join(outputs_dir, "sintesis-verificacion.json")))
 
     return {
         "generado": datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M"),
-        "cadena": [
-            {"nombre": n, "tipo": t, "funcion": f, "md": m} for n, t, f, m in CADENA
-        ],
+        "cadena": CADENA,
         "resumenes": resumenes,
+        "auditoria": {
+            "n_solo_en_train": len(auditoria["columnas_solo_en_train"]),
+            "n_constantes": len(auditoria["columnas_constantes"]),
+            "n_identificador": len(auditoria["columnas_identificador"]),
+            "n_evaluadas": len(auditoria["univariado"]),
+            "umbral": auditoria["umbral_auc_sospechoso"],
+            "auc_max": mejor_univariada["auc_oof"],
+            "columna_auc_max": mejor_univariada["columna"],
+            "n_preguntas_abiertas": len(auditoria["preguntas_abiertas"]),
+        },
+        "verificacion": {
+            "numeros": verificacion["numeros_en_borrador"],
+            "con_respaldo": verificacion["numeros_con_respaldo_en_outputs"],
+            "senalados": len(verificacion["numeros_sin_respaldo"]),
+            # Los tres no suman: el verificador extrae todo número y luego
+            # descarta los de contextos que no son cifras medidas. El resto
+            # es ese descarte, y sin nombrarlo la resta parece un error.
+            "ignorados": (
+                verificacion["numeros_en_borrador"]
+                - verificacion["numeros_con_respaldo_en_outputs"]
+                - len(verificacion["numeros_sin_respaldo"])
+            ),
+        },
+        "folds": {
+            "n_grupos_positivos": validacion["n_grupos_positivos"],
+            "min_positivos": min(positivos_por_fold),
+            "max_positivos": max(positivos_por_fold),
+        },
+        "test_es_marcador": eda["test_is_placeholder"],
         "eda": {
             "n_filas": eda["fuente"]["n_filas"],
             "n_columnas": eda["fuente"]["n_columnas"],
             "n_pacientes": eda["estructura_grupos"]["n_grupos"],
             "media_por_paciente": eda["estructura_grupos"]["filas_por_grupo"]["media"],
+            "min_por_paciente": eda["estructura_grupos"]["filas_por_grupo"]["min"],
             "max_por_paciente": eda["estructura_grupos"]["filas_por_grupo"]["max"],
+            "n_solo_en_train": len(eda["columnas_solo_en_train"]),
             "positivos": eda["desbalance_target"]["conteos"]["1"],
             "negativos": eda["desbalance_target"]["conteos"]["0"],
             "pct_positivos": eda["desbalance_target"]["pct_positivos"],
@@ -180,6 +269,8 @@ def construir_datos(outputs_dir):
         "pareado": pareado,
         "escala": modelado["escala_de_referencia_pauc"],
         "metrica": modelado["metrica"],
+        "metrica_fuente": modelado["metrica_fuente"],
+        "metrica_verificada": modelado["metrica_verificada_contra_fuente_oficial"],
     }
 
 
@@ -215,6 +306,9 @@ PLANTILLA = r"""<!DOCTYPE html>
     color: var(--suave); font-weight: 600;
   }
   h1 { font-size: 30px; margin: 10px 0 16px; line-height: 1.25; }
+  .contexto { margin: 0 0 22px; max-width: 860px; }
+  .contexto p { margin: 0 0 12px; font-size: 15.5px; }
+  .contexto b { color: var(--acento); }
   .tesis {
     font-size: 21px; line-height: 1.45; border-left: 5px solid var(--acento);
     padding: 4px 0 4px 18px; margin: 0; color: var(--tinta);
@@ -256,6 +350,10 @@ PLANTILLA = r"""<!DOCTYPE html>
     border-radius: 10px; padding: 0 20px 4px;
   }
   .salida h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--suave); }
+  .ficha { margin: 0 0 16px; }
+  .ficha p { margin: 0 0 9px; font-size: 14.5px; }
+  .ficha b { color: var(--acento); }
+  .ficha .hallazgo { border-left: 3px solid var(--acento); background: #f4f8fb; padding: 9px 13px; border-radius: 0 6px 6px 0; }
   .salida pre {
     white-space: pre-wrap; font-family: Menlo, Consolas, monospace;
     font-size: 12.5px; line-height: 1.6; background: #fbfcfd;
@@ -292,6 +390,15 @@ PLANTILLA = r"""<!DOCTYPE html>
   }
   .toggle button[aria-pressed="true"] { background: var(--acento); color: #fff; }
   .lienzo { position: relative; height: 340px; }
+  /* ---- cierre ---- */
+  .cierre { display: grid; gap: 16px; }
+  .bloque { background: #fff; border: 1px solid var(--linea); border-radius: 10px; padding: 20px 22px; border-left: 5px solid var(--suave); }
+  .bloque h3 { margin: 0 0 8px; font-size: 16px; }
+  .bloque p { margin: 0; font-size: 14.5px; }
+  .bloque.recomendacion { border-left-color: var(--bien); }
+  .bloque.recomendacion h3 { color: var(--bien); }
+  .bloque.limites { border-left-color: var(--alarma); }
+  .bloque.limites h3 { color: var(--alarma); }
   .pie-grafico { font-size: 13px; color: var(--suave); margin-top: 14px; }
   .destacado { color: var(--tinta); }
   .cifra-fuente { border-bottom: 1px dotted var(--suave); cursor: help; }
@@ -311,6 +418,10 @@ PLANTILLA = r"""<!DOCTYPE html>
 <header>
   <div class="kicker">Consultor&iacute;a e Investigaci&oacute;n &middot; Estad&iacute;stica &middot; caso ISIC 2024</div>
   <h1>Agente consultor estad&iacute;stico</h1>
+  <div class="contexto">
+    <p><b>El problema.</b> <span id="ctx-problema"></span></p>
+    <p><b>Por qu&eacute; este caso.</b> <span id="ctx-eleccion"></span></p>
+  </div>
   <p class="tesis">
     La finalidad del agente <strong>no es ganar la competencia</strong>: es leer la funci&oacute;n
     de utilidad que el cliente escribi&oacute; en su m&eacute;trica y emitir una recomendaci&oacute;n
@@ -323,6 +434,12 @@ PLANTILLA = r"""<!DOCTYPE html>
   <p class="sub">Cuatro skills miden y reportan. La quinta interpreta. Haz clic en cualquiera para ver su salida real.</p>
   <div class="cadena" id="cadena"></div>
   <div class="salida" id="salida" hidden>
+    <h3 id="salida-nombre"></h3>
+    <div class="ficha">
+      <p><b>Qu&eacute; mide.</b> <span id="ficha-mide"></span></p>
+      <p><b>Por qu&eacute; existe.</b> <span id="ficha-porque"></span></p>
+      <p class="hallazgo"><b>Un hallazgo concreto.</b> <span id="ficha-hallazgo"></span></p>
+    </div>
     <h3 id="salida-titulo"></h3>
     <pre id="salida-texto"></pre>
   </div>
@@ -382,6 +499,25 @@ PLANTILLA = r"""<!DOCTYPE html>
   </div>
 </section>
 
+<section>
+  <h2><span class="num">5</span>Conclusi&oacute;n</h2>
+  <p class="sub">Lo que un consultor le entregar&iacute;a al cliente: el hallazgo, la recomendaci&oacute;n y lo que a&uacute;n no se puede afirmar.</p>
+  <div class="cierre">
+    <div class="bloque">
+      <h3>Lo que se encontr&oacute;</h3>
+      <p id="cierre-hallazgos"></p>
+    </div>
+    <div class="bloque recomendacion">
+      <h3>La recomendaci&oacute;n</h3>
+      <p id="cierre-recomendacion"></p>
+    </div>
+    <div class="bloque limites">
+      <h3>Las limitaciones honestas</h3>
+      <p id="cierre-limites"></p>
+    </div>
+  </div>
+</section>
+
 <footer id="pie"></footer>
 </div>
 
@@ -393,8 +529,63 @@ const num = (v, d = 4) => v.toFixed(d).replace(".", ",");
 // Cada cifra lleva su origen en el title: la trazabilidad del informe
 // escrito, disponible al pasar el raton en la version proyectada.
 const cifra = (v, fuente) => `<span class="cifra-fuente" title="${esc(fuente)}">${v}</span>`;
+// useGrouping "always" porque el defecto español omite el punto en los
+// números de cuatro cifras: "1042" al lado de "401.059" se lee como una
+// inconsistencia en una pantalla proyectada.
+const mil = v => v.toLocaleString("es", {useGrouping: "always"});
+
+/* ---------- 0. contexto ---------- */
+document.getElementById("ctx-problema").innerHTML =
+  `ISIC 2024 pide detectar lesiones malignas de piel a partir de fotograf&iacute;as corporales totales en 3D ` +
+  `&mdash; im&aacute;genes de calidad tipo smartphone, no dermatoscopio cl&iacute;nico. El dataset: ` +
+  `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones de ` +
+  `${cifra(mil(D.eda.n_pacientes), "eda-diagnostico.json > estructura_grupos.n_grupos")} pacientes, con solo ` +
+  `${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} casos malignos confirmados ` +
+  `(${cifra(num(D.eda.pct_positivos, 3) + "%", "eda-diagnostico.json > desbalance_target.pct_positivos")}). ` +
+  `Cada paciente aporta entre ${cifra(mil(D.eda.min_por_paciente), "eda-diagnostico.json > estructura_grupos.filas_por_grupo.min")} y ` +
+  `${cifra(mil(D.eda.max_por_paciente), "eda-diagnostico.json > estructura_grupos.filas_por_grupo.max")} lesiones.`;
+
+document.getElementById("ctx-eleccion").innerHTML =
+  `Se eligi&oacute; sobre otras opciones (detecci&oacute;n en rodilla, columna lumbar, series de tiempo de commodities) ` +
+  `porque la metadata tabular permite trabajar sin GPU, el desbalance extremo y la agrupaci&oacute;n por paciente presentan ` +
+  `riesgos reales de fuga de datos, y la m&eacute;trica oficial &mdash;${cifra(esc(D.metrica), "modelado-baseline.json > metrica")}&mdash; ` +
+  `codifica expl&iacute;citamente la funci&oacute;n de utilidad del cliente: un sistema de apoyo diagn&oacute;stico debe ser ` +
+  `altamente sensible, as&iacute; que el desempe&ntilde;o solo cuenta en la regi&oacute;n donde una tasa de detecci&oacute;n alta ` +
+  `es cl&iacute;nicamente aceptable.`;
 
 /* ---------- 1. cadena ---------- */
+// La prosa de cada instrumento (que mide, por que existe) viaja en el JSON
+// desde CADENA. El hallazgo concreto se arma aqui porque lleva cifras: cada
+// una pasa por cifra() y por tanto por su archivo y campo de origen.
+const HALLAZGOS = {
+  "eda-diagnostico": () =>
+    `Encontr&oacute; ${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} columnas presentes ` +
+    `solo en entrenamiento, de las ${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")} del archivo ` +
+    `&mdash; la primera se&ntilde;al de que algo ah&iacute; no estar&iacute;a disponible al predecir en producci&oacute;n.`,
+  "diseno-validacion": () =>
+    `Cuantific&oacute; cu&aacute;nta fuga habr&iacute;a producido ignorar la agrupaci&oacute;n por paciente: ` +
+    `${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
+    `de los pacientes (${cifra(mil(D.fuga.n_grupos_naive), "diseno-validacion.json > comparacion_particion_naive.n_grupos_con_fuga")} ` +
+    `de ${cifra(mil(D.fuga.n_grupos_total), "diseno-validacion.json > n_grupos_total")}) habr&iacute;an caído a los dos lados de la partición.`,
+  "auditoria-de-fugas": () =>
+    `Gener&oacute; ${cifra(D.auditoria.n_preguntas_abiertas, "auditoria-de-fugas.json > preguntas_abiertas")} preguntas abiertas ` +
+    `sobre columnas sospechosas; ${cifra(D.auditoria.n_preguntas_abiertas - 1, "derivado: preguntas_abiertas menos la que exigió fuente externa")} ` +
+    `se resolvieron por su naturaleza post-biopsia, y la &uacute;ltima exigi&oacute; rastrear un paper cient&iacute;fico hasta confirmar ` +
+    `que <code>${esc(D.nevi ? D.nevi.columna : "")}</code>, de apariencia sospechosa, era en realidad leg&iacute;tima.`,
+  "modelado-baseline": () =>
+    `En el camino se descubri&oacute; que la implementaci&oacute;n inicial de la m&eacute;trica usaba un umbral de sensibilidad ` +
+    `equivocado y subestimaba el m&aacute;ximo posible de la escala, que es ` +
+    `${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}. Corregida y verificada contra ` +
+    `la fuente oficial (${cifra(esc(D.metrica_fuente), "modelado-baseline.json > metrica_fuente")}) antes de confiar en ning&uacute;n resultado.`,
+  "sintesis-consultoria": () =>
+    `Extrajo los ${cifra(mil(D.verificacion.numeros), "sintesis-verificacion.json > numeros_en_borrador")} n&uacute;meros del borrador ` +
+    `y los contrast&oacute; contra <code>outputs/</code>: ` +
+    `${cifra(mil(D.verificacion.con_respaldo), "sintesis-verificacion.json > numeros_con_respaldo_en_outputs")} con respaldo exacto, ` +
+    `${cifra(D.verificacion.senalados, "sintesis-verificacion.json > numeros_sin_respaldo")} se&ntilde;alados para revisi&oacute;n a mano, ` +
+    `y ${cifra(D.verificacion.ignorados, "derivado: numeros_en_borrador menos los con respaldo y los señalados")} en contextos que el ` +
+    `verificador excluye por dise&ntilde;o (n&uacute;meros de secci&oacute;n, fechas y similares).`
+};
+
 const cadena = document.getElementById("cadena");
 D.cadena.forEach((s, i) => {
   const b = document.createElement("button");
@@ -409,6 +600,10 @@ D.cadena.forEach((s, i) => {
     const caja = document.getElementById("salida");
     if (abierto) { caja.hidden = true; return; }
     b.setAttribute("aria-selected", "true");
+    document.getElementById("salida-nombre").textContent = s.nombre;
+    document.getElementById("ficha-mide").textContent = s.mide;
+    document.getElementById("ficha-porque").textContent = s.porque;
+    document.getElementById("ficha-hallazgo").innerHTML = HALLAZGOS[s.nombre]();
     document.getElementById("salida-titulo").textContent = "outputs/" + s.md + ".md";
     document.getElementById("salida-texto").textContent = D.resumenes[s.md];
     caja.hidden = false;
@@ -424,12 +619,12 @@ D.cadena.forEach((s, i) => {
 /* ---------- 2. fuga ---------- */
 const F = D.fuga;
 document.getElementById("sub-fuga").textContent =
-  `${D.eda.n_filas.toLocaleString("es")} lesiones sobre ${F.n_grupos_total.toLocaleString("es")} pacientes ` +
-  `(${num(D.eda.media_por_paciente, 2)} por paciente en promedio, hasta ${D.eda.max_por_paciente.toLocaleString("es")}). ` +
+  `${mil(D.eda.n_filas)} lesiones sobre ${mil(F.n_grupos_total)} pacientes ` +
+  `(${num(D.eda.media_por_paciente, 2)} por paciente en promedio, hasta ${mil(D.eda.max_por_paciente)}). ` +
   `Si se parte al azar, el mismo paciente cae a los dos lados.`;
 document.getElementById("fuga-naive").innerHTML = cifra(num(F.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga");
 document.getElementById("fuga-naive-det").textContent =
-  `${F.n_grupos_naive.toLocaleString("es")} de ${F.n_grupos_total.toLocaleString("es")} pacientes aparecen en train y validación a la vez`;
+  `${mil(F.n_grupos_naive)} de ${mil(F.n_grupos_total)} pacientes aparecen en train y validación a la vez`;
 document.getElementById("fuga-agrupada").innerHTML = cifra(F.fuga_agrupada ? "?" : "0%", "diseno-validacion.json > fuga_de_grupo_detectada");
 document.getElementById("fuga-agrupada-rot").textContent = F.metodo + ` (k=${F.n_splits})`;
 document.getElementById("fuga-agrupada-det").textContent =
@@ -618,6 +813,41 @@ function pintar(vista) {
 document.getElementById("btn-medias").onclick = () => pintar("medias");
 document.getElementById("btn-pareada").onclick = () => pintar("pareada");
 pintar("medias");
+
+/* ---------- 5. cierre ---------- */
+const M = et => D.modelos.find(m => m.etiqueta === et);
+const campo = et => "modelado-baseline.json > " + M(et).campo;
+
+document.getElementById("cierre-hallazgos").innerHTML =
+  `El desbalance extremo (${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} malignos entre ` +
+  `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones) y la agrupación por paciente hacían la partición ` +
+  `ingenua peligrosa: ${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
+  `de fuga potencial. La auditoría de columnas dejó fuera ` +
+  `${cifra(D.excluidas.length, "modelado-baseline.json > columnas_excluidas")} de las ` +
+  `${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")}, y evitó que información no disponible en producción ` +
+  `entrara al modelo. Y la comparación honesta entre modelos &mdash;no solo la media, sino par a par por fold&mdash; mostró que la ventaja ` +
+  `del gradient boosting balanceado no es estadísticamente sostenible con la evidencia disponible: gana en ` +
+  `${cifra(D.pareado.folds_a_favor + " de " + D.pareado.n_folds, "derivado de pauc_por_fold de los niveles 1 y 2b")} folds, y el intervalo ` +
+  `de confianza de la diferencia (${cifra(num(D.pareado.ic_bajo) + " a " + num(D.pareado.ic_alto), "derivado: intervalo t al 95% sobre las 5 diferencias")}) ` +
+  `cruza cero. <span class="destacado">Lo que sí se sostiene es que es más estable</span>: ` +
+  `&plusmn;${cifra(num(M("Nivel 2b").std), campo("Nivel 2b") + ".pauc_std")} entre folds frente a ` +
+  `&plusmn;${cifra(num(M("Nivel 1").std), campo("Nivel 1") + ".pauc_std")} de la logística.`;
+
+document.getElementById("cierre-recomendacion").innerHTML =
+  `Regresión logística balanceada &mdash;Nivel 1, pAUC ${cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media")}&mdash; ` +
+  `como modelo de referencia: interpretable, con desempeño comparable al gradient boosting ` +
+  `(Nivel 2b, ${cifra(num(M("Nivel 2b").media), campo("Nivel 2b") + ".pauc_media")}), y sin la fragilidad que mostró el boosting ` +
+  `sin ajustar por desbalance: el Nivel 2a colapsó a ${cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media")}, ` +
+  `por debajo del piso aleatorio de ${cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar")}.`;
+
+document.getElementById("cierre-limites").innerHTML =
+  `La clase negativa tiene ruido estructural: la mayoría de los ` +
+  `${cifra(mil(D.eda.negativos), "eda-diagnostico.json > desbalance_target.conteos.0")} &laquo;benignos&raquo; nunca se biopsiaron. ` +
+  `No existe un conjunto de prueba real sobre el cual medir un resultado final independiente &mdash;el test publicado es ` +
+  `${cifra("un marcador de posición", "eda-diagnostico.json > test_is_placeholder = " + D.test_es_marcador)}, así que todo lo de ` +
+  `arriba es validación cruzada, no resultado sobre datos nuevos. Y la propia métrica del proyecto tuvo un error que solo se detectó ` +
+  `al contrastarla explícitamente contra la fuente oficial &mdash; recordatorio de que ninguna parte de este proceso, ni siquiera la ` +
+  `más técnica, estaba exenta de revisión.`;
 
 /* ---------- pie ---------- */
 document.getElementById("pie").innerHTML =
