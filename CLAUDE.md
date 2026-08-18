@@ -350,8 +350,9 @@ sí se contestan con la Tercera nota.
 
 ## Estado actual
 
-**Fase:** las cuatro skills instrumento están completas, corridas sobre los
-datos reales y auditadas. Falta la de interpretación.
+**Fase:** las cinco skills están escritas, corridas y auditadas. El alcance
+original —metadata tabular, sin imágenes— está cerrado. Lo que sigue es la
+extensión documentada en la última sección de este archivo.
 
 | Skill | Estado | Salida en `outputs/` |
 |---|---|---|
@@ -359,11 +360,16 @@ datos reales y auditadas. Falta la de interpretación.
 | `diseno-validacion` | completa, auditada (`3df25fc`, `a53b199`) | `.json` + `.md` |
 | `auditoria-de-fugas` | completa, auditada (`958cee0`) | `.json` + `.md` |
 | `modelado-baseline` | completa, auditada (`50ba80d`, `30fbff5`, `ad22ba0`) | `.json` + `.md` |
-| `sintesis-consultoria` | **no escrita** | — |
+| `sintesis-consultoria` | completa (`c3467a7`, `6d5754a`, `3e144e0`, `8a1f3ab`) | `sintesis-verificacion.json` + `.md` |
 
 Ninguna se dio por buena sin correrla contra `data/train-metadata.csv` y
-encontrarle defectos. Las cuatro tenían al menos uno. El detalle de cada
-corrección está en el historial de commits, que es parte del entregable.
+encontrarle defectos. Las cuatro instrumento tenían al menos uno. El detalle de
+cada corrección está en el historial de commits, que es parte del entregable.
+
+`sintesis-consultoria` produjo `informe/borrador.md`, `informe/informe-final.docx`,
+`informe/informe-final.pdf` y `informe/demo.html`. Su salida en `outputs/` no son
+mediciones sino el resultado del verificador de trazabilidad (regla 2): cuántas
+cifras del borrador tienen respaldo en un archivo y cuáles no.
 
 ### Hallazgos vivos para el informe
 
@@ -390,11 +396,9 @@ train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, ambos trazables a
 
 ### Siguiente paso
 
-Escribir `sintesis-consultoria`. Es la única skill de interpretación y el
-entregable estrella: lee todo `outputs/` y produce el informe, con cada cifra
-trazable a un archivo (regla 2). A diferencia de las otras cuatro, no mide nada
-y por tanto no lleva contrato de 15 líneas ni advertencia de "no interpretes
-aquí" — es exactamente donde sí toca interpretar.
+Fase 0 de la extensión (última sección): resolver si SLICE-3D estuvo en el
+preentrenamiento de PanDerm. Es bloqueante — condiciona qué pesos se pueden
+usar, y por tanto todo lo demás.
 
 ### Pendientes
 
@@ -416,10 +420,13 @@ aquí" — es exactamente donde sí toca interpretar.
 - [x] Escribir las 4 skills instrumento y auditarlas contra los datos reales
       (2026-08-12 — `eda-diagnostico`, `diseno-validacion`, `auditoria-de-fugas`,
       `modelado-baseline`; las cuatro con defectos encontrados y corregidos)
-- [ ] Escribir `sintesis-consultoria`, la quinta
+- [x] Escribir `sintesis-consultoria`, la quinta (2026-08-18 — borrador con
+      verificador de trazabilidad, conversión a Word/PDF y demo HTML autocontenida)
 - [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
-- [ ] Preparar demo en vivo: plantear una pregunta al agente y que invoque las
-      skills frente a la clase
+- [x] Preparar demo en vivo: `informe/demo.html`, generada solo por
+      `generar_demo.py`, abre por doble clic sin servidor y muestra cada cifra
+      con su archivo y campo de origen al pasar el cursor
+- [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
 
@@ -430,3 +437,158 @@ aquí" — es exactamente donde sí toca interpretar.
    con trazabilidad de cada cifra.
 3. **Demo en vivo** — es lo que más pesa: muestra la arquitectura funcionando en
    vez de descrita.
+
+---
+
+## Extensión: fase de imágenes y modelos fundacionales
+
+**Estado: PLAN ACORDADO, NADA EJECUTADO.** Sesión de planificación del
+2026-08-18. Todo lo que sigue son decisiones de diseño, no resultados. Ninguna
+cifra de esta sección puede citarse en el informe como medida hasta que exista
+en `outputs/`.
+
+### Por qué existe
+
+El alcance original excluyó imágenes por restricción de cómputo. Con más tiempo
+(1-2 meses) y hardware capaz (MacBook Air M4), se extiende el proyecto **sin
+abandonar la tesis original**: la profundiza, no la reemplaza.
+
+El *Corolario* de la sección "Tesis" —la métrica principal no agota la utilidad
+del cliente, y los premios secundarios lo demuestran con 7.500 USD cada uno
+(`referencias/kaggle-rules.md`)— hasta ahora estaba escrito pero no ejecutado:
+todo lo medido son pAUC. Esta extensión lo toma en serio y evalúa los tres ejes.
+
+**La pregunta:** ¿cuál es la mejor recomendación que un consultor le daría hoy a
+MSKCC, evaluada contra su función de utilidad completa —no solo contra el pAUC
+del leaderboard— con la tecnología de 2026?
+
+No es "ganarle al primer lugar de 2024". Eso seguiría violando la tesis. Es
+evaluar el problema completo tal como el cliente lo definió.
+
+### Por qué no hay leaderboard privado
+
+La competencia cerró; el test privado no es accesible. El primer lugar (Ilya
+Novoselskiy, score privado 0,17265 sobre 0,2) documentó su solución en el
+writeup de Kaggle.
+
+> ⚠️ **Regla 3.** Ese writeup se leyó por capturas de pantalla en el chat de
+> planificación, no por fetch (Kaggle bloquea con JavaScript) y **no está en
+> `referencias/`**. Hasta que se guarde la copia, nada de este bloque puede
+> citarse en el informe: es memoria de conversación, exactamente lo que la
+> regla 3 prohíbe como fuente. Se anota aquí como orientación de trabajo, no
+> como hecho verificado.
+
+Orientación, entonces: imagen (EVA02-small + EdgeNeXt) → predicciones OOF
+concatenadas con metadata tabular → ensamble grande de GBDT. La feature que
+reporta como más valiosa es comparar cada lesión contra el promedio de lesiones
+del mismo paciente — la traducción numérica del "patito feo" clínico. Datos
+sintéticos mejoraron su CV individual pero no el ensamble, y los descartó.
+
+Esto encaja con lo ya medido aquí: `outputs/eda-diagnostico.json` da una media
+de 384,89 lesiones por paciente (máximo 9.184), así que hay material de sobra
+para construir un contraste intra-paciente.
+
+### Protocolo de medición sin leaderboard (DECIDIDO)
+
+Dos vías, combinadas.
+
+**Vía A — CV comparable.** Mismo esquema que ya está montado y verificado:
+StratifiedGroupKFold por `patient_id`, 5 folds (`outputs/diseno-validacion.json`),
+repetido con varias semillas. Comparar **distribuciones** de pAUC entre semillas,
+no puntos únicos. Declarar en el informe que compara pipelines, no arquitecturas
+aisladas, y que las asignaciones de fold no son idénticas a las de nadie más.
+
+Esto no es un capricho: el hallazgo 2 de "Hallazgos vivos" ya mostró que con
+±0.0055 y ±0.0173 de dispersión entre folds, una diferencia de medias de 0,1451
+contra 0,1331 no se sostiene sola.
+
+**Vía B — lockbox propio.** Antes de tocar ningún modelo nuevo: apartar ~20% de
+los **pacientes** (no de las filas), estratificado, y no tocarlo hasta la
+evaluación final única.
+
+*Aritmética del lockbox, con su fuente.* Hay 393 positivos
+(`eda-diagnostico.json > desbalance_target.conteos`) repartidos en solo **259
+pacientes portadores** de 1.042 (`diseno-validacion.json > n_grupos_positivos`).
+Un 20% estratificado deja ~79 positivos sobre ~52 pacientes. Suficiente para un
+pAUC final, pero con varianza alta y **con los positivos concentrados en pocos
+pacientes**, que es peor que 79 positivos independientes. Por eso el lockbox es
+confirmación, no la estimación principal.
+
+**Regla operativa: la Vía A y la Vía B se montan ANTES de entrenar nada nuevo**
+— para que el protocolo no se ajuste al resultado.
+
+### Riesgo bloqueante: contaminación del modelo fundacional
+
+PanDerm (Nature Medicine 2025, `github.com/SiyuanYan1/PanDerm`) se preentrenó con
+>2M imágenes de 11 instituciones, incluyendo ~757.890 de TBP (~35% del
+preentrenamiento) — la misma modalidad que ISIC 2024. Sucesor: DermFM-Zero /
+PanDerm-2 (`huggingface.co/redlessone/PanDerm2`).
+
+**Antes de descargar pesos: verificar si SLICE-3D estuvo entre las fuentes de
+preentrenamiento.** MSKCC, anfitrión de ISIC 2024, aparece mencionado como
+fuente institucional. Si hay solape, cualquier resultado de un modelo congelado
+sobre estos datos está inflado por fuga — no por un error del proyecto, sino por
+el preentrenamiento del modelo descargado.
+
+Si se confirma, no se usa PanDerm, y el hallazgo se documenta como parte del
+informe: **en la era de los modelos fundacionales la fuga se desplaza del propio
+dataset al preentrenamiento de terceros.** Es la continuación natural de lo que
+`auditoria-de-fugas` ya encontró dentro del CSV, un nivel más arriba.
+
+Respaldo si está contaminado: DINOv3 (genérico, no dermatológico, sin este
+riesgo conocido).
+
+*Precedente en este mismo archivo:* la Cuarta nota dejó abierta exactamente esta
+pregunta para `tbp_lv_nevi_confidence` —si las lesiones con que se entrenó ese
+clasificador se solapan con SLICE-3D— y se resolvió por criterio de
+disponibilidad en inferencia. Aquí el criterio no basta, porque el modelo
+congelado sí estará disponible en inferencia y aun así el número estaría inflado.
+
+### Plan de fases (orden de dependencia)
+
+- **Fase 0 — bloqueante.** Resolver la contaminación PanDerm/DermFM-Zero con
+  SLICE-3D. Posiblemente escribiendo a los autores (correo público en el repo).
+  Nada más empieza hasta cerrarla.
+- **Fase 1 — features de paciente relativo.** Sobre la metadata tabular que ya
+  está en `data/`: contraste de cada lesión contra el resto de su paciente (LOF
+  agrupado por `patient_id`, razones contra el promedio del paciente). Sin
+  imágenes. Días de trabajo, minutos de cómputo.
+  *Hipótesis, no resultado:* debería mejorar el pAUC de 0,1451
+  (`modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.pauc_media`).
+  Se escribe aquí como predicción declarada de antemano; si no mejora, eso
+  también va al informe.
+- **Fase 2 — protocolo.** Montar Vía A + Vía B. Antes de las fases 3 y 4.
+- **Fase 3 — características congeladas.** Una pasada hacia adelante por imagen,
+  sin fine-tuning. Factible en el M4 corriendo de noche. Requiere descargar
+  `train-image.hdf5` (ya está en Pendientes).
+- **Fase 4 — apilado y evaluación completa.** Características de imagen +
+  metadata + features de paciente relativo en el mismo pipeline tabular ya
+  auditado. Tabla final con los **tres** ejes de la función de utilidad: pAUC,
+  retrieval top-15 por paciente, y costo de inferencia.
+
+La fase 4 es la que cierra el argumento del informe: es donde el consultor deja
+de reportar una sola cifra y responde la pregunta que el cliente escribió
+entera.
+
+### Nota sobre alternativas tabulares (contexto, no decisión)
+
+TabPFN y otros "modelos fundacionales tabulares" (TabArena, 2026) superan a
+gradient boosting en benchmarks, pero: (a) buena parte de los números provienen
+del propio laboratorio que los publica, señalado como conflicto de interés por
+los mantenedores independientes de TabArena; (b) sin ensamblar configuraciones,
+CatBoost vuelve a liderar; (c) la zona segura documentada es de decenas de miles
+de filas, y aquí hay 401.059 (`eda-diagnostico.json > fuente.n_filas`), muy por
+encima del rango validado. **No se decidió usar TabPFN.** Queda como nota de
+contexto.
+
+### Pendientes de la extensión
+
+- [ ] **Fase 0:** verificar contaminación de PanDerm/DermFM-Zero con SLICE-3D
+- [ ] Guardar el writeup del 1er lugar en `referencias/` (con fuente y fecha en
+      la cabecera) antes de citarlo en el informe — regla 3
+- [ ] Decidir tamaño exacto del lockbox y semilla de partición, y verificar que
+      la partición deja positivos en ambos lados (mismo chequeo obligatorio que
+      `diseno-validacion` ya hace para los folds)
+- [ ] Decidir cuántas semillas usar en la Vía A, según tiempo de cómputo real
+- [ ] Definir cómo se mide el eje "costo de inferencia" — sin esa definición la
+      tabla de la fase 4 tiene solo dos columnas de tres
