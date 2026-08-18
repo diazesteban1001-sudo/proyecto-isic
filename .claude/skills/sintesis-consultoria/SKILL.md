@@ -122,8 +122,22 @@ Se genera con un script, nunca escribiendo el HTML a mano:
 ```bash
 python .claude/skills/sintesis-consultoria/scripts/generar_demo.py \
   --outputs-dir outputs/ \
-  --salida informe/demo.html
+  --salida informe/demo.html docs/index.html
 ```
+
+`--salida` admite varias rutas y **siempre se le pasan las dos**:
+`informe/demo.html` es la copia que abre por doble clic desde un USB sin
+servidor, y `docs/index.html` es la que GitHub Pages publica. El script
+renderiza el HTML una sola vez y escribe esa misma cadena en cada
+destino, así que son idénticos byte a byte por construcción. Si alguna
+vez difieren, es un defecto del script — nunca algo que se arregle
+copiando un archivo sobre el otro.
+
+`docs/.nojekyll` desactiva el procesado Jekyll de GitHub Pages, que
+interpretaría `{{` y `{%` como plantillas Liquid y podría corromper el
+JavaScript de los gráficos. Hoy la plantilla no contiene esas
+secuencias; el archivo está para que tampoco importe si mañana las
+contiene.
 
 Reglas, idénticas a las del informe escrito:
 

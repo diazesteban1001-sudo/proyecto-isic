@@ -65,8 +65,13 @@ Confirmadas contra esos archivos el 2026-08-18.)*
   (`modelado-baseline.json > metrica_fuente`, copia literal en
   `referencias/isic-primary-metric-pauc.py.md`).
 
-Detalle completo en `informe/informe-final.docx` y `informe/demo.html`
-(demo interactiva, abrir con doble clic).
+**▶ [Ver demo en vivo](https://diazesteban1001-sudo.github.io/proyecto-isic/)**
+— cada cifra muestra su archivo y campo de origen al pasar el cursor.
+
+Detalle completo en `informe/informe-final.docx`. La misma demo está en
+`informe/demo.html`, que es autocontenida y abre con doble clic sin
+servidor ni conexión. Las dos copias —esa y la publicada— las escribe
+`generar_demo.py` en la misma corrida, así que no pueden desincronizarse.
 
 ## Cómo correrlo
 
@@ -101,5 +106,9 @@ desde Kaggle (ver `CLAUDE.md` para el procedimiento).
 ├── data/                   # no versionado
 ├── outputs/                # salidas verificables de cada skill
 ├── referencias/            # fuentes primarias citadas, versionadas
-└── informe/                # borrador.md, informe-final.docx, demo.html
+├── informe/                # borrador.md, informe-final.docx, demo.html
+└── docs/                   # copia de la demo publicada por GitHub Pages
 ```
+
+`docs/index.html` no se edita nunca a mano: lo escribe `generar_demo.py`
+en la misma corrida que `informe/demo.html`, con el mismo contenido.

@@ -863,21 +863,35 @@ document.getElementById("pie").innerHTML =
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--outputs-dir", required=True)
-    ap.add_argument("--salida", required=True)
+    ap.add_argument(
+        "--salida",
+        required=True,
+        nargs="+",
+        help="Una o más rutas de destino. El HTML se renderiza UNA vez y esa "
+        "misma cadena se escribe en todas: informe/demo.html para abrir por "
+        "doble clic y docs/index.html para GitHub Pages.",
+    )
     args = ap.parse_args()
 
     datos = construir_datos(args.outputs_dir)
     # </script> dentro de la cadena JSON cerraria la etiqueta que la contiene;
     # \/ es escape válido en JSON, así que el dato llega intacto al parser.
     crudo = json.dumps(datos, ensure_ascii=False).replace("</", "<\\/")
+
+    # Se renderiza una sola vez, fuera del bucle, y se escribe la misma cadena
+    # en cada destino. No es una optimización: el payload lleva una marca de
+    # tiempo (datos["generado"]), así que dos renderizados podrían diferir en
+    # ese campo y las copias dejarían de ser idénticas. Renderizar aquí hace
+    # que la igualdad sea estructural en vez de algo que haya que comprobar.
     html = PLANTILLA.replace("__DATOS__", crudo)
 
-    os.makedirs(os.path.dirname(args.salida) or ".", exist_ok=True)
-    with open(args.salida, "w", encoding="utf-8") as f:
-        f.write(html)
+    for salida in args.salida:
+        os.makedirs(os.path.dirname(salida) or ".", exist_ok=True)
+        with open(salida, "w", encoding="utf-8") as f:
+            f.write(html)
 
     print(
-        f"Escrito: {args.salida} — {len(datos['modelos'])} niveles, "
+        f"Escrito: {', '.join(args.salida)} — {len(datos['modelos'])} niveles, "
         f"{len(datos['excluidas'])} columnas excluidas, "
         f"{len(datos['cadena'])} skills en la cadena"
     )
