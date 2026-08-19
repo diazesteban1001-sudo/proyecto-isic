@@ -7,8 +7,11 @@ evaluados con pAUC sobre 80% TPR. No decide cuál nivel es "el mejor" —
 mide y reporta. No optimiza hiperparámetros.
 
 ADVERTENCIA: la implementación de pauc_above_tpr() NO ha sido
-contrastada línea por línea contra el notebook oficial de Kaggle
-(isic-pauc-abovetpr). Ver SKILL.md, sección "Sobre la métrica".
+contrastada contra el script oficial del organizador, cuya copia literal
+está en referencias/isic-primary-metric-pauc.py.md. El notebook de Kaggle
+(isic-pauc-abovetpr) NO es legible por el agente —devuelve solo el shell
+de JavaScript—, así que no se verificó contra él. Ver SKILL.md, sección
+"Sobre la métrica".
 
 Uso:
     python train_and_evaluate.py --data data/train-metadata.csv \

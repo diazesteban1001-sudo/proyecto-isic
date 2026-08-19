@@ -440,6 +440,114 @@ usar, y por tanto todo lo demás.
 
 ---
 
+## Guardarraíles del agente
+
+Qué no decide el agente por su cuenta. Cada punto nombra el **mecanismo
+que lo hace cumplir**, porque una restricción que solo vive en la
+documentación es una intención, no un guardarraíl. Donde el mecanismo no
+existe todavía, se dice.
+
+### 1. No decide qué columnas excluir
+
+La decisión más consecuente del pipeline —qué columnas se quedan fuera—
+determina si el modelo es honesto o una fuga con buena puntuación. El
+agente no la toma: la lee del reporte de `auditoria-de-fugas`.
+
+**Mecanismo.** `modelado-baseline/scripts/train_and_evaluate.py:165-171`
+comprueba la existencia del reporte **antes** de leer el CSV y aborta con
+código 1:
+
+```
+ERROR: no existe outputs/auditoria-de-fugas.json. Esta skill no decide qué
+columnas excluir por su cuenta — corre auditoria-de-fugas primero.
+```
+
+No hay lista de respaldo escrita a mano ni valor por defecto: las
+columnas se arman concatenando tres campos del reporte, así que sin
+reporte no hay nada que usar. Reproducido y documentado en
+`informe/casos-de-fallo.md`, caso B.
+
+### 2. Ninguna cifra del informe existe sin estar en `outputs/`
+
+Es la regla 2 con un verificador detrás, no un propósito.
+
+**Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
+extrae todo número del borrador y lo busca en los `outputs/*.json` con
+tolerancia de redondeo 0,01. Última corrida
+(`outputs/sintesis-verificacion.json`): **331 números en el borrador,
+291 con respaldo, 13 señalados** para revisar uno por uno; el resto cae
+en contextos que no son cifras medidas (años, etiquetas de nivel) y se
+descarta explícitamente.
+
+**Límite conocido de este mecanismo:** el verificador se ejecuta sobre
+`informe/borrador.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
+produjo un fallo real: la AUC estándar de 0,6685 que este archivo
+atribuye al Nivel 2a no existe en ningún `outputs/*.json`. Está
+documentado en `informe/casos-de-fallo.md`, caso A. Pendiente: medirla y
+publicarla, o retirar la afirmación.
+
+### 3. No decide el umbral clínico de sensibilidad
+
+El agente **mide bajo el umbral que la contraparte definió**; no lo elige
+ni lo ajusta para que los resultados luzcan mejor. El pAUC sobre 80% TPR
+existe porque el organizador declaró inaceptable la región de
+sensibilidad baja — la función de utilidad es del cliente, no del
+consultor.
+
+**Mecanismo.** `MIN_TPR = 0.80` es una constante de módulo en
+`train_and_evaluate.py:46`, no un argumento de línea de comandos: no se
+puede cambiar por invocación. Su comentario cita la fuente y registra el
+valor rival que **no** se usa:
+
+```python
+# Constante del proyecto: Kaggle evalua el pAUC sobre 80% TPR, rango [0, 0.2]
+# (referencias/kaggle-evaluation.md). Los premios del organizador ISIC usan
+# 0.88 sobre el mismo algoritmo; no es la evaluacion que replicamos.
+```
+
+La implementación se verificó contra el script oficial del organizador
+(`referencias/isic-primary-metric-pauc.py.md`), no contra una
+reimplementación propia — y esa verificación encontró un error real: la
+primera versión subestimaba por un factor de 0,556, dando 0,12 donde el
+máximo es 0,2 (`modelado-baseline/SKILL.md`, "Sobre la métrica").
+
+### 4. No presenta resultados como diagnóstico ni recomendación de tratamiento
+
+La salida es **evidencia para una decisión humana**, no una conclusión
+clínica. El sistema ordena lesiones por sospecha; no dice qué tiene un
+paciente ni qué hacer con él.
+
+**Mecanismo, y su honesta debilidad.** A diferencia de los tres
+anteriores, este guardarraíl **no está impuesto por código** — ningún
+script puede impedir que alguien lea mal una tabla. Lo que sí existe es
+material medido que hace insostenible la lectura clínica, y que por regla
+del proyecto tiene que viajar con los resultados:
+
+- **La clase negativa tiene ruido de etiqueta estructural.** Los
+  positivos son de patología confirmada; de los negativos *"most never
+  underwent a skin biopsy"* y se asumen benignos por evaluación clínica
+  (sección "Sobre el problema"). Un "negativo" del modelo no es un
+  "sano": es "ningún dermatólogo lo consideró digno de biopsia".
+- **Las imágenes no son de calidad diagnóstica.** Recortes de ~133×133 px
+  *"comparable in optical resolution to smartphone images"*, con *"fewer
+  morphologic features than dermoscopic images"* (misma sección).
+- **La mejor comparación medida no es concluyente.** El intervalo *t* de
+  la diferencia entre los dos mejores modelos cruza el cero
+  (`informe/borrador.md` §7.4), y ese intervalo es además optimista
+  porque los folds no son independientes.
+
+Un sistema del que no se puede afirmar con certeza que un modelo supere a
+otro tampoco puede sostener una afirmación diagnóstica sobre un paciente.
+`sintesis-consultoria` tiene el mandato de reportar supuestos y
+limitaciones junto a cada resultado, y `informe/casos-de-fallo.md` existe
+para que el modo de fallo sea parte del entregable y no una nota al pie.
+
+**Pendiente para cerrar este punto con un mecanismo real:** que el
+verificador de trazabilidad falle —no solo avise— si el informe presenta
+una cifra de desempeño sin su limitación asociada. Hoy no lo hace.
+
+---
+
 ## Extensión: fase de imágenes y modelos fundacionales
 
 **Estado: PLAN ACORDADO, NADA EJECUTADO.** Sesión de planificación del
