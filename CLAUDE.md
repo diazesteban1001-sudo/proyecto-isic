@@ -378,12 +378,17 @@ train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, ambos trazables a
 `outputs/modelado-baseline.json`:
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
-   Nivel 2a da pAUC 0.0013, *por debajo del piso aleatorio de la métrica* (0.02),
-   mientras su AUC estándar es 0.6685 y no delata nada. No colapsa a "predecir
-   siempre negativo" —el diagnóstico de manual— sino que satura en probabilidad
-   1.0 sobre negativos y los coloca encima de los positivos, arrasando justo la
-   región de sensibilidad alta. Con `class_weight="balanced"` (2b): 0.1451.
-   La métrica del cliente ve el problema; la métrica por defecto no.
+   Nivel 2a da pAUC 0.0013, *por debajo del piso aleatorio de la métrica* (0.02).
+   No colapsa a "predecir siempre negativo" —el diagnóstico de manual— sino que
+   satura en probabilidad 1.0 sobre negativos y los coloca encima de los
+   positivos, arrasando justo la región de sensibilidad alta. Con
+   `class_weight="balanced"` (2b): 0.1451. La métrica del cliente ve el
+   problema; la métrica por defecto no.
+
+   > **AUC estándar del Nivel 2a: no medido en `outputs/`** — se retiró una
+   > cifra sin respaldo encontrada durante la verificación del 18 de agosto. El
+   > diagnóstico del caso de fallo no depende de ella (ver
+   > `informe/casos-de-fallo.md`).
 
 2. **2b no solo es mejor que la logística: es más estable.** Desviación entre
    folds de **±0.0055** frente a **±0.0173** del Nivel 1 — la logística varía
@@ -422,6 +427,16 @@ usar, y por tanto todo lo demás.
       `modelado-baseline`; las cuatro con defectos encontrados y corregidos)
 - [x] Escribir `sintesis-consultoria`, la quinta (2026-08-18 — borrador con
       verificador de trazabilidad, conversión a Word/PDF y demo HTML autocontenida)
+- [ ] **Semana del 20 al 26 de agosto de 2026 — extender
+      `verificar_trazabilidad.py` para que escanee también `CLAUDE.md`**, no
+      solo `informe/borrador.md`. Es el hueco exacto por el que pasó sin
+      verificar la AUC de 0,6685 atribuida al Nivel 2a, retirada el 2026-08-18.
+      Mientras el verificador solo mire el borrador, la regla 2 no cubre el
+      archivo que la enuncia. Nota de diseño: `CLAUDE.md` cita legítimamente
+      cifras que no son mediciones propias (conteos del paper, montos de
+      premios, versiones), así que el modo sobre este archivo probablemente
+      deba señalar para revisión en vez de fallar — igual que hoy con el
+      borrador. Cierra también el punto 2 de "Guardarraíles del agente".
 - [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
 - [x] Preparar demo en vivo: `informe/demo.html`, generada solo por
       `generar_demo.py`, abre por doble clic sin servidor y muestra cada cifra
@@ -481,10 +496,12 @@ descarta explícitamente.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
-produjo un fallo real: la AUC estándar de 0,6685 que este archivo
-atribuye al Nivel 2a no existe en ningún `outputs/*.json`. Está
-documentado en `informe/casos-de-fallo.md`, caso A. Pendiente: medirla y
-publicarla, o retirar la afirmación.
+produjo un fallo real: este archivo atribuía al Nivel 2a una AUC estándar
+de 0,6685 que no existe en ningún `outputs/*.json`. **Retirada el
+2026-08-18** (sección "Hallazgos vivos"); el caso A de
+`informe/casos-de-fallo.md` nunca la usó y su diagnóstico se sostiene sin
+ella. Cerrar el hueco —que el verificador escanee también `CLAUDE.md`—
+está en Pendientes con fecha objetivo.
 
 ### 3. No decide el umbral clínico de sensibilidad
 

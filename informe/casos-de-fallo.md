@@ -85,14 +85,20 @@ concentra su error. Es el argumento central del proyecto convertido en
 número: la métrica que la contraparte definió no es una preferencia
 estética, es lo que hace visible este fallo.
 
-> **Nota de trazabilidad.** `CLAUDE.md` afirma que la AUC estándar de
+> **Nota de trazabilidad.** `CLAUDE.md` afirmaba que la AUC estándar de
 > este nivel es 0,6685, sugiriendo que una métrica convencional lo daría
 > por aceptable. Esa cifra **no está en `outputs/`**: el bloque
 > `nivel_2a` no tiene campo `auc_estandar` —solo `nivel_0` lo tiene—, así
-> que por la regla 2 no se cita aquí. El argumento se sostiene sin ella:
-> el contraste medido entre 0,0013 y 0,1451 con un solo argumento de
-> diferencia ya lo demuestra. Pendiente: medir esa AUC y añadirla a
-> `outputs/`, o retirar la afirmación de `CLAUDE.md`.
+> que por la regla 2 nunca se citó aquí, y el 2026-08-18 se retiró también
+> de `CLAUDE.md`. El argumento se sostiene sin ella: el contraste medido
+> entre 0,0013 y 0,1451 con un solo argumento de diferencia ya lo
+> demuestra.
+>
+> Lo que la cifra retirada habría añadido —que una métrica convencional no
+> delata este fallo— sigue siendo defendible sin ella, pero como
+> razonamiento sobre lo que el pAUC mide, no como número medido. Si se
+> quiere sostener con evidencia, hay que medir esa AUC y publicarla en
+> `outputs/`.
 
 **Decisión que se tomó.** El nivel 2a se conservó en los resultados en
 lugar de borrarlo. Un pipeline que solo reporta su mejor configuración
