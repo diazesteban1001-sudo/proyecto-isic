@@ -1,7 +1,7 @@
 # Agente consultor estadístico — Detección de melanoma (ISIC 2024)
 
 **Estado: avance parcial.** Entrega de progreso — 20 de agosto de 2026.
-Proyecto en curso, sustentación final en aprox. 3 meses. Ver "Qué falta"
+Proyecto en curso, Ver "Qué falta"
 más abajo para el alcance pendiente.
 
 ## El problema y la contraparte
