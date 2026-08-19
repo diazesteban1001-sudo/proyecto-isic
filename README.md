@@ -69,9 +69,12 @@ Confirmadas contra esos archivos el 2026-08-18.)*
 — cada cifra muestra su archivo y campo de origen al pasar el cursor.
 
 Detalle completo en `informe/informe-final.docx`. La misma demo está en
-`informe/demo.html`, que es autocontenida y abre con doble clic sin
-servidor ni conexión. Las dos copias —esa y la publicada— las escribe
-`generar_demo.py` en la misma corrida, así que no pueden desincronizarse.
+`informe/demo.html`: **autocontenida de verdad** —datos y librería de
+gráficos empotrados, cero peticiones de red— así que abre con doble clic
+desde una USB, sin servidor y sin conexión. Verificado renderizándola con
+todo el tráfico bloqueado, no solo leyendo el código. Las dos copias
+—esa y la publicada— las escribe `generar_demo.py` en la misma corrida,
+así que no pueden desincronizarse.
 
 ## Cómo correrlo
 

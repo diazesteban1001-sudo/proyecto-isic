@@ -280,7 +280,7 @@ PLANTILLA = r"""<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Agente consultor estad&iacute;stico &mdash; ISIC 2024</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>__CHARTJS__</script>
 <style>
   :root {
     --tinta: #16202b;
@@ -878,12 +878,39 @@ def main():
     # \/ es escape válido en JSON, así que el dato llega intacto al parser.
     crudo = json.dumps(datos, ensure_ascii=False).replace("</", "<\\/")
 
+    # Chart.js se empotra desde disco en vez de cargarse por CDN. Antes iba en
+    # un <script src> a jsdelivr, y sin red la pagina lanzaba
+    # "Chart is not defined", lo que ABORTA el script y deja sin rellenar todo
+    # lo que viene despues: los pAUC y las fichas por skill desaparecian
+    # mientras la cabecera seguia a la vista. Fallo silencioso en mitad de una
+    # presentacion. Procedencia y hash en assets/PROCEDENCIA.md.
+    #
+    # La ruta se resuelve contra __file__, no contra el directorio de trabajo,
+    # para que el script funcione invocado desde cualquier sitio.
+    chartjs_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "..",
+        "assets",
+        "chart.umd.min.js",
+    )
+    with open(chartjs_path, encoding="utf-8") as f:
+        chartjs = f.read()
+
+    # Verificado al empotrarla: la libreria no contiene "</script". Si una
+    # version futura lo hiciera, cerraria la etiqueta antes de tiempo y
+    # romperia la pagina sin ruido, asi que se comprueba en vez de confiar.
+    if "</script" in chartjs.lower():
+        raise SystemExit(
+            f"{chartjs_path} contiene '</script': empotrarla cerraria la "
+            "etiqueta antes de tiempo. Hay que escaparla antes de seguir."
+        )
+
     # Se renderiza una sola vez, fuera del bucle, y se escribe la misma cadena
     # en cada destino. No es una optimización: el payload lleva una marca de
     # tiempo (datos["generado"]), así que dos renderizados podrían diferir en
     # ese campo y las copias dejarían de ser idénticas. Renderizar aquí hace
     # que la igualdad sea estructural en vez de algo que haya que comprobar.
-    html = PLANTILLA.replace("__DATOS__", crudo)
+    html = PLANTILLA.replace("__CHARTJS__", chartjs).replace("__DATOS__", crudo)
 
     for salida in args.salida:
         os.makedirs(os.path.dirname(salida) or ".", exist_ok=True)

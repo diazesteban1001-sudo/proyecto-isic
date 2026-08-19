@@ -139,6 +139,26 @@ JavaScript de los gráficos. Hoy la plantilla no contiene esas
 secuencias; el archivo está para que tampoco importe si mañana las
 contiene.
 
+La generación **no requiere internet**: Chart.js se lee de
+`assets/chart.umd.min.js`, versionado en el repositorio. Su procedencia,
+hash y licencia (MIT) están en `assets/PROCEDENCIA.md`. Vive dentro de
+la skill, no en la raíz del proyecto, porque al empaquetarla como
+`.skill` instalable tiene que viajar con ella.
+
+**Cómo se verifica que sigue siendo autocontenida** (no basta con
+mirarla, que es justo como se coló el defecto la primera vez):
+
+```bash
+# 1. No debe quedar ningún recurso externo
+grep -o -E '(src|href)="https?://[^"]*"' informe/demo.html   # sin salida
+
+# 2. Debe renderizar con toda la red cortada
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless --disable-gpu --proxy-server="127.0.0.1:1" \
+  --virtual-time-budget=6000 --dump-dom \
+  "file://$PWD/informe/demo.html" | grep -c "0,1451"          # debe dar 1
+```
+
 Reglas, idénticas a las del informe escrito:
 
 - **Ningún número tecleado en el HTML.** El script lee `outputs/*.json`
@@ -150,10 +170,17 @@ Reglas, idénticas a las del informe escrito:
   sostenga. Donde muestre una lectura y no una medición —el porqué de
   una columna excluida, por ejemplo— debe marcarlo como tal en la
   propia página.
-- **Autocontenida.** Los datos van embebidos como JSON en el archivo,
-  no se leen con `fetch` en tiempo real: tiene que abrir con doble clic
-  desde una USB, sin servidor y sin depender de rutas relativas. Las
-  librerías de gráficos van por CDN.
+- **Autocontenida, sin excepciones.** Los datos van embebidos como JSON
+  en el archivo, no se leen con `fetch` en tiempo real, y **la librería
+  de gráficos va empotrada** desde `assets/chart.umd.min.js` — no por
+  CDN. El archivo resultante no hace ni una sola petición de red: abre
+  con doble clic desde una USB, sin servidor y sin conexión.
+  *Esto no siempre fue así.* Chart.js se cargaba desde jsdelivr, y sin
+  red la página no mostraba un hueco donde iría el gráfico: lanzaba
+  `Chart is not defined`, lo que **aborta el script** y deja sin
+  rellenar todo lo posterior —los pAUC y las fichas por skill—
+  mientras la cabecera seguía viéndose normal. Si se vuelve a añadir
+  cualquier recurso externo, el fallo regresa en esa forma silenciosa.
 - **Se verifica mirándola**, igual que el `.docx`: abrir en el
   navegador, accionar los controles interactivos y confirmar que
   renderiza, no solo que el archivo se escribió.
