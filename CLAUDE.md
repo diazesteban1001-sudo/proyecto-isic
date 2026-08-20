@@ -55,6 +55,61 @@ la pregunta y omitiendo que el propio cliente señaló las otras.
 
 ---
 
+## La contraparte y su línea base (criterio 1)
+
+### Quién es la contraparte
+
+**ISIC / MSKCC, los organizadores del reto.** No es una contraparte inventada
+para el ejercicio: publicaron qué necesitaban —el pAUC sobre 80% TPR, la
+sensibilidad de recuperación top-15 por paciente y la eficiencia de
+inferencia—, lo justificaron en términos clínicos y respaldaron esas
+prioridades con premios reales (`referencias/kaggle-evaluation.md`,
+`referencias/kaggle-rules.md`). La función de utilidad del cliente está escrita
+por el cliente, no inferida por nosotros.
+
+Autorizado explícitamente por el profesor el 2026-08-20 (ver tabla de
+decisiones).
+
+### Línea base: cuántos exámenes innecesarios genera la práctica actual
+
+Sin una línea base, "el modelo prioriza bien" no significa nada: hay que decir
+*mejor que qué*. La cifra medida de referencia viene del cribado sobre
+fotografía corporal total, la misma modalidad de este dataset
+(`referencias/panderm-reduccion-examenes.md`, Nature Medicine 2025, consultado
+el 2026-08-20):
+
+> "Significantly, it detected malignant lesions in 79 out of 80 patients while
+> reducing unnecessary examinations by 60.8% compared with melanographers
+> (3,498 versus 8,913 lesions recommended for detailed examination)"
+
+Sobre 80 pacientes, los **melanógrafos marcaron 8.913 lesiones** para examen
+detallado; el sistema automático marcó **3.498** para el mismo grupo, una
+**reducción del 60,8%** de exámenes innecesarios, con detección de malignidad
+en **79 de 80** pacientes. El desbalance de esa evaluación —216 malignas contra
+197.716 benignas— es del mismo orden que el de SLICE-3D.
+
+Qué aporta al criterio 1: convierte "reducir carga de trabajo" en una magnitud
+con unidades. El costo de un falso positivo deja de ser abstracto y pasa a ser
+un examen detallado que alguien tiene que hacer, contable.
+
+**Tres salvedades, obligatorias al citarla** (detalle en el archivo de
+`referencias/`):
+
+1. El paper dice **"melanographers"**, palabra que aparece una sola vez y que
+   **no define**. Traducirlo como "especialistas en melanoma" sería una
+   sustitución nuestra que probablemente exagera la comparación. Se cita la
+   palabra del paper.
+2. Los autores **no discuten esta comparación en sus limitaciones**: no hay
+   análisis de factores de confusión ni de diferencias de protocolo.
+3. El **8.913 es el lado humano** y es la línea base independiente utilizable;
+   el 3.498 es desempeño de PanDerm reportado por sus propios autores.
+
+*Nota de deslinde:* PanDerm es también el modelo cuya posible contaminación con
+SLICE-3D es la Fase 0 bloqueante de la extensión. Citar el 8.913 no depende de
+esa cuestión —es una medición sobre personas—; usar sus pesos, sí.
+
+---
+
 ## Arquitectura
 
 **Un solo agente. Varias skills.**
@@ -345,6 +400,7 @@ sí se contestan con la Tercera nota.
 | Se descartan RSNA rodilla y RSNA columna lumbar | Imágenes médicas 3D: exigen GPU seria y aportan poco desde lo estadístico. |
 | Un agente, no varios | Las skills son instrumentos que el agente interpreta, no actores independientes. |
 | Claude Code sobre claude.ai | Las skills son mecanismo nativo, ejecución de Python sobre datos reales, `outputs/` persistente, todo versionado en Git. |
+| **ISIC/MSKCC cuenta como contraparte válida, y la línea base se construye con fuentes investigadas** (2026-08-20) | Respuesta del profesor, consultado sobre el criterio 1: autorizó usar lo que los organizadores declararon que necesitaban como contraparte real, y fuentes confiables investigadas —no una entrevista obligatoria— para la línea base. Cierra la tensión que estaba abierta sobre si un cliente que publica sus requisitos pero no se sienta con nosotros califica bajo ese criterio. Consecuencia operativa: la sección "La contraparte y su línea base" queda como respuesta al criterio 1, y la exigencia de rigor se traslada de *con quién se habló* a *qué tan trazable es la fuente* — que es la regla 3, ya vigente. |
 
 ---
 
