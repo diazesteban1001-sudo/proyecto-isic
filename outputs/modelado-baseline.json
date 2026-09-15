@@ -46,7 +46,15 @@
       0.1184
     ],
     "pauc_media": 0.1331,
-    "pauc_std": 0.0173
+    "pauc_std": 0.0173,
+    "auc_estandar_por_fold": [
+      0.9316,
+      0.9007,
+      0.9278,
+      0.8646,
+      0.8816
+    ],
+    "auc_estandar_media": 0.9013
   },
   "nivel_2a_gradient_boosting_sin_balancear": {
     "modelo": "HistGradientBoostingClassifier(class_weight=None)",
@@ -59,6 +67,14 @@
     ],
     "pauc_media": 0.0013,
     "pauc_std": 0.0015,
+    "auc_estandar_por_fold": [
+      0.6685,
+      0.7095,
+      0.5208,
+      0.6174,
+      0.5632
+    ],
+    "auc_estandar_media": 0.6159,
     "nota": "Se conserva aunque quede por DEBAJO del piso aleatorio de la métrica (0.02): con 0.098% de positivos el modelo satura en probabilidad 1.0 sobre negativos y los coloca por encima de los positivos, destruyendo justo la región de sensibilidad alta que el pAUC mide. Es un hallazgo, no un fallo del script."
   },
   "nivel_2b_gradient_boosting_balanceado": {
@@ -72,6 +88,14 @@
     ],
     "pauc_media": 0.1451,
     "pauc_std": 0.0055,
+    "auc_estandar_por_fold": [
+      0.9415,
+      0.9184,
+      0.936,
+      0.9337,
+      0.9203
+    ],
+    "auc_estandar_media": 0.93,
     "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds."
   },
   "escala_de_referencia_pauc": {

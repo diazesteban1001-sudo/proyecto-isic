@@ -32,7 +32,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.metrics import auc, roc_curve
+from sklearn.metrics import auc, roc_curve, roc_auc_score
 from sklearn.preprocessing import StandardScaler
 
 try:
@@ -118,9 +118,10 @@ def codificar_fold(df, numericas, categoricas, target_col, train_idx, val_idx):
     return X_train.values, X_val.values
 
 
-def evaluar_modelo(df, target_col, folds, numericas, categoricas, modelo_fn, escalar=False):
+def evaluar_modelo(df, target_col, folds, numericas, categoricas, modelo_fn, escalar=False, devolver_auc=False):
     y = df[target_col].values
     paucs = []
+    aucs = []
     for train_idx, val_idx in folds:
         X_train, X_val = codificar_fold(df, numericas, categoricas, target_col, train_idx, val_idx)
         y_train, y_val = y[train_idx], y[val_idx]
@@ -137,6 +138,12 @@ def evaluar_modelo(df, target_col, folds, numericas, categoricas, modelo_fn, esc
         y_score = modelo.predict_proba(X_val)[:, 1]
 
         paucs.append(pauc_above_tpr(y_val, y_score))
+        if devolver_auc:
+            # Mismo y_score que el pAUC de arriba: no se reentrena nada.
+            aucs.append(roc_auc_score(y_val, y_score))
+
+    if devolver_auc:
+        return paucs, aucs
     return paucs
 
 
@@ -218,7 +225,9 @@ def main():
     def modelo_logreg():
         return LogisticRegression(class_weight="balanced", max_iter=1000)
 
-    paucs_1 = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_logreg, escalar=True)
+    paucs_1, aucs_1 = evaluar_modelo(
+        df, args.target_col, folds, numericas, categoricas, modelo_logreg, escalar=True, devolver_auc=True
+    )
 
     # Nivel 2a: gradient boosting sin ajustar por el desbalance. Se conserva
     # deliberadamente aunque colapse — el colapso ES el hallazgo, y borrarlo
@@ -226,13 +235,17 @@ def main():
     def modelo_gb():
         return HistGradientBoostingClassifier(random_state=args.seed)
 
-    paucs_2a = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_gb)
+    paucs_2a, aucs_2a = evaluar_modelo(
+        df, args.target_col, folds, numericas, categoricas, modelo_gb, devolver_auc=True
+    )
 
     # Nivel 2b: el mismo modelo, unica diferencia class_weight="balanced".
     def modelo_gb_balanceado():
         return HistGradientBoostingClassifier(random_state=args.seed, class_weight="balanced")
 
-    paucs_2b = evaluar_modelo(df, args.target_col, folds, numericas, categoricas, modelo_gb_balanceado)
+    paucs_2b, aucs_2b = evaluar_modelo(
+        df, args.target_col, folds, numericas, categoricas, modelo_gb_balanceado, devolver_auc=True
+    )
 
     resultado = {
         "esquema_cv": {"group_col": args.group_col, "n_splits": args.n_splits, "seed": args.seed},
@@ -246,12 +259,16 @@ def main():
             "pauc_por_fold": [round(float(p), 4) for p in paucs_1],
             "pauc_media": round(float(np.mean(paucs_1)), 4),
             "pauc_std": round(float(np.std(paucs_1)), 4),
+            "auc_estandar_por_fold": [round(float(a), 4) for a in aucs_1],
+            "auc_estandar_media": round(float(np.mean(aucs_1)), 4),
         },
         "nivel_2a_gradient_boosting_sin_balancear": {
             "modelo": "HistGradientBoostingClassifier(class_weight=None)",
             "pauc_por_fold": [round(float(p), 4) for p in paucs_2a],
             "pauc_media": round(float(np.mean(paucs_2a)), 4),
             "pauc_std": round(float(np.std(paucs_2a)), 4),
+            "auc_estandar_por_fold": [round(float(a), 4) for a in aucs_2a],
+            "auc_estandar_media": round(float(np.mean(aucs_2a)), 4),
             "nota": (
                 "Se conserva aunque quede por DEBAJO del piso aleatorio de la "
                 "métrica (0.02): con 0.098% de positivos el modelo satura en "
@@ -265,6 +282,8 @@ def main():
             "pauc_por_fold": [round(float(p), 4) for p in paucs_2b],
             "pauc_media": round(float(np.mean(paucs_2b)), 4),
             "pauc_std": round(float(np.std(paucs_2b)), 4),
+            "auc_estandar_por_fold": [round(float(a), 4) for a in aucs_2b],
+            "auc_estandar_media": round(float(np.mean(aucs_2b)), 4),
             "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds.",
         },
         "escala_de_referencia_pauc": {
