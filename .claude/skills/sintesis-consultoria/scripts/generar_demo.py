@@ -30,8 +30,9 @@ from scipy import stats
 CADENA = [
     {
         "nombre": "eda-diagnostico",
-        "tipo": "instrumento",
-        "funcion": "Perfil de datos, faltantes, desbalance, estructura de grupos",
+        "etapa": "Diagnóstico del dataset",
+        "tipo": "medición",
+        "funcion": "Se perfiló el archivo: tipos, faltantes, desbalance y estructura de grupos por paciente",
         "md": "eda-diagnostico",
         "mide": "Estructura del archivo, tipos, faltantes por columna, desbalance de la "
                 "respuesta, tamaño de los grupos y qué columnas existen en train pero no en test.",
@@ -41,31 +42,34 @@ CADENA = [
     },
     {
         "nombre": "diseno-validacion",
-        "tipo": "instrumento",
-        "funcion": "Propone y verifica el esquema de validación cruzada",
+        "etapa": "Diseño de la validación",
+        "tipo": "medición",
+        "funcion": "Se construyó y se verificó la validación cruzada agrupada por paciente",
         "md": "diseno-validacion",
-        "mide": "Construye los folds agrupando por paciente y estratificando por clase, y después "
-                "comprueba que ningún paciente cruce de un lado al otro. Además cuantifica cuánta "
-                "fuga habría producido no hacerlo.",
+        "mide": "Se construyeron los folds agrupando por paciente y estratificando por clase, y "
+                "después se comprobó que ningún paciente cruzara de un lado al otro. Además se "
+                "cuantificó cuánta fuga habría producido no hacerlo.",
         "porque": "Proponer un esquema es barato; verificarlo es lo que lo convierte en evidencia. "
                   "Sin la comparación contra la partición ingenua, «hay que agrupar por paciente» "
                   "es una recomendación de manual y no un hallazgo sobre estos datos.",
     },
     {
         "nombre": "auditoria-de-fugas",
-        "tipo": "instrumento",
-        "funcion": "Chequeos de fuga estructural y escaneo univariado",
+        "etapa": "Auditoría de fugas",
+        "tipo": "medición",
+        "funcion": "Se auditó la fuga estructural y se escaneó columna por columna",
         "md": "auditoria-de-fugas",
         "mide": "Dos cosas distintas: fuga estructural —columnas ausentes en test, constantes, "
                 "identificadores— y fuga oculta, entrenando un modelo por columna sobre los folds "
                 "agrupados para ver si alguna predice el objetivo sospechosamente bien.",
-        "porque": "Es el instrumento adversario: existe para encontrar defectos, no para "
+        "porque": "Es el paso adversario: existe para encontrar defectos, no para "
                   "confirmar que todo está bien. Un chequeo que no puede fallar no vale nada.",
     },
     {
         "nombre": "modelado-baseline",
-        "tipo": "instrumento",
-        "funcion": "Modelos de referencia con la métrica oficial",
+        "etapa": "Modelos de referencia",
+        "tipo": "medición",
+        "funcion": "Se entrenaron y evaluaron cuatro niveles con la métrica oficial",
         "md": "modelado-baseline",
         "mide": "Cuatro niveles de referencia sobre los mismos folds, evaluados con la métrica "
                 "oficial de la competencia y no con la de por defecto, reportando el resultado de "
@@ -76,17 +80,19 @@ CADENA = [
     },
     {
         "nombre": "sintesis-consultoria",
+        "etapa": "Síntesis y verificación",
         "tipo": "interpretación",
-        "funcion": "Lee todo outputs/ y produce el informe y esta demo",
+        "funcion": "Se cruzaron las cuatro salidas, se redactó el informe y se verificó su trazabilidad",
         # No mide nada, así que no tiene un .md de resultados propio: se le
         # asocia el de la verificación de trazabilidad, que es la evidencia
         # de que hizo su trabajo.
         "md": "sintesis-verificacion",
-        "mide": "Nada. Es la única skill que interpreta: cruza los cuatro instrumentos, resuelve "
-                "sus contradicciones y emite la recomendación. Lo que sí verifica es a sí misma, "
-                "extrayendo cada número del informe y comprobando que tenga respaldo en outputs/.",
-        "porque": "Es el trabajo del consultor, y está separado de los instrumentos a propósito: "
-                  "un instrumento que interpretara sus propios resultados tendería a "
+        "mide": "Nada. Es la única etapa que interpreta: se cruzaron las cuatro salidas "
+                "anteriores, se resolvieron sus contradicciones y se emitió la recomendación. "
+                "Lo que sí se verificó fue a sí misma, extrayendo cada número del informe y "
+                "comprobando que tuviera respaldo en outputs/.",
+        "porque": "Es el trabajo del consultor, y está separado de las etapas de medición a "
+                  "propósito: una etapa que interpretara sus propios resultados tendería a "
                   "justificarlos.",
     },
 ]
@@ -422,22 +428,17 @@ PLANTILLA = r"""<!DOCTYPE html>
     <p><b>El problema.</b> <span id="ctx-problema"></span></p>
     <p><b>Por qu&eacute; este caso.</b> <span id="ctx-eleccion"></span></p>
   </div>
-  <p class="tesis">
-    La finalidad del agente <strong>no es ganar la competencia</strong>: es leer la funci&oacute;n
-    de utilidad que el cliente escribi&oacute; en su m&eacute;trica y emitir una recomendaci&oacute;n
-    defendible, con cada cifra rastreable hasta el archivo que la produjo.
-  </p>
 </header>
 
 <section>
-  <h2><span class="num">1</span>La cadena de instrumentos</h2>
-  <p class="sub">Cuatro skills miden y reportan. La quinta interpreta. Haz clic en cualquiera para ver su salida real.</p>
+  <h2><span class="num">1</span>C&oacute;mo se desarroll&oacute; el trabajo</h2>
+  <p class="sub">Cinco etapas. Las cuatro primeras miden y dejan su salida en un archivo; la quinta interpreta y redacta. Haz clic en cualquiera para ver la salida real que produjo.</p>
   <div class="cadena" id="cadena"></div>
   <div class="salida" id="salida" hidden>
     <h3 id="salida-nombre"></h3>
     <div class="ficha">
-      <p><b>Qu&eacute; mide.</b> <span id="ficha-mide"></span></p>
-      <p><b>Por qu&eacute; existe.</b> <span id="ficha-porque"></span></p>
+      <p><b>Qu&eacute; se midi&oacute;.</b> <span id="ficha-mide"></span></p>
+      <p><b>Por qu&eacute; se hizo.</b> <span id="ficha-porque"></span></p>
       <p class="hallazgo"><b>Un hallazgo concreto.</b> <span id="ficha-hallazgo"></span></p>
     </div>
     <h3 id="salida-titulo"></h3>
@@ -559,16 +560,16 @@ document.getElementById("ctx-eleccion").innerHTML =
 // una pasa por cifra() y por tanto por su archivo y campo de origen.
 const HALLAZGOS = {
   "eda-diagnostico": () =>
-    `Encontr&oacute; ${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} columnas presentes ` +
+    `Se encontraron ${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} columnas presentes ` +
     `solo en entrenamiento, de las ${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")} del archivo ` +
     `&mdash; la primera se&ntilde;al de que algo ah&iacute; no estar&iacute;a disponible al predecir en producci&oacute;n.`,
   "diseno-validacion": () =>
-    `Cuantific&oacute; cu&aacute;nta fuga habr&iacute;a producido ignorar la agrupaci&oacute;n por paciente: ` +
+    `Se cuantific&oacute; cu&aacute;nta fuga habr&iacute;a producido ignorar la agrupaci&oacute;n por paciente: ` +
     `${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
     `de los pacientes (${cifra(mil(D.fuga.n_grupos_naive), "diseno-validacion.json > comparacion_particion_naive.n_grupos_con_fuga")} ` +
     `de ${cifra(mil(D.fuga.n_grupos_total), "diseno-validacion.json > n_grupos_total")}) habr&iacute;an caído a los dos lados de la partición.`,
   "auditoria-de-fugas": () =>
-    `Gener&oacute; ${cifra(D.auditoria.n_preguntas_abiertas, "auditoria-de-fugas.json > preguntas_abiertas")} preguntas abiertas ` +
+    `Se generaron ${cifra(D.auditoria.n_preguntas_abiertas, "auditoria-de-fugas.json > preguntas_abiertas")} preguntas abiertas ` +
     `sobre columnas sospechosas; ${cifra(D.auditoria.n_preguntas_abiertas - 1, "derivado: preguntas_abiertas menos la que exigió fuente externa")} ` +
     `se resolvieron por su naturaleza post-biopsia, y la &uacute;ltima exigi&oacute; rastrear un paper cient&iacute;fico hasta confirmar ` +
     `que <code>${esc(D.nevi ? D.nevi.columna : "")}</code>, de apariencia sospechosa, era en realidad leg&iacute;tima.`,
@@ -578,8 +579,8 @@ const HALLAZGOS = {
     `${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}. Corregida y verificada contra ` +
     `la fuente oficial (${cifra(esc(D.metrica_fuente), "modelado-baseline.json > metrica_fuente")}) antes de confiar en ning&uacute;n resultado.`,
   "sintesis-consultoria": () =>
-    `Extrajo los ${cifra(mil(D.verificacion.numeros), "sintesis-verificacion.json > numeros_en_borrador")} n&uacute;meros del borrador ` +
-    `y los contrast&oacute; contra <code>outputs/</code>: ` +
+    `Se extrajeron los ${cifra(mil(D.verificacion.numeros), "sintesis-verificacion.json > numeros_en_borrador")} n&uacute;meros del borrador ` +
+    `y se contrastaron contra <code>outputs/</code>: ` +
     `${cifra(mil(D.verificacion.con_respaldo), "sintesis-verificacion.json > numeros_con_respaldo_en_outputs")} con respaldo exacto, ` +
     `${cifra(D.verificacion.senalados, "sintesis-verificacion.json > numeros_sin_respaldo")} se&ntilde;alados para revisi&oacute;n a mano, ` +
     `y ${cifra(D.verificacion.ignorados, "derivado: numeros_en_borrador menos los con respaldo y los señalados")} en contextos que el ` +
@@ -589,10 +590,10 @@ const HALLAZGOS = {
 const cadena = document.getElementById("cadena");
 D.cadena.forEach((s, i) => {
   const b = document.createElement("button");
-  b.className = "paso" + (s.tipo !== "instrumento" ? " final" : "");
+  b.className = "paso" + (s.tipo === "interpretación" ? " final" : "");
   b.setAttribute("aria-selected", "false");
-  b.innerHTML = `<span class="tipo">${esc(s.tipo)}</span>
-                 <span class="nom">${esc(s.nombre)}</span>
+  b.innerHTML = `<span class="tipo">${i + 1} &middot; ${esc(s.tipo)}</span>
+                 <span class="nom">${esc(s.etapa)}</span>
                  <span class="fun">${esc(s.funcion)}</span>`;
   b.onclick = () => {
     const abierto = b.getAttribute("aria-selected") === "true";
@@ -600,7 +601,7 @@ D.cadena.forEach((s, i) => {
     const caja = document.getElementById("salida");
     if (abierto) { caja.hidden = true; return; }
     b.setAttribute("aria-selected", "true");
-    document.getElementById("salida-nombre").textContent = s.nombre;
+    document.getElementById("salida-nombre").textContent = s.etapa;
     document.getElementById("ficha-mide").textContent = s.mide;
     document.getElementById("ficha-porque").textContent = s.porque;
     document.getElementById("ficha-hallazgo").innerHTML = HALLAZGOS[s.nombre]();
