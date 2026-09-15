@@ -96,6 +96,41 @@ def modelos_de(seed):
     }
 
 
+def _nadeau_bengio(diffs, n_splits):
+    """Corrección de Nadeau y Bengio (2003) sobre las diferencias pareadas
+    ya calculadas en `diffs`. El intervalo t ingenuo trata esas n
+    diferencias como independientes; no lo son, porque los conjuntos de
+    entrenamiento se solapan entre folds de la misma semilla. La
+    corrección ajusta la varianza multiplicándola por
+    (1/n + n_test/n_train), con n_test/n_train = 1/(n_splits - 1) para
+    k-fold. Mismo t de n-1 grados de libertad que el intervalo ingenuo."""
+    n = len(diffs)
+    media = float(np.mean(diffs))
+    varianza = float(np.var(diffs, ddof=1))
+    t_critico = float(stats.t.ppf(0.975, df=n - 1))
+    razon_test_train = 1.0 / (n_splits - 1)
+    varianza_corregida = varianza * (1.0 / n + razon_test_train)
+    error_estandar_corregido = float(np.sqrt(varianza_corregida))
+    return [
+        round(media - t_critico * error_estandar_corregido, 4),
+        round(media + t_critico * error_estandar_corregido, 4),
+    ]
+
+
+def _semillas_a_favor_de_2b(diffs, n_splits, semillas_corridas):
+    """Cuenta en cuántas semillas la media de sus n_splits diferencias
+    (2b − 1) fue positiva. Asume que `diffs` se construyó recorriendo
+    semillas_corridas en orden y añadiendo n_splits valores por semilla
+    —el mismo orden en que se arma esa lista más abajo—, así que el
+    bloque i-ésimo de tamaño n_splits corresponde a la semilla i-ésima."""
+    conteo = 0
+    for i in range(len(semillas_corridas)):
+        bloque = diffs[i * n_splits: (i + 1) * n_splits]
+        if bloque and float(np.mean(bloque)) > 0:
+            conteo += 1
+    return conteo
+
+
 def calcular_resultado(por_semilla, n_splits, semillas_corridas):
     """Reconstruye el bloque de salida completo a partir de lo acumulado
     hasta ahora. Se llama después de cada semilla, así que tiene que
@@ -136,18 +171,25 @@ def calcular_resultado(por_semilla, n_splits, semillas_corridas):
             round(float(media_diff - t_critico * error_estandar), 4),
             round(float(media_diff + t_critico * error_estandar), 4),
         ]
+        # Corrección de Nadeau-Bengio: se calcula a partir de `diffs`
+        # directamente (las diferencias reales), nunca de std_diff ya
+        # redondeado.
+        intervalo_t_95_nadeau_bengio = _nadeau_bengio(diffs, n_splits)
         media_diff = round(media_diff, 4)
         std_diff = round(std_diff, 4)
     elif n == 1:
         media_diff = round(float(diffs[0]), 4)
         std_diff = None
         intervalo_t_95 = None
+        intervalo_t_95_nadeau_bengio = None
     else:
         media_diff = None
         std_diff = None
         intervalo_t_95 = None
+        intervalo_t_95_nadeau_bengio = None
 
     gana_2b_en = sum(1 for d in diffs if d > 0)
+    semillas_a_favor_de_2b = _semillas_a_favor_de_2b(diffs, n_splits, semillas_corridas)
 
     comparacion_pareada_2b_menos_1 = {
         "diferencias": [round(d, 4) for d in diffs],
@@ -155,8 +197,10 @@ def calcular_resultado(por_semilla, n_splits, semillas_corridas):
         "media": media_diff,
         "desviacion": std_diff,
         "intervalo_t_95": intervalo_t_95,
+        "intervalo_t_95_nadeau_bengio": intervalo_t_95_nadeau_bengio,
         "gana_2b_en": gana_2b_en,
         "de": n,
+        "semillas_a_favor_de_2b": semillas_a_favor_de_2b,
     }
 
     return {
@@ -171,7 +215,12 @@ def calcular_resultado(por_semilla, n_splits, semillas_corridas):
             "comparte con los demás folds de la misma semilla), así que el intervalo t "
             "de arriba subestima la varianza real. Repetir con distintas semillas "
             "elimina la dependencia de una asignación concreta de folds, pero no "
-            "elimina ese solape dentro de cada semilla."
+            "elimina ese solape dentro de cada semilla. El intervalo_t_95 ingenuo "
+            "supone que las 50 diferencias son independientes entre sí, supuesto que "
+            "no se cumple por ese mismo solape; la corrección de Nadeau y Bengio "
+            "(2003) ajusta la varianza para tenerlo en cuenta, y es "
+            "intervalo_t_95_nadeau_bengio —más ancho— el que sostiene una conclusión "
+            "defendible, no el ingenuo."
         ),
     }
 
@@ -201,10 +250,15 @@ def escribir_md(resultado, out_path):
     )
     lineas.append(
         f"Comparación pareada 2b − 1 (n={comp['n_diferencias']}): media {comp['media']} · "
-        f"desviación {comp['desviacion']} · intervalo t 95% {comp['intervalo_t_95']} · "
-        f"2b gana en {comp['gana_2b_en']}/{comp['de']}"
+        f"desviación {comp['desviacion']} · intervalo t 95% ingenuo {comp['intervalo_t_95']} · "
+        f"2b gana en {comp['gana_2b_en']}/{comp['de']} folds"
     )
-    lineas.append("Nota: el intervalo t subestima la varianza real — folds con entrenamientos solapados. Ver .json.")
+    lineas.append(
+        f"Corrección Nadeau-Bengio (2003), varianza ajustada por solape entre folds: "
+        f"intervalo t 95% corregido {comp['intervalo_t_95_nadeau_bengio']} · "
+        f"2b gana en {comp['semillas_a_favor_de_2b']}/{len(resultado['semillas_corridas'])} semillas"
+    )
+    lineas.append("Nota: el intervalo ingenuo subestima la varianza real — folds con entrenamientos solapados. Ver .json.")
     lineas.append("Detalle por semilla y fold: outputs/validacion-repetida.json")
 
     with open(f"{out_path}.md", "w", encoding="utf-8") as f:

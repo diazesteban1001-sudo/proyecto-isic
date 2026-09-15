@@ -304,7 +304,12 @@
       0.0164
     ],
     "gana_2b_en": 40,
-    "de": 50
+    "de": 50,
+    "intervalo_t_95_nadeau_bengio": [
+      -0.0017,
+      0.0268
+    ],
+    "semillas_a_favor_de_2b": 10
   },
-  "nota": "Las diferencias fold a fold que alimentan comparacion_pareada_2b_menos_1 NO son independientes: los conjuntos de entrenamiento se solapan entre folds (cada fold deja fuera solo una fracción de los datos, el resto se comparte con los demás folds de la misma semilla), así que el intervalo t de arriba subestima la varianza real. Repetir con distintas semillas elimina la dependencia de una asignación concreta de folds, pero no elimina ese solape dentro de cada semilla."
+  "nota": "Las diferencias fold a fold que alimentan comparacion_pareada_2b_menos_1 NO son independientes: los conjuntos de entrenamiento se solapan entre folds (cada fold deja fuera solo una fracción de los datos, el resto se comparte con los demás folds de la misma semilla), así que el intervalo t de arriba subestima la varianza real. Repetir con distintas semillas elimina la dependencia de una asignación concreta de folds, pero no elimina ese solape dentro de cada semilla. El intervalo_t_95 ingenuo supone que las 50 diferencias son independientes entre sí, supuesto que no se cumple por ese mismo solape; la corrección de Nadeau y Bengio (2003) ajusta la varianza para tenerlo en cuenta, y es intervalo_t_95_nadeau_bengio —más ancho— el que sostiene una conclusión defendible, no el ingenuo."
 }
