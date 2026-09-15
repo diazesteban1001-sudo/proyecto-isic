@@ -447,46 +447,20 @@ PLANTILLA = r"""<!DOCTYPE html>
 </section>
 
 <section>
-  <h2><span class="num">2</span>El hallazgo de fuga</h2>
-  <p class="sub" id="sub-fuga"></p>
-  <div class="duo">
-    <div class="medida mal">
-      <div class="cifra" id="fuga-naive"></div>
-      <div class="rot">Partici&oacute;n aleatoria por fila</div>
-      <div class="det" id="fuga-naive-det"></div>
-    </div>
-    <div class="medida ok">
-      <div class="cifra" id="fuga-agrupada"></div>
-      <div class="rot" id="fuga-agrupada-rot"></div>
-      <div class="det" id="fuga-agrupada-det"></div>
-    </div>
-  </div>
-  <p class="aviso" id="aviso-fuga"></p>
-</section>
-
-<section>
-  <h2><span class="num">3</span>Columnas excluidas</h2>
-  <p class="sub" id="sub-excluidas"></p>
-  <div class="tarjeta">
-    <table>
-      <thead>
-        <tr>
-          <th style="width:34%">Columna</th>
-          <th style="width:24%">Motivo medido</th>
-          <th style="width:42%">Lectura del consultor (interpretaci&oacute;n)</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-excluidas"></tbody>
-    </table>
-    <p class="aviso">La columna &laquo;motivo medido&raquo; sale de <code>auditoria-de-fugas.json</code>.
-       La tercera columna no: es interpretaci&oacute;n, y por eso va rotulada aparte.</p>
-    <div class="contra" id="contra"></div>
-  </div>
-</section>
-
-<section>
-  <h2><span class="num">4</span>Los cuatro niveles de modelado</h2>
+  <h2><span class="num">2</span>Resultados</h2>
   <p class="sub" id="sub-modelos"></p>
+  <div class="duo">
+    <div class="medida ok">
+      <div class="cifra" id="tit-reco"></div>
+      <div class="rot">Nivel 1 &mdash; regresi&oacute;n log&iacute;stica balanceada</div>
+      <div class="det">El modelo recomendado</div>
+    </div>
+    <div class="medida mal">
+      <div class="cifra" id="tit-fallo"></div>
+      <div class="rot">Nivel 2a &mdash; boosting sin ajuste de clase</div>
+      <div class="det" id="tit-fallo-det"></div>
+    </div>
+  </div>
   <div class="tarjeta">
     <div class="barra">
       <div class="toggle" role="group" aria-label="Vista de resultados">
@@ -501,7 +475,7 @@ PLANTILLA = r"""<!DOCTYPE html>
 </section>
 
 <section>
-  <h2><span class="num">5</span>Conclusi&oacute;n</h2>
+  <h2><span class="num">3</span>Conclusi&oacute;n</h2>
   <p class="sub">Lo que un consultor le entregar&iacute;a al cliente: el hallazgo, la recomendaci&oacute;n y lo que a&uacute;n no se puede afirmar.</p>
   <div class="cierre">
     <div class="bloque">
@@ -617,40 +591,9 @@ D.cadena.forEach((s, i) => {
   }
 });
 
-/* ---------- 2. fuga ---------- */
-const F = D.fuga;
-document.getElementById("sub-fuga").textContent =
-  `${mil(D.eda.n_filas)} lesiones sobre ${mil(F.n_grupos_total)} pacientes ` +
-  `(${num(D.eda.media_por_paciente, 2)} por paciente en promedio, hasta ${mil(D.eda.max_por_paciente)}). ` +
-  `Si se parte al azar, el mismo paciente cae a los dos lados.`;
-document.getElementById("fuga-naive").innerHTML = cifra(num(F.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga");
-document.getElementById("fuga-naive-det").textContent =
-  `${mil(F.n_grupos_naive)} de ${mil(F.n_grupos_total)} pacientes aparecen en train y validación a la vez`;
-document.getElementById("fuga-agrupada").innerHTML = cifra(F.fuga_agrupada ? "?" : "0%", "diseno-validacion.json > fuga_de_grupo_detectada");
-document.getElementById("fuga-agrupada-rot").textContent = F.metodo + ` (k=${F.n_splits})`;
-document.getElementById("fuga-agrupada-det").textContent =
-  `Ningún ${F.group_col} compartido entre particiones, verificado fold a fold`;
-document.getElementById("aviso-fuga").textContent =
-  `Comparación: ${F.descripcion_naive}. La fuga por partición aleatoria no es un riesgo teórico en estos datos: es lo que pasa por defecto.`;
-
-/* ---------- 3. columnas excluidas ---------- */
-document.getElementById("sub-excluidas").textContent =
-  `${D.excluidas.length} de las ${D.eda.n_columnas} columnas quedan fuera. Se modela con ${D.n_features_usadas}.`;
-document.getElementById("tbody-excluidas").innerHTML = D.excluidas.map(e => `
-  <tr>
-    <td class="mono">${esc(e.columna)}</td>
-    <td>${esc(e.motivo)}</td>
-    <td class="lectura">${esc(e.glosa)}</td>
-  </tr>`).join("");
-if (D.nevi) {
-  document.getElementById("contra").innerHTML =
-    `<b>El contraejemplo.</b> <code>${esc(D.nevi.columna)}</code> tiene nombre sospechoso y el instrumento la marcó, ` +
-    `pero <b>sí está en test</b> y su AUC univariado fuera de muestra es ${cifra(num(D.nevi.auc_oof), "auditoria-de-fugas.json > univariado[].auc_oof")}. ` +
-    `Resolverla exigió leer el paper de SLICE-3D: es una métrica que la máquina calcula sobre la imagen, no un resultado de patología. ` +
-    `Nombre sospechoso no es fuga &mdash; y esa distinción no la puede hacer un script.`;
-}
-
-/* ---------- 4. modelado ---------- */
+/* ---------- 2. modelado ---------- */
+const M = et => D.modelos.find(m => m.etiqueta === et);
+const campo = et => "modelado-baseline.json > " + M(et).campo;
 document.getElementById("escala").innerHTML =
   `Escala: azar = ${cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar")}, ` +
   `máximo = ${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}`;
@@ -813,12 +756,19 @@ function pintar(vista) {
 }
 document.getElementById("btn-medias").onclick = () => pintar("medias");
 document.getElementById("btn-pareada").onclick = () => pintar("pareada");
+
+document.getElementById("tit-reco").innerHTML =
+  cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media");
+document.getElementById("tit-fallo").innerHTML =
+  cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media");
+document.getElementById("tit-fallo-det").innerHTML =
+  "Por debajo del piso aleatorio de " +
+  cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar") +
+  ": un fallo silencioso, no un error visible";
+
 pintar("medias");
 
-/* ---------- 5. cierre ---------- */
-const M = et => D.modelos.find(m => m.etiqueta === et);
-const campo = et => "modelado-baseline.json > " + M(et).campo;
-
+/* ---------- 3. cierre ---------- */
 document.getElementById("cierre-hallazgos").innerHTML =
   `El desbalance extremo (${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} malignos entre ` +
   `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones) y la agrupación por paciente hacían la partición ` +
