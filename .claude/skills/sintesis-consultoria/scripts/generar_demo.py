@@ -921,7 +921,7 @@ def main():
     print(
         f"Escrito: {', '.join(args.salida)} — {len(datos['modelos'])} niveles, "
         f"{len(datos['excluidas'])} columnas excluidas, "
-        f"{len(datos['cadena'])} skills en la cadena"
+        f"{len(datos['cadena'])} etapas en la cadena"
     )
 
 
