@@ -765,7 +765,7 @@ const PIE = {
       `intervalo t al 95% de ${num(p.ic_bajo)} a ${num(p.ic_alto)}. ` +
       `<span class="destacado">El intervalo cruza el cero: la comparación pareada no confirma la superioridad de 2b, la debilita.</span> ` +
       `Y además es optimista &mdash; los folds comparten la mayor parte del entrenamiento, así que las diferencias no son independientes ` +
-      `y el intervalo subestima la varianza. Lo que sí sostiene 2b es la estabilidad: su peor fold ` +
+      `y el intervalo subestima la varianza. En esta partición, el peor fold de 2b ` +
       `(${cifra(num(Math.min(...D.modelos.find(m => m.etiqueta === "Nivel 2b").por_fold)), "modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.pauc_por_fold")}) ` +
       `supera a los dos peores del nivel 1.`;
   }
@@ -808,9 +808,10 @@ document.getElementById("cierre-hallazgos").innerHTML =
   `del gradient boosting balanceado no es estadísticamente sostenible con la evidencia disponible: gana en ` +
   `${cifra(D.pareado.folds_a_favor + " de " + D.pareado.n_folds, "derivado de pauc_por_fold de los niveles 1 y 2b")} folds, y el intervalo ` +
   `de confianza de la diferencia (${cifra(num(D.pareado.ic_bajo) + " a " + num(D.pareado.ic_alto), "derivado: intervalo t al 95% sobre las 5 diferencias")}) ` +
-  `cruza cero. <span class="destacado">Lo que sí se sostiene es que es más estable</span>: ` +
+  `cruza cero. <span class="destacado">En esta partición 2b fue además menos disperso</span>: ` +
   `&plusmn;${cifra(num(M("Nivel 2b").std), campo("Nivel 2b") + ".pauc_std")} entre folds frente a ` +
-  `&plusmn;${cifra(num(M("Nivel 1").std), campo("Nivel 1") + ".pauc_std")} de la logística.`;
+  `&plusmn;${cifra(num(M("Nivel 1").std), campo("Nivel 1") + ".pauc_std")} de la logística &mdash; una ventaja que ` +
+  `no se mantiene al repetir la validación con diez particiones distintas.`;
 
 document.getElementById("cierre-recomendacion").innerHTML =
   `Regresión logística balanceada &mdash;Nivel 1, pAUC ${cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media")}&mdash; ` +
