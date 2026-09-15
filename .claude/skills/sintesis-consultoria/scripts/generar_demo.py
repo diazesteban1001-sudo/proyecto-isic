@@ -285,7 +285,7 @@ PLANTILLA = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agente consultor estad&iacute;stico &mdash; ISIC 2024</title>
+<title>Proyecto de consultor&iacute;a ISIC 2024 &mdash; Detecci&oacute;n de melanoma</title>
 <script>__CHARTJS__</script>
 <style>
   :root {
@@ -424,7 +424,7 @@ PLANTILLA = r"""<!DOCTYPE html>
 
 <header>
   <div class="kicker">Consultor&iacute;a e Investigaci&oacute;n &middot; Estad&iacute;stica &middot; caso ISIC 2024</div>
-  <h1>Agente consultor estad&iacute;stico</h1>
+  <h1>Proyecto de consultor&iacute;a ISIC 2024</h1>
   <div class="contexto">
     <p><b>El problema.</b> <span id="ctx-problema"></span></p>
     <p><b>Por qu&eacute; este caso.</b> <span id="ctx-eleccion"></span></p>

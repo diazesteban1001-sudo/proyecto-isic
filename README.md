@@ -1,4 +1,4 @@
-# Agente consultor estadístico — Detección de melanoma (ISIC 2024)
+# Proyecto de consultoría ISIC 2024 — Detección de melanoma
 
 **Estado: avance parcial.** Entrega de progreso — 20 de agosto de 2026.
 Proyecto en curso, Ver "Qué falta"
@@ -21,9 +21,9 @@ eficiencia computacional del modelo. Esas tres señales, declaradas con
 premios reales, son la línea base de lo que la contraparte necesita —
 no solo lo que pidió en el leaderboard.
 
-## Qué hace el agente
+## Qué hace el sistema
 
-Un solo agente (Claude Code), cinco skills con un rol cada una:
+Un único flujo orquestado en Claude Code, con cinco etapas, cada una con un rol:
 
 | Skill | Función |
 |---|---|
@@ -98,7 +98,7 @@ desde Kaggle (ver `CLAUDE.md` para el procedimiento).
   haya contaminación entre su preentrenamiento y este dataset.
 - **Casos de fallo documentados explícitamente** como conjunto de prueba
   propio (no solo desempeño agregado).
-- **Guardarraíles del agente** declarados explícitamente: qué no debe
+- **Guardarraíles del sistema** declarados explícitamente: qué no debe
   decidir por sí solo y cómo se verifica su salida.
 
 ## Estructura del repositorio
