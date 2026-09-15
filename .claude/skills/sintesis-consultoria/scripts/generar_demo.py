@@ -494,6 +494,29 @@ PLANTILLA = r"""<!DOCTYPE html>
   </div>
 </section>
 
+<section>
+  <h2><span class="num">4</span>Lo que sigue</h2>
+  <p class="sub">Trabajo previsto, no ejecutado. Sin cifras: todav&iacute;a no hay nada medido.</p>
+  <div class="tarjeta">
+    <p><b>Modelado con im&aacute;genes.</b> Todo lo anterior usa solo la metadata tabular.
+    La extensi&oacute;n prevista incorpora las fotograf&iacute;as sin entrenar una red desde cero:
+    se extraer&iacute;an caracter&iacute;sticas congeladas de un modelo fundacional de dermatolog&iacute;a
+    (PanDerm / DermFM-Zero) y se alimentar&iacute;an los mismos niveles de referencia, sobre
+    los mismos folds agrupados por paciente, para que la comparaci&oacute;n siga siendo v&aacute;lida.</p>
+    <p><b>El bloqueante, primero.</b> Antes de medir nada hay que verificar si SLICE-3D
+    &mdash;el conjunto de este caso&mdash; form&oacute; parte del preentrenamiento de esos modelos.
+    Si hubo solape, cualquier mejora observada estar&iacute;a inflada por una fuga que no viene
+    del dataset sino del preentrenamiento de un tercero, y no ser&iacute;a atribuible al m&eacute;todo.
+    Es el mismo razonamiento de la auditor&iacute;a de fugas, un nivel m&aacute;s arriba.</p>
+    <p><b>Respaldo.</b> Si esa verificaci&oacute;n no se puede cerrar, la alternativa es DINOv3:
+    no es espec&iacute;fico de dermatolog&iacute;a y por tanto no arrastra ese riesgo, a costa de
+    caracter&iacute;sticas menos ajustadas al dominio.</p>
+    <p class="aviso">Ninguna cifra aparece en esta secci&oacute;n porque ninguna est&aacute; medida.
+    A diferencia del resto de la p&aacute;gina, aqu&iacute; no hay archivo en <code>outputs/</code> que
+    respalde nada &mdash; y por eso no se afirma nada.</p>
+  </div>
+</section>
+
 <footer id="pie"></footer>
 </div>
 
