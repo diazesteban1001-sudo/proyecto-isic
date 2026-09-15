@@ -339,6 +339,7 @@ PLANTILLA = r"""<!DOCTYPE html>
     border: 1px solid var(--linea); border-top: 4px solid var(--suave);
     border-radius: 8px; padding: 13px 14px; font: inherit; color: inherit;
     transition: transform .12s, box-shadow .12s, border-color .12s;
+    display: flex; flex-direction: column;
   }
   .paso:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(22,32,43,.12); }
   .paso[aria-selected="true"] { border-color: var(--acento); border-top-color: var(--acento); background: #eef5fa; }
@@ -457,7 +458,7 @@ PLANTILLA = r"""<!DOCTYPE html>
     </div>
     <div class="medida mal">
       <div class="cifra" id="tit-fallo"></div>
-      <div class="rot">Nivel 2a &mdash; boosting sin ajuste de clase</div>
+      <div class="rot">Nivel 2a &mdash; colapsa por debajo del azar</div>
       <div class="det" id="tit-fallo-det"></div>
     </div>
   </div>
@@ -762,9 +763,9 @@ document.getElementById("tit-reco").innerHTML =
 document.getElementById("tit-fallo").innerHTML =
   cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media");
 document.getElementById("tit-fallo-det").innerHTML =
-  "Por debajo del piso aleatorio de " +
+  "Boosting sin ajustar por desbalance. El piso aleatorio es " +
   cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar") +
-  ": un fallo silencioso, no un error visible";
+  " y este modelo queda debajo: un fallo silencioso, no un error visible";
 
 pintar("medias");
 
