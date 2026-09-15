@@ -823,10 +823,12 @@ document.getElementById("cierre-hallazgos").innerHTML =
   `El desbalance extremo (${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} malignos entre ` +
   `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones) y la agrupación por paciente hacían la partición ` +
   `ingenua peligrosa: ${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
-  `de fuga potencial. La auditoría de columnas dejó fuera ` +
-  `${cifra(D.excluidas.length, "modelado-baseline.json > columnas_excluidas")} de las ` +
-  `${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")}, y evitó que información no disponible en producción ` +
-  `entrara al modelo. Y la comparación honesta entre modelos &mdash;no solo la media, sino par a par por fold&mdash; mostró que la ventaja ` +
+  `de fuga potencial. La auditoría de columnas dejó el modelado con ` +
+  `${cifra(D.n_features_usadas, "modelado-baseline.json > n_features_usadas")} variables de las ` +
+  `${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")} del archivo: ` +
+  `${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} no existen al predecir, ` +
+  `y el resto son identificadores, columnas constantes o la propia respuesta. Eso evitó que ` +
+  `información no disponible en producción entrara al modelo. Y la comparación honesta entre modelos &mdash;no solo la media, sino par a par por fold&mdash; mostró que la ventaja ` +
   `del gradient boosting balanceado no es estadísticamente sostenible con la evidencia disponible: gana en ` +
   `${cifra(D.pareado.folds_a_favor + " de " + D.pareado.n_folds, "derivado de pauc_por_fold de los niveles 1 y 2b")} folds, y el intervalo ` +
   `de confianza de la diferencia (${cifra(num(D.pareado.ic_bajo) + " a " + num(D.pareado.ic_alto), "derivado: intervalo t al 95% sobre las 5 diferencias")}) ` +
