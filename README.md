@@ -1,6 +1,6 @@
 # Proyecto de consultoría ISIC 2024 — Detección de melanoma
 
-**Estado: avance parcial.** Entrega de progreso — 20 de agosto de 2026.
+**Estado: avance parcial.** Entrega de progreso — 15 de sep de 2026.
 Proyecto en curso, Ver "Qué falta"
 más abajo para el alcance pendiente.
 
