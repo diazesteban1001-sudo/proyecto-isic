@@ -160,6 +160,7 @@ def construir_datos(outputs_dir):
             "campo": clave,
             "media": bloque["pauc_media"],
             "std": bloque["pauc_std"],
+            "auc": bloque.get("auc_estandar_media"),
             "por_fold": bloque["pauc_por_fold"],
             "nota": bloque.get("nota", ""),
         })
@@ -458,7 +459,7 @@ PLANTILLA = r"""<!DOCTYPE html>
     </div>
     <div class="medida mal">
       <div class="cifra" id="tit-fallo"></div>
-      <div class="rot">Nivel 2a &mdash; colapsa por debajo del azar</div>
+      <div class="rot">Nivel 2a &mdash; colapsa bajo la m&eacute;trica del cliente</div>
       <div class="det" id="tit-fallo-det"></div>
     </div>
   </div>
@@ -786,9 +787,11 @@ document.getElementById("tit-reco").innerHTML =
 document.getElementById("tit-fallo").innerHTML =
   cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media");
 document.getElementById("tit-fallo-det").innerHTML =
-  "Boosting sin ajustar por desbalance. El piso aleatorio es " +
+  "Boosting sin ajustar por desbalance. Su AUC est&aacute;ndar es " +
+  cifra(num(M("Nivel 2a").auc, 2), campo("Nivel 2a") + ".auc_estandar_media") +
+  ": por encima del azar. Bajo la m&eacute;trica del cliente queda por debajo de su piso de " +
   cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar") +
-  " y este modelo queda debajo: un fallo silencioso, no un error visible";
+  ". Las dos m&eacute;tricas no coinciden ni en si el modelo supera al azar";
 
 pintar("medias");
 
