@@ -1,0 +1,6 @@
+# Librerias de terceros vendorizadas: no describen este proyecto
+**/*.min.js
+
+# Demo generada: su contenido ya vive en generar_demo.py (PLANTILLA)
+informe/demo.html
+docs/index.html
