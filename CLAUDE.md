@@ -430,8 +430,8 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, ambos trazables a
-`outputs/modelado-baseline.json`:
+train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, trazables a
+`outputs/modelado-baseline.json` y a `outputs/validacion-repetida.json`:
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
    Nivel 2a da pAUC 0.0013, *por debajo del piso aleatorio de la métrica* (0.02).
@@ -441,19 +441,36 @@ train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, ambos trazables a
    `class_weight="balanced"` (2b): 0.1451. La métrica del cliente ve el
    problema; la métrica por defecto no.
 
-   > **AUC estándar del Nivel 2a: no medido en `outputs/`** — se retiró una
-   > cifra sin respaldo encontrada durante la verificación del 18 de agosto. El
-   > diagnóstico del caso de fallo no depende de ella (ver
-   > `informe/casos-de-fallo.md`).
+   > **AUC estándar del Nivel 2a: 0.6159 — y ahora SÍ está medido**, en
+   > `modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media`.
+   > El 2026-08-18 se retiró de aquí una cifra sin respaldo (0.6685); después se
+   > extendió el instrumento para medir el AUC estándar de cada nivel, así que
+   > el valor volvió a ser citable — y de paso quedó claro que 0.6685 es el AUC
+   > del **primer fold** (`...auc_estandar_por_fold`), no el del modelo: el
+   > número era real y estaba mal atribuido.
+   >
+   > Consecuencia sobre la última frase del párrafo de arriba: **la métrica por
+   > defecto no es ciega al problema.** Lo puntúa por encima del azar de su
+   > escala mientras el pAUC lo deja por debajo del azar de la suya (0.02). No
+   > es un fallo silencioso: es un desacuerdo entre dos métricas sobre las
+   > mismas predicciones (ver `informe/casos-de-fallo.md`).
 
-2. **2b no solo es mejor que la logística: es más estable.** Desviación entre
-   folds de **±0.0055** frente a **±0.0173** del Nivel 1 — la logística varía
-   más del triple. Con 393 positivos repartidos en 5 folds (77–83 por fold,
-   según `outputs/diseno-validacion.json`), esa dispersión es grande respecto a
-   la diferencia de medias (0.1451 vs 0.1331), así que la comparación de medias
-   sola no sostiene un "2b gana". *Salvedad al citarlo:* es dispersión fold a
-   fold sobre folds no independientes, no un intervalo de confianza. Cuantificar
-   la incertidumbre como es debido es trabajo del informe, no de la skill.
+2. **La ventaja de estabilidad de 2b NO se sostiene — retirada como argumento.**
+   Sobre **una** partición (`outputs/modelado-baseline.json`, semilla 42) 2b era
+   el menos disperso: ±0.0055 entre folds frente a ±0.0173 del Nivel 1, más del
+   triple. Sobre las **diez** particiones de `outputs/validacion-repetida.json`
+   el orden se invierte: la desviación entre folds de 2b es **0.0142** y la del
+   Nivel 1 **0.012**. Lo que parecía una propiedad del modelo era una propiedad
+   de la semilla. **No usar la estabilidad como argumento a favor de 2b.**
+
+   Lo que sí queda en pie es la comparación de medias, con esas mismas diez
+   semillas: 2b gana en dirección de forma consistente —**40 de 50** folds y
+   **10 de 10** semillas— pero el intervalo al 95% corregido por Nadeau y
+   Bengio para el solape entre folds va de **−0.0017 a 0.0268** y contiene el
+   cero. Dirección sí; magnitud no distinguible de cero. *Salvedad al citarlo:*
+   el intervalo ingenuo sobre esas mismas 50 diferencias ([0.0087, 0.0164])
+   excluye el cero y es el que **no** debe citarse — supone una independencia
+   que el solape entre folds no cumple.
 
 ### Siguiente paso
 
