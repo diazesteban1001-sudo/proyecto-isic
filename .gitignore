@@ -20,3 +20,6 @@ venv/
 
 # PDF de verificacion visual del entregable: se regenera desde el .docx
 informe/*.pdf
+
+# Salida derivada de graphify: grafo regenerable, no entra al repo por ahora
+graphify-out/
