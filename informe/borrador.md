@@ -384,18 +384,36 @@ no es el de manual. Uno espera que un modelo sin ajuste de desbalance "prediga
 siempre negativo" y quede plano. Lo que ocurre es distinto y peor: satura en
 probabilidad máxima sobre un puñado de casos negativos y los coloca por encima de
 los positivos reales, arrasando justo la región de sensibilidad alta que la
-métrica evalúa. Su AUC convencional —medido como diagnóstico auxiliar, no
-reportado aquí porque no está en `outputs/` y este informe no cita cifras sin
-respaldo— sugería un desempeño mediocre pero nada alarmante.
+métrica evalúa. Su AUC convencional es **0,6159** `[T59]`: mediocre, pero por
+encima del azar de esa escala `[T62]`. Sobre exactamente las mismas
+predicciones, las dos métricas no discrepan en el margen sino en el veredicto
+—una deja al modelo por encima de su azar y la otra por debajo del suyo—, y esa
+discrepancia es el hallazgo, no un detalle de presentación.
 
 La única diferencia entre 2a y 2b es el parámetro de balanceo `[T46]`. Mismo
 modelo, misma semilla, mismos folds.
 
-**La estabilidad discrimina más que la media.** El nivel 2b no solo tiene mejor
-media que el nivel 1 (0,1451 frente a 0,1331) sino que es **más de tres veces más
-estable** entre folds: ±0,0055 `[T44]` frente a ±0,0173 `[T39]`.
+**La estabilidad parecía discriminar más que la media. No era así, y conviene
+ver por qué.** Sobre esta partición el nivel 2b no solo tiene mejor media que el
+nivel 1 (0,1451 frente a 0,1331) sino que es **más de tres veces más estable**
+entre folds: ±0,0055 `[T44]` frente a ±0,0173 `[T39]`. Una versión anterior de
+esta sección convertía ese contraste en el argumento más fuerte a favor de 2b:
+un modelo cuyo desempeño depende menos de qué pacientes cayeron en validación es
+preferible ante datos nuevos, y ese argumento no descansaba en la diferencia de
+medias, que ya se sabía frágil.
 
-Y aquí el consultor debe frenar en vez de rematar: **la diferencia de medias
+**La validación cruzada repetida lo desmintió.** Al repetir el mismo esquema con
+diez semillas en vez de una `[T50]`, el orden se invierte: la desviación entre
+folds del nivel 2b sube a ±0,0142 `[T52]` y la del nivel 1 baja a ±0,012
+`[T51]`. El menos estable de los dos pasa a ser 2b. Lo que se había leído como
+una propiedad del modelo era una propiedad de la semilla 42 `[T18b]`: una sola
+partición es una muestra de tamaño uno en el espacio de particiones, y no
+distingue entre las dos cosas. **El argumento de estabilidad queda retirado.**
+No se ajusta la cifra y se sigue adelante con la misma conclusión: se retira el
+argumento entero, porque el defecto no estaba en el número sino en lo que se
+pretendía deducir de él.
+
+Y el freno que sí sigue en pie: **la diferencia de medias
 entre 2b y 1 es de 0,012, menor que la desviación entre folds del nivel 1**. Con
 77 a 83 positivos por fold `[T22]`, esa dispersión no permite afirmar que 2b sea
 superior a partir de las medias.
@@ -431,18 +449,48 @@ modo que las cinco diferencias no son observaciones independientes y el
 intervalo *t* ordinario subestima la variabilidad real. La conclusión honesta es
 por tanto más débil todavía que lo que sugiere el propio intervalo.
 
-Queda una asimetría real y que sí se sostiene: 2b es sensiblemente **más
-estable** —±0,0055 `[T44]` frente a ±0,0173 `[T39]`—, y su peor fold (0,1385) es
-mejor que los dos peores del nivel 1 (0,1142 y 0,1184). Un modelo cuyo
-desempeño depende menos de qué pacientes cayeron en validación es preferible
-ante datos nuevos, y ese argumento no descansa en la diferencia de medias.
+Sobre esta partición queda una asimetría que parece real: 2b es sensiblemente
+**más estable** —±0,0055 `[T44]` frente a ±0,0173 `[T39]`—, y su peor fold
+(0,1385) es mejor que los dos peores del nivel 1 (0,1142 y 0,1184). **Esa
+asimetría no sobrevive a la repetición** y no debe usarse como argumento de
+reserva a favor de 2b: con diez semillas el más disperso es 2b (sección 7.3).
 
 **Lo que no se puede afirmar:** que 2b sea superior al nivel 1 en pAUC medio.
 Con cinco folds y entre 77 y 83 positivos en cada uno `[T22]`, el diseño
-no tiene resolución para sostenerlo. Cuantificar la incertidumbre como es debido
-—remuestreo a nivel de paciente, o un número mayor de repeticiones de la
-validación cruzada— queda fuera del alcance de este trabajo y se declara como
-tal.
+no tiene resolución para sostenerlo.
+
+### 7.5 Validación cruzada repetida: la medición que zanja la comparación
+
+Una versión anterior de la sección 7.4 cerraba declarando fuera de alcance justo
+lo que hacía falta —repetir la validación cruzada un número mayor de veces— y
+esa deuda se saldó después: el instrumento `modelado-baseline` se extendió con
+un segundo script que corre el mismo esquema con
+**diez semillas de partición** en vez de una, cinco folds cada una `[T50]`. Es
+la medición más fuerte que existe en este proyecto sobre la comparación entre 2b
+y el nivel 1, y cambia dos cosas.
+
+**Lo que cambia.** El argumento de estabilidad se cae (sección 7.3). Las medias
+globales quedan en 0,131 para el nivel 1 y 0,1435 para 2b `[T53]`, muy cerca de
+lo medido sobre una sola partición, de modo que la ventaja *en dirección* no era
+un artefacto de la semilla.
+
+**Lo que no cambia.** La ventaja sigue sin poder afirmarse como magnitud. 2b
+gana en **40 de 50** folds `[T54]` y en **10 de 10** semillas `[T55]`, con una
+diferencia media de 0,0125 y una desviación de 0,0136 `[T56]` —la dispersión
+vuelve a exceder al efecto—. El intervalo *t* ingenuo sobre esas 50 diferencias
+va de 0,0087 a 0,0164 `[T57]` y **excluye** el cero, pero ese intervalo no es
+válido aquí: supone que las 50 diferencias son independientes, y no lo son,
+porque los conjuntos de entrenamiento se solapan entre folds de una misma
+semilla. Repetir con distintas semillas elimina la dependencia de *una*
+asignación concreta de folds, no el solape dentro de cada una.
+
+Corregido ese solape con el ajuste de varianza de Nadeau y Bengio, el intervalo
+al 95% va de **−0,0017 a 0,0268** `[T58]`: contiene el cero, por poco y por el
+lado esperable. La conclusión defendible es por tanto la incómoda: **la
+dirección del efecto es consistente hasta ser casi monótona, y su magnitud
+sigue sin ser distinguible de cero.** Reportar el intervalo ingenuo habría
+convertido la misma medición en un resultado positivo; la diferencia entre uno y
+otro no es estadística fina, es qué se le dice al cliente.
 
 ---
 
@@ -509,10 +557,17 @@ viabilidad de despliegue.
 
 - **Que el nivel 2b sea superior al nivel 1.** La comparación pareada por fold
   —la forma correcta de hacerla, porque ambos se evaluaron sobre los mismos
-  folds— lo deja claro: 2b gana en **tres de cinco** folds `[T48]` `[T49]`, la
-  desviación de las diferencias (0,0160) supera a su media (0,0120), y el
-  intervalo contiene el cero (sección 7.4). La estabilidad sí favorece a 2b,
-  pero eso es un argumento distinto del de superioridad en media.
+  folds— ya lo dejaba en duda sobre una partición: 2b gana en **tres de cinco**
+  folds `[T48]` `[T49]`, la desviación de las diferencias (0,0160) supera a su
+  media (0,0120), y el intervalo contiene el cero (sección 7.4). La validación
+  cruzada repetida con diez semillas `[T50]` —la medición más fuerte que existe
+  sobre esta comparación— lo confirma y lo precisa: 2b gana en dirección de
+  forma casi monótona, **40 de 50** folds `[T54]` y **10 de 10** semillas
+  `[T55]`, con una diferencia media de 0,0125 `[T56]`; pero el intervalo al 95%
+  corregido por el solape entre folds va de **−0,0017 a 0,0268** `[T58]` y
+  sigue conteniendo el cero (sección 7.5). Dirección sí; magnitud no. Y la
+  estabilidad ya no sirve como argumento de reserva: bajo repetición el modelo
+  más disperso es 2b `[T52]` `[T51]`.
 - **Que ninguno de estos modelos sirva para uso clínico.** No se probó, no se
   midió calibración, no hay conjunto de prueba real y la referencia de la clase
   negativa es presunta. Nada en este trabajo respalda esa afirmación.
@@ -534,8 +589,14 @@ Si el cliente fuera real, la recomendación sería en este orden:
    explicable gana. Si trabajo posterior con más datos o remuestreo adecuado
    confirmara la ventaja de 2b, la decisión debería revisarse.
 3. **Tratar el ajuste por desbalance como parte del contrato del modelo**, no
-   como un hiperparámetro más. El nivel 2a demuestra que omitirlo produce un
-   fallo silencioso bajo métricas convencionales.
+   como un hiperparámetro más. El nivel 2a demuestra que omitirlo pone a las dos
+   métricas en desacuerdo sobre las mismas predicciones: su AUC convencional es
+   0,6159 `[T59]` —mediocre, pero por encima del azar de esa escala `[T62]`— y
+   su pAUC es 0,0013 `[T30b]`, por debajo del azar de la suya (0,02 `[T33]`).
+   Quien reporte solo la métrica convencional verá un modelo flojo al que le
+   falta ajuste; quien reporte la del cliente verá uno inservible. El desacuerdo
+   entre las dos es lo que hay que llevar a la reunión, no cualquiera de ellas
+   por separado.
 4. **Resolver la calidad de la etiqueta negativa antes de invertir en
    modelos más complejos.** Es la limitación que más compromete las
    conclusiones, y ninguna mejora de modelado la compensa.
@@ -613,6 +674,19 @@ preguntarse por qué el cliente la eligió.
 | T47 | El conjunto de prueba es un marcador de posición | true | `eda-diagnostico.json` → `test_is_placeholder` |
 | T48 | pAUC del nivel 1 en cada fold | 0.1524, 0.1253, 0.1553, 0.1142, 0.1184 | `modelado-baseline.json` → `nivel_1_....pauc_por_fold` |
 | T49 | pAUC del nivel 2b en cada fold | 0.1509, 0.1386, 0.1499, 0.1478, 0.1385 | `modelado-baseline.json` → `nivel_2b_....pauc_por_fold` |
+| T50 | Diseño de la validación repetida | 10 semillas × 5 folds | `validacion-repetida.json` → `semillas_corridas`, `n_splits` |
+| T51 | Desviación entre folds del nivel 1, diez semillas | 0.012 | `validacion-repetida.json` → `nivel_1_....pauc_std_entre_folds` |
+| T52 | Desviación entre folds del nivel 2b, diez semillas | 0.0142 | `validacion-repetida.json` → `nivel_2b_....pauc_std_entre_folds` |
+| T53 | pAUC medio global, diez semillas | 0.131 (nivel 1), 0.1435 (nivel 2b) | `validacion-repetida.json` → `nivel_1_....pauc_media_global`, `nivel_2b_....pauc_media_global` |
+| T54 | Folds en que 2b supera al nivel 1 | 40 de 50 | `validacion-repetida.json` → `comparacion_pareada_2b_menos_1.gana_2b_en`, `.de` |
+| T55 | Semillas en que 2b supera al nivel 1 | 10 | `validacion-repetida.json` → `comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b` |
+| T56 | Media y desviación de las 50 diferencias 2b − 1 | 0.0125 / 0.0136 | `validacion-repetida.json` → `comparacion_pareada_2b_menos_1.media`, `.desviacion` |
+| T57 | Intervalo *t* al 95% ingenuo sobre las 50 diferencias | 0.0087 a 0.0164 | `validacion-repetida.json` → `comparacion_pareada_2b_menos_1.intervalo_t_95` |
+| T58 | Intervalo *t* al 95% corregido por Nadeau y Bengio | −0.0017 a 0.0268 | `validacion-repetida.json` → `comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio` |
+| T59 | AUC estándar medio del nivel 2a | 0.6159 | `modelado-baseline.json` → `nivel_2a_....auc_estandar_media` |
+| T60 | AUC estándar medio de los niveles 1 y 2b | 0.9013 / 0.93 | `modelado-baseline.json` → `nivel_1_....auc_estandar_media`, `nivel_2b_....auc_estandar_media` |
+| T61 | AUC estándar del nivel 2a en cada fold | 0.6685, 0.7095, 0.5208, 0.6174, 0.5632 | `modelado-baseline.json` → `nivel_2a_....auc_estandar_por_fold` |
+| T62 | Las escalas del AUC y del pAUC tienen azares distintos y no son comparables entre sí | — | `modelado-baseline.json` → `nivel_0_....nota` |
 
 ### 10.2 Cifras y citas de fuentes externas
 
@@ -630,15 +704,29 @@ resultados medidos por este proyecto.
 | E6 | Los datos provienen de siete centros dermatológicos | Artículo del dataset SLICE-3D, https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/ |
 | E7 | El esquema de premios del organizador ISIC evalúa *"above 88% true positive rate (TPR)"*, con rango resultante [0.00, 0.12] | `referencias/isic-metrics-readme.md` (copia literal del README del repositorio de métricas del organizador, 2026-08-12) |
 
-### 10.3 Cifras deliberadamente ausentes
+### 10.3 Cifras que estaban ausentes y ya no lo están
 
-Dos números que aparecerían de forma natural en la sección 7 no se citan, porque
-proceden de un diagnóstico auxiliar y no están en ningún archivo de `outputs/`:
-el AUC convencional de los niveles 2a y 2b. La regla de trazabilidad no admite
-excepciones por conveniencia narrativa. Se señala como mejora pendiente del
-instrumento `modelado-baseline`: si el AUC estándar de cada nivel se incorporara
-a su salida, el contraste entre métricas podría argumentarse con cifras en vez
-de en términos cualitativos.
+Una versión anterior de este anexo declaraba dos números deliberadamente
+ausentes: el AUC convencional de los niveles 2a y 2b. Procedían de un
+diagnóstico auxiliar, no estaban en ningún archivo de `outputs/`, y la regla de
+trazabilidad no admite excepciones por conveniencia narrativa — así que el
+contraste entre métricas de la sección 7.3 hubo de argumentarse en términos
+cualitativos. Se anotó entonces como mejora pendiente del instrumento
+`modelado-baseline`.
+
+La mejora se implementó. El AUC estándar de cada nivel está hoy en
+`modelado-baseline.json` → `nivel_*.auc_estandar_media` y
+`nivel_*.auc_estandar_por_fold` `[T59]` `[T60]` `[T61]`, y el contraste se
+argumenta con cifras.
+
+Queda el registro de un defecto que esa medición hizo visible. Mientras el valor
+no existía, un AUC de 0,6685 llegó a atribuirse al nivel 2a en su conjunto; se
+retiró al verificar que no tenía respaldo en `outputs/`. Medido ya el AUC por
+fold, resulta que 0,6685 es el del **primer fold** `[T61]`, no el del modelo,
+cuyo valor es 0,6159 `[T59]`. El número era real y estaba mal atribuido: ése es
+exactamente el modo de fallo que la regla de trazabilidad existe para atrapar, y
+la verificación lo atrapó sin necesidad de que nadie recordara de dónde había
+salido la cifra.
 
 ### 10.4 Cifras señaladas por la verificación y resueltas a mano
 
