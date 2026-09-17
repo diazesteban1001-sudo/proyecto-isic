@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
 """
-test_regla_porcentajes.py — control del verificador de trazabilidad.
+test_regresion_porcentajes.py — prueba de regresión de la regla de
+porcentajes de `verificar_trazabilidad.py`.
 
-Por qué existe (regla 5 de CLAUDE.md, corolario): un chequeo que no puede
-fallar no vale nada. Este archivo fuerza deliberadamente el caso que
-`verificar_trazabilidad.py` debe detectar y comprueba que se dispara.
+De dónde sale este archivo
+--------------------------
+Nació el 2026-09-17 como **control positivo**, no como prueba: se escribió
+para reproducir un defecto real que estaba vivo ese día, y su código de
+retorno estaba invertido a propósito —pasaba mientras el defecto
+existiera— porque su trabajo era demostrar el fallo, no protegerse de él.
+Es la aplicación literal del corolario de la regla 5 de CLAUDE.md: un
+chequeo que no puede fallar no vale nada, así que antes de escribir el
+arreglo hay que forzar el caso que debería detectarse y confirmar que se
+dispara.
+
+Cumplió esa función. Con la regla floja los dos casos quedaban
+respaldados; con la regla corregida, ninguno. Cerrado el defecto, el
+control positivo ya no tiene nada que demostrar y se invierte: pasa a ser
+lo que su nombre dice, una prueba de regresión que **falla si la regla
+floja vuelve**.
 
 El defecto que documenta
 ------------------------
@@ -25,25 +39,27 @@ verificador no puede fallar.
 
 Los dos casos
 -------------
+Se conservan los dos porque comprueban mecanismos distintos, y basta con
+que uno se rompa para que el defecto esté de vuelta.
+
 1. `88_medido`  — reproduce el caso real: "88%" contra un corpus cuyo único
-   contenido es 0.8816. Es el que se observó en producción.
+   contenido es 0.8816. Es el que se observó en producción. Hoy queda fuera
+   por la lista declarada `PORCENTAJES_DE_METODO`, que es una forma válida
+   de no estar respaldado: el informe no lo afirma como medición propia.
 2. `73_neutro`  — el mismo mecanismo con un porcentaje que NO está en
    ninguna lista de exclusión del verificador, para aislar la regla
-   numérica de cualquier otro filtro: "73%" contra 0.7316.
+   numérica de cualquier otro filtro: "73%" contra 0.7316. Este tiene que
+   salir señalado por la regla, no por una lista — es el que detectaría una
+   reintroducción del reescalado con tolerancia aunque la lista siguiera en
+   su sitio.
 
 Uso
 ---
-    python test_regla_porcentajes.py            # los dos casos
+    python test_regresion_porcentajes.py         # los dos casos
 
-Salida y código de retorno:
-  - `DEFECTO REPRODUCIDO`: el verificador dio el porcentaje por respaldado.
-    Sale con código 0 mientras el defecto siga vivo.
-  - `DEFECTO CORREGIDO`: el verificador ya no lo acepta. Sale con código 1.
-
-El código de retorno está invertido a propósito: este archivo es un control
-positivo, no una prueba de regresión. Su trabajo es demostrar que el fallo
-existe; cuando deja de existir, el control debe romperse. Es la señal de
-que la corrección llegó.
+Código de retorno, ya convencional:
+  - 0 si la regla sigue rechazando las coincidencias fortuitas.
+  - 1 si algún caso volvió a quedar respaldado por una de ellas.
 """
 
 import json
@@ -109,7 +125,7 @@ def correr_caso(caso):
     senalados = {s["valor"] for s in resultado["numeros_sin_respaldo"]}
     # Un porcentaje declarado como parametro del metodo no es un respaldo
     # numerico: se excluye por lista y se reporta aparte. Cuenta como "no
-    # aceptado por coincidencia", que es lo que este control mide.
+    # aceptado por coincidencia", que es lo que esta prueba mide.
     excluidos = {e["valor"] for e in resultado.get("porcentajes_de_metodo_excluidos", [])}
     token = caso["token"]
     aceptado_por_coincidencia = token not in senalados and token not in excluidos
@@ -117,30 +133,32 @@ def correr_caso(caso):
 
 
 def main():
-    print("Control positivo de la regla de porcentajes")
+    print("Prueba de regresion de la regla de porcentajes")
     print(f"Verificador: {VERIFICADOR}\n")
 
-    defecto_vivo = False
+    fallos = 0
     for caso in CASOS:
         aceptado, resultado = correr_caso(caso)
-        estado = "DEFECTO REPRODUCIDO" if aceptado else "DEFECTO CORREGIDO"
-        print(f"[{caso['nombre']}] {estado}")
+        # El aserto: el porcentaje NO debe quedar respaldado por coincidencia.
+        ok = not aceptado
+        print(f"[{caso['nombre']}] {'OK' if ok else 'REGRESION'}")
         print(f"    informe dice        : {caso['token']}")
         print(f"    outputs solo tiene  : {caso['por_que']}")
-        print(f"    el verificador lo da por respaldado: {aceptado}")
+        print(f"    respaldado por coincidencia: {aceptado}  (se espera False)")
         print(f"    conteo              : {resultado['numeros_con_respaldo_en_outputs']} "
               f"con respaldo, {len(resultado['numeros_sin_respaldo'])} senalados")
         print()
-        defecto_vivo = defecto_vivo or aceptado
+        if not ok:
+            fallos += 1
 
-    if defecto_vivo:
-        print("RESULTADO: el defecto sigue vivo. El control positivo PASA "
-              "(codigo 0), que es lo que debe hacer mientras no se corrija.")
-        return 0
-    print("RESULTADO: el verificador ya no acepta esas coincidencias. El "
-          "control positivo FALLA (codigo 1) a proposito: es la senal de que "
-          "la correccion llego.")
-    return 1
+    if fallos:
+        print(f"RESULTADO: FALLA — {fallos} de {len(CASOS)} caso(s) volvieron a "
+              "quedar respaldados por coincidencia fortuita. La regla floja "
+              "regreso; el encabezado de este archivo explica cual era.")
+        return 1
+    print("RESULTADO: PASA — la regla sigue rechazando las coincidencias "
+          "fortuitas que motivaron este archivo.")
+    return 0
 
 
 if __name__ == "__main__":
