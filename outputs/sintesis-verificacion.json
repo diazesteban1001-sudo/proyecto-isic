@@ -1,16 +1,16 @@
 {
   "numeros_en_borrador": 342,
-  "numeros_con_respaldo_en_outputs": 278,
+  "numeros_con_respaldo_en_outputs": 281,
   "numeros_sin_respaldo": [
+    {
+      "valor": "15",
+      "contexto": "mpletos y un `.md` de resumen acotado a 15 líneas. Y",
+      "linea_aprox": 99
+    },
     {
       "valor": "200",
       "contexto": "anizador y se verificó la corrección en 200 casos ale",
       "linea_aprox": 148
-    },
-    {
-      "valor": "99,9%",
-      "contexto": "ue prediga \"benigno\" siempre acierta el 99,9% de las ve",
-      "linea_aprox": 169
     },
     {
       "valor": "80",
@@ -48,11 +48,6 @@
       "linea_aprox": 363
     },
     {
-      "valor": "69,5%",
-      "contexto": "do | 0,1451 `[T43]` | ±0,0055 `[T44]` | 69,5% `[T45]` |",
-      "linea_aprox": 364
-    },
-    {
       "valor": "33,8%",
       "contexto": "uerte. En la métrica del cliente cae al 33,8% del recor",
       "linea_aprox": 370
@@ -63,18 +58,8 @@
       "linea_aprox": 376
     },
     {
-      "valor": "69,5%",
-      "contexto": "ca (62,8%) como el boosting balanceado (69,5%) recorren",
-      "linea_aprox": 377
-    },
-    {
       "valor": "62,8%",
       "contexto": "modelos combinados alcanzan entre   el 62,8% `[T40]` y",
-      "linea_aprox": 550
-    },
-    {
-      "valor": "69,5%",
-      "contexto": "alcanzan entre   el 62,8% `[T40]` y el 69,5% `[T45]` d",
       "linea_aprox": 550
     },
     {
@@ -208,5 +193,5 @@
     }
   ],
   "tolerancia_redondeo": 0.01,
-  "campos_declarados_como_porcentaje_en_outputs": 28
+  "campos_declarados_como_porcentaje_en_outputs": 29
 }

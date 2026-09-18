@@ -1,7 +1,7 @@
 {
   "fuente": {
     "archivo": "data/train-metadata.csv",
-    "fecha_ejecucion": "2026-08-12T03:32:01.545412+00:00",
+    "fecha_ejecucion": "2026-09-18T00:02:52.514310+00:00",
     "n_filas": 401059,
     "n_columnas": 55
   },
@@ -290,7 +290,8 @@
       "0": 400666,
       "1": 393
     },
-    "pct_positivos": 0.098
+    "pct_positivos": 0.098,
+    "pct_negativos": 99.902
   },
   "estructura_grupos": {
     "columna_grupo": "patient_id",

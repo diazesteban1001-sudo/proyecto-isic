@@ -37,10 +37,23 @@ def perfil_desbalance(df: pd.DataFrame, target_col: str | None) -> dict | None:
     conteos = {str(k): int(v) for k, v in conteos.items()}
     total = len(df)
     pct_pos = None
+    pct_neg = None
     # Asume codificación binaria 0/1 si aplica; si no, reporta conteos crudos.
-    if set(df[target_col].dropna().unique()) <= {0, 1}:
-        pct_pos = round(100 * df[target_col].sum() / total, 4) if total else None
-    return {"columna_target": target_col, "conteos": conteos, "pct_positivos": pct_pos}
+    if set(df[target_col].dropna().unique()) <= {0, 1} and total:
+        pct_pos = round(100 * df[target_col].sum() / total, 4)
+        # Se CUENTA, no se deriva como 100 - pct_positivos. Dos razones: si el
+        # target tuviera faltantes la resta mentiría —que los dos no sumen 100
+        # es información, no un error de redondeo—, y el informe necesita el
+        # campo medido. Sin él, el "99,9%" del informe era una derivación
+        # hecha a mano y el verificador de trazabilidad se lo daba por bueno
+        # contra 1.0, que era un índice de fold.
+        pct_neg = round(100 * int((df[target_col] == 0).sum()) / total, 4)
+    return {
+        "columna_target": target_col,
+        "conteos": conteos,
+        "pct_positivos": pct_pos,
+        "pct_negativos": pct_neg,
+    }
 
 
 def perfil_grupos(df: pd.DataFrame, group_col: str | None) -> dict | None:

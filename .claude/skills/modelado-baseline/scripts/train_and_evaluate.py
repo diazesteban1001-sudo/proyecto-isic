@@ -247,6 +247,12 @@ def main():
         df, args.target_col, folds, numericas, categoricas, modelo_gb_balanceado, devolver_auc=True
     )
 
+    # Escala de la métrica, derivada del único umbral del proyecto. El azar de
+    # un pAUC sobre MIN_TPR es el área del triángulo bajo la diagonal en esa
+    # franja; el máximo, la franja entera.
+    azar = round(0.5 * (1 - MIN_TPR) ** 2, 4)
+    maximo = round(1 - MIN_TPR, 4)
+
     resultado = {
         "esquema_cv": {"group_col": args.group_col, "n_splits": args.n_splits, "seed": args.seed},
         "metrica": "pAUC sobre 80% TPR, rango [0, 0.2]",
@@ -287,11 +293,37 @@ def main():
             "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds.",
         },
         "escala_de_referencia_pauc": {
-            "azar": round(0.5 * (1 - MIN_TPR) ** 2, 4),
-            "maximo": round(1 - MIN_TPR, 4),
-            "nota": "Para situar cualquier pauc_media entre el azar y el clasificador perfecto.",
+            "azar": azar,
+            "maximo": maximo,
+            "nota": (
+                "Para situar cualquier pauc_media entre el azar y el clasificador "
+                "perfecto. Esa cuenta ya está hecha: cada nivel trae el campo "
+                "posicion_en_escala = (pauc_media - azar) / (maximo - azar). El "
+                "informe debe citar ese campo, no rehacer la división."
+            ),
         },
     }
+
+    # Posición de cada nivel en la escala del pAUC, emitida como campo en vez
+    # de dejarla para que la calcule quien escriba el informe. Motivo: el .md
+    # de esta skill ya la imprimía, pero el verificador de trazabilidad solo
+    # lee los .json — así que "62,8%" y "69,5%" llegaban al informe sin
+    # respaldo posible y pasaban por coincidencia numérica con cualquier otro
+    # float del corpus. Emitirla convierte una derivación manual en un dato.
+    #
+    # El Nivel 2a sale NEGATIVO y así debe quedar: el signo es la información.
+    # Significa que cae por debajo del piso aleatorio de la métrica, que es
+    # justo el hallazgo (ver su campo `nota`). Recortarlo a cero lo borraría.
+    for clave in ("nivel_0_referencia_univariada",
+                  "nivel_1_regresion_logistica",
+                  "nivel_2a_gradient_boosting_sin_balancear",
+                  "nivel_2b_gradient_boosting_balanceado"):
+        bloque = resultado[clave]
+        if bloque.get("pauc_media") is None:
+            continue  # nivel 0 sin datos univariados en el reporte de fugas
+        bloque["posicion_en_escala"] = round(
+            (bloque["pauc_media"] - azar) / (maximo - azar), 4
+        )
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
@@ -309,7 +341,9 @@ def main():
 
     def linea_nivel(etiqueta, bloque):
         # Numero fijo de lineas: una por nivel, sin bucles sobre folds.
-        pct = 100 * (bloque["pauc_media"] - azar) / (maximo - azar)
+        # Lee posicion_en_escala en vez de recalcularla: el .md y el .json
+        # tienen que decir lo mismo por construccion, no por coincidencia.
+        pct = 100 * bloque["posicion_en_escala"]
         return (
             f"{etiqueta}: pAUC media {bloque['pauc_media']} ± {bloque['pauc_std']} "
             f"({pct:.1f}% del recorrido azar→perfecto)"
