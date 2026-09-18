@@ -177,13 +177,40 @@ sobrante: era una corrección a medio cablear, y borrarla habría consolidado el
 defecto en vez de limpiarlo.
 
 Esta regla existe porque el patrón ya apareció tres veces, y las tres el código
-inerte marcaba el sitio exacto de un defecto real:
+inerte marcaba el sitio exacto de un defecto real. La tabla es el registro de
+incidentes del proyecto: las tres primeras filas son ese patrón; la cuarta es
+una clase distinta, anotada aquí porque el registro vive en un solo sitio y
+partirlo lo volvería fácil de no consultar.
 
 | Dónde | Qué parecía | Qué era en realidad |
 |---|---|---|
 | `eda-diagnostico`, `duplicados_exactos` | Un chequeo que siempre daba 0 | Incluía la clave primaria, así que no podía detectar nada. Vacío de contenido, no correcto. |
 | `auditoria-de-fugas`, `preguntas_abiertas()` | Una rama que nunca se ejecutaba | `auc_alto is None` sobre un `.get(..., False)`. Se comía 9 de las 10 preguntas, incluida `tbp_lv_dnn_lesion_confidence`. |
 | `modelado-baseline`, `StandardScaler` | Un import muerto | La logística no convergía sin escalar. El pAUC reportado era el del optimizador detenido, no el del modelo. |
+| `sintesis-consultoria`, `outputs/sintesis-verificacion.json` | La salida de correr el verificador sobre el borrador | La salida de una corrida **intermedia** de esa sesión, commiteada en `29a0f47` junto a un código que ya no la producía. Decía 26 señalados; el código de ese mismo commit, sobre el corpus de ese mismo commit, da 27. El `15` de la línea 99 figuraba como respaldado sin haberlo estado nunca. |
+
+**La cuarta entrada es de otra clase, y por eso se anota aparte.** Las tres
+primeras son código inerte dentro de un script: se detectan leyendo el script, y
+la regla de arriba —conectarlo y comparar— basta para atraparlas. La cuarta no
+está en ningún script. Es un **artefacto desfasado del código que lo produce**:
+el archivo era sintácticamente válido, estaba versionado, tenía el nombre
+correcto y el formato correcto, y aun así no era el resultado de correr el
+código con el que viajaba.
+
+Su costo real no fue el número equivocado sino que **durante horas fue la fuente
+que se usó para razonar**: un señalamiento que no existía se tomó como recién
+aparecido, y se buscó en el corpus la causa de un cambio que nunca ocurrió. El
+diagnóstico solo llegó reconstruyendo el corpus de `HEAD` y volviendo a correr
+el verificador sobre él — es decir, haciendo a mano lo que nadie estaba
+haciendo.
+
+**Ninguno de los controles del proyecto lo detecta, y conviene ser preciso sobre
+por qué.** El verificador de trazabilidad comprueba que las cifras del informe
+tengan respaldo en `outputs/`; da por supuesto que `outputs/` es lo que dice
+ser. La regla 2 encadena informe → `outputs/`, y ahí se detiene: **nada encadena
+`outputs/` → código.** El eslabón que falta no es una comprobación más estricta
+de la que ya existe, es un eslabón distinto, y hoy no hay ninguno. Queda escrito
+como hueco abierto; el control que lo cerraría no se propone todavía.
 
 El contraejemplo también importa: el `StratifiedKFold` de `diseno-validacion`
 sí era un import muerto y se borró sin más. La regla no es "nunca borres", es
@@ -562,10 +589,18 @@ Es la regla 2 con un verificador detrás, no un propósito.
 **Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
 extrae todo número del borrador y lo busca en los `outputs/*.json` con
 tolerancia de redondeo 0,01. Última corrida
-(`outputs/sintesis-verificacion.json`): **331 números en el borrador,
-291 con respaldo, 13 señalados** para revisar uno por uno; el resto cae
-en contextos que no son cifras medidas (años, etiquetas de nivel) y se
-descarta explícitamente.
+(`outputs/sintesis-verificacion.json`, `e930c89`): **344 números en el
+borrador, 298 con respaldo, 16 señalados** para revisar uno por uno; el
+resto cae en contextos que no son cifras medidas (años, etiquetas de
+nivel, numeración de secciones) y se descarta explícitamente. De esos 16,
+catorce son siete cifras contadas dos veces: la sección §10.4 del
+borrador tiene que reescribir cada cifra para justificarla, y el
+verificador no distingue una afirmación de su propia auditoría.
+
+Estas tres cifras estuvieron desactualizadas —decían 331/291/13— y son
+un caso de la cuarta clase del registro de incidentes (regla 5): una
+cifra derivada de `outputs/` que se quedó atrás sin que nada lo
+advirtiera.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
