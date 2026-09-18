@@ -350,33 +350,43 @@ antes de reportar ningún número `[T32]`.
 
 La escala tiene una propiedad que invalida la lectura intuitiva: **el azar no
 vale 0, vale 0,02** `[T33]`, y el máximo alcanzable es **0,2** `[T34]`. Un modelo
-con pAUC 0,10 no está "a la mitad": está al 44% del recorrido entre el azar y el
-clasificador perfecto. Por eso todos los resultados se expresan también como
-porcentaje de ese recorrido.
+con pAUC 0,10 no está "a la mitad" de nada.
+
+Para leerlos sin ese espejismo, todos los resultados se acompañan de su
+**posición en la escala**: el mismo pAUC reexpresado en una escala donde **0 es
+el azar y 1 el clasificador perfecto**, es decir `(pAUC − 0,02) / (0,2 − 0,02)`.
+No es un porcentaje ni una probabilidad: es dónde cae el modelo dentro del
+recorrido que la métrica deja disponible. Ese pAUC hipotético de 0,10 queda en
+la posición 0,44 de esa escala. Una posición **negativa** no es un tramo hacia
+atrás: significa que el modelo quedó *por debajo del punto de partida*, fuera
+del recorrido, peor que no tener modelo.
+
+La posición no se calcula en este informe: la emite el propio instrumento, un
+campo `posicion_en_escala` por nivel, y aquí se cita tal cual.
 
 ### 7.2 Los cuatro niveles
 
-| Nivel | Modelo | pAUC medio | Desv. entre folds | % del recorrido azar→perfecto |
+| Nivel | Modelo | pAUC medio | Desv. entre folds | Posición en la escala |
 |---|---|---|---|---|
-| 0 | `tbp_lv_H` sola | 0,0809 `[T35]` | ±0,0247 `[T36]` | 33,8% `[T37]` |
-| 1 | Regresión logística balanceada | 0,1331 `[T38]` | ±0,0173 `[T39]` | 62,8% `[T40]` |
-| 2a | Gradient boosting sin balancear | 0,0013 `[T30b]` | ±0,0015 `[T41]` | −10,4% `[T42]` |
-| 2b | Gradient boosting balanceado | 0,1451 `[T43]` | ±0,0055 `[T44]` | 69,5% `[T45]` |
+| 0 | `tbp_lv_H` sola | 0,0809 `[T35]` | ±0,0247 `[T36]` | 0,3383 `[T37]` |
+| 1 | Regresión logística balanceada | 0,1331 `[T38]` | ±0,0173 `[T39]` | 0,6283 `[T40]` |
+| 2a | Gradient boosting sin balancear | 0,0013 `[T30b]` | ±0,0015 `[T41]` | −0,1039 `[T42]` |
+| 2b | Gradient boosting balanceado | 0,1451 `[T43]` | ±0,0055 `[T44]` | 0,695 `[T45]` |
 
 ### 7.3 Lectura de los resultados
 
 **El piso univariado es más bajo de lo que aparenta.** La columna `tbp_lv_H`
 obtiene un AUC estándar de 0,8053 `[T27]`, que suena a un predictor
-razonablemente fuerte. En la métrica del cliente cae al 33,8% del recorrido
-posible `[T37]`. La señal de esa columna no está donde la sensibilidad es
+razonablemente fuerte. En la métrica del cliente cae a la posición 0,3383
+`[T37]`. La señal de esa columna no está donde la sensibilidad es
 clínicamente aceptable. Es el argumento central de la tesis expresado en dos
 números del mismo dato: **la elección de métrica cambia la conclusión, no solo
 la cifra.**
 
-**Los modelos combinados justifican su complejidad.** Tanto la logística (62,8%)
-como el boosting balanceado (69,5%) recorren cerca del doble de distancia que la
-mejor columna sola. Combinar variables aporta algo real, y no era evidente de
-antemano.
+**Los modelos combinados justifican su complejidad.** Tanto la logística
+(0,6283 `[T40]`) como el boosting balanceado (0,695 `[T45]`) llegan a cerca del
+doble de la posición que alcanza la mejor columna sola. Combinar variables
+aporta algo real, y no era evidente de antemano.
 
 **El nivel 2a es el hallazgo más citable del proyecto.** Con pAUC de 0,0013
 `[T30b]`, queda *por debajo del piso aleatorio* de la métrica. Y el modo de fallo
@@ -546,9 +556,10 @@ viabilidad de despliegue.
   entrenar nada.
 - **Once columnas deben excluirse** `[T10]`, por tres razones distintas que
   conviene no confundir (sección 6.1).
-- **La metadata tabular tiene señal real.** Los modelos combinados alcanzan entre
-  el 62,8% `[T40]` y el 69,5% `[T45]` del recorrido entre el azar y el
-  clasificador perfecto, frente al 33,8% `[T37]` de la mejor columna sola.
+- **La metadata tabular tiene señal real.** Los modelos combinados alcanzan
+  posiciones de entre 0,6283 `[T40]` y 0,695 `[T45]` en la escala que va de 0 en
+  el azar a 1 en el clasificador perfecto, frente a 0,3383 `[T37]` de la mejor
+  columna sola.
 - **El ajuste por desbalance no es un refinamiento, es un requisito.** Sin él, el
   modelo de mayor capacidad queda por debajo del azar en la métrica del cliente
   `[T30b]`.
@@ -661,15 +672,15 @@ preguntarse por qué el cliente la eligió.
 | T34 | pAUC máximo alcanzable | 0.2 | `modelado-baseline.json` → `escala_de_referencia_pauc.maximo` |
 | T35 | pAUC medio del nivel 0 | 0.0809 | `modelado-baseline.json` → `nivel_0_....pauc_media` |
 | T36 | Desviación entre folds del nivel 0 | 0.0247 | `modelado-baseline.json` → `nivel_0_....pauc_std` |
-| T37 | Nivel 0 como % del recorrido | 33.8 | `modelado-baseline.md` |
+| T37 | Posición en la escala del nivel 0 | 0.3383 | `modelado-baseline.json` → `nivel_0_....posicion_en_escala` |
 | T38 | pAUC medio del nivel 1 | 0.1331 | `modelado-baseline.json` → `nivel_1_....pauc_media` |
 | T39 | Desviación entre folds del nivel 1 | 0.0173 | `modelado-baseline.json` → `nivel_1_....pauc_std` |
-| T40 | Nivel 1 como % del recorrido | 62.8 | `modelado-baseline.md` |
+| T40 | Posición en la escala del nivel 1 | 0.6283 | `modelado-baseline.json` → `nivel_1_....posicion_en_escala` |
 | T41 | Desviación entre folds del nivel 2a | 0.0015 | `modelado-baseline.json` → `nivel_2a_....pauc_std` |
-| T42 | Nivel 2a como % del recorrido | −10.4 | `modelado-baseline.md` |
+| T42 | Posición en la escala del nivel 2a | −0.1039 | `modelado-baseline.json` → `nivel_2a_....posicion_en_escala` |
 | T43 | pAUC medio del nivel 2b | 0.1451 | `modelado-baseline.json` → `nivel_2b_....pauc_media` |
 | T44 | Desviación entre folds del nivel 2b | 0.0055 | `modelado-baseline.json` → `nivel_2b_....pauc_std` |
-| T45 | Nivel 2b como % del recorrido | 69.5 | `modelado-baseline.md` |
+| T45 | Posición en la escala del nivel 2b | 0.695 | `modelado-baseline.json` → `nivel_2b_....posicion_en_escala` |
 | T46 | Única diferencia entre 2a y 2b | `class_weight` | `modelado-baseline.json` → `nivel_2a_....modelo`, `nivel_2b_....modelo` |
 | T47 | El conjunto de prueba es un marcador de posición | true | `eda-diagnostico.json` → `test_is_placeholder` |
 | T48 | pAUC del nivel 1 en cada fold | 0.1524, 0.1253, 0.1553, 0.1142, 0.1184 | `modelado-baseline.json` → `nivel_1_....pauc_por_fold` |
@@ -730,19 +741,41 @@ salido la cifra.
 
 ### 10.4 Cifras señaladas por la verificación y resueltas a mano
 
-`verificar_trazabilidad.py` compara todo número del informe contra los valores
-presentes en `outputs/*.json`. Señaló siete sin respaldo exacto. Dos eran
-defectos reales del borrador y se corrigieron: un promedio redondeado a "casi
-385" cuando la cifra medida es 384,89 `[T7]`, y un "menos de 85 positivos por
-fold" que sustituía el rango medido de 77 a 83 `[T22]`. Los cinco restantes se
-justifican:
+`verificar_trazabilidad.py` extrae todo número de este borrador y comprueba que
+tenga respaldo en `outputs/*.json`. Lo que el verificador señala no es una lista
+de errores: es una lista de cosas que un humano tiene que mirar. Esta sección es
+ese examen, hecho una por una.
+
+Dos señalamientos fueron defectos reales del borrador y se corrigieron: un
+promedio redondeado a "casi 385" cuando la cifra medida es 384,89 `[T7]`, y un
+"menos de 85 positivos por fold" que sustituía el rango medido de 77 a 83
+`[T22]`.
+
+Los porcentajes que el informe usa como **parámetros del método** y no como
+mediciones —el umbral de sensibilidad del pAUC `[E1]`, el umbral rival del
+esquema de premios `[E7]`, el nivel de confianza de los intervalos— los excluye
+el verificador por una lista declarada, y los reporta aparte en
+`porcentajes_de_metodo_excluidos`. No se cuentan como señalados porque el
+informe no los afirma como resultados propios.
+
+Los que quedan señalados, y por qué:
 
 | Cifra | Sección | Por qué no está en `outputs/*.json` |
 |---|---|---|
-| 44% | 7.1 | Derivación ilustrativa, no un resultado: es dónde caería un pAUC hipotético de 0,10 en el recorrido azar→perfecto, calculada a partir de `[T33]` y `[T34]`. Ningún modelo del proyecto obtuvo ese valor. |
-| 33,8% (×3) | 7.2, 7.3, 9 | Está en `outputs/modelado-baseline.md`, no en el `.json`: el porcentaje del recorrido lo calcula el instrumento al redactar su resumen. El script solo lee archivos `.json`, y esa es una limitación suya, no una cifra sin origen. Es reproducible desde `[T35]`, `[T33]` y `[T34]`. |
-| 88% | 8, punto 6 | Externa por naturaleza: es el umbral del esquema de premios del organizador, no un resultado de este proyecto. Trazable a `[E7]`. |
-| 95% | 7.4 | Nivel de confianza convencional del intervalo, no una magnitud medida. |
-| Diferencias por fold, su media (0,0120), su desviación (0,0160) y el intervalo *t* (−0,008 a +0,032) | 7.4 | Estadísticos derivados, calculados en este informe a partir de los pAUC por fold `[T48]` y `[T49]`, que sí están en `outputs/`. La regla de trazabilidad exige que toda cifra provenga de `outputs/`; estas provienen de restar dos columnas que están allí. El cálculo es reproducible con los dos vectores del anexo y no requiere volver a entrenar nada. |
+| 15 líneas | §3.1 | Restricción de diseño de las skills, fijada en `CLAUDE.md`. Es una regla del proyecto, no una magnitud medida: ningún script la produce. |
+| 200 casos | §3.4 | Tamaño de la comprobación de la métrica contra el script del organizador `[E3]`. Es un detalle del procedimiento de verificación, no un resultado del modelado. |
+| 80/20 | §5.3 | Proporción de la partición aleatoria que el instrumento corre **para mostrar que no debe usarse**. Es la convención de tutorial que la sección critica, no un parámetro del diseño adoptado. |
+| 57.000 lesiones | §6.3 | Cifra externa, del artículo que describe la metadata `[E5]`, citada dentro de un supuesto declarado. No procede de este proyecto. |
+| 0,44 | §7.1 | Derivación ilustrativa: es dónde caería en la escala un pAUC hipotético de 0,10, calculada desde `[T33]` y `[T34]`. Ningún modelo del proyecto obtuvo ese valor. |
+| 11 columnas | §10.1 | Es la **longitud** de la lista `columnas_solo_en_train`, no un número almacenado. El verificador lee valores, no cuenta elementos. Limitación del instrumento, no cifra sin origen. |
+| Diferencias por fold, su media (0,0120), su desviación (0,0160) y el intervalo *t* (−0,008 a +0,032) | §7.4 | Estadísticos derivados, calculados en este informe a partir de los pAUC por fold `[T48]` y `[T49]`, que sí están en `outputs/`. Provienen de restar dos columnas que están allí; el cálculo es reproducible con los dos vectores del anexo y no requiere volver a entrenar nada. |
+
+Queda un residuo que conviene nombrar en vez de disimular: **esta misma sección
+duplica todos sus señalamientos**. Para justificar una cifra hay que volver a
+escribirla, así que cada fila de la tabla de arriba reaparece marcada, igual que
+las citas de los dos defectos ya corregidos. El verificador cuenta ocurrencias,
+no cifras distintas, y no distingue una afirmación de su propia auditoría. Es el
+precio de documentar la revisión dentro del documento revisado, y se prefiere a
+la alternativa de no dejar constancia.
 
 Ningún número del informe queda, tras esta revisión, sin origen identificado.
