@@ -1,6 +1,6 @@
 {
-  "numeros_en_borrador": 342,
-  "numeros_con_respaldo_en_outputs": 281,
+  "numeros_en_borrador": 344,
+  "numeros_con_respaldo_en_outputs": 298,
   "numeros_sin_respaldo": [
     {
       "valor": "15",
@@ -28,94 +28,59 @@
       "linea_aprox": 328
     },
     {
-      "valor": "44%",
-      "contexto": "pAUC 0,10 no está \"a la mitad\": está al 44% del recor",
-      "linea_aprox": 353
-    },
-    {
-      "valor": "33,8%",
-      "contexto": "la | 0,0809 `[T35]` | ±0,0247 `[T36]` | 33,8% `[T37]` |",
-      "linea_aprox": 361
-    },
-    {
-      "valor": "62,8%",
-      "contexto": "da | 0,1331 `[T38]` | ±0,0173 `[T39]` | 62,8% `[T40]` |",
-      "linea_aprox": 362
-    },
-    {
-      "valor": "10,4%",
-      "contexto": "| 0,0013 `[T30b]` | ±0,0015 `[T41]` | −10,4% `[T42]` |",
-      "linea_aprox": 363
-    },
-    {
-      "valor": "33,8%",
-      "contexto": "uerte. En la métrica del cliente cae al 33,8% del recor",
-      "linea_aprox": 370
-    },
-    {
-      "valor": "62,8%",
-      "contexto": "n su complejidad.** Tanto la logística (62,8%) como el",
-      "linea_aprox": 376
-    },
-    {
-      "valor": "62,8%",
-      "contexto": "modelos combinados alcanzan entre   el 62,8% `[T40]` y",
-      "linea_aprox": 550
-    },
-    {
-      "valor": "33,8%",
-      "contexto": "y el   clasificador perfecto, frente al 33,8% `[T37]` d",
-      "linea_aprox": 551
+      "valor": "0,44",
+      "contexto": "hipotético de 0,10 queda en la posición 0,44 de esa es",
+      "linea_aprox": 360
     },
     {
       "valor": "11",
       "contexto": "umnas presentes solo en entrenamiento | 11 | `eda-di",
-      "linea_aprox": 636
+      "linea_aprox": 647
     },
     {
       "valor": "385",
       "contexto": "igieron: un promedio redondeado a \"casi 385\" cuando l",
-      "linea_aprox": 736
+      "linea_aprox": 750
     },
     {
       "valor": "85",
       "contexto": "medida es 384,89 `[T7]`, y un \"menos de 85 positivos",
-      "linea_aprox": 736
+      "linea_aprox": 751
     },
     {
-      "valor": "44%",
-      "contexto": "á en `outputs/*.json` | |---|---|---| | 44% | 7.1 | D",
-      "linea_aprox": 742
+      "valor": "15",
+      "contexto": "á en `outputs/*.json` | |---|---|---| | 15 líneas |",
+      "linea_aprox": 765
     },
     {
-      "valor": "7.1",
-      "contexto": "outputs/*.json` | |---|---|---| | 44% | 7.1 | Derivac",
-      "linea_aprox": 742
+      "valor": "200",
+      "contexto": "d medida: ningún script la produce. | | 200 casos | §",
+      "linea_aprox": 766
     },
     {
-      "valor": "33,8%",
-      "contexto": "delo del proyecto obtuvo ese valor. | | 33,8% (×3) | 7.",
-      "linea_aprox": 743
+      "valor": "80",
+      "contexto": "ción, no un resultado del modelado. | | 80/20 | §5.3",
+      "linea_aprox": 767
     },
     {
-      "valor": "7.2,",
-      "contexto": "ecto obtuvo ese valor. | | 33,8% (×3) | 7.2, 7.3, 9 |",
-      "linea_aprox": 743
+      "valor": "20",
+      "contexto": "n, no un resultado del modelado. | | 80/20 | §5.3 |",
+      "linea_aprox": 767
     },
     {
-      "valor": "7.3,",
-      "contexto": "obtuvo ese valor. | | 33,8% (×3) | 7.2, 7.3, 9 | Está",
-      "linea_aprox": 743
+      "valor": "57.000",
+      "contexto": "o un parámetro del diseño adoptado. | | 57.000 lesiones",
+      "linea_aprox": 768
     },
     {
-      "valor": "7.4",
-      "contexto": "proyecto. Trazable a `[E7]`. | | 95% | 7.4 | Nivel d",
-      "linea_aprox": 745
+      "valor": "0,44",
+      "contexto": "arado. No procede de este proyecto. | | 0,44 | §7.1 |",
+      "linea_aprox": 769
     },
     {
-      "valor": "7.4",
-      "contexto": "y el intervalo *t* (−0,008 a +0,032) | 7.4 | Estadís",
-      "linea_aprox": 746
+      "valor": "11",
+      "contexto": "delo del proyecto obtuvo ese valor. | | 11 columnas",
+      "linea_aprox": 770
     }
   ],
   "porcentajes_de_metodo_excluidos": [
@@ -135,63 +100,51 @@
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": "excede su tamaño. - Un intervalo *t* al 95% sobre esa",
-      "linea_aprox": 443
+      "linea_aprox": 453
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": "nza de Nadeau y Bengio, el intervalo al 95% va de **−",
-      "linea_aprox": 488
+      "linea_aprox": 498
     },
     {
       "valor": "80%",
       "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
       "contexto": "r, no una verdad.** Kaggle evalúa sobre 80% de sensib",
-      "linea_aprox": 526
+      "linea_aprox": 536
     },
     {
       "valor": "88%",
       "motivo": "umbral de TPR del esquema de premios ISIC (cifra externa, no usada)",
       "contexto": "premios del propio organizador ISIC usa 88% `[E7]` so",
-      "linea_aprox": 527
+      "linea_aprox": 537
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": "de 0,0125 `[T56]`; pero el intervalo al 95%   corregi",
-      "linea_aprox": 566
+      "linea_aprox": 577
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": ".desviacion` | | T57 | Intervalo *t* al 95% ingenuo s",
-      "linea_aprox": 684
+      "linea_aprox": 695
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": "ervalo_t_95` | | T58 | Intervalo *t* al 95% corregido",
-      "linea_aprox": 685
+      "linea_aprox": 696
     },
     {
       "valor": "88%",
       "motivo": "umbral de TPR del esquema de premios ISIC (cifra externa, no usada)",
       "contexto": "ios del organizador ISIC evalúa *\"above 88% true posi",
-      "linea_aprox": 705
-    },
-    {
-      "valor": "88%",
-      "motivo": "umbral de TPR del esquema de premios ISIC (cifra externa, no usada)",
-      "contexto": "e desde `[T35]`, `[T33]` y `[T34]`. | | 88% | 8, punt",
-      "linea_aprox": 744
-    },
-    {
-      "valor": "95%",
-      "motivo": "nivel de confianza de los intervalos (convención, no medición)",
-      "contexto": "e este proyecto. Trazable a `[E7]`. | | 95% | 7.4 | N",
-      "linea_aprox": 745
+      "linea_aprox": 716
     }
   ],
   "tolerancia_redondeo": 0.01,
-  "campos_declarados_como_porcentaje_en_outputs": 29
+  "campos_declarados_como_porcentaje_en_outputs": 27
 }
