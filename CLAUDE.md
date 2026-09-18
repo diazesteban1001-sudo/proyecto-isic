@@ -168,10 +168,61 @@ métrica ni la estructura de los datos. Lee la página oficial y los datos reale
 El grafo de Graphify se consulta para navegar el repositorio y para detectar
 desfases entre documentos. No es una fuente. Ninguna cifra, afirmación ni
 referencia sale de `graph.json`, `GRAPH_REPORT.md` o `graph.html` sin
-comprobarse antes contra el archivo original. Motivo medido: en la corrida del
-grafo reducido, 65 de las 163 aristas del paso semántico apuntan a nodos
-inexistentes — alrededor del 40% de lo que el modelo dedujo leyendo documentos.
-El paso AST sobre código es determinista y no tiene ese problema.
+comprobarse antes contra el archivo original.
+
+**Motivo medido**, sobre la corrida identificada por `built_at_commit`
+`500159ba064c9ad4c2e1155260fc8b94a5dc80a5` (37 archivos fuente, listados en
+`graphify-out/manifest.json`): el paso semántico produjo **197 aristas**
+repartidas en 25 archivos de caché, y **121 de ellas —el 61,4%— referencian
+nodos que no están declarados en su propio archivo**. De esas 197, al construir
+el grafo sobrevivieron **160**: **37 se descartaron**. El paso AST sobre código
+es determinista y no tiene ese problema — sus 210 aristas en `graph.json` no
+incluyen ninguna colgante.
+
+**El grafo exportado no muestra el problema, y eso es información, no un
+inconveniente.** `graph.json` tiene **0 aristas colgantes** sobre sus 239 nodos
+y 370 enlaces, porque el constructor descarta al exportar las que no resuelven.
+La tasa de invención solo es visible en `graphify-out/cache/semantic/`, nunca en
+el artefacto que uno abre para consultar. Es decir: el archivo que la regla
+prohíbe citar es también el que oculta la razón por la que se prohíbe.
+
+**Procedencia — cómo rehacer la cifra.** Desde la raíz del repositorio, con el
+`graphify-out/` de esa corrida en su sitio:
+
+```bash
+python3 -c "
+import json,glob
+tot=huer=0
+for f in glob.glob('graphify-out/cache/semantic/**/*.json',recursive=True):
+    d=json.load(open(f)); ids={n['id'] for n in d['nodes']}
+    for e in d['edges']:
+        tot+=1; huer+= e['source'] not in ids or e['target'] not in ids
+g=json.load(open('graphify-out/graph.json'))
+sem=sum(1 for l in g['links'] if not l.get('_origin'))
+print(f'corrida {g[\"built_at_commit\"][:12]}: {huer}/{tot} huerfanas; {tot-sem} descartadas; {sem} en graph.json')
+"
+```
+
+Salida esperada, literal:
+
+```
+corrida 500159ba064c: 121/197 huerfanas; 37 descartadas; 160 en graph.json
+```
+
+Salvedad de reproducibilidad, que forma parte de la cifra: `graphify-out/` está
+en `.gitignore`, así que esto se rehace sobre el directorio de esa corrida, no
+desde el repositorio. Una corrida nueva da otros números — y ese es exactamente
+el defecto que se describe abajo.
+
+**Cifra retirada — segundo ejemplar de la cuarta clase de fallo.** Esta regla se
+escribió el 2026-09-17 citando *"65 de las 163 aristas del paso semántico"*,
+≈40%. Ese par de números **no se puede reproducir desde el estado actual de
+`graphify-out/`**: corresponde a una corrida distinta, que ya no está en disco.
+No estaba mal medido; estaba medido sobre otra cosa, y nada en el archivo decía
+sobre cuál. Es el mismo modo de fallo registrado en la regla 6 —un artefacto que
+se desfasa de lo que lo produce y se sigue citando como si no—, esta vez dentro
+de la propia regla que prohíbe citar sin comprobar. Se retira, no se borra: la
+línea de procedencia de arriba existe porque esta cifra no la tenía.
 
 ### 5. El estado vive en archivos, no en conversaciones
 
@@ -198,14 +249,15 @@ partirlo lo volvería fácil de no consultar.
 | `auditoria-de-fugas`, `preguntas_abiertas()` | Una rama que nunca se ejecutaba | `auc_alto is None` sobre un `.get(..., False)`. Se comía 9 de las 10 preguntas, incluida `tbp_lv_dnn_lesion_confidence`. |
 | `modelado-baseline`, `StandardScaler` | Un import muerto | La logística no convergía sin escalar. El pAUC reportado era el del optimizador detenido, no el del modelo. |
 | `sintesis-consultoria`, `outputs/sintesis-verificacion.json` | La salida de correr el verificador sobre el borrador | La salida de una corrida **intermedia** de esa sesión, commiteada en `29a0f47` junto a un código que ya no la producía. Decía 26 señalados; el código de ese mismo commit, sobre el corpus de ese mismo commit, da 27. El `15` de la línea 99 figuraba como respaldado sin haberlo estado nunca. |
+| `CLAUDE.md`, la cifra que justificaba la regla 4 | Un motivo medido sobre el grafo de Graphify: "65 de las 163 aristas del paso semántico" | Una medición de una corrida **que ya no estaba en disco**. El `graphify-out/` presente da 121 de 197. La cifra no se podía rehacer, y el texto no decía sobre qué corrida se había tomado — así que tampoco se podía saber que no se podía rehacer. Retirada el 2026-09-17. |
 
-**La cuarta entrada es de otra clase, y por eso se anota aparte.** Las tres
-primeras son código inerte dentro de un script: se detectan leyendo el script, y
-la regla de arriba —conectarlo y comparar— basta para atraparlas. La cuarta no
-está en ningún script. Es un **artefacto desfasado del código que lo produce**:
-el archivo era sintácticamente válido, estaba versionado, tenía el nombre
-correcto y el formato correcto, y aun así no era el resultado de correr el
-código con el que viajaba.
+**La cuarta y la quinta entrada son de otra clase, y por eso se anotan aparte.**
+Las tres primeras son código inerte dentro de un script: se detectan leyendo el
+script, y la regla de arriba —conectarlo y comparar— basta para atraparlas. Las
+dos últimas no están en ningún script. Son **artefactos desfasados del código
+que los produce**: archivos sintácticamente válidos, con el nombre correcto y el
+formato correcto, que aun así no eran el resultado de correr el código con el
+que viajaban.
 
 Su costo real no fue el número equivocado sino que **durante horas fue la fuente
 que se usó para razonar**: un señalamiento que no existía se tomó como recién
@@ -213,6 +265,15 @@ aparecido, y se buscó en el corpus la causa de un cambio que nunca ocurrió. El
 diagnóstico solo llegó reconstruyendo el corpus de `HEAD` y volviendo a correr
 el verificador sobre él — es decir, haciendo a mano lo que nadie estaba
 haciendo.
+
+**La quinta añade un agravante que la cuarta no tenía: el artefacto ni siquiera
+estaba versionado.** `graphify-out/` está en `.gitignore`, así que no había
+forma de reconstruir la corrida de la que salía el 65/163 — con la cuarta al
+menos existía `git show HEAD:`. Una cifra tomada de un artefacto no versionado
+no es reproducible ni en principio, y el único remedio disponible es el que se
+aplicó en la regla 4: **decir sobre qué corrida se midió y con qué comando se
+rehace, dentro del mismo párrafo que la cita.** No es un control automático; es
+lo que hace que la ausencia del control se note.
 
 **Ninguno de los controles del proyecto lo detecta, y conviene ser preciso sobre
 por qué.** El verificador de trazabilidad comprueba que las cifras del informe
