@@ -11,7 +11,7 @@ ejecución del script**, y con ella el llenado del resto de la página —
 desaparecían los pAUC (0,1451 y 0,1331) y los paneles por skill, pero la
 cabecera y el texto seguían viéndose. Un fallo silencioso justo en la
 presentación en vivo. Comprobado empíricamente antes de decidir el
-cambio, según la regla 5 del proyecto.
+cambio, según la regla 6 del proyecto.
 
 **Descarga y verificación (2026-08-18).**
 

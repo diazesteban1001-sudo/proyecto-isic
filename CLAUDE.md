@@ -163,13 +163,23 @@ vez de un acto de fe.
 El agente no cita de memoria las reglas de la competencia, la definición de la
 métrica ni la estructura de los datos. Lee la página oficial y los datos reales.
 
-### 4. El estado vive en archivos, no en conversaciones
+### 4. Graphify se consulta, no se cita
+
+El grafo de Graphify se consulta para navegar el repositorio y para detectar
+desfases entre documentos. No es una fuente. Ninguna cifra, afirmación ni
+referencia sale de `graph.json`, `GRAPH_REPORT.md` o `graph.html` sin
+comprobarse antes contra el archivo original. Motivo medido: en la corrida del
+grafo reducido, 65 de las 163 aristas del paso semántico apuntan a nodos
+inexistentes — alrededor del 40% de lo que el modelo dedujo leyendo documentos.
+El paso AST sobre código es determinista y no tiene ese problema.
+
+### 5. El estado vive en archivos, no en conversaciones
 
 Este `CLAUDE.md` se actualiza al cerrar cada sesión: decisiones tomadas, estado
 actual, siguiente paso. Una conversación por tarea, no una para todo. Commit
 frecuente.
 
-### 5. Código que parece muerto: conectarlo antes de borrarlo
+### 6. Código que parece muerto: conectarlo antes de borrarlo
 
 **Antes de eliminar un import, una variable o una rama que parezcan sin uso,
 comprobar si conectarlos cambia el resultado.** Si lo cambia, no era código
@@ -598,7 +608,7 @@ borrador tiene que reescribir cada cifra para justificarla, y el
 verificador no distingue una afirmación de su propia auditoría.
 
 Estas tres cifras estuvieron desactualizadas —decían 331/291/13— y son
-un caso de la cuarta clase del registro de incidentes (regla 5): una
+un caso de la cuarta clase del registro de incidentes (regla 6): una
 cifra derivada de `outputs/` que se quedó atrás sin que nada lo
 advirtiera.
 

@@ -212,7 +212,7 @@ Es lo que cierra el argumento: el consultor deja de reportar una sola cifra.
 el estado final de `outputs/`.
 
 **Riesgo.** Que el informe quede desfasado de `outputs/` — la cuarta clase de
-fallo del registro de incidentes (`CLAUDE.md`, regla 5), que ya ocurrió una vez
+fallo del registro de incidentes (`CLAUDE.md`, regla 6), que ya ocurrió una vez
 en este proyecto y costó horas de razonar sobre una fuente equivocada.
 
 **Contingencia.** Regenerar y volver a correr el verificador **como último paso

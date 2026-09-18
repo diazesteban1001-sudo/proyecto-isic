@@ -9,7 +9,7 @@ Nació el 2026-09-17 como **control positivo**, no como prueba: se escribió
 para reproducir un defecto real que estaba vivo ese día, y su código de
 retorno estaba invertido a propósito —pasaba mientras el defecto
 existiera— porque su trabajo era demostrar el fallo, no protegerse de él.
-Es la aplicación literal del corolario de la regla 5 de CLAUDE.md: un
+Es la aplicación literal del corolario de la regla 6 de CLAUDE.md: un
 chequeo que no puede fallar no vale nada, así que antes de escribir el
 arreglo hay que forzar el caso que debería detectarse y confirmar que se
 dispara.
