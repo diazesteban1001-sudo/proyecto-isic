@@ -65,6 +65,22 @@ El orden importa y es el único posible: **sellar primero, medir después**. Tod
 lo medido hasta hoy se calculó sobre el 100% de los datos, así que todas las
 cifras del borrador cambian. Es trabajo de re-medición, no de re-análisis.
 
+**Motivo medido, no precaución teórica.** Los propios organizadores
+cuantificaron lo que cuesta mirar un conjunto antes de tiempo, sobre los 4.998
+envíos oficiales de ISIC 2024
+(`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, sección *Results*):
+
+> "Successful teams tended to submit dozens to several hundreds of entries for
+> real-time “validation” scoring. This led to a degree of overfitting, as
+> 95.5% of official submissions scored higher on the public leaderboard than on
+> the private leaderboard."
+
+Es decir: prácticamente todo el mundo obtuvo una cifra optimista en el conjunto
+que podía consultar a diario, y la perdió en el que no. No hacía falta hacer
+nada indebido —el leaderboard público estaba para eso—; bastó con poder mirarlo.
+Nuestro holdout es el equivalente del privado, y la única defensa disponible es
+no tener acceso a él mientras se decide nada.
+
 **Puerta.** Dos archivos:
 - `outputs/holdout-pacientes.json` — la lista de pacientes sellados, la semilla,
   y el recuento de positivos a cada lado.
@@ -223,25 +239,83 @@ corrida siga siendo la vigente.
 
 ## Decisiones pendientes
 
-### ¿El componente de recuperación de casos similares entra al alcance?
+### El componente de recuperación de casos similares — DECIDIDO: entra (2026-09-19)
 
-**Estado: declarado y sin medir desde el principio.** Uno de los dos premios
-secundarios oficiales del reto fue *"Top-15 Retrieval Sensitivity"*, con el
-mismo monto que el de eficiencia (`referencias/kaggle-rules.md`). Mide el
+**Entra al alcance como sexto objetivo, y se mide en la Fase 4.** Uno de los dos
+premios secundarios oficiales del reto fue *"Top-15 Retrieval Sensitivity"*, con
+el mismo monto que el de eficiencia (`referencias/kaggle-rules.md`). Mide el
 desempeño **por paciente**, no por lesión — una unidad de análisis distinta de
-la del pAUC, y la que un dermatólogo usa realmente.
+la del pAUC, y la que un dermatólogo usa realmente. El proyecto lo citaba desde
+el primer día como prueba de que la métrica principal no agota la función de
+utilidad del cliente, sin haberlo medido nunca: se usaba como argumento y no
+como resultado.
 
-El proyecto lo cita desde el primer día como prueba de que la métrica principal
-no agota la función de utilidad del cliente, y hasta hoy no lo ha medido. Esa
-asimetría es incómoda: se usa como argumento y no como resultado.
+**Qué destrabó la decisión.** Lo que sostenía la opción de excluirlo era que no
+había definición operativa: el reto nombraba el premio, pero nosotros no
+teníamos cómo calcular la métrica ni contra qué comparar el resultado. Eso dejó
+de ser cierto. En
+`referencias/kurtansky-2025-triaje-automatizado-tbp.md` los organizadores
+definen la métrica, explican por qué la ponderan así, y publican valores de
+referencia:
 
-Las dos salidas son legítimas y **ninguna está tomada**:
+> "SEtop-15 measured sensitivity under the hypothetical task of identifying 15
+> lesions with the highest risk scores on each patient. (…) The computation of
+> SEtop-15 weighed each diseased patient equally to avoid being more strongly
+> influenced by patients who had multiple malignancies."
 
-- **Entra como sexto objetivo.** Se mide, y el argumento del corolario pasa de
-  afirmado a demostrado.
-- **Se excluye,** con la razón escrita en el alcance de la fase 0. Una exclusión
-  razonada es una decisión de consultoría; una omisión silenciosa no.
+El mismo artículo define una segunda métrica de triaje, **NNTx% SE**, con
+interpretación clínica explícita:
 
-Lo que **no** es aceptable es seguir citándolo sin decidir. La decisión se toma
-en la fase 0, porque es donde se fija el alcance, y condiciona si la tabla de la
-fase 6 tiene dos columnas o tres.
+> "NNTx% SE defined the average number of lesions needed to triage to undergo
+> expert evaluation to detect a single malignancy (…) similar to the number
+> needed to biopsy to detect melanoma (NNB)45, which is used in dermatology to
+> measure the trade-off between skin cancer detection and avoidable
+> interventions."
+
+Con la definición, la ponderación y los valores publicados sobre la mesa, la
+exclusión ya no se puede razonar: lo que faltaba era exactamente eso.
+
+**Consecuencias, que quedan fijadas aquí:**
+
+- La tabla de la **Fase 6 tiene tres columnas**, no dos: pAUC, SEtop-15 por
+  paciente y costo de inferencia. La duda que esta entrada dejaba abierta queda
+  cerrada del lado de las tres.
+- Los valores de referencia contra los que comparar salen de la Tabla 3 de esa
+  misma fuente, y **hay que elegir cuál se usa como línea base** — no son
+  intercambiables. Queda abajo, en los flecos.
+
+**El sexto objetivo redactado no está escrito todavía: lo escribe la persona,
+no el agente.** Esta entrada registra la decisión y su motivo, no su redacción.
+
+### Flecos que abre esa decisión — sin resolver
+
+Tomar la decisión no fija contra qué se compara. Tres cosas quedan abiertas, y
+las tres hay que cerrarlas antes de medir, no después de ver el resultado.
+
+**1. Qué valor de referencia se usa como línea base.** La Tabla 3 de
+`referencias/kurtansky-2025-triaje-automatizado-tbp.md` da tres, y **no son
+intercambiables**:
+
+| Referencia (clasificación de malignidad) | SEtop-15 | Qué es |
+|---|---|---|
+| *Best across all ISIC'24 submissions* | 0,790 | **Máximo por columna**, no un modelo: puede venir de un envío distinto al que ganó |
+| Modelo ganador, variante completa | 0,729 | Un modelo concreto, el del primer puesto |
+| Marchetti et al. | 0,360 | El único enfoque previo publicado en 3D-TBP |
+
+Comparar contra 0,790 es comparar contra un máximo que quizá ningún modelo
+alcanzó junto al resto de sus cifras; contra 0,729, contra un sistema real;
+contra 0,360, contra el estado del arte previo. Son tres afirmaciones distintas.
+
+**2. Malignidad o melanoma.** El artículo reporta las dos tareas por separado, y
+los números cambian: para melanoma, las mismas tres referencias son 0,791,
+0,689 y 0,541. Hay que elegir una tarea y declararla, no mezclar.
+
+**3. Una inconsistencia en la fuente, que hay que decidir cómo citar.** El
+artículo se contradice sobre el NNT80% SE del modelo ganador: la sección
+*Results* dice **51,57**, mientras la Tabla 3 y la discusión de la ablación
+dicen **50,57**. La aritmética de la ablación —*"triaged 22 additional non-malignant lesions
+(NNT80% SE = 72.68 vs. NNT80% SE = 50.57)"*— cuadra con
+50,57, así que probablemente la errata esté en *Results*. **Probablemente no es
+suficiente:** si se cita esa cifra, se cita con las dos lecturas y con cuál se
+elige y por qué, igual que se hizo con la fecha de publicación de los boletines
+de la CAC.

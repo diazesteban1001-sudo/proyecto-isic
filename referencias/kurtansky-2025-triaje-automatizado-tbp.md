@@ -19,6 +19,15 @@ contra la etiqueta `<meta name="citation_doi">` de la página, no contra la
 lectura de la captura de pantalla — a simple vista se confundía con
 `…-02073-7`.
 
+**Cuidado al citar — los superíndices vienen aplanados.** La extracción
+convierte los marcadores de referencia en dígitos pegados a la palabra anterior:
+donde el artículo imprime *"(NNB)*^45^*"*, aquí se lee `(NNB)45`. Lo mismo con
+`Marchetti et al.27` o `SLICE-3D dataset23`. No son erratas ni parte del texto:
+son llamadas a la lista de referencias. Una cita literal los conserva; si
+estorban, se marca la omisión en vez de borrarlos en silencio. El texto también
+usa **espacios finos** (U+2009) alrededor de los signos `=`, que no son espacios
+normales — copiar y pegar es más seguro que reescribir a mano.
+
 **Qué se omitió:** el armazón de PMC (cabecera de la NLM, barra de acciones,
 panel de artículos relacionados, pie). El artículo va completo: resumen,
 introducción, resultados, discusión, métodos, disponibilidad de datos,
