@@ -105,8 +105,8 @@ un examen detallado que alguien tiene que hacer, contable.
    el 3.498 es desempeño de PanDerm reportado por sus propios autores.
 
 *Nota de deslinde:* PanDerm es también el modelo cuya posible contaminación con
-SLICE-3D es la Fase 0 bloqueante de la extensión. Citar el 8.913 no depende de
-esa cuestión —es una medición sobre personas—; usar sus pesos, sí.
+SLICE-3D es la sub-etapa **E1**, bloqueante, de la extensión. Citar el 8.913 no
+depende de esa cuestión —es una medición sobre personas—; usar sus pesos, sí.
 
 ---
 
@@ -226,9 +226,11 @@ línea de procedencia de arriba existe porque esta cifra no la tenía.
 
 ### 5. El estado vive en archivos, no en conversaciones
 
-Este `CLAUDE.md` se actualiza al cerrar cada sesión: decisiones tomadas, estado
-actual, siguiente paso. Una conversación por tarea, no una para todo. Commit
-frecuente.
+Al cerrar cada sesión se actualiza el archivo que corresponda, y son dos
+distintos: las decisiones tomadas y lo medido van aquí; la fase vigente y el
+siguiente paso van en `PLAN.md`. Un solo dueño por cosa — el "siguiente paso"
+estuvo en los dos archivos a la vez y así fue como se desfasaron. Una
+conversación por tarea, no una para todo. Commit frecuente.
 
 ### 6. Código que parece muerto: conectarlo antes de borrarlo
 
@@ -570,11 +572,11 @@ train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, trazables a
    excluye el cero y es el que **no** debe citarse — supone una independencia
    que el solape entre folds no cumple.
 
-### Siguiente paso
+### Dónde se lee la fase vigente
 
-Fase 0 de la extensión (última sección): resolver si SLICE-3D estuvo en el
-preentrenamiento de PanDerm. Es bloqueante — condiciona qué pesos se pueden
-usar, y por tanto todo lo demás.
+En `PLAN.md`, no aquí. La ruta —qué fase está en curso, cuál es el siguiente
+paso y qué archivo es su puerta— vive en ese archivo y solo en ese archivo.
+Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
 
 ### Pendientes
 
@@ -848,12 +850,23 @@ clasificador se solapan con SLICE-3D— y se resolvió por criterio de
 disponibilidad en inferencia. Aquí el criterio no basta, porque el modelo
 congelado sí estará disponible en inferencia y aun así el número estaría inflado.
 
-### Plan de fases (orden de dependencia)
+### Sub-etapas de la extensión (E1–E4), en orden de dependencia
 
-- **Fase 0 — bloqueante.** Resolver la contaminación PanDerm/DermFM-Zero con
+Estas son las **sub-etapas del trabajo con imágenes**, no la ruta del proyecto:
+en `PLAN.md` caen dentro de las **fases 2 a 4**. Se numeran E1–E4 a propósito,
+para que "Fase 2" signifique siempre una sola cosa — la de `PLAN.md`.
+
+| Sub-etapa | Dónde cae en la ruta (`PLAN.md`) |
+|---|---|
+| **E1** — contaminación del modelo fundacional | Fase 2 |
+| **E2** — features de paciente relativo (sin imágenes) | preparación tabular, dentro de la fase 4 |
+| **E3** — características congeladas | Fase 3 |
+| **E4** — apilado y evaluación completa | Fase 4 |
+
+- **E1 — bloqueante.** Resolver la contaminación PanDerm/DermFM-Zero con
   SLICE-3D. Posiblemente escribiendo a los autores (correo público en el repo).
   Nada más empieza hasta cerrarla.
-- **Fase 1 — features de paciente relativo.** Sobre la metadata tabular que ya
+- **E2 — features de paciente relativo.** Sobre la metadata tabular que ya
   está en `data/`: contraste de cada lesión contra el resto de su paciente (LOF
   agrupado por `patient_id`, razones contra el promedio del paciente). Sin
   imágenes. Días de trabajo, minutos de cómputo.
@@ -861,18 +874,22 @@ congelado sí estará disponible en inferencia y aun así el número estaría in
   (`modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.pauc_media`).
   Se escribe aquí como predicción declarada de antemano; si no mejora, eso
   también va al informe.
-- **Fase 2 — protocolo.** Montar Vía A + Vía B. Antes de las fases 3 y 4.
-- **Fase 3 — características congeladas.** Una pasada hacia adelante por imagen,
+- **E3 — características congeladas.** Una pasada hacia adelante por imagen,
   sin fine-tuning. Factible en el M4 corriendo de noche. Requiere descargar
   `train-image.hdf5` (ya está en Pendientes).
-- **Fase 4 — apilado y evaluación completa.** Características de imagen +
+- **E4 — apilado y evaluación completa.** Características de imagen +
   metadata + features de paciente relativo en el mismo pipeline tabular ya
   auditado. Tabla final con los **tres** ejes de la función de utilidad: pAUC,
   retrieval top-15 por paciente, y costo de inferencia.
 
-La fase 4 es la que cierra el argumento del informe: es donde el consultor deja
-de reportar una sola cifra y responde la pregunta que el cliente escribió
-entera.
+E4 es la que cierra el argumento del informe: es donde el consultor deja de
+reportar una sola cifra y responde la pregunta que el cliente escribió entera.
+
+**Qué pasó con la antigua "Fase 2 — protocolo (Vía A + Vía B)".** Ya no es una
+sub-etapa de la extensión: montar el protocolo es la **fase 1 de `PLAN.md`**
+—sellar el holdout y re-medir—, y es la ruta quien la ordena y le pone puerta.
+El contenido de las dos vías no se movió: sigue arriba, en "Protocolo de
+medición sin leaderboard".
 
 ### Nota sobre alternativas tabulares (contexto, no decisión)
 
@@ -887,7 +904,7 @@ contexto.
 
 ### Pendientes de la extensión
 
-- [ ] **Fase 0:** verificar contaminación de PanDerm/DermFM-Zero con SLICE-3D
+- [ ] **E1:** verificar contaminación de PanDerm/DermFM-Zero con SLICE-3D
 - [ ] Guardar el writeup del 1er lugar en `referencias/` (con fuente y fecha en
       la cabecera) antes de citarlo en el informe — regla 3
 - [ ] Decidir tamaño exacto del lockbox y semilla de partición, y verificar que
@@ -895,4 +912,4 @@ contexto.
       `diseno-validacion` ya hace para los folds)
 - [ ] Decidir cuántas semillas usar en la Vía A, según tiempo de cómputo real
 - [ ] Definir cómo se mide el eje "costo de inferencia" — sin esa definición la
-      tabla de la fase 4 tiene solo dos columnas de tres
+      tabla de E4 tiene solo dos columnas de tres

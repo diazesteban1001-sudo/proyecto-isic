@@ -92,11 +92,11 @@ una línea base mal entendida vale menos que ninguna.
 ## Advertencia de uso dentro de este proyecto
 
 PanDerm es, a la vez, la fuente de esta cifra y el modelo cuya posible
-contaminación con SLICE-3D es la **Fase 0 bloqueante** de la extensión (última
-sección de `CLAUDE.md`). Son dos cosas independientes y conviene no mezclarlas:
+contaminación con SLICE-3D es la sub-etapa **E1**, bloqueante, de la extensión
+(última sección de `CLAUDE.md`). Son dos cosas independientes y conviene no
+mezclarlas:
 
 - Citar el **8.913 de los melanógrafos** como línea base de práctica clínica no
   depende en absoluto de si PanDerm está contaminado: es una medición sobre
   personas.
-- Usar **pesos de PanDerm** para modelar sí depende de la Fase 0, y sigue
-  bloqueado.
+- Usar **pesos de PanDerm** para modelar sí depende de E1, y sigue bloqueado.
