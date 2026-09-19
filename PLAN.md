@@ -237,7 +237,7 @@ corrida siga siendo la vigente.
 
 ---
 
-## Decisiones pendientes
+## Decisiones
 
 ### El componente de recuperación de casos similares — DECIDIDO: entra (2026-09-19)
 
@@ -287,30 +287,49 @@ exclusión ya no se puede razonar: lo que faltaba era exactamente eso.
 **El sexto objetivo redactado no está escrito todavía: lo escribe la persona,
 no el agente.** Esta entrada registra la decisión y su motivo, no su redacción.
 
-### Flecos que abre esa decisión — sin resolver
+### Flecos que abre esa decisión
 
-Tomar la decisión no fija contra qué se compara. Tres cosas quedan abiertas, y
-las tres hay que cerrarlas antes de medir, no después de ver el resultado.
+Tomar la decisión no fijaba contra qué se compara. Dos de esas tres cosas ya
+están cerradas —y se cerraron antes de medir, que era la condición—; la tercera
+sigue abierta.
 
-**1. Qué valor de referencia se usa como línea base.** La Tabla 3 de
-`referencias/kurtansky-2025-triaje-automatizado-tbp.md` da tres, y **no son
-intercambiables**:
+**1 y 2 — CERRADOS (2026-09-19): la referencia es Marchetti et al., objetivo
+melanoma, SEtop-15 = 0,541.** Eran dos preguntas —contra qué valor y sobre qué
+tarea— y se contestan juntas porque la respuesta a una condiciona la otra. La
+Tabla 3 de `referencias/kurtansky-2025-triaje-automatizado-tbp.md` ofrecía tres
+candidatos por tarea:
 
-| Referencia (clasificación de malignidad) | SEtop-15 | Qué es |
-|---|---|---|
-| *Best across all ISIC'24 submissions* | 0,790 | **Máximo por columna**, no un modelo: puede venir de un envío distinto al que ganó |
-| Modelo ganador, variante completa | 0,729 | Un modelo concreto, el del primer puesto |
-| Marchetti et al. | 0,360 | El único enfoque previo publicado en 3D-TBP |
+| Referencia | SEtop-15 (malignidad) | SEtop-15 (melanoma) | Qué es |
+|---|---|---|---|
+| *Best across all ISIC'24 submissions* | 0,790 | 0,791 | Máximo por columna |
+| Modelo ganador, variante completa | 0,729 | 0,689 | El sistema del primer puesto |
+| **Marchetti et al.** | 0,360 | **0,541** | El único enfoque previo publicado en 3D-TBP |
 
-Comparar contra 0,790 es comparar contra un máximo que quizá ningún modelo
-alcanzó junto al resto de sus cifras; contra 0,729, contra un sistema real;
-contra 0,360, contra el estado del arte previo. Son tres afirmaciones distintas.
+**Por qué Marchetti.** Es el único enfoque previo publicado en esta área, y —lo
+que decide— **es de la misma familia que nuestro baseline tabular**: un modelo
+estadístico sobre medidas morfológicas, sin imágenes. Comparar contra algo del
+mismo género es lo único que hace interpretable la diferencia.
 
-**2. Malignidad o melanoma.** El artículo reporta las dos tareas por separado, y
-los números cambian: para melanoma, las mismas tres referencias son 0,791,
-0,689 y 0,541. Hay que elegir una tarea y declararla, no mezclar.
+**Por qué no los otros dos.** El máximo por columna **no corresponde
+necesariamente a un modelo único**: es el mejor valor de esa columna, que puede
+venir de un envío distinto del que lidera las demás, así que no hay un sistema
+al que atribuírselo. Y el ganador es un **ensamble con características de
+imagen**, que en este trabajo no tiene contraparte hasta la Fase 4; medirse
+contra él antes de esa fase sería compararse con algo que todavía no se está
+construyendo.
 
-**3. Una inconsistencia en la fuente, que hay que decidir cómo citar.** El
+**Salvedad obligatoria al citarla, y no es menor.** Marchetti et al. se evaluó
+sobre **particiones y poblaciones distintas** de las nuestras —de hecho los
+organizadores tuvieron que excluir un paciente del conjunto de evaluación por
+solaparse con aquel estudio—. Por tanto **es una referencia de orden de
+magnitud, para detectar una implementación rota, no una comparación de
+desempeño.** Si nuestro SEtop-15 sale en la vecindad de 0,5 el cálculo está
+probablemente bien montado; si sale 0,05 o 0,95, el defecto está en el código
+antes que en el modelo. Ninguna frase del informe puede decir que superamos o
+no superamos a Marchetti et al.
+
+**3 — ABIERTO. Una inconsistencia en la fuente, que hay que decidir cómo
+citar.** El
 artículo se contradice sobre el NNT80% SE del modelo ganador: la sección
 *Results* dice **51,57**, mientras la Tabla 3 y la discusión de la ablación
 dicen **50,57**. La aritmética de la ablación —*"triaged 22 additional non-malignant lesions
