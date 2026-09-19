@@ -541,7 +541,7 @@ sí se contestan con la Tercera nota.
 
 ## Estado actual
 
-**Fase:** las cinco skills están escritas, corridas y auditadas. El alcance
+Las cinco skills están escritas, corridas y auditadas. El alcance
 original —metadata tabular, sin imágenes— está cerrado. Lo que sigue es la
 extensión documentada en la última sección de este archivo.
 

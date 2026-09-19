@@ -34,6 +34,22 @@ proyecto en `PLAN.md`, y "E1–E4" las sub-etapas de la extensión en
 `CLAUDE.md`. Estas cuatro son internas de esta skill y no se corresponden con
 ninguna de las dos: una palabra, un significado.
 
+**Con qué intérprete se corre todo esto.** Con el del proyecto,
+`.venv/bin/python` (CPython 3.11.9) — **no** con el `python3` del sistema, que
+no tiene las dependencias. Los comandos de abajo lo escriben explícitamente en
+vez de decir `python`, porque `python` a secas depende de si el entorno está
+activado y el fallo no es obvio: el script aborta con `ModuleNotFoundError` a
+mitad de la etapa.
+
+| Script | Necesita | ¿Corre con el `python3` del sistema? |
+|---|---|---|
+| `verificar_trazabilidad.py` | solo biblioteca estándar | sí |
+| `md_a_docx.py` | `python-docx` | **no** |
+| `generar_demo.py` | `scipy` | **no** |
+
+Si `.venv/` no existe, se recrea con
+`python3 -m venv .venv && .venv/bin/pip install python-docx scipy`.
+
 ### Etapa 1 — Borrador en Markdown
 
 Redacta primero `informe/borrador.md`, no el `.docx` directamente. Es
@@ -74,7 +90,7 @@ sueltos sin fuente.
 Corre el script de verificación sobre el borrador:
 
 ```bash
-python .claude/skills/sintesis-consultoria/scripts/verificar_trazabilidad.py \
+.venv/bin/python .claude/skills/sintesis-consultoria/scripts/verificar_trazabilidad.py \
   --borrador informe/borrador.md \
   --outputs-dir outputs/ \
   --out outputs/sintesis-verificacion
@@ -100,13 +116,29 @@ Solo después de que la trazabilidad esté limpia:
 1. Revisa si hay una skill `docx` disponible en este entorno de Claude
    Code (`/mnt/skills/public/docx/` o equivalente). Si existe, síguela
    — tiene gotchas específicas del entorno que conviene respetar.
-2. Si no existe, usa `python-docx` (`pip install python-docx`) para
-   convertir `informe/borrador.md` en `informe/informe-final.docx`,
-   con estilos de encabezado, tabla de contenido, y la tabla de
-   trazabilidad como anexo con formato de tabla real, no texto plano.
-3. Verifica el resultado abriendo el documento generado o
-   convirtiéndolo a PDF para inspección visual antes de darlo por
+2. Si no existe, corre el script del proyecto, que usa `python-docx` y
+   produce los estilos de encabezado, la tabla de contenido y la tabla de
+   trazabilidad como anexo con formato de tabla real, no texto plano:
+
+   ```bash
+   .venv/bin/python .claude/skills/sintesis-consultoria/scripts/md_a_docx.py \
+     --entrada informe/borrador.md \
+     --salida informe/informe-final.docx
+   ```
+
+3. Verifica el resultado abriendo el documento generado antes de darlo por
    terminado — no asumas que el formato salió bien sin mirarlo.
+
+**Sobre el PDF: se exporta a mano y no se versiona.** No hay pipeline que lo
+genere: esta máquina no tiene LibreOffice ni pandoc, y el script solo produce
+`.docx`. Cuando haga falta un PDF —para entregar o para revisar el formato de
+un vistazo— se exporta a mano desde el `.docx` y se trata como copia
+desechable. Por eso `informe/*.pdf` está en `.gitignore`: un PDF versionado
+sin pipeline que lo regenere es un artefacto que se desfasa del `.docx` sin
+que nada avise, que es la cuarta clase de fallo del registro de incidentes de
+`CLAUDE.md`. Ya pasó una vez: el `informe-final.pdf` que estuvo en disco desde
+el 12 de agosto de 2026 siguió diciendo "% del recorrido" mucho después de que
+el borrador pasara a "posición en la escala".
 
 ### Etapa 4 — Demo interactiva en HTML
 
@@ -125,7 +157,7 @@ corrección. Un solo origen (`outputs/*.json`), dos presentaciones.
 Se genera con un script, nunca escribiendo el HTML a mano:
 
 ```bash
-python .claude/skills/sintesis-consultoria/scripts/generar_demo.py \
+.venv/bin/python .claude/skills/sintesis-consultoria/scripts/generar_demo.py \
   --outputs-dir outputs/ \
   --salida informe/demo.html docs/index.html
 ```
