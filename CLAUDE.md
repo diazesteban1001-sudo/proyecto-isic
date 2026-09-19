@@ -179,6 +179,15 @@ el grafo sobrevivieron **160**: **37 se descartaron**. El paso AST sobre código
 es determinista y no tiene ese problema — sus 210 aristas en `graph.json` no
 incluyen ninguna colgante.
 
+*Sobre ese hash:* `500159ba…` es el valor que `graph.json` grabó en
+`built_at_commit`, y por eso es el que imprime el comando de abajo. Ese commit
+se reescribió al poner `main` al día con `origin` (rebase del 2026-09-19) y hoy
+vive en la historia como `82f3fd6`, con el mismo árbol salvo una línea de fecha
+en `README.md`. El identificador de la corrida no se toca —es un dato grabado
+dentro del artefacto, no una cita que podamos actualizar—; lo que se anota es
+la equivalencia, para que buscar `500159ba` en `git log` y no encontrarlo no se
+lea como que la corrida no existió.
+
 **El grafo exportado no muestra el problema, y eso es información, no un
 inconveniente.** `graph.json` tiene **0 aristas colgantes** sobre sus 239 nodos
 y 370 enlaces, porque el constructor descarta al exportar las que no resuelven.
@@ -250,7 +259,7 @@ partirlo lo volvería fácil de no consultar.
 | `eda-diagnostico`, `duplicados_exactos` | Un chequeo que siempre daba 0 | Incluía la clave primaria, así que no podía detectar nada. Vacío de contenido, no correcto. |
 | `auditoria-de-fugas`, `preguntas_abiertas()` | Una rama que nunca se ejecutaba | `auc_alto is None` sobre un `.get(..., False)`. Se comía 9 de las 10 preguntas, incluida `tbp_lv_dnn_lesion_confidence`. |
 | `modelado-baseline`, `StandardScaler` | Un import muerto | La logística no convergía sin escalar. El pAUC reportado era el del optimizador detenido, no el del modelo. |
-| `sintesis-consultoria`, `outputs/sintesis-verificacion.json` | La salida de correr el verificador sobre el borrador | La salida de una corrida **intermedia** de esa sesión, commiteada en `29a0f47` junto a un código que ya no la producía. Decía 26 señalados; el código de ese mismo commit, sobre el corpus de ese mismo commit, da 27. El `15` de la línea 99 figuraba como respaldado sin haberlo estado nunca. |
+| `sintesis-consultoria`, `outputs/sintesis-verificacion.json` | La salida de correr el verificador sobre el borrador | La salida de una corrida **intermedia** de esa sesión, commiteada en `67fae00` junto a un código que ya no la producía. Decía 26 señalados; el código de ese mismo commit, sobre el corpus de ese mismo commit, da 27. El `15` de la línea 99 figuraba como respaldado sin haberlo estado nunca. |
 | `CLAUDE.md`, la cifra que justificaba la regla 4 | Un motivo medido sobre el grafo de Graphify: "65 de las 163 aristas del paso semántico" | Una medición de una corrida **que ya no estaba en disco**. El `graphify-out/` presente da 121 de 197. La cifra no se podía rehacer, y el texto no decía sobre qué corrida se había tomado — así que tampoco se podía saber que no se podía rehacer. Retirada el 2026-09-17. |
 
 **La cuarta y la quinta entrada son de otra clase, y por eso se anotan aparte.**
@@ -662,7 +671,7 @@ Es la regla 2 con un verificador detrás, no un propósito.
 **Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
 extrae todo número del borrador y lo busca en los `outputs/*.json` con
 tolerancia de redondeo 0,01. Última corrida
-(`outputs/sintesis-verificacion.json`, `e930c89`): **344 números en el
+(`outputs/sintesis-verificacion.json`, `903b54f`): **344 números en el
 borrador, 298 con respaldo, 16 señalados** para revisar uno por uno; el
 resto cae en contextos que no son cifras medidas (años, etiquetas de
 nivel, numeración de secciones) y se descarta explícitamente. De esos 16,
