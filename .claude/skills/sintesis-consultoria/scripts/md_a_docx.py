@@ -2,7 +2,7 @@
 """
 md_a_docx.py — convierte el borrador en Markdown al entregable .docx.
 
-Fase 3 de la skill sintesis-consultoria. Se corre SOLO después de que
+Etapa 3 de la skill sintesis-consultoria. Se corre SOLO después de que
 verificar_trazabilidad.py esté limpio: convertir antes es invertir
 tiempo en formato sobre un texto que todavía puede cambiar.
 

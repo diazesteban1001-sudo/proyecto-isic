@@ -3,7 +3,7 @@
 generar_demo.py — construye informe/demo.html, la síntesis en formato
 presentación.
 
-Fase 4 de la skill sintesis-consultoria. El HTML no se escribe a mano:
+Etapa 4 de la skill sintesis-consultoria. El HTML no se escribe a mano:
 se genera desde outputs/*.json igual que el informe, para que una
 corrección en los instrumentos llegue a los dos entregables o a
 ninguno. Un número tecleado en la plantilla sería una cifra inventada.

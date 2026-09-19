@@ -27,9 +27,14 @@ sintético de prueba):
 Si falta alguno, dilo explícitamente y detente. No redactes el informe
 con huecos rellenados de memoria.
 
-## Proceso, en fases
+## Proceso, en etapas
 
-### Fase 1 — Borrador en Markdown
+*Se llaman **etapas** y no fases a propósito.* "Fase" ya nombra la ruta del
+proyecto en `PLAN.md`, y "E1–E4" las sub-etapas de la extensión en
+`CLAUDE.md`. Estas cuatro son internas de esta skill y no se corresponden con
+ninguna de las dos: una palabra, un significado.
+
+### Etapa 1 — Borrador en Markdown
 
 Redacta primero `informe/borrador.md`, no el `.docx` directamente. Es
 más fácil de revisar, corregir y iterar contigo antes de invertir tiempo
@@ -64,7 +69,7 @@ Cada cifra citada en el cuerpo del texto debe tener una nota o marca
 que apunte a su fila en el anexo de trazabilidad. Nada de números
 sueltos sin fuente.
 
-### Fase 2 — Verificación de trazabilidad (obligatoria antes de Word)
+### Etapa 2 — Verificación de trazabilidad (obligatoria antes de Word)
 
 Corre el script de verificación sobre el borrador:
 
@@ -88,7 +93,7 @@ Si el script señala números sin respaldo, corrige el borrador o
 justifica por qué esa cifra no necesita estar en `outputs/` (ej. es un
 conteo estructural obvio, no un resultado medido) antes de continuar.
 
-### Fase 3 — Conversión a Word
+### Etapa 3 — Conversión a Word
 
 Solo después de que la trazabilidad esté limpia:
 
@@ -103,7 +108,7 @@ Solo después de que la trazabilidad esté limpia:
    convirtiéndolo a PDF para inspección visual antes de darlo por
    terminado — no asumas que el formato salió bien sin mirarlo.
 
-### Fase 4 — Demo interactiva en HTML
+### Etapa 4 — Demo interactiva en HTML
 
 El informe escrito no es la única forma de entregar la síntesis. La
 defensa del trabajo se hace en vivo, y ahí un documento de 17 páginas
