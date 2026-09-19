@@ -1,6 +1,14 @@
-# Walter (2005) — Crítica al pAUC parcial: "The partial area under the summary ROC curve"
+# Walter (2005) — El pAUC sobre la curva SROC en metaanálisis
 
-> ⚠️ **ESTE ARCHIVO CONTIENE SOLO EL RESUMEN, NO EL TEXTO COMPLETO.**
+> ⚠️ **ALCANCE: metaanálisis, no una curva ROC empírica única.** El artículo
+> estudia el pAUC aplicado a la curva ROC **de resumen (SROC)**, la que se
+> construye combinando la sensibilidad y la especificidad que aporta cada
+> estudio de un metaanálisis. **No es una crítica al pAUC sobre una sola curva
+> ROC empírica**, que es el caso de ISIC 2024. El archivo se llamaba antes
+> `walter-critica-pauc-parcial.md`; ese nombre afirmaba más de lo que el
+> artículo sostiene y por eso se cambió.
+>
+> ⚠️ **CONTIENE SOLO EL RESUMEN, NO EL TEXTO COMPLETO.**
 > El artículo está en *Statistics in Medicine* (Wiley) tras muro de pago; no
 > hay copia en PMC ni versión de acceso abierto localizable. Lo que sigue es el
 > *abstract* tal como lo publica PubMed, íntegro y literal. **Cualquier
@@ -25,11 +33,9 @@ curve'"*, Stat Med. 2008 Jun 30;27(14):2731-4, con respuesta del autor en
 2734-5, DOI 10.1002/sim.3088, PMID 17910010. **No está copiada aquí**; se anota
 para que se sepa que existe antes de presentar a Walter como palabra final.
 
-**Alcance de la crítica — importante para no sobreextenderla.** El título y el
-resumen acotan el objeto: la curva ROC **de resumen (SROC)** en
-**metaanálisis**, donde cada estudio aporta una estimación de sensibilidad y
-especificidad. No es una crítica al pAUC sobre una única curva ROC empírica,
-que es el caso de ISIC 2024. Las desventajas que enumera —sensibilidad a la
+**Cómo no sobreextender la crítica.** El alcance está arriba, en la primera
+línea del archivo, porque es lo que más fácilmente se pierde al citar. Las
+desventajas que el resumen enumera —sensibilidad a la
 heterogeneidad entre estudios, dificultad de comparación bajo truncamiento
 empírico, pérdida de una propiedad de simetría— hay que leerlas en ese
 contexto. Trasladarlas sin más a nuestro caso sería una extensión nuestra, no

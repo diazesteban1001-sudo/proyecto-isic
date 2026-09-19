@@ -130,14 +130,70 @@ FPR (≤p0) and TPR (≥q0), respectively. TPR pAUC is formulated as TPR pAUC (q
 
 ---
 
-## Por qué importa para este proyecto
+## Qué relación tiene con este proyecto — CORREGIDO el 2026-09-19
 
-**Nota nuestra, no del artículo — se marca como tal.** La métrica de ISIC 2024
-es exactamente un *FPR pAUC* en el sentido de este artículo: el script oficial
-fija `max_fpr = |1 - min_tpr|` e integra sobre FPR, de modo que el control
-sobre el TPR es indirecto (`referencias/isic-primary-metric-pauc.py.md`). Este
-trabajo sostiene que ese control indirecto es *"conceptually and practically
-misleading"* y que el área sobrante por debajo de la restricción de TPR
-*"distorts the comparison of two classifiers"*. No se sigue de ahí que la
-métrica del cliente esté mal elegida: se sigue que tiene una crítica publicada
-y con nombre, y que conviene citarla en vez de presentarla como incontestada.
+> **Una versión anterior de este archivo afirmaba que la métrica de ISIC 2024
+> "es exactamente un *FPR pAUC* en el sentido de este artículo". Es falso.**
+> La afirmación se escribió sin comprobarla contra el script oficial; al ir a
+> buscar la línea que la respaldara, resultó que no existe. Se deja el error
+> anotado en vez de borrarlo, porque el modo de fallo —una lectura plausible
+> dada por buena sin abrir el código— es el que el proyecto registra.
+
+### Qué hace realmente el script oficial
+
+Todas las líneas son de `referencias/isic-primary-metric-pauc.py.md`:
+
+| Línea | Código | Qué hace |
+|---|---|---|
+| 54–55 | `v_gt = abs(np.asarray(v_gt)-1)` y lo mismo con `v_pred` | **invierte etiquetas y puntajes** |
+| 56 | `max_fpr = abs(1-min_tpr)` | deriva el tope del umbral de sensibilidad |
+| 59 | `fpr, tpr, _ = sklean.roc_curve(v_gt, v_pred, ...)` | ROC **sobre las etiquetas ya invertidas** |
+| 66, 70 | `stop = np.searchsorted(fpr, max_fpr, "right")` … `fpr = np.append(fpr[:stop], max_fpr)` | trunca en el eje `fpr` |
+| 71 | `partial_auc = sklean.auc(fpr, tpr)` | integra con `fpr` como eje x |
+
+**La línea 54 lo cambia todo.** Como las etiquetas están invertidas, la variable
+que el código llama `fpr` **no es el FPR del problema original**: es
+`1 − TPR_original`. Acotarla por arriba con `max_fpr = 1 − min_tpr` equivale
+entonces a acotar `TPR_original ≥ min_tpr`, **directamente**. La métrica es una
+restricción **vertical sobre el TPR**, y **no impone ninguna restricción sobre
+el FPR**: la región integrada incluye cualquier FPR mientras el TPR supere el
+umbral.
+
+### Comprobación, no deducción
+
+Se corrió el script oficial contra las dos hipótesis, con seis semillas
+(n = 20.000, prevalencia 2%, `min_tpr = 0.80`):
+
+| Semilla | Script oficial | (A) área con TPR ≥ 0,80 | (B) pAUC con FPR ≤ 0,20 |
+|---|---|---|---|
+| 0 | 0,080512 | **0,080512** | 0,081155 |
+| 1 | 0,091335 | **0,091335** | 0,085318 |
+| 2 | 0,089962 | **0,089962** | 0,093062 |
+| 3 | 0,079038 | **0,079038** | 0,084093 |
+| 4 | 0,083016 | **0,083016** | 0,083691 |
+| 5 | 0,082145 | **0,082145** | 0,084461 |
+
+Seis de seis coinciden con (A) al dígito y ninguna con (B). El máximo teórico de
+(A) es `1 − 0,80 = 0,2`, que es el rango `[0.0, 0.2]` que documenta Kaggle
+(`referencias/kaggle-evaluation.md`) — coincidencia que (B) no explica por sí
+sola pero que junto a la tabla cierra el caso.
+
+### Qué se sigue, y qué no
+
+- **La crítica central de Yang et al. NO aplica a ISIC 2024.** Su objeto es el
+  *FPR pAUC*: un límite **inferior artificial sobre el FPR** usado para
+  controlar el TPR de forma indirecta. ISIC no hace eso — su restricción sobre
+  el TPR es explícita y directa. Ninguna frase del informe puede decir que la
+  métrica del cliente incurre en el defecto que este artículo describe.
+- **Tampoco es el *TPR pAUC* del Remark 3.2**, que pone un límite **superior**
+  artificial sobre el TPR para frenar el FPR. ISIC integra hasta TPR = 1 y no
+  tiene ese segundo límite.
+- **Lo que sí conecta — y es lectura nuestra, no del artículo.** El argumento
+  general de fondo es que restringir un solo eje deja el otro sin controlar.
+  ISIC fija el TPR y no acota el FPR en absoluto. Que eso sea un defecto
+  depende de si al cliente le importa un techo de FPR, y por su propio artículo
+  de 2025 parece que sí: definen `NNTx% SE`, una métrica de precisión
+  (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`). Esa conexión es
+  defendible y es la que vale la pena desarrollar — pero se presenta como
+  razonamiento propio apoyado en el marco de Yang et al., nunca como algo que
+  el artículo diga sobre ISIC.
