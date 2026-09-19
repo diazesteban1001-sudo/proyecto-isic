@@ -250,23 +250,24 @@ defecto en vez de limpiarlo.
 
 Esta regla existe porque el patrón ya apareció tres veces, y las tres el código
 inerte marcaba el sitio exacto de un defecto real. La tabla es el registro de
-incidentes del proyecto: las tres primeras filas son ese patrón; la cuarta es
-una clase distinta, anotada aquí porque el registro vive en un solo sitio y
-partirlo lo volvería fácil de no consultar.
+incidentes del proyecto: las tres primeras filas son ese patrón; de la cuarta en
+adelante son clases distintas, anotadas aquí porque el registro vive en un solo
+sitio y partirlo lo volvería fácil de no consultar.
 
 | Dónde | Qué parecía | Qué era en realidad |
 |---|---|---|
 | `eda-diagnostico`, `duplicados_exactos` | Un chequeo que siempre daba 0 | Incluía la clave primaria, así que no podía detectar nada. Vacío de contenido, no correcto. |
 | `auditoria-de-fugas`, `preguntas_abiertas()` | Una rama que nunca se ejecutaba | `auc_alto is None` sobre un `.get(..., False)`. Se comía 9 de las 10 preguntas, incluida `tbp_lv_dnn_lesion_confidence`. |
 | `modelado-baseline`, `StandardScaler` | Un import muerto | La logística no convergía sin escalar. El pAUC reportado era el del optimizador detenido, no el del modelo. |
-| `sintesis-consultoria`, `outputs/sintesis-verificacion.json` | La salida de correr el verificador sobre el borrador | La salida de una corrida **intermedia** de esa sesión, commiteada en `67fae00` junto a un código que ya no la producía. Decía 26 señalados; el código de ese mismo commit, sobre el corpus de ese mismo commit, da 27. El `15` de la línea 99 figuraba como respaldado sin haberlo estado nunca. |
+| `sintesis-consultoria`, `outputs/sintesis-verificacion.json` | La salida de correr el verificador sobre el borrador | La salida de una corrida **intermedia** de esa sesión, commiteada junto a un código que ya no la producía (el commit "Verificador: la regla de porcentajes aceptaba coincidencias fortuitas", 2026-09-17). Decía 26 señalados; el código de ese mismo commit, sobre el corpus de ese mismo commit, da 27. El `15` de la línea 99 figuraba como respaldado sin haberlo estado nunca. |
 | `CLAUDE.md`, la cifra que justificaba la regla 4 | Un motivo medido sobre el grafo de Graphify: "65 de las 163 aristas del paso semántico" | Una medición de una corrida **que ya no estaba en disco**. El `graphify-out/` presente da 121 de 197. La cifra no se podía rehacer, y el texto no decía sobre qué corrida se había tomado — así que tampoco se podía saber que no se podía rehacer. Retirada el 2026-09-17. |
+| `CLAUDE.md`, tres hashes de commit citados | Punteros estables a tres cambios del repositorio | Dejaron de resolver desde `main` en cuanto un rebase los reescribió. Poner `main` al día con `origin` reescribió los 14 commits locales, y `29a0f47` (tabla de incidentes), `e930c89` (guardarraíl 2) y `500159ba` (regla 4) pasaron a no ser ancestros de `main`: buscarlos en `git log` no los encuentra. **Ningún archivo se tocó**; las citas caducaron solas, por una operación rutinaria hecha en otra parte del repositorio. 2026-09-19. |
 
-**La cuarta y la quinta entrada son de otra clase, y por eso se anotan aparte.**
+**De la cuarta en adelante son de otra clase, y por eso se anotan aparte.**
 Las tres primeras son código inerte dentro de un script: se detectan leyendo el
 script, y la regla de arriba —conectarlo y comparar— basta para atraparlas. Las
-dos últimas no están en ningún script. Son **artefactos desfasados del código
-que los produce**: archivos sintácticamente válidos, con el nombre correcto y el
+demás no están en ningún script. La cuarta y la quinta son **artefactos
+desfasados del código que los produce**: archivos sintácticamente válidos, con el nombre correcto y el
 formato correcto, que aun así no eran el resultado de correr el código con el
 que viajaban.
 
@@ -285,6 +286,31 @@ no es reproducible ni en principio, y el único remedio disponible es el que se
 aplicó en la regla 4: **decir sobre qué corrida se midió y con qué comando se
 rehace, dentro del mismo párrafo que la cita.** No es un control automático; es
 lo que hace que la ausencia del control se note.
+
+**La sexta no es un artefacto desfasado: es una cita que caduca sola.** Las dos
+anteriores se rompen cuando alguien regenera algo mal, y en las dos hay un
+momento en que una persona hizo algo. Esta se rompió sin que nadie tocara el
+archivo que la contiene, sin que nadie se equivocara y sin que nada avisara. Un
+hash de commit parece un identificador y no lo es: es un nombre que Git reasigna
+cada vez que reescribe la historia, y `rebase`, `commit --amend` y `cherry-pick`
+la reescriben como parte del trabajo normal. Citar un hash es apostar a que
+nadie volverá a tocar esa rama.
+
+**Regla que se deriva: no se citan hashes de commit en la documentación.** Para
+señalar un cambio se lo nombra por lo que hizo —el asunto del commit, la fecha,
+el archivo que tocó—, que sobrevive a cualquier reescritura. El historial sigue
+siendo parte del entregable; lo que deja de ser citable es el hash como
+dirección.
+
+**La excepción, y es una sola:** el hash que identifica un **artefacto
+inmutable** en vez de un punto de la historia. El `built_at_commit` que
+`graph.json` grabó dentro de sí mismo (regla 4) es un dato de esa corrida, no
+una referencia que podamos corregir: cambiarlo rompería la correspondencia con
+la salida que imprime su propio comando de procedencia. En ese caso **se cita el
+hash y se dice, en el mismo párrafo, por qué no se actualiza y cuál es su
+equivalente vigente** — que es lo que hace la nota "Sobre ese hash" de la regla
+4. La excepción no es "a veces vale citar hashes": es "cuando el hash es el
+dato, se declara que lo es".
 
 **Ninguno de los controles del proyecto lo detecta, y conviene ser preciso sobre
 por qué.** El verificador de trazabilidad comprueba que las cifras del informe
@@ -527,6 +553,13 @@ extensión documentada en la última sección de este archivo.
 | `modelado-baseline` | completa, auditada (`50ba80d`, `30fbff5`, `ad22ba0`) | `.json` + `.md` |
 | `sintesis-consultoria` | completa (`c3467a7`, `6d5754a`, `3e144e0`, `8a1f3ab`) | `sintesis-verificacion.json` + `.md` |
 
+*Deuda declarada:* los once hashes de esta tabla **violan la regla derivada en
+el registro de incidentes** —no se citan hashes en la documentación—. Siguen
+resolviendo hoy porque el rebase del 2026-09-19 solo reescribió los commits que
+estaban sin subir, y estos son anteriores; es decir, sobrevivieron por suerte,
+no por diseño. Se dejan a la vista en vez de arreglarlos en silencio: está en
+Pendientes reemplazarlos por asunto y fecha.
+
 Ninguna se dio por buena sin correrla contra `data/train-metadata.csv` y
 encontrarle defectos. Las cuatro instrumento tenían al menos uno. El detalle de
 cada corrección está en el historial de commits, que es parte del entregable.
@@ -619,6 +652,9 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       premios, versiones), así que el modo sobre este archivo probablemente
       deba señalar para revisión en vez de fallar — igual que hoy con el
       borrador. Cierra también el punto 2 de "Guardarraíles del agente".
+- [ ] Reemplazar por asunto y fecha los once hashes de commit que aún cita la
+      tabla de "Estado actual", por la regla derivada en el registro de
+      incidentes: un hash sobrevive solo hasta el siguiente rebase
 - [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
 - [x] Preparar demo en vivo: `informe/demo.html`, generada solo por
       `generar_demo.py`, abre por doble clic sin servidor y muestra cada cifra
@@ -671,7 +707,7 @@ Es la regla 2 con un verificador detrás, no un propósito.
 **Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
 extrae todo número del borrador y lo busca en los `outputs/*.json` con
 tolerancia de redondeo 0,01. Última corrida
-(`outputs/sintesis-verificacion.json`, `903b54f`): **344 números en el
+(`outputs/sintesis-verificacion.json`, regenerado por el commit "Regenerar la verificacion de trazabilidad desde el estado actual"): **344 números en el
 borrador, 298 con respaldo, 16 señalados** para revisar uno por uno; el
 resto cae en contextos que no son cifras medidas (años, etiquetas de
 nivel, numeración de secciones) y se descarta explícitamente. De esos 16,
