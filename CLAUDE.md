@@ -249,7 +249,9 @@ sobrante: era una corrección a medio cablear, y borrarla habría consolidado el
 defecto en vez de limpiarlo.
 
 Esta regla existe porque el patrón ya apareció tres veces, y las tres el código
-inerte marcaba el sitio exacto de un defecto real. La tabla es el registro de
+inerte marcaba el sitio exacto de un defecto real. Las cuatro filas siguientes
+no son ese patrón: son otras cuatro formas de equivocarse que el proyecto ha
+cometido de verdad, cada una con su propio remedio. La tabla es el registro de
 incidentes del proyecto: las tres primeras filas son ese patrón; de la cuarta en
 adelante son clases distintas, anotadas aquí porque el registro vive en un solo
 sitio y partirlo lo volvería fácil de no consultar.
@@ -262,6 +264,7 @@ sitio y partirlo lo volvería fácil de no consultar.
 | `sintesis-consultoria`, `outputs/sintesis-verificacion.json` | La salida de correr el verificador sobre el borrador | La salida de una corrida **intermedia** de esa sesión, commiteada junto a un código que ya no la producía (el commit "Verificador: la regla de porcentajes aceptaba coincidencias fortuitas", 2026-09-17). Decía 26 señalados; el código de ese mismo commit, sobre el corpus de ese mismo commit, da 27. El `15` de la línea 99 figuraba como respaldado sin haberlo estado nunca. |
 | `CLAUDE.md`, la cifra que justificaba la regla 4 | Un motivo medido sobre el grafo de Graphify: "65 de las 163 aristas del paso semántico" | Una medición de una corrida **que ya no estaba en disco**. El `graphify-out/` presente da 121 de 197. La cifra no se podía rehacer, y el texto no decía sobre qué corrida se había tomado — así que tampoco se podía saber que no se podía rehacer. Retirada el 2026-09-17. |
 | `CLAUDE.md`, tres hashes de commit citados | Punteros estables a tres cambios del repositorio | Dejaron de resolver desde `main` en cuanto un rebase los reescribió. Poner `main` al día con `origin` reescribió los 14 commits locales, y `29a0f47` (tabla de incidentes), `e930c89` (guardarraíl 2) y `500159ba` (regla 4) pasaron a no ser ancestros de `main`: buscarlos en `git log` no los encuentra. **Ningún archivo se tocó**; las citas caducaron solas, por una operación rutinaria hecha en otra parte del repositorio. 2026-09-19. |
+| `referencias/yang-2019-two-way-partial-auc.md`, la nota sobre por qué importa | Una lectura del script oficial de la métrica: que ISIC 2024 restringe el FPR para controlar el TPR de forma indirecta, y que por eso le aplica la crítica de Yang et al. al *FPR pAUC* | Falso. La línea 54 de `referencias/isic-primary-metric-pauc.py.md` **invierte las etiquetas** antes de calcular la ROC, así que la variable que el código llama `fpr` es `1 − TPR_original`: la restricción sobre el TPR es **directa** y el FPR **no se acota**. La afirmación se construyó combinando dos lecturas plausibles —`max_fpr` en el nombre, `auc(fpr, tpr)` en la integral— **sin abrir el archivo que las decidía**, y sobrevivió un commit entero. 2026-09-19. |
 
 **De la cuarta en adelante son de otra clase, y por eso se anotan aparte.**
 Las tres primeras son código inerte dentro de un script: se detectan leyendo el
@@ -312,8 +315,35 @@ equivalente vigente** — que es lo que hace la nota "Sobre ese hash" de la regl
 4. La excepción no es "a veces vale citar hashes": es "cuando el hash es el
 dato, se declara que lo es".
 
-**Ninguno de los controles del proyecto lo detecta, y conviene ser preciso sobre
-por qué.** El verificador de trazabilidad comprueba que las cifras del informe
+**La séptima es la más incómoda, porque no hay nada que la detecte.** No es
+código inerte, ni un artefacto desfasado, ni una cita que caduca: es **una
+afirmación sobre el contenido de un archivo del repositorio, escrita sin abrir
+el archivo**. El archivo estaba ahí, versionado, a una orden de distancia, y
+decía lo contrario. Lo que se escribió no fue una invención: fue una inferencia
+razonable a partir de dos señales verdaderas —el parámetro se llama `max_fpr` y
+la integral es `auc(fpr, tpr)`— que apuntaban a la conclusión equivocada porque
+faltaba una tercera línea, la inversión de etiquetas, que nadie fue a leer.
+
+Las otras seis clases tienen al menos un mecanismo que las puede atrapar:
+conectar el código y comparar, regenerar el artefacto y volver a correr el
+verificador, resolver el hash contra `git log`. **Esta no tiene ninguno.** Un
+verificador de trazabilidad comprueba que una cifra exista en `outputs/`; no
+existe —ni es evidente cómo sería— un verificador que compruebe que una frase
+en prosa describe correctamente lo que hace un script. El único control
+disponible es ir a mirar.
+
+**Regla que se deriva: antes de afirmar qué hace un archivo del repositorio, se
+abre.** Y si la afirmación es sobre **comportamiento** y no sobre texto, no se
+razona: **se ejecuta contra las alternativas**. Así se detectó esta, y es el
+único método que sirvió — se corrió el script oficial contra las dos hipótesis
+con seis semillas, y las seis coincidieron al dígito con la restricción directa
+sobre el TPR y ninguna con la restricción sobre el FPR. Leer el código con
+atención habría bastado en este caso, pero leerlo con atención es lo que ya
+creíamos haber hecho; ejecutarlo no admite esa confusión.
+
+**Volviendo a la cuarta y la quinta: ninguno de los controles del proyecto
+detecta un artefacto desfasado, y conviene ser preciso sobre por qué.** El
+verificador de trazabilidad comprueba que las cifras del informe
 tengan respaldo en `outputs/`; da por supuesto que `outputs/` es lo que dice
 ser. La regla 2 encadena informe → `outputs/`, y ahí se detiene: **nada encadena
 `outputs/` → código.** El eslabón que falta no es una comprobación más estricta
