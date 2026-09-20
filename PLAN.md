@@ -41,6 +41,44 @@ descontaminar a posteriori.
 - **Declaración de uso de IA.** Qué hizo el agente, qué hizo la persona, y dónde
   está la evidencia de cada cosa (el historial de commits).
 
+**Estado del arte — las cuatro líneas, y dónde está cada una.** Tres cerradas,
+con la fuente abierta, leída y versionada; una sin abrir.
+
+1. **Magnitud del melanoma en Colombia — CERRADA.** Carga, concentración
+   regional y tiempos de diagnóstico y tratamiento, medidos por la Cuenta de
+   Alto Costo: `referencias/cac-melanoma-colombia-2026.md` (periodo 2025) y
+   `referencias/cac-melanoma-colombia-2025.md` (corte a dic. 2024).
+2. **El caso 3D-TBP y su triaje automatizado — CERRADA.** Los propios
+   organizadores analizan ISIC 2024, definen las métricas de triaje y publican
+   valores de referencia:
+   `referencias/kurtansky-2025-triaje-automatizado-tbp.md`; el conjunto de
+   datos lo describe `referencias/kurtansky-2024-slice3d-descriptor.md`.
+3. **Métricas de área parcial — CERRADA.** El origen del pAUC
+   (`referencias/mcclish-1989-pauc-original.md`), su crítica sobre la curva
+   SROC en metaanálisis
+   (`referencias/walter-2005-pauc-sroc-en-metaanalisis.md`) y la propuesta de
+   restringir los dos ejes
+   (`referencias/yang-2019-two-way-partial-auc.md`). *Las dos primeras son solo
+   resumen, y cada archivo lo declara en su primera línea.*
+4. **Fuga por paciente en la validación de modelos médicos — PENDIENTE.**
+   **Ninguna fuente de `referencias/` la sostiene**, y se comprobó archivo por
+   archivo, no de memoria: lo que aparece al buscar es contexto de paciente
+   como *predictor* (el "ugly duckling") y sesgo de *selección de lesiones*,
+   que son otra cosa. Lo más cercano es una frase de práctica, no de
+   justificación — los organizadores parten por paciente y lo dicen en una
+   línea, *"There was no patient overlap across subsets"*
+   (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`), sin cuantificar
+   qué pasaría si no lo hicieran.
+
+   Es la línea que respalda la decisión metodológica central del proyecto, así
+   que el hueco importa. Lo que **sí** existe es medición propia —
+   `outputs/diseno-validacion.json` compara el esquema agrupado contra una
+   partición ingenua a nivel de fila—, pero medición propia no es estado del
+   arte: sostiene que en *estos* datos la fuga ocurre, no que la disciplina lo
+   tenga establecido. Por la contingencia de esta fase, mientras no haya
+   fuente, el anteproyecto puede citar la medición propia y **no** puede
+   atribuir la afirmación a la literatura.
+
 **Puerta.** El PDF del anteproyecto, entregado.
 
 **Riesgo.** Una referencia que no diga lo que el documento afirma que dice. Es
