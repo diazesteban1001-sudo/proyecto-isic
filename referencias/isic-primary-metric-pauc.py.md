@@ -1,73 +1,66 @@
-<!--
-Fuente: https://raw.githubusercontent.com/ISIC-Research/Challenge-2024-Metrics/main/PrimaryMetric-pAUC.py
-Copia literal tomada el 2026-08-11 por el agente (raw.githubusercontent.com sí es legible sin sesión).
+# ISIC-Research/Challenge-2024-Metrics — `PrimaryMetric-pAUC.py` (FICHA)
 
-Motivo: el notebook oficial de Kaggle (kaggle.com/code/metric/isic-pauc-abovetpr) NO es
-legible por el agente — devuelve solo el shell de JavaScript, igual que el resto de Kaggle.
-Este script del organizador (Nicholas R Kurtansky, MSKCC) es la implementación de
-referencia del pAUC y sí es citable desde un archivo versionado, según la regla 3.
-Kaggle y el organizador difieren solo en el valor de min_tpr (0.80 vs 0.88), que aquí
-es un parámetro; el algoritmo es el mismo. Para este proyecto: min_tpr = 0.80.
--->
+**Qué es:** la implementación de referencia del pAUC del organizador, función
+`p_auc_tpr`. Autor declarado en el propio archivo: *(c) 2024 Nicholas R
+Kurtansky, MSKCC*.
+**URL:** https://github.com/ISIC-Research/Challenge-2024-Metrics/blob/main/PrimaryMetric-pAUC.py
+(en crudo: https://raw.githubusercontent.com/ISIC-Research/Challenge-2024-Metrics/main/PrimaryMetric-pAUC.py)
+**Fecha de consulta:** 2026-08-11. Contrastado de nuevo el 2026-09-21: el
+script no cambió.
 
-"""
-pAUC_metric.py
------------------
+**LICENCIA: ninguna → FICHA.** Mismo repositorio que el README, **sin archivo
+de licencia** (API de GitHub: `license: null`; `/license` responde 404). Sin
+licencia rige el copyright por defecto. Verificado el 2026-09-21.
 
-2024 ISIC Challenge primary prize scoring algorithm
+**Texto completo:** en local,
+`referencias/_texto-completo/upstream-PrimaryMetric-pAUC.py` (el script tal cual,
+61 líneas) y `referencias/_texto-completo/isic-primary-metric-pauc.py.md` (la
+copia que estuvo versionada hasta el 2026-09-21).
 
-Given a list of binary labels, an associated list of prediction 
-scores ranging from [0,1], this function produces, as a single value, 
-the partial area under the receiver operating characteristic (pAUC) 
-above a given true positive rate (TPR).
-https://en.wikipedia.org/wiki/Partial_Area_Under_the_ROC_Curve.
+**Por qué está aquí:** el *notebook* oficial de Kaggle no es legible por el
+agente. Este script es la implementación de referencia, y contra él se verificó
+la del proyecto (`modelado-baseline/scripts/train_and_evaluate.py`), incluida la
+corrección del factor 0,556 que documenta `modelado-baseline/SKILL.md`.
 
-(c) 2024 Nicholas R Kurtansky, MSKCC
-"""
+---
 
-#Primary scoring metric: pAUC
+## ⚠️ Cómo leer los números de línea
 
-#IMPORTS 
+**Los números de esta ficha son los del script original**, que no cambian con
+nuestras cabeceras. Hasta el 2026-09-21 este archivo era una copia literal con
+12 líneas de cabecera delante, y **algunas citas del repositorio se escribieron
+con la numeración de esa copia**. La equivalencia es exacta —se comprobó que la
+copia era idéntica al original byte a byte a partir de su línea 13—:
 
-import numpy as np
-import sklearn.metrics as sklean
+**línea del original = línea de la copia vieja − 12**
 
+La última columna de la tabla de abajo da la numeración vieja, para que esas
+citas sigan resolviendo.
 
-def p_auc_tpr(v_gt, v_pred, min_tpr=None, sample_weight=None):
-    """Computes the area under the AUC above a minumum TPR.
+## Líneas literales que el proyecto usa
 
-    Args:
-        v_gt: ground truth vector (1s and 0s)
-        v_p: predictions vector of scores ranging [0, 1]
-        min_tpr: minimum true positive threshold (sensitivity)
+| Original | Copia vieja | Código | Para qué la usa el proyecto |
+|---|---|---|---|
+| 24 | 36 | `def p_auc_tpr(v_gt, v_pred, min_tpr=None, sample_weight=None):` | el umbral es un **parámetro** sin valor por defecto (`CLAUDE.md`, "Sobre el problema") |
+| 35 | 47 | `    if len(np.unique(v_gt)) != 2:` | un fold sin positivos hace la métrica indefinida (`CLAUDE.md`, "Segunda nota metodológica") |
+| 36 | 48 | `        raise ValueError(` | ídem |
+| 37 | 49 | `            "Only one class present in y_true. ROC AUC score "` | ídem |
+| 42 | 54 | `    v_gt = abs(np.asarray(v_gt)-1)` | **inversión de etiquetas**: por ella la restricción sobre el TPR es directa (`CLAUDE.md`, regla 6, fila 7; `referencias/yang-2019-two-way-partial-auc.md`) |
+| 43 | 55 | `    v_pred = abs(np.asarray(v_pred)-1)` | ídem, sobre los puntajes |
+| 44 | 56 | `    max_fpr = abs(1-min_tpr)` | el tope se deriva del umbral de sensibilidad |
+| 47 | 59 | `    fpr, tpr, _ = sklean.roc_curve(v_gt, v_pred, sample_weight=sample_weight)` | ROC **sobre las etiquetas ya invertidas** |
+| 54 | 66 | `    stop = np.searchsorted(fpr, max_fpr, "right")` | truncamiento en el eje `fpr` invertido |
+| 58 | 70 | `    fpr = np.append(fpr[:stop], max_fpr)` | ídem |
+| 59 | 71 | `    partial_auc = sklean.auc(fpr, tpr)` | integra el área **cruda**, sin la corrección de McClish (`modelado-baseline/SKILL.md`) |
 
-    Returns:
-        Float value range [0, 1]
-    """
-    if len(np.unique(v_gt)) != 2:
-        raise ValueError(
-            "Only one class present in y_true. ROC AUC score "
-            "is not defined in that case."
-        )
-    
-    # redefine the target. set 0s to 1s and 1s to 0s
-    v_gt = abs(np.asarray(v_gt)-1)
-    v_pred = abs(np.asarray(v_pred)-1)
-    max_fpr = abs(1-min_tpr)
-    
-    # using sklearn.metric functions: (1) roc_curve and (2) auc
-    fpr, tpr, _ = sklean.roc_curve(v_gt, v_pred, sample_weight=sample_weight)
-    if max_fpr is None or max_fpr == 1:
-        return sklean.auc(fpr, tpr)
-    if max_fpr <= 0 or max_fpr > 1:
-        raise ValueError("Expected min_tpr in range [0, 1), got: %r" % min_tpr)
+*`sklean` es así en el original —alias de `sklearn.metrics`, línea 21—; no es
+errata nuestra.*
 
-    # Add a single point at max_fpr by linear interpolation
-    stop = np.searchsorted(fpr, max_fpr, "right")
-    x_interp = [fpr[stop - 1], fpr[stop]]
-    y_interp = [tpr[stop - 1], tpr[stop]]
-    tpr = np.append(tpr[:stop], np.interp(max_fpr, x_interp, y_interp))
-    fpr = np.append(fpr[:stop], max_fpr)
-    partial_auc = sklean.auc(fpr, tpr)
-    return(partial_auc)
+## Localizadores del resto — sin texto
 
+- Líneas 1–14: docstring del módulo — propósito, enlace a Wikipedia, autoría.
+- Líneas 25–34: docstring de la función. Documenta el retorno como *"Float
+  value range [0, 1]"*, pero con `min_tpr = 0.80` el máximo real es 0,2.
+- Líneas 48–51: casos límite — `max_fpr` igual a 1 devuelve el AUC completo; un
+  `min_tpr` fuera de rango lanza `ValueError`.
+- Líneas 55–57: interpolación lineal del punto en `max_fpr`.

@@ -1,12 +1,9 @@
 # Nadeau y Bengio (2003) — El t corregido por solape entre entrenamientos
 
-> ⚠️ **NO CONTIENE EL TEXTO ORIGINAL, y es a propósito.** El artículo es
-> © 2003 Kluwer Academic Publishers, sin licencia abierta, y este repositorio
-> es público. Aquí hay: los datos bibliográficos verificados, **la fórmula en
-> la notación del artículo** (contenido matemático, no expresión), localizadores
-> exactos de página y sección, una sola cita breve, y paráfrasis **marcada como
-> paráfrasis**. Quien quiera el texto lo obtiene del DOI. Es una desviación
-> declarada de la regla 3 de `CLAUDE.md`; ver la última sección.
+> **FICHA** (regla 3 de `CLAUDE.md`): datos bibliográficos verificados, **la
+> fórmula en la notación del artículo** —contenido matemático, no expresión—,
+> localizadores exactos de página y sección, dos citas breves y paráfrasis
+> **marcada como paráfrasis**.
 
 **Autores:** Claude Nadeau (Health Canada) y Yoshua Bengio (CIRANO y Dept. IRO,
 Université de Montréal).
@@ -15,6 +12,13 @@ Université de Montréal).
 **Año:** 2003 (septiembre). Editora de la revista para este artículo: Lisa
 Hellerstein.
 **DOI:** 10.1023/A:1024068626366
+
+**LICENCIA: con copyright → FICHA.** El PDF lleva *"c© 2003 Kluwer Academic
+Publishers"*; en Crossref, Springer solo deposita licencia de minería de textos.
+Verificado el 2026-09-21.
+
+**Texto completo:** en local, `referencias/_texto-completo/nadeau-bengio-2003.pdf`
+y su texto extraído, `nadeau-bengio-2003.txt`.
 **Fecha de consulta:** 2026-09-21
 **URL:** https://link.springer.com/article/10.1023/A:1024068626366
 
@@ -43,8 +47,11 @@ las `J`, ecuación (5), p. 242:
 
     ⁿ²ₙ₁μ̂_J = (1/J) · Σ_{j=1..J} μ̂_j
 
-Los autores lo describen como *"close to the popular K-fold cross-validation
-estimator"* (p. 242). **Cercano, no igual:** el escenario del artículo son
+Los autores lo describen como *"close to the popular K -fold cross-validation
+estimator"* (p. 242). *El espacio en "K -fold" lo introduce la extracción del
+PDF, que separa la K cursiva del guion; en el PDF se lee "K-fold". Se conserva
+para que la cita case carácter a carácter con el texto completo local, igual que
+las ligaduras de la ficha de Yang.* **Cercano, no igual:** el escenario del artículo son
 divisiones aleatorias independientes, no la partición en `K` bloques disjuntos
 de la validación cruzada `K`-fold.
 
@@ -145,13 +152,12 @@ cita.
 
 ---
 
-## Sobre la desviación de la regla 3
+## Sobre la regla 3
 
-La regla 3 pide que un archivo de `referencias/` contenga el texto original.
-Este no lo hace, porque reproducir un artículo con copyright y sin licencia
-abierta en un repositorio público no es algo que el agente haga. Lo que sí
-garantiza: cada afirmación lleva página y sección, la fórmula está en la
-notación del artículo, la única cita literal está entrecomillada, todo lo demás
-está marcado como paráfrasis, y la verificación numérica está entera aquí y es
-reproducible desde `outputs/`. **Cómo debe tratar la regla 3 a las fuentes con
-copyright es una decisión del proyecto, no del agente.**
+Este archivo se escribió como ficha el 2026-09-21, antes de que la regla 3 se
+enmendara ese mismo día para contemplar las fuentes con copyright; en el momento
+de escribirse era una desviación declarada. Con la regla enmendada, cumple: cada
+afirmación lleva página y sección, las dos citas literales están entrecomilladas
+y casan con el texto completo local, todo lo demás está marcado como paráfrasis,
+y la verificación numérica está entera aquí y es reproducible desde
+`outputs/`.

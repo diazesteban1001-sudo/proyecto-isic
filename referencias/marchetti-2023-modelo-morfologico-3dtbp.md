@@ -1,12 +1,10 @@
 # Marchetti et al. (2023) — Modelo morfológico sobre imágenes 3D de cuerpo entero
 
-> ⚠️ **NO CONTIENE EL TEXTO ORIGINAL, NI SIQUIERA EL RESUMEN LITERAL.** El
-> artículo es © 2023 European Academy of Dermatology and Venereology, se sirve
-> solo a través de Wiley, **no tiene copia en PMC** ni licencia abierta, y este
-> repositorio es público. Lo que hay: datos bibliográficos verificados, las
-> **cifras** del resumen (son datos, no expresión), una paráfrasis del diseño
+> **FICHA** (regla 3 de `CLAUDE.md`): datos bibliográficos verificados, las
+> **cifras** del resumen —son datos, no expresión—, una paráfrasis del diseño
 > **marcada como paráfrasis**, y el cruce con lo que de este modelo mide la
-> fuente del proyecto. El resumen literal está en la URL de PubMed de abajo.
+> fuente del proyecto. Solo hay acceso al resumen; el texto completo está tras
+> muro de pago.
 
 **Autores:** M. A. Marchetti, Z. H. Nazir, J. K. Nanda, S. W. Dusza, B. M.
 D'Alessandro, J. DeFazio, A. C. Halpern, V. M. Rotemberg, A. A. Marghoob.
@@ -17,6 +15,14 @@ D'Alessandro, J. DeFazio, A. C. Halpern, V. M. Rotemberg, A. A. Marghoob.
 **DOI:** 10.1111/jdv.18924
 **PMID:** 36708077
 **Tipo de publicación (PubMed):** Observational Study.
+
+**LICENCIA: con copyright → FICHA.** El resumen lleva *"© 2023 European Academy
+of Dermatology and Venereology"*; en Crossref, Wiley solo deposita sus términos y
+condiciones (*vor*); no hay copia en PMC. Verificado en `api.crossref.org` el
+2026-09-21.
+
+**Texto completo:** no hay acceso. En local, el resumen de PubMed:
+`referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt`.
 **Fecha de consulta:** 2026-09-21
 **URL:** https://pubmed.ncbi.nlm.nih.gov/36708077/
 

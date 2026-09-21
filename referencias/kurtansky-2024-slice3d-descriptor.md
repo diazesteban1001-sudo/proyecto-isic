@@ -14,6 +14,18 @@ Weber, Veronica Rotemberg.  (Kurtansky es autor de correspondencia.)
 **DOI:** 10.1038/s41597-024-03743-w
 **PMCID:** PMC11324883 — **PMID:** 39143096
 **Fecha de consulta:** 2026-09-19
+
+**LICENCIA: CC BY 4.0 → TEXTO COMPLETO.** *"Open Access This article is
+licensed under a Creative Commons Attribution 4.0 International License"*
+(https://creativecommons.org/licenses/by/4.0/). Verificado el 2026-09-21 en la
+página del artículo en PMC y en el depósito de la editorial en Crossref.
+Atribución: Kurtansky NR et al., *Scientific Data* 11:884 (2024), DOI 10.1038/s41597-024-03743-w. **Cambios** respecto del original, como pide la licencia:
+texto extraído de la versión HTML de PMC; se omite el armazón del sitio y se añaden esta cabecera y las notas marcadas como nuestras.
+
+*No confundir con la licencia **de los datos**:* SLICE-3D se distribuye bajo
+CC-BY-NC 4.0 y SLICE-3D Permissive bajo CC-BY 4.0
+(`referencias/isic-licencia-y-cita-slice3d.md`). Esta línea es la del
+**artículo**.
 **URL solicitada:** https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11324883/
 **URL efectiva tras redirección:** https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/
 

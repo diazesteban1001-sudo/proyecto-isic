@@ -6,6 +6,13 @@ https://www.nature.com/articles/s41591-025-03747-y
 Copia de acceso abierto en PMC: https://pmc.ncbi.nlm.nih.gov/articles/PMC12353815/
 
 **Fecha de consulta:** 2026-08-20
+
+**LICENCIA: CC BY 4.0 → TEXTO COMPLETO.** *"Open Access This article is
+licensed under a Creative Commons Attribution 4.0 International License"*
+(https://creativecommons.org/licenses/by/4.0/). Verificado el 2026-09-21 en la
+página del artículo en PMC y en el depósito de la editorial en Crossref.
+Atribución: Yan S et al., *Nature Medicine* (2025), DOI 10.1038/s41591-025-03747-y. **Cambios** respecto del original, como pide la licencia:
+aquí solo se reproduce la frase citada; el desglose, el contexto y las salvedades son nuestros.
 **Consultado por:** el agente, vía WebFetch sobre la versión de PMC (acceso
 abierto, legible sin sesión, a diferencia de Kaggle).
 

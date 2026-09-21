@@ -13,6 +13,13 @@ Kivanc Kose#.  (# contribución compartida; Kurtansky es autor de correspondenci
 **Fecha de consulta:** 2026-09-19
 **URL:** https://pmc.ncbi.nlm.nih.gov/articles/PMC12639164/
 
+**LICENCIA: CC BY 4.0 → TEXTO COMPLETO.** *"Open Access This article is
+licensed under a Creative Commons Attribution 4.0 International License"*
+(https://creativecommons.org/licenses/by/4.0/). Verificado el 2026-09-21 en la
+página del artículo en PMC y en el depósito de la editorial en Crossref.
+Atribución: Kurtansky NR et al., *npj Digital Medicine* 8:708 (2025), DOI 10.1038/s41746-025-02070-7. **Cambios** respecto del original, como pide la licencia:
+texto extraído de la versión HTML de PMC; se omite el armazón del sitio y se añaden esta cabecera y las notas marcadas como nuestras.
+
 **Cómo se tomó:** el agente, con el navegador integrado (`get_page_text`), que
 devuelve el texto visible sin procesarlo. No es un resumen. El DOI se verificó
 contra la etiqueta `<meta name="citation_doi">` de la página, no contra la

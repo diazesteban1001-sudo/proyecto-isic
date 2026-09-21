@@ -1,140 +1,88 @@
-# ISIC Challenge — Datos de SLICE-3D: licencias, cita obligatoria y procedencia
+# ISIC Challenge — Datos de SLICE-3D: licencias, cita obligatoria y procedencia (FICHA)
 
-**Entidad responsable:** International Skin Imaging Collaboration (ISIC).
-Co-presidentes del reto 2024: Veronica Rotemberg, M.D., Ph.D. y Nicholas
-Kurtansky, ambos del Memorial Sloan Kettering Cancer Center.
-**Revista / DOI:** no aplica — es una página web del organizador, no un
-artículo. Los DOI que la página asigna a los conjuntos de datos son:
-`10.34970/2024-slice-3d` (SLICE-3D) y `10.34970/2024-slice-3d-permissive`
-(SLICE-3D Permissive). La propia página remite además al descriptor publicado
-en *Scientific Data*, DOI `10.1038/s41597-024-03743-w`, copiado en
-`referencias/kurtansky-2024-slice3d-descriptor.md`.
-**Año:** 2024 (año de publicación de los conjuntos de datos según la cita que
-la propia página exige).
-**Fecha de consulta:** 2026-09-19
-**URL:** https://challenge.isic-archive.com/data/
+**Qué es:** la página de datos del ISIC Challenge, pestaña **"2024"**.
+**URL:** https://challenge.isic-archive.com/data/ — la página abre en la pestaña
+2016; hay que pulsar "2024" para ver SLICE-3D.
+**Entidad:** International Skin Imaging Collaboration (ISIC). Co-presidentes del
+reto 2024: Veronica Rotemberg y Nicholas Kurtansky, ambos del Memorial Sloan
+Kettering Cancer Center.
+**DOI de los conjuntos de datos:** `10.34970/2024-slice-3d` y
+`10.34970/2024-slice-3d-permissive`. La página remite además al descriptor en
+*Scientific Data*, `10.1038/s41597-024-03743-w`
+(`referencias/kurtansky-2024-slice3d-descriptor.md`).
+**Fecha de consulta:** 2026-09-19.
 
-**Cómo se tomó:** el agente, con el navegador integrado (`get_page_text`).
-**La página abre por defecto en la pestaña 2016**; hubo que pulsar la pestaña
-"2024" para que apareciera SLICE-3D. Lo que sigue es el contenido de esa
-pestaña, no el de la URL tal como carga.
+**LICENCIA: desconocida → FICHA.** Hay que distinguir dos cosas que la página
+mezcla:
 
-**Qué se omitió:** el armazón del sitio (menú, avisos de otros retos, pie). Se
-conservan íntegras la tabla de conjuntos de datos, las dos licencias con su
-texto de cita obligatoria, la lista de instituciones contribuyentes, la nota de
-control de versiones y la lista de organizadores.
+- **Los conjuntos de datos** tienen licencia explícita: CC-BY-NC 4.0 (SLICE-3D)
+  y CC-BY 4.0 (SLICE-3D Permissive).
+- **El texto de la página** no declara licencia propia. Los *Terms of Use* del
+  sitio (https://challenge.isic-archive.com/terms-of-use/, sección *"Rights in
+  Site"*) reparten el sitio en categorías con licencias **abiertas** distintas:
+  el *"Site Software"* —*"the software necessary for the Site to function and
+  related copyrighted templates, documentation and materials"*— va bajo Apache
+  2.0; la *"Site Database"* bajo CC0; y *"Software documentation and other
+  supporting media, such as tutorials, manuals, and webinars is made available
+  to our Users under the Creative Commons Attribution 4.0 License."*
+
+  **Ninguna categoría nombra la página de datos.** Encajarla en *"documentation
+  and materials"* (Apache 2.0) o en *"supporting media"* (CC BY 4.0) es **lectura
+  nuestra**, no algo que los términos digan, y por la regla 3 una licencia cuya
+  aplicación es interpretación nuestra cuenta como desconocida. **Es el caso
+  más dudoso de todo `referencias/`:** las dos lecturas plausibles dan licencia
+  abierta, así que hay argumento para versionar el texto completo. Se deja como
+  ficha por la regla, y queda a decisión del proyecto. Determinado el
+  2026-09-21; los términos, en local en
+  `referencias/_texto-completo/isic-terms-of-use.txt`.
+
+**Texto completo:** en local, `referencias/_texto-completo/isic-licencia-y-cita-slice3d.md`.
 
 ---
 
-## Texto original — pestaña "2024"
+## Citas literales que el proyecto usa
 
-ISIC Challenge Datasets
+**Las dos cadenas de cita obligatorias.** El ISIC exige reproducirlas tal cual
+para cumplir la atribución de cada licencia, así que citarlas literalmente es lo
+que la propia fuente pide:
 
-Dataset	Training Data	Training Ground Truth	Test Data	Test Ground Truth	License
+> International Skin Imaging Collaboration. SLICE-3D 2024 Challenge Dataset.
+> International Skin Imaging Collaboration https://doi.org/10.34970/2024-slice-3d
+> (2024).
 
-SLICE-3D
+> International Skin Imaging Collaboration. SLICE-3D 2024 Permissive Challenge
+> Dataset. International Skin Imaging Collaboration
+> https://doi.org/10.34970/2024-slice-3d-permissive (2024).
 
-Download (1.2GB)
-401,059 JPEG images of skin lesion image crops extracted from 3D TBP with metadata entries of age, sex, general anatomic site, common patient identifier, clinical size, and various data fields from the TBP Lesion Visualizer.
+**El nombre de la variante** que `CLAUDE.md` cita entre comillas, *"Permissive"*,
+aparece como nombre del conjunto: *SLICE-3D Permissive*.
 
-Download Supplemental Metadata (40MB)
-401,059 metadata entries of attributes which may be useful for training cross-validation.
+## Datos de la página — hechos, no texto
 
-Download (7MB)
-401,059 entries of gold standard lesion malignancy values.
+| Conjunto | Imágenes | Metadatos | Verdad de campo | Prueba | Licencia |
+|---|---|---|---|---|---|
+| SLICE-3D | 401.059 JPEG | 401.059 entradas (40 MB, suplementarios) | 401.059 valores de malignidad | no disponible | **CC-BY-NC 4.0** |
+| SLICE-3D Permissive | 217.477 JPEG | 217.477 entradas (21 MB) | 217.477 valores | no disponible | **CC-BY 4.0** |
 
-Test Data: Not Available
-Test Ground Truth: Not Available
+- **Campo de visión:** recortes de 15 mm × 15 mm centrados en lesiones
+  distintas, extraídos de fotografía corporal total 3D.
+- **Instituciones que aportaron imágenes (SLICE-3D):** Memorial Sloan Kettering
+  Cancer Center (EE. UU.), Hospital Clínic de Barcelona (España), The University
+  of Queensland (Australia), Medical University of Vienna (Austria), University
+  of Athens (Grecia), Melanoma Institute Australia (Australia), University
+  Hospital of Basel (Suiza), Alfred Hospital (Australia), FNQH Cairns
+  (Australia).
+- **SLICE-3D Permissive** usa un subconjunto de esas fuentes: MSKCC, FNQH
+  Cairns, University of Queensland, Melanoma Institute Australia y University of
+  Athens Medical School.
+- **Patrocinadores:** The International Skin Imaging Collaboration, Canfield
+  Scientific Inc., Kaggle.
 
-License: CC-BY-NC
+## Localizadores del resto — sin texto
 
-SLICE-3D Permissive
-
-Download (623MB)
-217,477 JPEG images of skin lesion image crops extracted from 3D TBP with metadata entries of age, sex, general anatomic site, common patient identifier, clinical size, and various data from the TBP Lesion Visualizer.
-
-Download Supplemental Metadata (21MB)
-217,477 metadata entries of attributes which may be useful for training cross-validation.
-
-Download (4MB)
-217,477 entries of gold standard lesion malignancy values.
-
-Test Data: Not Available
-Test Ground Truth: Not Available
-
-License: CC-BY
-
-The datasets contain 15mm-by-15mm field-of-view cropped images, centered on distinct lesions, extracted from 3D total body photographs.
-
-Datasets were curated by the International Skin Imaging Collaboration (ISIC) from images contributed by the following:
-
-Memorial Sloan Kettering Cancer Center (USA)
-Hospital Clínic de Barcelona (Spain)
-The University of Queensland (Australia)
-Medical University of Vienna (Austria)
-University of Athens (Greece)
-Melanoma Institute Australia (Australia)
-University Hospital of Basel (Switzerland)
-Alfred Hospital (Australia)
-FNQH Cairns (Australia)
-
-A dataset descriptor covering the SLICE-3D dataset was published in Scientific Data and is openly available at https://doi.org/10.1038/s41597-024-03743-w.
-
-Citing SLICE-3D dataset:
-To comply with the attribution requirements of the CC-BY-NC license, the "SLICE-3D" data must be cited as:
-
-International Skin Imaging Collaboration. SLICE-3D 2024 Challenge Dataset. International Skin Imaging Collaboration https://doi.org/10.34970/2024-slice-3d (2024).
-
-Creative Commons Attribution-Non Commercial 4.0 International License.
-
-The dataset was generated by the International Skin Imaging Collaboration (ISIC) and images are from the following sources: Hospital Clínic de Barcelona, Memorial Sloan Kettering Cancer Center, Hospital of Basel, FNQH Cairns, The University of Queensland, Melanoma Institute Australia, Monash University and Alfred Health, University of Athens Medical School, and Medical University of Vienna.
-
-You should have received a copy of the license along with this work.
-
-If not, see https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt .
-
-Citing SLICE-3D Permissive dataset:
-To comply with the attribution requirements of the CC-BY license, the "SLICE-3D Permissive" data must be cited as:
-
-International Skin Imaging Collaboration. SLICE-3D 2024 Permissive Challenge Dataset. International Skin Imaging Collaboration https://doi.org/10.34970/2024-slice-3d-permissive (2024).
-
-Creative Commons Attribution 4.0 International License.
-
-The dataset was generated by the International Skin Imaging Collaboration (ISIC) and images are from the following sources: Memorial Sloan Kettering Cancer Center, FNQH Cairns, The University of Queensland, Melanoma Institute Australia, and University of Athens Medical School.
-
-You should have received a copy of the license along with this work.
-
-If not, see https://creativecommons.org/licenses/by/4.0/legalcode.txt .
-
-Version control:
-
-Any future changes to the ISIC Archive will not affect the versions of the data available at the above links. The metadata on the ISIC Archive proper are subject to change. The training data reflected currently in the ISIC Archive proper are available at https://api.isic-archive.com/collections/390/.
-
-Organizers
-
-Sponsors:
-The International Skin Imaging Collaboration
-Canfield Scientific, Inc.
-Kaggle
-
-Challenge Co-Chairs:
-Name	Affiliation
-Veronica Rotemberg, M.D., Ph.D.	Memorial Sloan Kettering Cancer Center, New York City, NY, USA
-Nicholas Kurtansky	Memorial Sloan Kettering Cancer Center, New York City, NY, USA
-
-Partners:
-Name	Affiliation
-Jochen Weber	Memorial Sloan Kettering Cancer Center
-Kivanc Kose, Ph.D.	Memorial Sloan Kettering Cancer Center
-Allan Halpern, M.D.	Memorial Sloan Kettering Cancer Center
-Maura Gillis	Memorial Sloan Kettering Cancer Center
-Josep Malvehy, M.D.	Hospital Clinic de Barcelona
-H Peter Soyer, Prof., M.D.	The University of Queensland
-Harald Kittler, Prof., M.D.	Medical University of Vienna
-Konstantinos Liopyris, M.D.	University of Athens
-Linda K Martin, M.D.	Melanoma Institute Australia
-Pascale Guitera, M.D.	Melanoma Institute Australia
-Alexander A Navarini, Prof., M.D.	University Hospital of Basel
-Victoria J Mar, M.D.	Alfred Hospital
-Vin Rajeswaran, M.D.	FNQH Cairns
-Noel Codella, Ph.D.	Microsoft
+- Bajo la tabla: los metadatos suplementarios se describen como útiles para la
+  validación cruzada del entrenamiento (paráfrasis).
+- "Version control": las versiones enlazadas no cambian aunque cambie el ISIC
+  Archive, pero los metadatos del Archive sí pueden cambiar (paráfrasis); remite
+  a https://api.isic-archive.com/collections/390/.
+- "Organizers": lista completa de socios institucionales.

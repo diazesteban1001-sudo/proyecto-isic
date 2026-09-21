@@ -5,6 +5,13 @@ image crops extracted from 3D TBP for skin cancer detection"*, Scientific Data
 (2024). https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/
 
 **Fecha de consulta:** 2026-08-11
+
+**LICENCIA: CC BY 4.0 → TEXTO COMPLETO.** *"Open Access This article is
+licensed under a Creative Commons Attribution 4.0 International License"*
+(https://creativecommons.org/licenses/by/4.0/). Verificado el 2026-09-21 en la
+página del artículo en PMC y en el depósito de la editorial en Crossref.
+Atribución: Kurtansky NR et al., *Scientific Data* 11:884 (2024), DOI 10.1038/s41597-024-03743-w — el mismo artículo que `referencias/kurtansky-2024-slice3d-descriptor.md`. **Cambios** respecto del original, como pide la licencia:
+aquí solo se reproducen las definiciones de los campos `tbp_lv_*`; las secciones de análisis son nuestras y están marcadas.
 **Consultado por:** el agente, vía WebFetch sobre la versión de PMC (el paper es
 de acceso abierto y sí es legible sin sesión, a diferencia de Kaggle).
 
