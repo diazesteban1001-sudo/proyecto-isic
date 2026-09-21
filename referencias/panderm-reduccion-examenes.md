@@ -1,9 +1,14 @@
 # Línea base de la práctica clínica actual — cribado sobre TBP (PanDerm)
 
-**Fuente:** Yan S, Yu Z, Primiero C, Vico-Alonso C, et al., *"A multimodal
-vision foundation model for clinical dermatology"*, Nature Medicine (2025).
+**Fuente:** *"A multimodal vision foundation model for clinical dermatology"*,
+**Nature Medicine, volumen 31, número 8, páginas 2691-2702** (2025; en línea el
+6 de junio de 2025). DOI 10.1038/s41591-025-03747-y.
 https://www.nature.com/articles/s41591-025-03747-y
 Copia de acceso abierto en PMC: https://pmc.ncbi.nlm.nih.gov/articles/PMC12353815/
+
+**Autores (25), según Crossref:** Siyuan Yan, Zhen Yu, Clare Primiero, Cristina Vico-Alonso, Zhonghua Wang, Litao Yang, Philipp Tschandl, Ming Hu, Lie Ju, Gin Tan, Vincent Tang, Aik Beng Ng, David Powell, Paul Bonnington, Simon See, Elisabetta Magnaterra, Peter Ferguson, Jennifer Nguyen, Pascale Guitera, Jose Banuls, Monika Janda, Victoria Mar, Harald Kittler, H. Peter Soyer, Zongyuan Ge.
+*Verificado en `api.crossref.org` el 2026-09-21. Esta cabecera decía antes solo
+"Yan S, Yu Z, Primiero C, Vico-Alonso C, et al." y no daba volumen ni páginas.*
 
 **Fecha de consulta:** 2026-08-20
 
