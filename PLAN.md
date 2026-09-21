@@ -294,7 +294,8 @@ corrida siga siendo la vigente.
 
 ### El componente de recuperación de casos similares — DECIDIDO: entra (2026-09-19)
 
-**Entra al alcance como sexto objetivo, y se mide en la Fase 4.** Uno de los dos
+**Entra al alcance como objetivo específico 4 de cinco, y se mide en la Fase 4.**
+No como sexto: la rúbrica pide entre tres y cinco objetivos específicos. Uno de los dos
 premios secundarios oficiales del reto fue *"Top-15 Retrieval Sensitivity"*, con
 el mismo monto que el de eficiencia (`referencias/kaggle-rules.md`). Mide el
 desempeño **por paciente**, no por lesión — una unidad de análisis distinta de
@@ -337,8 +338,9 @@ exclusión ya no se puede razonar: lo que faltaba era exactamente eso.
   misma fuente, y **hay que elegir cuál se usa como línea base** — no son
   intercambiables. Queda abajo, en los flecos.
 
-**El sexto objetivo redactado no está escrito todavía: lo escribe la persona,
-no el agente.** Esta entrada registra la decisión y su motivo, no su redacción.
+**El objetivo está redactado por la persona, no por el agente**: es el
+objetivo específico 4 de `informe/anteproyecto.md`, apartado 3. Esta entrada
+registra la decisión y su motivo, no su redacción.
 
 ### Flecos que abre esa decisión
 
