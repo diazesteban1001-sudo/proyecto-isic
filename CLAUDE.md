@@ -158,10 +158,45 @@ Si una cifra no se puede rastrear hasta un archivo generado por un script, es
 inventada. Sin excepciones. Esto convierte la verificación en algo mecánico en
 vez de un acto de fe.
 
-### 3. Nada de memoria como fuente
+### 3. Nada de memoria como fuente — y cómo se guarda la fuente
 
 El agente no cita de memoria las reglas de la competencia, la definición de la
 métrica ni la estructura de los datos. Lee la página oficial y los datos reales.
+Toda fuente que el proyecto cite queda en `referencias/`, abierta, leída y con
+su procedencia en la cabecera.
+
+**Cómo se guarda depende de su licencia, porque este repositorio es público.**
+Enmendada el 2026-09-21; antes se versionaba el texto completo de todo.
+
+- **Cada archivo de `referencias/` declara su LICENCIA en la cabecera**, con la
+  evidencia de dónde se leyó —la propia fuente, el depósito de la editorial en
+  Crossref, los términos del sitio—. La licencia se determina, no se supone. Si
+  no se puede determinar, o si su aplicación a ese texto es interpretación
+  nuestra, cuenta como desconocida.
+- **Licencia abierta (CC BY o similar):** el texto completo se versiona, con la
+  atribución, el enlace a la licencia y la nota de qué se omitió, que es lo que
+  esas licencias exigen.
+- **Con copyright o licencia desconocida:** el archivo versionado es una
+  **ficha** — datos bibliográficos, licencia, localizadores de página o
+  sección, y las **citas literales exactas** de los pasajes que el proyecto
+  usa. **Nunca paráfrasis presentada como cita**: lo que no es literal va
+  marcado como paráfrasis. El texto completo se guarda en
+  `referencias/_texto-completo/`, que está en `.gitignore`.
+- **Una cita solo entra al informe si se comprobó carácter a carácter contra el
+  texto completo**, esté versionado o sea la copia local. La ficha registra la
+  cita; no sirve para verificarla, porque verificar es comprobar que la frase
+  está en la fuente, y la ficha es un extracto hecho por nosotros.
+- **La historia de git no se reescribe.** Los textos con copyright que ya se
+  subieron siguen en los commits anteriores y se retiran de este en adelante.
+  Reescribir la historia para borrarlos rompería toda referencia a esos commits
+  —el caso de los hashes de la regla 6— y no los retiraría de ningún clon ya
+  hecho.
+
+**Consecuencia que hay que tener presente:** `referencias/_texto-completo/` no
+viaja con el repositorio. En una máquina nueva está vacío, y la comprobación
+carácter a carácter no se puede hacer hasta volver a obtener cada texto desde la
+URL de su ficha. Es el precio de no publicar lo que no es nuestro, y se paga a
+sabiendas.
 
 ### 4. Graphify se consulta, no se cita
 
@@ -373,15 +408,18 @@ proyecto-isic/
 │   ├── auditoria-de-fugas/SKILL.md
 │   └── sintesis-consultoria/SKILL.md
 ├── data/                  ← en .gitignore, los datos NO se versionan
-├── referencias/           ← copias literales de fuentes oficiales, SÍ versionadas
+├── referencias/           ← fuentes: texto completo si la licencia es abierta, ficha si no
+│   └── _texto-completo/   ← textos con copyright, solo en local (en .gitignore)
 ├── outputs/               ← salidas de cada skill (.json + .md)
 └── informe/
 ```
 
 `referencias/` existe porque Kaggle no es legible por el agente (JavaScript +
-sesión). Las copias se toman manualmente, se anota fuente y fecha en la cabecera
-del archivo, y se versionan. Así una cita a Kaggle sigue siendo trazable a un
-archivo del repositorio y no a la memoria del agente.
+sesión), y porque ninguna fuente debe citarse de memoria. Cada fuente se toma de
+su origen, con fuente, fecha y licencia en la cabecera. Qué parte de ella se
+versiona lo decide su licencia, según la regla 3: el texto completo si es
+abierta, una ficha con las citas literales si no. En los dos casos la cita sigue
+siendo trazable a un archivo del repositorio y no a la memoria del agente.
 
 Anatomía de cada skill:
 

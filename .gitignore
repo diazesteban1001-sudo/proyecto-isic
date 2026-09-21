@@ -23,3 +23,8 @@ informe/*.pdf
 
 # Salida derivada de graphify: grafo regenerable, no entra al repo por ahora
 graphify-out/
+
+# Textos completos de fuentes con copyright o licencia desconocida (regla 3 de
+# CLAUDE.md). En referencias/ se versiona solo su ficha; el texto va aqui, en
+# local, para comprobar citas caracter a caracter.
+referencias/_texto-completo/
