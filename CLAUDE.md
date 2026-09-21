@@ -315,9 +315,10 @@ sobrante: era una corrección a medio cablear, y borrarla habría consolidado el
 defecto en vez de limpiarlo.
 
 Esta regla existe porque el patrón ya apareció tres veces, y las tres el código
-inerte marcaba el sitio exacto de un defecto real. Las cuatro filas siguientes
-no son ese patrón: son otras cuatro formas de equivocarse que el proyecto ha
-cometido de verdad, cada una con su propio remedio. La tabla es el registro de
+inerte marcaba el sitio exacto de un defecto real. Las filas siguientes no
+son ese patrón: son otras formas de equivocarse que el proyecto ha cometido de
+verdad, cada una con su propio remedio; la octava es una variante de la
+séptima. La tabla es el registro de
 incidentes del proyecto: las tres primeras filas son ese patrón; de la cuarta en
 adelante son clases distintas, anotadas aquí porque el registro vive en un solo
 sitio y partirlo lo volvería fácil de no consultar.
@@ -331,6 +332,7 @@ sitio y partirlo lo volvería fácil de no consultar.
 | `CLAUDE.md`, la cifra que justificaba la regla 4 | Un motivo medido sobre el grafo de Graphify: "65 de las 163 aristas del paso semántico" | Una medición de una corrida **que ya no estaba en disco**. El `graphify-out/` presente da 121 de 197. La cifra no se podía rehacer, y el texto no decía sobre qué corrida se había tomado — así que tampoco se podía saber que no se podía rehacer. Retirada el 2026-09-17. |
 | `CLAUDE.md`, tres hashes de commit citados | Punteros estables a tres cambios del repositorio | Dejaron de resolver desde `main` en cuanto un rebase los reescribió. Poner `main` al día con `origin` reescribió los 14 commits locales, y `29a0f47` (tabla de incidentes), `e930c89` (guardarraíl 2) y `500159ba` (regla 4) pasaron a no ser ancestros de `main`: buscarlos en `git log` no los encuentra. **Ningún archivo se tocó**; las citas caducaron solas, por una operación rutinaria hecha en otra parte del repositorio. 2026-09-19. |
 | `referencias/yang-2019-two-way-partial-auc.md`, la nota sobre por qué importa | Una lectura del script oficial de la métrica: que ISIC 2024 restringe el FPR para controlar el TPR de forma indirecta, y que por eso le aplica la crítica de Yang et al. al *FPR pAUC* | Falso. La línea 42 del script original `PrimaryMetric-pAUC.py` —ficha en `referencias/isic-primary-metric-pauc.py.md`; era la 54 de la copia versionada hasta el 2026-09-21— **invierte las etiquetas** antes de calcular la ROC, así que la variable que el código llama `fpr` es `1 − TPR_original`: la restricción sobre el TPR es **directa** y el FPR **no se acota**. La afirmación se construyó combinando dos lecturas plausibles —`max_fpr` en el nombre, `auc(fpr, tpr)` en la integral— **sin abrir el archivo que las decidía**, y sobrevivió un commit entero. 2026-09-19. |
+| `PLAN.md`, cuarta línea del estado del arte, y la nota de `referencias/kurtansky-2024-slice3d-descriptor.md` | Una comprobación: que ninguna fuente versionada afirmaba que los pacientes de prueba de ISIC 2024 fueran distintos de los de entrenamiento | Falso. `referencias/kurtansky-2025-triaje-automatizado-tbp.md` lo dice en su sección de métodos —*"albeit different patients than the training dataset"*—, y estaba en el repositorio desde el 2026-09-19. La afirmación se hizo tras **buscar una expresión** —*"no patient overlap"*— en vez de leer el artículo: la búsqueda encontró otra frase, que hablaba de los subconjuntos del leaderboard, y ese hallazgo se tomó por el mapa completo. Entró con el commit "referencias: cuarta linea del estado del arte, fuga por sujeto" y se corrigió el mismo día. **Variante de la séptima clase: una afirmación de ausencia.** 2026-09-21. |
 
 **De la cuarta en adelante son de otra clase, y por eso se anotan aparte.**
 Las tres primeras son código inerte dentro de un script: se detectan leyendo el
@@ -406,6 +408,25 @@ con seis semillas, y las seis coincidieron al dígito con la restricción direct
 sobre el TPR y ninguna con la restricción sobre el FPR. Leer el código con
 atención habría bastado en este caso, pero leerlo con atención es lo que ya
 creíamos haber hecho; ejecutarlo no admite esa confusión.
+
+**La octava es una variante de la séptima, y más traicionera: afirma una
+ausencia.** La séptima afirmaba qué hace un archivo sin abrirlo. La octava sí
+fue a los archivos —con una búsqueda— y concluyó que algo **no** estaba en
+ellos. Pero **una búsqueda puede probar presencia, nunca ausencia.** Si
+encuentra la expresión, la frase existe; si no la encuentra, lo único probado es
+que esa expresión, escrita exactamente así, no aparece. La idea puede estar
+dicha con otras palabras, y lo estaba: se buscó *"no patient overlap"*, y la
+fuente decía *"albeit different patients than the training dataset"*. Lo que la
+búsqueda sí encontró —una frase sobre otra cosa— empeoró el error, porque dio
+la sensación de haber mirado. Ocurrió dos veces en la misma tanda, una por cada
+lado de la conversación.
+
+**Regla que se deriva: antes de escribir que algo no está respaldado, se lee
+completa la fuente candidata.** Si eso no es viable —demasiadas fuentes, o una
+demasiado larga—, la frase no dice que no existe: dice **qué se buscó y
+dónde**. No *"ninguna fuente lo afirma"*, sino *"se buscaron estas expresiones
+en estos archivos, sin resultado"*, de modo que el lector sepa exactamente qué
+quedó descartado y qué no se miró.
 
 **Volviendo a la cuarta y la quinta: ninguno de los controles del proyecto
 detecta un artefacto desfasado, y conviene ser preciso sobre por qué.** El
