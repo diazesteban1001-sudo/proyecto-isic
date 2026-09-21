@@ -46,7 +46,7 @@ conjunto de datos.
 
 ## Sobre el conjunto de prueba de ISIC 2024 — lo que dice y lo que no
 
-*Sección nuestra, añadida el 2026-09-21. Las citas son literales; la lectura, no.*
+*Sección nuestra, añadida y corregida el 2026-09-21. Las citas son literales; la lectura, no.* *Una primera versión decía que tampoco Kurtansky 2025 lo resolvía; era falso.*
 
 **El artículo no dice que los pacientes del conjunto de prueba sean distintos de
 los del entrenamiento.** Lo que dice del conjunto de prueba son tres frases, las
@@ -72,8 +72,15 @@ esté en los dos lados. Que el conjunto sea "aparte" y que haya "datos
 adicionales" no afirma que los pacientes sean disjuntos. El artículo remite la
 prueba a otro sitio y no la describe.
 
-**Tampoco lo resuelve** `referencias/kurtansky-2025-triaje-automatizado-tbp.md`: su
-*"There was no patient overlap across subsets"* se refiere a los subconjuntos
+**Lo resuelve otra fuente:** `referencias/kurtansky-2025-triaje-automatizado-tbp.md`,
+sección de métodos *"ISIC’24 competition and dataset"*:
+
+> Competing submissions were judged on test data compiled from the same medical
+> centers (albeit different patients than the training dataset), plus from two
+> additional sources.
+
+**Lo que no lo resuelve, aunque lo parezca:** la frase *"There was no patient
+overlap across subsets"* de ese mismo artículo se refiere a los subconjuntos
 **público y privado del leaderboard**, ambos dentro de la prueba, no a
 entrenamiento frente a prueba.
 

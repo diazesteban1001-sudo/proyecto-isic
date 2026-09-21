@@ -84,15 +84,24 @@ con la fuente abierta, leída y versionada; una sin abrir.
    sobrestima el desempeño cuando hay varias observaciones por sujeto, **junto
    con su objeción publicada**.
 
-   **Corrección a lo que esta línea decía antes.** Presentaba *"There was no
-   patient overlap across subsets"* (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`)
-   como que *"los organizadores parten por paciente"*. La frase se refiere a los
-   subconjuntos **público y privado del leaderboard**, los dos dentro del
-   conjunto de prueba; **no** a entrenamiento frente a prueba. **Que los
-   pacientes de entrenamiento y de prueba de ISIC 2024 sean disjuntos no lo
-   afirma ninguna fuente versionada**: el descriptor de SLICE-3D deja la prueba
-   fuera de su alcance (`referencias/kurtansky-2024-slice3d-descriptor.md`,
-   sección sobre el conjunto de prueba). No se afirma en el anteproyecto.
+   **La prueba de ISIC 2024 se construyó con pacientes distintos a los del
+   entrenamiento, y la fuente es Kurtansky et al. 2025**
+   (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, sección de
+   métodos *"ISIC’24 competition and dataset"*):
+
+   > Competing submissions were judged on test data compiled from the same
+   > medical centers (albeit different patients than the training dataset), plus
+   > from two additional sources.
+
+   Dos cosas que **no** lo sostienen, aunque lo parezcan: el descriptor de
+   SLICE-3D, que deja la prueba fuera de su alcance
+   (`referencias/kurtansky-2024-slice3d-descriptor.md`), y la frase *"There was
+   no patient overlap across subsets"* del mismo artículo de 2025, que habla de
+   los subconjuntos **público y privado del leaderboard**, los dos dentro de la
+   prueba. Este párrafo se equivocó dos veces antes de llegar aquí: primero
+   presentó esa segunda frase como partición por paciente, y después afirmó
+   que ninguna fuente versionada lo respaldaba. La frase de arriba estaba en el
+   repositorio desde el 2026-09-19.
 
 **Puerta.** El PDF del anteproyecto, entregado.
 
