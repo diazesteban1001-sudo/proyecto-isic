@@ -186,6 +186,20 @@ Enmendada el 2026-09-21; antes se versionaba el texto completo de todo.
   texto completo**, esté versionado o sea la copia local. La ficha registra la
   cita; no sirve para verificarla, porque verificar es comprobar que la frase
   está en la fuente, y la ficha es un extracto hecho por nosotros.
+- **Una cita se conserva en una ficha solo mientras algún documento del proyecto
+  la use** —incluido el análisis de la propia ficha—. Cuando deja de usarse, se
+  retira: una ficha que acumula citas que nadie usa vuelve a ser, poco a poco,
+  el texto completo que la regla dejó de versionar.
+- **Cuando un archivo de `referencias/` cambia de forma —de texto completo a
+  ficha, o al revés; renombrado; renumerado—, se buscan en el repositorio las
+  frases que lo describen**, porque pueden haber quedado falsas aunque nadie las
+  haya tocado. No basta con buscar el nombre del archivo: hay que leer qué dice
+  cada mención de él. *Motivo:* al reducir fuentes a ficha el 2026-09-21, el
+  borrador y este archivo siguieron llamándolas "copia literal" en **ocho
+  frases**. Tres se vieron al reducir; las otras cinco solo aparecieron al
+  buscarlas expresamente, y cuatro de esas cinco no nombraban ningún archivo
+  —hablaban de "copias literales en `referencias/`" en general—, así que buscar
+  por nombre de archivo no las habría encontrado.
 - **La historia de git no se reescribe.** Los textos con copyright que ya se
   subieron siguen en los commits anteriores y se retiran de este en adelante.
   Reescribir la historia para borrarlos rompería toda referencia a esos commits
@@ -442,9 +456,12 @@ tienden a sub-activarse).
 **Procedencia de la verificación:** las páginas de Kaggle se renderizan
 enteramente con JavaScript y no devuelven contenido a un cliente sin navegador
 ni sesión —tampoco vía Internet Archive—, así que el agente no puede leerlas por
-su cuenta. Se resolvió con copias literales tomadas manualmente con sesión
-iniciada, versionadas en `referencias/`: son ahora la fuente citable para todo
-lo que dice Kaggle. El resto se verificó contra fuentes primarias del
+su cuenta. Se resolvió con copias tomadas manualmente con sesión iniciada.
+Desde el 2026-09-21 lo versionado en `referencias/` es una **ficha** con las
+citas literales —las páginas de Kaggle no declaran licencia para su texto, así
+que la regla 3 no permite versionarlo entero— y el texto completo queda en
+local. Las fichas son la referencia citable para todo lo que dice Kaggle; las
+citas se comprueban contra el texto completo. El resto se verificó contra fuentes primarias del
 organizador (ISIC / MSKCC). Cada punto indica su fuente.
 
 **Regla operativa:** si Kaggle y el organizador ISIC dicen cosas distintas, para
@@ -493,9 +510,9 @@ este proyecto manda Kaggle — es la evaluación que estamos replicando.
 - [x] **Umbral exacto de sensibilidad — CERRADO: 80% TPR, rango `[0.0, 0.2]`.**
       *"Submissions are evaluated on partial area under the ROC curve (pAUC)
       above 80% true positive rate (TPR) for binary classification of malignant
-      examples."* (`referencias/kaggle-evaluation.md`, copia literal de
-      https://www.kaggle.com/competitions/isic-2024-challenge/overview/evaluation
-      tomada con sesión iniciada el 2026-08-11)
+      examples."* (`referencias/kaggle-evaluation.md`, ficha de
+      https://www.kaggle.com/competitions/isic-2024-challenge/overview/evaluation;
+      copia tomada con sesión iniciada el 2026-08-11, texto completo en local)
       → **`min_tpr = 0.80` es la constante del proyecto.**
 - [x] **La discrepancia 80/88 no era una contradicción: son dos evaluaciones
       distintas.** El 88% TPR (rango `[0.00, 0.12]`) corresponde al esquema de
@@ -693,7 +710,7 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
 - [ ] Instalar Claude Code y verificar qué incluye el plan actual
 - [x] Verificar la sección "Sobre el problema" contra la fuente oficial
       (2026-08-11 — fuentes del organizador ISIC/MSKCC + copias literales de
-      Kaggle en `referencias/`)
+      Kaggle en `referencias/`, reducidas a ficha el 2026-09-21 por la regla 3)
 - [x] Cerrar el umbral de la métrica (80% TPR) y las reglas de datos externos
       (2026-08-11)
 - [ ] Copiar la página *Code Requirements* de Kaggle a `referencias/` para

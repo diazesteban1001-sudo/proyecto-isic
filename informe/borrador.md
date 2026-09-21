@@ -121,8 +121,9 @@ componente mida e interprete. Separarlos tiene tres consecuencias verificables:
 2. **Nada de memoria como fuente.** El agente no cita de memoria las reglas de la
    competencia ni la definición de la métrica. Cuando Kaggle resultó ilegible
    —sus páginas se renderizan con JavaScript y no devuelven contenido a un
-   cliente sin navegador— se resolvió con copias literales versionadas en
-   `referencias/`, no completando de memoria.
+   cliente sin navegador— se resolvió tomando la fuente a mano y guardándola en
+   `referencias/` —el texto completo o, si su licencia no lo permite, una ficha
+   con las citas literales—, no completando de memoria.
 3. **Antes de borrar código que parece muerto, comprobar si conectarlo cambia el
    resultado.** Esta regla se añadió a mitad de proyecto, después de que el
    patrón apareciera tres veces (sección 3.4).
@@ -701,19 +702,20 @@ preguntarse por qué el cliente la eligió.
 
 ### 10.2 Cifras y citas de fuentes externas
 
-Estas no proceden de `outputs/` sino de fuentes primarias versionadas en
-`referencias/` o citadas por URL. Se separan a propósito: son contexto, no
+Estas no proceden de `outputs/` sino de fuentes primarias —guardadas en
+`referencias/` como texto completo o como ficha con las citas literales, según
+su licencia— o citadas por URL. Se separan a propósito: son contexto, no
 resultados medidos por este proyecto.
 
 | Marca | Afirmación | Fuente |
 |---|---|---|
-| E1 | Justificación clínica de la métrica: *"there are regions in the ROC space where the values of TPR are unacceptable in clinical practice"*, y el rango resultante [0.0, 0.2] | `referencias/kaggle-evaluation.md` (copia literal de la página de evaluación de Kaggle, 2026-08-11) |
+| E1 | Justificación clínica de la métrica: *"there are regions in the ROC space where the values of TPR are unacceptable in clinical practice"*, y el rango resultante [0.0, 0.2] | `referencias/kaggle-evaluation.md` (ficha con las citas literales de la página de evaluación de Kaggle, 2026-08-11; texto completo solo en local, por su licencia) |
 | E2 | La mayoría de los casos negativos nunca fue biopsiada y se asume benigna | Artículo del dataset SLICE-3D, https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/ |
-| E3 | Algoritmo oficial del pAUC, usado para verificar la implementación | `referencias/isic-primary-metric-pauc.py.md` (copia literal del script del organizador, 2026-08-11) |
+| E3 | Algoritmo oficial del pAUC, usado para verificar la implementación | `referencias/isic-primary-metric-pauc.py.md` (ficha con las líneas literales del script del organizador, 2026-08-11; texto completo solo en local, por su licencia) |
 | E4 | Definición de `tbp_lv_nevi_confidence` y del prefijo *Lesion Visualizer* | `referencias/slice3d-metadata-tbp-lv.md` (definiciones literales de la Tabla 1 del artículo, 2026-08-11) |
 | E5 | El artículo no indica si las lesiones de entrenamiento del clasificador de nevus se solapan con el dataset | `referencias/slice3d-metadata-tbp-lv.md`, sección "Lo que el paper NO dice" |
 | E6 | Los datos provienen de siete centros dermatológicos | Artículo del dataset SLICE-3D, https://pmc.ncbi.nlm.nih.gov/articles/PMC11324883/ |
-| E7 | El esquema de premios del organizador ISIC evalúa *"above 88% true positive rate (TPR)"*, con rango resultante [0.00, 0.12] | `referencias/isic-metrics-readme.md` (copia literal del README del repositorio de métricas del organizador, 2026-08-12) |
+| E7 | El esquema de premios del organizador ISIC evalúa *"above 88% true positive rate (TPR)"*, con rango resultante [0.00, 0.12] | `referencias/isic-metrics-readme.md` (ficha con las citas literales del README del repositorio de métricas del organizador, 2026-08-12; texto completo solo en local, por su licencia) |
 
 ### 10.3 Cifras que estaban ausentes y ya no lo están
 
