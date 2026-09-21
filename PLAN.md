@@ -60,24 +60,39 @@ con la fuente abierta, leída y versionada; una sin abrir.
    restringir los dos ejes
    (`referencias/yang-2019-two-way-partial-auc.md`). *Las dos primeras son solo
    resumen, y cada archivo lo declara en su primera línea.*
-4. **Fuga por paciente en la validación de modelos médicos — PENDIENTE.**
-   **Ninguna fuente de `referencias/` la sostiene**, y se comprobó archivo por
-   archivo, no de memoria: lo que aparece al buscar es contexto de paciente
-   como *predictor* (el "ugly duckling") y sesgo de *selección de lesiones*,
-   que son otra cosa. Lo más cercano es una frase de práctica, no de
-   justificación — los organizadores parten por paciente y lo dicen en una
-   línea, *"There was no patient overlap across subsets"*
-   (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`), sin cuantificar
-   qué pasaría si no lo hicieran.
+4. **Fuga por sujeto en la validación de modelos médicos — CERRADA
+   (2026-09-21).** Cuatro fuentes, las cuatro con licencia abierta y texto
+   completo versionado:
+   - `referencias/saeb-2017-validacion-por-sujeto.md` — **el principio**: la
+     partición debe imitar la relación que habrá en el uso clínico; para
+     diagnóstico, por sujeto.
+   - `referencias/little-2017-perspectivas-sobre-saeb.md` — **la réplica**, en
+     el mismo número. Little objeta que partir por sujeto no arregla la
+     confusión y puede crear desajuste de distribución; Varoquaux respalda el
+     principio, con condiciones. **Saeb no se cita sin esta réplica.**
+   - `referencias/kapoor-2023-fuga-y-reproducibilidad.md` — **la taxonomía**: la
+     falta de independencia entre entrenamiento y prueba es el tipo **[L3.2]**
+     de ocho, clasificado como prueba que no sale de la distribución de interés,
+     no como falta de separación.
+   - `referencias/cassidy-2022-duplicados-isic.md` — **el precedente en el
+     propio ISIC**: duplicados entre entrenamiento y prueba en las ediciones
+     dermoscópicas de 2016 a 2020. Es anterior a SLICE-3D y no lo analiza.
 
-   Es la línea que respalda la decisión metodológica central del proyecto, así
-   que el hueco importa. Lo que **sí** existe es medición propia —
-   `outputs/diseno-validacion.json` compara el esquema agrupado contra una
-   partición ingenua a nivel de fila—, pero medición propia no es estado del
-   arte: sostiene que en *estos* datos la fuga ocurre, no que la disciplina lo
-   tenga establecido. Por la contingencia de esta fase, mientras no haya
-   fuente, el anteproyecto puede citar la medición propia y **no** puede
-   atribuir la afirmación a la literatura.
+   Con esto la medición propia —`outputs/diseno-validacion.json`, que compara
+   el esquema agrupado contra una partición ingenua por filas— deja de estar
+   sola: el anteproyecto puede atribuir a la literatura que partir por registro
+   sobrestima el desempeño cuando hay varias observaciones por sujeto, **junto
+   con su objeción publicada**.
+
+   **Corrección a lo que esta línea decía antes.** Presentaba *"There was no
+   patient overlap across subsets"* (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`)
+   como que *"los organizadores parten por paciente"*. La frase se refiere a los
+   subconjuntos **público y privado del leaderboard**, los dos dentro del
+   conjunto de prueba; **no** a entrenamiento frente a prueba. **Que los
+   pacientes de entrenamiento y de prueba de ISIC 2024 sean disjuntos no lo
+   afirma ninguna fuente versionada**: el descriptor de SLICE-3D deja la prueba
+   fuera de su alcance (`referencias/kurtansky-2024-slice3d-descriptor.md`,
+   sección sobre el conjunto de prueba). No se afirma en el anteproyecto.
 
 **Puerta.** El PDF del anteproyecto, entregado.
 

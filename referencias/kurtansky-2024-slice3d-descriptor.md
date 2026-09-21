@@ -44,6 +44,39 @@ conjunto de datos.
 
 ---
 
+## Sobre el conjunto de prueba de ISIC 2024 — lo que dice y lo que no
+
+*Sección nuestra, añadida el 2026-09-21. Las citas son literales; la lectura, no.*
+
+**El artículo no dice que los pacientes del conjunto de prueba sean distintos de
+los del entrenamiento.** Lo que dice del conjunto de prueba son tres frases, las
+tres en *"Usage Notes"*:
+
+> Additional data from each of the seven contributors (1–7) was collected for a
+> separate test set, not described here, for evaluating results of that
+> competition.
+
+> Two other sites provided data that was allocated entirely to the test set: (8)
+> Alfred Hospital, Melbourne, Australia; and (9) FNQH Cairns, Westcourt,
+> Australia.
+
+> While the methods of curating the SLICE-3D dataset and the ISIC 2024 test set
+> were consistent, the test set is beyond the scope of this data descriptor.
+
+**Lo que sí se sigue de esas frases:** la prueba es un conjunto aparte —*"a
+separate test set"*—, los siete centros del entrenamiento aportaron también a la
+prueba, y dos centros aportaron **solo** a la prueba.
+
+**Lo que no se sigue, y no se deduce:** que ningún paciente de esos siete centros
+esté en los dos lados. Que el conjunto sea "aparte" y que haya "datos
+adicionales" no afirma que los pacientes sean disjuntos. El artículo remite la
+prueba a otro sitio y no la describe.
+
+**Tampoco lo resuelve** `referencias/kurtansky-2025-triaje-automatizado-tbp.md`: su
+*"There was no patient overlap across subsets"* se refiere a los subconjuntos
+**público y privado del leaderboard**, ambos dentro de la prueba, no a
+entrenamiento frente a prueba.
+
 ## Texto original
 
 Sci Data. 2024 Aug 14;11:884. doi: 10.1038/s41597-024-03743-w

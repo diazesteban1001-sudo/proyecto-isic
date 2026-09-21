@@ -97,7 +97,7 @@ atribuye a Kurtansky et al. (2025), no a Marchetti et al. (2023).
 - **El esquema de validación.** El resumen no dice cómo se obtuvo el AUC de
   0,94 —si con partición por paciente, validación cruzada, o sobre los mismos
   datos del ajuste—. Con 35 pacientes y 49 melanomas la diferencia importa
-  mucho, y enlaza directamente con la línea 4 pendiente del estado del arte
+  mucho, y enlaza directamente con la línea 4 del estado del arte, la de fuga por sujeto
   (`PLAN.md`, Fase 0). **No se completa de memoria ni por inferencia.**
 - **El "75% menos de lesiones a revisar con 95% de sensibilidad".**
   Kurtansky et al. (2025) atribuyen a este estudio esa reducción, pero **esa
