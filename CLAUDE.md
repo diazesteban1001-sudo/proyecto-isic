@@ -173,9 +173,26 @@ Enmendada el 2026-09-21; antes se versionaba el texto completo de todo.
   Crossref, los términos del sitio—. La licencia se determina, no se supone. Si
   no se puede determinar, o si su aplicación a ese texto es interpretación
   nuestra, cuenta como desconocida.
-- **Licencia abierta (CC BY o similar):** el texto completo se versiona, con la
-  atribución, el enlace a la licencia y la nota de qué se omitió, que es lo que
-  esas licencias exigen.
+- **Licencia que autoriza redistribuir la obra sin modificar para este uso:** el
+  texto completo se versiona, con la atribución, el enlace a la licencia y la
+  nota de qué se omitió, que es lo que esas licencias exigen. El criterio no es
+  el nombre de la licencia sino **qué autoriza para lo que hacemos**: publicar
+  el texto tal cual en un repositorio académico, sin fines comerciales.
+  - **CC BY: sí.**
+  - **CC BY-NC-ND: también.** NC se cumple porque el repositorio es académico y
+    no comercial; ND, porque el texto va **sin adaptar**. Extraer el texto de
+    un PDF o de una página es un cambio de formato, no una adaptación, y todo
+    lo nuestro va en secciones separadas y marcadas como nuestras. *Caso que
+    motivó la precisión:* Cassidy et al. 2022
+    (`referencias/cassidy-2022-duplicados-isic.md`), CC BY-NC-ND 4.0, cuyo
+    texto legal autoriza *"reproduce and Share the Licensed Material, in whole
+    or in part, for NonCommercial purposes only"* (§2(a)(1); en local,
+    `referencias/_texto-completo/cc-by-nc-nd-4.0-legalcode.txt`). Con la
+    redacción anterior, *"CC BY o similar"*, no estaba claro de qué lado caía.
+  - **No bastan**, y van a ficha: una licencia solo de minería de textos, los
+    términos generales de una editorial, o una licencia que autoriza a
+    distribuir a un tercero concreto y no a nosotros —la no exclusiva de
+    arXiv—.
 - **Con copyright o licencia desconocida:** el archivo versionado es una
   **ficha** — datos bibliográficos, licencia, localizadores de página o
   sección, y las **citas literales exactas** de los pasajes que el proyecto
