@@ -41,13 +41,33 @@ descontaminar a posteriori.
 - **Declaración de uso de IA.** Qué hizo el agente, qué hizo la persona, y dónde
   está la evidencia de cada cosa (el historial de commits).
 
-**Estado del arte — las cuatro líneas, y dónde está cada una.** Tres cerradas,
-con la fuente abierta, leída y versionada; una sin abrir.
+**Estado del documento** (`informe/anteproyecto.md`, al 2026-09-21):
 
-1. **Magnitud del melanoma en Colombia — CERRADA.** Carga, concentración
-   regional y tiempos de diagnóstico y tratamiento, medidos por la Cuenta de
-   Alto Costo: `referencias/cac-melanoma-colombia-2026.md` (periodo 2025) y
-   `referencias/cac-melanoma-colombia-2025.md` (corte a dic. 2024).
+| Apartado | Estado |
+|---|---|
+| 1. Problema y estado actual | **vacío — BLOQUEANTE** |
+| 2. Estado del arte | escrito: cinco subsecciones (2.1 a 2.5) y 17 referencias en la lista final del documento |
+| 3. Objetivos | escrito |
+| 4. Datos y método | vacío |
+| 5. Alcance y plan | vacío |
+| 6. Declaración de uso de IA y reparto del trabajo | vacío |
+
+**Estado del arte — las líneas, y dónde está cada una.** Las líneas 2 a 5 son
+las del estado del arte y corresponden a las subsecciones 2.1 a 2.4 del
+anteproyecto; las cuatro están cerradas, con sus fuentes versionadas en
+`referencias/`. La línea 1 ya no pertenece al estado del arte.
+
+1. **Magnitud del melanoma en Colombia — FUERA DEL ESTADO DEL ARTE
+   (2026-09-21).** Los dos boletines de la Cuenta de Alto Costo
+   (`referencias/cac-melanoma-colombia-2026.md`, periodo 2025, y
+   `referencias/cac-melanoma-colombia-2025.md`, corte a dic. 2024) **ya no
+   sostienen nada del estado del arte.** Sus cifras de carga, concentración
+   regional y tiempos se retiraron del borrador del estado del arte el
+   2026-09-21. Quedan reservadas para el **apartado 1** (problema y estado
+   actual), junto con la línea base de práctica clínica de
+   `referencias/panderm-reduccion-examenes.md`. **No se vuelven a meter en el
+   estado del arte:** la subsección 2.4 trata de qué se ha investigado en
+   Colombia, no de cuánto melanoma hay.
 2. **El caso 3D-TBP y su triaje automatizado — CERRADA.** Los propios
    organizadores analizan ISIC 2024, definen las métricas de triaje y publican
    valores de referencia:
@@ -102,6 +122,60 @@ con la fuente abierta, leída y versionada; una sin abrir.
    presentó esa segunda frase como partición por paciente, y después afirmó
    que ninguna fuente versionada lo respaldaba. La frase de arriba estaba en el
    repositorio desde el 2026-09-19.
+5. **Qué se ha investigado en Colombia — CERRADA (2026-09-21).** No estaba en
+   el plan: salió al verificar el estado del arte, y es la subsección 2.4 del
+   anteproyecto. Seis fuentes en tres frentes:
+   - **Teledermatología.**
+     - `referencias/saenz-2018-app-teledermatologia-colombia.md`: CC BY, texto
+       completo.
+     - `referencias/barrera-valencia-2024-costos-teledermatologia.md`: CC BY,
+       ficha con el resumen de PubMed. El texto completo está detrás de un
+       desafío de Cloudflare y no hay copia en PMC.
+   - **Mapeo corporal digital.**
+     - `referencias/mejia-posada-2024-mapeo-corporal-medellin.md`: CC BY-NC-ND,
+       texto completo.
+   - **Aprendizaje automático dermatológico.**
+     - `referencias/rios-duarte-2024-cnn-melanoma-uniandes.md`: CC BY-NC-ND,
+       texto completo.
+     - `referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md`: CC BY,
+       texto completo.
+     - `referencias/jojoa-2022-redes-complejas-melanoma.md`: CC BY, texto
+       completo.
+
+   Las búsquedas que las encontraron están en
+   `referencias/busqueda-pubmed-colombia-2026-09-21.md`, con sus expresiones,
+   campos, fecha y resultados completos. Un hallazgo condiciona cómo se usan:
+   ninguno de los tres trabajos de aprendizaje automático usa datos de pacientes
+   colombianos. Los tres entrenan y evalúan sobre conjuntos internacionales.
+
+**Pendiente del estado del arte.** Ninguna de las dos cosas bloquea la entrega.
+
+- **Densidad de salvedades epistémicas.** Es alta para una revisión de unas
+  2.500 palabras (la sección 2 sin la lista de referencias).
+- **La subsección 2.4 enumera tres frentes sin contrastarlos.** Las subsecciones
+  2.1 y 2.3 sí contrastan: 2.1 opone el modelo morfológico de Marchetti a los
+  ensambles con características de imagen, y 2.3 opone a Saeb con la réplica de
+  Little. El contraste que le falta a 2.4 es **acceso frente a selección**.
+
+**Siguiente paso.** Redactar el **apartado 1**, que es bloqueante, a partir de:
+- las fichas de la CAC, `referencias/cac-melanoma-colombia-2025.md` y
+  `referencias/cac-melanoma-colombia-2026.md`, cuyo texto completo está en local
+  en `referencias/_texto-completo/`;
+- `referencias/panderm-reduccion-examenes.md`.
+
+**No** desde `d1-material-colombia.md`, el archivo de la carpeta Descargas donde
+se guardó lo retirado del estado del arte. Arrastra una versión descartada de
+2.4:
+- marcadores sin completar;
+- una descripción de Barrera-Valencia que no encajaba con su registro;
+- un párrafo de ausencia que resultó falso según cómo se lea "en Colombia".
+
+*Salvedad sobre PanDerm.* Su archivo dice "TEXTO COMPLETO" en la cabecera, pero
+solo reproduce la frase citada. En `referencias/_texto-completo/` se buscaron
+archivos con "panderm", "s41591" o el PMCID en el nombre, y la frase "79 out of
+80 patients" en el contenido, sin resultado. Cualquier cita nueva de PanDerm
+exige volver a obtener el texto de PMC12353815 y comprobarla carácter a
+carácter.
 
 **Puerta.** El PDF del anteproyecto, entregado.
 
