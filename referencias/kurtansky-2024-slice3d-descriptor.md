@@ -20,7 +20,7 @@ licensed under a Creative Commons Attribution 4.0 International License"*
 (https://creativecommons.org/licenses/by/4.0/). Verificado el 2026-09-21 en la
 página del artículo en PMC y en el depósito de la editorial en Crossref.
 Atribución: Kurtansky NR et al., *Scientific Data* 11:884 (2024), DOI 10.1038/s41597-024-03743-w. **Cambios** respecto del original, como pide la licencia:
-texto extraído de la versión HTML de PMC; se omite el armazón del sitio y se añaden esta cabecera y las notas marcadas como nuestras.
+el texto es la salida de `get_page_text`, del navegador integrado, sobre la página del artículo en PMC (ver «Cómo se tomó»). **No se omite todo el armazón del sitio**; queda mezclado con el artículo: las etiquetas de los paneles desplegables ("Author information", "Article notes", "Copyright and License information"), "Open in a new tab" junto a cada figura y tabla, las etiquetas "[DOI]", "[PubMed]", "[PMC free article]" y "[Google Scholar]" tras las referencias y la línea final "Articles from … are provided here courtesy of …". Las figuras 1 a 3 son imágenes y no se reproducen; quedan su número y su leyenda. Las tablas 1 y 2 aparecen como texto, con las celdas separadas por tabuladores. Se añaden esta cabecera y las notas marcadas como nuestras. *Hasta el 2026-09-21 esta nota decía que se omitía el armazón del sitio; solo se omitían las partes que lista «Qué se omitió».*
 
 *No confundir con la licencia **de los datos**:* SLICE-3D se distribuye bajo
 CC-BY-NC 4.0 y SLICE-3D Permissive bajo CC-BY 4.0
@@ -33,8 +33,9 @@ CC-BY-NC 4.0 y SLICE-3D Permissive bajo CC-BY 4.0
 devuelve el texto visible sin procesarlo. No es un resumen. Los metadatos de la
 cabecera se leyeron de las etiquetas `<meta name="citation_*">` de la página.
 
-**Qué se omitió:** el armazón de PMC (cabecera de la NLM, barra de acciones,
-panel de artículos relacionados, pie). El artículo va completo.
+**Qué se omitió:** la cabecera de la NLM, la barra de acciones, el panel de
+artículos relacionados y el pie de PMC, que `get_page_text` deja fuera. Lo
+que queda del armazón lo declara la nota de «Cambios», arriba. El artículo va completo.
 
 **Relación con lo que ya había en `referencias/`:** este es el artículo del que
 `referencias/slice3d-metadata-tbp-lv.md` copiaba únicamente la definición de los

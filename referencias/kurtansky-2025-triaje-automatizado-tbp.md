@@ -18,7 +18,7 @@ licensed under a Creative Commons Attribution 4.0 International License"*
 (https://creativecommons.org/licenses/by/4.0/). Verificado el 2026-09-21 en la
 página del artículo en PMC y en el depósito de la editorial en Crossref.
 Atribución: Kurtansky NR et al., *npj Digital Medicine* 8:708 (2025), DOI 10.1038/s41746-025-02070-7. **Cambios** respecto del original, como pide la licencia:
-texto extraído de la versión HTML de PMC; se omite el armazón del sitio y se añaden esta cabecera y las notas marcadas como nuestras.
+el texto es la salida de `get_page_text`, del navegador integrado, sobre la página del artículo en PMC (ver «Cómo se tomó»). **No se omite todo el armazón del sitio**; queda mezclado con el artículo: las etiquetas de los paneles desplegables ("Author information", "Article notes", "Copyright and License information"), "Open in a new tab" junto a cada figura y tabla, las etiquetas "[DOI]", "[PubMed]", "[PMC free article]" y "[Google Scholar]" tras las referencias y la línea final "Articles from … are provided here courtesy of …". Las figuras 1 a 4 son imágenes y no se reproducen; quedan su número y su leyenda. Las tablas 1 a 3 aparecen como texto, con las celdas separadas por tabuladores. Se añaden esta cabecera y las notas marcadas como nuestras. *Hasta el 2026-09-21 esta nota decía que se omitía el armazón del sitio; solo se omitían las partes que lista «Qué se omitió».*
 
 **Cómo se tomó:** el agente, con el navegador integrado (`get_page_text`), que
 devuelve el texto visible sin procesarlo. No es un resumen. El DOI se verificó
@@ -35,8 +35,9 @@ estorban, se marca la omisión en vez de borrarlos en silencio. El texto tambié
 usa **espacios finos** (U+2009) alrededor de los signos `=`, que no son espacios
 normales — copiar y pegar es más seguro que reescribir a mano.
 
-**Qué se omitió:** el armazón de PMC (cabecera de la NLM, barra de acciones,
-panel de artículos relacionados, pie). El artículo va completo: resumen,
+**Qué se omitió:** la cabecera de la NLM, la barra de acciones, el panel de
+artículos relacionados y el pie de PMC, que `get_page_text` deja fuera. Lo
+que queda del armazón lo declara la nota de «Cambios», arriba. El artículo va completo: resumen,
 introducción, resultados, discusión, métodos, disponibilidad de datos,
 declaraciones y lista de referencias.
 
