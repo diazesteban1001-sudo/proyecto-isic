@@ -47,6 +47,10 @@ permitiría versionar el texto entero.
   **resumen**. Una cita solo se puede comprobar carácter a carácter contra el
   resumen. No se leyeron el método de costeo, las tablas ni las limitaciones.
 
+**Uso en el proyecto:** el estado del arte del anteproyecto
+(`informe/anteproyecto.md`, §2.4) lo describe como trabajo colombiano de
+teledermatología.
+
 ---
 
 ## Resumen, literal, de PubMed

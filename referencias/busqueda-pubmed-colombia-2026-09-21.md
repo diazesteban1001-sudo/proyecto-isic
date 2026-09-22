@@ -1,11 +1,16 @@
 # Búsquedas en PubMed sobre trabajo publicado en Colombia (2026-09-21)
 
-**Qué es:** el registro de seis búsquedas en PubMed que corrió el agente el
-2026-09-21. Se hicieron para verificar un párrafo de la v3 del estado del arte
-(D2, §2.4), que decía: *"una búsqueda en PubMed no devolvió trabajo publicado
-sobre fotografía corporal total en 3D ni sobre aprendizaje automático
-dermatológico en Colombia, ni un equivalente colombiano de la carga de
-cribado"*. La v4 retiró ese párrafo.
+**Qué es:** el registro de las once búsquedas en PubMed que corrió el agente el
+2026-09-21, en dos baterías.
+- **Batería 1, cinco consultas, a las 18:26 (UTC−5).** Se corrió al verificar la
+  v2 del estado del arte (D2, §2.4). Es la que devolvió los dos estudios
+  colombianos de teledermatología, Sáenz et al. (2018) y Barrera-Valencia y
+  Perea-Flórez (2024).
+- **Batería 2, seis consultas, más tarde ese mismo día.** Se corrió para verificar
+  un párrafo de la v3 que decía: *"una búsqueda en PubMed no devolvió trabajo
+  publicado sobre fotografía corporal total en 3D ni sobre aprendizaje automático
+  dermatológico en Colombia, ni un equivalente colombiano de la carga de
+  cribado"*. La v4 retiró ese párrafo.
 
 **Por qué se versiona:** la octava clase del registro de incidentes (regla 6 de
 `CLAUDE.md`) exige que, cuando no se puede leer completa la fuente candidata, una
@@ -24,22 +29,135 @@ en cursiva.
 - `efetch.fcgi` (`retmode=xml`) da resumen y afiliaciones de los registros
   examinados.
 
-**Fecha y corridas:** 2026-09-21. La primera corrida fue por la tarde y listó
-solo los 40 primeros resultados de la consulta 4; los 19 restantes se listaron
-después. La segunda, a las 18:57 (UTC−5), obtuvo las listas completas que se
-reproducen abajo. Los seis conteos coinciden entre las dos corridas.
+**Fecha y corridas:** 2026-09-21.
+- **Batería 1.** A las 18:26 se corrió con `retmax=5`, así que de cada consulta
+  solo se vieron los cinco primeros PMID. Se repitió a las 20:05 con listas
+  completas: los cinco conteos y los cinco primeros PMID de cada consulta
+  coinciden con los de las 18:26.
+- **Batería 2.** La primera corrida listó solo los 40 primeros resultados de la
+  consulta 2.4; los 19 restantes se listaron después. Se repitió a las 18:57 con
+  listas completas, y los seis conteos coinciden entre las dos corridas.
 
-**Dos campos, porque "en Colombia" admite dos lecturas:**
+**Campos.** La batería 1 usa `Colombia[tiab]` y también "Colombia" sin campo. La
+batería 2 usa dos campos, porque "en Colombia" admite dos lecturas:
 - `Colombia[tiab]` busca la palabra en el título o el resumen. Recoge trabajos
   **sobre** Colombia.
 - `Colombia[ad]` busca la palabra en la afiliación de algún autor. Recoge
   trabajos **hechos desde** Colombia, usen o no datos colombianos. Acierta con
   cualquier afiliación que contenga la palabra, incluida una dirección como
   "Vía Puerto Colombia, Barranquilla".
+- **"Colombia" sin campo** (solo en la batería 1): PubMed lo traduce como
+  `"colombia"[MeSH Terms] OR "colombia"[All Fields] OR "colombia s"[All Fields]`.
 
 ---
 
-## Las consultas
+## Batería 1: verificación de la v2 (18:26)
+
+**Procedencia de las expresiones.** Se copiaron de la transcripción de la sesión
+en que se corrieron, no de memoria. Son las cinco consultas de una misma orden,
+tal como se enviaron a `esearch.fcgi`. A diferencia de la batería 2, van sin
+comillas en las frases de varias palabras, y PubMed las descompone palabra por
+palabra. Por eso la consulta 1.3 devuelve sobre todo registros ajenos a la piel.
+
+| # | Consulta | Resultados |
+|---|---|---|
+| 1.1 | `teledermatology[tiab] AND Colombia` | 5 |
+| 1.2 | `(telemedicine OR teledermatology) AND (dermatology OR skin) AND Colombia[tiab]` | 3 |
+| 1.3 | `(total body photography OR 3D total body OR mole mapping) AND Colombia` | 13 |
+| 1.4 | `(machine learning OR deep learning OR artificial intelligence) AND (skin cancer OR melanoma OR dermatology) AND Colombia[tiab]` | 1 |
+| 1.5 | `melanoma AND screening AND Colombia[tiab]` | 27 |
+
+**Resultados completos (corrida de las 20:05).** [E] marca los registros
+examinados, que tienen ficha propia en `referencias/`: 29785181 y 38669106
+(teledermatología) y 38048957 (mapeo corporal digital). Los demás se
+clasificaron solo por el título.
+
+### 1.1. `teledermatology[tiab] AND Colombia`: 5
+
+- 38909171 (2024, *Dermatol Ther (Heidelb)*). A Systematic Review and Meta-analysis of Mobile Health Applications and Telemonitoring in Atopic Dermatitis Self-Management.
+- [E] 38669106 (2024, *Telemed J E Health*). Comparison of Costs in Teledermatology Using PC and Camera Versus Smartphone.
+- 34990342 (2021, *Acta Dermatovenerol Croat*). Potential Dermatological Conditions Resulting from a Prolonged Stay at Home during the COVID-19 Pandemic: A Review.
+- [E] 29785181 (2018, *Int J Telemed Appl*). On Using a Mobile Application to Support Teledermatology: A Case Study in an Underprivileged Area in Colombia.
+- 27690203 (2016, *Telemed J E Health*). Practice Guidelines for Teledermatology.
+
+### 1.2. `(telemedicine OR teledermatology) AND (dermatology OR skin) AND Colombia[tiab]`: 3
+
+- 36972285 (2023, *PLoS Negl Trop Dis*). Randomized trial evaluating an mHealth intervention for the early community-based detection and follow-up of cutaneous leishmaniasis in rural Colombia.
+- [E] 29785181 (2018, *Int J Telemed Appl*). On Using a Mobile Application to Support Teledermatology: A Case Study in an Underprivileged Area in Colombia.
+- 17954469 (2007, *J Med Internet Res*). Web-based asynchronous teleconsulting for consumers in Colombia: a case study.
+
+### 1.3. `(total body photography OR 3D total body OR mole mapping) AND Colombia`: 13
+
+- 40537107 (2025, *J Bone Metab*). Positive Effect of Yerba Mate (Ilex paraguariensis) Consumption on Bone Mineral Density in Postmenopausal Women Assessed by Dual Energy X-Ray Absorptiometry-Based 3-Dimensional Modeling.
+- 39339721 (2024, *Nutrients*). Sum of Skinfold-Corrected Girths Correlates with Resting Energy Expenditure: Development of the NRG(CO) Equation.
+- [E] 38048957 (2024, *Actas Dermosifiliogr*). [Translated article] Dermoscopic Changes in Melanocytic Lesions in 368 Patients With Atypical Nevus Syndrome and Their Association With Melanoma Incidence: A Cohort Study.
+- 36472537 (2023, *Radiology*). Risk of Acute Kidney Injury Following Contrast-enhanced CT in a Cohort of 10 407 Children and Adolescents.
+- 35648191 (2022, *Aesthetic Plast Surg*). Quantitative Mobility Analysis of the Face and its Relevance for Surgical and Non-surgical Aesthetic Facial Procedures.
+- 34043153 (2021, *Clin Transl Oncol*). 5-year results of accelerated partial breast irradiation (APBI) with SBRT (stereotactic body radiation therapy) and exactrac adaptive gating (Novalis(®)) for very early breast cancer patients: was it all worth it?
+- 33987696 (2021, *Aesthetic Plast Surg*). The Influence of Different Light Angles During Standardized Patient Photographic Assessment on the Aesthetic Perception of the Face.
+- 33566882 (2021, *Rev Paul Pediatr*). CRANIAL OSTEOMYELITIS AS A COMPLICATION OF FURUNCULAR MYIASIS.
+- 32662554 (2020, *J Cosmet Dermatol*). Clinical validation of the temporal lifting technique using soft tissue fillers.
+- 32364980 (2020, *J Therm Biol*). Paper wasps are darker at high elevation.
+- 30910763 (2019, *J Stomatol Oral Maxillofac Surg*). Exploratory study of the three-dimensional morphological variation of the jaw associated to teeth loss.
+- 30424890 (2019, *Rev Esp Anestesiol Reanim (Engl Ed)*). Radiologic assessment of gastric emptying of water-soluble contrast media: New data security from a longitudinal study.
+- 30150329 (2018, *BMJ Case Rep*). Hypothalamic relapse of a cardiac large B-cell lymphoma presenting with memory loss, confabulation, alexia-agraphia, apathy, hypersomnia, appetite disturbances and diabetes insipidus.
+
+### 1.4. `(machine learning OR deep learning OR artificial intelligence) AND (skin cancer OR melanoma OR dermatology) AND Colombia[tiab]`: 1
+
+- 42140643 (2026, *J Rheumatol*). Transforming Psoriatic Disease Care Through Innovation and Real-World Data: GRAPPA 2025 Soapbox Highlights.
+
+### 1.5. `melanoma AND screening AND Colombia[tiab]`: 27
+
+- 42749123 (2026, *Actas Dermosifiliogr*). Temporal trends in melanoma and non-melanoma skin cancer mortality in Colombia, 2008-2022.
+- 42307794 (2026, *Head Neck Pathol*). Oral Melanoma: A South American Collaborative Series of 21 Cases.
+- 42211527 (2026, *Front Oncol*). Clinical characteristics and real-world survival in acral melanoma: experience from a comprehensive cancer center in Latin America.
+- 42035614 (2026, *Cancer Epidemiol*). Epidemiology, clinical characteristics, and survival of acral and non-acral melanoma in Colombia.
+- 42004443 (2026, *Public Health Pract (Oxf)*). Economic benefit of expanding mammography screening for breast cancer in Colombia: A cost modelling analysis.
+- 40497569 (2025, *Dermatol Surg*). Is Functional Surgery the Treatment of Choice for Subungual Melanoma in Situ and Subungual Microinvasive Melanoma? A Retrospective Cohort Study in a Latin American Population.
+- 39869442 (2024, *Melanoma Manag*). Melanoma in a Colombian population: a survival study.
+- 39044133 (2024, *BMC Cancer*). Survival of patients with mucosal melanoma in Cali, Colombia: a retrospective cohort study.
+- [E] 38048957 (2024, *Actas Dermosifiliogr*). [Translated article] Dermoscopic Changes in Melanocytic Lesions in 368 Patients With Atypical Nevus Syndrome and Their Association With Melanoma Incidence: A Cohort Study.
+- 37849291 (2024, *Ophthalmic Epidemiol*). Epidemiology of Eye Cancer in Cali, Colombia: A 55-Year Study.
+- 37372871 (2023, *Healthcare (Basel)*). Clinical Cancer Research in South America and Potential Health Economic Impacts.
+- 37216624 (2023, *JCO Glob Oncol*). Clinical Outcomes and Prognostic Factors of Patients With Early Malignant Melanoma in One Latin American Country: Results of the Epidemiological Registry of Malignant Melanoma in Colombia Study.
+- 37196281 (2023, *Dermatol Pract Concept*). Dermoscopy in Selected Latin American Countries: A Preliminary Look into Current Trends and Future Opportunities Among Dermatology Residency Programs.
+- 36575614 (2023, *J Vet Dent*). Histopathological Results of Mouth Lesions in Dogs and Cats from Colombia.
+- 35722901 (2022, *J Int Med Res*). Cutaneous melanoma incidence, mortality, and survival in Manizales, Colombia: a population-based study.
+- 35141880 (2022, *Int J Dermatol*). Burden of skin cancer in Colombia.
+- 34214264 (2021, *Biomedica*). Exogenous pigmentation by silver nitrate: Dermatological and toxicological aspects, case report.
+- 33102592 (2020, *Biomed Res Int*). CDKN2A Polymorphism in Melanoma Patients in Colombian Population: A Case-Control Study.
+- 33014232 (2020, *Radiol Case Rep*). Extrapulmonary tuberculosis: mimicking metastases in a patient with melanoma in a high TB-burden country; case report.
+- 30793185 (2019, *Mil Med*). Health Characteristics of the Wayuu Indigenous People.
+- 30570006 (2018, *Rev Salud Publica (Bogota)*). Epidemiological profile of primary cutaneous melanoma over a 15-year period at a private skin cancer center in Colombia.
+- 29983461 (2018, *Colomb Med (Cali)*). Reliable information for cancer control in Cali, Colombia.
+- 27992981 (2016, *Biomedica*). [Years of life lost as a measure of cancer burden in Colombia, 1997-2012].
+- 27518480 (2017, *J Eur Acad Dermatol Venereol*). Survival of acral lentiginous melanoma in the National Cancer Institute of Colombia.
+- 26296697 (2016, *Photodiagnosis Photodyn Ther*). Photodynamic therapy: Progress toward a scientific and clinical network in Latin America.
+- 25124243 (2013, *Rev Salud Publica (Bogota)*). [Colombian experience regarding skin cancer: healthcare-related barriers to access to healthcare and bureaucratic itineraries].
+- 19662813 (2009, *Invest Clin*). [Cytogenetic study in peripheral blood of melanoma patients].
+
+**Lo encontrado.**
+1. **1.1 y 1.2** devuelven los dos estudios colombianos de teledermatología que
+   tienen ficha: 29785181 (Sáenz et al., 2018), que sale en ambas, y 38669106
+   (Barrera-Valencia y Perea-Flórez, 2024), que sale solo en la 1.1.
+   - Además aparece 36972285, un ensayo aleatorizado de una intervención mHealth
+     para detectar leishmaniasis cutánea en zonas rurales de Colombia, que no se
+     examinó.
+   - El resto, a juzgar por el título: una revisión sobre dermatitis atópica, una
+     revisión sobre afecciones de piel durante el confinamiento por COVID-19 y
+     unas guías de práctica de teledermatología, ninguna sobre un servicio
+     colombiano. Queda 17954469, un estudio de caso de teleconsulta web para
+     consumidores en Colombia, que el título no restringe a dermatología y que no
+     se examinó.
+2. **1.3 y 1.5** devuelven 38048957 (Mejía Posada et al., 2024), el mismo
+   registro que encuentra la batería 2.
+3. **1.4** devuelve solo 42140643, el mismo que la consulta 2.3.
+
+---
+
+## Batería 2: verificación de la v3 (seis consultas)
+
+### Las consultas
 
 Cada consulta es la expresión del tema seguida de `AND Colombia[tiab]` o de
 `AND Colombia[ad]`.
@@ -64,26 +182,26 @@ Cada consulta es la expresión del tema seguida de `AND Colombia[tiab]` o de
 
 | # | Tema | Campo | Resultados |
 |---|---|---|---|
-| 1 | Fotografía corporal total y seguimiento digital | `tiab` | 2 |
-| 2 | Fotografía corporal total y seguimiento digital | `ad` | 6 |
-| 3 | Aprendizaje automático aplicado a piel | `tiab` | 1 |
-| 4 | Aprendizaje automático aplicado a piel | `ad` | 59 |
-| 5 | Carga de cribado | `tiab` | 0 |
-| 6 | Carga de cribado | `ad` | 1 |
+| 2.1 | Fotografía corporal total y seguimiento digital | `tiab` | 2 |
+| 2.2 | Fotografía corporal total y seguimiento digital | `ad` | 6 |
+| 2.3 | Aprendizaje automático aplicado a piel | `tiab` | 1 |
+| 2.4 | Aprendizaje automático aplicado a piel | `ad` | 59 |
+| 2.5 | Carga de cribado | `tiab` | 0 |
+| 2.6 | Carga de cribado | `ad` | 1 |
 
 ---
 
-## Resultados completos
+### Resultados completos
 
 **[E]** marca los registros examinados: se leyeron el resumen y las
 afiliaciones con `efetch`. Los demás se clasificaron **solo por el título**.
 
-### 1. Fotografía corporal total y seguimiento digital, `Colombia[tiab]`: 2
+#### 2.1. Fotografía corporal total y seguimiento digital, `Colombia[tiab]`: 2
 
 - [E] 38048957 (2024, *Actas Dermosifiliogr*). [Translated article] Dermoscopic Changes in Melanocytic Lesions in 368 Patients With Atypical Nevus Syndrome and Their Association With Melanoma Incidence: A Cohort Study.
 - 37982434 (2023, *Sex Reprod Health Matters*). Tírala Plena: findings from the formative research to inform the initiative "Reaching those most left behind through comprehensive sexuality education for out-of-school young people" in Colombia.
 
-### 2. Fotografía corporal total y seguimiento digital, `Colombia[ad]`: 6
+#### 2.2. Fotografía corporal total y seguimiento digital, `Colombia[ad]`: 6
 
 - 38050325 (2024, *J Cachexia Sarcopenia Muscle*). Using magnetic resonance imaging to measure head muscles: An innovative method to opportunistically determine muscle mass and detect sarcopenia.
 - [E] 38048957 (2024, *Actas Dermosifiliogr*). [Translated article] Dermoscopic Changes in Melanocytic Lesions in 368 Patients With Atypical Nevus Syndrome and Their Association With Melanoma Incidence: A Cohort Study.
@@ -92,11 +210,11 @@ afiliaciones con `efetch`. Los demás se clasificaron **solo por el título**.
 - 25293431 (2015, *Eur J Clin Nutr*). Effect of resistance training on resting metabolic rate and its estimation by a dual-energy X-ray absorptiometry metabolic map.
 - 21630165 (2011, *Comput Methods Biomech Biomed Engin*). A kinematic method for computing the motion of the body centre-of-mass (CoM) during walking: a Bayesian approach.
 
-### 3. Aprendizaje automático aplicado a piel, `Colombia[tiab]`: 1
+#### 2.3. Aprendizaje automático aplicado a piel, `Colombia[tiab]`: 1
 
 - 42140643 (2026, *J Rheumatol*). Transforming Psoriatic Disease Care Through Innovation and Real-World Data: GRAPPA 2025 Soapbox Highlights.
 
-### 4. Aprendizaje automático aplicado a piel, `Colombia[ad]`: 59
+#### 2.4. Aprendizaje automático aplicado a piel, `Colombia[ad]`: 59
 
 - [E] 42728887 (2026, *Skin Res Technol*). Demographic Reporting and the Absence of Hispanic/Latino Representation in Dermatology Artificial Intelligence: A Scoping Review.
 - 42705247 (2026, *Lancet Public Health*). Global, regional, and national prevalence of second-hand smoke and attributable disease burden in 204 countries and territories, 1990-2023: a systematic analysis for the Global Burden of Disease Study 2023.
@@ -158,17 +276,17 @@ afiliaciones con `efetch`. Los demás se clasificaron **solo por el título**.
 - [E] 28969863 (2018, *J Am Acad Dermatol*). Results of the 2016 International Skin Imaging Collaboration International Symposium on Biomedical Imaging challenge: Comparison of the accuracy of computer algorithms to dermatologists for the diagnosis of melanoma from dermoscopic images.
 - 26928228 (2016, *Nat Genet*). Breast cancer risk variants at 6q25 display different phenotype associations and regulate ESR1, RMND1 and CCDC170.
 
-### 5. Carga de cribado, `Colombia[tiab]`: 0
+#### 2.5. Carga de cribado, `Colombia[tiab]`: 0
 
 Sin resultados.
 
-### 6. Carga de cribado, `Colombia[ad]`: 1
+#### 2.6. Carga de cribado, `Colombia[ad]`: 1
 
 - [E] 40078077 (2025, *J Med Econ*). Number needed to treat (NNT) with pembrolizumab as an adjuvant therapy in resected patients with high-risk stage II (IIB and IIC) melanoma and its application to cost of preventing an event (COPE) in Mexico.
 
 ---
 
-## Registros examinados: qué dicen
+### Registros examinados: qué dicen
 
 Todo es paráfrasis nuestra del resumen, salvo lo que va entre comillas y en
 cursiva. Los recuentos de autores con afiliación colombiana salen del XML de
@@ -242,22 +360,22 @@ originales**
   2026. Revisión sistemática sobre el melanoma uveal. Es ocular, no cutáneo.
 - **42512375**, *Cancers* 2026. Bibliometría del carcinoma basocelular con LDA:
   el aprendizaje automático se aplica a la literatura, no a lesiones.
-- **40078077**, consulta 6. Dos de los quince autores tienen afiliación en MSD
+- **40078077**, consulta 2.6. Dos de los quince autores tienen afiliación en MSD
   Colombia. Calcula el número necesario a tratar de un tratamiento adyuvante del
   melanoma, no una medida de cribado.
 
 ---
 
-## Lo encontrado, por consulta
+### Lo encontrado, por consulta
 
-1. **Fotografía corporal total, `[tiab]` (2 resultados).** Uno es pertinente:
+1. **2.1. Fotografía corporal total, `[tiab]` (2 resultados).** Uno es pertinente:
    38048957, mapeo corporal digital en 2D. El otro no trata de piel.
-2. **Fotografía corporal total, `[ad]` (6 resultados).** Aparece el mismo
+2. **2.2. Fotografía corporal total, `[ad]` (6 resultados).** Aparece el mismo
    38048957. Los otros cinco no tratan de piel, a juzgar por el título.
-3. **Aprendizaje automático, `[tiab]` (1 resultado).** 42140643, sobre la
+3. **2.3. Aprendizaje automático, `[tiab]` (1 resultado).** 42140643, sobre la
    enfermedad psoriásica (reunión de GRAPPA). No trata de lesiones; se clasificó
    por el título.
-4. **Aprendizaje automático, `[ad]` (59 resultados).**
+4. **2.4. Aprendizaje automático, `[ad]` (59 resultados).**
    - Tres trabajos originales sobre imágenes de lesiones cutáneas: 38742379,
      33407213 y 36010243.
    - Tres sobre histología o microscopía de piel: 38606989, 39498903 y
@@ -271,13 +389,13 @@ originales**
    - En los trabajos originales cuyos datos se comprobaron (38742379 y
      36010243), las imágenes vienen de repositorios públicos, no de pacientes
      colombianos.
-5. **Carga de cribado, `[tiab]` (0 resultados).**
-6. **Carga de cribado, `[ad]` (1 resultado).** No es pertinente: es el número
+5. **2.5. Carga de cribado, `[tiab]` (0 resultados).**
+6. **2.6. Carga de cribado, `[ad]` (1 resultado).** No es pertinente: es el número
    necesario a tratar de una terapia.
 
 Los dos estudios colombianos de teledermatología —Sáenz et al. (2018) y
 Barrera-Valencia y Perea-Flórez (2024)— no salen de estas seis consultas, porque
-ninguna busca teledermatología. Se encontraron antes, al verificar la v2, y
+ninguna busca teledermatología. Salen de la batería 1 (consultas 1.1 y 1.2) y
 tienen ficha propia:
 `referencias/saenz-2018-app-teledermatologia-colombia.md` y
 `referencias/barrera-valencia-2024-costos-teledermatologia.md`.
@@ -286,12 +404,17 @@ tienen ficha propia:
 
 ## Qué no se buscó: límites de este registro
 
+Valen para las dos baterías.
+
 - **Solo PubMed.** No se consultaron LILACS, SciELO, Scopus, repositorios
   institucionales colombianos, tesis, literatura gris ni revistas no indexadas en
   PubMed.
 - **Solo expresiones en inglés.** No se buscaron términos en español, como
   "fotografía corporal total", "mapeo corporal" o "aprendizaje automático".
 - **Pertinencia por título,** salvo en los registros marcados [E].
+- **Frases sin comillas en la batería 1.** PubMed las descompone palabra por
+  palabra, así que esas consultas son a la vez más amplias y menos precisas que
+  las de la batería 2.
 - **Lo que cada campo no ve.** `[ad]` no encuentra a autores colombianos con
   afiliación extranjera. `[tiab]` no encuentra trabajos con datos colombianos que
   no nombren el país en el título o el resumen.

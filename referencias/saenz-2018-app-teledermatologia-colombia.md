@@ -37,6 +37,9 @@ revista. Las figuras 1 a 5 son imágenes y no se reproducen; quedan su número y
 su leyenda. Las tablas 1 a 5 aparecen con una celda por línea. Se añaden esta
 cabecera y las secciones marcadas como nuestras.
 
+**Uso en el proyecto:** estado del arte del anteproyecto (`informe/anteproyecto.md`,
+§2.4), que lo describe como trabajo colombiano de teledermatología.
+
 ---
 
 ## Citas que el proyecto usa
