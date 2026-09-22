@@ -27,11 +27,15 @@ Correal D, Eapen BR, *International Journal of Telemedicine and Applications*
 2018:1496941, DOI 10.1155/2018/1496941. **Cambios** respecto del original, como
 pide la licencia: el texto se extrajo de la versión HTML de PMC con un script
 que conserva el contenido del elemento `<article>` y quita etiquetas, scripts y
-botones; quedan restos del armazón del sitio (nombres de autor duplicados,
-enlaces "Find articles by…", "Open in a new tab") y la línea de cita inicial
-perdió el nombre de la revista; las figuras 1 a 5 son imágenes y no se
-reproducen, solo sus leyendas; las tablas 1 a 5 aparecen con una celda por
-línea. Se añaden esta cabecera y las secciones marcadas como nuestras.
+botones. **No se omite el resto del armazón del sitio**, que queda mezclado con
+el artículo: nombres de autor duplicados, afiliaciones repetidas, enlaces "Find
+articles by…", "Open in a new tab" junto a cada figura y tabla, las etiquetas
+"[DOI]", "[PubMed]", "[PMC free article]" y "[Google Scholar]" tras las
+referencias, "PMC Copyright notice" y la línea final "Articles from … are
+provided here courtesy of …". La línea de cita inicial perdió el nombre de la
+revista. Las figuras 1 a 5 son imágenes y no se reproducen; quedan su número y
+su leyenda. Las tablas 1 a 5 aparecen con una celda por línea. Se añaden esta
+cabecera y las secciones marcadas como nuestras.
 
 **Uso en el proyecto:** estado del arte del anteproyecto (`informe/anteproyecto.md`,
 §2.4), que lo describe como trabajo colombiano de teledermatología.
