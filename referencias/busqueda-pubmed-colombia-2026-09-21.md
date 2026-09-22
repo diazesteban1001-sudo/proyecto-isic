@@ -275,9 +275,10 @@ originales**
 6. **Carga de cribado, `[ad]` (1 resultado).** No es pertinente: es el número
    necesario a tratar de una terapia.
 
-Los dos estudios colombianos de teledermatología que cita el estado del arte no
-salen de estas seis consultas, porque ninguna busca teledermatología. Se
-encontraron antes, al verificar la v2, y tienen ficha propia:
+Los dos estudios colombianos de teledermatología —Sáenz et al. (2018) y
+Barrera-Valencia y Perea-Flórez (2024)— no salen de estas seis consultas, porque
+ninguna busca teledermatología. Se encontraron antes, al verificar la v2, y
+tienen ficha propia:
 `referencias/saenz-2018-app-teledermatologia-colombia.md` y
 `referencias/barrera-valencia-2024-costos-teledermatologia.md`.
 
