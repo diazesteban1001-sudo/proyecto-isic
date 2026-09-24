@@ -15,10 +15,9 @@ Lo que está en juego es el estadio en que se diagnostica. Según el boletín de
 año anterior, la supervivencia global a cinco años del melanoma cutáneo es del
 60,9 %, pero en los estadios avanzados, y en particular en el estadio IV, menos
 del 50 % de los pacientes sobrevive a los dos años de confirmado el diagnóstico
-(Cuenta de Alto Costo [CAC], 2025). Ese boletín
-reporta además que el 67,4 % de los casos de su periodo 2024 —que la CAC define
-como del 2 de enero de 2023 al 1 de enero de 2024— se diagnosticó en estadios
-tempranos, I y II.
+(Cuenta de Alto Costo [CAC], 2025). Ese boletín reporta además que el 67,4 % de
+los casos de su periodo 2024 —que la CAC define como del 2 de enero de 2023 al 1
+de enero de 2024— se diagnosticó en estadios tempranos, I y II.
 
 Las cifras de los dos boletines no forman una serie, y no se leen aquí como
 tendencia. Uno dice que «se han atendido» 11.064 casos hasta el 31 de diciembre
@@ -61,25 +60,25 @@ detallado, frente a 3.498 del modelo. Según los métodos, el conjunto de prueba
 de ese cribado reunió 80 pacientes de dos cohortes australianas, con 30.698
 imágenes que incluyen 28 lesiones malignas (Yan et al., 2025).
 
-Esa cifra es la línea base de este trabajo, y se usa con cuatro salvedades.
+El 8.913 es la línea base de este trabajo, y se usa con cuatro salvedades.
 
-- **El denominador es lectura nuestra.** El artículo no dice en una misma frase
-  que las 8.913 recomendaciones se hicieron sobre esas 30.698 imágenes. Lo
-  sugiere la leyenda de su figura 4, que presenta la selección humana sobre las
-  lesiones de prueba.
+- **El denominador es lectura nuestra.** Ninguna frase del artículo dice que las
+  8.913 recomendaciones se hicieron sobre esas 30.698 imágenes. Lo sugiere la
+  leyenda de su figura 4, que presenta la selección humana sobre las lesiones de
+  prueba.
 - **El denominador no son todas las lesiones capturadas.** El conjunto se filtró
   antes con parámetros del propio sistema de captura, entre ellos una confianza
   de nevus superior a 80, y se cuenta en imágenes, no en lesiones. Procede de
-  2.038 capturas de 480 pacientes y una de las cohortes es secuencial, así que
-  una misma lesión puede estar en más de una imagen (Yan et al., 2025).
+  2.038 capturas de 480 pacientes, así que una misma lesión puede estar en más
+  de una imagen (Yan et al., 2025).
 - **Solo se usa el lado humano.** El 8.913 es el lado humano de una comparación
-  que publican los autores del modelo. El 3.498 es desempeño del propio
-  PanDerm, y aquí se cita solo como contexto.
-- **El «79 out of 80» no se usa.** La misma frase atribuye al modelo la
-  detección de lesiones malignas «in 79 out of 80 patients», sin definir cómo
-  mide ese resultado por paciente. Si esos 80 fueran los de prueba y la frase se
-  leyera al pie de la letra, no cuadraría con 28 lesiones malignas. Ninguna de
-  las dos condiciones está escrita en el artículo.
+  que publican los autores del modelo. El 3.498 es desempeño del propio PanDerm,
+  y aquí se cita solo como contexto.
+- **El «79 out of 80» no se usa.** La frase de los resultados que da el 8.913
+  atribuye además al modelo la detección de lesiones malignas «in 79 out of 80
+  patients», sin definir cómo mide ese resultado por paciente. Si esos 80 fueran
+  los de prueba y la frase se leyera al pie de la letra, no cuadraría con 28
+  lesiones malignas. Ninguna de las dos condiciones está escrita en el artículo.
 
 Una coincidencia hace esta línea base más pertinente de lo que parece: las dos
 cohortes australianas de esa evaluación tienen los mismos números de
@@ -127,12 +126,11 @@ El alcance geográfico de la conclusión queda acotado desde aquí. Ninguno de l
 siete centros que aportan SLICE-3D está en América Latina: son centros de
 Estados Unidos, España, Australia, Austria, Grecia y Suiza (Kurtansky,
 D’Alessandro, et al., 2024). El contexto colombiano de la sección 1.1 explica
-por qué importa detectar a tiempo; el costo de hacerlo sin saturar la consulta
-lo documenta la literatura de la sección 1.2, no los boletines. Ninguno de los
-dos autoriza a trasladar a pacientes colombianos un desempeño medido sobre
-estos datos. Lo
-que sí es transferible es el procedimiento de evaluación, que es lo que este
-trabajo se propone establecer.
+por qué importa detectar a tiempo. Que eso deba hacerse sin saturar la consulta
+lo sostiene la literatura de la sección 1.2, no los boletines. Ninguno de los
+dos autoriza a trasladar a pacientes colombianos un desempeño medido sobre estos
+datos. Lo que sí es transferible es el procedimiento de evaluación, que es lo
+que este trabajo se propone establecer.
 
 ## 2. Estado del arte
 
