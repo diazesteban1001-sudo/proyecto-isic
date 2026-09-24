@@ -121,9 +121,10 @@ un examen detallado que alguien tiene que hacer, contable.
 3. El **8.913 es el lado humano** y es la línea base independiente utilizable;
    el 3.498 es desempeño de PanDerm reportado por sus propios autores.
 
-*Nota de deslinde:* PanDerm es también el modelo cuya posible contaminación con
-SLICE-3D es la sub-etapa **E1**, bloqueante, de la extensión. Citar el 8.913 no
-depende de esa cuestión —es una medición sobre personas—; usar sus pesos, sí.
+*Nota de deslinde:* PanDerm es también el modelo que la Fase 2 decidió no usar
+(2026-09-24), porque su artículo declara SLICE-3D entre sus fuentes de
+preentrenamiento (sub-etapa **E1**, «Riesgo bloqueante»). Citar el 8.913 no
+depende de esa decisión: es una medición sobre personas.
 
 ---
 
@@ -961,7 +962,9 @@ una cifra de desempeño sin su limitación asociada. Hoy no lo hace.
 
 ## Extensión: fase de imágenes y modelos fundacionales
 
-**Estado: PLAN ACORDADO, NADA EJECUTADO.** Sesión de planificación del
+**Estado: PLAN ACORDADO, NADA EJECUTADO.** *Salvo E1 para PanDerm: el
+2026-09-24 se leyó su artículo y se decidió no usarlo (ver «Riesgo
+bloqueante»).* Sesión de planificación del
 2026-08-18. Todo lo que sigue son decisiones de diseño, no resultados. Ninguna
 cifra de esta sección puede citarse en el informe como medida hasta que exista
 en `outputs/`.
@@ -1052,7 +1055,7 @@ fuga — no por un error del proyecto, sino por el preentrenamiento del modelo
 descargado.
 
 **Hallazgo del 2026-09-24: el artículo de PanDerm declara SLICE-3D en su
-preentrenamiento. La decisión de la Fase 2 no está tomada.** En
+preentrenamiento.** La decisión que se tomó con él está abajo, en «Decisión». En
 `referencias/panderm-reduccion-examenes.md` (texto completo), métodos,
 *"Pretraining dataset for developing PanDerm"*, subsección *"ISIC2024"*:
 
@@ -1066,7 +1069,9 @@ detection."* La misma sección incluye las cohortes MYM y HOP, cuyos números de
 aprobación ética coinciden con los de los dos estudios con que la Universidad de
 Queensland contribuyó a SLICE-3D.
 
-Lo que el texto **no** resuelve, y queda para la decisión:
+Lo que el texto **no** resuelve. Son límites del hallazgo, no condiciones de la
+decisión: la decisión aplica un criterio fijado antes de conocer el dato, y
+ninguna de estas preguntas la cambia.
 
 - **Qué imágenes exactamente.** *Aritmética nuestra:* 405.856 (MYM) + 352.034 =
   757.890, el total de recortes TBP del preentrenamiento; y 352.034 + 49.025 =
@@ -1080,22 +1085,37 @@ Lo que el texto **no** resuelve, y queda para la decisión:
 - **Si cuenta como fuga.** El preentrenamiento fue sobre imágenes sin etiqueta,
   *"2,149,706 unlabeled multimodal skin images"*: el modelo vio las imágenes, no
   los diagnósticos. Si eso infla un resultado sobre estos mismos datos, y
-  cuánto, es la pregunta que decide la Fase 2 de `PLAN.md`; no se cierra
-  citando.
+  cuánto, no se sabe. La decisión no lo admite como excepción, porque el
+  criterio no la preveía.
 - **MSKCC.** En el texto del artículo aparece solo como conjunto de evaluación
   dermatoscópico, *"8,984 dermoscopic images"*. El reparto del preentrenamiento
   por institución está en la figura 1c, que es una imagen y no se leyó.
   Entraría por ISIC2024, que en SLICE-3D incluye filas de MSKCC; el texto no
   dice qué instituciones tiene el subconjunto de 352.034.
-- **DermFM-Zero** no se ha mirado.
+- **DermFM-Zero** no se examinó. Por la decisión, tampoco se usa.
 
-Si se confirma, no se usa PanDerm, y el hallazgo se documenta como parte del
-informe: **en la era de los modelos fundacionales la fuga se desplaza del propio
-dataset al preentrenamiento de terceros.** Es la continuación natural de lo que
-`auditoria-de-fugas` ya encontró dentro del CSV, un nivel más arriba.
+*Criterio, fijado el 2026-08-18, antes del hallazgo:* Si se confirma, no se usa
+PanDerm, y el hallazgo se documenta como parte del informe: **en la era de los
+modelos fundacionales la fuga se desplaza del propio dataset al preentrenamiento
+de terceros.** Es la continuación natural de lo que `auditoria-de-fugas` ya
+encontró dentro del CSV, un nivel más arriba.
 
-Respaldo si está contaminado: DINOv3 (genérico, no dermatológico, sin este
-riesgo conocido).
+**Decisión (2026-09-24, de la persona):** PanDerm no se usa. Su artículo declara
+ISIC2024 (ref. 47, el descriptor de SLICE-3D) entre las fuentes de
+preentrenamiento, con 352.034 recortes. El criterio de esta fase se fijó antes
+de conocer ese dato: si hay solape, no se usa. Que el preentrenamiento fuera sin
+etiquetas no se admite como excepción, porque el criterio no la preveía. Se usa
+DINOv3, sujeto a la misma verificación del objetivo 5. DermFM-Zero no se examinó
+y no se usa.
+
+El estado de la fase vive en `PLAN.md`, Fase 2: la puerta queda cumplida para
+PanDerm, y la fase sigue abierta hasta versionar la fuente de los datos de
+preentrenamiento de DINOv3 y escribir la decisión sobre ella.
+
+**DINOv3** (genérico, no dermatológico) pasa de respaldo a modelo elegido. *Aquí
+se decía que era un respaldo "sin este riesgo conocido". Que no se le conozca el
+riesgo no es una verificación: sus datos de preentrenamiento están por
+comprobar, igual que se comprobaron los de PanDerm.*
 
 *Precedente en este mismo archivo:* la Cuarta nota dejó abierta exactamente esta
 pregunta para `tbp_lv_nevi_confidence` —si las lesiones con que se entrenó ese
@@ -1118,9 +1138,9 @@ para que "Fase 2" signifique siempre una sola cosa — la de `PLAN.md`.
 
 - **E1 — bloqueante.** Resolver la contaminación PanDerm/DermFM-Zero con
   SLICE-3D. Posiblemente escribiendo a los autores (correo público en el repo).
-  Nada más empieza hasta cerrarla. *2026-09-24: para PanDerm, el artículo
-  declara ISIC2024 en el preentrenamiento (ver «Riesgo bloqueante»). Faltan la
-  decisión y DermFM-Zero.*
+  Nada más empieza hasta cerrarla. *2026-09-24: PanDerm no se usa, porque su
+  artículo declara ISIC2024 en el preentrenamiento; DermFM-Zero no se examinó y
+  no se usa (decisión en «Riesgo bloqueante»). E1 sigue abierta por DINOv3.*
 - **E2 — features de paciente relativo.** Sobre la metadata tabular que ya
   está en `data/`: contraste de cada lesión contra el resto de su paciente (LOF
   agrupado por `patient_id`, razones contra el promedio del paciente). Sin
@@ -1159,9 +1179,11 @@ contexto.
 
 ### Pendientes de la extensión
 
-- [ ] **E1:** verificar contaminación de PanDerm/DermFM-Zero con SLICE-3D.
-      PanDerm: el artículo declara ISIC2024 en el preentrenamiento; falta
-      decidir si cuenta como fuga y qué se hace. DermFM-Zero: sin mirar.
+- [ ] **E1:** verificar contaminación del modelo fundacional con SLICE-3D.
+      PanDerm: cerrado el 2026-09-24, no se usa (su artículo declara ISIC2024
+      en el preentrenamiento). DermFM-Zero: no se examinó y no se usa.
+      Pendiente: versionar la fuente de los datos de preentrenamiento de
+      DINOv3 y escribir la decisión sobre ella.
 - [ ] Guardar el writeup del 1er lugar en `referencias/` (con fuente y fecha en
       la cabecera) antes de citarlo en el informe — regla 3
 - [ ] Decidir tamaño exacto del lockbox y semilla de partición, y verificar que

@@ -171,7 +171,8 @@ verificación: todas sus citas son literales y todas sus cifras tienen fuente o
 están en `outputs/`; no quedan cifras derivadas.
 
 **Siguiente paso.** Quedan vacíos los apartados 4 y 5; los dos dependen de la
-decisión de la Fase 2 sobre PanDerm. El orden entre ellos no está fijado.
+Fase 2, que ya decidió no usar PanDerm y tiene pendiente la verificación de
+DINOv3. El orden entre ellos no está fijado.
 
 *Salvedad sobre PanDerm — resuelta el 2026-09-24.* Hasta esa fecha su archivo
 decía "TEXTO COMPLETO" en la cabecera, pero solo reproducía la frase citada, y
@@ -247,20 +248,29 @@ desarrollo.
 ## Fase 2 — El bloqueante de preentrenamiento
 
 **Qué se hace.** Verificar si SLICE-3D estuvo entre las fuentes de
-preentrenamiento de PanDerm o de DermFM-Zero. ~35% del preentrenamiento de
-PanDerm es fotografía corporal total — la misma modalidad que este dataset.
+preentrenamiento del modelo fundacional que se use. Se planteó para PanDerm o
+DermFM-Zero; tras la decisión de abajo, el modelo es DINOv3. ~35% del
+preentrenamiento de PanDerm es fotografía corporal total — la misma modalidad
+que este dataset.
 *Aquí se decía también que MSKCC "aparece mencionado como fuente institucional
 de esos modelos"; en el texto del artículo de PanDerm solo aparece como conjunto
 de evaluación.*
 
-**Estado (2026-09-24): la fuente está versionada; la decisión, no.** Para
-PanDerm, el propio artículo lo declara: sus métodos incluyen ISIC2024 entre las
-fuentes de preentrenamiento, con 352.034 recortes y la referencia al descriptor
-de SLICE-3D (`referencias/panderm-reduccion-examenes.md`, texto completo). Lo
-que eso implica, y lo que el texto deja sin resolver —qué imágenes exactamente,
-si ver imágenes sin etiqueta cuenta como fuga—, está en `CLAUDE.md`, «Riesgo
-bloqueante». La fase sigue abierta: falta la decisión escrita, que es la otra
-mitad de la puerta, y DermFM-Zero no se ha mirado.
+**Decisión (2026-09-24, de la persona):** PanDerm no se usa. Su artículo declara
+ISIC2024 (ref. 47, el descriptor de SLICE-3D) entre las fuentes de
+preentrenamiento, con 352.034 recortes. El criterio de esta fase se fijó antes
+de conocer ese dato: si hay solape, no se usa. Que el preentrenamiento fuera sin
+etiquetas no se admite como excepción, porque el criterio no la preveía. Se usa
+DINOv3, sujeto a la misma verificación del objetivo 5. DermFM-Zero no se examinó
+y no se usa.
+
+**Estado (2026-09-24).** **La puerta queda cumplida para PanDerm**: la fuente
+está versionada (`referencias/panderm-reduccion-examenes.md`, texto completo) y
+la decisión, escrita. **La fase sigue abierta** hasta versionar la fuente de los
+datos de preentrenamiento de DINOv3 y escribir la decisión sobre ella. Los
+límites del hallazgo sobre PanDerm —qué imágenes exactamente, si el
+preentrenamiento sin etiquetas infla un resultado— están en `CLAUDE.md`, «Riesgo
+bloqueante»; no cambian la decisión.
 
 **No se extrae ni una característica antes de cerrar esto.** Si hay solape,
 cualquier resultado de un modelo congelado sobre estos datos viene inflado por
@@ -278,13 +288,17 @@ procedencia, **y la decisión escrita**: se usa, o no se usa, y por qué. Las do
 cosas. Una fuente sin decisión deja la fase abierta.
 
 **Riesgo.** La verificación no se puede cerrar — los autores no contestan, o la
-documentación no es concluyente. Es un riesgo real y no depende de nosotros.
+documentación no es concluyente. Es un riesgo real y no depende de nosotros. Con
+PanDerm no se dio: el artículo lo resolvió. Queda para la de DINOv3.
 
-**Contingencia.** DINOv3: genérico, no específico de dermatología, sin este
-riesgo conocido. Se pierde el ajuste al dominio y probablemente desempeño; se
-gana poder afirmar lo que se mida. El intercambio se declara en el informe, con
-la verificación fallida documentada — **el hallazgo de que no se pudo verificar
-es él mismo un resultado publicable** del trabajo.
+**Contingencia.** Se planteó DINOv3 como respaldo: genérico, no específico de
+dermatología. Tras la decisión es el modelo que se usa. *Aquí se decía que no
+tenía "este riesgo conocido"; que no se le conozca no es una verificación, y se
+le aplica la misma.* Con DINOv3 se pierde el ajuste al dominio y probablemente
+desempeño, y el intercambio se declara en el informe. Solo se gana poder afirmar
+lo que se mida cuando su verificación esté cerrada. Qué hacer si esa
+verificación tampoco se puede cerrar no está decidido; **el hallazgo de que no se
+pudo verificar sería, él mismo, un resultado publicable** del trabajo.
 
 ---
 

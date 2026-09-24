@@ -93,9 +93,11 @@ desde Kaggle (ver `CLAUDE.md` para el procedimiento).
 - **Contraparte ampliada:** validar la línea base actual con evidencia
   adicional de la práctica clínica real (tasas de biopsia innecesaria,
   tiempos de triage), más allá de lo declarado por el organizador.
-- **Modelado con imágenes:** extensión evaluando características de
-  modelos fundacionales de dermatología, condicionada a verificar que no
-  haya contaminación entre su preentrenamiento y este dataset.
+- **Modelado con imágenes:** extensión evaluando características de un
+  modelo fundacional de imagen, DINOv3, condicionada a verificar que no
+  haya contaminación entre su preentrenamiento y este dataset. PanDerm,
+  específico de dermatología, se descartó por eso: su artículo declara un
+  subconjunto de ISIC 2024 entre sus datos de preentrenamiento.
 - **Casos de fallo documentados explícitamente** como conjunto de prueba
   propio (no solo desempeño agregado).
 - **Guardarraíles del sistema** declarados explícitamente: qué no debe

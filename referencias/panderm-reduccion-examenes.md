@@ -214,20 +214,20 @@ una línea base mal entendida vale menos que ninguna.
 
 ## Advertencia de uso dentro de este proyecto
 
-PanDerm es, a la vez, la fuente de esta cifra y el modelo cuya posible
-contaminación con SLICE-3D es la sub-etapa **E1**, bloqueante, de la extensión
-(última sección de `CLAUDE.md`). Son dos cosas independientes y conviene no
-mezclarlas:
+PanDerm es, a la vez, la fuente de esta cifra y el modelo que la sub-etapa
+**E1** de la extensión (última sección de `CLAUDE.md`; Fase 2 de `PLAN.md`)
+decidió no usar. Son dos cosas independientes y conviene no mezclarlas:
 
 - Citar el **8.913 de los melanógrafos** como línea base de práctica clínica no
   depende en absoluto de si PanDerm está contaminado: es una medición sobre
   personas.
-- Usar **pesos de PanDerm** para modelar sí depende de E1, y sigue bloqueado.
-  *2026-09-24:* este mismo artículo declara ISIC2024 en su preentrenamiento
-  (métodos, *"Pretraining dataset for developing PanDerm"*, subsección
-  *"ISIC2024"*, con la referencia 47, que es el descriptor de SLICE-3D). Lo que
-  eso implica está en `CLAUDE.md`, «Riesgo bloqueante»; la decisión, pendiente,
-  es la de la Fase 2 de `PLAN.md`.
+- **Los pesos de PanDerm no se usan.** Decisión de la persona del 2026-09-24,
+  porque este mismo artículo declara ISIC2024 en su preentrenamiento (métodos,
+  *"Pretraining dataset for developing PanDerm"*, subsección *"ISIC2024"*, con
+  la referencia 47, que es el descriptor de SLICE-3D). La decisión y su criterio
+  están en `CLAUDE.md`, «Riesgo bloqueante», y en la Fase 2 de `PLAN.md`.
+  *Hasta ese día esta viñeta decía que usar los pesos dependía de E1 y seguía
+  bloqueado.*
 
 ---
 
