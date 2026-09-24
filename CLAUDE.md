@@ -112,8 +112,10 @@ un examen detallado que alguien tiene que hacer, contable.
 
 1. El paper dice **"melanographers"**, palabra que aparece una sola vez y que
    **no define**. Traducirlo como "especialistas en melanoma" sería una
-   sustitución nuestra que probablemente exagera la comparación. Se cita la
-   palabra del paper.
+   sustitución nuestra, y el artículo no da base para decir quiénes son. Se
+   cita la palabra del paper. *Hasta el 2026-09-24 decía que la sustitución
+   "probablemente exagera la comparación"; eso se apoyaba en una descripción
+   del melanógrafo sin fuente, retirada de la ficha.*
 2. Los autores **no discuten esta comparación en sus limitaciones**: no hay
    análisis de factores de confusión ni de diferencias de protocolo.
 3. El **8.913 es el lado humano** y es la línea base independiente utilizable;

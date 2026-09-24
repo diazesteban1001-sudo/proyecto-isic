@@ -177,12 +177,14 @@ una línea base mal entendida vale menos que ninguna.
 1. **El paper dice *"melanographers"*, no "especialistas en melanoma".** La
    palabra aparece **una sola vez** en todo el artículo y **no se define**: no
    se describe su formación, su rol ni su protocolo. Decir "especialistas en
-   melanoma" sería una sustitución nuestra, no una cita — y una que
-   probablemente exagera la comparación, porque en las unidades de fotografía
-   corporal total el melanógrafo suele ser personal técnico dedicado a la
-   captura y al marcado, no el dermatólogo que diagnostica. **No lo afirmamos
-   en ninguna dirección: el paper no da base para hacerlo.** Al citar la cifra,
-   se cita la palabra del paper.
+   melanoma" sería una sustitución nuestra, no una cita, y el artículo no da
+   base para decir quiénes son. **No lo afirmamos en ninguna dirección.** Al
+   citar la cifra, se cita la palabra del paper.
+   *Corregido el 2026-09-24: aquí se añadía que la sustitución "probablemente
+   exagera la comparación, porque en las unidades de fotografía corporal total
+   el melanógrafo suele ser personal técnico dedicado a la captura y al
+   marcado, no el dermatólogo que diagnostica". No tenía fuente: era memoria,
+   que la regla 3 no admite. Se retira hasta que una fuente lo diga.*
 
 2. **Los datos se declaran retrospectivos, para todo el estudio y no para esta
    comparación en particular.** La declaración de ética dice: *"Only
