@@ -19,6 +19,12 @@ contains first place solution for **isic-2024** competition"*).
   idéntico al texto canónico de https://www.apache.org/licenses/LICENSE-2.0.txt;
 - la API de GitHub detecta `Apache-2.0` (`spdx_id`) en `LICENSE`.
 
+La corrobora, sin ser una tercera vía sobre el repositorio, que es la licencia
+que las reglas de la competencia exigían a las soluciones ganadoras: *"WINNER
+LICENSE TYPE: Apache 2.0"*. La línea está en la copia local de las reglas,
+`referencias/_texto-completo/kaggle-rules.md`; la ficha versionada
+`referencias/kaggle-rules.md` no la recoge.
+
 Apache 2.0 permite redistribuir la obra sin modificar con una copia de la
 licencia (§4). Por eso los tres archivos se versionan **byte a byte**, sin
 cabecera dentro: añadírsela sería modificarlos, y los archivos modificados
