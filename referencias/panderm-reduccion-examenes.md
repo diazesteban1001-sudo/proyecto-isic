@@ -64,7 +64,9 @@ lectura, no.*
 
 ## La cita literal
 
-Sección de resultados, *"Melanoma screening using TBP"* (figura 4j,k):
+Sección de resultados, *"Risk assessment and malignant lesion screening using
+TBP"* (figura 4j,k). *Corregido el 2026-09-24: aquí decía "Melanoma screening
+using TBP", que es el título de una subsección de los métodos.*
 
 > "Significantly, it detected malignant lesions in 79 out of 80 patients while
 > reducing unnecessary examinations by 60.8% compared with melanographers
@@ -123,13 +125,23 @@ métodos, en *"Risk prediction and TBP screening datasets (2 classes)"*:
 
 ## Contexto del experimento
 
-Cohortes de fotografía corporal total citadas para esta parte del estudio:
+Cohortes de fotografía corporal total de esta parte del estudio. El conjunto de
+cribado se tomó *"from the MYM and HOP studies"*; las dos frases siguientes las
+describen en los métodos, *"Pretraining dataset for developing PanDerm"*
+(subsecciones *"HOP cohort (TBP)"* y *"MYM cohort (TBP)"*). El «49» y el «50»
+son números de referencia, pegados a la palabra en el original:
 
-> "The HOP study is an in-house sequential dataset of high-risk melanoma
+> "The HOP study49 is an in-house sequential dataset of high-risk melanoma
 > individuals with 314 participants."
 
-> "The MYM cohort is an in-house dataset studying the natural history of
-> melanocytic nevi from 193 Australian participants."
+> "The MYM cohort50 is an in-house dataset studying the natural history of
+> melanocytic nevi from 193 Australian participants recruited from the
+> electoral roll."
+
+*Corregido el 2026-09-24: las dos citas habían perdido el número de referencia
+sin declararlo, y la de MYM además cortaba la frase antes de "recruited from
+the electoral roll" y le ponía un punto. Venían de WebFetch. La sección tampoco
+estaba localizada.*
 
 Escala del problema de cribado en el conjunto completo —los 480 pacientes, no la
 prueba—:
