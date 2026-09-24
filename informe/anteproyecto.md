@@ -2,6 +2,138 @@
 
 ## 1. Problema y estado actual
 
+### 1.1 El problema: detectar a tiempo sin saturar la consulta
+
+La Cuenta de Alto Costo (CAC) reportó 9.272 casos de melanoma en Colombia para
+su periodo 2025, con corte al 2 de febrero de 2026; la cifra es preliminar,
+previa a auditoría (Contreras, 2026). El mismo boletín informa que los casos
+prevalentes aumentaron un 12,65 % frente al periodo anterior y que la
+mortalidad por todas las causas en las personas con melanoma creció un 10,53 %
+frente a 2024.
+
+Lo que está en juego es el estadio en que se diagnostica. Según el boletín del
+año anterior, la supervivencia global a cinco años del melanoma cutáneo es del
+60,9 %, pero en los estadios avanzados, y en particular en el estadio IV, menos
+del 50 % de los pacientes sobrevive a los dos años de confirmado el diagnóstico
+(Cuenta de Alto Costo [CAC], 2025). Ese boletín
+reporta además que el 67,4 % de los casos de su periodo 2024 —que la CAC define
+como del 2 de enero de 2023 al 1 de enero de 2024— se diagnosticó en estadios
+tempranos, I y II.
+
+Las cifras de los dos boletines no forman una serie, y no se leen aquí como
+tendencia. Uno dice que «se han atendido» 11.064 casos hasta el 31 de diciembre
+de 2024 y el otro habla de 9.272 casos «reportados» en el periodo 2025, sin que
+ninguno defina qué cuenta. El «más del 50 %» en estadios tempranos del boletín
+de 2026 remite a una meta, no es una estimación puntual, así que no puede
+compararse con el 67,4 % del anterior (CAC, 2025; Contreras, 2026). Sirven para
+dimensionar el problema, no para medir su evolución.
+
+Esas cifras tampoco miden el problema que aborda este trabajo, y conviene
+decirlo desde el principio. Los boletines señalan dos desafíos. El de 2025
+dice que la detección temprana sigue siendo un desafío en algunas regiones del
+país (CAC, 2025). El de 2026 señala la oportunidad del tratamiento: el tiempo
+promedio al diagnóstico se ha mantenido cercano a 15 días, sin que se precise
+desde qué momento se cuenta, mientras el inicio del tratamiento supera en
+promedio los 30 días (Contreras, 2026). Ninguno de los dos informa cuántas
+lesiones se examinan para encontrar cada melanoma. Ese es el costo del lado
+opuesto: un sistema que detecta pronto pero envía a revisión muchas lesiones
+benignas desplaza la carga hacia la consulta especializada.
+
+### 1.2 Estado actual: el triaje sobre fotografía corporal total
+
+La fotografía corporal total en 3D (3D-TBP) cambia la naturaleza de la tarea
+clínica. Captura toda la superficie cutánea visible en una sola toma, y el
+programa del fabricante identifica cada lesión por separado (Kurtansky,
+D’Alessandro, et al., 2024). En los datos de este caso son 401.059 lesiones de
+1.042 pacientes, una media de 384,89 por paciente. La dermatoscopia, en cambio,
+se usa normalmente para documentar las lesiones más atípicas, las que se
+biopsian o se vigilan (Kurtansky, D’Alessandro, et al., 2024). Con 3D-TBP la
+pregunta clínica ya no es qué tiene una lesión que alguien escogió, sino cuáles
+de varios cientos merecen que un especialista las mire. Es una tarea de
+triaje, y sus dos errores cuestan: un falso negativo es un cáncer que nadie
+revisa; un falso positivo, un examen detallado que alguien tiene que hacer.
+
+La práctica humana actual en esta modalidad tiene al menos una medición
+publicada, en la validación de PanDerm, un modelo fundacional dermatológico
+(Yan et al., 2025). Los autores informan que los *melanographers* —el término
+del artículo, que no lo define— recomendaron 8.913 lesiones para examen
+detallado, frente a 3.498 del modelo. Según los métodos, el conjunto de prueba
+de ese cribado reunió 80 pacientes de dos cohortes australianas, con 30.698
+imágenes que incluyen 28 lesiones malignas (Yan et al., 2025).
+
+Esa cifra es la línea base de este trabajo, y se usa con cuatro salvedades.
+
+- **El denominador es lectura nuestra.** El artículo no dice en una misma frase
+  que las 8.913 recomendaciones se hicieron sobre esas 30.698 imágenes. Lo
+  sugiere la leyenda de su figura 4, que presenta la selección humana sobre las
+  lesiones de prueba.
+- **El denominador no son todas las lesiones capturadas.** El conjunto se filtró
+  antes con parámetros del propio sistema de captura, entre ellos una confianza
+  de nevus superior a 80, y se cuenta en imágenes, no en lesiones. Procede de
+  2.038 capturas de 480 pacientes y una de las cohortes es secuencial, así que
+  una misma lesión puede estar en más de una imagen (Yan et al., 2025).
+- **Solo se usa el lado humano.** El 8.913 es el lado humano de una comparación
+  que publican los autores del modelo. El 3.498 es desempeño del propio
+  PanDerm, y aquí se cita solo como contexto.
+- **El «79 out of 80» no se usa.** La misma frase atribuye al modelo la
+  detección de lesiones malignas «in 79 out of 80 patients», sin definir cómo
+  mide ese resultado por paciente. Si esos 80 fueran los de prueba y la frase se
+  leyera al pie de la letra, no cuadraría con 28 lesiones malignas. Ninguna de
+  las dos condiciones está escrita en el artículo.
+
+Una coincidencia hace esta línea base más pertinente de lo que parece: las dos
+cohortes australianas de esa evaluación tienen los mismos números de
+aprobación ética que los dos estudios con que la Universidad de Queensland
+contribuyó a SLICE-3D (Kurtansky, D’Alessandro, et al., 2024; Yan et al., 2025).
+La línea base se midió en los mismos estudios de los que proviene una parte de
+los datos del caso.
+
+### 1.3 El cliente y lo que declaró necesitar
+
+La contraparte son los organizadores del reto ISIC 2024. La modalidad es de
+datos abiertos: no hay acta ni reuniones, y lo que el cliente necesita se lee en
+lo que publicó. La métrica principal es el área parcial bajo la curva ROC por
+encima del 80 % de sensibilidad, justificada porque existen regiones del espacio
+ROC donde la sensibilidad es inaceptable en la práctica clínica. Además hubo dos
+premios secundarios de 7.500 dólares cada uno, uno a la *Top-15 Retrieval
+Sensitivity* y otro a la *Model Efficiency* (Kurtansky, Rotemberg, et al.,
+2024). La primera mide la sensibilidad sobre las quince lesiones de mayor riesgo
+de cada paciente (Kurtansky et al., 2025). La función de utilidad del cliente,
+por tanto, no cabe en una sola cifra: pide sensibilidad alta, la mide también
+por paciente y le importa la eficiencia del modelo.
+
+Los datos imponen dos condiciones que cualquier análisis tiene que respetar.
+La primera es el desbalance: 393 lesiones malignas entre 401.059, un 0,098 %,
+concentradas en 259 de los 1.042 pacientes. La segunda es que las dos clases no
+se etiquetaron igual. Las malignas están confirmadas por patología. La mayoría
+de las benignas, en cambio, nunca se biopsió: son lesiones que un dermatólogo
+vio durante un examen de piel completo y no consideró preocupantes (Kurtansky,
+D’Alessandro, et al., 2024). Un «negativo» en estos datos no significa «sano»:
+en la mayoría de los casos significa «no enviado a biopsia».
+
+### 1.4 El problema de consultoría
+
+Con ese cliente y esos datos, la pregunta de este trabajo no es cómo obtener el
+mejor puntaje, sino cuánto depende el veredicto sobre un modelo de las
+decisiones metodológicas que se toman por defecto: con qué métrica se evalúa,
+cómo se trata el desbalance y cómo se parten los datos cuando un mismo paciente
+aporta cientos de lesiones. Cada una de esas decisiones puede cambiar qué modelo
+parece mejor, y el cliente ya dejó escrito, en su métrica y en sus premios,
+contra qué quiere que se juzgue. El trabajo del consultor es leer esa función
+de utilidad antes de optimizar nada y recomendar desde ella, diciendo con qué
+seguridad se hace la recomendación.
+
+El alcance geográfico de la conclusión queda acotado desde aquí. Ninguno de los
+siete centros que aportan SLICE-3D está en América Latina: son centros de
+Estados Unidos, España, Australia, Austria, Grecia y Suiza (Kurtansky,
+D’Alessandro, et al., 2024). El contexto colombiano de la sección 1.1 explica
+por qué importa detectar a tiempo; el costo de hacerlo sin saturar la consulta
+lo documenta la literatura de la sección 1.2, no los boletines. Ninguno de los
+dos autoriza a trasladar a pacientes colombianos un desempeño medido sobre
+estos datos. Lo
+que sí es transferible es el procedimiento de evaluación, que es lo que este
+trabajo se propone establecer.
+
 ## 2. Estado del arte
 
 La revisión se organiza por enfoques y no por autor. Cuatro líneas convergen en
@@ -266,6 +398,15 @@ Cassidy, B., Kendrick, C., Brodzicki, A., Jaworek-Korjakowska, J., & Yap, M. H.
 recommendations. *Medical Image Analysis, 75*, 102305.
 https://doi.org/10.1016/j.media.2021.102305
 
+Contreras, J. (2026, 22 de mayo). *Día mundial del melanoma 2026: Las cifras
+detrás de la piel: panorama del melanoma en Colombia*. Cuenta de Alto Costo.
+https://cuentadealtocosto.org/noticias/dia-mundial-del-melanoma-2026/
+
+Cuenta de Alto Costo. (2025, 23 de mayo). *Día mundial del melanoma cutáneo
+2025: «¡Más allá de la piel, están las cifras del melanoma en Colombia!»*
+[Boletín de prensa].
+https://cuentadealtocosto.org/noticias/dia-mundial-del-melanoma-cutaneo-2025/
+
 Jojoa, M., Garcia-Zapirain, B., & Percybrooks, W. (2022). A fair performance
 comparison between complex-valued and real-valued neural networks for disease
 detection. *Diagnostics, 12*(8), Artículo 1893.
@@ -335,6 +476,12 @@ Colombia. *International Journal of Telemedicine and Applications, 2018*, Artíc
 
 Walter, S. D. (2005). The partial area under the summary ROC curve. *Statistics in
 Medicine, 24*(13), 2025–2040. https://doi.org/10.1002/sim.2103
+
+Yan, S., Yu, Z., Primiero, C., Vico-Alonso, C., Wang, Z., Yang, L., Tschandl,
+P., Hu, M., Ju, L., Tan, G., Tang, V., Ng, A. B., Powell, D., Bonnington, P.,
+See, S., Magnaterra, E., Ferguson, P., Nguyen, J., Guitera, P., … Ge, Z.
+(2025). A multimodal vision foundation model for clinical dermatology. *Nature
+Medicine, 31*(8), 2691–2702. https://doi.org/10.1038/s41591-025-03747-y
 
 Yang, H., Lu, K., Lyu, X., & Hu, F. (2019). Two-way partial AUC and its
 properties. *Statistical Methods in Medical Research, 28*(1), 184–195.
