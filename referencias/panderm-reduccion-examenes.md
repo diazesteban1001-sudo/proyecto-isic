@@ -184,8 +184,20 @@ una línea base mal entendida vale menos que ninguna.
    en ninguna dirección: el paper no da base para hacerlo.** Al citar la cifra,
    se cita la palabra del paper.
 
-2. **No se declara si los datos son prospectivos o retrospectivos** para esta
-   comparación.
+2. **Los datos se declaran retrospectivos, para todo el estudio y no para esta
+   comparación en particular.** La declaración de ética dice: *"Only
+   de-identified retrospective data were used for research, without the active
+   involvement of patients."* Los estudios de origen sí son prospectivos: la
+   referencia 49 del artículo es el protocolo de HOP, *"protocol for a
+   randomised controlled trial"*, y la 50 el de MYM, *"protocol of a prospective
+   cohort study of melanocytic naevi"*. Es decir, datos recogidos en estudios
+   prospectivos y usados después de forma retrospectiva. Se buscaron
+   «retrospective» y «prospective» en el texto completo: aparecen solo en esa
+   frase de ética y en los títulos de las referencias 4, que no es de estos
+   datos, y 50.
+   *Corregido el 2026-09-24: aquí decía "No se declara si los datos son
+   prospectivos o retrospectivos para esta comparación". Era una afirmación de
+   ausencia y era falsa: la respuesta está en la declaración de ética.*
 
 3. **La sección de discusión y limitaciones no menciona esta comparación.** Ni
    el 79-de-80, ni los melanógrafos, ni el 60,8%. El resultado se presenta sin
