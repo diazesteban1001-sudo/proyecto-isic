@@ -342,7 +342,53 @@ intervalo ingenuo sobre diferencias por fold no se cita: supone una
 independencia que el solape no cumple, y en este proyecto ya produjo una vez un
 intervalo que excluía el cero cuando el corregido lo contenía.
 
-**Puerta.** El intervalo corregido de la diferencia contra el baseline tabular.
+**Comparador añadido: la parte tabular de la solución ganadora, reproducida**
+(objetivo 3 del anteproyecto). Desde su código público
+(`referencias/novoselskiy-2024-isic2024.md`) se reproduce la parte tabular y de
+contraste intra-paciente del ganador, sobre las mismas particiones de desarrollo
+y como comparador en la misma prueba pareada con varianza corregida: CatBoost
+sobre la metadata, con el z-score de cada variable dentro del paciente, los
+conteos y sumas de área por paciente y el LOF ajustado paciente por paciente.
+
+Quedan fuera, con su motivo:
+
+- **Las redes EVA02-small y EdgeNeXt-base.** Cómputo: el código las ajusta por
+  completo en GPU y depende de CUDA; el README declara una NVIDIA A6000.
+- **El modelo entrenado con el ISIC Archive** (el tercer modelo de imagen, otro
+  EVA02-small). Riesgo de fuga: la descarga no se filtra contra las imágenes ni
+  los pacientes de la competición, y el código no permite saber si contiene los
+  recortes de SLICE-3D (pregunta abierta en `CLAUDE.md`). Es el mismo criterio
+  de la Fase 2: no se usa sin verificar que no hay solape.
+- **La razón de cada predicción contra la media del paciente.** En el código solo
+  se calcula sobre las predicciones de esos tres modelos de imagen, así que sale
+  con ellos.
+
+**La canalización publicada está rota:** `top-model.ipynb` lee la columna
+`tmp_predictions_all__pr`, que ningún código del repositorio produce; el
+entrenamiento de imagen escribe `tmp_predictions_all`. Reproducirla exigirá
+parchearla, y cada parche se declara: qué se cambió del código publicado y por
+qué. Quitar la rama de imagen ya es uno. Otra salvedad que se declara: los
+hiperparámetros y las columnas descartadas del CatBoost se eligieron con las
+variables de imagen presentes, así que la parte tabular reproducida no es un
+modelo ajustado para ir sin ellas.
+
+**Orden de magnitud, no comparación.** La Tabla 3 de Kurtansky 2025
+(`referencias/kurtansky-2025-triaje-automatizado-tbp.md`) publica una variante
+de ablación del ganador sin recortes de imagen —*Meta-basic*, *Meta-WB360* y
+*Patient context*—, que es la parte que se reproduce. Sirve para comprobar que la
+reproducción está bien montada, no para compararse con ella: se midió sobre la
+evaluación privada del reto, con particiones y conjuntos distintos de los
+nuestros. Por tarea:
+
+- Malignidad: pAUC 0,164; SEtop-15 0,695.
+- Melanoma: pAUC 0,168; SEtop-15 0,708.
+
+La referencia de SEtop-15 para nuestros modelos sigue siendo Marchetti et al.
+(«Decisiones», abajo).
+
+**Puerta.** El intervalo corregido de la diferencia contra el baseline tabular,
+y el de la diferencia contra la parte tabular reproducida del ganador, con la
+lista de lo que no se reprodujo y su motivo.
 
 **Riesgo.** La mejora no se distingue del baseline.
 
@@ -479,10 +525,12 @@ mismo género es lo único que hace interpretable la diferencia.
 **Por qué no los otros dos.** El máximo por columna **no corresponde
 necesariamente a un modelo único**: es el mejor valor de esa columna, que puede
 venir de un envío distinto del que lidera las demás, así que no hay un sistema
-al que atribuírselo. Y el ganador es un **ensamble con características de
-imagen**, que en este trabajo no tiene contraparte hasta la Fase 4; medirse
-contra él antes de esa fase sería compararse con algo que todavía no se está
-construyendo.
+al que atribuírselo. Y el ganador completo es un **ensamble con características
+de imagen**. En este trabajo entra como comparador, pero reproducido solo en su
+parte tabular y de contraste intra-paciente, sobre nuestras particiones (Fase
+4): la comparación es contra esa parte, no contra su ensamble con imágenes.
+*Hasta el 2026-09-24 esta frase decía que medirse contra él antes de la Fase 4
+"sería compararse con algo que todavía no se está construyendo".*
 
 **Salvedad obligatoria al citarla, y no es menor.** Marchetti et al. se evaluó
 sobre **particiones y poblaciones distintas** de las nuestras —de hecho los

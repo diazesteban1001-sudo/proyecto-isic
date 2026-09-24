@@ -1015,6 +1015,21 @@ writeup de Kaggle.
 > (`referencias/novoselskiy-2024-isic2024.md`), no el writeup. El párrafo de
 > abajo no se ha reescrito contra el código.*
 
+**Pregunta abierta (2026-09-24): ¿vio el tercer modelo de imagen los recortes de
+SLICE-3D?** Además de EVA02 y EdgeNeXt sobre los recortes de la competición, el
+código entrena un tercer modelo —otro EVA02-small, de tres clases— con una
+descarga del ISIC Archive (`data_pull.ipynb`: `!isic image download images/`), y
+sus predicciones entran al CatBoost. La descarga no fija colección ni lista de
+imágenes. Las celdas que preparan esos datos no los cruzan con
+`train-metadata.csv` ni con los pacientes de la competición: solo deduplican
+por hash de píxeles dentro del propio conjunto externo. **El código no permite
+saber si esa descarga contiene los recortes de SLICE-3D.** Kurtansky 2025 dice
+que ese modelo *"is trained on external dermoscopy data"*
+(`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, «Ablation study»),
+pero el código no filtra por tipo de imagen, así que esa frase no lo resuelve.
+No se afirma en ninguna dirección. Mientras siga abierta, ese modelo queda fuera
+de la reproducción (`PLAN.md`, Fase 4), por el mismo criterio de la Fase 2.
+
 Orientación, entonces: imagen (EVA02-small + EdgeNeXt) → predicciones OOF
 concatenadas con metadata tabular → ensamble grande de GBDT. La feature que
 reporta como más valiosa es comparar cada lesión contra el promedio de lesiones
