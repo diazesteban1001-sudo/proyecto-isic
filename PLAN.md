@@ -167,22 +167,6 @@ de Kaggle y `outputs/`, y no desde `d1-material-colombia.md`. Pasó la
 verificación: todas sus citas son literales y todas sus cifras tienen fuente o
 están en `outputs/`; no quedan cifras derivadas.
 
-**Pendiente del apartado 1.** Son observaciones de redacción, no de fuentes, y
-ninguna bloquea la entrega. Las decide la persona:
-
-- **1.2, «Esa cifra es la línea base».** Tras reordenar el párrafo, la cifra más
-  cercana es el 30.698 / 28, no el 8.913.
-- **1.2, primera salvedad, «no dice en una misma frase».** Sugiere que lo dice
-  repartido en varias. Ninguna frase del artículo lo dice: el 8.913 aparece una
-  sola vez.
-- **1.2, cuarta salvedad, «La misma frase».** En una lista, no tiene antecedente
-  claro.
-- **1.4, «el costo de hacerlo sin saturar la consulta».** Se puede leer al revés
-  de lo que quiere decir. Además, «la literatura de la sección 1.2» es una sola
-  medición más el descriptor de SLICE-3D.
-- Dos líneas sin ajustar, al final del segundo párrafo de 1.1 y del último de
-  1.4. Es cosmético.
-
 **Siguiente paso.** Quedan vacíos los apartados 4, 5 y 6. El orden entre ellos
 no está fijado.
 
