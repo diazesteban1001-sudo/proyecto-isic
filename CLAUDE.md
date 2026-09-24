@@ -92,8 +92,16 @@ de esos pacientes tienen malignidad, así que la frase, leída al pie de la letr
 y sobre los pacientes de prueba, no cuadra. El artículo no define cómo mide el
 resultado por paciente, y la *Supplementary Table 18* a la que remite solo da
 precisión y recall por lesión (detalle en la ficha). *Hasta el 2026-09-24 este
-párrafo daba el 79 de 80 como dato.* El desbalance de esa evaluación —216
-malignas contra 197.716 benignas— es del mismo orden que el de SLICE-3D.
+párrafo daba el 79 de 80 como dato.*
+
+El artículo da para el conjunto completo —los 480 pacientes, no la evaluación—
+*"216 malignant versus 197,716 benign lesions"*, pero esas dos cifras suman
+197.932, y el total que dan los métodos, la leyenda de la figura 4e y la suma de
+las tres particiones es 196.933: el 197.716 no cuadra, y el artículo no declara
+errata. La prueba tiene 28 malignas entre 30.698 imágenes. Con cualquiera de las
+dos cifras el desbalance es del mismo orden que el de SLICE-3D (393 sobre
+401.059). *Hasta el 2026-09-24 esta frase atribuía el 216/197.716 a la
+evaluación y no advertía que no suma.*
 
 Qué aporta al criterio 1: convierte "reducir carga de trabajo" en una magnitud
 con unidades. El costo de un falso positivo deja de ser abstracto y pasa a ser

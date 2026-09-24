@@ -131,7 +131,8 @@ Cohortes de fotografía corporal total citadas para esta parte del estudio:
 > "The MYM cohort is an in-house dataset studying the natural history of
 > melanocytic nevi from 193 Australian participants."
 
-Escala del problema de cribado en esa evaluación:
+Escala del problema de cribado en el conjunto completo —los 480 pacientes, no la
+prueba—:
 
 > "216 malignant versus 197,716 benign lesions"
 
@@ -139,9 +140,20 @@ Desempeño del modelo sobre esa tarea:
 
 > "Using TBP images alone, PanDerm achieved a sensitivity of 0.893"
 
-Ese desbalance —216 malignas contra 197.716 benignas— es del mismo orden que el
-de SLICE-3D (393 sobre 401.059, `outputs/eda-diagnostico.json`), lo que hace la
-comparación pertinente para este proyecto.
+**Esas dos cifras no suman el total del artículo.** 216 + 197.716 = 197.932, y
+el artículo da 196.933 en tres sitios: los resultados (*"480 patients with
+196,933 lesions"*), la leyenda de la figura 4e (*"n = 196,933 TBP tiles"*) y los
+métodos (*"This process resulted in 196,933 lesion image tiles"*), que además es
+la suma de las tres particiones (146.752 + 19.483 + 30.698). El 216 también
+aparece en los métodos (*"216 images represent malignant lesions"*); el que no
+cuadra es el 197.716. El artículo no declara errata. La prueba tiene 28
+malignas entre 30.698 imágenes.
+
+Con cualquiera de esas cifras el desbalance es del mismo orden que el de
+SLICE-3D (393 sobre 401.059, `outputs/eda-diagnostico.json`), lo que hace la
+comparación pertinente para este proyecto. *Corregido el 2026-09-24: antes se
+citaba el 216/197.716 como la escala «de esa evaluación», sin advertir que no
+suma.*
 
 ---
 
