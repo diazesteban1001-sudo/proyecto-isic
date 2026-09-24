@@ -387,9 +387,10 @@ definieron.
 
 Se usó Claude (Anthropic) como asistente de redacción y de análisis: se le
 pidieron borradores, búsquedas de fuentes y la ejecución del código; la persona
-revisó, decidió y corrigió cada resultado. Todas las fuentes se verificaron
-contra su texto antes de entrar al documento. El historial de commits del
-repositorio registra qué se pidió y qué se corrigió en cada caso.
+revisó, decidió y corrigió cada resultado. Cada cita se verificó contra el texto
+disponible de su fuente antes de entrar al documento; de tres fuentes solo se
+pudo leer el resumen (sección 2.5). El historial de commits del repositorio
+registra qué se pidió y qué se corrigió en cada caso.
 
 ## Referencias
 

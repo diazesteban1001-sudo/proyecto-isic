@@ -170,8 +170,8 @@ de Kaggle y `outputs/`, y no desde `d1-material-colombia.md`. Pasó la
 verificación: todas sus citas son literales y todas sus cifras tienen fuente o
 están en `outputs/`; no quedan cifras derivadas.
 
-**Siguiente paso.** Quedan vacíos los apartados 4, 5 y 6. El orden entre ellos
-no está fijado.
+**Siguiente paso.** Quedan vacíos los apartados 4 y 5; los dos dependen de la
+decisión de la Fase 2 sobre PanDerm. El orden entre ellos no está fijado.
 
 *Salvedad sobre PanDerm — resuelta el 2026-09-24.* Hasta esa fecha su archivo
 decía "TEXTO COMPLETO" en la cabecera, pero solo reproducía la frase citada, y
