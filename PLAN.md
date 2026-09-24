@@ -244,10 +244,20 @@ desarrollo.
 ## Fase 2 — El bloqueante de preentrenamiento
 
 **Qué se hace.** Verificar si SLICE-3D estuvo entre las fuentes de
-preentrenamiento de PanDerm o de DermFM-Zero. MSKCC, anfitrión de ISIC 2024,
-aparece mencionado como fuente institucional de esos modelos, y ~35% del
-preentrenamiento de PanDerm es fotografía corporal total — la misma modalidad
-que este dataset.
+preentrenamiento de PanDerm o de DermFM-Zero. ~35% del preentrenamiento de
+PanDerm es fotografía corporal total — la misma modalidad que este dataset.
+*Aquí se decía también que MSKCC "aparece mencionado como fuente institucional
+de esos modelos"; en el texto del artículo de PanDerm solo aparece como conjunto
+de evaluación.*
+
+**Estado (2026-09-24): la fuente está versionada; la decisión, no.** Para
+PanDerm, el propio artículo lo declara: sus métodos incluyen ISIC2024 entre las
+fuentes de preentrenamiento, con 352.034 recortes y la referencia al descriptor
+de SLICE-3D (`referencias/panderm-reduccion-examenes.md`, texto completo). Lo
+que eso implica, y lo que el texto deja sin resolver —qué imágenes exactamente,
+si ver imágenes sin etiqueta cuenta como fuga—, está en `CLAUDE.md`, «Riesgo
+bloqueante». La fase sigue abierta: falta la decisión escrita, que es la otra
+mitad de la puerta, y DermFM-Zero no se ha mirado.
 
 **No se extrae ni una característica antes de cerrar esto.** Si hay solape,
 cualquier resultado de un modelo congelado sobre estos datos viene inflado por

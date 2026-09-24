@@ -223,6 +223,11 @@ mezclarlas:
   depende en absoluto de si PanDerm está contaminado: es una medición sobre
   personas.
 - Usar **pesos de PanDerm** para modelar sí depende de E1, y sigue bloqueado.
+  *2026-09-24:* este mismo artículo declara ISIC2024 en su preentrenamiento
+  (métodos, *"Pretraining dataset for developing PanDerm"*, subsección
+  *"ISIC2024"*, con la referencia 47, que es el descriptor de SLICE-3D). Lo que
+  eso implica está en `CLAUDE.md`, «Riesgo bloqueante»; la decisión, pendiente,
+  es la de la Fase 2 de `PLAN.md`.
 
 ---
 

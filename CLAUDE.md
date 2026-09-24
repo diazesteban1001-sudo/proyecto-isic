@@ -1044,10 +1044,50 @@ preentrenamiento) — la misma modalidad que ISIC 2024. Sucesor: DermFM-Zero /
 PanDerm-2 (`huggingface.co/redlessone/PanDerm2`).
 
 **Antes de descargar pesos: verificar si SLICE-3D estuvo entre las fuentes de
-preentrenamiento.** MSKCC, anfitrión de ISIC 2024, aparece mencionado como
-fuente institucional. Si hay solape, cualquier resultado de un modelo congelado
-sobre estos datos está inflado por fuga — no por un error del proyecto, sino por
-el preentrenamiento del modelo descargado.
+preentrenamiento.** *Aquí se decía que MSKCC, anfitrión de ISIC 2024, "aparece
+mencionado como fuente institucional"; en el texto del artículo de PanDerm solo
+aparece como conjunto de evaluación (ver el hallazgo de abajo).* Si hay solape,
+cualquier resultado de un modelo congelado sobre estos datos está inflado por
+fuga — no por un error del proyecto, sino por el preentrenamiento del modelo
+descargado.
+
+**Hallazgo del 2026-09-24: el artículo de PanDerm declara SLICE-3D en su
+preentrenamiento. La decisión de la Fase 2 no está tomada.** En
+`referencias/panderm-reduccion-examenes.md` (texto completo), métodos,
+*"Pretraining dataset for developing PanDerm"*, subsección *"ISIC2024"*:
+
+> "ISIC2024 (ref. 47) is an open-source TBP-based dataset for identifying skin
+> cancers among lesions cropped from 3D total-body photographs. We selected a
+> subset containing 352,034 tile images, stratified by institutions."
+
+La referencia 47 del artículo es *"Kurtansky, N. R. et al. The SLICE-3D
+dataset: 400,000 skin lesion image crops extracted from 3D TBP for skin cancer
+detection."* La misma sección incluye las cohortes MYM y HOP, cuyos números de
+aprobación ética coinciden con los de los dos estudios con que la Universidad de
+Queensland contribuyó a SLICE-3D.
+
+Lo que el texto **no** resuelve, y queda para la decisión:
+
+- **Qué imágenes exactamente.** *Aritmética nuestra:* 405.856 (MYM) + 352.034 =
+  757.890, el total de recortes TBP del preentrenamiento; y 352.034 + 49.025 =
+  401.059, las filas de `train-metadata.csv`
+  (`eda-diagnostico.json > fuente.n_filas`). Las 49.025 son el conjunto de
+  ISIC2024 que el artículo reserva para evaluar, *"with three institutions
+  (FNQH Cairns, Alfred Hospital, Melanoma Institute Australia)"*. Pero según el
+  descriptor de SLICE-3D, Alfred y FNQH Cairns aportaron solo al conjunto de
+  prueba del reto, así que esas 49.025 no pueden ser solo filas de SLICE-3D. El
+  texto no permite saber qué versión de ISIC2024 se usó.
+- **Si cuenta como fuga.** El preentrenamiento fue sobre imágenes sin etiqueta,
+  *"2,149,706 unlabeled multimodal skin images"*: el modelo vio las imágenes, no
+  los diagnósticos. Si eso infla un resultado sobre estos mismos datos, y
+  cuánto, es la pregunta que decide la Fase 2 de `PLAN.md`; no se cierra
+  citando.
+- **MSKCC.** En el texto del artículo aparece solo como conjunto de evaluación
+  dermatoscópico, *"8,984 dermoscopic images"*. El reparto del preentrenamiento
+  por institución está en la figura 1c, que es una imagen y no se leyó.
+  Entraría por ISIC2024, que en SLICE-3D incluye filas de MSKCC; el texto no
+  dice qué instituciones tiene el subconjunto de 352.034.
+- **DermFM-Zero** no se ha mirado.
 
 Si se confirma, no se usa PanDerm, y el hallazgo se documenta como parte del
 informe: **en la era de los modelos fundacionales la fuga se desplaza del propio
@@ -1078,7 +1118,9 @@ para que "Fase 2" signifique siempre una sola cosa — la de `PLAN.md`.
 
 - **E1 — bloqueante.** Resolver la contaminación PanDerm/DermFM-Zero con
   SLICE-3D. Posiblemente escribiendo a los autores (correo público en el repo).
-  Nada más empieza hasta cerrarla.
+  Nada más empieza hasta cerrarla. *2026-09-24: para PanDerm, el artículo
+  declara ISIC2024 en el preentrenamiento (ver «Riesgo bloqueante»). Faltan la
+  decisión y DermFM-Zero.*
 - **E2 — features de paciente relativo.** Sobre la metadata tabular que ya
   está en `data/`: contraste de cada lesión contra el resto de su paciente (LOF
   agrupado por `patient_id`, razones contra el promedio del paciente). Sin
@@ -1117,7 +1159,9 @@ contexto.
 
 ### Pendientes de la extensión
 
-- [ ] **E1:** verificar contaminación de PanDerm/DermFM-Zero con SLICE-3D
+- [ ] **E1:** verificar contaminación de PanDerm/DermFM-Zero con SLICE-3D.
+      PanDerm: el artículo declara ISIC2024 en el preentrenamiento; falta
+      decidir si cuenta como fuga y qué se hace. DermFM-Zero: sin mirar.
 - [ ] Guardar el writeup del 1er lugar en `referencias/` (con fuente y fecha en
       la cabecera) antes de citarlo en el informe — regla 3
 - [ ] Decidir tamaño exacto del lockbox y semilla de partición, y verificar que
