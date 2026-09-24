@@ -41,16 +41,19 @@ descontaminar a posteriori.
 - **Declaración de uso de IA.** Qué hizo el agente, qué hizo la persona, y dónde
   está la evidencia de cada cosa (el historial de commits).
 
-**Estado del documento** (`informe/anteproyecto.md`, al 2026-09-21):
+**Estado del documento** (`informe/anteproyecto.md`, al 2026-09-24):
 
 | Apartado | Estado |
 |---|---|
-| 1. Problema y estado actual | **vacío — BLOQUEANTE** |
-| 2. Estado del arte | escrito: cinco subsecciones (2.1 a 2.5) y 17 referencias en la lista final del documento |
+| 1. Problema y estado actual | escrito: cuatro subsecciones (1.1 a 1.4), verificado frase por frase el 2026-09-24 |
+| 2. Estado del arte | escrito: cinco subsecciones (2.1 a 2.5) |
 | 3. Objetivos | escrito |
 | 4. Datos y método | vacío |
 | 5. Alcance y plan | vacío |
 | 6. Declaración de uso de IA y reparto del trabajo | vacío |
+
+La lista final de referencias tiene 20 entradas: 17 del estado del arte y 3 del
+apartado 1.
 
 **Estado del arte — las líneas, y dónde está cada una.** Las líneas 2 a 5 son
 las del estado del arte y corresponden a las subsecciones 2.1 a 2.4 del
@@ -63,8 +66,8 @@ anteproyecto; las cuatro están cerradas, con sus fuentes versionadas en
    `referencias/cac-melanoma-colombia-2025.md`, corte a dic. 2024) **ya no
    sostienen nada del estado del arte.** Sus cifras de carga, concentración
    regional y tiempos se retiraron del borrador del estado del arte el
-   2026-09-21. Quedan reservadas para el **apartado 1** (problema y estado
-   actual), junto con la línea base de práctica clínica de
+   2026-09-21. Se usan en el **apartado 1** (problema y estado actual), escrito
+   el 2026-09-24, junto con la línea base de práctica clínica de
    `referencias/panderm-reduccion-examenes.md`. **No se vuelven a meter en el
    estado del arte:** la subsección 2.4 trata de qué se ha investigado en
    Colombia, no de cuánto melanoma hay.
@@ -157,18 +160,31 @@ anteproyecto; las cuatro están cerradas, con sus fuentes versionadas en
   ensambles con características de imagen, y 2.3 opone a Saeb con la réplica de
   Little. El contraste que le falta a 2.4 es **acceso frente a selección**.
 
-**Siguiente paso.** Redactar el **apartado 1**, que es bloqueante, a partir de:
-- las fichas de la CAC, `referencias/cac-melanoma-colombia-2025.md` y
-  `referencias/cac-melanoma-colombia-2026.md`, cuyo texto completo está en local
-  en `referencias/_texto-completo/`;
-- `referencias/panderm-reduccion-examenes.md`.
+**Apartado 1 — ESCRITO (2026-09-24).** Se redactó desde las fichas de la CAC
+(texto completo en local), `referencias/panderm-reduccion-examenes.md` (texto
+completo versionado desde ese día), los descriptores de Kurtansky, las páginas
+de Kaggle y `outputs/`, y no desde `d1-material-colombia.md`. Pasó la
+verificación: todas sus citas son literales y todas sus cifras tienen fuente o
+están en `outputs/`; no quedan cifras derivadas.
 
-**No** desde `d1-material-colombia.md`, el archivo de la carpeta Descargas donde
-se guardó lo retirado del estado del arte. Arrastra una versión descartada de
-2.4:
-- marcadores sin completar;
-- una descripción de Barrera-Valencia que no encajaba con su registro;
-- un párrafo de ausencia que resultó falso según cómo se lea "en Colombia".
+**Pendiente del apartado 1.** Son observaciones de redacción, no de fuentes, y
+ninguna bloquea la entrega. Las decide la persona:
+
+- **1.2, «Esa cifra es la línea base».** Tras reordenar el párrafo, la cifra más
+  cercana es el 30.698 / 28, no el 8.913.
+- **1.2, primera salvedad, «no dice en una misma frase».** Sugiere que lo dice
+  repartido en varias. Ninguna frase del artículo lo dice: el 8.913 aparece una
+  sola vez.
+- **1.2, cuarta salvedad, «La misma frase».** En una lista, no tiene antecedente
+  claro.
+- **1.4, «el costo de hacerlo sin saturar la consulta».** Se puede leer al revés
+  de lo que quiere decir. Además, «la literatura de la sección 1.2» es una sola
+  medición más el descriptor de SLICE-3D.
+- Dos líneas sin ajustar, al final del segundo párrafo de 1.1 y del último de
+  1.4. Es cosmético.
+
+**Siguiente paso.** Quedan vacíos los apartados 4, 5 y 6. El orden entre ellos
+no está fijado.
 
 *Salvedad sobre PanDerm — resuelta el 2026-09-24.* Hasta esa fecha su archivo
 decía "TEXTO COMPLETO" en la cabecera, pero solo reproducía la frase citada, y
