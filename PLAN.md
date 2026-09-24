@@ -50,10 +50,13 @@ descontaminar a posteriori.
 | 3. Objetivos | escrito |
 | 4. Datos y método | vacío |
 | 5. Alcance y plan | vacío |
-| 6. Declaración de uso de IA y reparto del trabajo | vacío |
+| 6. Declaración de uso de IA y reparto del trabajo | escrito |
 
 La lista final de referencias tiene 20 entradas: 17 del estado del arte y 3 del
 apartado 1.
+
+Decisión de la persona, prioritaria: el apartado 6 es mínimo, una línea por
+cosa; no se le dedican más recursos.
 
 **Estado del arte — las líneas, y dónde está cada una.** Las líneas 2 a 5 son
 las del estado del arte y corresponden a las subsecciones 2.1 a 2.4 del

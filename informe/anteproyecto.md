@@ -385,6 +385,12 @@ definieron.
 
 ## 6. Declaración de uso de IA y reparto del trabajo
 
+Se usó Claude (Anthropic) como asistente de redacción y de análisis: se le
+pidieron borradores, búsquedas de fuentes y la ejecución del código; la persona
+revisó, decidió y corrigió cada resultado. Todas las fuentes se verificaron
+contra su texto antes de entrar al documento. El historial de commits del
+repositorio registra qué se pidió y qué se corrigió en cada caso.
+
 ## Referencias
 
 Barrera-Valencia, C., & Perea-Flórez, E. X. (2024). Comparison of costs in
