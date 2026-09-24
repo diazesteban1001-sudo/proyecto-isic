@@ -126,11 +126,11 @@ El alcance geográfico de la conclusión queda acotado desde aquí. Ninguno de l
 siete centros que aportan SLICE-3D está en América Latina: son centros de
 Estados Unidos, España, Australia, Austria, Grecia y Suiza (Kurtansky,
 D’Alessandro, et al., 2024). El contexto colombiano de la sección 1.1 explica
-por qué importa detectar a tiempo. Que eso deba hacerse sin saturar la consulta
-lo sostiene la literatura de la sección 1.2, no los boletines. Ninguno de los
-dos autoriza a trasladar a pacientes colombianos un desempeño medido sobre estos
-datos. Lo que sí es transferible es el procedimiento de evaluación, que es lo
-que este trabajo se propone establecer.
+por qué importa detectar a tiempo. La carga que genera el triaje la dimensiona
+la medición de la sección 1.2, no los boletines. Ninguno de los dos autoriza a
+trasladar a pacientes colombianos un desempeño medido sobre estos datos. Lo que
+sí es transferible es el procedimiento de evaluación, que es lo que este trabajo
+se propone establecer.
 
 ## 2. Estado del arte
 
