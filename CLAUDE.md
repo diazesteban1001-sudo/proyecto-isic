@@ -335,9 +335,10 @@ Esta regla existe porque el patrón ya apareció tres veces, y las tres el códi
 inerte marcaba el sitio exacto de un defecto real. Las filas siguientes no
 son ese patrón: son otras formas de equivocarse que el proyecto ha cometido de
 verdad, cada una con su propio remedio; la octava es una variante de la
-séptima. La tabla es el registro de
-incidentes del proyecto: las tres primeras filas son ese patrón; de la cuarta en
-adelante son clases distintas, anotadas aquí porque el registro vive en un solo
+séptima, y la novena no es una clase nueva: son dos instancias más de la
+séptima y la octava. La tabla es el registro de
+incidentes del proyecto: las tres primeras filas son ese patrón; de la cuarta a
+la octava son clases distintas, anotadas aquí porque el registro vive en un solo
 sitio y partirlo lo volvería fácil de no consultar.
 
 | Dónde | Qué parecía | Qué era en realidad |
@@ -350,8 +351,9 @@ sitio y partirlo lo volvería fácil de no consultar.
 | `CLAUDE.md`, tres hashes de commit citados | Punteros estables a tres cambios del repositorio | Dejaron de resolver desde `main` en cuanto un rebase los reescribió. Poner `main` al día con `origin` reescribió los 14 commits locales, y `29a0f47` (tabla de incidentes), `e930c89` (guardarraíl 2) y `500159ba` (regla 4) pasaron a no ser ancestros de `main`: buscarlos en `git log` no los encuentra. **Ningún archivo se tocó**; las citas caducaron solas, por una operación rutinaria hecha en otra parte del repositorio. 2026-09-19. |
 | `referencias/yang-2019-two-way-partial-auc.md`, la nota sobre por qué importa | Una lectura del script oficial de la métrica: que ISIC 2024 restringe el FPR para controlar el TPR de forma indirecta, y que por eso le aplica la crítica de Yang et al. al *FPR pAUC* | Falso. La línea 42 del script original `PrimaryMetric-pAUC.py` —ficha en `referencias/isic-primary-metric-pauc.py.md`; era la 54 de la copia versionada hasta el 2026-09-21— **invierte las etiquetas** antes de calcular la ROC, así que la variable que el código llama `fpr` es `1 − TPR_original`: la restricción sobre el TPR es **directa** y el FPR **no se acota**. La afirmación se construyó combinando dos lecturas plausibles —`max_fpr` en el nombre, `auc(fpr, tpr)` en la integral— **sin abrir el archivo que las decidía**, y sobrevivió un commit entero. 2026-09-19. |
 | **Dos instancias.** (1) `PLAN.md`, cuarta línea del estado del arte, y la nota de `referencias/kurtansky-2024-slice3d-descriptor.md`. (2) **La conversación**: la instrucción de versionar `challenge2024.isic-archive.com/background/` | (1) Una comprobación: que ninguna fuente versionada afirmaba que los pacientes de prueba de ISIC 2024 fueran distintos de los de entrenamiento. (2) Una fuente: que esa página dice que el conjunto de prueba contiene 500.000 imágenes adicionales de un conjunto de pacientes distinto | **(1) Del lado del agente — rastreable.** Falso. `referencias/kurtansky-2025-triaje-automatizado-tbp.md` lo dice en su sección de métodos —*"albeit different patients than the training dataset"*—, y estaba en el repositorio desde el 2026-09-19. La afirmación se hizo tras **buscar una expresión** —*"no patient overlap"*— en vez de leer el artículo: la búsqueda encontró otra frase, que hablaba de los subconjuntos del leaderboard, y ese hallazgo se tomó por el mapa completo. Entró con el commit "referencias: cuarta linea del estado del arte, fuga por sujeto" y se corrigió el mismo día, 2026-09-21. **(2) Del lado de la persona — NO rastreable en el repositorio: vive solo en la conversación**, y se registra aquí para que no parezca que hay un commit detrás. Instrucción dada en conversación el 2026-09-19, ejecutada el 2026-09-21. Salió de **un fragmento de resultado de un buscador**: la página nunca se abrió ni se comprobó que respondiera. Al ejecutarla, la página redirige de forma permanente (301) a la de datos del reto, y el Internet Archive **nunca la capturó** —de 73 capturas del dominio, ninguna es de `/background/`—, así que la afirmación no se puede comprobar ni siquiera a posteriori. **La tanda se gastó en buscarla mientras lo que afirmaba ya estaba en una fuente versionada**: Kurtansky 2025 dice *"Test data comprised about 500,000 lesion tiles from more than 1200 patients"* y, en la misma sección, *"albeit different patients than the training dataset"*. **Variante de la séptima clase: una afirmación de ausencia (1), y una fuente que nadie abrió (2).** |
+| **Dos instancias.** (1) `referencias/panderm-reduccion-examenes.md` y `CLAUDE.md`, sección «Línea base». (2) **La conversación**: la nota de verificación del apartado 1 del anteproyecto, sobre la sección de preentrenamiento de Yan et al. 2025 | (1) Una lectura del alcance de la línea base: que el 3.498, el 8.913 y el «79 de 80» correspondían *"al mismo grupo de 80 pacientes"* porque la frase los enuncia en una sola oración, y que el desbalance «de esa evaluación» era 216 contra 197.716. (2) Una lectura de las fuentes de preentrenamiento de PanDerm: que su solape con SLICE-3D era *"evidencia de solape a nivel de estudio, no prueba de que las mismas imágenes estén en los dos conjuntos"* | **(1) Del lado del agente — rastreable.** Falso en las dos partes. Los métodos del mismo artículo definen la prueba como *"80 patients for testing (30,698 images, including 28 malignant lesions)"*: con 28 malignas, el 79 de 80 no cuadra leído al pie de la letra. Y 216 + 197.716 = 197.932, no el 196.933 que el artículo da tres veces, y es el conjunto completo, no la evaluación. La ficha se construyó con **WebFetch**, que no devuelve el texto de la página sino, según su propia descripción, lo que responde sobre ella *"a small fast model"*: dos de sus cinco citas no eran literales, y uno de sus límites era una afirmación de ausencia falsa —la declaración de ética dice *"Only de-identified retrospective data were used for research"*—. Entró el 2026-08-20 y se corrigió el 2026-09-24, desde el commit "Linea base: el 79 de 80 de PanDerm no se sostiene contra sus metodos" hasta "referencias: PanDerm, retirar la descripcion de melanografo sin fuente". **(2) Del lado de la persona — NO rastreable en el repositorio: vive solo en la conversación**, y se registra aquí para que no parezca que hay un commit detrás. En la sesión de redacción del apartado 1, el 2026-09-24, la sección *"Pretraining dataset for developing PanDerm"* se leyó cortada y la nota de verificación hizo esa afirmación, enumerando como fuentes de TBP solo MYM y HOP. Cinco subsecciones después de la de HOP, en la misma sección, la subsección *"ISIC2024"* declaraba *"We selected a subset containing 352,034 tile images"*, con la referencia 47, que es el descriptor de SLICE-3D. **La séptima clase en (1), una afirmación sobre una fuente sacada de una frase sin leer los métodos que la acotaban; la octava en (2), la lectura de un fragmento tomada por completa.** |
 
-**De la cuarta en adelante son de otra clase, y por eso se anotan aparte.**
+**De la cuarta a la octava son de otra clase, y por eso se anotan aparte.**
 Las tres primeras son código inerte dentro de un script: se detectan leyendo el
 script, y la regla de arriba —conectarlo y comparar— basta para atraparlas. Las
 demás no están en ningún script. La cuarta y la quinta son **artefactos
@@ -456,6 +458,20 @@ demasiado larga—, la frase no dice que no existe: dice **qué se buscó y
 dónde**. No *"ninguna fuente lo afirma"*, sino *"se buscaron estas expresiones
 en estos archivos, sin resultado"*, de modo que el lector sepa exactamente qué
 quedó descartado y qué no se miró.
+
+**La novena no añade una clase, pero sí un intermediario que no se veía.** La
+ficha de PanDerm dice desde el 2026-08-20 que se consultó con WebFetch, y nadie
+lo leyó como una advertencia. WebFetch no trae el texto: convierte la página y
+devuelve la respuesta de un modelo pequeño a una pregunta sobre ella. Es el
+mismo problema que el fragmento de buscador de la octava, con una diferencia que
+lo empeora: el resultado **parece** una cita, entre comillas y en inglés, y dos
+de cinco no lo eran. **Regla operativa: ninguna cita se toma de WebFetch.** Se
+toma de una copia del texto —el XML, el HTML o el PDF obtenidos con `curl`, o
+`get_page_text` del navegador— guardada en `referencias/_texto-completo/` o
+versionada, y se comprueba contra esa copia. La otra ficha tomada con WebFetch,
+`referencias/slice3d-metadata-tbp-lv.md`, queda por comprobar así. Su cita de
+`tbp_lv_nevi_confidence`, la que usa la Cuarta nota, sí está literal en el texto
+completo de Kurtansky 2024: comprobado el 2026-09-24.
 
 **Volviendo a la cuarta y la quinta: ninguno de los controles del proyecto
 detecta un artefacto desfasado, y conviene ser preciso sobre por qué.** El
