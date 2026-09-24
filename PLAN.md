@@ -170,12 +170,13 @@ se guardó lo retirado del estado del arte. Arrastra una versión descartada de
 - una descripción de Barrera-Valencia que no encajaba con su registro;
 - un párrafo de ausencia que resultó falso según cómo se lea "en Colombia".
 
-*Salvedad sobre PanDerm.* Su archivo dice "TEXTO COMPLETO" en la cabecera, pero
-solo reproduce la frase citada. En `referencias/_texto-completo/` se buscaron
-archivos con "panderm", "s41591" o el PMCID en el nombre, y la frase "79 out of
-80 patients" en el contenido, sin resultado. Cualquier cita nueva de PanDerm
-exige volver a obtener el texto de PMC12353815 y comprobarla carácter a
-carácter.
+*Salvedad sobre PanDerm — resuelta el 2026-09-24.* Hasta esa fecha su archivo
+decía "TEXTO COMPLETO" en la cabecera, pero solo reproducía la frase citada, y
+en `referencias/_texto-completo/` no había copia. Desde el 2026-09-24
+`referencias/panderm-reduccion-examenes.md` lleva el texto completo versionado
+(CC BY 4.0), tomado del XML de Europe PMC, y las citas de PanDerm se comprueban
+contra él. El material suplementario no se versiona: su licencia no está
+determinada.
 
 **Puerta.** El PDF del anteproyecto, entregado.
 
