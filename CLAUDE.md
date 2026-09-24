@@ -207,6 +207,17 @@ Enmendada el 2026-09-21; antes se versionaba el texto completo de todo.
     or in part, for NonCommercial purposes only"* (§2(a)(1); en local,
     `referencias/_texto-completo/cc-by-nc-nd-4.0-legalcode.txt`). Con la
     redacción anterior, *"CC BY o similar"*, no estaba claro de qué lado caía.
+  - **Apache 2.0, y cualquier licencia que obligue a marcar los archivos
+    modificados: los originales se versionan intactos**, byte a byte, y la
+    procedencia y la licencia van en un `.md` hermano, no dentro del archivo.
+    Ponerle una cabecera sería modificarlo, y Apache 2.0 exige *"You must cause
+    any modified files to carry prominent notices stating that You changed the
+    files"* (§4(b)). Es la única excepción a que la licencia se declare en la
+    cabecera del propio archivo. *Ejemplo:* la carpeta
+    `referencias/novoselskiy-2024-isic2024/`, con el `README.md`, el `LICENSE`
+    y un notebook de la solución ganadora sin tocar, y a su lado
+    `referencias/novoselskiy-2024-isic2024.md`, con la URL, el commit, la fecha,
+    la licencia y el SHA-256 de cada archivo.
   - **No bastan**, y van a ficha: una licencia solo de minería de textos, los
     términos generales de una editorial, o una licencia que autoriza a
     distribuir a un tercero concreto y no a nosotros —la no exclusiva de
@@ -999,6 +1010,10 @@ writeup de Kaggle.
 > citarse en el informe: es memoria de conversación, exactamente lo que la
 > regla 3 prohíbe como fuente. Se anota aquí como orientación de trabajo, no
 > como hecho verificado.
+>
+> *2026-09-24: se versionó el código público de la solución
+> (`referencias/novoselskiy-2024-isic2024.md`), no el writeup. El párrafo de
+> abajo no se ha reescrito contra el código.*
 
 Orientación, entonces: imagen (EVA02-small + EdgeNeXt) → predicciones OOF
 concatenadas con metadata tabular → ensamble grande de GBDT. La feature que
@@ -1184,8 +1199,12 @@ contexto.
       en el preentrenamiento). DermFM-Zero: no se examinó y no se usa.
       Pendiente: versionar la fuente de los datos de preentrenamiento de
       DINOv3 y escribir la decisión sobre ella.
-- [ ] Guardar el writeup del 1er lugar en `referencias/` (con fuente y fecha en
-      la cabecera) antes de citarlo en el informe — regla 3
+- [x] Guardar el writeup del 1er lugar en `referencias/` (con fuente y fecha en
+      la cabecera) antes de citarlo en el informe — regla 3. *Cumplido el
+      2026-09-24 con el **código** público de la solución, no con el writeup:
+      `referencias/novoselskiy-2024-isic2024.md`. El writeup de Kaggle sigue
+      sin estar en `referencias/`, así que lo que el autor reporta sobre por
+      qué funciona su solución sigue sin ser citable.*
 - [ ] Decidir tamaño exacto del lockbox y semilla de partición, y verificar que
       la partición deja positivos en ambos lados (mismo chequeo obligatorio que
       `diseno-validacion` ya hace para los folds)
