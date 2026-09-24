@@ -77,11 +77,49 @@ Desglose de las cifras, todas de esa misma frase:
 | 8.913 | Lesiones que **los melanógrafos** marcaron para examen detallado |
 | 3.498 | Lesiones que **PanDerm** marcó para examen detallado |
 | 60,8% | Reducción de exámenes innecesarios de la segunda cifra respecto a la primera |
-| 79 de 80 | Pacientes en los que se detectó malignidad, sobre el mismo grupo |
+| 79 de 80 | Pacientes en los que, según la frase, el modelo detectó lesiones malignas. **No se usa**: ver abajo |
 
-**El alcance está resuelto, no supuesto:** las cifras 3.498 / 8.913 y el
-79-de-80 corresponden **al mismo grupo de 80 pacientes**; la frase los enuncia
-en una sola oración.
+**El alcance no está resuelto.** *Corregido el 2026-09-24: aquí decía que
+estaba "resuelto, no supuesto" porque la frase enuncia las cifras en una sola
+oración.* Una oración no fija sobre qué conjunto se midió. Lo que dicen los
+métodos, en *"Risk prediction and TBP screening datasets (2 classes)"*:
+
+> "We stratified the data by the patient for training, validation and testing:
+> 360 patients for training (146,752 images), 40 patients for validation
+> (19,483 images) and 80 patients for testing (30,698 images, including 28
+> malignant lesions)."
+
+- **Que los *"80 patients"* de la frase sean los de prueba es lectura
+  nuestra**: la frase no dice *test*. Lo sugieren las leyendas de la figura 4
+  que la frase cita: *"The numbers below the bars indicate the recommended
+  suspicious lesion count. k, Number of malignant lesions detected in the test
+  set."*, y la del panel i, *"UMAP plot of human screening results for test
+  lesions"*.
+- **El 79 de 80 no se usa.** Si esos 80 son los de prueba, con 28 lesiones
+  malignas como mucho 28 pacientes tienen malignidad, y la frase leída al pie
+  de la letra no cuadra. El artículo tampoco define el resultado por paciente.
+  Los métodos dicen *"We evaluate the screening performance at both the lesion
+  and patient levels"*, y las métricas, *"For TBP-based melanoma screening, we
+  primarily report the sensitivity (recall) in malignant lesions"*. Para
+  buscar esa definición se leyeron completas la subsección de resultados, las
+  de métodos *"Melanoma screening using TBP"*, *"3D TBP datasets"*,
+  *"Evaluation metrics"* y *"Statistical analysis"*, la discusión, las leyendas
+  de la figura 4 y de los datos extendidos, y la Supplementary Table 18. Las
+  figuras son imágenes y no se leyeron.
+- **La Supplementary Table 18**, a la que remite la frase, no lo resuelve ni
+  dice sobre qué conjunto se hicieron las 8.913 recomendaciones. Su título:
+  *"TBP-based Malignant lesion screening performance of different models and
+  prediction head types on HOP&MYM dataset."* Da precisión, recall y F1 por
+  lesión, de benignas y de malignas, por modelo; no da pacientes ni el 8.913.
+  *Licencia del suplemento no determinada: solo se cita
+  (`referencias/_texto-completo/yan-2025-panderm-suplemento-MOESM1.pdf`,
+  página 13).*
+  *Cálculo nuestro, no del artículo:* los dieciséis recall de malignas de esa
+  tabla son múltiplos de 1/28 (el de PanDerm, 0.893 = 25/28), y su fila de
+  PanDerm —recall de benignas 0.887, precisión de malignas 0.007— cuadra con
+  3.498 recomendaciones sobre 30.698 imágenes con 28 malignas. Sobre el
+  conjunto completo, el recall de benignas sería 0,982. Es coherencia
+  aritmética, no una frase del artículo.
 
 ## Contexto del experimento
 

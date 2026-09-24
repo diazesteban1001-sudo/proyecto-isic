@@ -82,11 +82,18 @@ el 2026-08-20):
 > reducing unnecessary examinations by 60.8% compared with melanographers
 > (3,498 versus 8,913 lesions recommended for detailed examination)"
 
-Sobre 80 pacientes, los **melanógrafos marcaron 8.913 lesiones** para examen
-detallado; el sistema automático marcó **3.498** para el mismo grupo, una
-**reducción del 60,8%** de exámenes innecesarios, con detección de malignidad
-en **79 de 80** pacientes. El desbalance de esa evaluación —216 malignas contra
-197.716 benignas— es del mismo orden que el de SLICE-3D.
+Los **melanógrafos marcaron 8.913 lesiones** para examen detallado y el sistema
+automático **3.498**, una **reducción del 60,8%** de exámenes innecesarios. Que
+las dos cifras se refieran a los 80 pacientes de prueba es **lectura nuestra**:
+la frase dice *"80 patients"*, no *test*, y los métodos definen ese conjunto
+como *"80 patients for testing (30,698 images, including 28 malignant
+lesions)"*. **El 79 de 80 no se usa.** Con 28 lesiones malignas, como mucho 28
+de esos pacientes tienen malignidad, así que la frase, leída al pie de la letra
+y sobre los pacientes de prueba, no cuadra. El artículo no define cómo mide el
+resultado por paciente, y la *Supplementary Table 18* a la que remite solo da
+precisión y recall por lesión (detalle en la ficha). *Hasta el 2026-09-24 este
+párrafo daba el 79 de 80 como dato.* El desbalance de esa evaluación —216
+malignas contra 197.716 benignas— es del mismo orden que el de SLICE-3D.
 
 Qué aporta al criterio 1: convierte "reducir carga de trabajo" en una magnitud
 con unidades. El costo de un falso positivo deja de ser abstracto y pasa a ser
