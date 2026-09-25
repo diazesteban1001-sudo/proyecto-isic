@@ -1,8 +1,13 @@
 {
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
   "fuente": {
     "archivo": "data/train-metadata.csv",
-    "fecha_ejecucion": "2026-09-18T00:02:52.514310+00:00",
-    "n_filas": 401059,
+    "fecha_ejecucion": "2026-09-25T23:36:30.496521+00:00",
+    "n_filas": 318229,
     "n_columnas": 55
   },
   "tipos": {
@@ -76,16 +81,16 @@
       "pct": 0.0
     },
     "age_approx": {
-      "n": 2798,
-      "pct": 0.698
+      "n": 2708,
+      "pct": 0.851
     },
     "sex": {
-      "n": 11517,
-      "pct": 2.872
+      "n": 10116,
+      "pct": 3.179
     },
     "anatom_site_general": {
-      "n": 5756,
-      "pct": 1.435
+      "n": 5754,
+      "pct": 1.808
     },
     "clin_size_long_diam_mm": {
       "n": 0,
@@ -244,8 +249,8 @@
       "pct": 0.0
     },
     "lesion_id": {
-      "n": 379001,
-      "pct": 94.5
+      "n": 300357,
+      "pct": 94.384
     },
     "iddx_full": {
       "n": 0,
@@ -256,28 +261,28 @@
       "pct": 0.0
     },
     "iddx_2": {
-      "n": 399991,
-      "pct": 99.734
+      "n": 317364,
+      "pct": 99.728
     },
     "iddx_3": {
-      "n": 399994,
-      "pct": 99.734
+      "n": 317367,
+      "pct": 99.729
     },
     "iddx_4": {
-      "n": 400508,
-      "pct": 99.863
+      "n": 317782,
+      "pct": 99.86
     },
     "iddx_5": {
-      "n": 401058,
+      "n": 318228,
       "pct": 100.0
     },
     "mel_mitotic_index": {
-      "n": 401006,
-      "pct": 99.987
+      "n": 318186,
+      "pct": 99.986
     },
     "mel_thick_mm": {
-      "n": 400996,
-      "pct": 99.984
+      "n": 318176,
+      "pct": 99.983
     },
     "tbp_lv_dnn_lesion_confidence": {
       "n": 0,
@@ -287,21 +292,21 @@
   "desbalance_target": {
     "columna_target": "target",
     "conteos": {
-      "0": 400666,
-      "1": 393
+      "0": 317912,
+      "1": 317
     },
-    "pct_positivos": 0.098,
-    "pct_negativos": 99.902
+    "pct_positivos": 0.0996,
+    "pct_negativos": 99.9004
   },
   "estructura_grupos": {
     "columna_grupo": "patient_id",
-    "n_grupos": 1042,
-    "n_filas": 401059,
+    "n_grupos": 833,
+    "n_filas": 318229,
     "filas_por_grupo": {
       "min": 1,
-      "max": 9184,
-      "media": 384.89,
-      "mediana": 241.5
+      "max": 6267,
+      "media": 382.03,
+      "mediana": 245.0
     }
   },
   "columnas_solo_en_train": [

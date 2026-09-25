@@ -257,6 +257,41 @@ aportan información. La exclusión entra por `auditoria-de-fugas`, como una
 categoría propia con su motivo en el JSON (`columnas_procedencia`), y
 `modelado-baseline` la lee como lee las demás (guardarraíl 1 de `CLAUDE.md`).
 
+**Re-medición (2026-09-25).** Las cuatro skills instrumento y la validación
+repetida de 10 semillas, por el cargador del conjunto de desarrollo, con los
+mismos argumentos que la corrida anterior (semilla 42, 5 folds; semillas 0 a 9).
+«Antes» es `outputs/` en el commit anterior a la re-medición. Entre las dos
+corridas cambian tres cosas a la vez: los datos (el 100 % frente al conjunto de
+desarrollo, y con ellos los folds), las variables (sin las de procedencia) y la
+elección del nivel 0. La tabla no separa sus efectos.
+
+| Cifra | Antes: 100 % de los datos | Después: conjunto de desarrollo | Campo |
+|---|---|---|---|
+| Filas | 401059 | 318229 | eda-diagnostico → fuente.n_filas |
+| Pacientes | 1042 | 833 | eda-diagnostico → estructura_grupos.n_grupos |
+| Lesiones malignas | 393 | 317 | eda-diagnostico → desbalance_target.conteos |
+| Variables del modelo | 41 | 39 | modelado-baseline → n_features_usadas |
+| Nivel 0, columna | tbp_lv_H | tbp_lv_H (5 de 5 folds) | antes: columna; ahora: columna_por_fold |
+| Nivel 0, pAUC media | 0.0809 | 0.0796 | modelado-baseline → nivel_0….pauc_media |
+| Nivel 0, AUC | 0.8053 (AUC fuera de muestra del reporte de fugas, otra medida) | 0.8048 (media por fold en validación) | antes: auc_estandar; ahora: auc_estandar_media |
+| Nivel 1, pAUC media | 0.1331 | 0.1326 | modelado-baseline → nivel_1_regresion_logistica.pauc_media |
+| Nivel 1, AUC media | 0.9013 | 0.8974 | modelado-baseline → nivel_1_regresion_logistica.auc_estandar_media |
+| Nivel 2a, pAUC media | 0.0013 | 0.0005 | modelado-baseline → nivel_2a_gradient_boosting_sin_balancear.pauc_media |
+| Nivel 2a, AUC media | 0.6159 | 0.582 | modelado-baseline → nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media |
+| Nivel 2b, pAUC media | 0.1451 | 0.1398 | modelado-baseline → nivel_2b_gradient_boosting_balanceado.pauc_media |
+| Nivel 2b, AUC media | 0.93 | 0.9247 | modelado-baseline → nivel_2b_gradient_boosting_balanceado.auc_estandar_media |
+| Nivel 1, pAUC media, 10 semillas | 0.131 | 0.1325 | validacion-repetida → nivel_1_regresion_logistica.pauc_media_global |
+| Nivel 2a, pAUC media, 10 semillas | 0.0022 | 0.0018 | validacion-repetida → nivel_2a_gradient_boosting_sin_balancear.pauc_media_global |
+| Nivel 2b, pAUC media, 10 semillas | 0.1435 | 0.1375 | validacion-repetida → nivel_2b_gradient_boosting_balanceado.pauc_media_global |
+| 2b − 1, media de las diferencias | 0.0125 | 0.005 | validacion-repetida → comparacion_pareada_2b_menos_1.media |
+| 2b − 1, intervalo 95 % ingenuo | [0.0087, 0.0164] | [-0.0003, 0.0103] | ….intervalo_t_95 |
+| 2b − 1, intervalo 95 % corregido (Nadeau-Bengio) | [-0.0017, 0.0268] | [-0.0145, 0.0245] | ….intervalo_t_95_nadeau_bengio |
+| 2b gana, por fold | 40 de 50 | 29 de 50 | ….gana_2b_en / de |
+| 2b gana, por semilla | 10 de 10 | 8 de 10 | ….semillas_a_favor_de_2b |
+
+`outputs/sintesis-verificacion.*` no se regeneró: verifica el borrador, que
+todavía no se ha actualizado.
+
 **Motivo medido, no precaución teórica.** Los propios organizadores
 cuantificaron lo que cuesta mirar un conjunto antes de tiempo, sobre los 4.998
 envíos oficiales de ISIC 2024

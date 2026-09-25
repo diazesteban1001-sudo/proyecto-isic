@@ -1,4 +1,9 @@
 {
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
   "esquema_cv": {
     "group_col": "patient_id",
     "n_splits": 5,
@@ -23,6 +28,11 @@
   "columnas_identificador": [
     "isic_id"
   ],
+  "columnas_procedencia": [
+    "attribution",
+    "copyright_license"
+  ],
+  "motivo_columnas_procedencia": "Describen el centro y la licencia de la imagen, no la lesión; en un centro nuevo no aportan información. Decisión de la persona, 2026-09-25 (PLAN.md, Fase 1).",
   "columnas_nombre_sospechoso": [
     "tbp_lv_nevi_confidence",
     "iddx_full",
@@ -40,287 +50,287 @@
     {
       "columna": "tbp_lv_H",
       "tipo": "numerica",
-      "auc_oof": 0.8053,
+      "auc_oof": 0.8045,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_deltaB",
       "tipo": "numerica",
-      "auc_oof": 0.7541,
+      "auc_oof": 0.7527,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_Hext",
       "tipo": "numerica",
-      "auc_oof": 0.7195,
+      "auc_oof": 0.7178,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_B",
       "tipo": "numerica",
-      "auc_oof": 0.712,
+      "auc_oof": 0.7132,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_stdLExt",
       "tipo": "numerica",
-      "auc_oof": 0.6622,
+      "auc_oof": 0.6609,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_Aext",
       "tipo": "numerica",
-      "auc_oof": 0.6586,
+      "auc_oof": 0.6529,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_nevi_confidence",
       "tipo": "numerica",
-      "auc_oof": 0.6457,
+      "auc_oof": 0.6422,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_A",
       "tipo": "numerica",
-      "auc_oof": 0.6382,
+      "auc_oof": 0.6333,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_minorAxisMM",
       "tipo": "numerica",
-      "auc_oof": 0.6272,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_perimeterMM",
-      "tipo": "numerica",
-      "auc_oof": 0.6231,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_areaMM2",
-      "tipo": "numerica",
-      "auc_oof": 0.618,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_radial_color_std_max",
-      "tipo": "numerica",
-      "auc_oof": 0.616,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_norm_color",
-      "tipo": "numerica",
-      "auc_oof": 0.6156,
+      "auc_oof": 0.6199,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_Bext",
       "tipo": "numerica",
-      "auc_oof": 0.615,
+      "auc_oof": 0.6183,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
-      "columna": "tbp_lv_y",
+      "columna": "tbp_lv_perimeterMM",
       "tipo": "numerica",
-      "auc_oof": 0.6141,
+      "auc_oof": 0.6144,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
-      "columna": "attribution",
-      "tipo": "categorica",
-      "auc_oof": 0.6128,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_location",
-      "tipo": "categorica",
-      "auc_oof": 0.6123,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "clin_size_long_diam_mm",
+      "columna": "tbp_lv_norm_color",
       "tipo": "numerica",
-      "auc_oof": 0.6104,
+      "auc_oof": 0.613,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_radial_color_std_max",
+      "tipo": "numerica",
+      "auc_oof": 0.6126,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_areaMM2",
+      "tipo": "numerica",
+      "auc_oof": 0.6096,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_color_std_mean",
       "tipo": "numerica",
-      "auc_oof": 0.6098,
+      "auc_oof": 0.608,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
-      "columna": "tbp_lv_location_simple",
+      "columna": "tbp_lv_y",
+      "tipo": "numerica",
+      "auc_oof": 0.6049,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "clin_size_long_diam_mm",
+      "tipo": "numerica",
+      "auc_oof": 0.5993,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_location",
       "tipo": "categorica",
-      "auc_oof": 0.5947,
+      "auc_oof": 0.5978,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_tile_type",
       "tipo": "categorica",
-      "auc_oof": 0.591,
+      "auc_oof": 0.5877,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "copyright_license",
       "tipo": "categorica",
-      "auc_oof": 0.5832,
+      "auc_oof": 0.5834,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "attribution",
+      "tipo": "categorica",
+      "auc_oof": 0.5826,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_location_simple",
+      "tipo": "categorica",
+      "auc_oof": 0.5777,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "anatom_site_general",
       "tipo": "categorica",
-      "auc_oof": 0.5803,
-      "n_faltantes": 5756,
+      "auc_oof": 0.5717,
+      "n_faltantes": 5754,
       "sospechosa": false
     },
     {
       "columna": "age_approx",
       "tipo": "numerica",
-      "auc_oof": 0.5703,
-      "n_faltantes": 2798,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_z",
-      "tipo": "numerica",
-      "auc_oof": 0.568,
-      "n_faltantes": 0,
+      "auc_oof": 0.57,
+      "n_faltantes": 2708,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_C",
       "tipo": "numerica",
-      "auc_oof": 0.5653,
+      "auc_oof": 0.5699,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_deltaLB",
       "tipo": "numerica",
-      "auc_oof": 0.564,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_deltaL",
-      "tipo": "numerica",
-      "auc_oof": 0.5618,
+      "auc_oof": 0.5679,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_stdL",
       "tipo": "numerica",
-      "auc_oof": 0.5603,
+      "auc_oof": 0.567,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_deltaL",
+      "tipo": "numerica",
+      "auc_oof": 0.5663,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_z",
+      "tipo": "numerica",
+      "auc_oof": 0.5563,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_norm_border",
       "tipo": "numerica",
-      "auc_oof": 0.5531,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_eccentricity",
-      "tipo": "numerica",
-      "auc_oof": 0.5528,
+      "auc_oof": 0.5545,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_deltaLBnorm",
       "tipo": "numerica",
-      "auc_oof": 0.5492,
+      "auc_oof": 0.5532,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
-      "columna": "tbp_lv_area_perim_ratio",
+      "columna": "tbp_lv_eccentricity",
       "tipo": "numerica",
-      "auc_oof": 0.5432,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_x",
-      "tipo": "numerica",
-      "auc_oof": 0.5243,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_L",
-      "tipo": "numerica",
-      "auc_oof": 0.5231,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_symm_2axis",
-      "tipo": "numerica",
-      "auc_oof": 0.5213,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_symm_2axis_angle",
-      "tipo": "numerica",
-      "auc_oof": 0.5076,
-      "n_faltantes": 0,
-      "sospechosa": false
-    },
-    {
-      "columna": "tbp_lv_deltaA",
-      "tipo": "numerica",
-      "auc_oof": 0.5071,
+      "auc_oof": 0.5526,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "sex",
       "tipo": "categorica",
-      "auc_oof": 0.5055,
-      "n_faltantes": 11517,
+      "auc_oof": 0.5475,
+      "n_faltantes": 10116,
       "sospechosa": false
     },
     {
-      "columna": "tbp_lv_Lext",
+      "columna": "tbp_lv_area_perim_ratio",
       "tipo": "numerica",
-      "auc_oof": 0.5024,
+      "auc_oof": 0.5382,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_symm_2axis",
+      "tipo": "numerica",
+      "auc_oof": 0.5285,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_L",
+      "tipo": "numerica",
+      "auc_oof": 0.5279,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_x",
+      "tipo": "numerica",
+      "auc_oof": 0.5155,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_symm_2axis_angle",
+      "tipo": "numerica",
+      "auc_oof": 0.515,
       "n_faltantes": 0,
       "sospechosa": false
     },
     {
       "columna": "tbp_lv_Cext",
       "tipo": "numerica",
-      "auc_oof": 0.5014,
+      "auc_oof": 0.5068,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_deltaA",
+      "tipo": "numerica",
+      "auc_oof": 0.5051,
+      "n_faltantes": 0,
+      "sospechosa": false
+    },
+    {
+      "columna": "tbp_lv_Lext",
+      "tipo": "numerica",
+      "auc_oof": 0.5003,
       "n_faltantes": 0,
       "sospechosa": false
     }

@@ -1,4 +1,9 @@
 {
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
   "esquema": {
     "metodo": "StratifiedGroupKFold",
     "n_splits": 5,
@@ -6,59 +11,59 @@
     "target_col": "target",
     "seed": 42
   },
-  "n_grupos_total": 1042,
-  "n_grupos_positivos": 259,
+  "n_grupos_total": 833,
+  "n_grupos_positivos": 207,
   "por_fold": [
     {
       "fold": 0,
-      "n_train_grupos": 835,
-      "n_val_grupos": 207,
-      "n_train_filas": 320848,
-      "n_val_filas": 80211,
-      "n_val_positivos": 78,
-      "pct_val_positivos": 0.0972
+      "n_train_grupos": 667,
+      "n_val_grupos": 166,
+      "n_train_filas": 254583,
+      "n_val_filas": 63646,
+      "n_val_positivos": 64,
+      "pct_val_positivos": 0.1006
     },
     {
       "fold": 1,
-      "n_train_grupos": 834,
-      "n_val_grupos": 208,
-      "n_train_filas": 320848,
-      "n_val_filas": 80211,
-      "n_val_positivos": 78,
-      "pct_val_positivos": 0.0972
+      "n_train_grupos": 667,
+      "n_val_grupos": 166,
+      "n_train_filas": 254583,
+      "n_val_filas": 63646,
+      "n_val_positivos": 63,
+      "pct_val_positivos": 0.099
     },
     {
       "fold": 2,
-      "n_train_grupos": 832,
-      "n_val_grupos": 210,
-      "n_train_filas": 320843,
-      "n_val_filas": 80216,
-      "n_val_positivos": 83,
-      "pct_val_positivos": 0.1035
+      "n_train_grupos": 666,
+      "n_val_grupos": 167,
+      "n_train_filas": 254583,
+      "n_val_filas": 63646,
+      "n_val_positivos": 64,
+      "pct_val_positivos": 0.1006
     },
     {
       "fold": 3,
-      "n_train_grupos": 833,
-      "n_val_grupos": 209,
-      "n_train_filas": 320848,
-      "n_val_filas": 80211,
-      "n_val_positivos": 77,
-      "pct_val_positivos": 0.096
+      "n_train_grupos": 665,
+      "n_val_grupos": 168,
+      "n_train_filas": 254583,
+      "n_val_filas": 63646,
+      "n_val_positivos": 63,
+      "pct_val_positivos": 0.099
     },
     {
       "fold": 4,
-      "n_train_grupos": 834,
-      "n_val_grupos": 208,
-      "n_train_filas": 320849,
-      "n_val_filas": 80210,
-      "n_val_positivos": 77,
-      "pct_val_positivos": 0.096
+      "n_train_grupos": 667,
+      "n_val_grupos": 166,
+      "n_train_filas": 254584,
+      "n_val_filas": 63645,
+      "n_val_positivos": 63,
+      "pct_val_positivos": 0.099
     }
   ],
   "fuga_de_grupo_detectada": false,
   "comparacion_particion_naive": {
     "descripcion": "partición aleatoria 80/20 a nivel de fila, misma semilla, ignorando group_col",
-    "n_grupos_con_fuga": 1032,
-    "pct_grupos_con_fuga": 99.04
+    "n_grupos_con_fuga": 824,
+    "pct_grupos_con_fuga": 98.92
   }
 }

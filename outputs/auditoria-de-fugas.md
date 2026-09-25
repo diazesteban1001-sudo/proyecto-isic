@@ -1,6 +1,6 @@
-# Auditoría de fugas — data/train-metadata.csv
+# Auditoría de fugas — data/train-metadata.csv, conjunto de desarrollo
 Columnas solo en train (excluidas de entrada): 11
-Columnas constantes: 1 · identificador: 1
+Columnas constantes: 1 · identificador: 1 · procedencia, excluidas de los modelos por decisión: 2 ['attribution', 'copyright_license']
 Columnas evaluadas univariadamente: 41 · umbral AUC >= 0.9
 Columnas sospechosas por AUC alto: 0
 Preguntas abiertas sin resolver por el script: 10
