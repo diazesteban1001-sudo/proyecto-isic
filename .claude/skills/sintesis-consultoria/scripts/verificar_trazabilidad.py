@@ -17,6 +17,7 @@ Uso:
 """
 
 import argparse
+import fnmatch
 import glob
 import json
 import os
@@ -121,11 +122,38 @@ def extraer_valores_numericos(obj, acumulador, ruta="", acumulador_pct=None):
             acumulador_pct.add(float(obj))
 
 
-def cargar_valores_permitidos(outputs_dir):
-    """Devuelve (todos_los_valores, valores_de_campos_declarados_porcentaje)."""
+# Archivos de outputs/ en los que NO se busca respaldo, cada uno con su
+# motivo. Sus cifras existen, pero ninguna cifra del informe puede apoyarse
+# en ellas: si una coincide, es casualidad, no trazabilidad. Se comparan por
+# nombre de archivo, con comodines.
+FUERA_DEL_CORPUS = {
+    "holdout-pacientes.json": (
+        "Recuentos del conjunto reservado. No son mediciones del informe, y el "
+        "conjunto reservado no se toca hasta la evaluación final."
+    ),
+    "sensibilidad-*.json": (
+        "Análisis de sensibilidad. No sustituyen a la corrida principal ni se usan "
+        "para elegir nada, así que no respaldan cifras del informe."
+    ),
+}
+
+
+def fuera_del_corpus(nombre):
+    """El motivo si el archivo está en la lista declarada; None si no."""
+    return next((m for patron, m in FUERA_DEL_CORPUS.items() if fnmatch.fnmatch(nombre, patron)), None)
+
+
+def cargar_valores_permitidos(outputs_dir, excluidos=None):
+    """Devuelve (todos_los_valores, valores_de_campos_declarados_porcentaje).
+    Si se pasa `excluidos`, añade ahí los archivos que dejó fuera y por qué."""
     valores = set()
     valores_pct = set()
-    for path in glob.glob(os.path.join(outputs_dir, "*.json")):
+    for path in sorted(glob.glob(os.path.join(outputs_dir, "*.json"))):
+        motivo = fuera_del_corpus(os.path.basename(path))
+        if motivo:
+            if excluidos is not None:
+                excluidos.append({"archivo": os.path.basename(path), "motivo": motivo})
+            continue
         with open(path, encoding="utf-8") as f:
             try:
                 data = json.load(f)
@@ -251,7 +279,8 @@ def main():
     with open(args.borrador, encoding="utf-8") as f:
         texto = f.read()
 
-    valores_permitidos, valores_pct = cargar_valores_permitidos(args.outputs_dir)
+    archivos_fuera = []
+    valores_permitidos, valores_pct = cargar_valores_permitidos(args.outputs_dir, archivos_fuera)
     encontrados = extraer_numeros_del_borrador(texto)
 
     sin_respaldo = []
@@ -285,6 +314,7 @@ def main():
         "numeros_sin_respaldo": sin_respaldo,
         "porcentajes_de_metodo_excluidos": excluidos_metodo,
         "tolerancia_redondeo": args.tolerancia,
+        "archivos_fuera_del_corpus": archivos_fuera,
         "campos_declarados_como_porcentaje_en_outputs": len(valores_pct),
     }
 
@@ -305,6 +335,10 @@ def main():
     lineas.append(
         f"Porcentajes que son parámetros del método, excluidos por lista "
         f"declarada (no se les busca respaldo): {len(excluidos_metodo)}"
+    )
+    lineas.append(
+        f"Archivos de outputs/ en los que no se busca respaldo, por lista declarada: "
+        f"{len(archivos_fuera)} {[a['archivo'] for a in archivos_fuera]}"
     )
     lineas.append(
         "Nota: este script señala, no decide. Un número sin respaldo puede ser "

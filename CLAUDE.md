@@ -908,7 +908,9 @@ Es la regla 2 con un verificador detrás, no un propósito.
 
 **Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
 extrae todo número del borrador y lo busca en los `outputs/*.json` con
-tolerancia de redondeo 0,01. Última corrida
+tolerancia de redondeo 0,01, salvo en los que declara fuera del corpus
+(`FUERA_DEL_CORPUS`: el conjunto reservado y los análisis de sensibilidad,
+desde el 2026-09-25). Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit "Regenerar la verificacion de trazabilidad desde el estado actual"): **344 números en el
 borrador, 298 con respaldo, 16 señalados** para revisar uno por uno; el
 resto cae en contextos que no son cifras medidas (años, etiquetas de

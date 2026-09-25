@@ -105,6 +105,15 @@ puede ser una cifra legítima que no viene de outputs/ (ej. "cinco
 skills", "393 positivos" citado dos veces con redondeo distinto), pero
 la revisión la hace una persona, no el script.
 
+**No todo `outputs/` es corpus.** La lista `FUERA_DEL_CORPUS`, en el
+propio script, declara los archivos en los que no se busca respaldo, cada
+uno con su motivo: `holdout-pacientes.json`, los recuentos del conjunto
+reservado, y `sensibilidad-*.json`, los análisis de sensibilidad, que no
+sustituyen a la corrida principal. Si una cifra del borrador solo
+coincide con uno de ellos, es casualidad, no trazabilidad. La salida los
+lista en `archivos_fuera_del_corpus`. Control positivo:
+`scripts/test_fuera_del_corpus.py`.
+
 Si el script señala números sin respaldo, corrige el borrador o
 justifica por qué esa cifra no necesita estar en `outputs/` (ej. es un
 conteo estructural obvio, no un resultado medido) antes de continuar.
