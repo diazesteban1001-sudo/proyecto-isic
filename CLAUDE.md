@@ -348,10 +348,10 @@ inerte marcaba el sitio exacto de un defecto real. Las filas siguientes no
 son ese patrón: son otras formas de equivocarse que el proyecto ha cometido de
 verdad, cada una con su propio remedio; la octava es una variante de la
 séptima, y la novena no es una clase nueva: son dos instancias más de la
-séptima y la octava. La tabla es el registro de
+séptima y la octava. La décima sí es una clase nueva. La tabla es el registro de
 incidentes del proyecto: las tres primeras filas son ese patrón; de la cuarta a
-la octava son clases distintas, anotadas aquí porque el registro vive en un solo
-sitio y partirlo lo volvería fácil de no consultar.
+la octava, y la décima, son clases distintas, anotadas aquí porque el registro
+vive en un solo sitio y partirlo lo volvería fácil de no consultar.
 
 | Dónde | Qué parecía | Qué era en realidad |
 |---|---|---|
@@ -364,8 +364,10 @@ sitio y partirlo lo volvería fácil de no consultar.
 | `referencias/yang-2019-two-way-partial-auc.md`, la nota sobre por qué importa | Una lectura del script oficial de la métrica: que ISIC 2024 restringe el FPR para controlar el TPR de forma indirecta, y que por eso le aplica la crítica de Yang et al. al *FPR pAUC* | Falso. La línea 42 del script original `PrimaryMetric-pAUC.py` —ficha en `referencias/isic-primary-metric-pauc.py.md`; era la 54 de la copia versionada hasta el 2026-09-21— **invierte las etiquetas** antes de calcular la ROC, así que la variable que el código llama `fpr` es `1 − TPR_original`: la restricción sobre el TPR es **directa** y el FPR **no se acota**. La afirmación se construyó combinando dos lecturas plausibles —`max_fpr` en el nombre, `auc(fpr, tpr)` en la integral— **sin abrir el archivo que las decidía**, y sobrevivió un commit entero. 2026-09-19. |
 | **Dos instancias.** (1) `PLAN.md`, cuarta línea del estado del arte, y la nota de `referencias/kurtansky-2024-slice3d-descriptor.md`. (2) **La conversación**: la instrucción de versionar `challenge2024.isic-archive.com/background/` | (1) Una comprobación: que ninguna fuente versionada afirmaba que los pacientes de prueba de ISIC 2024 fueran distintos de los de entrenamiento. (2) Una fuente: que esa página dice que el conjunto de prueba contiene 500.000 imágenes adicionales de un conjunto de pacientes distinto | **(1) Del lado del agente — rastreable.** Falso. `referencias/kurtansky-2025-triaje-automatizado-tbp.md` lo dice en su sección de métodos —*"albeit different patients than the training dataset"*—, y estaba en el repositorio desde el 2026-09-19. La afirmación se hizo tras **buscar una expresión** —*"no patient overlap"*— en vez de leer el artículo: la búsqueda encontró otra frase, que hablaba de los subconjuntos del leaderboard, y ese hallazgo se tomó por el mapa completo. Entró con el commit "referencias: cuarta linea del estado del arte, fuga por sujeto" y se corrigió el mismo día, 2026-09-21. **(2) Del lado de la persona — NO rastreable en el repositorio: vive solo en la conversación**, y se registra aquí para que no parezca que hay un commit detrás. Instrucción dada en conversación el 2026-09-19, ejecutada el 2026-09-21. Salió de **un fragmento de resultado de un buscador**: la página nunca se abrió ni se comprobó que respondiera. Al ejecutarla, la página redirige de forma permanente (301) a la de datos del reto, y el Internet Archive **nunca la capturó** —de 73 capturas del dominio, ninguna es de `/background/`—, así que la afirmación no se puede comprobar ni siquiera a posteriori. **La tanda se gastó en buscarla mientras lo que afirmaba ya estaba en una fuente versionada**: Kurtansky 2025 dice *"Test data comprised about 500,000 lesion tiles from more than 1200 patients"* y, en la misma sección, *"albeit different patients than the training dataset"*. **Variante de la séptima clase: una afirmación de ausencia (1), y una fuente que nadie abrió (2).** |
 | **Dos instancias.** (1) `referencias/panderm-reduccion-examenes.md` y `CLAUDE.md`, sección «Línea base». (2) **La conversación**: la nota de verificación del apartado 1 del anteproyecto, sobre la sección de preentrenamiento de Yan et al. 2025 | (1) Una lectura del alcance de la línea base: que el 3.498, el 8.913 y el «79 de 80» correspondían *"al mismo grupo de 80 pacientes"* porque la frase los enuncia en una sola oración, y que el desbalance «de esa evaluación» era 216 contra 197.716. (2) Una lectura de las fuentes de preentrenamiento de PanDerm: que su solape con SLICE-3D era *"evidencia de solape a nivel de estudio, no prueba de que las mismas imágenes estén en los dos conjuntos"* | **(1) Del lado del agente — rastreable.** Falso en las dos partes. Los métodos del mismo artículo definen la prueba como *"80 patients for testing (30,698 images, including 28 malignant lesions)"*: con 28 malignas, el 79 de 80 no cuadra leído al pie de la letra. Y 216 + 197.716 = 197.932, no el 196.933 que el artículo da tres veces, y es el conjunto completo, no la evaluación. La ficha se construyó con **WebFetch**, que no devuelve el texto de la página sino, según su propia descripción, lo que responde sobre ella *"a small fast model"*: dos de sus cinco citas no eran literales, y uno de sus límites era una afirmación de ausencia falsa —la declaración de ética dice *"Only de-identified retrospective data were used for research"*—. Entró el 2026-08-20 y se corrigió el 2026-09-24, desde el commit "Linea base: el 79 de 80 de PanDerm no se sostiene contra sus metodos" hasta "referencias: PanDerm, retirar la descripcion de melanografo sin fuente". **(2) Del lado de la persona — NO rastreable en el repositorio: vive solo en la conversación**, y se registra aquí para que no parezca que hay un commit detrás. En la sesión de redacción del apartado 1, el 2026-09-24, la sección *"Pretraining dataset for developing PanDerm"* se leyó cortada y la nota de verificación hizo esa afirmación, enumerando como fuentes de TBP solo MYM y HOP. Cinco subsecciones después de la de HOP, en la misma sección, la subsección *"ISIC2024"* declaraba *"We selected a subset containing 352,034 tile images"*, con la referencia 47, que es el descriptor de SLICE-3D. **La séptima clase en (1), una afirmación sobre una fuente sacada de una frase sin leer los métodos que la acotaban; la octava en (2), la lectura de un fragmento tomada por completa.** |
+| `modelado-baseline`, nivel 0, función `evaluar_columna_sola` de `train_and_evaluate.py` | Una referencia univariada: la columna de mayor AUC, que `SKILL.md` describe como *"se usa cruda como predictor"* | Una referencia orientada con las etiquetas de validación. En cada pliegue toma `max(pauc_above_tpr(y[val_idx], s), pauc_above_tpr(y[val_idx], -s))`, así que la dirección de la variable se elige mirando el resultado que después se reporta. La docstring lo decía; `SKILL.md`, no. La columna misma se elige con el AUC fuera de muestra de `auditoria-de-fugas`, calculado sobre todos los pliegues, que tiene un problema parecido. Se detectó el 2026-09-24, al contrastar con el código la descripción del nivel 0 en el apartado 4 del anteproyecto. El efecto no está medido. El código no se ha tocado; la corrección está en `PLAN.md`, Fase 1. **Clase nueva: el instrumento elige con las etiquetas con que se evalúa.** |
 
-**De la cuarta a la octava son de otra clase, y por eso se anotan aparte.**
+**De la cuarta a la octava, y la décima, son de otra clase, y por eso se anotan
+aparte.**
 Las tres primeras son código inerte dentro de un script: se detectan leyendo el
 script, y la regla de arriba —conectarlo y comparar— basta para atraparlas. Las
 demás no están en ningún script. La cuarta y la quinta son **artefactos
@@ -484,6 +486,24 @@ versionada, y se comprueba contra esa copia. La otra ficha tomada con WebFetch,
 `referencias/slice3d-metadata-tbp-lv.md`, queda por comprobar así. Su cita de
 `tbp_lv_nevi_confidence`, la que usa la Cuarta nota, sí está literal en el texto
 completo de Kurtansky 2024: comprobado el 2026-09-24.
+
+**La décima es una clase nueva: el instrumento elige con las etiquetas con que
+se evalúa.** No es código inerte ni un artefacto desfasado, y el archivo sí se
+abrió: la función hace lo que su docstring dice. El defecto es de método. Una
+elección que depende de las etiquetas —aquí, la orientación de la variable— se
+hace en el pliegue de validación, el mismo cuyo resultado se reporta, así que
+ese resultado sale sesgado a favor, en la misma dirección que la fuga que
+`auditoria-de-fugas` busca en los datos. Nadie lo vio porque `SKILL.md` describía
+el nivel como una columna *"cruda"*. Apareció al escribir el método con el
+detalle suficiente para que otro lo reprodujera, y ese es su único detector
+conocido: describir lo que hace el código, paso por paso, contra el código.
+
+**Regla que se deriva: toda elección que dependa de las etiquetas —orientación,
+columna, umbral, época, hiperparámetro— se hace dentro del pliegue de
+entrenamiento.** Donde no se pueda, se declara como sesgo del resultado. *No se
+aplica a `auditoria-de-fugas`:* allí `max(auc, 1 − auc)` mide la fuerza de la
+asociación sin importar su signo, que es lo que un chequeo de fugas necesita, y
+no se reporta como desempeño de un modelo.
 
 **Volviendo a la cuarta y la quinta: ninguno de los controles del proyecto
 detecta un artefacto desfasado, y conviene ser preciso sobre por qué.** El
@@ -1029,6 +1049,16 @@ que ese modelo *"is trained on external dermoscopy data"*
 pero el código no filtra por tipo de imagen, así que esa frase no lo resuelve.
 No se afirma en ninguna dirección. Mientras siga abierta, ese modelo queda fuera
 de la reproducción (`PLAN.md`, Fase 4), por el mismo criterio de la Fase 2.
+
+*Ampliado el mismo día: SLICE-3D está en el ISIC Archive.* Lo dicen dos fuentes
+del proyecto. El descriptor: *"Both versions are stored on the ISIC Archive."*
+(`referencias/kurtansky-2024-slice3d-descriptor.md`, *"Data accessibility"*). Y
+la página de datos del reto: *"The training data reflected currently in the ISIC
+Archive proper are available at https://api.isic-archive.com/collections/390/."*
+(`referencias/isic-licencia-y-cita-slice3d.md`, *"Version control"*). Una
+descarga completa del archivo, sin filtro, **podía** por tanto incluir los
+recortes de SLICE-3D. Sigue sin estar probado que los incluyera: depende de qué
+descargue la herramienta y en qué fecha, y el código no lo registra.
 
 Orientación, entonces: imagen (EVA02-small + EdgeNeXt) → predicciones OOF
 concatenadas con metadata tabular → ensamble grande de GBDT. La feature que

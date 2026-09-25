@@ -207,6 +207,16 @@ El orden importa y es el único posible: **sellar primero, medir después**. Tod
 lo medido hasta hoy se calculó sobre el 100% de los datos, así que todas las
 cifras del borrador cambian. Es trabajo de re-medición, no de re-análisis.
 
+**Antes de re-medir, un defecto que se corrige (2026-09-24).** El nivel 0 de
+`modelado-baseline` elige la orientación de su variable con las etiquetas del
+pliegue de validación: en cada pliegue toma `max(pauc(s), pauc(−s))`
+(`evaluar_columna_sola`, en `train_and_evaluate.py`). Se corrige eligiendo la
+orientación en el pliegue de entrenamiento, y solo después se vuelve a medir.
+La elección de la columna tiene un problema parecido: se hace con el AUC fuera
+de muestra de `auditoria-de-fugas`, calculado sobre todos los pliegues. Queda
+por decidir si se corrige igual. El código no se ha tocado todavía; el
+incidente está en el registro de `CLAUDE.md` (regla 6).
+
 **Motivo medido, no precaución teórica.** Los propios organizadores
 cuantificaron lo que cuesta mirar un conjunto antes de tiempo, sobre los 4.998
 envíos oficiales de ISIC 2024

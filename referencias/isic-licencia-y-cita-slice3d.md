@@ -57,6 +57,13 @@ que la propia fuente pide:
 **El nombre de la variante** que `CLAUDE.md` cita entre comillas, *"Permissive"*,
 aparece como nombre del conjunto: *SLICE-3D Permissive*.
 
+**Sección "Version control"**: dónde está hoy el entrenamiento en el ISIC
+Archive. La usa `CLAUDE.md`, en la pregunta abierta sobre el tercer modelo de
+imagen de la solución ganadora:
+
+> The training data reflected currently in the ISIC Archive proper are available
+> at https://api.isic-archive.com/collections/390/.
+
 ## Datos de la página — hechos, no texto
 
 | Conjunto | Imágenes | Metadatos | Verdad de campo | Prueba | Licencia |
