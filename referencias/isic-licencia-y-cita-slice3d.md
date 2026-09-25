@@ -42,9 +42,10 @@ mezcla:
 
 ## Citas literales que el proyecto usa
 
-**Las dos cadenas de cita obligatorias.** El ISIC exige reproducirlas tal cual
-para cumplir la atribución de cada licencia, así que citarlas literalmente es lo
-que la propia fuente pide.
+**La cadena de cita obligatoria.** El ISIC exige reproducirla tal cual para
+cumplir la atribución de la licencia, así que citarla literalmente es lo que la
+propia fuente pide. *La página da otra para SLICE-3D Permissive; se retiró de
+esta ficha el 2026-09-24 porque ningún documento del proyecto la usa (regla 3).*
 
 **La de SLICE-3D, entera**, en sus cinco párrafos, tras *"must be cited as:"*.
 La usa `informe/anteproyecto.md`, sección 4.1, como atribución de la licencia.
@@ -60,10 +61,6 @@ con la licencia y las fuentes de las imágenes.*
 > You should have received a copy of the license along with this work.
 >
 > If not, see https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt .
-
-> International Skin Imaging Collaboration. SLICE-3D 2024 Permissive Challenge
-> Dataset. International Skin Imaging Collaboration
-> https://doi.org/10.34970/2024-slice-3d-permissive (2024).
 
 **El nombre de la variante** que `CLAUDE.md` cita entre comillas, *"Permissive"*,
 aparece como nombre del conjunto: *SLICE-3D Permissive*.
