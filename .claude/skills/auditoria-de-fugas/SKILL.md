@@ -36,6 +36,15 @@ No decide qué hacer con lo que encuentra. Eso lo hace el agente al leer
   objetivo (ej. contiene "confidence", "score", "pred", "diagnosis")
   se marca para revisión manual — el nombre no basta para confirmar
   fuga, así que esto es una señal, no una conclusión.
+- **Columnas de procedencia** (`attribution`, `copyright_license`):
+  describen el centro y la licencia de la imagen, no la lesión, y en un
+  centro nuevo no aportan información. No es un hallazgo del script: es
+  una decisión de la persona (`PLAN.md`, Fase 1, 2026-09-25), escrita en
+  `COLUMNAS_PROCEDENCIA`. El script la aplica a las que existan y la
+  escribe en el JSON con su motivo, para que `modelado-baseline` las
+  excluya como excluye las demás. Siguen en el escaneo univariado: se
+  excluyen de los modelos, no de la auditoría. Control positivo:
+  `scripts/test_columnas_procedencia.py`.
 
 ### 2. Escaneo univariado de AUC fuera de muestra
 
@@ -100,6 +109,8 @@ en el `.json`.
   "columnas_solo_en_train": [str, ...],
   "columnas_constantes": [str, ...],
   "columnas_identificador": [str, ...],
+  "columnas_procedencia": [str, ...],
+  "motivo_columnas_procedencia": str,
   "columnas_nombre_sospechoso": [str, ...],
   "umbral_auc_sospechoso": float,
   "univariado": [

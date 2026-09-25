@@ -229,6 +229,7 @@ def main():
         reporte_fugas.get("columnas_solo_en_train", [])
         + reporte_fugas.get("columnas_constantes", [])
         + reporte_fugas.get("columnas_identificador", [])
+        + reporte_fugas.get("columnas_procedencia", [])
     )
 
     df, datos = cargar_desarrollo(args.data, args.group_col, args.holdout)
@@ -311,6 +312,7 @@ def main():
         "metrica_fuente": "referencias/isic-primary-metric-pauc.py.md (p_auc_tpr, ISIC/MSKCC), verificado 2026-08-11",
         "columnas_excluidas": columnas_excluidas,
         "n_features_usadas": len(numericas) + len(categoricas),
+        "features_usadas": numericas + categoricas,
         "nivel_0_referencia_univariada": nivel_0,
         "nivel_1_regresion_logistica": {
             "pauc_por_fold": [round(float(p), 4) for p in paucs_1],

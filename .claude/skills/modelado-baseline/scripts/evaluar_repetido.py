@@ -83,6 +83,7 @@ def cargar_columnas_excluidas(leakage_report_path):
         reporte_fugas.get("columnas_solo_en_train", [])
         + reporte_fugas.get("columnas_constantes", [])
         + reporte_fugas.get("columnas_identificador", [])
+        + reporte_fugas.get("columnas_procedencia", [])
     )
 
 

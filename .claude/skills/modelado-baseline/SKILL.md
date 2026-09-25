@@ -15,7 +15,8 @@ mejor" ni qué hacer después. Eso lo hace el agente al leer
 
 - Solo después de `auditoria-de-fugas`. Esta skill LEE
   `outputs/auditoria-de-fugas.json` para saber qué columnas excluir —
-  no vuelve a decidirlo por su cuenta. Si ese archivo no existe, falla
+  solo en train, constantes, identificador y procedencia— y no vuelve a
+  decidirlo por su cuenta. Si ese archivo no existe, falla
   con un mensaje explícito en vez de adivinar qué excluir.
 - Usa el mismo esquema de partición que `diseno-validacion`
   (`--group-col`, `--n-splits`, `--seed` deben coincidir) para que los
@@ -154,6 +155,7 @@ leer los datos. Lo mismo vale para `evaluar_repetido.py`. Los dos JSON de salida
   "metrica_fuente": str,
   "columnas_excluidas": [str, ...],
   "n_features_usadas": int,
+  "features_usadas": [str, ...],
   "nivel_0_referencia_univariada": {
     "criterio": str,
     "columna_por_fold": [str, ...], "orientacion_por_fold": [1 | -1, ...],

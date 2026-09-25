@@ -41,6 +41,18 @@ from datos_desarrollo import RUTA_HOLDOUT, cargar_desarrollo  # noqa: E402
 
 NOMBRES_SOSPECHOSOS = ["confidence", "score", "pred", "diagnos", "iddx", "mel_"]
 
+# Columnas de procedencia: describen de dónde viene la imagen, no la lesión.
+# No es un hallazgo del script sino una decisión de la persona (PLAN.md,
+# Fase 1, 2026-09-25), que el script aplica a las columnas que existan y
+# escribe en el JSON con su motivo, para que modelado-baseline la lea como
+# lee las demás exclusiones. Siguen en el escaneo univariado: se excluyen
+# de los modelos, no de la auditoría.
+COLUMNAS_PROCEDENCIA = ["attribution", "copyright_license"]
+MOTIVO_PROCEDENCIA = (
+    "Describen el centro y la licencia de la imagen, no la lesión; en un centro "
+    "nuevo no aportan información. Decisión de la persona, 2026-09-25 (PLAN.md, Fase 1)."
+)
+
 
 def columnas_estructurales(train, test, target_col, group_col):
     cols_train = set(train.columns)
@@ -162,6 +174,7 @@ def main():
     solo_train, constantes, identificador, nombre_sospechoso = columnas_estructurales(
         train, test, args.target_col, args.group_col
     )
+    procedencia = [c for c in COLUMNAS_PROCEDENCIA if c in train.columns]
 
     excluir_del_univariado = set(solo_train) | set(constantes) | set(identificador) | {
         args.group_col, args.target_col
@@ -195,6 +208,8 @@ def main():
         "columnas_solo_en_train": solo_train,
         "columnas_constantes": constantes,
         "columnas_identificador": identificador,
+        "columnas_procedencia": procedencia,
+        "motivo_columnas_procedencia": MOTIVO_PROCEDENCIA,
         "columnas_nombre_sospechoso": nombre_sospechoso,
         "umbral_auc_sospechoso": args.auc_threshold,
         "univariado": sorted(univariado, key=lambda x: x["auc_oof"], reverse=True),
@@ -213,7 +228,10 @@ def main():
     lineas = []
     lineas.append(f"# Auditoría de fugas — {args.train}, conjunto de desarrollo")
     lineas.append(f"Columnas solo en train (excluidas de entrada): {len(solo_train)}")
-    lineas.append(f"Columnas constantes: {len(constantes)} · identificador: {len(identificador)}")
+    lineas.append(
+        f"Columnas constantes: {len(constantes)} · identificador: {len(identificador)} · "
+        f"procedencia, excluidas de los modelos por decisión: {len(procedencia)} {procedencia}"
+    )
     lineas.append(f"Columnas evaluadas univariadamente: {len(univariado)} · umbral AUC >= {args.auc_threshold}")
     lineas.append(f"Columnas sospechosas por AUC alto: {len(sospechosas)}")
     for u in sospechosas[:MAX_DETALLE]:

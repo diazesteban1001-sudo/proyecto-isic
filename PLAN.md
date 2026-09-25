@@ -250,6 +250,13 @@ mide al re-medir. El incidente está en el registro de `CLAUDE.md` (regla 6).
 todos los centros tienen al menos un paciente portador a cada lado. Los
 recuentos están en `outputs/holdout-pacientes.md`.
 
+**Decisión de la persona sobre las columnas de procedencia (2026-09-25).**
+`attribution` y `copyright_license` se excluyen de los modelos, porque
+describen el centro y la licencia y no la lesión, y en un centro nuevo no
+aportan información. La exclusión entra por `auditoria-de-fugas`, como una
+categoría propia con su motivo en el JSON (`columnas_procedencia`), y
+`modelado-baseline` la lee como lee las demás (guardarraíl 1 de `CLAUDE.md`).
+
 **Motivo medido, no precaución teórica.** Los propios organizadores
 cuantificaron lo que cuesta mirar un conjunto antes de tiempo, sobre los 4.998
 envíos oficiales de ISIC 2024

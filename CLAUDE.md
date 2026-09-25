@@ -896,8 +896,10 @@ columnas excluir por su cuenta — corre auditoria-de-fugas primero.
 ```
 
 No hay lista de respaldo escrita a mano ni valor por defecto: las
-columnas se arman concatenando tres campos del reporte, así que sin
-reporte no hay nada que usar. Reproducido y documentado en
+columnas se arman concatenando cuatro campos del reporte, así que sin
+reporte no hay nada que usar. El cuarto, las columnas de procedencia, no
+es un hallazgo sino una decisión de la persona (2026-09-25), escrita en
+`audit_leakage.py`; `modelado-baseline` la lee igual que las demás. Reproducido y documentado en
 `informe/casos-de-fallo.md`, caso B.
 
 ### 2. Ninguna cifra del informe existe sin estar en `outputs/`
