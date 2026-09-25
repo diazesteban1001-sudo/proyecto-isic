@@ -152,18 +152,54 @@ def evaluar_modelo(df, target_col, folds, numericas, categoricas, modelo_fn, esc
     return paucs
 
 
-def evaluar_columna_sola(df, col, target_col, folds):
-    """pAUC del nivel 0: la columna cruda como predictor, imputada con la
-    mediana del fold de entrenamiento. No entrena nada. Se prueba en ambas
-    direcciones porque una columna puede predecir bien 'al revés' — el
-    criterio es el mismo que usa auditoria-de-fugas con max(auc, 1-auc)."""
+def elegir_columna_sola(df, candidatas, target_col, train_idx):
+    """Elección del nivel 0 con las etiquetas del fold de entrenamiento,
+    nunca con las de validación (clase décima del registro de incidentes
+    de CLAUDE.md). Hasta el 2026-09-25 la columna venía del reporte de
+    fugas, calculado sobre todos los folds, y la orientación se elegía con
+    max(pAUC(s), pAUC(-s)) sobre validación.
+
+    Los criterios son los de antes; solo cambia de dónde salen las
+    etiquetas:
+    - columna: la de mayor max(AUC, 1 - AUC), el criterio de
+      auditoria-de-fugas;
+    - orientación: el signo con mayor pAUC.
+    Solo columnas numéricas: la referencia es la variable cruda, y una
+    categórica habría que codificarla. Empates: la primera columna en orden,
+    orientación +1."""
+    y_train = df[target_col].values[train_idx]
+    mejor, mejor_fuerza = None, -1.0
+    for c in candidatas:
+        s = df[c].iloc[train_idx]
+        if s.isna().all():
+            continue
+        a = roc_auc_score(y_train, s.fillna(s.median()).values)
+        if max(a, 1 - a) > mejor_fuerza:
+            mejor, mejor_fuerza = c, max(a, 1 - a)
+    s = df[mejor].iloc[train_idx]
+    s = s.fillna(s.median()).values
+    signo = 1 if pauc_above_tpr(y_train, s) >= pauc_above_tpr(y_train, -s) else -1
+    return mejor, signo
+
+
+def evaluar_columna_sola(df, candidatas, target_col, folds):
+    """Nivel 0: en cada fold, la columna y la orientación elegidas en
+    entrenamiento, imputada con la mediana de entrenamiento y usada tal cual
+    como puntuación sobre validación. No entrena nada. Devuelve, por fold,
+    la columna, la orientación, el pAUC y el AUC estándar en validación."""
     y = df[target_col].values
-    paucs = []
+    por_fold = []
     for train_idx, val_idx in folds:
+        col, signo = elegir_columna_sola(df, candidatas, target_col, train_idx)
         mediana = df[col].iloc[train_idx].median()
-        s = df[col].iloc[val_idx].fillna(mediana).values
-        paucs.append(max(pauc_above_tpr(y[val_idx], s), pauc_above_tpr(y[val_idx], -s)))
-    return paucs
+        s = signo * df[col].iloc[val_idx].fillna(mediana).values
+        por_fold.append({
+            "columna": col,
+            "orientacion": signo,
+            "pauc": pauc_above_tpr(y[val_idx], s),
+            "auc": roc_auc_score(y[val_idx], s),
+        })
+    return por_fold
 
 
 def main():
@@ -205,27 +241,35 @@ def main():
     numericas, categoricas = preparar_features(df, columnas_excluidas, args.target_col, args.group_col)
     folds = construir_folds(df, args.group_col, args.target_col, args.n_splits, args.seed)
 
-    # Nivel 0: referencia univariada. La columna y su AUC estándar vienen del
-    # reporte de fugas; el pAUC se calcula aquí, sobre los mismos folds, porque
-    # sin él no hay forma de comparar el piso univariado con los niveles 1 y 2.
-    univariado = reporte_fugas.get("univariado", [])
-    if univariado:
-        mejor = max(univariado, key=lambda u: u["auc_oof"])
-        paucs_0 = evaluar_columna_sola(df, mejor["columna"], args.target_col, folds)
+    # Nivel 0: referencia univariada. La columna y su orientación se eligen
+    # dentro de cada fold de entrenamiento (elegir_columna_sola), y el pAUC y
+    # el AUC estándar se miden sobre validación, en los mismos folds que los
+    # niveles 1 y 2.
+    if numericas:
+        por_fold_0 = evaluar_columna_sola(df, numericas, args.target_col, folds)
+        paucs_0 = [f["pauc"] for f in por_fold_0]
+        aucs_0 = [f["auc"] for f in por_fold_0]
         nivel_0 = {
-            "columna": mejor["columna"],
-            "auc_estandar": mejor["auc_oof"],
+            "criterio": (
+                "en cada fold de entrenamiento: la columna numérica de mayor "
+                "max(AUC, 1 - AUC) y el signo de mayor pAUC; nada se elige con "
+                "etiquetas de validación"
+            ),
+            "columna_por_fold": [f["columna"] for f in por_fold_0],
+            "orientacion_por_fold": [f["orientacion"] for f in por_fold_0],
             "pauc_por_fold": [round(float(p), 4) for p in paucs_0],
             "pauc_media": round(float(np.mean(paucs_0)), 4),
             "pauc_std": round(float(np.std(paucs_0)), 4),
+            "auc_estandar_por_fold": [round(float(a), 4) for a in aucs_0],
+            "auc_estandar_media": round(float(np.mean(aucs_0)), 4),
             "nota": (
-                "auc_estandar y pauc_media NO están en la misma escala: el AUC va "
+                "auc_estandar_media y pauc_media NO están en la misma escala: el AUC va "
                 "de 0.5 (azar) a 1, el pAUC de 0.02 (azar) a 0.2. Compara contra "
-                "los niveles 1 y 2 usando pauc_media, nunca auc_estandar."
+                "los niveles 1 y 2 usando pauc_media, nunca auc_estandar_media."
             ),
         }
     else:
-        nivel_0 = {"columna": None, "auc_estandar": None, "nota": "sin datos univariados en el reporte de fugas"}
+        nivel_0 = {"columna_por_fold": None, "nota": "sin columnas numéricas candidatas"}
 
     # Nivel 1: regresión logística balanceada.
     def modelo_logreg():
@@ -327,7 +371,7 @@ def main():
                   "nivel_2b_gradient_boosting_balanceado"):
         bloque = resultado[clave]
         if bloque.get("pauc_media") is None:
-            continue  # nivel 0 sin datos univariados en el reporte de fugas
+            continue  # nivel 0 sin columnas numéricas candidatas
         bloque["posicion_en_escala"] = round(
             (bloque["pauc_media"] - azar) / (maximo - azar), 4
         )
@@ -357,13 +401,17 @@ def main():
         )
 
     if nivel_0.get("pauc_media") is not None:
+        # Una columna por fold, elegida en entrenamiento: se resume en cuántos
+        # folds salió cada una, para que la línea no crezca con --n-splits.
+        conteo = pd.Series(nivel_0["columna_por_fold"]).value_counts()
+        elegidas = ", ".join(f"{c} en {n} de {len(nivel_0['columna_por_fold'])}" for c, n in conteo.items())
         lineas.append(
-            f"Nivel 0 (univariado {nivel_0['columna']}): AUC estándar {nivel_0['auc_estandar']} "
-            f"— NO comparable con lo de abajo, escalas distintas"
+            f"Nivel 0 (univariado, elegido en entrenamiento: {elegidas}): AUC estándar "
+            f"{nivel_0['auc_estandar_media']} — NO comparable con lo de abajo, escalas distintas"
         )
         lineas.append(linea_nivel("Nivel 0 (mismo, en pAUC)", nivel_0))
     else:
-        lineas.append("Nivel 0: sin datos univariados en el reporte de fugas.")
+        lineas.append("Nivel 0: sin columnas numéricas candidatas.")
     lineas.append(linea_nivel("Nivel 1 (logística balanceada)", resultado["nivel_1_regresion_logistica"]))
     lineas.append(linea_nivel("Nivel 2a (GB sin balancear)", resultado["nivel_2a_gradient_boosting_sin_balancear"]))
     lineas.append(linea_nivel("Nivel 2b (GB balanceado)", resultado["nivel_2b_gradient_boosting_balanceado"]))

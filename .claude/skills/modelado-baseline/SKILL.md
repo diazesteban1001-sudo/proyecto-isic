@@ -23,21 +23,34 @@ mejor" ni qué hacer después. Eso lo hace el agente al leer
 
 ## Por qué tres niveles, y qué es cada uno
 
-**Nivel 0 — referencia univariada.** No se entrena nada: se toma la
-columna con mayor AUC individual ya calculada por `auditoria-de-fugas`
-(en ISIC, `tbp_lv_H` con AUC ≈ 0.80) y se usa cruda como predictor,
-imputada con la mediana del fold de entrenamiento. Sirve como piso
-mínimo — cualquier modelo combinado que apenas lo empate no está
-justificando su propia complejidad.
+**Nivel 0 — referencia univariada.** No se entrena nada. En cada fold,
+y solo con las etiquetas del fold de **entrenamiento**, se elige la
+columna numérica de mayor `max(AUC, 1 − AUC)` —el criterio de
+`auditoria-de-fugas`— y su orientación, el signo de mayor pAUC. Esa
+columna, imputada con la mediana de entrenamiento y con esa orientación,
+es la puntuación sobre validación. Sirve como piso mínimo — cualquier
+modelo combinado que apenas lo empate no está justificando su propia
+complejidad. Solo columnas numéricas, porque una categórica habría que
+codificarla.
 
-Se reportan **dos** números para este nivel: el AUC estándar que viene
-del reporte de fugas (rango [0.5, 1]) y el pAUC calculado aquí sobre los
-mismos folds (rango [0.02, 0.2]). No son la misma escala y no se pueden
+*Hasta el 2026-09-25* la columna salía del reporte de fugas, calculado
+sobre todos los folds, y la orientación se elegía en cada fold con las
+etiquetas de validación, `max(pAUC(s), pAUC(−s))`. Esta sección decía que
+la columna se usaba "cruda". Es la décima fila del registro de
+incidentes de `CLAUDE.md`. El control positivo, con datos sintéticos en
+los que entrenamiento y validación eligen distinto, es
+`scripts/test_nivel0_en_entrenamiento.py`.
+
+Se reportan **dos** números para este nivel, los dos medidos aquí sobre
+validación: el AUC estándar (rango [0.5, 1]) y el pAUC (rango
+[0.02, 0.2]). No son la misma escala y no se pueden
 comparar entre sí. **Solo el pAUC es comparable con los niveles 1 y 2.**
 Sin ese segundo número el `.md` invitaba a comparar 0.8053 contra 0.1331,
 que es precisamente el error que la advertencia pretendía evitar.
 
-Que ambos existan es informativo por sí solo: en ISIC, `tbp_lv_H` recorre
+Que ambos existan es informativo por sí solo: en la medición
+exploratoria, sobre el 100 % de los datos y con la elección anterior,
+`tbp_lv_H` recorría
 el 61% del camino azar→perfecto en AUC estándar pero solo el 33.8% en
 pAUC. Su señal no está donde la sensibilidad es clínicamente aceptable, y
 eso solo se ve mirando la métrica del cliente.
@@ -142,8 +155,10 @@ leer los datos. Lo mismo vale para `evaluar_repetido.py`. Los dos JSON de salida
   "columnas_excluidas": [str, ...],
   "n_features_usadas": int,
   "nivel_0_referencia_univariada": {
-    "columna": str, "auc_estandar": float,
+    "criterio": str,
+    "columna_por_fold": [str, ...], "orientacion_por_fold": [1 | -1, ...],
     "pauc_por_fold": [float, ...], "pauc_media": float, "pauc_std": float,
+    "auc_estandar_por_fold": [float, ...], "auc_estandar_media": float,
     "nota": str
   },
   "nivel_1_regresion_logistica": {

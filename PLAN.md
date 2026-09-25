@@ -231,8 +231,10 @@ La elección de la columna tenía un problema parecido: se hace con el AUC fuera
 de muestra de `auditoria-de-fugas`, calculado sobre todos los pliegues.
 **Resuelto (2026-09-24): la variable también se elige dentro de cada pliegue de
 entrenamiento**, por la regla de la clase décima: toda elección que dependa de
-las etiquetas se hace dentro del pliegue de entrenamiento. El código no se ha
-tocado todavía; el incidente está en el registro de `CLAUDE.md` (regla 6).
+las etiquetas se hace dentro del pliegue de entrenamiento. **Corregido en el
+código el 2026-09-25**, con control positivo
+(`modelado-baseline/scripts/test_nivel0_en_entrenamiento.py`); el efecto se
+mide al re-medir. El incidente está en el registro de `CLAUDE.md` (regla 6).
 
 **Decisiones de la persona sobre el conjunto reservado (2026-09-25).**
 
