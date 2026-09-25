@@ -8,11 +8,14 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-24): Fase 1.** La Fase 0 está cerrada. El
-siguiente paso es la Fase 1: sellar el conjunto reservado, corregir el nivel 0 y
-re-medir. Sigue abierto, aparte, el pendiente de la Fase 2: versionar la fuente
-de los datos de preentrenamiento de DINOv3 y escribir la decisión sobre ella,
-con la regla de verificación de esa fase.
+**Dónde está la ruta (2026-09-25): Fase 1.** El conjunto reservado está
+sellado, el nivel 0 corregido y las cuatro skills instrumento re-medidas sobre
+el conjunto de desarrollo. Falta la segunda parte de la puerta: actualizar el
+borrador y la demo con las cifras nuevas y dejar
+`outputs/sintesis-verificacion.json` sin cifras heredadas. Sigue abierto, aparte,
+el pendiente de la Fase 2: versionar la fuente de los datos de preentrenamiento
+de DINOv3 y escribir la decisión sobre ella, con la regla de verificación de esa
+fase.
 
 ## Cómo leer una puerta
 
@@ -291,6 +294,13 @@ elección del nivel 0. La tabla no separa sus efectos.
 
 `outputs/sintesis-verificacion.*` no se regeneró: verifica el borrador, que
 todavía no se ha actualizado.
+
+**Pendiente conocido (2026-09-25), sin tocar.** `audit_leakage.py`
+(`columnas_estructurales`) marca como identificador toda columna con tantos
+valores únicos como filas, así que una variable continua sin valores repetidos
+se excluiría de los modelos como si fuera un identificador. Se vio con datos
+sintéticos. En la corrida actual solo cae `isic_id`
+(`auditoria-de-fugas.json > columnas_identificador`).
 
 **Motivo medido, no precaución teórica.** Los propios organizadores
 cuantificaron lo que cuesta mirar un conjunto antes de tiempo, sobre los 4.998
