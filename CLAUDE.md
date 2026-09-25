@@ -886,9 +886,9 @@ La decisión más consecuente del pipeline —qué columnas se quedan fuera—
 determina si el modelo es honesto o una fuga con buena puntuación. El
 agente no la toma: la lee del reporte de `auditoria-de-fugas`.
 
-**Mecanismo.** `modelado-baseline/scripts/train_and_evaluate.py:165-171`
-comprueba la existencia del reporte **antes** de leer el CSV y aborta con
-código 1:
+**Mecanismo.** `modelado-baseline/scripts/train_and_evaluate.py`, al
+principio de `main()`, comprueba la existencia del reporte **antes** de leer
+el CSV y aborta con código 1:
 
 ```
 ERROR: no existe outputs/auditoria-de-fugas.json. Esta skill no decide qué
@@ -940,7 +940,7 @@ sensibilidad baja — la función de utilidad es del cliente, no del
 consultor.
 
 **Mecanismo.** `MIN_TPR = 0.80` es una constante de módulo en
-`train_and_evaluate.py:46`, no un argumento de línea de comandos: no se
+`train_and_evaluate.py`, no un argumento de línea de comandos: no se
 puede cambiar por invocación. Su comentario cita la fuente y registra el
 valor rival que **no** se usa:
 
