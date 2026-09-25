@@ -157,6 +157,29 @@ python .claude/skills/modelado-baseline/scripts/train_and_evaluate.py \
   --incluir-procedencia
 ```
 
+La misma sensibilidad con validación repetida la hace
+`scripts/sensibilidad_repetida.py`, que escribe
+`outputs/sensibilidad-procedencia-repetida.json` y `.md` y nunca
+`validacion-repetida.*`. Corre las dos configuraciones, sin y con
+procedencia, sobre los mismos folds, construidos una vez por semilla, y
+guarda su huella SHA-256. Comprueba que la configuración sin procedencia
+reproduce fold a fold `outputs/validacion-repetida.json`. Reporta tres
+comparaciones pareadas, con intervalo ingenuo y corregido por Nadeau y
+Bengio y victorias por fold y por semilla: 2b − 1 con procedencia, junto
+al de sin procedencia; 2b con menos 2b sin; y 1 con menos 1 sin.
+
+```bash
+python .claude/skills/modelado-baseline/scripts/sensibilidad_repetida.py \
+  --data data/train-metadata.csv \
+  --group-col patient_id \
+  --target-col target \
+  --n-splits 5 \
+  --leakage-report outputs/auditoria-de-fugas.json \
+  --referencia outputs/validacion-repetida.json \
+  --out outputs/sensibilidad-procedencia-repetida \
+  --semillas 0 1 2 3 4 5 6 7 8 9
+```
+
 ## Contrato de salida
 
 - `outputs/modelado-baseline.json` — resultados completos por nivel y fold.
