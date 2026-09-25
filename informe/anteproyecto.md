@@ -376,7 +376,7 @@ definieron.
 1. Construir un esquema de evaluación libre de fuga: cuantificar la fuga de una partición por registro frente a una agrupada por paciente, identificar las variables no disponibles al momento de predecir y reservar un conjunto de pacientes que se evalúe una sola vez. *Se declara cumplido con la proporción de pacientes presentes a ambos lados de cada partición, el listado de variables excluidas con su motivo y el conjunto reservado sellado antes de cualquier decisión nueva de modelado.*
 2. Estimar el desempeño de cuatro niveles de referencia bajo la métrica oficial y bajo el AUC estándar, sobre los mismos pliegues. *Se declara cumplido con las medias y las series por pliegue de ambas métricas, y con los casos donde las dos discrepan en el veredicto.*
 3. Contrastar los niveles, y la solución ganadora de la competencia reproducida desde su código público sobre las mismas particiones, mediante comparación pareada con validación cruzada repetida, corrigiendo la varianza por el solape entre conjuntos de entrenamiento. *Se declara cumplido con el intervalo de confianza de cada diferencia en sus versiones ingenua y corregida, y con la lista de los componentes de la solución ganadora que no se pudieron reproducir, con su motivo: cómputo o riesgo de fuga.*
-4. Evaluar los niveles bajo los ejes de triaje que definen los organizadores —sensibilidad en las quince lesiones de mayor riesgo por paciente y número de lesiones a derivar por maligna detectada— para determinar si el veredicto de la métrica principal se sostiene sobre la función de utilidad completa. *Se declara cumplido con la tabla de los tres ejes por nivel y con la implementación contrastada contra el orden de magnitud publicado.*
+4. Evaluar los niveles bajo los ejes de triaje que definen los organizadores —sensibilidad en las quince lesiones de mayor riesgo por paciente y número de lesiones a derivar por maligna detectada— y bajo su tiempo de inferencia, para determinar si el veredicto de la métrica principal se sostiene sobre la función de utilidad completa. *Se declara cumplido con la tabla por nivel de la métrica principal, los dos ejes de triaje y el tiempo de inferencia, y con la implementación de los ejes de triaje contrastada contra el orden de magnitud publicado.*
 5. Incorporar características derivadas de imagen, previa verificación de que el conjunto no estuvo en el preentrenamiento del modelo fundacional empleado, y evaluar el modelo recomendado sobre el conjunto reservado. *Se declara cumplido con el resultado de esa verificación y con las métricas del conjunto reservado reportadas con su intervalo.*
 
 ## 4. Datos y método
@@ -521,8 +521,9 @@ mismas particiones: CatBoost con el z-score de cada variable dentro del
 paciente, conteos y sumas de área por paciente y un indicador de atipicidad
 (LOF) ajustado paciente por paciente.
 
-- **Quedan fuera sus redes de imagen**, por cómputo: el código las ajusta por
-  completo en una GPU de servidor.
+- **Quedan fuera sus redes de imagen**: fuera del alcance de esta entrega. Su
+  costo no se ha estimado, y se reconsidera si la Fase 4 muestra que la imagen
+  aporta de forma distinguible.
 - **Queda fuera su modelo entrenado con el archivo público de ISIC**, por
   riesgo de fuga: el código no excluye de esa descarga las imágenes de la
   competencia.
