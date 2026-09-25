@@ -14,6 +14,19 @@ Cubre solo lo que usa el anteproyecto: encabezados, párrafos, viñetas y listas
 numeradas anidadas (con párrafos dentro de un ítem), tablas con barras, citas
 en bloque con varios párrafos, **negrita**, *cursiva*, `código` y URL sueltas.
 Lo que haya antes del primer `## ` es la portada: va centrada y en su página.
+
+Tipografía (solo en el conversor; el Markdown no se toca):
+- Times New Roman de 12 puntos, alineada a la izquierda y sin justificar, como
+  pide APA 7, y sin división automática de palabras. Times no tiene los
+  subíndices ₁ y ₂: los dibuja STIX Two Text, segunda en la lista de fuentes,
+  así que el carácter Unicode se conserva y se ve como subíndice.
+- Entre una cifra y el signo % va un espacio de no separación.
+- Las URL y los DOI solo se parten después de «/» o antes de «.»: cada tramo
+  va en un <span> sin cortes y entre tramos hay un <wbr>, que no es un
+  carácter. El texto copiado del PDF es la URL exacta: no se meten caracteres
+  invisibles ni se cambian guiones. «SLICE-3D» tampoco se parte.
+- Números de página abajo al centro, con las cajas de margen de @page, que
+  Chrome dibuja; la portada no lleva número.
 """
 
 import argparse
@@ -30,35 +43,38 @@ MARCA_LISTA = re.compile(r"^(\s*)([-*]|\d+\.)\s+(.*)$")
 URL = re.compile(r"https?://[^\s<]+")
 
 CSS = """
-@page { size: A4; margin: 2.5cm 2.3cm; }
-html { font-family: "Georgia", "Times New Roman", serif; font-size: 11pt;
-       line-height: 1.45; color: #111; }
+@page { size: A4; margin: 2.5cm;
+        @bottom-center { content: counter(page);
+                         font-family: "Times New Roman", serif; font-size: 11pt; } }
+@page :first { @bottom-center { content: none; } }
+html { font-family: "Times New Roman", "STIX Two Text", serif; font-size: 12pt;
+       line-height: 1.5; color: #111; hyphens: manual;
+       font-variant-numeric: lining-nums; }
 body { margin: 0; }
 h1 { font-size: 20pt; line-height: 1.25; margin: 0 0 1.2em; }
 h2 { font-size: 15pt; margin: 1.6em 0 .5em; break-after: avoid; }
-h3 { font-size: 12.5pt; margin: 1.2em 0 .4em; break-after: avoid; }
-p { margin: 0 0 .7em; text-align: justify; hyphens: auto; }
+h3 { font-size: 13pt; margin: 1.2em 0 .4em; break-after: avoid; }
+p { margin: 0 0 .7em; text-align: left; }
 ul, ol { margin: 0 0 .7em; padding-left: 1.6em; }
 li { margin: 0 0 .25em; }
 li > p { margin: 0 0 .3em; }
 li > ul, li > ol { margin: .2em 0 .3em; }
 blockquote { margin: .6em 0 .9em 1.2em; padding: .2em 0 .2em .9em;
-             border-left: 3px solid #999; font-size: 10pt; }
-blockquote p { text-align: left; margin: 0 0 .5em; }
+             border-left: 3px solid #999; font-size: 11pt; }
+blockquote p { margin: 0 0 .5em; }
 table { border-collapse: collapse; width: 100%; margin: .6em 0 1em;
-        font-size: 9.5pt; }
+        font-size: 10pt; }
 th, td { border: 1px solid #888; padding: .3em .45em; vertical-align: top;
          text-align: left; }
 th { background: #eee; }
 tr { break-inside: avoid; }
-code { font-family: "Menlo", "Courier New", monospace; font-size: .88em;
-       overflow-wrap: anywhere; hyphens: none; }
-a { color: inherit; text-decoration: none; overflow-wrap: anywhere; hyphens: none; }
+code { font-family: "Menlo", "Courier New", monospace; font-size: .85em; }
+a { color: inherit; text-decoration: none; }
+.nb { white-space: nowrap; }
 .portada { text-align: center; padding-top: 30%; break-after: page; }
 .portada h1 { margin-bottom: 2em; }
 .portada p { text-align: center; margin: 0 0 .6em; }
-.referencias p { text-align: left; padding-left: 2em; text-indent: -2em;
-                 hyphens: manual; }
+.referencias p { padding-left: 2em; text-indent: -2em; }
 """
 
 
@@ -82,11 +98,38 @@ def inline(texto):
             while url and url[-1] in ".,;:)":
                 cola = url[-1] + cola
                 url = url[:-1]
-            return f'<a href="{url}">{url}</a>{cola}'
+            return f'<a href="{url}">{tramos_url(url)}</a>{cola}'
 
         t = URL.sub(enlazar, t)
+        t = fuera_de_etiquetas(t, lambda s: re.sub(r"(\d) %", "\\1&nbsp;%", s))
+        t = fuera_de_etiquetas(t, lambda s: s.replace("SLICE-3D", '<span class="nb">SLICE-3D</span>'))
         salida.append(t)
     return "".join(salida)
+
+
+def tramos_url(url):
+    """La URL partida en tramos que no se cortan por dentro, con un punto de
+    corte (<wbr>, que no es un carácter) después de cada «/» y antes de cada
+    «.». El esquema «https://» no se parte."""
+    esquema, resto = url.split("://", 1)
+    tramos, actual = [], esquema + "://"
+    for c in resto:
+        if c == "." and actual and not actual.endswith("://"):
+            tramos.append(actual)
+            actual = ""
+        actual += c
+        if c == "/":
+            tramos.append(actual)
+            actual = ""
+    if actual:
+        tramos.append(actual)
+    return "<wbr>".join(f'<span class="nb">{tramo}</span>' for tramo in tramos)
+
+
+def fuera_de_etiquetas(texto, funcion):
+    """Aplica la función solo al texto, no a las etiquetas ni a sus atributos."""
+    partes = re.split(r"(<[^>]+>)", texto)
+    return "".join(p if p.startswith("<") else funcion(p) for p in partes)
 
 
 def interrumpe(linea):
