@@ -49,12 +49,12 @@ descontaminar a posteriori.
 | 1. Problema y estado actual | escrito: cuatro subsecciones (1.1 a 1.4), verificado frase por frase el 2026-09-24 |
 | 2. Estado del arte | escrito: cinco subsecciones (2.1 a 2.5) |
 | 3. Objetivos | escrito |
-| 4. Datos y método | vacío |
+| 4. Datos y método | escrito: cinco subsecciones (4.1 a 4.5), verificado frase por frase el 2026-09-24 |
 | 5. Alcance y plan | vacío |
 | 6. Declaración de uso de IA y reparto del trabajo | escrito |
 
-La lista final de referencias tiene 20 entradas: 17 del estado del arte y 3 del
-apartado 1.
+La lista final de referencias tiene 24 entradas: 17 del estado del arte, 3 del
+apartado 1 y 4 del apartado 4.
 
 Decisión de la persona, prioritaria: el apartado 6 es mínimo, una línea por
 cosa; no se le dedican más recursos.
@@ -171,9 +171,10 @@ de Kaggle y `outputs/`, y no desde `d1-material-colombia.md`. Pasó la
 verificación: todas sus citas son literales y todas sus cifras tienen fuente o
 están en `outputs/`; no quedan cifras derivadas.
 
-**Siguiente paso.** Quedan vacíos los apartados 4 y 5; los dos dependen de la
-Fase 2, que ya decidió no usar PanDerm y tiene pendiente la verificación de
-DINOv3. El orden entre ellos no está fijado.
+**Siguiente paso.** Solo queda vacío el **apartado 5, alcance y plan**: la
+próxima sesión arranca de ahí. Sigue abierto, además, el pendiente de la Fase 2:
+versionar la fuente de los datos de preentrenamiento de DINOv3 y escribir la
+decisión sobre ella.
 
 *Salvedad sobre PanDerm — resuelta el 2026-09-24.* Hasta esa fecha su archivo
 decía "TEXTO COMPLETO" en la cabecera, pero solo reproducía la frase citada, y
