@@ -136,6 +136,27 @@ de `outputs/holdout-pacientes.json` (`--holdout`, por defecto esa ruta). Si
 ese archivo no existe, el script falla con un mensaje explícito antes de
 leer los datos. Lo mismo vale para `evaluar_repetido.py`. Los dos JSON de salida lo declaran en su campo `datos`.
 
+**Análisis de sensibilidad de las columnas de procedencia.** Con
+`--incluir-procedencia`, las columnas de procedencia del reporte de fugas
+(`attribution`, `copyright_license`) quedan dentro del modelo, sobre las
+mismas particiones de desarrollo. La salida va a su propio archivo,
+`outputs/sensibilidad-procedencia.json` y `.md`, con un bloque
+`sensibilidad` que lo declara: no sustituye a la corrida principal ni se
+usa para elegir nada. El script se niega a escribir con esa opción sobre
+`outputs/modelado-baseline`.
+
+```bash
+python .claude/skills/modelado-baseline/scripts/train_and_evaluate.py \
+  --data data/train-metadata.csv \
+  --group-col patient_id \
+  --target-col target \
+  --n-splits 5 \
+  --seed 42 \
+  --leakage-report outputs/auditoria-de-fugas.json \
+  --out outputs/sensibilidad-procedencia \
+  --incluir-procedencia
+```
+
 ## Contrato de salida
 
 - `outputs/modelado-baseline.json` — resultados completos por nivel y fold.

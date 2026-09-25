@@ -212,7 +212,23 @@ def main():
     ap.add_argument("--leakage-report", required=True)
     ap.add_argument("--holdout", default=RUTA_HOLDOUT)
     ap.add_argument("--out", required=True)
+    ap.add_argument(
+        "--incluir-procedencia", action="store_true",
+        help="Solo para el análisis de sensibilidad: deja dentro del modelo las "
+             "columnas de procedencia del reporte de fugas.",
+    )
     args = ap.parse_args()
+
+    # REGLA DURA, como en evaluar_repetido.py: la corrida de sensibilidad nunca
+    # escribe la salida principal, que alimenta la demo, el borrador y la
+    # verificación de trazabilidad.
+    if args.incluir_procedencia and os.path.basename(args.out) == "modelado-baseline":
+        print(
+            "ERROR: --incluir-procedencia no escribe outputs/modelado-baseline. "
+            "Usa otra salida, p. ej. outputs/sensibilidad-procedencia.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     if not os.path.exists(args.leakage_report):
         print(
@@ -229,8 +245,10 @@ def main():
         reporte_fugas.get("columnas_solo_en_train", [])
         + reporte_fugas.get("columnas_constantes", [])
         + reporte_fugas.get("columnas_identificador", [])
-        + reporte_fugas.get("columnas_procedencia", [])
     )
+    procedencia = reporte_fugas.get("columnas_procedencia", [])
+    if not args.incluir_procedencia:
+        columnas_excluidas = columnas_excluidas + procedencia
 
     df, datos = cargar_desarrollo(args.data, args.group_col, args.holdout)
 
@@ -357,6 +375,16 @@ def main():
         },
     }
 
+    if args.incluir_procedencia:
+        resultado["sensibilidad"] = {
+            "columnas_procedencia_incluidas": procedencia,
+            "nota": (
+                "Análisis de sensibilidad: las mismas particiones de desarrollo que "
+                "outputs/modelado-baseline.json, con las columnas de procedencia dentro "
+                "del modelo. No sustituye a la corrida principal ni se usa para elegir nada."
+            ),
+        }
+
     # Posición de cada nivel en la escala del pAUC, emitida como campo en vez
     # de dejarla para que la calcule quien escriba el informe. Motivo: el .md
     # de esta skill ya la imprimía, pero el verificador de trazabilidad solo
@@ -385,6 +413,11 @@ def main():
 
     lineas = []
     lineas.append(f"# Modelado baseline — {args.data}, conjunto de desarrollo")
+    if args.incluir_procedencia:
+        lineas.append(
+            f"SENSIBILIDAD: con las columnas de procedencia {procedencia} dentro del modelo. "
+            f"No sustituye a outputs/modelado-baseline.json ni se usa para elegir nada."
+        )
     lineas.append("Métrica: pAUC sobre 80% TPR [0, 0.2] · verificada contra el script oficial (2026-08-11)")
     lineas.append(f"Esquema CV: {args.n_splits} folds agrupados por {args.group_col}, seed {args.seed}")
     lineas.append(f"Columnas excluidas: {len(columnas_excluidas)} · features usadas: {resultado['n_features_usadas']}")
@@ -418,7 +451,7 @@ def main():
     lineas.append(linea_nivel("Nivel 2a (GB sin balancear)", resultado["nivel_2a_gradient_boosting_sin_balancear"]))
     lineas.append(linea_nivel("Nivel 2b (GB balanceado)", resultado["nivel_2b_gradient_boosting_balanceado"]))
     lineas.append("2a por debajo del azar no es un bug: satura en 1.0 sobre negativos. Ver nota en el .json.")
-    lineas.append("Detalle por fold: outputs/modelado-baseline.json")
+    lineas.append(f"Detalle por fold: {args.out}.json")
 
     with open(f"{args.out}.md", "w", encoding="utf-8") as f:
         f.write("\n".join(lineas) + "\n")

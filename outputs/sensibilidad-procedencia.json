@@ -1,0 +1,186 @@
+{
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "esquema_cv": {
+    "group_col": "patient_id",
+    "n_splits": 5,
+    "seed": 42
+  },
+  "metrica": "pAUC sobre 80% TPR, rango [0, 0.2]",
+  "metrica_verificada_contra_fuente_oficial": true,
+  "metrica_fuente": "referencias/isic-primary-metric-pauc.py.md (p_auc_tpr, ISIC/MSKCC), verificado 2026-08-11",
+  "columnas_excluidas": [
+    "iddx_1",
+    "iddx_2",
+    "iddx_3",
+    "iddx_4",
+    "iddx_5",
+    "iddx_full",
+    "lesion_id",
+    "mel_mitotic_index",
+    "mel_thick_mm",
+    "target",
+    "tbp_lv_dnn_lesion_confidence",
+    "image_type",
+    "isic_id"
+  ],
+  "n_features_usadas": 41,
+  "features_usadas": [
+    "age_approx",
+    "clin_size_long_diam_mm",
+    "tbp_lv_A",
+    "tbp_lv_Aext",
+    "tbp_lv_B",
+    "tbp_lv_Bext",
+    "tbp_lv_C",
+    "tbp_lv_Cext",
+    "tbp_lv_H",
+    "tbp_lv_Hext",
+    "tbp_lv_L",
+    "tbp_lv_Lext",
+    "tbp_lv_areaMM2",
+    "tbp_lv_area_perim_ratio",
+    "tbp_lv_color_std_mean",
+    "tbp_lv_deltaA",
+    "tbp_lv_deltaB",
+    "tbp_lv_deltaL",
+    "tbp_lv_deltaLB",
+    "tbp_lv_deltaLBnorm",
+    "tbp_lv_eccentricity",
+    "tbp_lv_minorAxisMM",
+    "tbp_lv_nevi_confidence",
+    "tbp_lv_norm_border",
+    "tbp_lv_norm_color",
+    "tbp_lv_perimeterMM",
+    "tbp_lv_radial_color_std_max",
+    "tbp_lv_stdL",
+    "tbp_lv_stdLExt",
+    "tbp_lv_symm_2axis",
+    "tbp_lv_symm_2axis_angle",
+    "tbp_lv_x",
+    "tbp_lv_y",
+    "tbp_lv_z",
+    "sex",
+    "anatom_site_general",
+    "tbp_tile_type",
+    "tbp_lv_location",
+    "tbp_lv_location_simple",
+    "attribution",
+    "copyright_license"
+  ],
+  "nivel_0_referencia_univariada": {
+    "criterio": "en cada fold de entrenamiento: la columna numérica de mayor max(AUC, 1 - AUC) y el signo de mayor pAUC; nada se elige con etiquetas de validación",
+    "columna_por_fold": [
+      "tbp_lv_H",
+      "tbp_lv_H",
+      "tbp_lv_H",
+      "tbp_lv_H",
+      "tbp_lv_H"
+    ],
+    "orientacion_por_fold": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "pauc_por_fold": [
+      0.0737,
+      0.089,
+      0.0835,
+      0.0681,
+      0.0837
+    ],
+    "pauc_media": 0.0796,
+    "pauc_std": 0.0076,
+    "auc_estandar_por_fold": [
+      0.7994,
+      0.8089,
+      0.8303,
+      0.768,
+      0.8175
+    ],
+    "auc_estandar_media": 0.8048,
+    "nota": "auc_estandar_media y pauc_media NO están en la misma escala: el AUC va de 0.5 (azar) a 1, el pAUC de 0.02 (azar) a 0.2. Compara contra los niveles 1 y 2 usando pauc_media, nunca auc_estandar_media.",
+    "posicion_en_escala": 0.3311
+  },
+  "nivel_1_regresion_logistica": {
+    "pauc_por_fold": [
+      0.1316,
+      0.1204,
+      0.1372,
+      0.1502,
+      0.1284
+    ],
+    "pauc_media": 0.1336,
+    "pauc_std": 0.0099,
+    "auc_estandar_por_fold": [
+      0.9028,
+      0.8778,
+      0.9044,
+      0.924,
+      0.8913
+    ],
+    "auc_estandar_media": 0.9001,
+    "posicion_en_escala": 0.6311
+  },
+  "nivel_2a_gradient_boosting_sin_balancear": {
+    "modelo": "HistGradientBoostingClassifier(class_weight=None)",
+    "pauc_por_fold": [
+      0.001,
+      0.0005,
+      0.0002,
+      0.0008,
+      0.0002
+    ],
+    "pauc_media": 0.0006,
+    "pauc_std": 0.0003,
+    "auc_estandar_por_fold": [
+      0.5558,
+      0.667,
+      0.5597,
+      0.6014,
+      0.4782
+    ],
+    "auc_estandar_media": 0.5724,
+    "nota": "Se conserva aunque quede por DEBAJO del piso aleatorio de la métrica (0.02): con 0.098% de positivos el modelo satura en probabilidad 1.0 sobre negativos y los coloca por encima de los positivos, destruyendo justo la región de sensibilidad alta que el pAUC mide. Es un hallazgo, no un fallo del script.",
+    "posicion_en_escala": -0.1078
+  },
+  "nivel_2b_gradient_boosting_balanceado": {
+    "modelo": "HistGradientBoostingClassifier(class_weight='balanced')",
+    "pauc_por_fold": [
+      0.1242,
+      0.1421,
+      0.1699,
+      0.1567,
+      0.1407
+    ],
+    "pauc_media": 0.1467,
+    "pauc_std": 0.0155,
+    "auc_estandar_por_fold": [
+      0.9089,
+      0.9218,
+      0.9617,
+      0.9433,
+      0.9269
+    ],
+    "auc_estandar_media": 0.9325,
+    "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds.",
+    "posicion_en_escala": 0.7039
+  },
+  "escala_de_referencia_pauc": {
+    "azar": 0.02,
+    "maximo": 0.2,
+    "nota": "Para situar cualquier pauc_media entre el azar y el clasificador perfecto. Esa cuenta ya está hecha: cada nivel trae el campo posicion_en_escala = (pauc_media - azar) / (maximo - azar). El informe debe citar ese campo, no rehacer la división."
+  },
+  "sensibilidad": {
+    "columnas_procedencia_incluidas": [
+      "attribution",
+      "copyright_license"
+    ],
+    "nota": "Análisis de sensibilidad: las mismas particiones de desarrollo que outputs/modelado-baseline.json, con las columnas de procedencia dentro del modelo. No sustituye a la corrida principal ni se usa para elegir nada."
+  }
+}
