@@ -18,7 +18,8 @@ mecánica.
 
 Las fases están ordenadas por dependencia real, no por comodidad. Las fases 1 y
 2 son bloqueantes por razones distintas y ambas van antes de tocar imágenes: la
-1 porque un holdout sellado después de mirar los datos no es un holdout, y la 2
+1 porque el holdout protege las decisiones que se tomen después de sellarlo —las
+tomadas antes, con los datos completos, no las protege, y se declaran—, y la 2
 porque una característica extraída de un modelo contaminado no se puede
 descontaminar a posteriori.
 
