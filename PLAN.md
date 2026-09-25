@@ -381,8 +381,12 @@ conteos y sumas de área por paciente y el LOF ajustado paciente por paciente.
 
 Quedan fuera, con su motivo:
 
-- **Las redes EVA02-small y EdgeNeXt-base.** Cómputo: el código las ajusta por
-  completo en GPU y depende de CUDA; el README declara una NVIDIA A6000.
+- **Las redes EVA02-small y EdgeNeXt-base.** Fuera del alcance de esta
+  entrega: su costo no se ha estimado, y se reconsidera si esta fase muestra que
+  la imagen aporta de forma distinguible (anteproyecto, sección 5.1). Lo que se
+  sabe de ese costo: el código las ajusta por completo en GPU y depende de CUDA;
+  el README declara una NVIDIA A6000. *Hasta el 2026-09-24 el motivo que se daba
+  aquí era "cómputo".*
 - **El modelo entrenado con el ISIC Archive** (el tercer modelo de imagen, otro
   EVA02-small). Riesgo de fuga: la descarga no se filtra contra las imágenes ni
   los pacientes de la competición, y el código no permite saber si contiene los

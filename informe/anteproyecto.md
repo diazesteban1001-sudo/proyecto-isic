@@ -375,7 +375,7 @@ definieron.
 
 1. Construir un esquema de evaluación libre de fuga: cuantificar la fuga de una partición por registro frente a una agrupada por paciente, identificar las variables no disponibles al momento de predecir y reservar un conjunto de pacientes que se evalúe una sola vez. *Se declara cumplido con la proporción de pacientes presentes a ambos lados de cada partición, el listado de variables excluidas con su motivo y el conjunto reservado sellado antes de cualquier decisión nueva de modelado.*
 2. Estimar el desempeño de cuatro niveles de referencia bajo la métrica oficial y bajo el AUC estándar, sobre los mismos pliegues. *Se declara cumplido con las medias y las series por pliegue de ambas métricas, y con los casos donde las dos discrepan en el veredicto.*
-3. Contrastar los niveles, y la solución ganadora de la competencia reproducida desde su código público sobre las mismas particiones, mediante comparación pareada con validación cruzada repetida, corrigiendo la varianza por el solape entre conjuntos de entrenamiento. *Se declara cumplido con el intervalo de confianza de cada diferencia en sus versiones ingenua y corregida, y con la lista de los componentes de la solución ganadora que no se pudieron reproducir, con su motivo: cómputo o riesgo de fuga.*
+3. Contrastar los niveles, y la solución ganadora de la competencia reproducida desde su código público sobre las mismas particiones, mediante comparación pareada con validación cruzada repetida, corrigiendo la varianza por el solape entre conjuntos de entrenamiento. *Se declara cumplido con el intervalo de confianza de cada diferencia en sus versiones ingenua y corregida, y con la lista de los componentes de la solución ganadora que no se pudieron reproducir, con su motivo.*
 4. Evaluar los niveles bajo los ejes de triaje que definen los organizadores —sensibilidad en las quince lesiones de mayor riesgo por paciente y número de lesiones a derivar por maligna detectada— y bajo su tiempo de inferencia, para determinar si el veredicto de la métrica principal se sostiene sobre la función de utilidad completa. *Se declara cumplido con la tabla por nivel de la métrica principal, los dos ejes de triaje y el tiempo de inferencia, y con la implementación de los ejes de triaje contrastada contra el orden de magnitud publicado.*
 5. Incorporar características derivadas de imagen, previa verificación de que el conjunto no estuvo en el preentrenamiento del modelo fundacional empleado, y evaluar el modelo recomendado sobre el conjunto reservado. *Se declara cumplido con el resultado de esa verificación y con las métricas del conjunto reservado reportadas con su intervalo.*
 
@@ -497,8 +497,8 @@ Los valores de referencia salen de la Tabla 3 de Kurtansky et al. (2025):
 Sirven para comprobar que el cálculo está bien montado, no para comparar
 desempeño, porque se midieron sobre otras particiones y otros conjuntos.
 
-El costo de inferencia, que el cliente también premió (sección 1.3), todavía no
-tiene definición operativa; se fija en el apartado 5.
+El costo de inferencia, que el cliente también premió (sección 1.3), se mide
+como tiempo de inferencia; su definición está en el apartado 5.
 
 ### 4.4 Modelos
 
@@ -603,7 +603,7 @@ Quedan fuera, con su motivo:
    - Sus redes de imagen, por el mismo motivo que el punto 1.
    - Su modelo entrenado con el archivo público de ISIC, por riesgo de fuga.
    - La razón de cada predicción de imagen contra la media del paciente, que
-     solo se calcula sobre las predicciones de esas redes.
+     solo se calcula sobre las predicciones de sus tres modelos de imagen.
 4. **Cualquier comparación con la clasificación privada de la competencia.**
    Ese conjunto no es accesible, así que el trabajo no afirma superar ni quedar
    por debajo del ganador en la competencia. La comparación con él se hace
