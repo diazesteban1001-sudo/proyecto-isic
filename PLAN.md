@@ -174,7 +174,7 @@ están en `outputs/`; no quedan cifras derivadas.
 **Siguiente paso.** Los seis apartados están escritos. Queda la puerta de esta
 fase, el PDF del anteproyecto, y sigue abierto el pendiente de la Fase 2:
 versionar la fuente de los datos de preentrenamiento de DINOv3 y escribir la
-decisión sobre ella.
+decisión sobre ella, con la regla de verificación de esa fase.
 
 *Salvedad sobre PanDerm — resuelta el 2026-09-24.* Hasta esa fecha su archivo
 decía "TEXTO COMPLETO" en la cabecera, pero solo reproducía la frase citada, y
@@ -286,6 +286,19 @@ límites del hallazgo sobre PanDerm —qué imágenes exactamente, si el
 preentrenamiento sin etiquetas infla un resultado— están en `CLAUDE.md`, «Riesgo
 bloqueante»; no cambian la decisión.
 
+**Decisión (2026-09-24, de la persona): regla de verificación del extractor de
+imagen**, fijada antes de leer su fuente. Un modelo cuenta como verificado en
+dos casos:
+- sus pesos o sus datos de preentrenamiento son anteriores a la publicación de
+  SLICE-3D, y sus autores no pertenecen a las instituciones que aportaron los
+  datos;
+- su documentación enumera fuentes cerradas que excluyen SLICE-3D.
+
+Si no se verifica, no se usa. Los candidatos se prueban en este orden: DINOv3,
+DINOv2 y, si ninguno se verifica, el trabajo sigue sin imagen. *Las fechas de
+DINOv2, de DINOv3 y de la publicación de SLICE-3D no se afirman aquí: se
+verifican con fuente en esta misma fase.*
+
 **No se extrae ni una característica antes de cerrar esto.** Si hay solape,
 cualquier resultado de un modelo congelado sobre estos datos viene inflado por
 fuga, y la fuga no se puede quitar después: está dentro de los pesos. Es la
@@ -310,9 +323,11 @@ dermatología. Tras la decisión es el modelo que se usa. *Aquí se decía que n
 tenía "este riesgo conocido"; que no se le conozca no es una verificación, y se
 le aplica la misma.* Con DINOv3 se pierde el ajuste al dominio y probablemente
 desempeño, y el intercambio se declara en el informe. Solo se gana poder afirmar
-lo que se mida cuando su verificación esté cerrada. Qué hacer si esa
-verificación tampoco se puede cerrar no está decidido; **el hallazgo de que no se
-pudo verificar sería, él mismo, un resultado publicable** del trabajo.
+lo que se mida cuando su verificación esté cerrada. Si esa verificación
+tampoco se puede cerrar, lo decide la regla de arriba: no se usa, y se pasa al
+siguiente candidato. *Hasta el 2026-09-24 aquí decía que no estaba decidido.*
+**El hallazgo de que no se pudo verificar sería, él mismo, un resultado
+publicable** del trabajo.
 
 ---
 
