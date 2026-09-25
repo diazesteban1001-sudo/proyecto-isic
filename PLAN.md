@@ -212,10 +212,12 @@ cifras del borrador cambian. Es trabajo de re-medición, no de re-análisis.
 pliegue de validación: en cada pliegue toma `max(pauc(s), pauc(−s))`
 (`evaluar_columna_sola`, en `train_and_evaluate.py`). Se corrige eligiendo la
 orientación en el pliegue de entrenamiento, y solo después se vuelve a medir.
-La elección de la columna tiene un problema parecido: se hace con el AUC fuera
-de muestra de `auditoria-de-fugas`, calculado sobre todos los pliegues. Queda
-por decidir si se corrige igual. El código no se ha tocado todavía; el
-incidente está en el registro de `CLAUDE.md` (regla 6).
+La elección de la columna tenía un problema parecido: se hace con el AUC fuera
+de muestra de `auditoria-de-fugas`, calculado sobre todos los pliegues.
+**Resuelto (2026-09-24): la variable también se elige dentro de cada pliegue de
+entrenamiento**, por la regla de la clase décima: toda elección que dependa de
+las etiquetas se hace dentro del pliegue de entrenamiento. El código no se ha
+tocado todavía; el incidente está en el registro de `CLAUDE.md` (regla 6).
 
 **Motivo medido, no precaución teórica.** Los propios organizadores
 cuantificaron lo que cuesta mirar un conjunto antes de tiempo, sobre los 4.998
