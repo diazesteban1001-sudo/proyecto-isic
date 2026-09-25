@@ -1,4 +1,16 @@
-# Anteproyecto
+# ¿Depende el veredicto del método? Evaluación de modelos de triaje de melanoma en SLICE-3D desde la función de utilidad del cliente
+
+**Anteproyecto**
+
+Esteban Díaz
+
+Programa de Estadística
+
+Universidad Santo Tomás
+
+Consultoría e Investigación
+
+Docente: Javier Mauricio Sierra
 
 ## 1. Problema y estado actual
 
@@ -596,7 +608,7 @@ El tiempo de inferencia se mide así:
 Quedan fuera, con su motivo:
 
 1. **El ajuste fino de redes de imagen.** Queda fuera del alcance de esta
-   entrega: su costo no se ha estimado, y se reconsidera si la Fase 4 muestra
+   entrega: su costo no se ha estimado, y se reconsidera si la fase 4 muestra
    que la imagen aporta de forma distinguible. Las características de imagen se
    extraen de un modelo congelado.
 2. **PanDerm.** Su artículo declara un subconjunto de ISIC 2024 entre sus datos
