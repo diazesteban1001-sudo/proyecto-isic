@@ -1250,9 +1250,12 @@ contexto.
       `referencias/novoselskiy-2024-isic2024.md`. El writeup de Kaggle sigue
       sin estar en `referencias/`, así que lo que el autor reporta sobre por
       qué funciona su solución sigue sin ser citable.*
-- [ ] Decidir tamaño exacto del lockbox y semilla de partición, y verificar que
+- [x] Decidir tamaño exacto del lockbox y semilla de partición, y verificar que
       la partición deja positivos en ambos lados (mismo chequeo obligatorio que
-      `diseno-validacion` ya hace para los folds)
+      `diseno-validacion` ya hace para los folds). *Cumplido el 2026-09-25: 20 %
+      de los pacientes, estratificado por centro y por presencia de lesiones
+      malignas, semilla 2026, sin ningún estrato vacío a un lado. Decisión en
+      `PLAN.md`, Fase 1; lista en `outputs/holdout-pacientes.json`.*
 - [ ] Decidir cuántas semillas usar en la Vía A, según tiempo de cómputo real
 - [x] Definir cómo se mide el eje "costo de inferencia" — sin esa definición la
       tabla de E4 tiene solo dos columnas de tres. *Cumplido el 2026-09-24: se

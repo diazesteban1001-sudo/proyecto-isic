@@ -58,6 +58,31 @@ python .claude/skills/diseno-validacion/scripts/build_and_audit_cv.py \
 Si `--group-col` o `--target-col` no existen en el archivo, el script
 falla con un mensaje explícito — no continúa con un esquema sin sentido.
 
+## El conjunto reservado
+
+`scripts/sellar_reservado.py` aparta el conjunto reservado: el 20 % de
+los pacientes, estratificado por centro (`attribution`) y por presencia
+de al menos una lesión maligna, con semilla 2026 (decisión de la
+persona, `PLAN.md`, Fase 1). Es el único script que lee el CSV de
+entrenamiento entero.
+
+```bash
+python .claude/skills/diseno-validacion/scripts/sellar_reservado.py \
+  --data data/train-metadata.csv \
+  --group-col patient_id \
+  --target-col target \
+  --centro-col attribution \
+  --fraccion 0.2 \
+  --seed 2026 \
+  --out outputs/holdout-pacientes
+```
+
+Escribe `outputs/holdout-pacientes.json` —semilla, método, lista de
+`patient_id` reservados y recuentos a cada lado— y su `.md`. No calcula
+ninguna métrica de modelo. Se detiene sin escribir nada si algún estrato
+(centro × portador) queda vacío a un lado. Si el archivo ya existe, no lo
+sobrescribe: recalcula la partición y la compara con la sellada.
+
 ## Contrato de salida
 
 - `outputs/diseno-validacion.json` — esquema completo y auditoría,

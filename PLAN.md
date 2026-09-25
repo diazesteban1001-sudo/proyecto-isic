@@ -213,7 +213,8 @@ afirmación no se escribe.
 ## Fase 1 — Sellar el holdout y re-medir
 
 **Qué se hace.** Apartar el **20% de los pacientes** —no de las filas—,
-estratificado por presencia de positivos, y sellarlo. Después, re-correr las
+estratificado por centro y por presencia de positivos (decisión del
+2026-09-25, abajo), y sellarlo. Después, re-correr las
 cuatro skills instrumento sobre el conjunto de desarrollo restante, y actualizar
 la demo y el borrador con las cifras nuevas.
 
@@ -232,6 +233,20 @@ de muestra de `auditoria-de-fugas`, calculado sobre todos los pliegues.
 entrenamiento**, por la regla de la clase décima: toda elección que dependa de
 las etiquetas se hace dentro del pliegue de entrenamiento. El código no se ha
 tocado todavía; el incidente está en el registro de `CLAUDE.md` (regla 6).
+
+**Decisiones de la persona sobre el conjunto reservado (2026-09-25).**
+
+- 20 % de los pacientes, estratificado por centro (`attribution`) y por
+  presencia de al menos una lesión maligna. Hasta hoy se estratificaba solo
+  por presencia de positivos.
+- Semilla 2026.
+- Si algún estrato queda sin pacientes portadores a un lado, se para antes de
+  sellar y se consulta.
+
+**Sellado (2026-09-25).** `outputs/holdout-pacientes.json`, escrito por
+`diseno-validacion/scripts/sellar_reservado.py`. Ningún estrato quedó vacío:
+todos los centros tienen al menos un paciente portador a cada lado. Los
+recuentos están en `outputs/holdout-pacientes.md`.
 
 **Motivo medido, no precaución teórica.** Los propios organizadores
 cuantificaron lo que cuesta mirar un conjunto antes de tiempo, sobre los 4.998
