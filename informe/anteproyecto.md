@@ -435,10 +435,11 @@ variables, porque `patient_id` se usa para agrupar y no como variable. La
 auditoría de fugas no encontró entre ellas ninguna con un AUC univariado de 0,9
 o más, el umbral fijado para marcar una variable como sospechosa.
 
-Las imágenes se incorporan en una fase posterior (sección 4.4), que reporta
-cuántas lesiones tienen imagen utilizable. Si el cómputo no alcanza para todas,
-se submuestrea por paciente conservando todas las lesiones malignas; la regla
-se fija antes de medir cuánto tarda la extracción.
+Las imágenes se incorporan en una fase posterior (sección 5.2, fase 3), que
+reporta cuántas lesiones tienen imagen utilizable; cómo se extraen sus
+características se describe en la sección 4.4. Si el cómputo no alcanza para
+todas, se submuestrea por paciente conservando todas las lesiones malignas; la
+regla se fija antes de medir cuánto tarda la extracción.
 
 ### 4.2 Esquema de evaluación
 
@@ -522,8 +523,8 @@ paciente, conteos y sumas de área por paciente y un indicador de atipicidad
 (LOF) ajustado paciente por paciente.
 
 - **Quedan fuera sus redes de imagen**: fuera del alcance de esta entrega. Su
-  costo no se ha estimado, y se reconsidera si la Fase 4 muestra que la imagen
-  aporta de forma distinguible.
+  costo no se ha estimado, y se reconsidera si la fase 4 del plan (sección 5.2)
+  muestra que la imagen aporta de forma distinguible.
 - **Queda fuera su modelo entrenado con el archivo público de ISIC**, por
   riesgo de fuga: el código no excluye de esa descarga las imágenes de la
   competencia.
@@ -533,11 +534,12 @@ paciente, conteos y sumas de área por paciente y un indicador de atipicidad
 
 Cada cambio que exija el código publicado se declara.
 
-Las características de imagen se extraen con un modelo preentrenado y
-congelado, en una sola pasada y sin ajuste fino. Se descartó PanDerm porque su
-propio artículo declara un subconjunto de ISIC 2024 entre sus datos de
-preentrenamiento (Yan et al., 2025). En su lugar se usa DINOv3, sujeto a la
-misma verificación antes de extraer ninguna característica; su fuente se cita
+Las características de imagen se extraen con un modelo preentrenado y congelado,
+en una sola pasada y sin ajuste fino. Se descartó PanDerm porque su propio
+artículo declara un subconjunto de ISIC 2024 entre sus datos de preentrenamiento
+(Yan et al., 2025). En su lugar se prueba primero DINOv3, con la misma
+verificación antes de extraer ninguna característica y con el orden de
+candidatos que fija la sección 5.2; la fuente del modelo que se use se cita
 cuando esté verificada.
 
 ### 4.5 Comparación estadística
@@ -573,9 +575,9 @@ que el cliente declaró, en sus tres componentes:
   sensibilidad, con el AUC estándar al lado.
 - **Los ejes de triaje**, SEtop-15 y NNT80% SE.
 - **La eficiencia.** El organizador anunció que la evaluaría por *"inference
-  time on an undisclosed subset of test set images"* (Kurtansky, 2024). El
-  costo de inferencia que dejó pendiente la sección 4.3 se mide, por tanto,
-  como tiempo de inferencia.
+  time on an undisclosed subset of test set images"* (Kurtansky, 2024). Por eso,
+  como adelanta la sección 4.3, el costo de inferencia se mide como tiempo de
+  inferencia.
 
 El tiempo de inferencia se mide así:
 
