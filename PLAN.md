@@ -8,6 +8,12 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
+**Dónde está la ruta (2026-09-24): Fase 1.** La Fase 0 está cerrada. El
+siguiente paso es la Fase 1: sellar el conjunto reservado, corregir el nivel 0 y
+re-medir. Sigue abierto, aparte, el pendiente de la Fase 2: versionar la fuente
+de los datos de preentrenamiento de DINOv3 y escribir la decisión sobre ella,
+con la regla de verificación de esa fase.
+
 ## Cómo leer una puerta
 
 Una **puerta** es un archivo concreto que tiene que existir en el repositorio
@@ -25,7 +31,13 @@ descontaminar a posteriori.
 
 ---
 
-## Fase 0 — Cerrar el anteproyecto
+## Fase 0 — Cerrar el anteproyecto — CERRADA
+
+**Estado: CERRADA (2026-09-24).** La entrega del anteproyecto ya pasó, así que la
+puerta está cumplida. `informe/anteproyecto.md` queda como base de diseño del
+proyecto y no se vuelve a pulir salvo que el curso lo pida: sus cifras son las
+de las mediciones exploratorias y no se actualizan con la re-medición de la
+Fase 1. Lo que sigue en esta sección es el registro de cómo se cerró.
 
 **Qué se hace.** El documento de anteproyecto, completo:
 
@@ -155,7 +167,9 @@ anteproyecto; las cuatro están cerradas, con sus fuentes versionadas en
    ninguno de los tres trabajos de aprendizaje automático usa datos de pacientes
    colombianos. Los tres entrenan y evalúan sobre conjuntos internacionales.
 
-**Pendiente del estado del arte.** Ninguna de las dos cosas bloquea la entrega.
+**Pendiente del estado del arte — no se atiende.** Con la fase cerrada, el
+documento no se vuelve a pulir salvo que el curso lo pida. Quedan anotadas como
+mejoras posibles:
 
 - **Densidad de salvedades epistémicas.** Es alta para una revisión de unas
   2.500 palabras (la sección 2 sin la lista de referencias).
@@ -171,10 +185,8 @@ de Kaggle y `outputs/`, y no desde `d1-material-colombia.md`. Pasó la
 verificación: todas sus citas son literales y todas sus cifras tienen fuente o
 están en `outputs/`; no quedan cifras derivadas.
 
-**Siguiente paso.** Los seis apartados están escritos. Queda la puerta de esta
-fase, el PDF del anteproyecto, y sigue abierto el pendiente de la Fase 2:
-versionar la fuente de los datos de preentrenamiento de DINOv3 y escribir la
-decisión sobre ella, con la regla de verificación de esa fase.
+*El siguiente paso ya no está aquí: está al principio de este archivo, en
+«Dónde está la ruta».*
 
 *Salvedad sobre PanDerm — resuelta el 2026-09-24.* Hasta esa fecha su archivo
 decía "TEXTO COMPLETO" en la cabecera, pero solo reproducía la frase citada, y
@@ -184,7 +196,8 @@ en `referencias/_texto-completo/` no había copia. Desde el 2026-09-24
 contra él. El material suplementario no se versiona: su licencia no está
 determinada.
 
-**Puerta.** El PDF del anteproyecto, entregado.
+**Puerta.** El PDF del anteproyecto, entregado. *Cumplida: la entrega ya
+pasó.*
 
 **Riesgo.** Una referencia que no diga lo que el documento afirma que dice. Es
 el modo de fallo más caro de esta fase porque no degrada el criterio: lo deja en
