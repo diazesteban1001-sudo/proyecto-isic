@@ -16,9 +16,15 @@ Uso:
 import argparse
 import json
 import os
+import sys
 from datetime import datetime, timezone
 
 import pandas as pd
+
+# El cargador del conjunto de desarrollo vive en diseno-validacion, la skill
+# que sella el conjunto reservado.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "diseno-validacion", "scripts"))
+from datos_desarrollo import RUTA_HOLDOUT, cargar_desarrollo  # noqa: E402
 
 
 def perfil_columnas(df: pd.DataFrame) -> dict:
@@ -108,12 +114,13 @@ def main():
     ap.add_argument("--test", required=False, default=None)
     ap.add_argument("--group-col", required=False, default=None)
     ap.add_argument("--target-col", required=False, default=None)
+    ap.add_argument("--holdout", default=RUTA_HOLDOUT)
     ap.add_argument("--out", required=True, help="Ruta base sin extensión, ej. outputs/eda-diagnostico")
     args = ap.parse_args()
 
-    # low_memory=False: infiere tipos sobre el archivo completo en vez de por
-    # bloques. Evita el DtypeWarning sin alterar los tipos resultantes.
-    train = pd.read_csv(args.train, low_memory=False)
+    # Solo el conjunto de desarrollo: el cargador lee con low_memory=False,
+    # que infiere tipos sobre el archivo completo en vez de por bloques.
+    train, datos = cargar_desarrollo(args.train, args.group_col or "patient_id", args.holdout)
 
     test = None
     test_is_placeholder = False
@@ -145,6 +152,7 @@ def main():
     dup = perfil_duplicados(train)
 
     resultado = {
+        "datos": datos,
         "fuente": {
             "archivo": args.train,
             "fecha_ejecucion": datetime.now(timezone.utc).isoformat(),
@@ -171,7 +179,7 @@ def main():
 
     # Resumen .md: máximo 15 líneas, sin interpretación.
     lineas = []
-    lineas.append(f"# EDA diagnóstico — {args.train}")
+    lineas.append(f"# EDA diagnóstico — {args.train}, conjunto de desarrollo")
     lineas.append(f"Filas: {resultado['fuente']['n_filas']} · Columnas: {resultado['fuente']['n_columnas']}")
     n_con_faltantes = sum(1 for v in faltantes.values() if v["n"] > 0)
     lineas.append(f"Columnas con al menos un faltante: {n_con_faltantes}")

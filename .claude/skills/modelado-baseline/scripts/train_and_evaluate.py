@@ -42,6 +42,11 @@ except ImportError:
     HAS_STRATIFIED_GROUP = False
 from sklearn.model_selection import GroupKFold
 
+# El cargador del conjunto de desarrollo vive en diseno-validacion, la skill
+# que sella el conjunto reservado.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "diseno-validacion", "scripts"))
+from datos_desarrollo import RUTA_HOLDOUT, cargar_desarrollo  # noqa: E402
+
 
 # Constante del proyecto: Kaggle evalua el pAUC sobre 80% TPR, rango [0, 0.2]
 # (referencias/kaggle-evaluation.md). Los premios del organizador ISIC usan
@@ -169,6 +174,7 @@ def main():
     ap.add_argument("--n-splits", type=int, default=5)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--leakage-report", required=True)
+    ap.add_argument("--holdout", default=RUTA_HOLDOUT)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
@@ -189,7 +195,7 @@ def main():
         + reporte_fugas.get("columnas_identificador", [])
     )
 
-    df = pd.read_csv(args.data, low_memory=False)
+    df, datos = cargar_desarrollo(args.data, args.group_col, args.holdout)
 
     for col in (args.group_col, args.target_col):
         if col not in df.columns:
@@ -254,6 +260,7 @@ def main():
     maximo = round(1 - MIN_TPR, 4)
 
     resultado = {
+        "datos": datos,
         "esquema_cv": {"group_col": args.group_col, "n_splits": args.n_splits, "seed": args.seed},
         "metrica": "pAUC sobre 80% TPR, rango [0, 0.2]",
         "metrica_verificada_contra_fuente_oficial": True,
@@ -331,7 +338,7 @@ def main():
         json.dump(resultado, f, ensure_ascii=False, indent=2)
 
     lineas = []
-    lineas.append(f"# Modelado baseline — {args.data}")
+    lineas.append(f"# Modelado baseline — {args.data}, conjunto de desarrollo")
     lineas.append("Métrica: pAUC sobre 80% TPR [0, 0.2] · verificada contra el script oficial (2026-08-11)")
     lineas.append(f"Esquema CV: {args.n_splits} folds agrupados por {args.group_col}, seed {args.seed}")
     lineas.append(f"Columnas excluidas: {len(columnas_excluidas)} · features usadas: {resultado['n_features_usadas']}")

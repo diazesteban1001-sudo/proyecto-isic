@@ -116,6 +116,12 @@ python .claude/skills/modelado-baseline/scripts/train_and_evaluate.py \
   --out outputs/modelado-baseline
 ```
 
+**Solo lee el conjunto de desarrollo.** El CSV se carga con
+`diseno-validacion/scripts/datos_desarrollo.py`, que excluye los pacientes
+de `outputs/holdout-pacientes.json` (`--holdout`, por defecto esa ruta). Si
+ese archivo no existe, el script falla con un mensaje explícito antes de
+leer los datos. Lo mismo vale para `evaluar_repetido.py`. Los dos JSON de salida lo declaran en su campo `datos`.
+
 ## Contrato de salida
 
 - `outputs/modelado-baseline.json` — resultados completos por nivel y fold.
@@ -128,6 +134,7 @@ python .claude/skills/modelado-baseline/scripts/train_and_evaluate.py \
 
 ```
 {
+  "datos": {"archivo": str, "conjunto": "desarrollo", "sin_los_pacientes_de": str},
   "esquema_cv": {"group_col": str, "n_splits": int, "seed": int},
   "metrica": "pAUC sobre 80% TPR, rango [0, 0.2]",
   "metrica_verificada_contra_fuente_oficial": true,

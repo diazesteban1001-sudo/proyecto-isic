@@ -55,6 +55,12 @@ python .claude/skills/diseno-validacion/scripts/build_and_audit_cv.py \
   --out outputs/diseno-validacion
 ```
 
+**Solo lee el conjunto de desarrollo.** El CSV se carga con
+`scripts/datos_desarrollo.py`, que excluye los pacientes
+de `outputs/holdout-pacientes.json` (`--holdout`, por defecto esa ruta). Si
+ese archivo no existe, el script falla con un mensaje explícito antes de
+leer los datos. El JSON de salida lo declara en su campo `datos`.
+
 Si `--group-col` o `--target-col` no existen en el archivo, el script
 falla con un mensaje explícito — no continúa con un esquema sin sentido.
 
@@ -83,6 +89,12 @@ ninguna métrica de modelo. Se detiene sin escribir nada si algún estrato
 (centro × portador) queda vacío a un lado. Si el archivo ya existe, no lo
 sobrescribe: recalcula la partición y la compara con la sellada.
 
+Los demás instrumentos leen los datos con `scripts/datos_desarrollo.py`,
+que excluye los pacientes reservados. Su control positivo es
+`scripts/test_datos_desarrollo.py`: con datos sintéticos, comprueba que
+el cargador falla sin el archivo sellado y que la comprobación se
+dispara si la exclusión no se aplica.
+
 ## Contrato de salida
 
 - `outputs/diseno-validacion.json` — esquema completo y auditoría,
@@ -99,6 +111,7 @@ necesite el detalle por fold lo lee del `.json`.
 
 ```
 {
+  "datos": {"archivo": str, "conjunto": "desarrollo", "sin_los_pacientes_de": str},
   "esquema": {
     "metodo": "StratifiedGroupKFold" | "GroupKFold",
     "n_splits": int,

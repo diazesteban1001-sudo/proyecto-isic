@@ -31,6 +31,10 @@ try:
 except ImportError:
     HAS_STRATIFIED_GROUP = False
 
+# datos_desarrollo.py vive en el mismo directorio que este script.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from datos_desarrollo import RUTA_HOLDOUT, cargar_desarrollo  # noqa: E402
+
 
 def elegir_metodo(df, target_col, group_col, n_splits):
     """StratifiedGroupKFold si está disponible y hay suficientes grupos
@@ -84,10 +88,11 @@ def main():
     ap.add_argument("--target-col", required=True)
     ap.add_argument("--n-splits", type=int, default=5)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--holdout", default=RUTA_HOLDOUT)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
-    df = pd.read_csv(args.data, low_memory=False)
+    df, datos = cargar_desarrollo(args.data, args.group_col, args.holdout)
 
     for col in (args.group_col, args.target_col):
         if col not in df.columns:
@@ -125,6 +130,7 @@ def main():
     comparacion = comparacion_naive(df, args.group_col, args.seed)
 
     resultado = {
+        "datos": datos,
         "esquema": {
             "metodo": metodo,
             "n_splits": args.n_splits,
@@ -145,7 +151,7 @@ def main():
         json.dump(resultado, f, ensure_ascii=False, indent=2)
 
     lineas = []
-    lineas.append(f"# Diseño de validación — {args.data}")
+    lineas.append(f"# Diseño de validación — {args.data}, conjunto de desarrollo")
     lineas.append(f"Método: {metodo} · n_splits={args.n_splits} · seed={args.seed}")
     lineas.append(f"Grupos totales: {resultado['n_grupos_total']} · grupos con al menos un positivo: {resultado['n_grupos_positivos']}")
     lineas.append(f"Fuga de grupo detectada en el esquema construido: {fuga_detectada}")

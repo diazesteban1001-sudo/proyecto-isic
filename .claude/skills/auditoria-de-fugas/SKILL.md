@@ -71,6 +71,12 @@ python .claude/skills/auditoria-de-fugas/scripts/audit_leakage.py \
   --out outputs/auditoria-de-fugas
 ```
 
+**Solo lee el conjunto de desarrollo.** El CSV se carga con
+`diseno-validacion/scripts/datos_desarrollo.py`, que excluye los pacientes
+de `outputs/holdout-pacientes.json` (`--holdout`, por defecto esa ruta). Si
+ese archivo no existe, el script falla con un mensaje explícito antes de
+leer los datos. El JSON de salida lo declara en su campo `datos`.
+
 Los parámetros de partición (`--group-col`, `--n-splits`, `--seed`) deben
 coincidir con los que usó `diseno-validacion`, para que ambas skills midan
 sobre el mismo esquema.
@@ -89,6 +95,7 @@ en el `.json`.
 
 ```
 {
+  "datos": {"archivo": str, "conjunto": "desarrollo", "sin_los_pacientes_de": str},
   "esquema_cv": {"group_col": str, "n_splits": int, "seed": int},
   "columnas_solo_en_train": [str, ...],
   "columnas_constantes": [str, ...],

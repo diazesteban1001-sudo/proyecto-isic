@@ -34,6 +34,11 @@ except ImportError:
     HAS_STRATIFIED_GROUP = False
 from sklearn.model_selection import GroupKFold
 
+# El cargador del conjunto de desarrollo vive en diseno-validacion, la skill
+# que sella el conjunto reservado.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "diseno-validacion", "scripts"))
+from datos_desarrollo import RUTA_HOLDOUT, cargar_desarrollo  # noqa: E402
+
 NOMBRES_SOSPECHOSOS = ["confidence", "score", "pred", "diagnos", "iddx", "mel_"]
 
 
@@ -142,10 +147,11 @@ def main():
     ap.add_argument("--n-splits", type=int, default=5)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--auc-threshold", type=float, default=0.90)
+    ap.add_argument("--holdout", default=RUTA_HOLDOUT)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
-    train = pd.read_csv(args.train, low_memory=False)
+    train, datos = cargar_desarrollo(args.train, args.group_col, args.holdout)
     test = pd.read_csv(args.test, low_memory=False) if args.test and os.path.exists(args.test) else None
 
     for col in (args.group_col, args.target_col):
@@ -184,6 +190,7 @@ def main():
     preguntas = preguntas_abiertas(nombre_sospechoso, solo_train, univariado_por_col, args.target_col)
 
     resultado = {
+        "datos": datos,
         "esquema_cv": {"group_col": args.group_col, "n_splits": args.n_splits, "seed": args.seed},
         "columnas_solo_en_train": solo_train,
         "columnas_constantes": constantes,
@@ -204,7 +211,7 @@ def main():
     # bloque de detalle esta acotado y el resto vive en el .json.
     MAX_DETALLE = 3
     lineas = []
-    lineas.append(f"# Auditoría de fugas — {args.train}")
+    lineas.append(f"# Auditoría de fugas — {args.train}, conjunto de desarrollo")
     lineas.append(f"Columnas solo en train (excluidas de entrada): {len(solo_train)}")
     lineas.append(f"Columnas constantes: {len(constantes)} · identificador: {len(identificador)}")
     lineas.append(f"Columnas evaluadas univariadamente: {len(univariado)} · umbral AUC >= {args.auc_threshold}")

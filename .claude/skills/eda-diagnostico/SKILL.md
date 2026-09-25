@@ -42,6 +42,12 @@ python .claude/skills/eda-diagnostico/scripts/eda_profile.py \
   --out outputs/eda-diagnostico
 ```
 
+**Solo lee el conjunto de desarrollo.** El CSV se carga con
+`diseno-validacion/scripts/datos_desarrollo.py`, que excluye los pacientes
+de `outputs/holdout-pacientes.json` (`--holdout`, por defecto esa ruta). Si
+ese archivo no existe, el script falla con un mensaje explícito antes de
+leer los datos. El JSON de salida lo declara en su campo `datos`.
+
 Si `--test` no se pasa o el archivo es un placeholder con muy pocas filas
 (menos de 1% del tamaño de train), el script lo marca explícitamente en
 el reporte como `test_is_placeholder: true` — no lo trata como test real
@@ -59,6 +65,7 @@ Escribe siempre dos archivos, nunca solo uno:
 
 ```
 {
+  "datos": {"archivo": str, "conjunto": "desarrollo", "sin_los_pacientes_de": str},
   "fuente": {"archivo": str, "fecha_ejecucion": str, "n_filas": int, "n_columnas": int},
   "tipos": {columna: dtype, ...},
   "faltantes": {columna: {"n": int, "pct": float}, ...},

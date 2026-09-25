@@ -52,6 +52,11 @@ from train_and_evaluate import (  # noqa: E402  (import tras el sys.path.insert,
                       # explícita de que este script no define su propia métrica.
 )
 
+# El cargador del conjunto de desarrollo vive en diseno-validacion, la skill
+# que sella el conjunto reservado.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "diseno-validacion", "scripts"))
+from datos_desarrollo import RUTA_HOLDOUT, cargar_desarrollo  # noqa: E402
+
 
 # Nombres largos para que las claves de salida sean comparables a simple
 # vista con outputs/modelado-baseline.json.
@@ -232,7 +237,7 @@ def escribir_md(resultado, out_path):
     comp = resultado["comparacion_pareada_2b_menos_1"]
 
     lineas = []
-    lineas.append(f"# Validación repetida — {len(resultado['semillas_corridas'])} semillas")
+    lineas.append(f"# Validación repetida — {len(resultado['semillas_corridas'])} semillas, conjunto de desarrollo")
     lineas.append("Métrica: pAUC sobre 80% TPR [0, 0.2], funciones de train_and_evaluate.py (no reimplementada)")
     lineas.append(f"Semillas corridas: {resultado['semillas_corridas']}")
     lineas.append(f"Folds por semilla: {resultado['n_splits']}")
@@ -279,6 +284,7 @@ def main():
     ap.add_argument("--target-col", required=True)
     ap.add_argument("--n-splits", type=int, default=5)
     ap.add_argument("--leakage-report", required=True)
+    ap.add_argument("--holdout", default=RUTA_HOLDOUT)
     ap.add_argument("--out", required=True)
     ap.add_argument(
         "--semillas",
@@ -290,7 +296,7 @@ def main():
 
     columnas_excluidas = cargar_columnas_excluidas(args.leakage_report)
 
-    df = pd.read_csv(args.data, low_memory=False)
+    df, datos = cargar_desarrollo(args.data, args.group_col, args.holdout)
     for col in (args.group_col, args.target_col):
         if col not in df.columns:
             print(f"ERROR: la columna '{col}' no existe en {args.data}", file=sys.stderr)
@@ -319,7 +325,7 @@ def main():
         # Se guarda después de CADA semilla, no al final: si esto se
         # interrumpe, el archivo en outputs/ refleja las semillas que
         # alcanzaron a correr, no nada.
-        resultado = calcular_resultado(por_semilla, args.n_splits, semillas_corridas)
+        resultado = {"datos": datos, **calcular_resultado(por_semilla, args.n_splits, semillas_corridas)}
         escribir_salida(resultado, args.out)
 
         duracion = time.time() - inicio
