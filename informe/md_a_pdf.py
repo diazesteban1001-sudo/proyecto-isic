@@ -24,7 +24,11 @@ Tipografía (solo en el conversor; el Markdown no se toca):
 - Las URL y los DOI solo se parten después de «/» o antes de «.»: cada tramo
   va en un <span> sin cortes y entre tramos hay un <wbr>, que no es un
   carácter. El texto copiado del PDF es la URL exacta: no se meten caracteres
-  invisibles ni se cambian guiones. «SLICE-3D» tampoco se parte.
+  invisibles ni se cambian guiones. El prefijo de un DOI («10.1038/») no se
+  parte. «SLICE-3D» tampoco.
+- Espacio de no separación en «et al.» y antes del guion de « - », para que
+  ninguna línea empiece por él. Las palabras compuestas sí pueden partirse
+  por su guion.
 - Números de página abajo al centro, con las cajas de margen de @page, que
   Chrome dibuja; la portada no lleva número.
 """
@@ -103,6 +107,9 @@ def inline(texto):
         t = URL.sub(enlazar, t)
         t = fuera_de_etiquetas(t, lambda s: re.sub(r"(\d) %", "\\1&nbsp;%", s))
         t = fuera_de_etiquetas(t, lambda s: s.replace("SLICE-3D", '<span class="nb">SLICE-3D</span>'))
+        # «et al.» no se parte, y una línea no empieza por el guion de « - »
+        # (el título de la competencia en Kaggle): espacio de no separación.
+        t = fuera_de_etiquetas(t, lambda s: s.replace("et al.", "et&nbsp;al.").replace(" - ", "&nbsp;- "))
         salida.append(t)
     return "".join(salida)
 
@@ -114,7 +121,8 @@ def tramos_url(url):
     esquema, resto = url.split("://", 1)
     tramos, actual = [], esquema + "://"
     for c in resto:
-        if c == "." and actual and not actual.endswith("://"):
+        # El prefijo de un DOI («10.1038/») no se parte por su punto.
+        if c == "." and actual and not actual.endswith("://") and actual != "10":
             tramos.append(actual)
             actual = ""
         actual += c
