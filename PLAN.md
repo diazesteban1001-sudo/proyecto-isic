@@ -289,15 +289,15 @@ bloqueante»; no cambian la decisión.
 **Decisión (2026-09-24, de la persona): regla de verificación del extractor de
 imagen**, fijada antes de leer su fuente. Un modelo cuenta como verificado en
 dos casos:
-- sus pesos o sus datos de preentrenamiento son anteriores a la publicación de
-  SLICE-3D, y sus autores no pertenecen a las instituciones que aportaron los
-  datos;
+- sus pesos o sus datos de preentrenamiento son anteriores a la primera fecha
+  en que los datos de SLICE-3D fueron públicos, y sus autores no pertenecen a
+  las instituciones que aportaron los datos;
 - su documentación enumera fuentes cerradas que excluyen SLICE-3D.
 
 Si no se verifica, no se usa. Los candidatos se prueban en este orden: DINOv3,
 DINOv2 y, si ninguno se verifica, el trabajo sigue sin imagen. *Las fechas de
-DINOv2, de DINOv3 y de la publicación de SLICE-3D no se afirman aquí: se
-verifican con fuente en esta misma fase.*
+DINOv2, de DINOv3 y la primera en que los datos de SLICE-3D fueron públicos no
+se afirman aquí: se verifican con fuente en esta misma fase.*
 
 **No se extrae ni una característica antes de cerrar esto.** Si hay solape,
 cualquier resultado de un modelo congelado sobre estos datos viene inflado por

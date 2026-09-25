@@ -637,9 +637,9 @@ Los riesgos principales y lo que ya está decidido para cada uno:
 - **Que el preentrenamiento del extractor de imagen no se pueda verificar.** La
   regla queda fijada antes de leer su fuente. Un modelo cuenta como verificado
   en dos casos:
-  - sus pesos o sus datos de preentrenamiento son anteriores a la publicación
-    de SLICE-3D, y sus autores no pertenecen a las instituciones que aportaron
-    los datos;
+  - sus pesos o sus datos de preentrenamiento son anteriores a la primera
+    fecha en que los datos de SLICE-3D fueron públicos, y sus autores no
+    pertenecen a las instituciones que aportaron los datos;
   - su documentación enumera fuentes cerradas que excluyen SLICE-3D.
 
   Si no se verifica, no se usa. Los candidatos se prueban en este orden:
