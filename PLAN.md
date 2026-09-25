@@ -50,7 +50,7 @@ descontaminar a posteriori.
 | 2. Estado del arte | escrito: cinco subsecciones (2.1 a 2.5) |
 | 3. Objetivos | escrito |
 | 4. Datos y método | escrito: cinco subsecciones (4.1 a 4.5), verificado frase por frase el 2026-09-24 |
-| 5. Alcance y plan | vacío |
+| 5. Alcance y plan | escrito: dos subsecciones (5.1 y 5.2), verificado el 2026-09-24 |
 | 6. Declaración de uso de IA y reparto del trabajo | escrito |
 
 La lista final de referencias tiene 24 entradas: 17 del estado del arte, 3 del
@@ -171,8 +171,8 @@ de Kaggle y `outputs/`, y no desde `d1-material-colombia.md`. Pasó la
 verificación: todas sus citas son literales y todas sus cifras tienen fuente o
 están en `outputs/`; no quedan cifras derivadas.
 
-**Siguiente paso.** Solo queda vacío el **apartado 5, alcance y plan**: la
-próxima sesión arranca de ahí. Sigue abierto, además, el pendiente de la Fase 2:
+**Siguiente paso.** Los seis apartados están escritos. Queda la puerta de esta
+fase, el PDF del anteproyecto, y sigue abierto el pendiente de la Fase 2:
 versionar la fuente de los datos de preentrenamiento de DINOv3 y escribir la
 decisión sobre ella.
 
@@ -447,6 +447,20 @@ regenera, no se edita a mano.
 La tabla final responde la pregunta del cliente **entera**, con sus tres ejes:
 pAUC, sensibilidad de recuperación top-15 por paciente, y costo de inferencia.
 Es lo que cierra el argumento: el consultor deja de reportar una sola cifra.
+
+**Definición operativa del tiempo de inferencia** (anteproyecto, sección 5.1).
+El costo de inferencia se mide como tiempo:
+- **Qué se cronometra:** desde los metadatos y la imagen de cada lesión hasta su
+  puntuación, sin el entrenamiento.
+- **Sobre qué:** un subconjunto fijo de pacientes completos del conjunto de
+  desarrollo, elegido con semilla antes de medir. Van pacientes completos porque
+  los modelos con contexto de paciente necesitan todas las lesiones de un
+  paciente antes de puntuar cualquiera.
+- **Cómo se reporta:** la mediana de cinco repeticiones, en segundos por cada
+  1.000 lesiones, con el equipo y las versiones de software declarados.
+- **Qué no se afirma:** los tiempos no se comparan con los de la competencia,
+  que usó otro subconjunto y otro equipo; solo comparan los modelos de este
+  trabajo entre sí.
 
 **Puerta.** `informe/informe-final.pdf` y `informe/demo.html` regenerados desde
 el estado final de `outputs/`.

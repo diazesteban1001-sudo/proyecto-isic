@@ -1254,5 +1254,7 @@ contexto.
       la partición deja positivos en ambos lados (mismo chequeo obligatorio que
       `diseno-validacion` ya hace para los folds)
 - [ ] Decidir cuántas semillas usar en la Vía A, según tiempo de cómputo real
-- [ ] Definir cómo se mide el eje "costo de inferencia" — sin esa definición la
-      tabla de E4 tiene solo dos columnas de tres
+- [x] Definir cómo se mide el eje "costo de inferencia" — sin esa definición la
+      tabla de E4 tiene solo dos columnas de tres. *Cumplido el 2026-09-24: se
+      mide como tiempo de inferencia. La definición está en el anteproyecto,
+      sección 5.1, y en `PLAN.md`, Fase 6.*

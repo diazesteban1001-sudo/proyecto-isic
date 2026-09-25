@@ -563,6 +563,96 @@ cero, esa ventaja no se da por establecida, y la recomendación lo dice así.
 
 ## 5. Alcance y plan
 
+### 5.1 Alcance
+
+El trabajo evalúa modelos de triaje sobre SLICE-3D con la función de utilidad
+que el cliente declaró, en sus tres componentes:
+
+- **La métrica principal**, el área parcial por encima del 80 % de
+  sensibilidad, con el AUC estándar al lado.
+- **Los ejes de triaje**, SEtop-15 y NNT80% SE.
+- **La eficiencia.** El organizador anunció que la evaluaría por *"inference
+  time on an undisclosed subset of test set images"* (Kurtansky, 2024). El
+  costo de inferencia que dejó pendiente la sección 4.3 se mide, por tanto,
+  como tiempo de inferencia.
+
+El tiempo de inferencia se mide así:
+
+- **Qué se cronometra:** desde los metadatos y la imagen de cada lesión hasta
+  su puntuación, sin el entrenamiento.
+- **Sobre qué:** un subconjunto fijo de pacientes completos del conjunto de
+  desarrollo, elegido con semilla antes de medir. Van pacientes completos
+  porque los modelos con contexto de paciente necesitan todas las lesiones de
+  un paciente antes de puntuar cualquiera.
+- **Cómo se reporta:** la mediana de cinco repeticiones, en segundos por cada
+  1.000 lesiones, con el equipo y las versiones de software declarados.
+- **Qué no se afirma:** los tiempos no se comparan con los de la competencia,
+  que usó otro subconjunto y otro equipo. Solo comparan los modelos de este
+  trabajo entre sí.
+
+Quedan fuera, con su motivo:
+
+1. **El ajuste fino de redes de imagen.** Queda fuera del alcance de esta
+   entrega: su costo no se ha estimado, y se reconsidera si la Fase 4 muestra
+   que la imagen aporta de forma distinguible. Las características de imagen se
+   extraen de un modelo congelado.
+2. **PanDerm.** Su artículo declara un subconjunto de ISIC 2024 entre sus datos
+   de preentrenamiento (Yan et al., 2025).
+3. **Parte de la solución ganadora.**
+   - Sus redes de imagen, por el mismo motivo que el punto 1.
+   - Su modelo entrenado con el archivo público de ISIC, por riesgo de fuga.
+   - La razón de cada predicción de imagen contra la media del paciente, que
+     solo se calcula sobre las predicciones de esas redes.
+4. **Cualquier comparación con la clasificación privada de la competencia.**
+   Ese conjunto no es accesible, así que el trabajo no afirma superar ni quedar
+   por debajo del ganador en la competencia. La comparación con él se hace
+   sobre las mismas particiones propias (objetivo 3).
+5. **Trasladar el desempeño a pacientes colombianos.** Ninguno de los centros
+   de SLICE-3D está en América Latina (sección 1.4).
+6. **Cualquier uso diagnóstico.** El resultado es evidencia para una decisión
+   humana, no un diagnóstico. La mayoría de las lesiones de la clase negativa
+   nunca se biopsió (sección 1.3), así que un «negativo» del modelo no
+   significa «sano».
+
+### 5.2 Plan
+
+Las fases se ordenan por dependencia, no por fecha. Cada una termina cuando
+existe su archivo de salida, y la siguiente no empieza antes.
+
+| Fase | Qué se hace | Termina cuando existe | Objetivos |
+|---|---|---|---|
+| 1 | Apartar el conjunto reservado; corregir la elección del nivel 0; volver a medir todo sobre el conjunto de desarrollo | La lista sellada de pacientes reservados y la verificación de trazabilidad sin cifras heredadas | 1, 2 |
+| 2 | Verificar los datos de preentrenamiento del extractor de imagen | La fuente versionada y la decisión escrita | 5 |
+| 3 | Extraer características de imagen y medir su cobertura | El reporte de extracción con cobertura | 5 |
+| 4 | Comparar niveles, modelo con imagen y parte tabular reproducida del ganador; ejes de triaje y tiempo de inferencia | Los intervalos corregidos de cada diferencia | 2, 3, 4, 5 |
+| 5 | Evaluar el modelo recomendado sobre el conjunto reservado, una sola vez | El resultado con su intervalo | 5 |
+| 6 | Informe final con la tabla de los tres componentes de la utilidad, y demo | El informe y la demo regenerados desde las salidas y verificados | 4 |
+
+Los riesgos principales y lo que ya está decidido para cada uno:
+
+- **Pocos pacientes portadores en el conjunto reservado.** Su resultado se
+  reporta siempre con intervalo, y la estimación principal sigue siendo la
+  validación cruzada repetida.
+- **Que el preentrenamiento del extractor de imagen no se pueda verificar.** La
+  regla queda fijada antes de leer su fuente. Un modelo cuenta como verificado
+  en dos casos:
+  - sus pesos o sus datos de preentrenamiento son anteriores a la publicación
+    de SLICE-3D, y sus autores no pertenecen a las instituciones que aportaron
+    los datos;
+  - su documentación enumera fuentes cerradas que excluyen SLICE-3D.
+
+  Si no se verifica, no se usa. Los candidatos se prueban en este orden:
+  DINOv3, DINOv2 y, si ninguno se verifica, el trabajo sigue sin imagen.
+- **Que la extracción de imagen no quepa en el equipo.** Se submuestrea por
+  paciente conservando todas las lesiones malignas, con una regla fijada antes
+  de medir cuánto tarda.
+- **Que la imagen no mejore de forma distinguible.** Si el intervalo corregido
+  contiene el cero, la recomendación dice que la imagen no justifica su costo.
+  No se buscan semillas, pliegues ni métricas en que sí se distinga.
+- **La tentación de reabrir el conjunto reservado.** El modelo elegido queda
+  fijado en el historial del repositorio antes de abrirlo, y la apertura va en
+  un cambio propio. Así el orden se puede comprobar desde fuera.
+
 ## 6. Declaración de uso de IA y reparto del trabajo
 
 Se usó Claude (Anthropic) como asistente de redacción y de análisis: se le
