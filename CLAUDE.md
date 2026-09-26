@@ -1207,8 +1207,8 @@ datos de un conjunto abierto de Instagram sin fecha de recogida y semillas no
 enumeradas). Se usa DINOv2 por el caso 1 de la regla: sus datos de
 preentrenamiento (LVD-142M) están descritos en un artículo de abril de 2023, sus
 autores no pertenecen a las instituciones contribuyentes, y los recortes de
-SLICE-3D se generaron con una herramienta creada para el reto de 2024, presentado
-en un congreso de 2023 (el de la EADV, del 11 al 14 de octubre de 2023:
+SLICE-3D se generaron con una herramienta que lleva el nombre del reto de 2024,
+presentado en un congreso de 2023 (el de la EADV, del 11 al 14 de octubre de 2023:
 `referencias/eadv-congress-2023.md`). Salvedad declarada: la primera fecha
 pública de SLICE-3D no la fija ninguna fuente; el orden temporal se apoya en esa
 cadena de evidencia.
@@ -1220,9 +1220,9 @@ de extraer ninguna característica.
 La regla es la de `PLAN.md`, Fase 2. Fuentes: `referencias/simeoni-2025-dinov3.md`,
 `referencias/oquab-2023-dinov2.md` (citas cotejadas con el PDF de la v1) y la
 cadena de evidencia en `referencias/slice3d-fechas-de-publicacion.md`, sección 5.
-*Nota del agente: que la herramienta se creara para el reto de 2024 se lee de su
-nombre, «ISIC2024 Tile Export Tool»; el descriptor no lo dice. La cadena lo marca
-como inferencia.*
+*Hasta el 2026-09-25 la decisión decía «una herramienta creada para el reto de
+2024»; el descriptor no lo dice, y se cambió por el nombre de la herramienta,
+«ISIC2024 Tile Export Tool».*
 
 *Precedente en este mismo archivo:* la Cuarta nota dejó abierta exactamente esta
 pregunta para `tbp_lv_nevi_confidence` —si las lesiones con que se entrenó ese
