@@ -600,14 +600,19 @@ sale del modelo ajustado sobre todo el pliegue de entrenamiento. Se corre una
 sola vez, con los mismos pliegues y semillas, y se reporta como secundaria: no
 cambia la conclusión principal del hallazgo 5 de `CLAUDE.md`.
 
-*Detalles que la especificación no fija, anotados por el agente para que se
-decidan antes de correr:*
-- la semilla de la validación interna, y si se estratifica por la etiqueta como
-  la externa (`construir_folds`);
-- con qué filas se ajusta el estandarizado de las 384 variables;
-- si la «puntuación» es la probabilidad o la función de decisión de la
-  logística. Solo la probabilidad es siempre positiva, así que es la que permite
-  dividir por la media del paciente sin riesgo de dividir por cero.
+**Detalles de M4b: decisión de la persona, fijada el 2026-09-25 antes de
+correr.** Cierran los tres que la especificación dejaba abiertos:
+1. **Validación interna:** `StratifiedGroupKFold` de 5 pliegues, agrupada por
+   `patient_id`, estratificada por la etiqueta y con la misma semilla que la
+   externa.
+2. **Estandarizado:** dentro de un pipeline con la logística, ajustado con las
+   mismas filas que cada logística.
+3. **Puntuación:** `predict_proba[:, 1]`. La razón se calcula contra la media del
+   paciente sobre puntuaciones del mismo tipo: fuera de pliegue en
+   entrenamiento, y del modelo del pliegue en validación.
+
+La logística lleva `class_weight="balanced"`, `C` por defecto y
+`max_iter=2000`, y se reporta el número de avisos de no convergencia.
 
 **Qué se hace.** Los mismos niveles del `modelado-baseline` actual, sobre los
 mismos pliegues de desarrollo, con **pAUC y AUC estándar** para cada uno —las
