@@ -11,9 +11,8 @@ salida, y qué hacer cuando algo no se pueda cerrar.
 **Dónde está la ruta (2026-09-25): Fase 3.** Las fases 0, 1 y 2 están
 cerradas. La preparación de la Fase 3 está hecha: la condición sobre el punto de
 control, comprobada; las imágenes, descargadas; la prueba de tiempo, medida. El
-siguiente paso es la elección entre ViT-S/14 y ViT-B/14, que es de la persona,
-con los tiempos y antes de ver ningún resultado de desempeño. Después, la
-extracción.
+punto de control elegido es ViT-S/14, por decisión de la persona. El siguiente
+paso es la extracción completa.
 
 ## Cómo leer una puerta
 
@@ -483,7 +482,25 @@ decisión de la Fase 2; si no se cumple, el modelo no cuenta como verificado.
   características ni calcular métricas. Los dos candidatos caben en las 8 horas
   del primer paso del orden de extracción; las horas estimadas están en su campo
   `horas_estimadas_total_con_lectura_y_preproceso`.
-- La elección entre S y B es de la persona y está pendiente.
+- La elección entre S y B es de la persona y está pendiente. *Se tomó el mismo
+  día; va a continuación.*
+
+**Decisión (2026-09-25, de la persona): se usa DINOv2 ViT-S/14.** Elegido antes
+de ver ningún resultado de desempeño, por tres motivos:
+- **Eficiencia**, que es un eje de la utilidad del cliente: en la prueba de
+  tiempo, ViT-S/14 va unas 3,5 veces más rápido que ViT-B/14
+  (`outputs/prueba-tiempo-dinov2.json`, `imagenes_por_segundo_solo_modelo`).
+- **Dimensión frente a positivos:** su token CLS tiene 384 dimensiones, frente a
+  las 768 de ViT-B/14 (`referencias/dinov2-repositorio/MODEL_CARD.md`), y el
+  conjunto de desarrollo tiene 317 lesiones malignas
+  (`eda-diagnostico.json > desbalance_target.conteos`).
+- **Tamaño de los recortes:** miden 133 × 133 píxeles de media
+  (`referencias/kurtansky-2024-slice3d-descriptor.md`, *"average image size of
+  133px-by-133px"*), menos que los 224 píxeles de entrada del modelo.
+
+**ViT-B/14 queda documentado como alternativa no elegida**, por esos mismos
+motivos: más lento, con el doble de dimensiones para los mismos positivos, y
+con recortes más pequeños que su entrada.
 
 **Qué se hace.** Una skill instrumento nueva, con el **mismo contrato de salida**
 que las cuatro existentes: `outputs/<nombre>.json` + `outputs/<nombre>.md` de
