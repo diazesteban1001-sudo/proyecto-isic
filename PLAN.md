@@ -9,10 +9,11 @@ medido—. Este archivo describe **la ruta**: en qué orden, con qué condición
 salida, y qué hacer cuando algo no se pueda cerrar.
 
 **Dónde está la ruta (2026-09-25): Fase 3.** Las fases 0, 1 y 2 están
-cerradas. El siguiente paso es la Fase 3: extraer las características de imagen
-con DINOv2, después de comprobar que el punto de control que se use documenta
-LVD-142M como sus datos de entrenamiento (la condición de la decisión de la
-Fase 2).
+cerradas. La preparación de la Fase 3 está hecha: la condición sobre el punto de
+control, comprobada; las imágenes, descargadas; la prueba de tiempo, medida. El
+siguiente paso es la elección entre ViT-S/14 y ViT-B/14, que es de la persona,
+con los tiempos y antes de ver ningún resultado de desempeño. Después, la
+extracción.
 
 ## Cómo leer una puerta
 
@@ -469,6 +470,20 @@ publicable** del trabajo.
 **Antes de extraer:** comprobar que el punto de control de DINOv2 que se use
 documenta LVD-142M como sus datos de entrenamiento. Es la condición de la
 decisión de la Fase 2; si no se cumple, el modelo no cuenta como verificado.
+
+**Preparación (2026-09-25), sin extraer nada.**
+- La condición de la Fase 2 se cumple para los dos candidatos: la documentación
+  oficial de ViT-S/14 y ViT-B/14 sin registros da LVD-142M como datos de
+  entrenamiento (`referencias/dinov2-repositorio.md`). Las copias de Hugging
+  Face no la dan, y no se usan.
+- `data/train-image.hdf5` está descargado: 401.059 imágenes, una por cada
+  `isic_id` del CSV.
+- La prueba de tiempo está en `outputs/prueba-tiempo-dinov2.json`: pasada
+  congelada sobre 1.000 imágenes del conjunto de desarrollo, en MPS, sin guardar
+  características ni calcular métricas. Los dos candidatos caben en las 8 horas
+  del primer paso del orden de extracción; las horas estimadas están en su campo
+  `horas_estimadas_total_con_lectura_y_preproceso`.
+- La elección entre S y B es de la persona y está pendiente.
 
 **Qué se hace.** Una skill instrumento nueva, con el **mismo contrato de salida**
 que las cuatro existentes: `outputs/<nombre>.json` + `outputs/<nombre>.md` de

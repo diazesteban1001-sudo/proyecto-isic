@@ -67,6 +67,17 @@ Las dos URL respondieron 200 el 2026-09-25, con estos datos de la cabecera HTTP:
 sirve hoy, no documentación del modelo: fecha la última subida, no el
 entrenamiento.
 
+Los dos archivos se descargaron el 2026-09-25 con `curl` a la caché de torch
+(`~/.cache/torch/hub/checkpoints/`), con el tamaño que anuncia la cabecera, y se
+cargan desde ahí. *Nuestro:* desde Python la descarga fallaba, porque el Python
+del sistema no encontraba los certificados raíz para verificar SSL, y no se
+desactivó la verificación. SHA-256 de los archivos descargados:
+
+| Archivo | SHA-256 |
+|---|---|
+| `dinov2_vits14_pretrain.pth` | `b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9` |
+| `dinov2_vitb14_pretrain.pth` | `0b8b82f85de91b424aded121c7e1dcc2b7bc6d0adeea651bf73a13307fad8c73` |
+
 ## Las copias de Hugging Face no cumplen la condición
 
 Las fichas de `facebook/dinov2-small` y `facebook/dinov2-base` en Hugging Face

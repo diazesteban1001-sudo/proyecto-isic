@@ -1,0 +1,70 @@
+{
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "que_es": "Prueba de tiempo de la pasada hacia adelante congelada. No guarda características ni calcula ninguna métrica de desempeño.",
+  "muestra": {
+    "n_imagenes": 1000,
+    "semilla": 0,
+    "de": "conjunto de desarrollo (isic_id)"
+  },
+  "preprocesado": "RGB, redimensión bicúbica a 224x224, normalización de ImageNet",
+  "lote": 64,
+  "repeticiones": 3,
+  "dispositivo": "mps",
+  "equipo": {
+    "chip": "Apple M4",
+    "memoria_gb": 16.0,
+    "macos": "27.0"
+  },
+  "software": {
+    "python": "3.11.9",
+    "torch": "2.14.0",
+    "h5py": "3.16.0"
+  },
+  "repositorio_dinov2": "dinov2-7764ea0f912e53c92e82eb78a2a1631e92725fc8",
+  "segundos_lectura_hdf5": 0.358,
+  "segundos_decodificacion_y_preproceso": 0.836,
+  "total_para_la_estimacion": 401059,
+  "modelos": {
+    "dinov2_vits14": {
+      "pesos": {
+        "archivo": "dinov2_vits14_pretrain.pth",
+        "bytes": 88283115,
+        "sha256": "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9"
+      },
+      "parametros": 22056576,
+      "segundos_pasada_por_repeticion": [
+        7.67,
+        7.545,
+        7.547
+      ],
+      "segundos_pasada_mediana": 7.547,
+      "imagenes_por_segundo_solo_modelo": 132.5,
+      "imagenes_por_segundo_con_lectura_y_preproceso": 114.4,
+      "horas_estimadas_total_solo_modelo": 0.84,
+      "horas_estimadas_total_con_lectura_y_preproceso": 0.97
+    },
+    "dinov2_vitb14": {
+      "pesos": {
+        "archivo": "dinov2_vitb14_pretrain.pth",
+        "bytes": 346378731,
+        "sha256": "0b8b82f85de91b424aded121c7e1dcc2b7bc6d0adeea651bf73a13307fad8c73"
+      },
+      "parametros": 86580480,
+      "segundos_pasada_por_repeticion": [
+        24.527,
+        26.985,
+        26.878
+      ],
+      "segundos_pasada_mediana": 26.878,
+      "imagenes_por_segundo_solo_modelo": 37.2,
+      "imagenes_por_segundo_con_lectura_y_preproceso": 35.6,
+      "horas_estimadas_total_solo_modelo": 2.99,
+      "horas_estimadas_total_con_lectura_y_preproceso": 3.13
+    }
+  },
+  "nota": "La estimación supone el mismo ritmo para todas las imágenes y que lectura, preprocesado y modelo van uno detrás de otro; no mide el efecto de solaparlos ni de otro tamaño de lote."
+}
