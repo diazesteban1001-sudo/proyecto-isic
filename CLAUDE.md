@@ -772,10 +772,10 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman cinco del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman seis del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
-`outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`
-y `outputs/fase4-m4-vs-m2.json`. Desde el 2026-09-25 sus
+`outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
+`outputs/fase4-m4-vs-m2.json` y `outputs/fase4-m4b-vs-m2.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -865,6 +865,21 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
    variables adicionales frente a 317 lesiones malignas
    (`eda-diagnostico.json > desbalance_target.conteos`) probablemente diluyen la
    señal.
+
+6. **Variante secundaria, fijada antes de correrla: la imagen resumida en una
+   puntuación apilada**, como hizo el ganador (`outputs/fase4-m4b-vs-m2.json`).
+   M4b − M2:
+   - pAUC +0,0056, corregido [−0,0091; 0,0202], M4b mejor en 36 de 50 pliegues
+     y 8 de 10 semillas;
+   - SEtop-15 −0,0062, corregido [−0,0444; 0,032], 3 de 10 semillas;
+   - NNT80% SE −3,87, corregido [−25,10; 17,35].
+
+   Ningún intervalo corregido excluye el cero, y la conclusión del hallazgo 5 se
+   mantiene: la imagen no justifica su costo. El apilado añade 21,3 s de mediana
+   por pliegue, además de la extracción. *Patrón, no efecto establecido:* la
+   forma de incorporar la imagen invierte la dirección. Como variables sueltas
+   (M4), la pAUC es peor en 8 de 10 semillas (`outputs/fase4-m4-vs-m2.json`);
+   como puntuación apilada (M4b), mejor en 8 de 10.
 
 ### Dónde se lee la fase vigente
 
