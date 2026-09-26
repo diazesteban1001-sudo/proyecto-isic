@@ -387,6 +387,11 @@ PLANTILLA = r"""<!DOCTYPE html>
     font-size: 12.5px; color: var(--suave); background: #fbfcfd;
     border-left: 3px solid var(--linea); padding: 8px 12px; margin: 14px 0 0;
   }
+  .exploratorio {
+    margin: 24px 0 0; padding: 12px 16px; border: 2px solid var(--alarma);
+    border-radius: 8px; background: #fdf3f1; color: var(--tinta); font-size: 15px;
+  }
+  .exploratorio b { color: var(--alarma); }
   .contra { margin-top: 18px; border-left: 4px solid var(--bien); background: #f2faf6; padding: 14px 16px; border-radius: 0 8px 8px 0; }
   .contra b { color: var(--bien); }
   /* ---- toggle ---- */
@@ -422,6 +427,7 @@ PLANTILLA = r"""<!DOCTYPE html>
 </head>
 <body>
 <div class="hoja">
+__AVISO_EXPLORATORIO__
 
 <header>
   <div class="kicker">Consultor&iacute;a e Investigaci&oacute;n &middot; Estad&iacute;stica &middot; caso ISIC 2024</div>
@@ -845,6 +851,30 @@ document.getElementById("pie").innerHTML =
 """
 
 
+# Aviso de cifras exploratorias. Desde la Fase 1 (2026-09-25) cada instrumento
+# declara en su JSON sobre qué datos midió (campo "datos"). Si alguno de los
+# que lee la demo no declara el conjunto de desarrollo, sus cifras son las de
+# la corrida exploratoria sobre el 100 % de los datos, y la página lo dice
+# arriba. Se decide con los datos de entrada, no con una bandera: así el aviso
+# no puede quedarse puesto en una demo regenerada con las cifras nuevas, ni
+# faltar en una hecha con las viejas. Va en el HTML servido, no en el script
+# de la página, para que se vea aunque el JavaScript falle.
+INSTRUMENTOS_DE_LA_DEMO = ("eda-diagnostico", "diseno-validacion", "auditoria-de-fugas", "modelado-baseline")
+AVISO_EXPLORATORIO = (
+    '<div class="exploratorio" role="note"><b>Cifras exploratorias.</b> '
+    "Las cifras de esta p&aacute;gina son de la corrida exploratoria sobre el 100&nbsp;% "
+    "de los datos y se est&aacute;n re-midiendo sobre el conjunto de desarrollo.</div>"
+)
+
+
+def aviso_exploratorio(outputs_dir):
+    for nombre in INSTRUMENTOS_DE_LA_DEMO:
+        datos = json.loads(leer(os.path.join(outputs_dir, f"{nombre}.json"))).get("datos", {})
+        if datos.get("conjunto") != "desarrollo":
+            return AVISO_EXPLORATORIO
+    return ""
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--outputs-dir", required=True)
@@ -895,7 +925,11 @@ def main():
     # tiempo (datos["generado"]), así que dos renderizados podrían diferir en
     # ese campo y las copias dejarían de ser idénticas. Renderizar aquí hace
     # que la igualdad sea estructural en vez de algo que haya que comprobar.
-    html = PLANTILLA.replace("__CHARTJS__", chartjs).replace("__DATOS__", crudo)
+    html = (
+        PLANTILLA.replace("__CHARTJS__", chartjs)
+        .replace("__AVISO_EXPLORATORIO__", aviso_exploratorio(args.outputs_dir))
+        .replace("__DATOS__", crudo)
+    )
 
     for salida in args.salida:
         os.makedirs(os.path.dirname(salida) or ".", exist_ok=True)

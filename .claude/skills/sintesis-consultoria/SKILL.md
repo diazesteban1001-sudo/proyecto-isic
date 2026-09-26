@@ -212,6 +212,11 @@ Reglas, idénticas a las del informe escrito:
   y embebe los valores al generar el archivo. Un número escrito a mano
   en la plantilla es una cifra inventada, exactamente igual que en el
   `.docx`.
+- **Aviso de cifras exploratorias.** Si alguno de los JSON de los
+  instrumentos no declara en su campo `datos` el conjunto de desarrollo,
+  la página abre con un aviso: sus cifras son las de la corrida
+  exploratoria sobre el 100 % de los datos. Lo decide el script con los
+  datos de entrada, no una bandera, y va en el HTML servido.
 - **Mismo alcance de interpretación.** La demo puede ordenar, resaltar
   y comparar lo medido; no puede afirmar nada que el informe no
   sostenga. Donde muestre una lectura y no una medición —el porqué de
