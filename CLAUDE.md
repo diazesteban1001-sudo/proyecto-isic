@@ -1104,9 +1104,9 @@ repetido con varias semillas. Comparar **distribuciones** de pAUC entre semillas
 no puntos únicos. Declarar en el informe que compara pipelines, no arquitecturas
 aisladas, y que las asignaciones de fold no son idénticas a las de nadie más.
 
-Esto no es un capricho: el hallazgo 2 de "Hallazgos vivos" ya mostró que con
-±0.0055 y ±0.0173 de dispersión entre folds, una diferencia de medias de 0,1451
-contra 0,1331 no se sostiene sola.
+Esto no es un capricho: el hallazgo 2 de "Hallazgos vivos" muestra, con las
+cifras de la validación repetida, por qué una diferencia de medias sobre una sola
+partición no se sostiene sola.
 
 **Vía B — lockbox propio.** Antes de tocar ningún modelo nuevo: apartar ~20% de
 los **pacientes** (no de las filas), estratificado, y no tocarlo hasta la
