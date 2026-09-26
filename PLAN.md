@@ -14,7 +14,8 @@ La Fase 4 tiene fijados sus modelos y sus comparaciones (decisión del
 las tres comparaciones principales, M2 − M1 y M4 − M2
 (`outputs/fase4-m2-vs-m1.json` y `outputs/fase4-m4-vs-m2.json`). El siguiente
 paso es M3, la parte tabular reproducida del ganador, con la tercera: el mejor de
-los modelos propios frente a M3.
+los modelos propios frente a M3. La variante secundaria M4b está especificada y
+sin correr.
 
 ## Cómo leer una puerta
 
@@ -582,6 +583,31 @@ imagen.**
   que recoge la Fase 6 de este archivo.
 - **Apilar un clasificador de imagen** queda como variante secundaria, no como
   principal.
+
+**Variante secundaria M4b: especificación de la persona, fijada el 2026-09-25
+antes de correrla.** M4b es M2 más dos variables de imagen:
+- la puntuación de una regresión logística con pesos balanceados sobre las 384
+  variables de DINOv2 ViT-S/14, estandarizadas;
+- esa puntuación dividida por su media dentro del paciente, como hizo el
+  ganador con sus predicciones de imagen (`top-model.ipynb`, celda 15:
+  `df_train['oof_eva_score_m'] = df_train['oof_eva_score'] / df_train['oof_eva_score_m']`,
+  donde `oof_eva_score_m` es la media del paciente).
+
+Para no filtrar etiquetas, la puntuación de las filas de entrenamiento se obtiene
+fuera de pliegue, con una validación cruzada interna de 5 pliegues agrupada por
+paciente dentro de cada pliegue de entrenamiento. La de las filas de validación
+sale del modelo ajustado sobre todo el pliegue de entrenamiento. Se corre una
+sola vez, con los mismos pliegues y semillas, y se reporta como secundaria: no
+cambia la conclusión principal del hallazgo 5 de `CLAUDE.md`.
+
+*Detalles que la especificación no fija, anotados por el agente para que se
+decidan antes de correr:*
+- la semilla de la validación interna, y si se estratifica por la etiqueta como
+  la externa (`construir_folds`);
+- con qué filas se ajusta el estandarizado de las 384 variables;
+- si la «puntuación» es la probabilidad o la función de decisión de la
+  logística. Solo la probabilidad es siempre positiva, así que es la que permite
+  dividir por la media del paciente sin riesgo de dividir por cero.
 
 **Qué se hace.** Los mismos niveles del `modelado-baseline` actual, sobre los
 mismos pliegues de desarrollo, con **pAUC y AUC estándar** para cada uno —las
