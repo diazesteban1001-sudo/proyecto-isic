@@ -8,11 +8,11 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-25): Fase 2.** La Fase 1 está cerrada. El
-siguiente paso es la Fase 2: reunir y versionar las fuentes —los datos de
-preentrenamiento de DINOv3 y de DINOv2, y la primera fecha en que los datos de
-SLICE-3D fueron públicos—, aplicarles la regla de verificación de esa fase y
-escribir la decisión, que es de la persona.
+**Dónde está la ruta (2026-09-25): Fase 2.** La Fase 1 está cerrada. Las
+fuentes de la Fase 2 están reunidas y versionadas: los datos de preentrenamiento
+de DINOv3 y de DINOv2, y lo que se sabe de cuándo fueron públicos los datos de
+SLICE-3D. El siguiente paso es la decisión sobre DINOv3 y DINOv2 con la regla de
+verificación de esa fase, que es de la persona.
 
 ## Cómo leer una puerta
 
@@ -390,6 +390,13 @@ Si no se verifica, no se usa. Los candidatos se prueban en este orden: DINOv3,
 DINOv2 y, si ninguno se verifica, el trabajo sigue sin imagen. *Las fechas de
 DINOv2, de DINOv3 y la primera en que los datos de SLICE-3D fueron públicos no
 se afirman aquí: se verifican con fuente en esta misma fase.*
+
+**Fuentes reunidas (2026-09-25), sin decisión.**
+`referencias/simeoni-2025-dinov3.md`, `referencias/oquab-2023-dinov2.md` y
+`referencias/slice3d-fechas-de-publicacion.md`, las tres fichas, con el texto
+completo en local. La tercera no fija la primera fecha en que los datos de
+SLICE-3D fueron públicos, porque ninguna fuente la da; recoge las que sí dan.
+La decisión sobre DINOv3 y DINOv2 es de la persona y está pendiente.
 
 **No se extrae ni una característica antes de cerrar esto.** Si hay solape,
 cualquier resultado de un modelo congelado sobre estos datos viene inflado por
