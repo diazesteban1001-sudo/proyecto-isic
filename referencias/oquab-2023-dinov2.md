@@ -13,11 +13,18 @@ https://arxiv.org/html/2304.07193, que sirve la **v2**.
 **Fecha de consulta:** 2026-09-25. Las dos URL respondieron 200 antes de
 descargar nada.
 
-**Salvedad de versión.** La fecha que importa para la regla de la Fase 2 es la
-de la v1, y sale del historial de envíos. **Las citas de abajo son de la v2**,
-que es la que arXiv sirve en HTML: no se han cotejado con la v1, que solo está en
-PDF. Tampoco se ha comprobado aquí la fecha de publicación de los pesos: la
-ficha fecha el artículo, no los pesos.
+**Versiones: la descripción de los datos ya está en la v1.** La fecha que importa
+para la regla de la Fase 2 es la de la v1, y sale del historial de envíos. Las
+citas de abajo se tomaron de la v2, que es la que arXiv sirve en HTML, y **el
+2026-09-25 se cotejaron con el PDF de la v1**
+(https://arxiv.org/pdf/2304.07193v1, que respondió 200 antes de descargarlo). Las
+seis están en la v1: cinco en las páginas 4 y 5 del PDF y la leyenda de la tabla
+en la 29, con la misma numeración, tabla 15. Cuatro coinciden carácter a
+carácter. Las otras dos, la de los conjuntos curados y la de la fuente sin
+curar, solo difieren en que la extracción del PDF da la ligadura `ﬁ` en
+*"fine-grained"* y en *"unfiltered"*. *Hasta ese día esta ficha decía que no se
+habían cotejado.* No se ha comprobado aquí la fecha de publicación de los pesos:
+la ficha fecha el artículo, no los pesos.
 
 **LICENCIA: con copyright → FICHA.** La página de arXiv enlaza la **licencia no
 exclusiva de distribución de arXiv 1.0**
@@ -28,7 +35,10 @@ distribuirlo y no a terceros (regla 3 de `CLAUDE.md`). Determinado el
 **Texto completo:** en local, `referencias/_texto-completo/arxiv-2304.07193v2-dinov2.html`
 (460.611 bytes, SHA-256
 `db2e8fa25d3e29e24acf9464668e5e841c6af98b1b514e840e16f98d1657d9f7`), obtenido con
-`curl`, y la página del resumen, `arxiv-2304.07193-abs.html`. Las citas se
+`curl`, y la página del resumen, `arxiv-2304.07193-abs.html`. El PDF de la v1, en
+`arxiv-2304.07193v1-dinov2.pdf` (7.944.724 bytes, SHA-256
+`ba47279a742327b613f213dfa057bd3715c88142f2fd88437e318a51544cb176`), con su texto
+extraído con pymupdf en `arxiv-2304.07193v1-dinov2.txt`. Las citas se
 comprobaron carácter a carácter contra el HTML, quitando las etiquetas en línea
 sin añadir espacios. Donde van `[...]`, se omite un número de tabla enlazado.
 
