@@ -8,11 +8,11 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-25): Fase 2.** La Fase 1 está cerrada. Las
-fuentes de la Fase 2 están reunidas y versionadas: los datos de preentrenamiento
-de DINOv3 y de DINOv2, y lo que se sabe de cuándo fueron públicos los datos de
-SLICE-3D. El siguiente paso es la decisión sobre DINOv3 y DINOv2 con la regla de
-verificación de esa fase, que es de la persona.
+**Dónde está la ruta (2026-09-25): Fase 3.** Las fases 0, 1 y 2 están
+cerradas. El siguiente paso es la Fase 3: extraer las características de imagen
+con DINOv2, después de comprobar que el punto de control que se use documenta
+LVD-142M como sus datos de entrenamiento (la condición de la decisión de la
+Fase 2).
 
 ## Cómo leer una puerta
 
@@ -351,11 +351,18 @@ desarrollo.
 
 ---
 
-## Fase 2 — El bloqueante de preentrenamiento
+## Fase 2 — El bloqueante de preentrenamiento — CERRADA
+
+**Estado: CERRADA (2026-09-25).** La puerta está cumplida: las fuentes están
+versionadas en `referencias/` y la decisión, escrita. PanDerm y DINOv3 no se
+usan; se usa DINOv2, con una condición sobre el punto de control que se comprueba
+al empezar la Fase 3. Lo que sigue en esta sección es el registro de cómo se
+cerró.
 
 **Qué se hace.** Verificar si SLICE-3D estuvo entre las fuentes de
 preentrenamiento del modelo fundacional que se use. Se planteó para PanDerm o
-DermFM-Zero; tras la decisión de abajo, el modelo es DINOv3. ~35% del
+DermFM-Zero; tras las decisiones de abajo, el modelo es DINOv2. *Hasta el
+2026-09-25 aquí decía DINOv3.* ~35% del
 preentrenamiento de PanDerm es fotografía corporal total — la misma modalidad
 que este dataset.
 *Aquí se decía también que MSKCC "aparece mencionado como fuente institucional
@@ -368,7 +375,7 @@ preentrenamiento, con 352.034 recortes. El criterio de esta fase se fijó antes
 de conocer ese dato: si hay solape, no se usa. Que el preentrenamiento fuera sin
 etiquetas no se admite como excepción, porque el criterio no la preveía. Se usa
 DINOv3, sujeto a la misma verificación del objetivo 5. DermFM-Zero no se examinó
-y no se usa.
+y no se usa. *DINOv3 no superó esa verificación: decisión del 2026-09-25, abajo.*
 
 **Estado (2026-09-24).** **La puerta queda cumplida para PanDerm**: la fuente
 está versionada (`referencias/panderm-reduccion-examenes.md`, texto completo) y
@@ -396,7 +403,29 @@ se afirman aquí: se verifican con fuente en esta misma fase.*
 `referencias/slice3d-fechas-de-publicacion.md`, las tres fichas, con el texto
 completo en local. La tercera no fija la primera fecha en que los datos de
 SLICE-3D fueron públicos, porque ninguna fuente la da; recoge las que sí dan.
-La decisión sobre DINOv3 y DINOv2 es de la persona y está pendiente.
+*La decisión, que estaba pendiente, se tomó el mismo día; va a continuación.*
+
+**Decisión (2026-09-25, de la persona): DINOv3 no se usa; se usa DINOv2.**
+DINOv3 no se usa: no cumple ningún caso de la regla (artículo de agosto de 2025,
+datos de un conjunto abierto de Instagram sin fecha de recogida y semillas no
+enumeradas). Se usa DINOv2 por el caso 1 de la regla: sus datos de
+preentrenamiento (LVD-142M) están descritos en un artículo de abril de 2023, sus
+autores no pertenecen a las instituciones contribuyentes, y los recortes de
+SLICE-3D se generaron con una herramienta creada para el reto de 2024, presentado
+en un congreso de 2023 (el de la EADV, del 11 al 14 de octubre de 2023:
+`referencias/eadv-congress-2023.md`). Salvedad declarada: la primera fecha
+pública de SLICE-3D no la fija ninguna fuente; el orden temporal se apoya en esa
+cadena de evidencia.
+
+**Condición:** el punto de control que se use tiene que documentar LVD-142M como
+sus datos de entrenamiento. Se comprueba al empezar la Fase 3, antes de extraer
+ninguna característica.
+
+Fuentes: `referencias/simeoni-2025-dinov3.md`, `referencias/oquab-2023-dinov2.md`
+(citas cotejadas con el PDF de la v1) y la cadena de evidencia en
+`referencias/slice3d-fechas-de-publicacion.md`, sección 5. *Nota del agente: que
+la herramienta se creara para el reto de 2024 se lee de su nombre, «ISIC2024 Tile
+Export Tool»; el descriptor no lo dice. La cadena lo marca como inferencia.*
 
 **No se extrae ni una característica antes de cerrar esto.** Si hay solape,
 cualquier resultado de un modelo congelado sobre estos datos viene inflado por
@@ -415,7 +444,9 @@ cosas. Una fuente sin decisión deja la fase abierta.
 
 **Riesgo.** La verificación no se puede cerrar — los autores no contestan, o la
 documentación no es concluyente. Es un riesgo real y no depende de nosotros. Con
-PanDerm no se dio: el artículo lo resolvió. Queda para la de DINOv3.
+PanDerm no se dio: el artículo lo resolvió. *Con DINOv3 y DINOv2 tampoco
+(2026-09-25): los artículos bastaron para aplicar la regla, y no hizo falta
+escribir a los autores.*
 
 **Contingencia.** Se planteó DINOv3 como respaldo: genérico, no específico de
 dermatología. Tras la decisión es el modelo que se usa. *Aquí se decía que no
@@ -425,12 +456,19 @@ desempeño, y el intercambio se declara en el informe. Solo se gana poder afirma
 lo que se mida cuando su verificación esté cerrada. Si esa verificación
 tampoco se puede cerrar, lo decide la regla de arriba: no se usa, y se pasa al
 siguiente candidato. *Hasta el 2026-09-24 aquí decía que no estaba decidido.*
+*2026-09-25: así fue. DINOv3 no se verificó y se pasó a DINOv2, que sí se
+verificó. Lo dicho del ajuste al dominio vale igual para DINOv2, que también es
+genérico.*
 **El hallazgo de que no se pudo verificar sería, él mismo, un resultado
 publicable** del trabajo.
 
 ---
 
 ## Fase 3 — Características de imagen
+
+**Antes de extraer:** comprobar que el punto de control de DINOv2 que se use
+documenta LVD-142M como sus datos de entrenamiento. Es la condición de la
+decisión de la Fase 2; si no se cumple, el modelo no cuenta como verificado.
 
 **Qué se hace.** Una skill instrumento nueva, con el **mismo contrato de salida**
 que las cuatro existentes: `outputs/<nombre>.json` + `outputs/<nombre>.md` de

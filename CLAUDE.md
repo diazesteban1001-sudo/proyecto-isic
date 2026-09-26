@@ -1017,9 +1017,9 @@ una cifra de desempeño sin su limitación asociada. Hoy no lo hace.
 
 ## Extensión: fase de imágenes y modelos fundacionales
 
-**Estado: PLAN ACORDADO, NADA EJECUTADO.** *Salvo E1 para PanDerm: el
-2026-09-24 se leyó su artículo y se decidió no usarlo (ver «Riesgo
-bloqueante»).* Sesión de planificación del
+**Estado: PLAN ACORDADO, NADA EJECUTADO.** *Salvo E1, cerrada: el
+2026-09-24 se decidió no usar PanDerm, y el 2026-09-25 no usar DINOv3 y usar
+DINOv2 (ver «Riesgo bloqueante»).* Sesión de planificación del
 2026-08-18. Todo lo que sigue son decisiones de diseño, no resultados. Ninguna
 cifra de esta sección puede citarse en el informe como medida hasta que exista
 en `outputs/`.
@@ -1190,16 +1190,39 @@ preentrenamiento, con 352.034 recortes. El criterio de esta fase se fijó antes
 de conocer ese dato: si hay solape, no se usa. Que el preentrenamiento fuera sin
 etiquetas no se admite como excepción, porque el criterio no la preveía. Se usa
 DINOv3, sujeto a la misma verificación del objetivo 5. DermFM-Zero no se examinó
-y no se usa.
+y no se usa. *DINOv3 no superó esa verificación: decisión del 2026-09-25, abajo.*
 
-El estado de la fase vive en `PLAN.md`, Fase 2: la puerta queda cumplida para
-PanDerm, y la fase sigue abierta hasta versionar la fuente de los datos de
-preentrenamiento de DINOv3 y escribir la decisión sobre ella.
+El estado de la fase vive en `PLAN.md`, Fase 2, cerrada el 2026-09-25. *Hasta ese
+día aquí decía que seguía abierta por DINOv3.*
 
 **DINOv3** (genérico, no dermatológico) pasa de respaldo a modelo elegido. *Aquí
 se decía que era un respaldo "sin este riesgo conocido". Que no se le conozca el
 riesgo no es una verificación: sus datos de preentrenamiento están por
-comprobar, igual que se comprobaron los de PanDerm.*
+comprobar, igual que se comprobaron los de PanDerm.* *Se comprobaron el
+2026-09-25 y no cumplió la regla; el modelo elegido pasa a ser DINOv2.*
+
+**Decisión (2026-09-25, de la persona): DINOv3 no se usa; se usa DINOv2.**
+DINOv3 no se usa: no cumple ningún caso de la regla (artículo de agosto de 2025,
+datos de un conjunto abierto de Instagram sin fecha de recogida y semillas no
+enumeradas). Se usa DINOv2 por el caso 1 de la regla: sus datos de
+preentrenamiento (LVD-142M) están descritos en un artículo de abril de 2023, sus
+autores no pertenecen a las instituciones contribuyentes, y los recortes de
+SLICE-3D se generaron con una herramienta creada para el reto de 2024, presentado
+en un congreso de 2023 (el de la EADV, del 11 al 14 de octubre de 2023:
+`referencias/eadv-congress-2023.md`). Salvedad declarada: la primera fecha
+pública de SLICE-3D no la fija ninguna fuente; el orden temporal se apoya en esa
+cadena de evidencia.
+
+**Condición:** el punto de control que se use tiene que documentar LVD-142M como
+sus datos de entrenamiento. Se comprueba al empezar la Fase 3 de `PLAN.md`, antes
+de extraer ninguna característica.
+
+La regla es la de `PLAN.md`, Fase 2. Fuentes: `referencias/simeoni-2025-dinov3.md`,
+`referencias/oquab-2023-dinov2.md` (citas cotejadas con el PDF de la v1) y la
+cadena de evidencia en `referencias/slice3d-fechas-de-publicacion.md`, sección 5.
+*Nota del agente: que la herramienta se creara para el reto de 2024 se lee de su
+nombre, «ISIC2024 Tile Export Tool»; el descriptor no lo dice. La cadena lo marca
+como inferencia.*
 
 *Precedente en este mismo archivo:* la Cuarta nota dejó abierta exactamente esta
 pregunta para `tbp_lv_nevi_confidence` —si las lesiones con que se entrenó ese
@@ -1224,7 +1247,8 @@ para que "Fase 2" signifique siempre una sola cosa — la de `PLAN.md`.
   SLICE-3D. Posiblemente escribiendo a los autores (correo público en el repo).
   Nada más empieza hasta cerrarla. *2026-09-24: PanDerm no se usa, porque su
   artículo declara ISIC2024 en el preentrenamiento; DermFM-Zero no se examinó y
-  no se usa (decisión en «Riesgo bloqueante»). E1 sigue abierta por DINOv3.*
+  no se usa (decisión en «Riesgo bloqueante»).* *2026-09-25: DINOv3 no se usa y
+  se usa DINOv2, con una condición sobre el punto de control; E1 cerrada.*
 - **E2 — features de paciente relativo.** Sobre la metadata tabular que ya
   está en `data/`: contraste de cada lesión contra el resto de su paciente (LOF
   agrupado por `patient_id`, razones contra el promedio del paciente). Sin
@@ -1267,11 +1291,12 @@ contexto.
 
 ### Pendientes de la extensión
 
-- [ ] **E1:** verificar contaminación del modelo fundacional con SLICE-3D.
+- [x] **E1:** verificar contaminación del modelo fundacional con SLICE-3D.
       PanDerm: cerrado el 2026-09-24, no se usa (su artículo declara ISIC2024
       en el preentrenamiento). DermFM-Zero: no se examinó y no se usa.
-      Pendiente: versionar la fuente de los datos de preentrenamiento de
-      DINOv3 y escribir la decisión sobre ella.
+      *Cumplido el 2026-09-25: DINOv3 no se usa y se usa DINOv2, con la
+      condición de que el punto de control documente LVD-142M (decisión en
+      «Riesgo bloqueante»).*
 - [x] Guardar el writeup del 1er lugar en `referencias/` (con fuente y fecha en
       la cabecera) antes de citarlo en el informe — regla 3. *Cumplido el
       2026-09-24 con el **código** público de la solución, no con el writeup:
