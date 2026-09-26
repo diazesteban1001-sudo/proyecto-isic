@@ -21,6 +21,13 @@ comprobación no puede fallar: está para cuando no funcione, porque un
 cambio la rompa o porque alguien lea el CSV por otra vía y llame solo a
 exigir_sin_reservados. El control positivo, test_datos_desarrollo.py,
 desactiva la exclusión y comprueba que la comprobación se dispara.
+
+Desde la Fase 3 carga también las características de imagen de desarrollo
+(cargar_caracteristicas_desarrollo). Se niega a leer el archivo del conjunto
+reservado por dos vías independientes: el atributo "conjunto" del archivo, que
+tiene que decir "desarrollo", y su contenido: ningún isic_id puede ser de un
+paciente reservado. La primera atrapa el archivo equivocado; la segunda, un
+archivo mal etiquetado o hecho a mano.
 """
 
 import json
@@ -76,3 +83,29 @@ def cargar_desarrollo(ruta_csv, group_col="patient_id", ruta_holdout=RUTA_HOLDOU
         "sin_los_pacientes_de": ruta_holdout,
     }
     return desarrollo, datos
+
+
+def cargar_caracteristicas_desarrollo(ruta_h5, ruta_csv, group_col="patient_id", ruta_holdout=RUTA_HOLDOUT):
+    """Devuelve (isic_id, cls, decodificada) de un archivo de características de
+    desarrollo. Falla si el archivo no declara ser de desarrollo, si alguno de
+    sus isic_id no está en el CSV o si alguno es de un paciente reservado."""
+    import h5py
+
+    reservados = leer_reservados(ruta_holdout)
+    with h5py.File(ruta_h5, "r") as f:
+        conjunto = f.attrs.get("conjunto")
+        if conjunto != "desarrollo":
+            raise SystemExit(
+                f"ERROR: {ruta_h5} declara el conjunto {conjunto!r}, no 'desarrollo'. El cargador de "
+                f"desarrollo no lee las características del conjunto reservado."
+            )
+        ids = f["isic_id"].asstr()[:]
+        cls = f["cls"][:]
+        decodificada = f["decodificada"][:]
+    mapa = pd.read_csv(ruta_csv, usecols=["isic_id", group_col]).set_index("isic_id")[group_col]
+    desconocidos = pd.Index(ids).difference(mapa.index)
+    if len(desconocidos):
+        raise SystemExit(f"ERROR: {len(desconocidos)} isic_id de {ruta_h5} no están en {ruta_csv}.")
+    exigir_sin_reservados(pd.DataFrame({group_col: mapa.loc[ids].to_numpy()}), reservados, group_col,
+                          f"las características de {ruta_h5}")
+    return list(ids), cls, decodificada

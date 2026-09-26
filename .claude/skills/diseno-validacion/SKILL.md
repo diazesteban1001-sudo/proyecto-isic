@@ -95,6 +95,13 @@ que excluye los pacientes reservados. Su control positivo es
 el cargador falla sin el archivo sellado y que la comprobación se
 dispara si la exclusión no se aplica.
 
+Desde la Fase 3, `cargar_caracteristicas_desarrollo`, en el mismo archivo,
+carga las características de imagen de desarrollo que escribe
+`extraccion-imagen`. Se niega a leer el archivo del conjunto reservado por dos
+vías independientes: el atributo `conjunto` del archivo tiene que decir
+`desarrollo`, y ninguno de sus `isic_id` puede ser de un paciente reservado.
+Su control positivo es `scripts/test_caracteristicas_reservado.py`.
+
 ## Contrato de salida
 
 - `outputs/diseno-validacion.json` — esquema completo y auditoría,
