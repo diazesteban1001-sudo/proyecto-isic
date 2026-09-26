@@ -538,6 +538,27 @@ reportada en el `.json` y decidido antes de ver cuánto tarda la extracción.*
 
 ## Fase 4 — Modelado con imagen
 
+**Decisión (2026-09-25, de la persona), fijada antes de correr ningún modelo con
+imagen.**
+
+- **Modelos**, sobre los mismos pliegues de desarrollo y con 10 semillas:
+  - **M1:** el nivel 2b actual.
+  - **M2:** M1 más el contexto de paciente: el z-score de cada variable dentro
+    del paciente, los conteos y las sumas de área por paciente, y el LOF
+    ajustado paciente por paciente.
+  - **M3:** la parte tabular reproducida del ganador.
+  - **M4:** M2 más las 384 variables de DINOv2 ViT-S/14, tal cual.
+- **Comparaciones principales, fijadas:** M2 − M1, M4 − M2 y el mejor de los
+  modelos propios frente a M3, cada una con su intervalo corregido por Nadeau y
+  Bengio. Se reportan las tres.
+- **Sin ajuste de hiperparámetros** en los modelos propios, que usan los del
+  nivel 2b. M3 usa los publicados.
+- **Tabla final por modelo:** pAUC, AUC, SEtop-15, NNT80% SE y tiempo de
+  inferencia, con la definición del apartado 5 del anteproyecto (sección 5.1),
+  que recoge la Fase 6 de este archivo.
+- **Apilar un clasificador de imagen** queda como variante secundaria, no como
+  principal.
+
 **Qué se hace.** Los mismos niveles del `modelado-baseline` actual, sobre los
 mismos pliegues de desarrollo, con **pAUC y AUC estándar** para cada uno —las
 dos, porque el desacuerdo entre ambas métricas sobre las mismas predicciones ya
