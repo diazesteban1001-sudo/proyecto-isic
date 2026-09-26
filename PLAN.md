@@ -11,8 +11,10 @@ salida, y qué hacer cuando algo no se pueda cerrar.
 **Dónde está la ruta (2026-09-25): Fase 3.** Las fases 0, 1 y 2 están
 cerradas. La preparación de la Fase 3 está hecha: la condición sobre el punto de
 control, comprobada; las imágenes, descargadas; la prueba de tiempo, medida. El
-punto de control elegido es ViT-S/14, por decisión de la persona. El siguiente
-paso es la extracción completa.
+punto de control elegido es ViT-S/14, por decisión de la persona. La extracción
+completa está hecha y su puerta, `outputs/extraccion-imagen.json`, existe. La
+Fase 4 tiene fijados sus modelos y comparaciones (decisión del 2026-09-25) y es
+el siguiente paso.
 
 ## Cómo leer una puerta
 
@@ -501,6 +503,23 @@ de ver ningún resultado de desempeño, por tres motivos:
 **ViT-B/14 queda documentado como alternativa no elegida**, por esos mismos
 motivos: más lento, con el doble de dimensiones para los mismos positivos, y
 con recortes más pequeños que su entrada.
+
+**Extracción (2026-09-25).** Las 401.059 imágenes, con `extraccion-imagen` en
+el commit que graba `outputs/extraccion-imagen.json > codigo_commit`. La
+cobertura por conjunto, los tiempos por fase y los hashes de los pesos y de cada
+archivo de características están en ese JSON. Las características van en
+`data/dinov2-vits14-desarrollo.h5` y `data/dinov2-vits14-reservado.h5`, en
+float32; el cargador de desarrollo se niega a leer el segundo. No se leyó
+ninguna etiqueta ni se calculó ninguna métrica.
+
+*La extracción fue más lenta que la prueba de tiempo:* la fase del modelo sumó
+`conjuntos.desarrollo.segundos_por_fase.modelo` para las imágenes de desarrollo,
+frente al ritmo de `outputs/prueba-tiempo-dinov2.json >
+imagenes_por_segundo_solo_modelo`. Hay dos diferencias entre las dos
+mediciones: la prueba duró segundos y dejaba la salida en el dispositivo, y la
+extracción duró más de una hora y pasa la salida a CPU en cada lote. No se ha
+medido cuál explica la diferencia. Cuenta para el tiempo de inferencia de la
+Fase 6: la prueba de tiempo sale optimista.
 
 **Qué se hace.** Una skill instrumento nueva, con el **mismo contrato de salida**
 que las cuatro existentes: `outputs/<nombre>.json` + `outputs/<nombre>.md` de

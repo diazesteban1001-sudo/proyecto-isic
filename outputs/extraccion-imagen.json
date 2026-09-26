@@ -1,0 +1,88 @@
+{
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "columnas_leidas": [
+      "isic_id",
+      "patient_id"
+    ],
+    "imagenes": "data/train-image.hdf5",
+    "reparto": "desarrollo y reservado según outputs/holdout-pacientes.json"
+  },
+  "modelo": {
+    "nombre": "dinov2_vits14",
+    "repositorio": "facebookresearch/dinov2",
+    "repositorio_commit": "7764ea0f912e53c92e82eb78a2a1631e92725fc8",
+    "pesos": {
+      "archivo": "dinov2_vits14_pretrain.pth",
+      "sha256": "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9"
+    }
+  },
+  "preprocesado": "JPEG a RGB; redimensionado bicúbico a 224 x 224, sin recorte central; normalización por defecto de DINOv2 (media 0.485, 0.456, 0.406; desviación 0.229, 0.224, 0.225)",
+  "caracteristica": "token CLS tras la normalización final (x_norm_clstoken), 384 dimensiones",
+  "lote": 64,
+  "dispositivo": "mps",
+  "equipo": {
+    "chip": "Apple M4",
+    "memoria_gb": 16.0,
+    "macos": "27.0"
+  },
+  "software": {
+    "python": "3.11.9",
+    "torch": "2.14.0",
+    "numpy": "2.4.6",
+    "h5py": "3.16.0",
+    "pillow": "12.3.0",
+    "pandas": "3.0.5"
+  },
+  "codigo_commit": "134b9f0cda5fbb4d5b09069dd267f1b387ba42e2",
+  "fecha": "2026-09-26T02:53:06.732895+00:00",
+  "segundos_carga_del_modelo": 0.3,
+  "conjuntos": {
+    "desarrollo": {
+      "cobertura": {
+        "imagenes": 318229,
+        "pacientes": 833,
+        "decodificadas": 318229,
+        "fallidas": 0,
+        "no_cuadradas": 0
+      },
+      "fallidas": [],
+      "segundos_por_fase": {
+        "lectura_hdf5": 22.3,
+        "decodificacion_y_preproceso": 276.2,
+        "modelo": 3855.1,
+        "escritura": 0.4
+      },
+      "segundos_total": 4154.0,
+      "archivo": {
+        "archivo": "data/dinov2-vits14-desarrollo.h5",
+        "bytes": 504402949,
+        "sha256": "52a7fd12855ae7548df2a21b46d513f51ab056c817acc468ab0e1c70576f3cfd"
+      }
+    },
+    "reservado": {
+      "cobertura": {
+        "imagenes": 82830,
+        "pacientes": 209,
+        "decodificadas": 82830,
+        "fallidas": 0,
+        "no_cuadradas": 0
+      },
+      "fallidas": [],
+      "segundos_por_fase": {
+        "lectura_hdf5": 8.9,
+        "decodificacion_y_preproceso": 65.0,
+        "modelo": 1002.5,
+        "escritura": 0.1
+      },
+      "segundos_total": 1076.5,
+      "archivo": {
+        "archivo": "data/dinov2-vits14-reservado.h5",
+        "bytes": 131291662,
+        "sha256": "7e145c16238ded00599c6ddc39a25b11b4ef185956d29259dde2b0673ee35c80"
+      }
+    }
+  },
+  "segundos_total": 5232.5,
+  "nota": "No se leyó ninguna etiqueta ni se calculó ninguna métrica. Las filas de una imagen fallida van en NaN y con decodificada = false."
+}
