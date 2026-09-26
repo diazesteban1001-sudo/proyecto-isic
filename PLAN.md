@@ -484,14 +484,23 @@ Mide dos cosas, no una:
 
 **Puerta.** `outputs/extraccion-imagen.json`.
 
-**Riesgo.** Las 401.059 imágenes (`eda-diagnostico.json > fuente.n_filas`) no
-caben en el equipo, ni en tiempo ni en disco.
+**Riesgo.** Las 401.059 imágenes (`referencias/isic-licencia-y-cita-slice3d.md`,
+tabla de la página de datos) no caben en el equipo, ni en tiempo ni en disco.
+*Hasta el 2026-09-25 la cifra remitía a `eda-diagnostico.json > fuente.n_filas`,
+que desde la re-medición cuenta solo el conjunto de desarrollo.*
 
-**Contingencia — declarada de entrada, no como plan B.** Submuestreo por
-paciente conservando **todos** los positivos y una muestra de negativos, con la
-proporción reportada en el `.json`. Se decide antes de ver cuánto tarda, porque
-una decisión de muestreo tomada a mitad del cómputo se toma para que quepa, no
-para que mida.
+**Decisión (2026-09-25, de la persona): el orden de la extracción.** Sustituye a
+la contingencia anterior.
+1. Extracción completa en el M4, si cabe en 8 horas.
+2. Si no cabe, extracción completa en Kaggle.
+3. Submuestreo solo como último recurso, y declarado.
+
+Motivo: submuestrear cambia la población evaluada y quita lesiones a los
+pacientes, lo que rompe la comparación con el modelo tabular.
+
+*Hasta el 2026-09-25 la contingencia era el submuestreo por paciente,
+conservando todos los positivos y una muestra de negativos, con la proporción
+reportada en el `.json` y decidido antes de ver cuánto tarda la extracción.*
 
 ---
 
