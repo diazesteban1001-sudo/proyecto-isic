@@ -772,47 +772,65 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman dos del modelado, trazables a
-`outputs/modelado-baseline.json` y a `outputs/validacion-repetida.json`:
+train, `tbp_lv_nevi_confidence`). Se suman tres del modelado, trazables a
+`outputs/modelado-baseline.json`, `outputs/validacion-repetida.json` y
+`outputs/sensibilidad-procedencia-repetida.json`. Desde el 2026-09-25 sus
+cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
+los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
-   Nivel 2a da pAUC 0.0013, *por debajo del piso aleatorio de la métrica* (0.02).
+   Nivel 2a da pAUC 0,0005, *por debajo del piso aleatorio de la métrica* (0,02).
    No colapsa a "predecir siempre negativo" —el diagnóstico de manual— sino que
    satura en probabilidad 1.0 sobre negativos y los coloca encima de los
    positivos, arrasando justo la región de sensibilidad alta. Con
-   `class_weight="balanced"` (2b): 0.1451. La métrica del cliente ve el
-   problema; la métrica por defecto no.
+   `class_weight="balanced"` (2b): 0,1398. La métrica del cliente ve el
+   problema; la métrica por defecto no. Cifras del conjunto de desarrollo
+   (`outputs/modelado-baseline.json`); las conclusiones son las mismas que sobre
+   el 100 % de los datos, donde eran 0,0013 y 0,1451.
 
-   > **AUC estándar del Nivel 2a: 0.6159 — y ahora SÍ está medido**, en
+   > **AUC estándar del Nivel 2a: 0,582**, en
    > `modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media`.
    > El 2026-08-18 se retiró de aquí una cifra sin respaldo (0.6685); después se
-   > extendió el instrumento para medir el AUC estándar de cada nivel, así que
-   > el valor volvió a ser citable — y de paso quedó claro que 0.6685 es el AUC
-   > del **primer fold** (`...auc_estandar_por_fold`), no el del modelo: el
-   > número era real y estaba mal atribuido.
+   > extendió el instrumento para medir el AUC estándar de cada nivel, y quedó
+   > claro que 0.6685 era el AUC del **primer fold** en la corrida sobre el 100 %
+   > de los datos (`...auc_estandar_por_fold`), no el del modelo, cuya media era
+   > 0.6159: el número era real y estaba mal atribuido.
    >
    > Consecuencia sobre la última frase del párrafo de arriba: **la métrica por
    > defecto no es ciega al problema.** Lo puntúa por encima del azar de su
-   > escala mientras el pAUC lo deja por debajo del azar de la suya (0.02). No
-   > es un fallo silencioso: es un desacuerdo entre dos métricas sobre las
-   > mismas predicciones (ver `informe/casos-de-fallo.md`).
+   > escala mientras el pAUC lo deja por debajo del azar de la suya (0,02): las
+   > dos métricas siguen discrepando sobre si 2a supera al azar. No es un fallo
+   > silencioso: es un desacuerdo entre dos métricas sobre las mismas
+   > predicciones (ver `informe/casos-de-fallo.md`).
 
-2. **La ventaja de estabilidad de 2b NO se sostiene — retirada como argumento.**
-   Sobre **una** partición (`outputs/modelado-baseline.json`, semilla 42) 2b era
-   el menos disperso: ±0.0055 entre folds frente a ±0.0173 del Nivel 1, más del
-   triple. Sobre las **diez** particiones de `outputs/validacion-repetida.json`
-   el orden se invierte: la desviación entre folds de 2b es **0.0142** y la del
-   Nivel 1 **0.012**. Lo que parecía una propiedad del modelo era una propiedad
-   de la semilla. **No usar la estabilidad como argumento a favor de 2b.**
+2. **La ventaja de 2b sobre 1 no está establecida, ni en magnitud ni en
+   dirección.** Sobre el conjunto de desarrollo, con 10 semillas × 5 pliegues
+   (`outputs/validacion-repetida.json`), la media de 2b − 1 es 0,005; 2b gana
+   en 29 de 50 pliegues y 8 de 10 semillas, y el intervalo corregido es
+   [−0,0145; 0,0245]. Sobre el 100 % de los datos la media era 0,0125, con 40
+   de 50 y 10 de 10: la estimación se movió al quitar el 20 % de los pacientes.
+   Se retira la conclusión anterior, «dirección sí; magnitud no».
 
-   Lo que sí queda en pie es la comparación de medias, con esas mismas diez
-   semillas: 2b gana en dirección de forma consistente —**40 de 50** folds y
-   **10 de 10** semillas— pero el intervalo al 95% corregido por Nadeau y
-   Bengio para el solape entre folds va de **−0.0017 a 0.0268** y contiene el
-   cero. Dirección sí; magnitud no distinguible de cero. *Salvedad al citarlo:*
-   el intervalo ingenuo sobre esas mismas 50 diferencias ([0.0087, 0.0164])
-   excluye el cero y es el que **no** debe citarse — supone una independencia
-   que el solape entre folds no cumple.
+   *Retirada antes, y de la misma forma: la ventaja de estabilidad de 2b.* Sobre
+   una partición (semilla 42) 2b era el menos disperso, ±0,0055 entre folds
+   frente a ±0,0173 del Nivel 1; sobre las diez de la validación repetida el
+   orden se invertía, 0,0142 frente a 0,012. Lo que parecía una propiedad del
+   modelo era una propiedad de la semilla. No usar la estabilidad como
+   argumento a favor de 2b. *Son cifras de la corrida sobre el 100 % de los
+   datos; este párrafo no se ha rehecho con el conjunto de desarrollo.*
+
+3. **Las columnas de procedencia no explican la ventaja de 2b**
+   (`outputs/sensibilidad-procedencia-repetida.json`). 2b − 1 es 0,0046 con
+   ellas y 0,005 sin ellas. Incluirlas mueve 2b en 0,0021 (corregido
+   [−0,0082; 0,0124]) y el nivel 1 en 0,0025 (34 de 50 pliegues, 10 de 10
+   semillas, corregido [−0,0023; 0,0073]). La exclusión se sostiene por razón
+   de uso, no por desempeño. Una sola partición (semilla 42:
+   `outputs/sensibilidad-procedencia.json` frente a
+   `outputs/modelado-baseline.json`) sugería lo contrario, 2b de 0,1398 a
+   0,1467, y la hipótesis se formuló en la conversación desde esa corrida. Es
+   la segunda vez que un resultado de una sola partición no sobrevive a la
+   validación repetida; la primera fue la estabilidad de 2b. **Regla: ninguna
+   conclusión comparativa se escribe desde una sola partición.**
 
 ### Dónde se lee la fase vigente
 
@@ -912,7 +930,9 @@ tolerancia de redondeo 0,01, salvo en los que declara fuera del corpus
 (`FUERA_DEL_CORPUS`: el conjunto reservado y los análisis de sensibilidad,
 desde el 2026-09-25). Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit "Regenerar la verificacion de trazabilidad desde el estado actual"): **344 números en el
-borrador, 298 con respaldo, 16 señalados** para revisar uno por uno; el
+borrador, 298 con respaldo, 16 señalados** —recuentos de la corrida anterior a
+la re-medición de la Fase 1 (2026-09-25), sobre el borrador y el `outputs/` de
+entonces, pendientes de regenerar— para revisar uno por uno; el
 resto cae en contextos que no son cifras medidas (años, etiquetas de
 nivel, numeración de secciones) y se descarta explícitamente. De esos 16,
 catorce son siete cifras contadas dos veces: la sección §10.4 del
@@ -1209,10 +1229,14 @@ para que "Fase 2" signifique siempre una sola cosa — la de `PLAN.md`.
   está en `data/`: contraste de cada lesión contra el resto de su paciente (LOF
   agrupado por `patient_id`, razones contra el promedio del paciente). Sin
   imágenes. Días de trabajo, minutos de cómputo.
-  *Hipótesis, no resultado:* debería mejorar el pAUC de 0,1451
-  (`modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.pauc_media`).
-  Se escribe aquí como predicción declarada de antemano; si no mejora, eso
-  también va al informe.
+  *Hipótesis, no resultado:* debería mejorar sobre el nivel 2b medido en el
+  conjunto de desarrollo. El criterio es la comparación pareada de E2 contra 2b
+  en la validación repetida, con el intervalo corregido por Nadeau y Bengio, y
+  no un valor puntual: la mejora no se da por establecida si ese intervalo
+  contiene el cero. *Hasta el 2026-09-25 el punto de partida era un valor
+  puntual: el pAUC de 0,1451 del nivel 2b sobre el 100 % de los datos, en una
+  sola partición.* Se escribe aquí como predicción declarada de antemano; si no
+  mejora, eso también va al informe.
 - **E3 — características congeladas.** Una pasada hacia adelante por imagen,
   sin fine-tuning. Factible en el M4 corriendo de noche. Requiere descargar
   `train-image.hdf5` (ya está en Pendientes).
