@@ -94,10 +94,11 @@ desde Kaggle (ver `CLAUDE.md` para el procedimiento).
   adicional de la práctica clínica real (tasas de biopsia innecesaria,
   tiempos de triage), más allá de lo declarado por el organizador.
 - **Modelado con imágenes:** extensión evaluando características de un
-  modelo fundacional de imagen, DINOv3, condicionada a verificar que no
-  haya contaminación entre su preentrenamiento y este dataset. PanDerm,
-  específico de dermatología, se descartó por eso: su artículo declara un
-  subconjunto de ISIC 2024 entre sus datos de preentrenamiento.
+  modelo fundacional de imagen, DINOv2, elegido con una regla de
+  verificación de su preentrenamiento fijada de antemano. PanDerm,
+  específico de dermatología, se descartó porque su artículo declara un
+  subconjunto de ISIC 2024 entre sus datos de preentrenamiento; DINOv3,
+  porque no cumplía la regla.
 - **Casos de fallo documentados explícitamente** como conjunto de prueba
   propio (no solo desempeño agregado).
 - **Guardarraíles del sistema** declarados explícitamente: qué no debe

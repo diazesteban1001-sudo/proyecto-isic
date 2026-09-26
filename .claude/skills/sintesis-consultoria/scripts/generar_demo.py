@@ -508,7 +508,7 @@ __AVISO_EXPLORATORIO__
     <p><b>Modelado con im&aacute;genes.</b> Todo lo anterior usa solo la metadata tabular.
     La extensi&oacute;n prevista incorpora las fotograf&iacute;as sin entrenar una red desde cero:
     se extraer&iacute;an caracter&iacute;sticas congeladas de un modelo fundacional de imagen,
-    DINOv3, y se alimentar&iacute;an los mismos niveles de referencia, sobre
+    DINOv2, y se alimentar&iacute;an los mismos niveles de referencia, sobre
     los mismos folds agrupados por paciente, para que la comparaci&oacute;n siga siendo v&aacute;lida.</p>
     <p><b>El bloqueante, primero.</b> Antes de medir nada hay que verificar si SLICE-3D
     &mdash;el conjunto de este caso&mdash; form&oacute; parte del preentrenamiento del modelo.
@@ -517,9 +517,10 @@ __AVISO_EXPLORATORIO__
     Es el mismo razonamiento de la auditor&iacute;a de fugas, un nivel m&aacute;s arriba.</p>
     <p><b>Lo que ya se decidi&oacute;.</b> PanDerm, un modelo fundacional de dermatolog&iacute;a, no se usa:
     su art&iacute;culo declara un subconjunto de ISIC 2024 entre sus datos de preentrenamiento, y el
-    criterio fijado de antemano era no usarlo si hab&iacute;a solape. DINOv3 no es espec&iacute;fico de
-    dermatolog&iacute;a, pero eso no basta para descartar el riesgo: sus datos de preentrenamiento
-    est&aacute;n por verificar igual.</p>
+    criterio fijado de antemano era no usarlo si hab&iacute;a solape. DINOv3, gen&eacute;rico, tampoco:
+    no cumpli&oacute; la regla de verificaci&oacute;n, fijada tambi&eacute;n de antemano. Se usa DINOv2: sus datos
+    de preentrenamiento est&aacute;n descritos en un art&iacute;culo de abril de 2023, y sus autores no
+    pertenecen a las instituciones que aportaron los datos.</p>
     <p class="aviso">Ninguna cifra aparece en esta secci&oacute;n porque ninguna est&aacute; medida.
     A diferencia del resto de la p&aacute;gina, aqu&iacute; no hay archivo en <code>outputs/</code> que
     respalde nada &mdash; y por eso no se afirma nada.</p>
