@@ -1,0 +1,12 @@
+# Intérprete aparte para ejecutar sin modificar el código de 2024 del
+# organizador (SecondaryMetric-TopNSensitivity.py) y del ganador (top-model.ipynb),
+# en test_metricas_triaje.py y test_contexto_paciente.py. Se indica con la
+# variable de entorno PYTHON_GUION_ISIC. Con pandas 3 falla la línea 125 del guion
+# del organizador; con scikit-learn >= 1.6, el StandardScaler del ganador rechaza
+# sus columnas repetidas. Versiones con las que se verificó el 2026-09-25:
+pandas==2.3.3
+numpy==2.4.6
+scikit-learn==1.5.2
+polars==1.9.0
+pyarrow==17.0.0
+tqdm==4.70.1

@@ -143,8 +143,38 @@ que acompañan al pAUC en la Fase 4.
 - la SEtop-15 frente al guion oficial, ejecutado sin modificar.
 
 El guion es de 2024 y necesita pandas < 3; el intérprete se indica con
-`PYTHON_GUION_ISIC`. En la verificación del 2026-09-25 coincidió en seis
+`PYTHON_GUION_ISIC` (versiones en `requisitos-interprete-2024.txt`). En la verificación del 2026-09-25 coincidió en seis
 conjuntos sintéticos con empates, con pandas 2.3.3.
+
+## Contexto de paciente, las variables de M2 (2026-09-25)
+
+`scripts/contexto_paciente.py` calcula las variables con que M2 compara cada
+lesión con las demás de su paciente (`PLAN.md`, Fase 4). Sigue la solución
+ganadora (`referencias/novoselskiy-2024-isic2024/notebooks/top-model.ipynb`):
+
+- el z-score dentro del paciente de cada una de las 34 variables numéricas de
+  M1 (celda 7);
+- el conteo de lesiones y las sumas de área del paciente, total y por zona
+  anatómica (celda 7);
+- el LOF por paciente con sus 17 variables, repeticiones incluidas, y
+  `n_neighbors=min(n, 30)`; con menos de 3 lesiones vale −1 (celdas 10 y 11).
+
+**Una desviación, declarada:** el ganador estandariza e imputa las variables
+del LOF con todas las filas; aquí se hace dentro de cada paciente. **No usan
+etiquetas y cada una se calcula con las lesiones de un solo paciente**, así que,
+con los pliegues agrupados por paciente, no hay fuga entre pliegues. Se calculan
+una vez y valen para todos los pliegues.
+
+`scripts/test_contexto_paciente.py` comprueba:
+- los valores calculados a mano;
+- que barajar las etiquetas no cambia ninguna variable, en datos sintéticos y en
+  el conjunto de desarrollo real, y que una variante con fuga sí cambia;
+- que cambiar un paciente no cambia las variables de otro;
+- que coinciden con `read_data` y `get_lof_score` del ganador, ejecutados sin
+  modificar.
+
+Esa última comprobación necesita el intérprete de 2024 de
+`requisitos-interprete-2024.txt`, indicado con `PYTHON_GUION_ISIC`.
 
 ## Cómo correrlo
 
