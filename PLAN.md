@@ -14,8 +14,8 @@ La Fase 4 tiene fijados sus modelos y sus comparaciones (decisión del
 las tres comparaciones principales, M2 − M1 y M4 − M2
 (`outputs/fase4-m2-vs-m1.json` y `outputs/fase4-m4-vs-m2.json`). El siguiente
 paso es M3, la parte tabular reproducida del ganador, con la tercera: el mejor de
-los modelos propios frente a M3. La variante secundaria M4b está especificada y
-sin correr.
+los modelos propios frente a M3. La variante secundaria M4b está corrida
+(`outputs/fase4-m4b-vs-m2.json`).
 
 ## Cómo leer una puerta
 

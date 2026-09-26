@@ -189,6 +189,16 @@ desarrollo y los hiperparámetros de 2b, sin ajuste:
   se detiene si alguna fila no casa, si hay faltantes o si el hash del archivo
   no es el de `outputs/extraccion-imagen.json`.
 
+- **M4b, variante secundaria:** M2 más dos variables de imagen apiladas, de
+  `scripts/apilado_imagen.py`: la puntuación de una logística balanceada sobre
+  las 384 variables y su razón a la media del paciente. Se rehacen en cada fold:
+  fuera de pliegue en entrenamiento, con una validación interna agrupada por
+  paciente, y con el modelo del fold en validación. El control de fuga,
+  `scripts/test_apilado_imagen.py`, comprueba con datos sintéticos que barajar
+  las etiquetas de validación no cambia ninguna puntuación y que ninguna fila,
+  ni ningún paciente, se puntúa con un modelo que lo vio. Cada comprobación
+  detecta el mutante hecho para incumplirla.
+
 Por modelo mide pAUC, AUC, SEtop-15 y NNT80% SE, y el tiempo de entrenamiento
 por fold. Para cada métrica da nuevo − base con intervalo ingenuo y corregido, y
 victorias en la dirección de la métrica. Con `--referencia` comprueba que el

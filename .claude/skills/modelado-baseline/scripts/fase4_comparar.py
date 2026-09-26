@@ -10,6 +10,11 @@ fase4_comparar.py — Fase 4: una comparación principal entre dos modelos
        desarrollo, tal cual. Se leen con el cargador protegido
        (datos_desarrollo.cargar_caracteristicas_desarrollo), se alinean por
        isic_id y se comprueba la alineación y el hash del archivo.
+  M4b = variante secundaria: M2 más dos variables de imagen apiladas, la
+       puntuación de una logística balanceada sobre esas 384 variables y su
+       razón a la media del paciente (apilado_imagen.py). Se calculan dentro de
+       cada fold: fuera de pliegue en entrenamiento, con el modelo del fold en
+       validación. Su control de fuga es test_apilado_imagen.py.
 Todos con los mismos hiperparámetros, los de 2b, sin ajuste.
 
 Validación repetida con las semillas dadas y los mismos folds de desarrollo que
@@ -64,6 +69,7 @@ from evaluar_repetido import _nadeau_bengio, _semillas_a_favor_de_2b, cargar_col
 from metricas_triaje import nnt_a_sensibilidad, setop_n  # noqa: E402
 from contexto_paciente import variables_contexto_paciente  # noqa: E402
 from datos_desarrollo import RUTA_HOLDOUT, cargar_caracteristicas_desarrollo, cargar_desarrollo  # noqa: E402
+from apilado_imagen import puntuaciones_imagen  # noqa: E402
 
 # codificar_fold (train_and_evaluate.py, verificado) inserta las columnas de una en una;
 # con cientos de columnas pandas avisa de fragmentación. Es rendimiento, no resultado.
@@ -79,7 +85,10 @@ DESCRIPCION = {
     "M1": "nivel 2b actual",
     "M2": "M1 + contexto de paciente (contexto_paciente.py)",
     "M4": "M2 + las 384 variables de DINOv2 ViT-S/14 (token CLS), tal cual",
+    "M4b": "M2 + 2 variables de imagen apiladas: puntuación de una logística balanceada sobre las 384 "
+           "de DINOv2, fuera de pliegue, y su razón a la media del paciente (apilado_imagen.py)",
 }
+APILADAS = ["img_lr_puntuacion", "img_lr_razon_paciente"]
 
 
 def sha256(ruta):
@@ -184,8 +193,8 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--semillas", type=int, nargs="+", default=list(range(10)))
     args = ap.parse_args()
-    if "M4" in (args.base, args.nuevo) and not args.imagen:
-        raise SystemExit("ERROR: M4 necesita --imagen.")
+    if {"M4", "M4b"} & {args.base, args.nuevo} and not args.imagen:
+        raise SystemExit("ERROR: M4 y M4b necesitan --imagen.")
 
     t_total = time.perf_counter()
     excluidas = cargar_columnas_excluidas(args.leakage_report)
@@ -207,7 +216,10 @@ def main():
         "M1": numericas,
         "M2": numericas + list(contexto.columns),
         "M4": numericas + list(contexto.columns) + (list(imagen.columns) if imagen is not None else []),
+        "M4b": numericas + list(contexto.columns) + APILADAS,
     }
+    x_imagen = imagen.to_numpy() if imagen is not None else None
+    avisos_apilado, t_apilado = {}, {}
     modelos = {m: variables[m] for m in (args.base, args.nuevo)}
 
     y = df[args.target_col].to_numpy()
@@ -223,6 +235,17 @@ def main():
         for m, num in modelos.items():
             valores, tiempos = {k: [] for k in METRICAS}, []
             for tr, va in folds:
+                if m == "M4b":
+                    # Las variables apiladas dependen de las etiquetas: se rehacen en cada fold.
+                    t0 = time.perf_counter()
+                    ap = puntuaciones_imagen(x_imagen, y, grupos, tr, va, seed)
+                    for col, clave in zip(APILADAS, ("puntuacion", "razon")):
+                        valores_col = np.full(len(df), np.nan)
+                        valores_col[tr] = ap["tr"][clave]
+                        valores_col[va] = ap["va"][clave]
+                        df[col] = valores_col
+                    avisos_apilado.setdefault(str(seed), []).append(ap["avisos_no_convergencia"])
+                    t_apilado.setdefault(str(seed), []).append(round(time.perf_counter() - t0, 2))
                 x_tr, x_va = codificar_fold(df, num, categoricas, args.target_col, tr, va)
                 modelo = HistGradientBoostingClassifier(random_state=seed, class_weight="balanced")
                 t0 = time.perf_counter()
@@ -291,6 +314,14 @@ def main():
         "metricas": {m: {k: resumen(m, k) for k in METRICAS} for m in modelos},
         "comparaciones_nuevo_menos_base": comparaciones,
         "segundos_de_entrenamiento_por_fold": {m: resumen_tiempo(m) for m in modelos},
+        **({"apilado_imagen": {
+            "logistica": "pipeline StandardScaler + LogisticRegression(class_weight='balanced', max_iter=2000), C por defecto",
+            "validacion_interna": "StratifiedGroupKFold(5, shuffle=True, random_state=semilla externa), por patient_id",
+            "avisos_no_convergencia_por_semilla_y_fold": avisos_apilado,
+            "avisos_no_convergencia_total": int(sum(sum(v) for v in avisos_apilado.values())),
+            "segundos_por_fold": t_apilado,
+            "nota": "6 logísticas por fold: 5 de la validación interna y 1 sobre todo el fold de entrenamiento.",
+        }} if avisos_apilado else {}),
         "segundos": {"contexto_de_paciente": round(t_contexto, 1),
                      "carga_de_caracteristicas_de_imagen": round(t_imagen, 1) if t_imagen is not None else None,
                      "por_semilla": t_semilla, "total": round(time.perf_counter() - t_total, 1)},
@@ -328,6 +359,11 @@ def main():
             f"corregido {c['intervalo_t_95_nadeau_bengio']} · {n} mejor en {c['nuevo_mejor_en_folds']}/{c['de_folds']} "
             f"folds y {c['nuevo_mejor_en_semillas']}/{c['de_semillas']} semillas"
         )
+    if avisos_apilado:
+        a = resultado["apilado_imagen"]
+        todos = [s for v in t_apilado.values() for s in v]
+        lineas.append(f"Apilado de imagen: {a['avisos_no_convergencia_total']} avisos de no convergencia · "
+                      f"{float(np.median(todos))} s por fold de mediana (6 logísticas)")
     tf = resultado["segundos_de_entrenamiento_por_fold"]
     lineas.append("Entrenamiento por fold (fit), mediana: " + " · ".join(f"{m} {tf[m]['mediana']} s" for m in (b, n)))
     lineas.append("En el NNT80% SE menos es mejor. El intervalo ingenuo supone diferencias independientes; no lo son.")
