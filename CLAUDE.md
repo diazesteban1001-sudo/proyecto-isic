@@ -852,9 +852,12 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       257 MB / 401.059 filas / 55 columnas, `test-metadata.csv` 3 filas /
       44 columnas). Cifras del paper confirmadas contra los datos reales:
       393 positivos (0,098%), 1.042 pacientes.
-- [ ] Descargar `train-image.hdf5` (1,21 GiB) cuando lleguemos al modelado con
+- [x] Descargar `train-image.hdf5` (1,21 GiB) cuando lleguemos al modelado con
       imágenes. Entorno: `.venv/` con Kaggle CLI 2.2.4; token en
-      `~/.kaggle/access_token`
+      `~/.kaggle/access_token`. *Cumplido el 2026-09-25: `data/train-image.hdf5`,
+      1.297.309.944 bytes, con 401.059 imágenes, una por cada `isic_id` del CSV.
+      Llega comprimido; el zip queda en `data/`. El `.venv/` tiene desde ese día
+      torch 2.14.0, torchvision 0.29.0 y h5py 3.16.0, instalados desde PyPI.*
 - [x] Escribir las 4 skills instrumento y auditarlas contra los datos reales
       (2026-08-12 — `eda-diagnostico`, `diseno-validacion`, `auditoria-de-fugas`,
       `modelado-baseline`; las cuatro con defectos encontrados y corregidos)
@@ -1263,7 +1266,7 @@ para que "Fase 2" signifique siempre una sola cosa — la de `PLAN.md`.
   mejora, eso también va al informe.
 - **E3 — características congeladas.** Una pasada hacia adelante por imagen,
   sin fine-tuning. Factible en el M4 corriendo de noche. Requiere descargar
-  `train-image.hdf5` (ya está en Pendientes).
+  `train-image.hdf5`, descargado el 2026-09-25 (Pendientes).
 - **E4 — apilado y evaluación completa.** Características de imagen +
   metadata + features de paciente relativo en el mismo pipeline tabular ya
   auditado. Tabla final con los **tres** ejes de la función de utilidad: pAUC,
