@@ -772,10 +772,10 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman cuatro del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman cinco del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
-`outputs/sensibilidad-procedencia-repetida.json` y
-`outputs/fase4-m2-vs-m1.json`. Desde el 2026-09-25 sus
+`outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`
+y `outputs/fase4-m4-vs-m2.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -848,6 +848,23 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
    *Interpretación, no medición:* las variables relativas al paciente ordenan
    las lesiones dentro de cada paciente, que es lo que mide SEtop-15, mientras
    que el pAUC ordena todas las lesiones juntas.
+
+5. **Las 384 variables de imagen (DINOv2 ViT-S/14) no mejoran el modelo con
+   contexto de paciente** (conjunto de desarrollo, 10 semillas × 5 pliegues;
+   `outputs/fase4-m4-vs-m2.json`). M4 − M2:
+   - pAUC −0,0065, corregido [−0,0263; 0,0133], M4 mejor en 19 de 50 pliegues y
+     2 de 10 semillas;
+   - SEtop-15 −0,0332, corregido [−0,085; 0,0185], 0 de 10 semillas;
+   - NNT80% SE +11,24 lesiones por maligna, corregido [−19,90; 42,37].
+
+   Ningún intervalo corregido excluye el cero y la estimación puntual es peor en
+   las cuatro métricas. El entrenamiento por pliegue pasa de una mediana de
+   1,19 s a 6,51 s, sin contar la extracción de características. Por el criterio
+   fijado antes de medir (`PLAN.md`, Fase 4, «Contingencia»), la imagen, así
+   incorporada, no justifica su costo. *Interpretación, no medición:* 384
+   variables adicionales frente a 317 lesiones malignas
+   (`eda-diagnostico.json > desbalance_target.conteos`) probablemente diluyen la
+   señal.
 
 ### Dónde se lee la fase vigente
 
