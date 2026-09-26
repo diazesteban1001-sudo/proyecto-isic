@@ -8,13 +8,10 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-25): Fase 3.** Las fases 0, 1 y 2 están
-cerradas. La preparación de la Fase 3 está hecha: la condición sobre el punto de
-control, comprobada; las imágenes, descargadas; la prueba de tiempo, medida. El
-punto de control elegido es ViT-S/14, por decisión de la persona. La extracción
-completa está hecha y su puerta, `outputs/extraccion-imagen.json`, existe. La
-Fase 4 tiene fijados sus modelos y comparaciones (decisión del 2026-09-25) y es
-el siguiente paso.
+**Dónde está la ruta (2026-09-25): Fase 4.** Las fases 0 a 3 están cerradas.
+La Fase 4 tiene fijados sus modelos y sus comparaciones (decisión del
+2026-09-25). El siguiente paso son las métricas de triaje, el contexto de
+paciente y la primera comparación, M2 − M1.
 
 ## Cómo leer una puerta
 
@@ -466,7 +463,12 @@ publicable** del trabajo.
 
 ---
 
-## Fase 3 — Características de imagen
+## Fase 3 — Características de imagen — CERRADA
+
+**Estado: CERRADA (2026-09-25).** La puerta, `outputs/extraccion-imagen.json`,
+existe: las 401.059 imágenes extraídas con DINOv2 ViT-S/14, desarrollo y
+reservado en archivos separados, y el cargador de desarrollo se niega a leer el
+del reservado. Lo que sigue en esta sección es el registro de cómo se cerró.
 
 **Antes de extraer:** comprobar que el punto de control de DINOv2 que se use
 documenta LVD-142M como sus datos de entrenamiento. Es la condición de la
@@ -637,9 +639,12 @@ nuestros. Por tarea:
 La referencia de SEtop-15 para nuestros modelos sigue siendo Marchetti et al.
 («Decisiones», abajo).
 
-**Puerta.** El intervalo corregido de la diferencia contra el baseline tabular,
-y el de la diferencia contra la parte tabular reproducida del ganador, con la
-lista de lo que no se reprodujo y su motivo.
+**Puerta.** Las tres comparaciones principales fijadas en la decisión de arriba,
+cada una con su intervalo corregido por Nadeau y Bengio: **M2 − M1**, **M4 − M2**
+y **el mejor de los modelos propios frente a M3**. Con ellas, la lista de lo que
+no se reprodujo del ganador y su motivo. *Hasta el 2026-09-25 la puerta pedía
+dos intervalos: la diferencia contra el baseline tabular y contra la parte
+tabular reproducida del ganador.*
 
 **Riesgo.** La mejora no se distingue del baseline.
 
