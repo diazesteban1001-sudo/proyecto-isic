@@ -135,6 +135,11 @@ FUERA_DEL_CORPUS = {
         "Análisis de sensibilidad. No sustituyen a la corrida principal ni se usan "
         "para elegir nada, así que no respaldan cifras del informe."
     ),
+    "sintesis-verificacion.json": (
+        "La salida de este mismo script. Sus recuentos describen una verificación "
+        "anterior del borrador, no mediciones; en el corpus, el borrador quedaría "
+        "respaldado por su propia verificación."
+    ),
 }
 
 

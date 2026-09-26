@@ -108,8 +108,9 @@ la revisión la hace una persona, no el script.
 **No todo `outputs/` es corpus.** La lista `FUERA_DEL_CORPUS`, en el
 propio script, declara los archivos en los que no se busca respaldo, cada
 uno con su motivo: `holdout-pacientes.json`, los recuentos del conjunto
-reservado, y `sensibilidad-*.json`, los análisis de sensibilidad, que no
-sustituyen a la corrida principal. Si una cifra del borrador solo
+reservado; `sensibilidad-*.json`, los análisis de sensibilidad, que no
+sustituyen a la corrida principal; y `sintesis-verificacion.json`, la salida
+del propio verificador, cuyos recuentos describen una verificación anterior. Si una cifra del borrador solo
 coincide con uno de ellos, es casualidad, no trazabilidad. La salida los
 lista en `archivos_fuera_del_corpus`. Control positivo:
 `scripts/test_fuera_del_corpus.py`.

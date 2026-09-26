@@ -11,9 +11,11 @@ un outputs/ sintético, en un directorio temporal.
   - 0,1234 solo en modelado-baseline.json: tiene que contar como respaldada.
   - 0,5678 solo en sensibilidad-procedencia.json: NO debe contar.
   - 777 solo en holdout-pacientes.json: NO debe contar.
+  - 344 solo en sintesis-verificacion.json, la salida del propio
+    verificador: NO debe contar.
 
-Y el caso discrimina: con los dos últimos archivos renombrados fuera de la
-lista, las tres cuentan como respaldadas. La diferencia la hace la lista y
+Y el caso discrimina: con los tres últimos archivos renombrados fuera de la
+lista, las cuatro cuentan como respaldadas. La diferencia la hace la lista y
 nada más.
 
 Uso:
@@ -32,7 +34,8 @@ BORRADOR = (
     "# Informe de prueba\n\n"
     "El modelo principal da 0,1234.\n\n"
     "La corrida con otras columnas da 0,5678.\n\n"
-    "Quedan apartados 777 pacientes.\n"
+    "Quedan apartados 777 pacientes.\n\n"
+    "La verificación anterior contó 344 números.\n"
 )
 
 
@@ -58,11 +61,13 @@ def main():
         "modelado-baseline.json": {"pauc_media": 0.1234},
         "sensibilidad-procedencia.json": {"pauc_media": 0.5678},
         "holdout-pacientes.json": {"recuentos": {"pacientes": 777}},
+        "sintesis-verificacion.json": {"numeros_en_borrador": 344},
     })
     renombrados = verificar({
         "modelado-baseline.json": {"pauc_media": 0.1234},
         "otra-corrida.json": {"pauc_media": 0.5678},
         "otros-recuentos.json": {"recuentos": {"pacientes": 777}},
+        "otra-verificacion.json": {"numeros_en_borrador": 344},
     })
     # El verificador guarda el token tal cual, con la puntuación que lo sigue
     # ("0,5678."). Se normaliza antes de comparar: sin eso, un caso que
@@ -81,12 +86,14 @@ def main():
          "0,5678" in senalados, f"señaladas: {sorted(senalados)}"),
         ("la cifra que solo está en holdout-pacientes.json NO cuenta",
          "777" in senalados, f"señaladas: {sorted(senalados)}"),
-        ("los dos archivos quedan registrados fuera del corpus, con su motivo",
-         fuera == ["holdout-pacientes.json", "sensibilidad-procedencia.json"]
+        ("la cifra que solo está en la salida del propio verificador NO cuenta",
+         "344" in senalados, f"señaladas: {sorted(senalados)}"),
+        ("los tres archivos quedan registrados fuera del corpus, con su motivo",
+         fuera == ["holdout-pacientes.json", "sensibilidad-procedencia.json", "sintesis-verificacion.json"]
          and all(a["motivo"] for a in con_lista["archivos_fuera_del_corpus"]),
          f"archivos_fuera_del_corpus: {fuera}"),
-        ("el caso discrimina: renombrados fuera de la lista, las tres cuentan",
-         not senalados_ren and renombrados["numeros_con_respaldo_en_outputs"] == 3,
+        ("el caso discrimina: renombrados fuera de la lista, las cuatro cuentan",
+         not senalados_ren and renombrados["numeros_con_respaldo_en_outputs"] == 4,
          f"señaladas: {sorted(senalados_ren) or 'ninguna'}; con respaldo: {renombrados['numeros_con_respaldo_en_outputs']}"),
     ]
     fallos = 0
