@@ -11,7 +11,8 @@ completo.
 **Lo primero que hay que saber: ninguna de estas fuentes dice cuál fue esa
 primera fecha.** Dan una fecha de registro del DOI, una fecha en la que los datos
 ya eran públicos y una fecha antes de la cual el conjunto no estaba terminado.
-Lo que cada una dice, y lo que no, va abajo.
+Lo que cada una dice, y lo que no, va abajo; la sección 5 las encadena, que es
+en lo que se apoya la decisión de la Fase 2.
 
 **LICENCIA: desconocida → FICHA.** El registro de DataCite no declara licencia
 en el propio registro, y no se ha determinado la de sus metadatos; de él se
@@ -91,3 +92,61 @@ control"*). Copia local: `referencias/_texto-completo/isic-archive-coleccion-390
 `e13ab20127652dc608723877be76976f699567848d160beb1a9f5721ac7f3aa6`). Campos:
 `name` *"Challenge 2024: Training"*, `public` `true`, `doi` `null`. **No trae
 ninguna fecha.**
+
+## 5. La cadena de evidencia (2026-09-25)
+
+En esto se apoya el orden temporal de la decisión de la Fase 2 sobre DINOv2
+(`PLAN.md`), a falta de una fuente que fije la primera fecha pública. Primero
+lo que dice cada fuente, literal; después lo que es nuestro.
+
+**Lo que dicen las fuentes.**
+
+1. Los recortes se generaron con una herramienta propia. Descriptor, *"Lesion-image
+   “tile” cropping"* y *"Data collection"*:
+
+   > The ISIC2024 Tile Export Tool was developed by Canfield Scientific for the
+   > purpose of extracting standardized, de-identified, single-image photos from
+   > individual 3D TBP captures.
+
+   > Tile data was exported in bulk at each site using the ISIC2024 Tile Export
+   > Tool.
+
+2. El proyecto se presentó en el congreso de la EADV de 2023, y después las
+   instituciones aportaron los datos. Descriptor, *"Data collection"*:
+
+   > Plans for this dataset were initiated by the ISIC Artificial Intelligence
+   > working group and were presented at the VECTRA WB360 user group meeting
+   > during the 2023 EADV Congress.
+
+   > Users from seven institutions ultimately received ethics approval from their
+   > respective institutional review board (IRB) or human research ethics
+   > committee (HREC) and contributed data to ISIC for the present dataset
+
+3. Ese congreso fue del 11 al 14 de octubre de 2023, en Berlín.
+   `referencias/eadv-congress-2023.md`:
+
+   > 11-14 OCTOBER 2023
+
+4. Las imágenes llegan hasta 2024. Descriptor, *"Data collection"*:
+
+   > Each site identified patients who had been imaged with 3D TBP between 2015
+   > and 2024.
+
+5. En la competición, desde el 27 de junio de 2024, los datos ya eran públicos
+   (sección 2, Kurtansky et al. 2025).
+
+**Lo que es inferencia nuestra, y no dice ninguna fuente.**
+
+- Que *"the 2023 EADV Congress"* del descriptor sea el de Berlín, del 11 al 14 de
+  octubre de 2023. El descriptor no da lugar ni fecha.
+- Que la herramienta se creara para el reto de 2024. El descriptor la llama
+  *"ISIC2024 Tile Export Tool"* y dice para qué sirve, no para qué reto se hizo:
+  el vínculo con el reto sale del nombre.
+- Que los datos se aportaran después de la presentación de octubre de 2023. Se
+  lee de *"ultimately"*, que marca un orden, no una fecha.
+- Que el conjunto completo no pudo estar terminado antes de 2024, porque incluye
+  pacientes fotografiados en 2024.
+- La conclusión: los recortes de SLICE-3D no eran públicos en abril de 2023, ni
+  el conjunto completo antes de 2024. **Nada de esto excluye que alguna de las
+  imágenes originales estuviera pública antes por otra vía**; las fuentes no
+  hablan de eso.
