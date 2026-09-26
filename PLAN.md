@@ -8,14 +8,11 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-25): Fase 1.** El conjunto reservado está
-sellado, el nivel 0 corregido y las cuatro skills instrumento re-medidas sobre
-el conjunto de desarrollo. Falta la segunda parte de la puerta: actualizar el
-borrador y la demo con las cifras nuevas y dejar
-`outputs/sintesis-verificacion.json` sin cifras heredadas. Sigue abierto, aparte,
-el pendiente de la Fase 2: versionar la fuente de los datos de preentrenamiento
-de DINOv3 y escribir la decisión sobre ella, con la regla de verificación de esa
-fase.
+**Dónde está la ruta (2026-09-25): Fase 2.** La Fase 1 está cerrada. El
+siguiente paso es la Fase 2: reunir y versionar las fuentes —los datos de
+preentrenamiento de DINOv3 y de DINOv2, y la primera fecha en que los datos de
+SLICE-3D fueron públicos—, aplicarles la regla de verificación de esa fase y
+escribir la decisión, que es de la persona.
 
 ## Cómo leer una puerta
 
@@ -213,13 +210,22 @@ afirmación no se escribe.
 
 ---
 
-## Fase 1 — Sellar el holdout y re-medir
+## Fase 1 — Sellar el holdout y re-medir — CERRADA
+
+**Estado: CERRADA (2026-09-25).** Decisión de la persona: la condición de cierre
+pasa a ser `outputs/` regenerado sobre el conjunto de desarrollo y los hallazgos
+de `CLAUDE.md` actualizados. Las dos se cumplen: la re-medición y los hallazgos
+son del 2026-09-25. **El borrador no se parchea con las cifras nuevas: se
+reescribe después de la Fase 4.** Hasta entonces la demo lleva un aviso de que
+sus cifras son las exploratorias. Lo que sigue en esta sección es el registro de
+cómo se cerró.
 
 **Qué se hace.** Apartar el **20% de los pacientes** —no de las filas—,
 estratificado por centro y por presencia de positivos (decisión del
 2026-09-25, abajo), y sellarlo. Después, re-correr las
 cuatro skills instrumento sobre el conjunto de desarrollo restante, y actualizar
-la demo y el borrador con las cifras nuevas.
+la demo y el borrador con las cifras nuevas. *Esto último cambió el 2026-09-25:
+ver «Estado».*
 
 El orden importa y es el único posible: **sellar primero, medir después**. Todo
 lo medido hasta hoy se calculó sobre el 100% de los datos, así que todas las
@@ -324,6 +330,10 @@ no tener acceso a él mientras se decide nada.
 - `outputs/sintesis-verificacion.json` en verde sobre el borrador ya actualizado,
   es decir: cada cifra señalada, revisada y justificada, y ninguna heredada de
   la corrida anterior.
+
+*Sustituida el 2026-09-25 por decisión de la persona: la segunda condición pasa
+a ser `outputs/` regenerado sobre el conjunto de desarrollo y los hallazgos
+actualizados. Cumplida.*
 
 **Riesgo.** El holdout se queda con pocos pacientes portadores de positivos y el
 número final sale muy incierto. La aritmética ya está hecha y no es tranquila:
@@ -543,7 +553,8 @@ desde fuera y no depende de que nadie recuerde haberse portado bien.
 
 **Qué se hace.** Informe final y demo actualizada. El informe se produce desde
 `outputs/` como hasta ahora, con la trazabilidad verificada; la demo se
-regenera, no se edita a mano.
+regenera, no se edita a mano. *El borrador se reescribe después de la Fase 4, no
+se parchea antes (decisión del 2026-09-25, en la Fase 1).*
 
 La tabla final responde la pregunta del cliente **entera**, con sus tres ejes:
 pAUC, sensibilidad de recuperación top-15 por paciente, y costo de inferencia.
