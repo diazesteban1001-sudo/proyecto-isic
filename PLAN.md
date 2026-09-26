@@ -10,10 +10,11 @@ salida, y qué hacer cuando algo no se pueda cerrar.
 
 **Dónde está la ruta (2026-09-25): Fase 4.** Las fases 0 a 3 están cerradas.
 La Fase 4 tiene fijados sus modelos y sus comparaciones (decisión del
-2026-09-25). Hechas: las métricas de triaje, el contexto de paciente y la
-primera comparación, M2 − M1 (`outputs/fase4-m2-vs-m1.json`). El siguiente paso
-son M3, la parte tabular reproducida del ganador, y M4, M2 con DINOv2, con las
-otras dos comparaciones.
+2026-09-25). Hechas: las métricas de triaje, el contexto de paciente y dos de
+las tres comparaciones principales, M2 − M1 y M4 − M2
+(`outputs/fase4-m2-vs-m1.json` y `outputs/fase4-m4-vs-m2.json`). El siguiente
+paso es M3, la parte tabular reproducida del ganador, con la tercera: el mejor de
+los modelos propios frente a M3.
 
 ## Cómo leer una puerta
 

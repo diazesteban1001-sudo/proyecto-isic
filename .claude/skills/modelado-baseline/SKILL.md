@@ -176,6 +176,25 @@ una vez y valen para todos los pliegues.
 Esa última comprobación necesita el intérprete de 2024 de
 `requisitos-interprete-2024.txt`, indicado con `PYTHON_GUION_ISIC`.
 
+## Comparaciones de la Fase 4 (2026-09-25)
+
+`scripts/fase4_comparar.py` hace una comparación principal de la Fase 4
+(`PLAN.md`), nuevo − base, con validación repetida sobre los mismos folds de
+desarrollo y los hiperparámetros de 2b, sin ajuste:
+
+- **M1:** el nivel 2b.
+- **M2:** M1 más el contexto de paciente.
+- **M4:** M2 más las 384 variables de DINOv2 ViT-S/14. Se leen con el cargador
+  protegido, que no lee las del reservado. Se alinean por `isic_id`, y el script
+  se detiene si alguna fila no casa, si hay faltantes o si el hash del archivo
+  no es el de `outputs/extraccion-imagen.json`.
+
+Por modelo mide pAUC, AUC, SEtop-15 y NNT80% SE, y el tiempo de entrenamiento
+por fold. Para cada métrica da nuevo − base con intervalo ingenuo y corregido, y
+victorias en la dirección de la métrica. Con `--referencia` comprueba que el
+modelo base reproduce fold a fold una corrida anterior. Hasta el 2026-09-25 se
+llamaba `fase4_m2_vs_m1.py` y solo hacía M2 − M1.
+
 ## Cómo correrlo
 
 ```bash
