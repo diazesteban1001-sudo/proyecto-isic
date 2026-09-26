@@ -772,9 +772,10 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman tres del modelado, trazables a
-`outputs/modelado-baseline.json`, `outputs/validacion-repetida.json` y
-`outputs/sensibilidad-procedencia-repetida.json`. Desde el 2026-09-25 sus
+train, `tbp_lv_nevi_confidence`). Se suman cuatro del modelado, trazables a
+`outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
+`outputs/sensibilidad-procedencia-repetida.json` y
+`outputs/fase4-m2-vs-m1.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -831,6 +832,22 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
    la segunda vez que un resultado de una sola partición no sobrevive a la
    validación repetida; la primera fue la estabilidad de 2b. **Regla: ninguna
    conclusión comparativa se escribe desde una sola partición.**
+
+4. **El contexto de paciente no cambia de forma distinguible la métrica
+   principal, pero sí los ejes de triaje que el cliente declaró** (conjunto de
+   desarrollo, 10 semillas × 5 pliegues; `outputs/fase4-m2-vs-m1.json`). M2 − M1:
+   - pAUC +0,0065, corregido [−0,0147; 0,0276], 28 de 50 pliegues;
+   - SEtop-15 +0,0842, corregido [0,021; 0,1473], 46 de 50 pliegues y 10 de 10
+     semillas;
+   - NNT80% SE −30,55 lesiones por maligna, corregido [−60,89; −0,20], 42 de 50
+     y 10 de 10.
+
+   Si solo se lee el pAUC, se concluye que el contexto de paciente no aporta;
+   los ejes de triaje del cliente dicen lo contrario. Salvedades: son cuatro
+   métricas sobre una misma comparación, y el NNT queda al límite.
+   *Interpretación, no medición:* las variables relativas al paciente ordenan
+   las lesiones dentro de cada paciente, que es lo que mide SEtop-15, mientras
+   que el pAUC ordena todas las lesiones juntas.
 
 ### Dónde se lee la fase vigente
 
