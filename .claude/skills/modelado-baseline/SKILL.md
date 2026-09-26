@@ -117,6 +117,35 @@ daba 0.12 en vez de 0.2. El oficial no aplica la corrección de McClish
 en absoluto — trunca la curva ROC en `max_fpr` interpolando el último
 punto e integra el área cruda.
 
+## Métricas de triaje: SEtop-15 y NNT80% SE (2026-09-25)
+
+`scripts/metricas_triaje.py` implementa las dos métricas de triaje del cliente,
+que acompañan al pAUC en la Fase 4.
+
+- **SEtop-15**, verificada contra el guion del organizador
+  (`referencias/isic-secondary-metric-topn.py.md`). Es la media, sobre los
+  pacientes con alguna lesión maligna, de la fracción de sus malignas que caen
+  entre sus 15 lesiones de mayor puntuación: el `raw_average_rank` del guion, con
+  el mismo peso para cada paciente enfermo. El guion calcula además una
+  sensibilidad con peso por lesión, que no es la del premio.
+- **NNT80% SE**, según la definición de Kurtansky et al. 2025: *"the average
+  number of lesions needed to triage to undergo expert evaluation to detect a
+  single malignancy, using a threshold corresponding to a given sensitivity"*.
+  El organizador no publica guion para esta métrica. La lectura operativa es
+  nuestra: el umbral más alto con el que la sensibilidad llega al 80 %, y el NNT
+  como lesiones marcadas entre malignas capturadas; con empates en el umbral,
+  entran todas.
+
+`scripts/test_metricas_triaje.py` tiene tres partes:
+- casos con el valor calculado a mano;
+- un control positivo: seis mutantes, cada uno un error plausible, y cada uno
+  detectado por al menos un caso;
+- la SEtop-15 frente al guion oficial, ejecutado sin modificar.
+
+El guion es de 2024 y necesita pandas < 3; el intérprete se indica con
+`PYTHON_GUION_ISIC`. En la verificación del 2026-09-25 coincidió en seis
+conjuntos sintéticos con empates, con pandas 2.3.3.
+
 ## Cómo correrlo
 
 ```bash
