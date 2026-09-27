@@ -21,7 +21,9 @@ Hechas:
   (`outputs/fase4-m3limpio-vs-m2.json`), con el modelo recomendado: M3 limpio;
 - el tiempo de inferencia, que cierra la fase (`outputs/tiempo-inferencia.json`).
 
-La Fase 5 está fijada, y su apertura va en un commit propio.
+La Fase 5 está fijada, y su apertura va en un commit propio. La Fase 5 no se
+abre hasta conocer la rúbrica del avance y la retroalimentación del docente:
+si piden cambios de modelado, se hacen antes de abrir el reservado.
 
 ## Cómo leer una puerta
 
