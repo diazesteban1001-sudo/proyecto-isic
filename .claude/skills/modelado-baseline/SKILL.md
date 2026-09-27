@@ -176,6 +176,36 @@ una vez y valen para todos los pliegues.
 Esa última comprobación necesita el intérprete de 2024 de
 `requisitos-interprete-2024.txt`, indicado con `PYTHON_GUION_ISIC`.
 
+## M3, la parte tabular del ganador (2026-09-26)
+
+`scripts/ganador_m3.py` reproduce en el entorno actual la parte tabular de la
+solución ganadora, con la especificación fijada en `PLAN.md`, Fase 4. Las listas
+de variables no se transcriben: se leen del notebook versionado, después de
+comprobar su SHA-256.
+
+- **Las variables:** 217 en el conjunto de desarrollo. Son las de las celdas 7,
+  8, 10, 13, 18 y 19, sin las de imagen, sin `attribution` y sin las
+  descartadas en la celda 24. La imputación, el one-hot, el estandarizado del
+  LOF, el k-means y las medias por conglomerado se ajustan sobre todo el
+  conjunto de desarrollo, como se publicó. **No leen la etiqueta, pero las
+  variables de un paciente dependen de los demás.**
+- **El ajuste:** el CatBoost y el remuestreo publicados, en CPU. El número de
+  árboles se elige sobre un 20 % interno del pliegue de entrenamiento, nunca
+  con el de validación.
+
+`scripts/test_ganador_m3.py` comprueba:
+- las listas y los parámetros, contra el notebook;
+- que las 217 variables, los conglomerados y el LOF coinciden con el código
+  del ganador, ejecutado en el intérprete de 2024 sobre el conjunto de
+  desarrollo con los parches de la especificación;
+- que las columnas repetidas del LOF pesan doble, con dos variantes que la
+  comprobación tiene que detectar;
+- que barajar las etiquetas de validación no cambia el ajuste, mientras que con
+  el ajuste publicado sí cambia.
+
+Necesita el intérprete de 2024 (`requisitos-interprete-2024.txt`, indicado con
+`PYTHON_GUION_ISIC`), y en `.venv` catboost 1.2.8 e imbalanced-learn 0.14.2.
+
 ## Comparaciones de la Fase 4 (2026-09-25)
 
 `scripts/fase4_comparar.py` hace una comparación principal de la Fase 4
