@@ -673,6 +673,162 @@ nuestros. Por tarea:
 La referencia de SEtop-15 para nuestros modelos sigue siendo Marchetti et al.
 («Decisiones», abajo).
 
+**Especificación de M3: fijada el 2026-09-26 antes de correr, con el visto bueno
+y las decisiones de la persona.** Las celdas son las de `top-model.ipynb`. El
+código está en `modelado-baseline/scripts/ganador_m3.py`, que lee las listas de
+variables del notebook versionado en vez de transcribirlas, y su control en
+`test_ganador_m3.py`.
+
+- **Datos y pliegues.** El conjunto de desarrollo, con los mismos pliegues que
+  M1, M2 y M4: `construir_folds`, 5 pliegues, semillas 0 a 9.
+- **Variables: 217, las publicadas salvo lo que se lista abajo.** Por familia:
+  - 25 numéricas brutas y 38 derivadas;
+  - 69 z-scores dentro del paciente;
+  - los 3 conteos y sumas por paciente;
+  - 40 one-hot;
+  - el LOF;
+  - 41 de conglomerado.
+
+  Se calculan una vez, sobre todo el conjunto de desarrollo, como el notebook
+  las calcula sobre todo el CSV de entrenamiento. Eso incluye la edad imputada
+  con la mediana, el one-hot, el estandarizado del LOF, el k-means y las medias
+  por conglomerado. Ninguno lee la etiqueta, pero, a diferencia de M2, las
+  variables de un paciente dependen de los demás. El conjunto reservado no
+  entra. *Decisión de la persona:* así, como se publicó, y no dentro de cada
+  pliegue de entrenamiento.
+- **Salen, con su motivo:**
+  - las 12 variables de los modelos de imagen (celdas 14 a 17) y las 8 de la
+    celda 19 que se calculan sobre ellas. El k-means se queda: la celda 18 lo
+    ajusta sobre `top_lof_features`, sin imagen;
+  - `attribution` (celda 3, en `cat_cols`; su one-hot, celda 8), por la
+    exclusión de procedencia de `auditoria-de-fugas`. `copyright_license` no
+    aparece en el notebook;
+  - las 22 de `columns_to_drop` (celda 24) que no son de imagen, como se publicó.
+- **Modelo, como se publicó.** Es la ruta que ejecuta la celda 25: la función de
+  la celda 22 con la configuración de la celda 24.
+  - CatBoost `Logloss`, `eval_metric='AUC'` y 2000 iteraciones;
+  - `learning_rate` 0,0261, `depth` 6, `l2_leaf_reg` 18,04 y `min_data_in_leaf`
+    38;
+  - `bagging_temperature` 0,874, `border_count` 256 y
+    `grow_policy='Lossguide'`;
+  - `od_wait=100` y la semilla del pliegue.
+
+  Los valores exactos van en el código y el control comprueba que están
+  literalmente en su celda. Antes del ajuste se sobremuestrean los positivos
+  hasta una razón de 0,003 positivos por negativo y después se submuestrean los
+  negativos hasta 0,01, con la misma semilla (celdas 3 y 22). `random_strength` (4,707 en la celda 24) no llega al modelo
+  publicado: `ModelConfigCB` (celda 21) no tiene ese campo, pydantic lo descarta
+  y la celda 22 tampoco lo pasa. Aquí tampoco llega.
+
+**Parches, con su motivo:**
+
+1. **Sin imagen.** Motivo: los de «Quedan fuera», arriba.
+2. **Sin procedencia.** Motivo: la decisión del 2026-09-25 (Fase 1).
+3. **Nuestros pliegues y semillas.** El publicado usa sus propios pliegues y las
+   semillas 1 a 9 (celda 22, `range(1, n_rounds)` con `n_rounds=10`). Motivo:
+   que la comparación con M2 sea pareada.
+4. **El número de árboles no se elige con el pliegue de validación.**
+   - *Qué hace el publicado.* La celda 22 le pasa el pliegue de validación a
+     CatBoost como `eval_set`. Con eso, `use_best_model`, que por defecto vale
+     `True`, se queda con los árboles hasta la mejor iteración en validación. Y
+     con `od_wait=100` el entrenamiento se detiene 100 iteraciones después; esto
+     último se comprobó en CPU.
+   - *Motivo.* Es la clase 10 del registro de incidentes: una elección que
+     depende de las etiquetas, hecha en el pliegue que se reporta. El control lo
+     muestra con datos sintéticos: con el ajuste publicado, barajar las etiquetas
+     de validación hace que el modelo pase de 76 árboles a 7.
+   - *Decisión de la persona.* La misma parada, sobre un 20 % del pliegue de
+     entrenamiento: el primer pliegue de un `StratifiedGroupKFold` de 5,
+     agrupado por paciente, estratificado y con la semilla externa, como la
+     validación interna de M4b. El remuestreo va solo en el 80 % restante, igual
+     que el publicado remuestrea el entrenamiento y no la evaluación. El modelo
+     que sale predice el pliegue de validación.
+   - *Descartado:* los 2000 árboles, sin parada.
+5. **CPU en lugar de GPU.** Celda 22: `task_type='GPU'`, `devices='0'`. Motivo: el
+   M4 no tiene GPU CUDA.
+   - En CPU, el bootstrap por defecto es MVS, que no usa `bagging_temperature`,
+     así que se fija `bootstrap_type='Bayesian'`. Según la documentación de
+     CatBoost (`referencias/catboost-parametros-entrenamiento.md`), es el valor
+     por defecto en GPU.
+   - No se reproduce el AUC calculado cada 5 iteraciones en GPU (salida de la
+     celda 25): en CPU, con la parada activa, se calcula en cada una.
+   - Tampoco los demás valores por defecto ni la implementación propios de la
+     GPU. M3 en CPU no es el mismo modelo que el de GPU, aunque tenga los mismos
+     parámetros explícitos.
+6. **Versiones.**
+   - *catboost 1.2.8.* La 1.2.5 que fija el `requirements.txt` del ganador no
+     importa con el numpy 2 de `.venv`, y la 1.2.6 y la 1.2.7 tampoco (probadas
+     el 2026-09-26).
+   - *scikit-learn 1.9.0*, frente a la 1.2.0 fijada. El k-means lleva `n_init=10`
+     explícito, que era el valor por defecto en la corrida publicada: la celda
+     18 muestra el aviso de que cambiaría. El estandarizado del LOF recibe la
+     matriz de numpy, porque el scikit-learn actual rechaza el DataFrame con
+     columnas repetidas. Son las mismas 17 columnas, y las dos repetidas siguen
+     pesando doble.
+   - *imbalanced-learn 0.14.2*: el `requirements.txt` no fija versión.
+
+**Sesgos declarados, que no se corrigen:**
+
+- Los hiperparámetros y `columns_to_drop` se eligieron con las variables de
+  imagen presentes, como ya se dijo arriba.
+- El notebook contiene un estudio de Optuna (celda 23, comentado) sobre
+  `df_train`, todo el CSV de entrenamiento. No dice de dónde salen los valores
+  de la celda 24 ni cómo se eligió `columns_to_drop`. Si salen de ahí, se
+  eligieron con etiquetas que incluyen nuestros pliegues de validación y nuestro
+  conjunto reservado. El sesgo va a favor de M3, y pesa también en la Fase 5.
+
+**Nota de lectura, de la persona, fijada antes de correr:** "Los dos sesgos
+conocidos favorecen a M3: los hiperparámetros y columnas descartadas pudieron
+elegirse con Optuna sobre todo el conjunto de entrenamiento, que incluye a los
+pacientes reservados, y las transformaciones sin etiqueta se ajustan con filas
+de validación. Si M2 no queda por debajo de M3, la conclusión es conservadora;
+si M3 gana, su ventaja no se puede separar de esos sesgos."
+
+**Comparador fijado: M2** (decisión de la persona, 2026-09-26). Es el mejor de
+los modelos principales en pAUC: M1 0,1375, M2 0,144 y M4 0,1375 de media en
+desarrollo (`outputs/fase4-m2-vs-m1.json` y `outputs/fase4-m4-vs-m2.json`). M4b,
+con 0,1496, queda fuera por ser secundaria.
+
+**Reporte,** con `fase4_comparar.py`, como las otras comparaciones:
+- pAUC, AUC, SEtop-15 y NNT80% SE de M3 y de M2;
+- M3 − M2, con el intervalo ingenuo y el corregido por Nadeau y Bengio, y las
+  victorias por pliegue y por semilla;
+- el tiempo de entrenamiento por pliegue y el número de árboles de cada ajuste.
+
+M2 se recalcula, y se comprueba que reproduce pliegue a pliegue
+`outputs/fase4-m2-vs-m1.json`. La salida es `outputs/fase4-m3-vs-m2.json`.
+
+**Orden de magnitud, no comparación.** La fila sin recortes de la Tabla 3 de
+Kurtansky 2025, para malignidad: pAUC 0,164, AUC 0,957, NNT80% SE 63,62 y
+SEtop-15 0,695. No es comparable con M3, por tres motivos:
+- se midió en la evaluación privada del reto, entrenando con todo el CSV;
+- su *Meta-basic* incluye *"hospital/institution"*, que M3 no usa;
+- el NNT depende de la prevalencia del conjunto evaluado.
+
+**Tiempo estimado.** Medido el 2026-09-26 en el M4, con 10 núcleos, sobre la
+semilla 0 y el pliegue 0, sin calcular ninguna métrica:
+- variables, 17 s, una sola vez;
+- ajuste de un pliegue: 5,4 s con la parada fijada, que se quedó en 74 árboles,
+  y 55,5 s sin parada;
+- predicción de las 63 646 filas de validación: menos de 0,3 s.
+
+Con M2, cuya mediana es de 1,2 s por pliegue (`outputs/fase4-m2-vs-m1.json`), la
+corrida entera tarda unos 7 minutos con la parada fijada, si los otros
+pliegues paran como este, y unos 48 sin parada.
+
+**Control, corrido el 2026-09-26 antes de correr M3:** `test_ganador_m3.py`, 11
+de 11. El código del ganador, con los parches 1 y 2 y `n_init=10`, se corrió sin
+más cambios en el intérprete de 2024 sobre el conjunto de desarrollo. Contra
+esa corrida:
+- las 217 variables coinciden, con los NaN en los mismos sitios y una
+  diferencia relativa máxima de 1,1e-13;
+- los conglomerados son idénticos;
+- el LOF coincide exactamente.
+
+Los controles de que la comprobación puede fallar, en 60 pacientes:
+- sin las columnas repetidas, el LOF se aparta hasta 0,692;
+- con la estandarización dentro del paciente de M2, hasta 11,8.
+
 **Puerta.** Las tres comparaciones principales fijadas en la decisión de arriba,
 cada una con su intervalo corregido por Nadeau y Bengio: **M2 − M1**, **M4 − M2**
 y **el mejor de los modelos propios frente a M3**. Con ellas, la lista de lo que
