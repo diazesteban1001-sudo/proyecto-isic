@@ -86,10 +86,28 @@ Walter. Son la indización de PubMed, no el trabajo.
 notebook se toman sus 28 celdas, 27 de código y 1 de texto, sin salidas. La
 licencia no entra.
 
-**Lo único añadido:** en los tres archivos que reúnen varias fuentes de una
-misma referencia (17, 18 y 13), una línea con el nombre de archivo o la URL
-precede a cada fuente. Son 7 líneas en total. Eran 8 hasta que salieron las
-reglas de Kaggle, que llevaban la suya.
+**Lo único añadido: 7 líneas separadoras.** Los tres archivos que reúnen varias
+fuentes de una misma referencia (filas 13, 17 y 18) llevan, delante de cada
+fuente, una línea con su nombre de archivo o su URL. Son las únicas líneas del
+corpus que no salen de la fuente. Se conservan porque dicen de dónde sale cada
+parte, y ese dato también es de la fuente. Decisión de la persona,
+2026-09-27. Van solas en su línea, con una línea en blanco antes y otra
+después, salvo la primera de cada archivo:
+
+| Archivo | Línea | Texto de la línea |
+|---|---|---|
+| `novoselskiy-2024.txt` | 1 | `README.md` |
+| `novoselskiy-2024.txt` | 23 | `notebooks/top-model.ipynb` |
+| `kurtansky-2024-kaggle.txt` | 1 | `https://www.kaggle.com/competitions/isic-2024-challenge/overview` |
+| `kurtansky-2024-kaggle.txt` | 18 | `https://www.kaggle.com/competitions/isic-2024-challenge/overview/evaluation` |
+| `kurtansky-2024-challenge-metrics.txt` | 1 | `README.md` |
+| `kurtansky-2024-challenge-metrics.txt` | 29 | `PrimaryMetric-pAUC.py` |
+| `kurtansky-2024-challenge-metrics.txt` | 91 | `SecondaryMetric-TopNSensitivity.py` |
+
+En Novoselskiy y en las métricas, la línea es la ruta del archivo en el
+repositorio original. En Kaggle es la URL de la página. Eran 8 hasta que
+salieron las reglas de Kaggle, que llevaban la suya
+(`https://www.kaggle.com/competitions/isic-2024-challenge/rules`).
 
 ## Cómo se comprobó que no hay texto nuestro
 
