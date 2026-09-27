@@ -4,3 +4,8 @@
 # Demo generada: su contenido ya vive en generar_demo.py (PLANTILLA)
 informe/demo.html
 docs/index.html
+
+# Actividad «Nada sin fuente»: contendrá a propósito referencias inventadas (las
+# del tratamiento A del protocolo). En el grafo serían nodos indistinguibles de
+# las fuentes reales.
+actividad-fuentes/
