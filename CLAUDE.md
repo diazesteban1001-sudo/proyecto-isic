@@ -775,10 +775,11 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman seis del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman siete del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
-`outputs/fase4-m4-vs-m2.json` y `outputs/fase4-m4b-vs-m2.json`. Desde el 2026-09-25 sus
+`outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json` y
+`outputs/fase4-m3-vs-m2.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -883,6 +884,24 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
    forma de incorporar la imagen invierte la dirección. Como variables sueltas
    (M4), la pAUC es peor en 8 de 10 semillas (`outputs/fase4-m4-vs-m2.json`);
    como puntuación apilada (M4b), mejor en 8 de 10.
+
+7. **La parte tabular reproducida del ganador (M3) supera a M2 en la métrica
+   principal** (conjunto de desarrollo, 10 semillas × 5 pliegues;
+   `outputs/fase4-m3-vs-m2.json`). M3 − M2:
+   - pAUC +0,0185, corregido [0,0007; 0,0364], M3 mejor en 45 de 50 pliegues y
+     10 de 10 semillas;
+   - AUC +0,0204, corregido [0,0011; 0,0397].
+
+   En los ejes de triaje no se distingue:
+   - SEtop-15 +0,0181, corregido [−0,0365; 0,0726];
+   - NNT80% SE −12,62, corregido [−49,29; 24,05].
+
+   El entrenamiento por pliegue pasa de una mediana de 1,31 s (M2) a 18,12 s
+   (M3). Por la nota de lectura fijada antes de correr (`PLAN.md`, Fase 4), esta
+   ventaja no se puede separar de los dos sesgos conocidos a favor de M3.
+   Consecuencia: si sus hiperparámetros se eligieron sobre todo el conjunto de
+   entrenamiento, también se eligieron con los pacientes reservados, y evaluar M3
+   en el reservado no sería una evaluación limpia.
 
 ### Dónde se lee la fase vigente
 
