@@ -393,7 +393,7 @@ def ajustar_m3(x_tr, y_tr, grupos_tr, categoricas, semilla, parametros=None):
 
 
 def variables_m3_en_pliegue(df, tr, va, columnas_excluidas, group_col="patient_id", descartar_publicadas=False,
-                            ruta=NOTEBOOK):
+                            ruta=NOTEBOOK, devolver_ajuste=False):
     """Las variables de M3 limpio (PLAN.md, Fase 4) para un pliegue: la imputación de
     la edad, el one-hot, el estandarizado del LOF, el k-means y las medias por
     conglomerado se ajustan solo con las filas de entrenamiento `tr` y se aplican a
@@ -401,7 +401,9 @@ def variables_m3_en_pliegue(df, tr, va, columnas_excluidas, group_col="patient_i
     paciente —z-scores, conteos, sumas y el LOF de cada paciente— se calcula a cada
     lado con sus propias filas: los pliegues agrupan por paciente. Sin
     `descartar_publicadas`, no se quitan las columnas de la celda 24.
-    Devuelve (variables de tr, variables de va, categóricas, inventario)."""
+    Devuelve (variables de tr, variables de va, categóricas, inventario) y, con
+    `devolver_ajuste`, también las transformaciones ajustadas, para aplicarlas a
+    filas nuevas (tiempo_inferencia.py)."""
     if "target" in df.columns:
         raise ValueError("variables_m3_en_pliegue no recibe la etiqueta.")
     listas = listas_publicadas(ruta)
@@ -459,4 +461,9 @@ def variables_m3_en_pliegue(df, tr, va, columnas_excluidas, group_col="patient_i
                   "excluidas_por_auditoria_de_fugas": [c for c in listas["num_cols"] + listas["cat_cols"]
                                                        if c in excluidas],
                   "segundos": segundos}
+    if devolver_ajuste:
+        ajuste = {"listas": listas, "categoricas_brutas": categoricas, "medianas": medianas, "one_hot": enc,
+                  "nombres_one_hot": nombres, "escala": escala, "kmeans": km, "columnas_conglomerado": cols,
+                  "media_conglomerado": media, "desviacion_conglomerado": sd, "finales": finales}
+        return x_tr, x_va, cats, inventario, ajuste
     return x_tr, x_va, cats, inventario

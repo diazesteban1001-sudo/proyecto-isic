@@ -264,6 +264,28 @@ victorias en la dirección de la métrica. Con `--referencia` comprueba que el
 modelo base reproduce fold a fold una corrida anterior. Hasta el 2026-09-25 se
 llamaba `fase4_m2_vs_m1.py` y solo hacía M2 − M1.
 
+## Tiempo de inferencia (2026-09-27)
+
+`scripts/tiempo_inferencia.py` mide el tiempo de inferencia de M1, M2, M3 limpio,
+M4 y M4b con la especificación fijada en `PLAN.md`, Fase 4, y su enmienda.
+- **El subconjunto:** pacientes completos de desarrollo, barajados con semilla
+  7, hasta 5.000 lesiones o más.
+- **El entrenamiento:** una vez, con los demás pacientes de desarrollo, fuera
+  del cronómetro.
+- **Lo que se cronometra:** el camino desde los metadatos del subconjunto, y en
+  M4 y M4b desde las imágenes de `data/train-image.hdf5`, hasta la puntuación.
+  Ese camino tiene su propia implementación, que aplica las transformaciones ya
+  ajustadas.
+
+Antes de cronometrar compara ese camino con el de la Fase 4, con el mismo modelo:
+- en M1, M2 y M3 limpio, igualdad exacta;
+- en M4 y M4b, DINOv2 a 1e-3 como máximo del archivo de la extracción, e
+  igualdad exacta con las variables de ese archivo.
+
+Después quita cada paso, uno por vez, y exige que la comprobación falle. Para
+la imputación compara la matriz que entra al modelo. Si algo falla, no
+cronometra. Cinco repeticiones por modelo, en segundos por 1.000 lesiones.
+
 ## Cómo correrlo
 
 ```bash

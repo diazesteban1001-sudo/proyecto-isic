@@ -1,0 +1,378 @@
+{
+  "especificacion": "PLAN.md, Fase 4, «Tiempo de inferencia», fijada el 2026-09-26 antes de medir",
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "subconjunto": {
+    "semilla": 7,
+    "minimo_de_lesiones": 5000,
+    "orden": "patient_id de desarrollo ordenados, permutados con numpy.random.default_rng(7)",
+    "pacientes": [
+      "IP_5078348",
+      "IP_5117525",
+      "IP_0152575",
+      "IP_7240141",
+      "IP_6426047",
+      "IP_7212568",
+      "IP_5611762",
+      "IP_5529572",
+      "IP_3880252",
+      "IP_2612113",
+      "IP_7152379",
+      "IP_9553357",
+      "IP_3401345",
+      "IP_4408352",
+      "IP_7458220",
+      "IP_9773839"
+    ],
+    "n_pacientes": 16,
+    "n_lesiones": 5008
+  },
+  "entrenamiento": {
+    "pacientes": 817,
+    "lesiones": 313221,
+    "semilla": 0,
+    "no_se_cronometra": true,
+    "m3limpio_variables": 239,
+    "m3limpio_arboles": 225
+  },
+  "caracteristicas_de_imagen": {
+    "archivo": "data/dinov2-vits14-desarrollo.h5",
+    "sha256": "52a7fd12855ae7548df2a21b46d513f51ab056c817acc468ab0e1c70576f3cfd",
+    "isic_id_en_datos": 318229,
+    "isic_id_en_archivo": 318229,
+    "en_datos_sin_caracteristicas": 0,
+    "en_archivo_sin_fila_en_datos": 0,
+    "imagenes_no_decodificadas": 0,
+    "nan_tras_alinear": 0,
+    "mismo_orden_que_los_datos": true,
+    "filas_comprobadas_al_azar": 1000,
+    "filas_comprobadas_identicas": true,
+    "sha256_igual_al_de_la_extraccion": true
+  },
+  "control": {
+    "igualdad": {
+      "M1": {
+        "identicas": true,
+        "identicas_en_la_copia_con_la_edad_borrada": true,
+        "matriz_identica_en_la_copia_con_la_edad_borrada": true
+      },
+      "M2": {
+        "identicas": true,
+        "identicas_en_la_copia_con_la_edad_borrada": true,
+        "matriz_identica_en_la_copia_con_la_edad_borrada": true
+      },
+      "M3limpio": {
+        "identicas": true,
+        "identicas_en_la_copia_con_la_edad_borrada": true,
+        "matriz_identica_en_la_copia_con_la_edad_borrada": true
+      },
+      "M4": {
+        "a_dinov2_diferencia_maxima": 0.0,
+        "a_dentro_de_la_tolerancia": true,
+        "b_identicas_con_las_variables_del_archivo": true,
+        "c_puntuacion_diferencia_maxima_con_las_recalculadas": 0.0,
+        "c_lesiones_con_diferencia_mayor_que_1e-6": 0,
+        "identicas_en_la_copia_con_la_edad_borrada": true,
+        "matriz_identica_en_la_copia_con_la_edad_borrada": true
+      },
+      "M4b": {
+        "a_dinov2_diferencia_maxima": 0.0,
+        "a_dentro_de_la_tolerancia": true,
+        "b_identicas_con_las_variables_del_archivo": true,
+        "c_puntuacion_diferencia_maxima_con_las_recalculadas": 0.0,
+        "c_lesiones_con_diferencia_mayor_que_1e-6": 0,
+        "identicas_en_la_copia_con_la_edad_borrada": true,
+        "matriz_identica_en_la_copia_con_la_edad_borrada": true
+      }
+    },
+    "pasos_quitados": {
+      "M1": {
+        "imputacion": {
+          "detectado": true,
+          "matriz_distinta": true,
+          "puntuaciones_distintas": true
+        },
+        "codificacion_categoricas": {
+          "detectado": true
+        }
+      },
+      "M2": {
+        "imputacion": {
+          "detectado": true,
+          "matriz_distinta": true,
+          "puntuaciones_distintas": true
+        },
+        "codificacion_categoricas": {
+          "detectado": true
+        },
+        "variables_por_paciente": {
+          "detectado": true
+        },
+        "lof": {
+          "detectado": true
+        }
+      },
+      "M3limpio": {
+        "imputacion_edad": {
+          "detectado": true,
+          "error": "ValueError"
+        },
+        "variables_por_paciente": {
+          "detectado": true
+        },
+        "one_hot": {
+          "detectado": true
+        },
+        "estandarizado_y_lof": {
+          "detectado": true
+        },
+        "conglomerado": {
+          "detectado": true
+        },
+        "medias_por_conglomerado": {
+          "detectado": true
+        }
+      },
+      "M4": {
+        "imputacion": {
+          "detectado": true,
+          "matriz_distinta": true,
+          "puntuaciones_distintas": false
+        },
+        "codificacion_categoricas": {
+          "detectado": true
+        },
+        "variables_por_paciente": {
+          "detectado": true
+        },
+        "lof": {
+          "detectado": true
+        },
+        "lectura_y_decodificacion": {
+          "diferencia_maxima_en_dinov2": 14.89046859741211,
+          "detectado": true
+        },
+        "preprocesado": {
+          "diferencia_maxima_en_dinov2": 9.7908353805542,
+          "detectado": true
+        },
+        "dinov2": {
+          "diferencia_maxima_en_dinov2": 14.741788864135742,
+          "detectado": true
+        }
+      },
+      "M4b": {
+        "imputacion": {
+          "detectado": true,
+          "matriz_distinta": true,
+          "puntuaciones_distintas": true
+        },
+        "codificacion_categoricas": {
+          "detectado": true
+        },
+        "variables_por_paciente": {
+          "detectado": true
+        },
+        "lof": {
+          "detectado": true
+        },
+        "lectura_y_decodificacion": {
+          "diferencia_maxima_en_dinov2": 14.89046859741211,
+          "detectado": true
+        },
+        "preprocesado": {
+          "diferencia_maxima_en_dinov2": 9.7908353805542,
+          "detectado": true
+        },
+        "dinov2": {
+          "diferencia_maxima_en_dinov2": 14.741788864135742,
+          "detectado": true
+        },
+        "logistica_imagen": {
+          "detectado": true
+        },
+        "razon_paciente": {
+          "detectado": true
+        }
+      }
+    },
+    "copia_con_la_edad_borrada": {
+      "pacientes": 16,
+      "lesiones": 5008,
+      "edades_presentes_que_se_borraron": 5008
+    },
+    "tolerancia_dinov2": 0.001
+  },
+  "tiempos": {
+    "M1": {
+      "segundos_por_repeticion": [
+        0.011,
+        0.01,
+        0.01,
+        0.01,
+        0.01
+      ],
+      "segundos_por_1000_lesiones": [
+        0.0022,
+        0.0021,
+        0.002,
+        0.002,
+        0.0021
+      ],
+      "mediana_segundos_por_1000_lesiones": 0.0021,
+      "puntuaciones_identicas_en_las_repeticiones": true
+    },
+    "M2": {
+      "segundos_por_repeticion": [
+        0.105,
+        0.105,
+        0.103,
+        0.107,
+        0.103
+      ],
+      "segundos_por_1000_lesiones": [
+        0.0209,
+        0.0209,
+        0.0205,
+        0.0214,
+        0.0206
+      ],
+      "mediana_segundos_por_1000_lesiones": 0.0209,
+      "puntuaciones_identicas_en_las_repeticiones": true
+    },
+    "M3limpio": {
+      "segundos_por_repeticion": [
+        0.206,
+        0.233,
+        0.203,
+        0.225,
+        0.218
+      ],
+      "segundos_por_1000_lesiones": [
+        0.0411,
+        0.0465,
+        0.0406,
+        0.0449,
+        0.0435
+      ],
+      "mediana_segundos_por_1000_lesiones": 0.0435,
+      "puntuaciones_identicas_en_las_repeticiones": true
+    },
+    "M4": {
+      "segundos_por_repeticion": [
+        72.084,
+        72.24,
+        72.71,
+        72.694,
+        73.3
+      ],
+      "segundos_por_1000_lesiones": [
+        14.3937,
+        14.425,
+        14.5187,
+        14.5156,
+        14.6365
+      ],
+      "mediana_segundos_por_1000_lesiones": 14.5156,
+      "puntuaciones_identicas_en_las_repeticiones": true
+    },
+    "M4b": {
+      "segundos_por_repeticion": [
+        72.753,
+        73.038,
+        73.295,
+        73.278,
+        73.932
+      ],
+      "segundos_por_1000_lesiones": [
+        14.5273,
+        14.5842,
+        14.6357,
+        14.6321,
+        14.7628
+      ],
+      "mediana_segundos_por_1000_lesiones": 14.6321,
+      "puntuaciones_identicas_en_las_repeticiones": true
+    }
+  },
+  "repeticiones": 5,
+  "es_la_corrida_de_la_especificacion": true,
+  "que_se_cronometra": "desde las filas de metadatos del subconjunto, en memoria y sin la etiqueta (y en M4 y M4b desde las imágenes de data/train-image.hdf5) hasta la puntuación de cada lesión; fuera, la carga de los modelos y de los pesos de DINOv2",
+  "declaraciones": {
+    "equipo": {
+      "chip": "Apple M4",
+      "memoria_gb": 16.0,
+      "nucleos": 10
+    },
+    "sistema": {
+      "macos": "27.0",
+      "plataforma": "macOS-27.0-arm64-arm-64bit"
+    },
+    "interprete": {
+      "python": "3.11.9",
+      "ejecutable": "/Users/ediaz07/proyecto-isic/.venv/bin/python"
+    },
+    "versiones_por_modelo": {
+      "M1": {
+        "numpy": "2.4.6",
+        "pandas": "3.0.5",
+        "scikit_learn": "1.9.0"
+      },
+      "M2": {
+        "numpy": "2.4.6",
+        "pandas": "3.0.5",
+        "scikit_learn": "1.9.0"
+      },
+      "M3limpio": {
+        "numpy": "2.4.6",
+        "pandas": "3.0.5",
+        "scikit_learn": "1.9.0",
+        "catboost": "1.2.8"
+      },
+      "M4": {
+        "numpy": "2.4.6",
+        "pandas": "3.0.5",
+        "scikit_learn": "1.9.0",
+        "torch": "2.14.0",
+        "pillow": "12.3.0",
+        "h5py": "3.16.0"
+      },
+      "M4b": {
+        "numpy": "2.4.6",
+        "pandas": "3.0.5",
+        "scikit_learn": "1.9.0",
+        "torch": "2.14.0",
+        "pillow": "12.3.0",
+        "h5py": "3.16.0"
+      }
+    },
+    "solo_en_el_entrenamiento": {
+      "imbalanced_learn": "0.14.2",
+      "scipy": "1.17.1"
+    },
+    "dinov2": {
+      "modelo": "dinov2_vits14",
+      "pesos_sha256": "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9",
+      "dispositivo": "mps",
+      "lote": 64,
+      "preprocesado": "JPEG a RGB; redimensionado bicúbico a 224 x 224, sin recorte central; normalización por defecto de DINOv2 (media 0.485, 0.456, 0.406; desviación 0.229, 0.224, 0.225)"
+    },
+    "hilos": {
+      "torch_cpu": 4,
+      "openmp_scikit_learn": [
+        4,
+        10
+      ],
+      "catboost": "thread_count por defecto (todos los núcleos)"
+    }
+  },
+  "segundos": {
+    "entrenamiento": 81.4,
+    "control": 302.9,
+    "total": 1123.3
+  },
+  "nota": "Los tiempos solo comparan estos modelos entre sí. Son tiempos de pared, en el mismo proceso."
+}

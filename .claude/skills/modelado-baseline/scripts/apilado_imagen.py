@@ -68,4 +68,5 @@ def puntuaciones_imagen(x, y, grupos, tr, va, semilla):
         "modelo_de_fila_tr": modelo_de_fila,
         "filas_de_modelo": filas_de_modelo,
         "avisos_no_convergencia": n_avisos,
+        "modelo_completo": completo,  # el que puntúa la validación; lo usa tiempo_inferencia.py
     }

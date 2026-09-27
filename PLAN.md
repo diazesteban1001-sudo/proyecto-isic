@@ -8,15 +8,20 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-26): Fase 4.** Las fases 0 a 3 están cerradas.
-La Fase 4 tiene fijados sus modelos y sus comparaciones (decisión del
-2026-09-25) y la especificación de M3 (2026-09-26). Hechas: las métricas de
-triaje, el contexto de paciente y las tres comparaciones principales, M2 − M1,
-M4 − M2 y M3 − M2 (`outputs/fase4-m2-vs-m1.json`, `outputs/fase4-m4-vs-m2.json`
-y `outputs/fase4-m3-vs-m2.json`). La variante secundaria M4b está corrida
-(`outputs/fase4-m4b-vs-m2.json`). También M3 limpio − M2, la corrida única de la
-regla de recomendación (`outputs/fase4-m3limpio-vs-m2.json`). El cierre de la
-fase queda pendiente de la persona.
+**Dónde está la ruta (2026-09-27): Fase 4, completa; la siguiente es la Fase
+5.** Las fases 0 a 3 están cerradas. La Fase 4 tiene fijados sus modelos y sus
+comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
+Hechas:
+- las métricas de triaje y el contexto de paciente;
+- las tres comparaciones principales, M2 − M1, M4 − M2 y M3 − M2
+  (`outputs/fase4-m2-vs-m1.json`, `outputs/fase4-m4-vs-m2.json` y
+  `outputs/fase4-m3-vs-m2.json`);
+- la variante secundaria M4b (`outputs/fase4-m4b-vs-m2.json`);
+- M3 limpio − M2, la corrida única de la regla de recomendación
+  (`outputs/fase4-m3limpio-vs-m2.json`), con el modelo recomendado: M3 limpio;
+- el tiempo de inferencia, que cierra la fase (`outputs/tiempo-inferencia.json`).
+
+La Fase 5 está fijada, y su apertura va en un commit propio.
 
 ## Cómo leer una puerta
 
