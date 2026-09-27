@@ -962,9 +962,10 @@ Qué se comprueba:
     dentro de la tolerancia puede cambiar la rama de un árbol.
 - **Pasos quitados.** La comprobación se repite quitando cada paso del camino
   cronometrado, uno por vez, y tiene que fallar cada vez. Esta parte corre sobre
-  una copia del subconjunto a la que se le borra la edad de un paciente en los
-  dos caminos, para que la imputación tenga efecto; sobre esa copia se comprueba
-  también la igualdad. Los pasos:
+  una copia del subconjunto a la que se le borra la edad de todos sus pacientes
+  en los dos caminos, para que la imputación tenga efecto; sobre esa copia se
+  comprueba también la igualdad. *Hasta el 2026-09-27 decía «de un paciente»:
+  ver la enmienda de abajo.* Los pasos:
   - *M1:* imputación con las medianas de entrenamiento y codificación de las
     categóricas con las medias de entrenamiento;
   - *M2:* los de M1, las variables por paciente (z-scores, conteos y sumas) y el
@@ -976,6 +977,25 @@ Qué se comprueba:
   - *M4b:* los de M4, la logística de imagen y la razón a la media del paciente.
 
 La salida es `outputs/tiempo-inferencia.json` y `.md`.
+
+**Enmienda del control: decisión de la persona del 2026-09-27, antes de la
+corrida oficial.** En una prueba de humo con 300 lesiones, sin cronometrar,
+borrar la edad de un solo paciente no ejerció la imputación en M2 ni en M4:
+quitarla no cambió ninguna puntuación. Las lesiones de ese paciente no pasan por
+las divisiones donde el NaN y la mediana van a lados distintos. Por eso:
+- en la copia se borra la edad de todos los pacientes del subconjunto, en los dos
+  caminos;
+- para el paso de imputación se compara, entre los dos caminos, la matriz que
+  entra al modelo, no solo las puntuaciones: que una puntuación no cambie no
+  prueba que el paso se ejecutó. Sin la imputación, esa comparación tiene que
+  fallar en todos los modelos. Si aun así las puntuaciones de M2 o M4 no
+  cambian, el control de ese paso queda cubierto por las matrices, y el reporte
+  lo dice;
+- en M3 limpio, sin la imputación, el LOF se niega a correr con la edad en NaN y
+  la matriz no llega a formarse. Cuenta como fallo de la comparación y se
+  registra el error.
+
+Nada de esto toca lo que se cronometra.
 
 **Puerta.** Las tres comparaciones principales fijadas en la decisión de arriba,
 cada una con su intervalo corregido por Nadeau y Bengio: **M2 − M1**, **M4 − M2**
