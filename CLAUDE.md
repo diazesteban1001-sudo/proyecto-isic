@@ -775,11 +775,11 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman siete del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman ocho del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
-`outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json` y
-`outputs/fase4-m3-vs-m2.json`. Desde el 2026-09-25 sus
+`outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
+`outputs/fase4-m3-vs-m2.json` y `outputs/fase4-m3limpio-vs-m2.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -902,6 +902,27 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
    Consecuencia: si sus hiperparámetros se eligieron sobre todo el conjunto de
    entrenamiento, también se eligieron con los pacientes reservados, y evaluar M3
    en el reservado no sería una evaluación limpia.
+
+8. **Sin sus dos sesgos conocidos, la parte tabular del ganador sigue superando
+   a M2 en la métrica principal** (conjunto de desarrollo, 10 semillas × 5
+   pliegues; `outputs/fase4-m3limpio-vs-m2.json`). M3 limpio − M2:
+   - pAUC +0,0181, corregido [0,0021; 0,0341], mejor en 43 de 50 pliegues y en
+     las 10 semillas;
+   - AUC +0,021 [0,0043; 0,0376].
+
+   En los ejes de triaje la diferencia no se distingue de cero:
+   - SEtop-15 +0,0227 [−0,0291; 0,0746];
+   - NNT80% SE −20,06 [−49,74; 9,61].
+
+   Por la regla fijada antes de correr (`PLAN.md`, Fase 4), el modelo
+   recomendado es M3 limpio. Quitar los sesgos casi no movió la media de la pAUC
+   (M3: +0,0185, `outputs/fase4-m3-vs-m2.json`). Esa comparación es descriptiva,
+   entre dos corridas, sin intervalo propio y sin fijar antes.
+
+   *Salvedad para la Fase 5:* el diseño de sus variables lo fijó su autor sin
+   ningún conjunto reservado. Eso incluye qué agregados construir, cuántos
+   conglomerados y los parámetros del LOF. Por eso el reservado no es ajeno a
+   él.
 
 ### Dónde se lee la fase vigente
 
