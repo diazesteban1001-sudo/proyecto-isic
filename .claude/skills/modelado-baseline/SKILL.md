@@ -228,6 +228,11 @@ desarrollo y los hiperparámetros de 2b, sin ajuste:
   las etiquetas de validación no cambia ninguna puntuación y que ninguna fila,
   ni ningún paciente, se puntúa con un modelo que lo vio. Cada comprobación
   detecta el mutante hecho para incumplirla.
+- **M3, desde el 2026-09-26:** la parte tabular reproducida del ganador, de
+  `scripts/ganador_m3.py`. No usa los hiperparámetros de 2b sino los
+  publicados, con los parches de la especificación. Sus variables se calculan
+  una vez; el ajuste, en cada fold, con el número de árboles elegido dentro del
+  pliegue de entrenamiento. Se registran los árboles de cada ajuste.
 
 Por modelo mide pAUC, AUC, SEtop-15 y NNT80% SE, y el tiempo de entrenamiento
 por fold. Para cada métrica da nuevo − base con intervalo ingenuo y corregido, y

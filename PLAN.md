@@ -8,14 +8,14 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-25): Fase 4.** Las fases 0 a 3 están cerradas.
+**Dónde está la ruta (2026-09-26): Fase 4.** Las fases 0 a 3 están cerradas.
 La Fase 4 tiene fijados sus modelos y sus comparaciones (decisión del
-2026-09-25). Hechas: las métricas de triaje, el contexto de paciente y dos de
-las tres comparaciones principales, M2 − M1 y M4 − M2
-(`outputs/fase4-m2-vs-m1.json` y `outputs/fase4-m4-vs-m2.json`). El siguiente
-paso es M3, la parte tabular reproducida del ganador, con la tercera: el mejor de
-los modelos propios frente a M3. La variante secundaria M4b está corrida
-(`outputs/fase4-m4b-vs-m2.json`).
+2026-09-25) y la especificación de M3 (2026-09-26). Hechas: las métricas de
+triaje, el contexto de paciente y las tres comparaciones principales, M2 − M1,
+M4 − M2 y M3 − M2 (`outputs/fase4-m2-vs-m1.json`, `outputs/fase4-m4-vs-m2.json`
+y `outputs/fase4-m3-vs-m2.json`). La variante secundaria M4b está corrida
+(`outputs/fase4-m4b-vs-m2.json`). El cierre de la fase queda pendiente de la
+persona.
 
 ## Cómo leer una puerta
 

@@ -15,7 +15,12 @@ fase4_comparar.py — Fase 4: una comparación principal entre dos modelos
        razón a la media del paciente (apilado_imagen.py). Se calculan dentro de
        cada fold: fuera de pliegue en entrenamiento, con el modelo del fold en
        validación. Su control de fuga es test_apilado_imagen.py.
-Todos con los mismos hiperparámetros, los de 2b, sin ajuste.
+  M3 = la parte tabular reproducida del ganador (ganador_m3.py): sus 217
+       variables, calculadas una vez sobre el conjunto de desarrollo, y su
+       CatBoost con los parámetros publicados y los parches de la especificación
+       (PLAN.md, Fase 4). El número de árboles se elige dentro de cada pliegue de
+       entrenamiento; se registra el de cada ajuste.
+M1, M2, M4 y M4b, con los mismos hiperparámetros, los de 2b, sin ajuste.
 
 Validación repetida con las semillas dadas y los mismos folds de desarrollo que
 outputs/validacion-repetida.json. Por modelo: pAUC, AUC, SEtop-15 y NNT80% SE en
@@ -47,6 +52,9 @@ Uso:
         --imagen data/dinov2-vits14-desarrollo.h5 \
         --extraccion outputs/extraccion-imagen.json \
         ... --referencia outputs/fase4-m2-vs-m1.json --out outputs/fase4-m4-vs-m2
+
+    python fase4_comparar.py --base M2 --nuevo M3 \
+        ... --referencia outputs/fase4-m2-vs-m1.json --out outputs/fase4-m3-vs-m2
 """
 
 import argparse
@@ -70,6 +78,7 @@ from metricas_triaje import nnt_a_sensibilidad, setop_n  # noqa: E402
 from contexto_paciente import variables_contexto_paciente  # noqa: E402
 from datos_desarrollo import RUTA_HOLDOUT, cargar_caracteristicas_desarrollo, cargar_desarrollo  # noqa: E402
 from apilado_imagen import puntuaciones_imagen  # noqa: E402
+import ganador_m3  # noqa: E402
 
 # codificar_fold (train_and_evaluate.py, verificado) inserta las columnas de una en una;
 # con cientos de columnas pandas avisa de fragmentación. Es rendimiento, no resultado.
@@ -87,6 +96,8 @@ DESCRIPCION = {
     "M4": "M2 + las 384 variables de DINOv2 ViT-S/14 (token CLS), tal cual",
     "M4b": "M2 + 2 variables de imagen apiladas: puntuación de una logística balanceada sobre las 384 "
            "de DINOv2, fuera de pliegue, y su razón a la media del paciente (apilado_imagen.py)",
+    "M3": "parte tabular reproducida del ganador: CatBoost publicado sobre sus variables, con los parches "
+          "de la especificación (ganador_m3.py)",
 }
 APILADAS = ["img_lr_puntuacion", "img_lr_razon_paciente"]
 
@@ -211,15 +222,23 @@ def main():
         imagen, comprobacion_imagen = cargar_imagen(df, args.imagen, args.data, args.holdout, args.extraccion)
         t_imagen = time.perf_counter() - t0
         extra.append(imagen)
+    x_m3 = cats_m3 = inventario_m3 = None
+    t_m3 = None
+    if "M3" in (args.base, args.nuevo):
+        t0 = time.perf_counter()
+        x_m3, cats_m3, inventario_m3 = ganador_m3.variables_m3(df.drop(columns=[args.target_col]), excluidas,
+                                                               args.group_col)
+        t_m3 = time.perf_counter() - t0
     df = pd.concat([df, *extra], axis=1)
     variables = {
         "M1": numericas,
         "M2": numericas + list(contexto.columns),
         "M4": numericas + list(contexto.columns) + (list(imagen.columns) if imagen is not None else []),
         "M4b": numericas + list(contexto.columns) + APILADAS,
+        "M3": list(x_m3.columns) if x_m3 is not None else [],
     }
     x_imagen = imagen.to_numpy() if imagen is not None else None
-    avisos_apilado, t_apilado = {}, {}
+    avisos_apilado, t_apilado, arboles_m3 = {}, {}, {}
     modelos = {m: variables[m] for m in (args.base, args.nuevo)}
 
     y = df[args.target_col].to_numpy()
@@ -246,12 +265,20 @@ def main():
                         df[col] = valores_col
                     avisos_apilado.setdefault(str(seed), []).append(ap["avisos_no_convergencia"])
                     t_apilado.setdefault(str(seed), []).append(round(time.perf_counter() - t0, 2))
-                x_tr, x_va = codificar_fold(df, num, categoricas, args.target_col, tr, va)
-                modelo = HistGradientBoostingClassifier(random_state=seed, class_weight="balanced")
-                t0 = time.perf_counter()
-                modelo.fit(x_tr, y[tr])
-                tiempos.append(round(time.perf_counter() - t0, 2))
-                s = modelo.predict_proba(x_va)[:, 1]
+                if m == "M3":
+                    # Remuestreo, parada interna y ajuste: todo con el pliegue de entrenamiento.
+                    t0 = time.perf_counter()
+                    modelo = ganador_m3.ajustar_m3(x_m3.iloc[tr], y[tr], grupos[tr], cats_m3, seed)
+                    tiempos.append(round(time.perf_counter() - t0, 2))
+                    arboles_m3.setdefault(str(seed), []).append(int(modelo.tree_count_))
+                    s = modelo.predict_proba(x_m3.iloc[va])[:, 1]
+                else:
+                    x_tr, x_va = codificar_fold(df, num, categoricas, args.target_col, tr, va)
+                    modelo = HistGradientBoostingClassifier(random_state=seed, class_weight="balanced")
+                    t0 = time.perf_counter()
+                    modelo.fit(x_tr, y[tr])
+                    tiempos.append(round(time.perf_counter() - t0, 2))
+                    s = modelo.predict_proba(x_va)[:, 1]
                 for k, v in medir(y[va], s, grupos[va]).items():
                     valores[k].append(v)
             for k in METRICAS:
@@ -302,12 +329,13 @@ def main():
         "comparacion": {"nuevo": args.nuevo, "base": args.base},
         "semillas_corridas": semillas,
         "n_splits": args.n_splits,
-        "modelos": {m: {"descripcion": DESCRIPCION[m], "n_variables": len(num) + len(categoricas)}
+        "modelos": {m: {"descripcion": DESCRIPCION[m],
+                        "n_variables": len(num) if m == "M3" else len(num) + len(categoricas)}
                     for m, num in modelos.items()},
         "variables_de_contexto": list(contexto.columns),
         "caracteristicas_de_imagen": comprobacion_imagen,
-        "hiperparametros": "los del nivel 2b: HistGradientBoostingClassifier(class_weight='balanced', "
-                           "random_state=semilla), el resto por defecto; sin ajuste",
+        "hiperparametros": "M1, M2, M4 y M4b: los del nivel 2b, HistGradientBoostingClassifier(class_weight='balanced', "
+                           "random_state=semilla), el resto por defecto; sin ajuste. M3: los publicados, en el bloque m3",
         "folds": {"sha256_por_semilla": huellas,
                   "como_se_construyen": "construir_folds de train_and_evaluate.py, los mismos de validacion-repetida"},
         "reproduccion_del_base": reproduccion,
@@ -322,14 +350,35 @@ def main():
             "segundos_por_fold": t_apilado,
             "nota": "6 logísticas por fold: 5 de la validación interna y 1 sobre todo el fold de entrenamiento.",
         }} if avisos_apilado else {}),
+        **({"m3": {
+            "especificacion": "PLAN.md, Fase 4, «Especificación de M3», fijada el 2026-09-26 antes de correr",
+            "parametros_catboost": ganador_m3.PARAMETROS_CATBOOST,
+            "parche_cpu": ganador_m3.PARCHE_CPU,
+            "semilla_catboost_y_remuestreo": "la semilla externa",
+            "remuestreo": {"sobremuestreo_positivos_hasta": ganador_m3.SOBREMUESTREO,
+                           "submuestreo_negativos_hasta": ganador_m3.SUBMUESTREO},
+            "parada": "StratifiedGroupKFold(5, shuffle=True, random_state=semilla externa) sobre el pliegue de "
+                      "entrenamiento, por patient_id; su primer pliegue es el conjunto de evaluación de CatBoost "
+                      "(eval_metric AUC, od_wait=100, use_best_model); el remuestreo, solo en el resto",
+            "arboles_por_semilla_y_fold": arboles_m3,
+            "arboles": {"mediana": float(np.median([a for v in arboles_m3.values() for a in v])),
+                        "minimo": min(a for v in arboles_m3.values() for a in v),
+                        "maximo": max(a for v in arboles_m3.values() for a in v)},
+            "variables": inventario_m3,
+            "versiones": {"catboost": __import__("catboost").__version__,
+                          "imbalanced_learn": __import__("imblearn").__version__,
+                          "scikit_learn": __import__("sklearn").__version__},
+        }} if arboles_m3 else {}),
         "segundos": {"contexto_de_paciente": round(t_contexto, 1),
+                     "variables_m3": round(t_m3, 1) if t_m3 is not None else None,
                      "carga_de_caracteristicas_de_imagen": round(t_imagen, 1) if t_imagen is not None else None,
                      "por_semilla": t_semilla, "total": round(time.perf_counter() - t_total, 1)},
         "nota": (
             "Las diferencias fold a fold no son independientes: los entrenamientos se solapan. "
             "El intervalo corregido por Nadeau y Bengio tiene en cuenta ese solape; el ingenuo, no. "
             "En el NNT80% SE menos es mejor: las victorias del modelo nuevo cuentan las diferencias "
-            "negativas. El tiempo de entrenamiento es el de fit, sin codificación ni predicción."
+            "negativas. El tiempo de entrenamiento es el de fit, sin codificación ni predicción; en M3 incluye "
+            "el remuestreo y la parada interna."
         ),
     }
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
@@ -341,7 +390,8 @@ def main():
     lineas = [
         f"# Fase 4 — {n} − {b}, {len(semillas)} semillas × {args.n_splits} folds, conjunto de desarrollo",
         " · ".join(f"{m} = {DESCRIPCION[m]} ({resultado['modelos'][m]['n_variables']} variables)" for m in (b, n))
-        + " · hiperparámetros de 2b",
+        + (" · M3 con los hiperparámetros publicados; el otro, con los de 2b" if "M3" in (b, n)
+           else " · hiperparámetros de 2b"),
     ]
     if reproduccion:
         lineas.append(f"{reproduccion['que_se_compara']} ({args.referencia}), fold a fold: {reproduccion['reproduce_fold_a_fold']}")
@@ -364,6 +414,11 @@ def main():
         todos = [s for v in t_apilado.values() for s in v]
         lineas.append(f"Apilado de imagen: {a['avisos_no_convergencia_total']} avisos de no convergencia · "
                       f"{float(np.median(todos))} s por fold de mediana (6 logísticas)")
+    if arboles_m3:
+        a = resultado["m3"]["arboles"]
+        lineas.append(f"M3: {resultado['m3']['variables']['n_variables']} variables, calculadas en "
+                      f"{resultado['segundos']['variables_m3']} s · árboles por ajuste: mediana {a['mediana']}, "
+                      f"mínimo {a['minimo']}, máximo {a['maximo']}")
     tf = resultado["segundos_de_entrenamiento_por_fold"]
     lineas.append("Entrenamiento por fold (fit), mediana: " + " · ".join(f"{m} {tf[m]['mediana']} s" for m in (b, n)))
     lineas.append("En el NNT80% SE menos es mejor. El intervalo ingenuo supone diferencias independientes; no lo son.")
