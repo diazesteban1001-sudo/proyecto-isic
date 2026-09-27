@@ -775,11 +775,12 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman ocho del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman nueve del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
-`outputs/fase4-m3-vs-m2.json` y `outputs/fase4-m3limpio-vs-m2.json`. Desde el 2026-09-25 sus
+`outputs/fase4-m3-vs-m2.json`, `outputs/fase4-m3limpio-vs-m2.json` y
+`outputs/tiempo-inferencia.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -923,6 +924,21 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
    ningún conjunto reservado. Eso incluye qué agregados construir, cuántos
    conglomerados y los parámetros del LOF. Por eso el reservado no es ajeno a
    él.
+
+9. **Al predecir, la imagen es por mucho lo más caro**
+   (`outputs/tiempo-inferencia.json`). Mediana en segundos por 1.000 lesiones:
+   - M1 0,0021;
+   - M2 0,0209;
+   - M3 limpio 0,0435;
+   - M4 14,5156;
+   - M4b 14,6321.
+
+   M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de
+   segundo por cada 1.000 lesiones. Los modelos con imagen no mejoraron la
+   métrica principal de forma distinguible (hallazgos 5 y 6).
+
+   *Salvedad:* DINOv2 corre en la GPU del equipo (MPS) y los modelos tabulares en
+   CPU. Los tiempos solo comparan estos modelos entre sí, en este equipo.
 
 ### Dónde se lee la fase vigente
 
