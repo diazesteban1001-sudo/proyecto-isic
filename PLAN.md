@@ -983,6 +983,11 @@ en este proyecto y costó horas de razonar sobre una fuente equivocada.
 antes de entregar**, y que ese sea su propio commit. No confiar en que la última
 corrida siga siendo la vigente.
 
+**Pendiente (2026-09-26, de la persona).** El proyecto excluye 15 columnas, no
+13 como dice el anteproyecto: sección 4.1, *"Antes de modelar se excluyen 13
+columnas"*. Las 15 están en `outputs/auditoria-de-fugas.json`. El recuento de
+variables del informe final se toma de `outputs/`, no del anteproyecto.
+
 ---
 
 ## Decisiones
