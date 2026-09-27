@@ -939,17 +939,17 @@ Según `outputs/holdout-pacientes.json`:
   especificación de la Fase 4 y semilla 0. La parada temprana usa el 20 %
   interno de desarrollo, agrupado por paciente. Todo lo que se ajusta, se ajusta
   con el desarrollo y se aplica al reservado.
-- [M2] M2 se entrena igual y se puntúa en la misma corrida, como referencia. No
-  estaba en el anteproyecto y se declara.
+- M2 se entrena igual y se puntúa en la misma corrida, como referencia. No estaba
+  en el anteproyecto y se declara.
 - Los pacientes reservados se puntúan en una sola corrida. M3 limpio es el
   resultado principal.
 - Métricas: pAUC (principal), AUC, SEtop-15 y NNT80% SE.
 - Intervalos: bootstrap por paciente sobre los reservados, 2.000 remuestras,
   semilla 2026, percentiles 2,5 y 97,5.
-- [M2] La diferencia M3 limpio − M2 se calcula con las mismas remuestras. Si
-  queda entera por debajo de cero, el informe lo declara como contradicción
-  entre las dos estimaciones y rebaja la seguridad de la recomendación, sin
-  cambiar de modelo.
+- La diferencia M3 limpio − M2 se calcula con las mismas remuestras. Si queda
+  entera por debajo de cero, el informe lo declara como contradicción entre las
+  dos estimaciones y rebaja la seguridad de la recomendación, sin cambiar de
+  modelo.
 - El resultado se reporta sea cual sea. La estimación principal sigue siendo la
   validación cruzada repetida, y la recomendación no cambia por el reservado.
 - La apertura va en un commit propio, posterior a este. El guion se niega a
