@@ -906,6 +906,77 @@ limpio − M2 en pAUC, corregido [0,0021; 0,0341], queda entero por encima de
 cero (`outputs/fase4-m3limpio-vs-m2.json`). El modelo recomendado es M3 limpio,
 y es el que se evalúa en el reservado. Queda fijado aquí antes de abrirlo.
 
+**Tiempo de inferencia, que cierra la Fase 4: especificación de la persona,
+fijada el 2026-09-26 antes de medir.** Concreta la definición operativa de la
+Fase 6.
+
+- **Modelos:** M1, M2, M3 limpio, M4 y M4b. M3 queda fuera: no es candidato, y su
+  camino de predicción reajusta transformaciones con las filas nuevas.
+- **Subconjunto:** pacientes completos de desarrollo. Los `patient_id` de
+  desarrollo, ordenados, se barajan con `numpy.random.default_rng(7)` y se van
+  añadiendo en ese orden hasta sumar 5.000 lesiones o más. La lista de pacientes
+  va en la salida.
+- **Entrenamiento, que no se cronometra.** Cada modelo se entrena una vez con los
+  demás pacientes de desarrollo, con su especificación de la Fase 4 y semilla 0.
+  En M4b, las puntuaciones apiladas de entrenamiento salen de la validación
+  interna, y la logística que puntúa el subconjunto es la ajustada con todo el
+  entrenamiento.
+- **Qué se cronometra.** Desde las filas de metadatos del subconjunto, ya en
+  memoria y sin la etiqueta, hasta la puntuación de cada lesión. Para M4 y M4b
+  se parte también de las imágenes tal como están en el archivo del que se
+  extrajeron, `data/train-image.hdf5`. Entra todo lo que se calcula al predecir:
+  - las variables por paciente, el LOF y la asignación a conglomerados;
+  - las transformaciones ya ajustadas: imputación, codificación de
+    categóricas, one-hot, estandarizado, medias por conglomerado y la
+    logística de M4b;
+  - la lectura y decodificación de imagen y DINOv2, con el mismo dispositivo
+    (MPS), el preprocesado y el lote de 64 de la extracción;
+  - y la predicción.
+
+  Queda fuera cargar los modelos y los pesos de DINOv2, que se hace una vez
+  antes del cronómetro.
+- **Repeticiones:** cinco seguidas por modelo, en el mismo proceso. Se reportan
+  las cinco y la mediana, en segundos por 1.000 lesiones.
+- **Declaraciones:** el equipo, el sistema, el intérprete y las versiones con que
+  corre cada modelo, el dispositivo de DINOv2 y los hilos.
+- **Alcance:** los tiempos solo comparan estos modelos entre sí.
+
+**Control, antes de cronometrar.** Si algo falla, no se cronometra. El camino
+normal es el de la Fase 4, con el mismo modelo ya entrenado:
+- en M1 y M2, `codificar_fold` y `variables_contexto_paciente`;
+- en M3 limpio, `variables_m3_en_pliegue`;
+- en M4 y M4b, además, las variables del archivo de la extracción y
+  `puntuaciones_imagen`.
+
+Qué se comprueba:
+- **M1, M2 y M3 limpio:** las puntuaciones del camino cronometrado son idénticas
+  a las del camino normal.
+- **M4 y M4b, con tolerancia declarada:**
+  - (a) las 384 variables que el camino cronometrado calcula con DINOv2 difieren
+    de las de `data/dinov2-vits14-desarrollo.h5` en 1e-3 como máximo, en valor
+    absoluto;
+  - (b) con las variables del archivo en lugar de las recalculadas, las
+    puntuaciones son idénticas a las del camino normal;
+  - (c) con las recalculadas, se reportan la diferencia máxima de puntuación y
+    cuántas lesiones difieren en más de 1e-6, sin umbral: una diferencia
+    dentro de la tolerancia puede cambiar la rama de un árbol.
+- **Pasos quitados.** La comprobación se repite quitando cada paso del camino
+  cronometrado, uno por vez, y tiene que fallar cada vez. Esta parte corre sobre
+  una copia del subconjunto a la que se le borra la edad de un paciente en los
+  dos caminos, para que la imputación tenga efecto; sobre esa copia se comprueba
+  también la igualdad. Los pasos:
+  - *M1:* imputación con las medianas de entrenamiento y codificación de las
+    categóricas con las medias de entrenamiento;
+  - *M2:* los de M1, las variables por paciente (z-scores, conteos y sumas) y el
+    LOF;
+  - *M3 limpio:* imputación de la edad, variables por paciente, one-hot,
+    estandarizado y LOF, asignación al conglomerado y medias por conglomerado;
+  - *M4:* los de M2, la lectura y decodificación de la imagen, el preprocesado y
+    DINOv2;
+  - *M4b:* los de M4, la logística de imagen y la razón a la media del paciente.
+
+La salida es `outputs/tiempo-inferencia.json` y `.md`.
+
 **Puerta.** Las tres comparaciones principales fijadas en la decisión de arriba,
 cada una con su intervalo corregido por Nadeau y Bengio: **M2 − M1**, **M4 − M2**
 y **el mejor de los modelos propios frente a M3**. Con ellas, la lista de lo que
