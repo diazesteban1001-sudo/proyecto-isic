@@ -9,11 +9,20 @@ Lee, de la misma carpeta:
   cada referencia en que las dos pasadas no coinciden, y solo esas. Si hay
   discrepancias y falta este archivo, el guion lista las referencias que hay
   que leer una tercera vez y se detiene **antes de abrir la llave**;
-- llave.csv, id -> tratamiento.
+- llave.csv, id -> tratamiento;
+- tratamientos.csv, una fila por tratamiento, con las columnas tratamiento,
+  entregadas, se_abstuvo y texto_abstencion. Registra lo que el protocolo pide
+  en «Qué se extrae de cada respuesta»: si la respuesta se abstuvo de forma
+  explícita («no está en las fuentes»), con el texto literal de la abstención.
+  entregadas tiene que coincidir con las referencias de ese tratamiento en la
+  llave; se_abstuvo es si o no; con si, texto_abstencion es obligatorio, y con
+  no, va vacío. Un tratamiento que no entregó ninguna referencia va con
+  entregadas 0.
 
 Escribe resultados.json y resultados.md:
-- por tratamiento: cuántas referencias entregó de las 5 pedidas, y el conteo de
-  cada categoría en la pasada 1, en la pasada 2 y en la clasificación final;
+- por tratamiento: cuántas referencias entregó de las 5 pedidas, si se abstuvo
+  de forma explícita y con qué texto, y el conteo de cada categoría en la
+  pasada 1, en la pasada 2 y en la clasificación final;
 - por tratamiento: la proporción de utilizables en la clasificación final, con
   el intervalo de Wilson al 95 %, sobre las referencias que entregó;
 - por tratamiento y pasada: cuántas llevan las marcas solo_resumen y doi_erroneo;
@@ -161,6 +170,45 @@ def leer_llave(directorio, ids):
     return llave
 
 
+def leer_tratamientos(directorio, llave):
+    ruta = os.path.join(directorio, "tratamientos.csv")
+    if not os.path.exists(ruta):
+        raise Rechazo(f"no existe {ruta}.")
+    columnas, filas = leer_csv(ruta)
+    faltan = [c for c in ("tratamiento", "entregadas", "se_abstuvo", "texto_abstencion") if c not in columnas]
+    if faltan:
+        raise Rechazo(f"tratamientos.csv: faltan las columnas {faltan}.")
+    tratamientos = {}
+    for i, f in enumerate(filas, start=2):
+        t = f["tratamiento"].strip()
+        donde = f"tratamientos.csv, línea {i} (tratamiento {t})"
+        if t not in TRATAMIENTOS:
+            raise Rechazo(f"{donde}: tratamiento fuera del protocolo.")
+        if t in tratamientos:
+            raise Rechazo(f"{donde}: tratamiento repetido.")
+        try:
+            entregadas = int(f["entregadas"])
+        except ValueError:
+            raise Rechazo(f"{donde}: entregadas {f['entregadas']!r} no es un entero.")
+        en_llave = sum(1 for x in llave.values() if x == t)
+        if entregadas != en_llave:
+            raise Rechazo(f"{donde}: entregadas {entregadas}, pero la llave tiene {en_llave} referencias "
+                          "de ese tratamiento.")
+        v = f["se_abstuvo"].strip().lower()
+        if v not in SI and v != "no":
+            raise Rechazo(f"{donde}: se_abstuvo {f['se_abstuvo']!r}; tiene que ser si o no.")
+        abstuvo, texto = v in SI, f["texto_abstencion"].strip()
+        if abstuvo and not texto:
+            raise Rechazo(f"{donde}: se abstuvo, pero falta el texto literal de la abstención.")
+        if not abstuvo and texto:
+            raise Rechazo(f"{donde}: dice que no se abstuvo y trae texto de abstención.")
+        tratamientos[t] = {"entregadas": entregadas, "se_abstuvo": abstuvo, "texto_abstencion": texto or None}
+    ausentes = [t for t in TRATAMIENTOS if t not in tratamientos]
+    if ausentes:
+        raise Rechazo(f"tratamientos.csv: faltan los tratamientos {ausentes}.")
+    return tratamientos
+
+
 def contar(ids, clasif):
     return {c: sum(clasif[i] == c for i in ids) for c in CATEGORIAS}
 
@@ -186,6 +234,7 @@ def analizar(directorio):
     tercera = tercera or {}
 
     llave = leer_llave(directorio, ids)
+    tratamientos = leer_tratamientos(directorio, llave)
 
     c1 = {i: p1[i]["categoria"] for i in ids}
     c2 = {i: p2[i]["categoria"] for i in ids}
@@ -201,6 +250,8 @@ def analizar(directorio):
             "pedidas": PEDIDAS,
             "entregadas": n,
             "faltaron": PEDIDAS - n,
+            "se_abstuvo": tratamientos[t]["se_abstuvo"],
+            "texto_abstencion": tratamientos[t]["texto_abstencion"],
             "pasada_1": contar(suyos, c1),
             "pasada_2": contar(suyos, c2),
             "final": contar(suyos, final),
@@ -263,14 +314,19 @@ def markdown(r):
     L = ["# Experimento de la semana 1: resultados", ""]
     L.append(f"Protocolo: `{r['protocolo']}`. Referencias clasificadas: {r['n_referencias']}.")
     L += ["", "## Por tratamiento", ""]
-    L.append("| | Entregadas de 5 | Faltaron | " + " | ".join(
+    L.append("| | Entregadas de 5 | Faltaron | Se abstuvo | " + " | ".join(
         f"{NOMBRES[c]} (P1 / P2 / final)" for c in CATEGORIAS) + " | Solo resumen (P1 / P2) | DOI erróneo (P1 / P2) |")
-    L.append("|---" * (5 + len(CATEGORIAS)) + "|")
+    L.append("|---" * (6 + len(CATEGORIAS)) + "|")
     for t, d in r["por_tratamiento"].items():
         celdas = [f"{d['pasada_1'][c]} / {d['pasada_2'][c]} / {d['final'][c]}" for c in CATEGORIAS]
-        L.append(f"| {t} | {d['entregadas']} | {d['faltaron']} | " + " | ".join(celdas)
+        L.append(f"| {t} | {d['entregadas']} | {d['faltaron']} | {'sí' if d['se_abstuvo'] else 'no'} | "
+                 + " | ".join(celdas)
                  + f" | {d['solo_resumen']['pasada_1']} / {d['solo_resumen']['pasada_2']}"
                  + f" | {d['doi_erroneo']['pasada_1']} / {d['doi_erroneo']['pasada_2']} |")
+    abstenciones = [(t, d["texto_abstencion"]) for t, d in r["por_tratamiento"].items() if d["se_abstuvo"]]
+    if abstenciones:
+        L += ["", "Abstenciones explícitas, texto literal:", ""]
+        L += [f"- {t}: «{texto}»" for t, texto in abstenciones]
     L += ["", "Proporción de utilizables en la clasificación final, sobre las que entregó, "
           "con intervalo de Wilson al 95 %:", ""]
     for t, d in r["por_tratamiento"].items():

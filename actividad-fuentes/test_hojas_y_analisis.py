@@ -13,6 +13,10 @@ temporal.
    referencias, con todos los resultados esperados calculados a mano y escritos
    en el caso. Sin tercera lectura, se detiene antes de abrir la llave. Control:
    dos pasadas iguales dan 0 discrepancias y kappa 1.
+   tratamientos.csv: C entrega 3 de 5 y se abstiene de forma explícita, y en
+   otro caso C no entrega ninguna y se abstiene; los dos salen en resultados.
+   Controles positivos: entregadas que no cuadran con la llave, abstención sin
+   texto, texto sin abstención y un tratamiento que falta.
 3. Intervalo de Wilson de 7 de 10 frente a statsmodels, y kappa frente a
    scikit-learn. El valor de statsmodels está además escrito como literal,
    tomado de statsmodels 0.15.0 el 2026-09-27, así que la comparación con el
@@ -74,6 +78,13 @@ TERCERA = {"082": ("no_existe", "motivo sintético 1"), "527": ("utilizable", "m
 SOLO_RESUMEN = {1: {"417", "399"}, 2: {"399"}}
 DOI_ERRONEO = {1: {"864"}, 2: {"864"}}
 SIN_UBICACION = {2: {"013"}}  # una utilizable sin ubicación en la pasada 2: un aviso
+# C entrega 3 de 5 y se abstiene de forma explícita.
+TEXTO_ABSTENCION = "No encontré en las fuentes cargadas más estudios que midan esa sobreestimación."
+TRATAMIENTOS_CSV = [
+    {"tratamiento": "A", "entregadas": "5", "se_abstuvo": "no", "texto_abstencion": ""},
+    {"tratamiento": "B", "entregadas": "5", "se_abstuvo": "no", "texto_abstencion": ""},
+    {"tratamiento": "C", "entregadas": "3", "se_abstuvo": "sí", "texto_abstencion": TEXTO_ABSTENCION},
+]
 
 
 def escribir_csv(ruta, columnas, filas, separador=","):
@@ -124,6 +135,11 @@ def clasificar(d, n, categorias):
             f["categoria"] = "Existe pero no dice eso"
             break
     escribir_csv(ruta, cols, filas)
+
+
+def escribir_tratamientos(d, filas=TRATAMIENTOS_CSV):
+    escribir_csv(os.path.join(d, "tratamientos.csv"),
+                 ["tratamiento", "entregadas", "se_abstuvo", "texto_abstencion"], filas)
 
 
 def escribir_tercera(d, tercera):
@@ -241,6 +257,7 @@ def parte_2(tmp, d):
     casos = []
     p2 = dict(P1, **CAMBIOS_P2)
     clasificar(d, 2, p2)
+    escribir_tratamientos(d)
 
     # Sin tercera lectura: se detiene, lista las 3, y no ha leído la llave.
     shutil.move(os.path.join(d, "llave.csv"), os.path.join(tmp, "llave-apartada.csv"))
@@ -301,12 +318,62 @@ def parte_2(tmp, d):
                   len(res["avisos_de_protocolo"]) == e["avisos"] and "013" in res["avisos_de_protocolo"][0],
                   str(res["avisos_de_protocolo"])))
 
+    # C se abstiene de forma explícita después de 3 referencias.
+    pt = res["por_tratamiento"]
+    with open(os.path.join(d, "resultados.md"), encoding="utf-8") as f:
+        md = f.read()
+    casos.append(("2k. C se abstuvo: sale en el json y en el md, con el texto literal; A y B no",
+                  pt["C"]["se_abstuvo"] is True and pt["C"]["texto_abstencion"] == TEXTO_ABSTENCION
+                  and pt["C"]["entregadas"] == 3 and pt["C"]["faltaron"] == 2
+                  and all(pt[x]["se_abstuvo"] is False and pt[x]["texto_abstencion"] is None for x in "AB")
+                  and f"- C: «{TEXTO_ABSTENCION}»" in md and "| C | 3 | 2 | sí |" in md,
+                  json.dumps({x: [pt[x]["se_abstuvo"], pt[x]["texto_abstencion"]] for x in "ABC"}, ensure_ascii=False)))
+
+    # Controles positivos de tratamientos.csv: cada uno tiene que rechazarse.
+    def con(tr, **cambios):
+        return [dict(f, **cambios) if f["tratamiento"] == tr else f for f in TRATAMIENTOS_CSV]
+    for nombre, filas, texto in (
+        ("entregadas que no cuadran con la llave", con("C", entregadas="4"), "la llave tiene 3"),
+        ("abstención sin texto", con("C", texto_abstencion=""), "falta el texto literal"),
+        ("texto sin abstención", con("A", texto_abstencion="algo"), "no se abstuvo y trae texto"),
+        ("un tratamiento que falta", [f for f in TRATAMIENTOS_CSV if f["tratamiento"] != "B"], "faltan los tratamientos ['B']"),
+    ):
+        escribir_tratamientos(d, filas)
+        r = correr("analizar.py", "--dir", d)
+        casos.append((f"2l. control: rechaza tratamientos.csv con {nombre}",
+                      r.returncode == 1 and texto in r.stderr, r.stderr.strip()))
+    escribir_tratamientos(d)
+
+    # Abstención total: C no entrega ninguna referencia.
+    sin_c = [f for f in RESPUESTAS if f["tratamiento"] != "C"]
+    d_cero = nuevo_dir(tmp, "c-se-abstiene", filas=sin_c)
+    correr("preparar_hojas.py", "--pasada", "1", "--dir", d_cero)
+    correr("preparar_hojas.py", "--pasada", "2", "--dir", d_cero)
+    solo_ab = {i: c for i, c in P1.items() if i not in IDS["C"]}
+    clasificar(d_cero, 1, solo_ab)
+    clasificar(d_cero, 2, solo_ab)
+    escribir_tratamientos(d_cero, [f if f["tratamiento"] != "C" else dict(f, entregadas="0") for f in TRATAMIENTOS_CSV])
+    r = correr("analizar.py", "--dir", d_cero)
+    c_cero, md_cero = {}, ""
+    if r.returncode == 0:
+        with open(os.path.join(d_cero, "resultados.json"), encoding="utf-8") as f:
+            c_cero = json.load(f)["por_tratamiento"]["C"]
+        with open(os.path.join(d_cero, "resultados.md"), encoding="utf-8") as f:
+            md_cero = f.read()
+    casos.append(("2m. C no entrega ninguna y se abstiene: 0 de 5, sin intervalo, abstención reportada",
+                  r.returncode == 0 and c_cero["entregadas"] == 0 and c_cero["faltaron"] == 5
+                  and c_cero["utilizables_final"]["wilson_95"] is None and c_cero["se_abstuvo"] is True
+                  and c_cero["texto_abstencion"] == TEXTO_ABSTENCION
+                  and "- C: 0 de 0, —, sin intervalo (no entregó ninguna)" in md_cero,
+                  r.stderr.strip() or json.dumps(c_cero, ensure_ascii=False)[:200]))
+
     # Control: dos pasadas iguales.
     d_igual = nuevo_dir(tmp, "pasadas-iguales")
     correr("preparar_hojas.py", "--pasada", "1", "--dir", d_igual)
     correr("preparar_hojas.py", "--pasada", "2", "--dir", d_igual)
     clasificar(d_igual, 1, P1)
     clasificar(d_igual, 2, P1)
+    escribir_tratamientos(d_igual)
     r = correr("analizar.py", "--dir", d_igual)
     c0 = {}
     if r.returncode == 0:
