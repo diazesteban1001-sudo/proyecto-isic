@@ -51,7 +51,7 @@ SHA-256 de los archivos extraídos, 16 primeros caracteres, del 2026-09-27.
 | 14 | Contreras (2026), Cuenta de Alto Costo | `cac-melanoma-colombia-2026.md` | el artículo completo | `contreras-2026.txt` | `13e61eed02a42ceb` |
 | 15 | Cuenta de Alto Costo (2025) | `cac-melanoma-colombia-2025.md` | el boletín completo | `cuenta-de-alto-costo-2025.txt` | `f32468a216a35c81` |
 | 16 | ISIC (2024), *SLICE-3D 2024 Challenge Dataset* | `isic-licencia-y-cita-slice3d.md` | la pestaña «2024» de la página de datos | `isic-2024.txt` | `283350e5763c924e` |
-| 17 | Kurtansky et al. (2024), competición de Kaggle | `kaggle-overview-cita-2026-09-21.txt`, `kaggle-evaluation.md`, `kaggle-rules.md` | dos bloques de la portada, la página de evaluación y una selección de las reglas | `kurtansky-2024-kaggle.txt` | `a1fc592f8f472a07` |
+| 17 | Kurtansky et al. (2024), competición de Kaggle | `kaggle-overview-cita-2026-09-21.txt`, `kaggle-evaluation.md` | dos bloques de la portada y la página de evaluación; las reglas no entran (ver «Casos anotados») | `kurtansky-2024-kaggle.txt` | `5eac339220e20127` |
 | 18 | Kurtansky (2024), *Challenge-2024-Metrics* | `upstream-README.md`, `upstream-PrimaryMetric-pAUC.py`, `upstream-SecondaryMetric-TopNSensitivity.py` | los tres archivos tal cual | `kurtansky-2024-challenge-metrics.txt` | `c678f49dde301593` |
 | 19 | Marchetti et al. (2023) | `marchetti-2023-resumen-pubmed.txt` | solo el resumen | `marchetti-2023.txt` | `771acc9200a35dc9` |
 | 20 | McClish (1989) | `mcclish-1989-pauc-original.md` | solo el resumen | `mcclish-1989.txt` | `66648eebc9c243e0` |
@@ -77,8 +77,7 @@ SHA-256 de los archivos extraídos, 16 primeros caracteres, del 2026-09-27.
 - en PanDerm, la primera línea en cursiva, el marcado Markdown (`#`, `>`, la
   negrita que abre línea) y los encabezados «Abstract» y «Abstract
   (web-summary)», que no están en el XML;
-- en Kaggle, el marcado Markdown y el añadido «(selección relevante)» de un
-  encabezado.
+- en Kaggle, el marcado Markdown de la página de evaluación.
 
 **También se quitó, aunque no es nuestro:** los términos MeSH de McClish y
 Walter. Son la indización de PubMed, no el trabajo.
@@ -89,7 +88,8 @@ licencia no entra.
 
 **Lo único añadido:** en los tres archivos que reúnen varias fuentes de una
 misma referencia (17, 18 y 13), una línea con el nombre de archivo o la URL
-precede a cada fuente. Son 8 líneas en total.
+precede a cada fuente. Son 7 líneas en total. Eran 8 hasta que salieron las
+reglas de Kaggle, que llevaban la suya.
 
 ## Cómo se comprobó que no hay texto nuestro
 
@@ -110,6 +110,8 @@ precede a cada fuente. Son 8 líneas en total.
    Todas son texto de la fuente que nuestros documentos reproducen: títulos,
    autores, afiliaciones, cifras de una tabla de Cassidy, frases de la Cuenta
    de Alto Costo citadas en el anteproyecto y el título de la competición.
+   La comprobación se repitió después de sacar las reglas de Kaggle, con el
+   mismo resultado.
 3. **Procedencia de cada línea, donde hay fuente cruda en local.** Se compara
    sin espacios:
    - PanDerm contra el XML de Europe PMC. Todas las líneas están, salvo la
@@ -133,12 +135,18 @@ Se detectaron los cuatro.
 
 ## Casos anotados
 
-- **Las reglas de Kaggle (fila 17) no se pueden certificar como literales.** La
-  copia local se tomó a mano el 2026-08-11, y su ficha dice que ya era una
-  selección, con las secciones 7, 8 y 21 de las reglas generales. Algún pasaje
-  tiene forma de resumen: el de la §21 empieza *"Governed by New York law,
-  litigated exclusively…"*. Sin la página no se puede comprobar. Se carga tal
-  como está en la copia local.
+- **Las reglas de Kaggle (fila 17) no entran, porque no se pueden certificar
+  como literales.** Decisión de la persona, 2026-09-27.
+  - La copia local, `kaggle-rules.md`, se tomó a mano el 2026-08-11, y su ficha
+    dice que ya era una selección, con las secciones 7, 8 y 21 de las reglas
+    generales.
+  - Algún pasaje tiene forma de resumen: el de la §21 empieza *"Governed by New
+    York law, litigated exclusively…"*.
+  - Sin la página no se puede comprobar.
+
+  De la fila 17 entran la portada y la página de evaluación. *Hasta ese mismo
+  día las reglas entraban en `kurtansky-2024-kaggle.txt`, cuyo SHA-256
+  empezaba por `a1fc592f8f472a07`.*
 - **Esta extracción no se puede rehacer desde el repositorio.** Las copias
   locales no viajan con el repositorio, y el guion que hizo la extracción no se
   versionó. Lo que la fija son los SHA-256 de la lista final.
