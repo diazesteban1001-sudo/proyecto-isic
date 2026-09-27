@@ -567,7 +567,7 @@ reportada en el `.json` y decidido antes de ver cuánto tarda la extracción.*
 
 ---
 
-## Fase 4 — Modelado con imagen
+## Fase 4 — Modelado con imagen — CERRADA
 
 **Decisión (2026-09-25, de la persona), fijada antes de correr ningún modelo con
 imagen.**
