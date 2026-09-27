@@ -829,6 +829,77 @@ Los controles de que la comprobación puede fallar, en 60 pacientes:
 - sin las columnas repetidas, el LOF se aparta hasta 0,692;
 - con la estandarización dentro del paciente de M2, hasta 11,8.
 
+**M3 limpio y regla de recomendación: decisión de la persona, fijadas el
+2026-09-26 antes de correr.** El motivo es el hallazgo 7 de `CLAUDE.md`: la
+ventaja de M3 sobre M2 no se puede separar de los dos sesgos conocidos a su
+favor. M3 limpio es M3 con tres cambios; todo lo demás, igual.
+
+1. **Transformaciones sin etiqueta dentro de cada pliegue.** La imputación de la
+   edad, el one-hot, el estandarizado del LOF, el k-means y las medias por
+   conglomerado se ajustan con las filas de entrenamiento del pliegue y se
+   aplican a su validación. Las variables que se calculan dentro del paciente no
+   cambian de forma: el z-score, los conteos, las sumas y el LOF de cada
+   paciente. Cada paciente está en un solo lado del pliegue.
+2. **Hiperparámetros por defecto de CatBoost, con la parada de M3.** La parada
+   es la del 20 % interno agrupado por paciente, con `eval_metric='AUC'`,
+   `od_wait=100` y `use_best_model=True`. Todo parámetro del constructor que no
+   sea de parada, de especificación de datos (`cat_features`) o de ejecución
+   (`random_seed`, `thread_count`, `verbose`) vuelve a su valor por defecto,
+   incluido el tope de 1000 iteraciones y cualquier parámetro de pesos de clase.
+   Lo que M3 hace fuera del constructor sigue igual, incluido el remuestreo.
+3. **239 variables.** No se descartan las 22 de la celda 24.
+
+**Parámetros de M3 que vuelven a su valor por defecto.** Los valores por
+defecto se leyeron con `get_all_params()` en catboost 1.2.8, en CPU, el
+2026-09-26:
+
+| Parámetro | M3 | M3 limpio |
+|---|---|---|
+| `iterations` | 2000 | 1000 |
+| `learning_rate` | 0,0261 | automática: la elige CatBoost según los datos, y se reporta |
+| `l2_leaf_reg` | 18,04 | 3 |
+| `grow_policy` | `Lossguide` | `SymmetricTree` |
+| `min_data_in_leaf` | 38 | 1 |
+| `border_count` | 256 | 254 |
+| `bootstrap_type` | `Bayesian` (parche 5) | `MVS`, con `subsample` 0,8 |
+| `bagging_temperature` | 0,874 | sin efecto: MVS no lo usa |
+| `depth` | 6 | 6, el mismo valor |
+| `loss_function` | `Logloss` | `Logloss`, el mismo valor |
+
+Ni M3 ni M3 limpio usan pesos de clase.
+
+**Control previo, del 2026-09-26.** Ninguna de las 22 columnas está entre las
+15 que excluye `auditoria-de-fugas`. Todas se calculan solo con las 34
+numéricas brutas de la celda 3 y con `patient_id`, así que tampoco dependen de
+una columna excluida ni de la etiqueta.
+
+**Lectura, declarada antes de correr.** M3 limpio difiere de M3 en tres cosas a
+la vez, así que el resultado no dice cuál de los dos sesgos pesaba.
+
+**Regla de recomendación.**
+- Si el intervalo corregido de la pAUC de M3 limpio − M2 queda entero **por
+  encima de cero**, el modelo recomendado es M3 limpio, y es el que se evalúa en
+  el reservado.
+- En cualquier otro caso, el modelo recomendado es M2, y el informe declara que
+  la configuración publicada del ganador parecía mejor, pero su ventaja no se
+  pudo separar de sus sesgos. Eso incluye el caso de que el intervalo quede
+  entero por debajo de cero.
+- Si queda entero por debajo de cero, el informe dice además que M3 limpio quedó
+  por debajo de M2 de forma distinguible, sin atribuirlo a ninguno de los tres
+  cambios frente a M3.
+
+**Solo esta corrida.** No se prueban otras variantes.
+
+**Reporte,** con `fase4_comparar.py`, en `outputs/fase4-m3limpio-vs-m2.json` y
+`.md`:
+- las cuatro métricas;
+- M3 limpio − M2, con los dos intervalos y las victorias;
+- los árboles y los tiempos;
+- cuántos ajustes no se detuvieron antes del tope de 1000 árboles, y qué tasa
+  de aprendizaje automática eligió CatBoost.
+
+Nada de eso cambia la corrida.
+
 **Puerta.** Las tres comparaciones principales fijadas en la decisión de arriba,
 cada una con su intervalo corregido por Nadeau y Bengio: **M2 − M1**, **M4 − M2**
 y **el mejor de los modelos propios frente a M3**. Con ellas, la lista de lo que
