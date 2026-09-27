@@ -928,6 +928,33 @@ es buscar la semilla, el pliegue o la métrica en que sí se distinga.
 **Qué se hace.** Evaluar sobre el holdout sellado en la fase 1 **el modelo
 recomendado**, uno solo, y reportar punto e intervalo.
 
+**Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el
+reservado.** El modelo recomendado es M3 limpio (Fase 4, «Modelo recomendado»).
+Según `outputs/holdout-pacientes.json`:
+- el reservado tiene 209 pacientes, 52 de ellos con alguna lesión maligna y 76
+  lesiones malignas en total;
+- el desarrollo tiene 833 pacientes, con 207 y 317.
+
+- Se entrena M3 limpio una sola vez sobre los pacientes de desarrollo, con su
+  especificación de la Fase 4 y semilla 0. La parada temprana usa el 20 %
+  interno de desarrollo, agrupado por paciente. Todo lo que se ajusta, se ajusta
+  con el desarrollo y se aplica al reservado.
+- [M2] M2 se entrena igual y se puntúa en la misma corrida, como referencia. No
+  estaba en el anteproyecto y se declara.
+- Los pacientes reservados se puntúan en una sola corrida. M3 limpio es el
+  resultado principal.
+- Métricas: pAUC (principal), AUC, SEtop-15 y NNT80% SE.
+- Intervalos: bootstrap por paciente sobre los reservados, 2.000 remuestras,
+  semilla 2026, percentiles 2,5 y 97,5.
+- [M2] La diferencia M3 limpio − M2 se calcula con las mismas remuestras. Si
+  queda entera por debajo de cero, el informe lo declara como contradicción
+  entre las dos estimaciones y rebaja la seguridad de la recomendación, sin
+  cambiar de modelo.
+- El resultado se reporta sea cual sea. La estimación principal sigue siendo la
+  validación cruzada repetida, y la recomendación no cambia por el reservado.
+- La apertura va en un commit propio, posterior a este. El guion se niega a
+  correr si la salida del reservado ya existe.
+
 **Después de esto no se cambia nada.** Ni el modelo, ni las características, ni
 el preprocesamiento, ni el criterio. Si el resultado decepciona, se reporta el
 resultado que decepciona. Un holdout abierto dos veces es un conjunto de
