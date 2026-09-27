@@ -20,6 +20,12 @@ fase4_comparar.py — Fase 4: una comparación principal entre dos modelos
        CatBoost con los parámetros publicados y los parches de la especificación
        (PLAN.md, Fase 4). El número de árboles se elige dentro de cada pliegue de
        entrenamiento; se registra el de cada ajuste.
+  M3limpio = M3 limpio (PLAN.md, Fase 4, fijado el 2026-09-26): las mismas
+       variables sin descartar las 22 de la celda 24 (239), con las
+       transformaciones sin etiqueta ajustadas en cada pliegue de entrenamiento
+       (ganador_m3.variables_m3_en_pliegue), y CatBoost con la parada de M3 y el
+       resto de parámetros por defecto (PARAMETROS_LIMPIO). Su control es
+       test_m3_limpio.py.
 M1, M2, M4 y M4b, con los mismos hiperparámetros, los de 2b, sin ajuste.
 
 Validación repetida con las semillas dadas y los mismos folds de desarrollo que
@@ -55,6 +61,9 @@ Uso:
 
     python fase4_comparar.py --base M2 --nuevo M3 \
         ... --referencia outputs/fase4-m2-vs-m1.json --out outputs/fase4-m3-vs-m2
+
+    python fase4_comparar.py --base M2 --nuevo M3limpio \
+        ... --referencia outputs/fase4-m2-vs-m1.json --out outputs/fase4-m3limpio-vs-m2
 """
 
 import argparse
@@ -98,6 +107,9 @@ DESCRIPCION = {
            "de DINOv2, fuera de pliegue, y su razón a la media del paciente (apilado_imagen.py)",
     "M3": "parte tabular reproducida del ganador: CatBoost publicado sobre sus variables, con los parches "
           "de la especificación (ganador_m3.py)",
+    "M3limpio": "M3 limpio: las variables de M3 sin descartar las de la celda 24, con las transformaciones sin "
+                "etiqueta ajustadas en cada pliegue de entrenamiento, y CatBoost con la parada de M3 y el resto "
+                "por defecto (ganador_m3.py)",
 }
 APILADAS = ["img_lr_puntuacion", "img_lr_razon_paciente"]
 
@@ -224,6 +236,7 @@ def main():
         extra.append(imagen)
     x_m3 = cats_m3 = inventario_m3 = None
     t_m3 = None
+    df_sin_etiqueta = df.drop(columns=[args.target_col])
     if "M3" in (args.base, args.nuevo):
         t0 = time.perf_counter()
         x_m3, cats_m3, inventario_m3 = ganador_m3.variables_m3(df.drop(columns=[args.target_col]), excluidas,
@@ -236,9 +249,11 @@ def main():
         "M4": numericas + list(contexto.columns) + (list(imagen.columns) if imagen is not None else []),
         "M4b": numericas + list(contexto.columns) + APILADAS,
         "M3": list(x_m3.columns) if x_m3 is not None else [],
+        "M3limpio": [],  # se arman en cada pliegue
     }
     x_imagen = imagen.to_numpy() if imagen is not None else None
     avisos_apilado, t_apilado, arboles_m3 = {}, {}, {}
+    ajustes_limpio, t_variables_limpio, n_variables_limpio = {}, {}, {}
     modelos = {m: variables[m] for m in (args.base, args.nuevo)}
 
     y = df[args.target_col].to_numpy()
@@ -265,7 +280,24 @@ def main():
                         df[col] = valores_col
                     avisos_apilado.setdefault(str(seed), []).append(ap["avisos_no_convergencia"])
                     t_apilado.setdefault(str(seed), []).append(round(time.perf_counter() - t0, 2))
-                if m == "M3":
+                if m == "M3limpio":
+                    # Transformaciones con el pliegue de entrenamiento; ajuste con la parada de M3.
+                    t0 = time.perf_counter()
+                    x_tr, x_va, cats, inv = ganador_m3.variables_m3_en_pliegue(df_sin_etiqueta, tr, va, excluidas,
+                                                                               args.group_col)
+                    t_variables_limpio.setdefault(str(seed), []).append(round(time.perf_counter() - t0, 2))
+                    n_variables_limpio[inv["n_variables"]] = n_variables_limpio.get(inv["n_variables"], 0) + 1
+                    t0 = time.perf_counter()
+                    modelo = ganador_m3.ajustar_m3(x_tr, y[tr], grupos[tr], cats, seed,
+                                                   parametros=ganador_m3.PARAMETROS_LIMPIO)
+                    tiempos.append(round(time.perf_counter() - t0, 2))
+                    ajustes_limpio.setdefault(str(seed), []).append({
+                        "arboles": int(modelo.tree_count_),
+                        "iteraciones_corridas": len(modelo.get_evals_result()["validation"]["AUC"]),
+                        "tasa_de_aprendizaje": float(modelo.get_all_params()["learning_rate"]),
+                    })
+                    s = modelo.predict_proba(x_va)[:, 1]
+                elif m == "M3":
                     # Remuestreo, parada interna y ajuste: todo con el pliegue de entrenamiento.
                     t0 = time.perf_counter()
                     modelo = ganador_m3.ajustar_m3(x_m3.iloc[tr], y[tr], grupos[tr], cats_m3, seed)
@@ -330,7 +362,8 @@ def main():
         "semillas_corridas": semillas,
         "n_splits": args.n_splits,
         "modelos": {m: {"descripcion": DESCRIPCION[m],
-                        "n_variables": len(num) if m == "M3" else len(num) + len(categoricas)}
+                        "n_variables": (sorted(n_variables_limpio) if m == "M3limpio" else
+                                        len(num) if m == "M3" else len(num) + len(categoricas))}
                     for m, num in modelos.items()},
         "variables_de_contexto": list(contexto.columns),
         "caracteristicas_de_imagen": comprobacion_imagen,
@@ -369,6 +402,33 @@ def main():
                           "imbalanced_learn": __import__("imblearn").__version__,
                           "scikit_learn": __import__("sklearn").__version__},
         }} if arboles_m3 else {}),
+        **({"m3limpio": {
+            "especificacion": "PLAN.md, Fase 4, «M3 limpio y regla de recomendación», fijadas el 2026-09-26 antes de correr",
+            "parametros_catboost": {**ganador_m3.PARAMETROS_LIMPIO, "el resto": "por defecto"},
+            "semilla_catboost_y_remuestreo": "la semilla externa",
+            "remuestreo": {"sobremuestreo_positivos_hasta": ganador_m3.SOBREMUESTREO,
+                           "submuestreo_negativos_hasta": ganador_m3.SUBMUESTREO},
+            "parada": "la de M3: StratifiedGroupKFold(5, shuffle=True, random_state=semilla externa) sobre el pliegue "
+                      "de entrenamiento, por patient_id; su primer pliegue es el conjunto de evaluación",
+            "tope_de_iteraciones": 1000,
+            "ajustes_por_semilla_y_fold": ajustes_limpio,
+            "arboles": {"mediana": float(np.median([a["arboles"] for v in ajustes_limpio.values() for a in v])),
+                        "minimo": min(a["arboles"] for v in ajustes_limpio.values() for a in v),
+                        "maximo": max(a["arboles"] for v in ajustes_limpio.values() for a in v)},
+            "ajustes_que_no_pararon_antes_del_tope": sum(a["iteraciones_corridas"] >= 1000
+                                                         for v in ajustes_limpio.values() for a in v),
+            "de_ajustes": sum(len(v) for v in ajustes_limpio.values()),
+            "tasa_de_aprendizaje_automatica": {
+                "minimo": min(a["tasa_de_aprendizaje"] for v in ajustes_limpio.values() for a in v),
+                "mediana": float(np.median([a["tasa_de_aprendizaje"] for v in ajustes_limpio.values() for a in v])),
+                "maximo": max(a["tasa_de_aprendizaje"] for v in ajustes_limpio.values() for a in v)},
+            "n_variables_por_pliegue": {str(k): v for k, v in n_variables_limpio.items()},
+            "segundos_de_variables_por_fold": t_variables_limpio,
+            "segundos_de_variables_mediana": float(np.median([t for v in t_variables_limpio.values() for t in v])),
+            "versiones": {"catboost": __import__("catboost").__version__,
+                          "imbalanced_learn": __import__("imblearn").__version__,
+                          "scikit_learn": __import__("sklearn").__version__},
+        }} if ajustes_limpio else {}),
         "segundos": {"contexto_de_paciente": round(t_contexto, 1),
                      "variables_m3": round(t_m3, 1) if t_m3 is not None else None,
                      "carga_de_caracteristicas_de_imagen": round(t_imagen, 1) if t_imagen is not None else None,
@@ -377,8 +437,9 @@ def main():
             "Las diferencias fold a fold no son independientes: los entrenamientos se solapan. "
             "El intervalo corregido por Nadeau y Bengio tiene en cuenta ese solape; el ingenuo, no. "
             "En el NNT80% SE menos es mejor: las victorias del modelo nuevo cuentan las diferencias "
-            "negativas. El tiempo de entrenamiento es el de fit, sin codificación ni predicción; en M3 incluye "
-            "el remuestreo y la parada interna."
+            "negativas. El tiempo de entrenamiento es el de fit, sin codificación ni predicción; en M3 y M3 "
+            "limpio incluye el remuestreo y la parada interna, y en M3 limpio no incluye las variables, que se "
+            "arman en cada pliegue y van aparte."
         ),
     }
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
@@ -391,7 +452,8 @@ def main():
         f"# Fase 4 — {n} − {b}, {len(semillas)} semillas × {args.n_splits} folds, conjunto de desarrollo",
         " · ".join(f"{m} = {DESCRIPCION[m]} ({resultado['modelos'][m]['n_variables']} variables)" for m in (b, n))
         + (" · M3 con los hiperparámetros publicados; el otro, con los de 2b" if "M3" in (b, n)
-           else " · hiperparámetros de 2b"),
+           else " · M3 limpio con los parámetros por defecto y la parada de M3; el otro, con los de 2b"
+           if "M3limpio" in (b, n) else " · hiperparámetros de 2b"),
     ]
     if reproduccion:
         lineas.append(f"{reproduccion['que_se_compara']} ({args.referencia}), fold a fold: {reproduccion['reproduce_fold_a_fold']}")
@@ -419,6 +481,14 @@ def main():
         lineas.append(f"M3: {resultado['m3']['variables']['n_variables']} variables, calculadas en "
                       f"{resultado['segundos']['variables_m3']} s · árboles por ajuste: mediana {a['mediana']}, "
                       f"mínimo {a['minimo']}, máximo {a['maximo']}")
+    if ajustes_limpio:
+        a = resultado["m3limpio"]
+        lineas.append(f"M3 limpio: {a['n_variables_por_pliegue']} (variables: pliegues) · árboles por ajuste: mediana "
+                      f"{a['arboles']['mediana']}, mínimo {a['arboles']['minimo']}, máximo {a['arboles']['maximo']} · "
+                      f"sin parar antes del tope de 1000: {a['ajustes_que_no_pararon_antes_del_tope']}/{a['de_ajustes']} · "
+                      f"tasa de aprendizaje automática: {a['tasa_de_aprendizaje_automatica']['minimo']:.4f} a "
+                      f"{a['tasa_de_aprendizaje_automatica']['maximo']:.4f} · variables por pliegue: mediana "
+                      f"{a['segundos_de_variables_mediana']} s")
     tf = resultado["segundos_de_entrenamiento_por_fold"]
     lineas.append("Entrenamiento por fold (fit), mediana: " + " · ".join(f"{m} {tf[m]['mediana']} s" for m in (b, n)))
     lineas.append("En el NNT80% SE menos es mejor. El intervalo ingenuo supone diferencias independientes; no lo son.")

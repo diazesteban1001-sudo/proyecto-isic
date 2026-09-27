@@ -14,8 +14,9 @@ La Fase 4 tiene fijados sus modelos y sus comparaciones (decisión del
 triaje, el contexto de paciente y las tres comparaciones principales, M2 − M1,
 M4 − M2 y M3 − M2 (`outputs/fase4-m2-vs-m1.json`, `outputs/fase4-m4-vs-m2.json`
 y `outputs/fase4-m3-vs-m2.json`). La variante secundaria M4b está corrida
-(`outputs/fase4-m4b-vs-m2.json`). El cierre de la fase queda pendiente de la
-persona.
+(`outputs/fase4-m4b-vs-m2.json`). También M3 limpio − M2, la corrida única de la
+regla de recomendación (`outputs/fase4-m3limpio-vs-m2.json`). El cierre de la
+fase queda pendiente de la persona.
 
 ## Cómo leer una puerta
 

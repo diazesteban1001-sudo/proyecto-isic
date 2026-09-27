@@ -206,6 +206,27 @@ comprobar su SHA-256.
 Necesita el intérprete de 2024 (`requisitos-interprete-2024.txt`, indicado con
 `PYTHON_GUION_ISIC`), y en `.venv` catboost 1.2.8 e imbalanced-learn 0.14.2.
 
+**M3 limpio** (`PLAN.md`, Fase 4, fijado el 2026-09-26) es M3 con tres cambios:
+- `variables_m3_en_pliegue` ajusta la imputación, el one-hot, el estandarizado,
+  el k-means y las medias por conglomerado solo con el pliegue de entrenamiento,
+  y los aplica a su validación;
+- no descarta las 22 columnas de la celda 24;
+- `ajustar_m3` con `PARAMETROS_LIMPIO` conserva la parada de M3 y deja el resto
+  del constructor de CatBoost por defecto.
+
+Como el one-hot se ajusta con el entrenamiento, una categoría que solo aparece
+en la validación no tiene columna, y ese pliegue queda con menos de 239
+variables.
+
+`scripts/test_m3_limpio.py`, con datos sintéticos, comprueba:
+- que cambiar las demás filas de validación no cambia el entrenamiento ni a un
+  paciente de validación, mientras que con M3 sí cambian;
+- que el lado de entrenamiento coincide con el M3 verificado;
+- que las 22 columnas no dependen de las que excluye el proyecto. Esto lo
+  comprueba también sobre una muestra real de desarrollo;
+- que el ajuste usa los valores por defecto y no ve las etiquetas de
+  validación.
+
 ## Comparaciones de la Fase 4 (2026-09-25)
 
 `scripts/fase4_comparar.py` hace una comparación principal de la Fase 4
@@ -233,6 +254,9 @@ desarrollo y los hiperparámetros de 2b, sin ajuste:
   publicados, con los parches de la especificación. Sus variables se calculan
   una vez; el ajuste, en cada fold, con el número de árboles elegido dentro del
   pliegue de entrenamiento. Se registran los árboles de cada ajuste.
+- **M3 limpio, desde el 2026-09-26:** sus variables se arman en cada fold. Se
+  registran los árboles, las iteraciones corridas y la tasa de aprendizaje que
+  elige CatBoost en cada ajuste.
 
 Por modelo mide pAUC, AUC, SEtop-15 y NNT80% SE, y el tiempo de entrenamiento
 por fold. Para cada métrica da nuevo − base con intervalo ingenuo y corregido, y

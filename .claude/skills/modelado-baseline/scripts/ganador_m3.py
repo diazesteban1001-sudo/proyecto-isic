@@ -109,6 +109,9 @@ SUBMUESTREO = 0.01  # celda 3: sampling_ratio = 0.01, el RandomUnderSampler de l
 # metric_period (aviso de CatBoost 1.2.8), así que eso no se reproduce.
 PARCHE_CPU = {"task_type": "CPU", "bootstrap_type": "Bayesian"}
 PLIEGUES_INTERNOS = 5
+# M3 limpio (PLAN.md, Fase 4, decisión de la persona del 2026-09-26): solo la parada
+# de M3; el resto de los parámetros del constructor, con su valor por defecto.
+PARAMETROS_LIMPIO = {"eval_metric": "AUC", "od_wait": 100, "use_best_model": True}
 
 
 def celdas_publicadas(ruta=NOTEBOOK):
@@ -225,14 +228,15 @@ def _media_y_desviacion_como_polars(x, grupos):
     return media, sd
 
 
-def variables_lectura(df, listas, group_col="patient_id"):
+def variables_lectura(df, listas, group_col="patient_id", medianas=None):
     """La celda 7 (read_data) sobre un DataFrame de pandas: las 34 numéricas con la
     edad imputada, las 42 derivadas, sus 76 z-scores dentro del paciente y los tres
-    conteos y sumas por paciente. No lee la etiqueta."""
+    conteos y sumas por paciente. No lee la etiqueta. Con `medianas`, imputa con
+    ellas en vez de con las de df (M3 limpio: las del pliegue de entrenamiento)."""
     base = df[listas["num_cols"]].astype(float).copy()
     for col in listas["num_cols"]:  # fill_nan(median) de la celda 7: en estos datos, solo la edad tiene NaN
         if base[col].isna().any():
-            base[col] = base[col].fillna(mediana_como_polars(base[col]))
+            base[col] = base[col].fillna(mediana_como_polars(base[col]) if medianas is None else medianas[col])
     base = pd.concat([base, derivadas(base)], axis=1)
     grupos = df[group_col]
     normas = {}
@@ -366,17 +370,19 @@ def remuestrear(x, y, semilla):
     ]).fit_resample(x, y)
 
 
-def ajustar_m3(x_tr, y_tr, grupos_tr, categoricas, semilla):
+def ajustar_m3(x_tr, y_tr, grupos_tr, categoricas, semilla, parametros=None):
     """CatBoost de M3 sobre el pliegue de entrenamiento. El publicado elige el número
     de árboles con el pliegue de validación (eval_set, use_best_model y od_wait);
     aquí nunca lo ve (parche 4, decisión de la persona del 2026-09-26). La parada
     temprana del publicado se hace sobre un 20 % del pliegue de entrenamiento: el
     primer pliegue de un StratifiedGroupKFold de 5, agrupado por paciente,
     estratificado y con la semilla externa. El remuestreo va solo en el resto, como
-    el publicado remuestrea el entrenamiento y no la evaluación."""
+    el publicado remuestrea el entrenamiento y no la evaluación. Con
+    parametros=PARAMETROS_LIMPIO, el ajuste de M3 limpio: la misma parada y el
+    mismo remuestreo, con los demás parámetros por defecto."""
     from catboost import CatBoostClassifier, Pool
-    parametros = {**PARAMETROS_CATBOOST, **PARCHE_CPU, "random_state": semilla,
-                  "verbose": False, "allow_writing_files": False}
+    base = {**PARAMETROS_CATBOOST, **PARCHE_CPU} if parametros is None else dict(parametros)
+    parametros = {**base, "random_state": semilla, "verbose": False, "allow_writing_files": False}
     interna = StratifiedGroupKFold(n_splits=PLIEGUES_INTERNOS, shuffle=True, random_state=semilla)
     itr, iva = next(interna.split(x_tr, y_tr, groups=grupos_tr))
     x_fit, y_fit = remuestrear(x_tr.iloc[itr], y_tr[itr], semilla)
@@ -384,3 +390,73 @@ def ajustar_m3(x_tr, y_tr, grupos_tr, categoricas, semilla):
     modelo = CatBoostClassifier(**parametros)
     modelo.fit(Pool(x_fit, y_fit, cat_features=categoricas), eval_set=evaluacion)
     return modelo
+
+
+def variables_m3_en_pliegue(df, tr, va, columnas_excluidas, group_col="patient_id", descartar_publicadas=False,
+                            ruta=NOTEBOOK):
+    """Las variables de M3 limpio (PLAN.md, Fase 4) para un pliegue: la imputación de
+    la edad, el one-hot, el estandarizado del LOF, el k-means y las medias por
+    conglomerado se ajustan solo con las filas de entrenamiento `tr` y se aplican a
+    las de entrenamiento y a las de validación `va`. Lo que se calcula dentro del
+    paciente —z-scores, conteos, sumas y el LOF de cada paciente— se calcula a cada
+    lado con sus propias filas: los pliegues agrupan por paciente. Sin
+    `descartar_publicadas`, no se quitan las columnas de la celda 24.
+    Devuelve (variables de tr, variables de va, categóricas, inventario)."""
+    if "target" in df.columns:
+        raise ValueError("variables_m3_en_pliegue no recibe la etiqueta.")
+    listas = listas_publicadas(ruta)
+    excluidas = set(columnas_excluidas)
+    categoricas = [c for c in listas["cat_cols"] if c not in excluidas]
+    d_tr, d_va = df.iloc[tr], df.iloc[va]
+    segundos = {}
+
+    t0 = time.perf_counter()
+    medianas = {c: mediana_como_polars(d_tr[c]) for c in listas["num_cols"]}
+    b_tr = variables_lectura(d_tr, listas, group_col, medianas)
+    b_va = variables_lectura(d_va, listas, group_col, medianas)
+
+    def texto(d):
+        return d[categoricas].astype(object).where(d[categoricas].notna(), "").astype(str)
+    enc = OneHotEncoder(sparse_output=False, dtype=np.int32, handle_unknown="ignore").fit(texto(d_tr))
+    nombres = [f"onehot_{i}" for i in range(len(enc.get_feature_names_out()))]
+    oh_tr = pd.DataFrame(enc.transform(texto(d_tr)), index=d_tr.index, columns=nombres).astype("category")
+    oh_va = pd.DataFrame(enc.transform(texto(d_va)), index=d_va.index, columns=nombres).astype("category")
+    segundos["lectura_y_one_hot"] = round(time.perf_counter() - t0, 1)
+
+    t0 = time.perf_counter()
+    top = listas["top_lof_features"]
+    escala = StandardScaler().fit(b_tr[top].to_numpy(dtype=float))
+    e_tr = escala.transform(b_tr[top].to_numpy(dtype=float))
+    e_va = escala.transform(b_va[top].to_numpy(dtype=float))
+    b_tr["of"] = lof_publicado(e_tr, d_tr[group_col])
+    b_va["of"] = lof_publicado(e_va, d_va[group_col])
+    segundos["lof"] = round(time.perf_counter() - t0, 1)
+
+    t0 = time.perf_counter()
+    km = KMeans(n_clusters=N_CONGLOMERADOS, random_state=SEMILLA_KMEANS, n_init=N_INIT_KMEANS).fit(e_tr)
+    et_tr, et_va = km.labels_, km.predict(e_va)
+    de_imagen = set(listas["de_imagen"])
+    cols = [c for c in listas["columns_for_cluster_culculations"] if c not in de_imagen]
+    g = b_tr[cols].groupby(et_tr, sort=False)
+    media, sd = g.mean(), g.std()
+
+    def por_conglomerado(b, et):
+        valores = (b[cols].to_numpy() - media.loc[et].to_numpy()) / sd.loc[et].to_numpy()
+        return pd.DataFrame(valores, index=b.index, columns=[f"{c}__cluster" for c in cols])
+    c_tr, c_va = por_conglomerado(b_tr, et_tr), por_conglomerado(b_va, et_va)
+    segundos["kmeans_y_conglomerado"] = round(time.perf_counter() - t0, 1)
+
+    norm_cols = [f"{c}_patient_norm" for c in listas["num_cols"] + listas["new_num_cols"]]
+    orden = (listas["num_cols"] + listas["new_num_cols"] + norm_cols + listas["special_cols"]
+             + nombres + ["of"] + list(c_tr.columns))
+    quitar = set(listas["columns_to_drop"]) if descartar_publicadas else set()
+    finales = [c for c in orden if c not in quitar]
+    cats = [c for c in finales if c in set(nombres)]
+    x_tr = pd.concat([b_tr, oh_tr, c_tr], axis=1)[finales]
+    x_va = pd.concat([b_va, oh_va, c_va], axis=1)[finales]
+    inventario = {"n_variables": len(finales), "n_categoricas": len(cats),
+                  "columns_to_drop_celda_24_quitadas": sorted(quitar & set(orden)),
+                  "excluidas_por_auditoria_de_fugas": [c for c in listas["num_cols"] + listas["cat_cols"]
+                                                       if c in excluidas],
+                  "segundos": segundos}
+    return x_tr, x_va, cats, inventario
