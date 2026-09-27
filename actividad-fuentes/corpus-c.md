@@ -147,9 +147,19 @@ Se detectaron los cuatro.
   De la fila 17 entran la portada y la página de evaluación. *Hasta ese mismo
   día las reglas entraban en `kurtansky-2024-kaggle.txt`, cuyo SHA-256
   empezaba por `a1fc592f8f472a07`.*
-- **Esta extracción no se puede rehacer desde el repositorio.** Las copias
-  locales no viajan con el repositorio, y el guion que hizo la extracción no se
-  versionó. Lo que la fija son los SHA-256 de la lista final.
+- **Cómo se rehace la extracción:** con `actividad-fuentes/extraer_corpus_c.py`.
+  - Escribe los 22 archivos en `~/Downloads/corpus-c`, o donde diga
+    `--salida`, y no sobrescribe una carpeta que ya existe.
+  - Al terminar, compara cada SHA-256 con la lista final.
+  - `--comprobar DIR` solo compara una carpeta ya extraída.
+  - Necesita las copias locales de `referencias/_texto-completo/`, que no viajan
+    con el repositorio. Si falta alguna, lo dice antes de escribir nada, y hay
+    que volver a obtenerla desde la URL de su ficha.
+  - Si una copia obtenida de nuevo difiere de la de 2026-09-27, la comparación
+    de SHA-256 lo señala.
+
+  *Hasta el 2026-09-27 el guion no estaba versionado, y esta nota decía que la
+  extracción no se podía rehacer desde el repositorio.*
 - **`referencias/slice3d-metadata-tbp-lv.md`** no entra. Es un extracto tomado
   con WebFetch (regla 6, novena clase), y el texto original de esa referencia
   ya está en la fila 5.
