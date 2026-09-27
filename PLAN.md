@@ -901,6 +901,11 @@ la vez, así que el resultado no dice cuál de los dos sesgos pesaba.
 
 Nada de eso cambia la corrida.
 
+**Modelo recomendado: decisión de la persona, 2026-09-26.** Regla aplicada: M3
+limpio − M2 en pAUC, corregido [0,0021; 0,0341], queda entero por encima de
+cero (`outputs/fase4-m3limpio-vs-m2.json`). El modelo recomendado es M3 limpio,
+y es el que se evalúa en el reservado. Queda fijado aquí antes de abrirlo.
+
 **Puerta.** Las tres comparaciones principales fijadas en la decisión de arriba,
 cada una con su intervalo corregido por Nadeau y Bengio: **M2 − M1**, **M4 − M2**
 y **el mejor de los modelos propios frente a M3**. Con ellas, la lista de lo que
