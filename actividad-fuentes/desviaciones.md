@@ -77,3 +77,41 @@ ninguna referencia**, y antes de generar la hoja de la pasada 1.
    - A se abstuvo. El texto de la abstención es su primera frase, completa y
      literal.
    - B y C no se abstuvieron.
+
+## 4. La hoja de la pasada 1 delataba el tratamiento por el formato (2026-09-27, 23:28 -0500)
+
+**Qué pasó.** La extracción copió cada campo con el marcado de su respuesta, y
+cada tratamiento marcaba distinto:
+
+| Tratamiento | DOI | Afirmaciones | Referencias |
+|---|---|---|---|
+| A | sin marca | rótulos en negrita | lista con viñetas, en varias líneas |
+| B | en negrita o como URL | negritas | cursivas |
+| C | entre comillas invertidas | — | — |
+
+La hoja de la pasada 1 dejaba ver el tratamiento sin leer el contenido. Es una
+pista que no venía de las respuestas, sino de cómo se extrajeron. El protocolo
+declara el ciego parcial solo porque quien clasifica conoce el corpus de C.
+
+**Qué se hizo.** Nadie había clasificado la hoja todavía.
+1. Se retiraron la hoja y la llave.
+2. Se limpió `respuestas.csv`:
+   - se quitaron los asteriscos de negritas y cursivas y las comillas
+     invertidas;
+   - se quitaron las viñetas de las referencias de A;
+   - los saltos de línea y los espacios repetidos se reducen a un espacio;
+   - en el campo DOI se quitó el prefijo `https://doi.org/`.
+
+   Comprobado: sin marcas ni espacios, cada campo es igual al anterior. Las
+   URL que forman parte del texto de una referencia se quedan.
+3. Los 15 id se volvieron a sortear, sin repetir ninguno de los anteriores.
+   Los anteriores habían salido junto a su tratamiento en la salida del guion
+   de extracción, y la hoja retirada los asociaba al formato.
+4. Se regeneró la pasada 1 con la semilla 1, como fija el protocolo. Se
+   comprobó que ningún campo de la hoja conserva marcas de formato.
+
+**Qué no cambia.** Las 15 referencias, su orden dentro de cada respuesta y el
+texto de cada campo. Las diferencias de contenido entre tratamientos se
+quedan, porque son parte de las respuestas: por ejemplo, A etiqueta sus
+referencias con «Título:» y «Autor:», y B las da en formato APA. Se declaran
+con el ciego parcial.
