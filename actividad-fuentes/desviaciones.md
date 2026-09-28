@@ -46,3 +46,34 @@ parámetros es un modelo más pequeño que Claude, y de otra familia. Lo que mid
 A vale para ese modelo, no para Claude ni para *"chat sin fuentes"* en general.
 Al comparar A con B y C, la ausencia de fuentes va mezclada con el tamaño y la
 familia del modelo, y el experimento no puede separar esos dos efectos.
+
+## 3. Reglas de extracción añadidas (2026-09-27, 23:22 -0500)
+
+**Por qué.** La sección «Qué se extrae de cada respuesta» del protocolo no
+alcanzó para decidir seis casos de la extracción, marcados como «duda» en
+`respuestas.csv`. La persona los decidió con estas reglas **antes de clasificar
+ninguna referencia**, y antes de generar la hoja de la pasada 1.
+
+1. **Una afirmación por referencia.** Si la respuesta no atribuye una afirmación
+   propia a cada referencia, la afirmación es el rótulo en negrita de su ítem.
+   Se aplica a las 5 referencias de A.
+2. **Referencias repetidas.** Si una referencia aparece varias veces, la
+   afirmación y el DOI se toman de la tabla «Cinco Referencias». Si ahí no hay
+   DOI, se toma el de la lista «References». Se aplica a B:
+   - Rotemberg et al.: el DOI de la tabla.
+   - Jamaludin & Kim: el DOI de la lista.
+   - Cassidy et al.: la afirmación de la tabla.
+
+   **2b.** Jamaludin & Kim ocupa dos filas de esa tabla. Se toma la afirmación
+   de la primera.
+3. **Qué es una referencia.** Es referencia lo que nombra un trabajo, por su
+   autor, su título o su DOI, y lo presenta como sustento.
+   - La figura sin autor de B no cuenta, y Haggenmüller et al. queda como
+     quinta referencia de B.
+   - Los conjuntos de datos que nombra C (ISIC 2017, HAM10000, BCN20000) son el
+     objeto de la afirmación, no su sustento, y Little et al. queda como quinta
+     referencia de C.
+4. **Abstención explícita.**
+   - A se abstuvo. El texto de la abstención es su primera frase, completa y
+     literal.
+   - B y C no se abstuvieron.
