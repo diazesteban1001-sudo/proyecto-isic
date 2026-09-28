@@ -28,3 +28,8 @@ graphify-out/
 # CLAUDE.md). En referencias/ se versiona solo su ficha; el texto va aqui, en
 # local, para comprobar citas caracter a caracter.
 referencias/_texto-completo/
+
+# Respuestas del experimento de la actividad «Nada sin fuente» cuyo texto no
+# autoriza redistribuirse (regla 3 de CLAUDE.md). Se versiona su ficha, en
+# actividad-fuentes/respuestas/; el texto completo va aquí, solo en local.
+actividad-fuentes/respuestas/_texto-completo/
