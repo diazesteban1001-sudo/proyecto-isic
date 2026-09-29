@@ -1,0 +1,26 @@
+10.1089/tmj.2023.0369
+10.1016/j.media.2021.102305
+10.34970/2024-slice-3d
+10.3390/diagnostics12081893
+10.1186/s12880-020-00534-8
+10.1016/j.patter.2023.100804
+10.1038/s41597-024-03743-w
+10.1038/s41746-025-02070-7
+10.1093/gigascience/gix020
+10.1111/jdv.18924
+10.1177/0272989X8900900307
+10.1016/j.ad.2023.11.018
+10.1023/A:1024068626366
+10.1111/srt.13607
+10.1093/gigascience/gix019
+10.1155/2018/1496941
+10.1002/sim.2103
+10.1038/s41591-025-03747-y
+10.1177/0962280217718866
+
+# Sin DOI: no van al cuadro de identificadores de Zotero; se añaden desde su URL.
+Contreras (2026): https://cuentadealtocosto.org/noticias/dia-mundial-del-melanoma-2026/
+Cuenta de Alto Costo (2025): https://cuentadealtocosto.org/noticias/dia-mundial-del-melanoma-cutaneo-2025/
+Kurtansky, Rotemberg, et al. (2024), competición de Kaggle: https://www.kaggle.com/competitions/isic-2024-challenge
+Kurtansky (2024), Challenge-2024-Metrics: https://github.com/ISIC-Research/Challenge-2024-Metrics
+Novoselskiy (2024), isic-2024: https://github.com/ilyanovo/isic-2024
