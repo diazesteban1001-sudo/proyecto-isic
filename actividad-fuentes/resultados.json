@@ -1,0 +1,166 @@
+{
+  "protocolo": "protocolo-experimento-v1.md",
+  "categorias": [
+    "no_existe",
+    "no_dice_eso",
+    "utilizable"
+  ],
+  "n_referencias": 15,
+  "por_tratamiento": {
+    "A": {
+      "pedidas": 5,
+      "entregadas": 5,
+      "faltaron": 0,
+      "se_abstuvo": true,
+      "texto_abstencion": "Lo siento, pero no puedo encontrar las referencias exactas solicitadas para la sobreestimación del desempeño de los clasificadores de lesiones de piel cuando se dividen los datos por imagen o por lesión en lugar de por paciente.",
+      "pasada_1": {
+        "no_existe": 5,
+        "no_dice_eso": 0,
+        "utilizable": 0
+      },
+      "pasada_2": {
+        "no_existe": 5,
+        "no_dice_eso": 0,
+        "utilizable": 0
+      },
+      "final": {
+        "no_existe": 5,
+        "no_dice_eso": 0,
+        "utilizable": 0
+      },
+      "utilizables_final": {
+        "k": 0,
+        "n": 5,
+        "proporcion": 0.0,
+        "wilson_95": [
+          0.0,
+          0.4345
+        ]
+      },
+      "solo_resumen": {
+        "pasada_1": 0,
+        "pasada_2": 0
+      },
+      "doi_erroneo": {
+        "pasada_1": 0,
+        "pasada_2": 0
+      }
+    },
+    "B": {
+      "pedidas": 5,
+      "entregadas": 5,
+      "faltaron": 0,
+      "se_abstuvo": false,
+      "texto_abstencion": null,
+      "pasada_1": {
+        "no_existe": 0,
+        "no_dice_eso": 2,
+        "utilizable": 3
+      },
+      "pasada_2": {
+        "no_existe": 0,
+        "no_dice_eso": 1,
+        "utilizable": 4
+      },
+      "final": {
+        "no_existe": 0,
+        "no_dice_eso": 2,
+        "utilizable": 3
+      },
+      "utilizables_final": {
+        "k": 3,
+        "n": 5,
+        "proporcion": 0.6,
+        "wilson_95": [
+          0.2307,
+          0.8824
+        ]
+      },
+      "solo_resumen": {
+        "pasada_1": 0,
+        "pasada_2": 1
+      },
+      "doi_erroneo": {
+        "pasada_1": 1,
+        "pasada_2": 1
+      }
+    },
+    "C": {
+      "pedidas": 5,
+      "entregadas": 5,
+      "faltaron": 0,
+      "se_abstuvo": false,
+      "texto_abstencion": null,
+      "pasada_1": {
+        "no_existe": 0,
+        "no_dice_eso": 3,
+        "utilizable": 2
+      },
+      "pasada_2": {
+        "no_existe": 0,
+        "no_dice_eso": 3,
+        "utilizable": 2
+      },
+      "final": {
+        "no_existe": 0,
+        "no_dice_eso": 3,
+        "utilizable": 2
+      },
+      "utilizables_final": {
+        "k": 2,
+        "n": 5,
+        "proporcion": 0.4,
+        "wilson_95": [
+          0.1176,
+          0.7693
+        ]
+      },
+      "solo_resumen": {
+        "pasada_1": 0,
+        "pasada_2": 0
+      },
+      "doi_erroneo": {
+        "pasada_1": 0,
+        "pasada_2": 0
+      }
+    }
+  },
+  "consistencia": {
+    "tabla_filas_pasada_1_columnas_pasada_2": {
+      "no_existe": {
+        "no_existe": 5,
+        "no_dice_eso": 0,
+        "utilizable": 0
+      },
+      "no_dice_eso": {
+        "no_existe": 0,
+        "no_dice_eso": 4,
+        "utilizable": 1
+      },
+      "utilizable": {
+        "no_existe": 0,
+        "no_dice_eso": 0,
+        "utilizable": 5
+      }
+    },
+    "coinciden": 14,
+    "no_coinciden": 1,
+    "no_coinciden_por_celda": {
+      "no_dice_eso -> utilizable": 1
+    },
+    "discrepancias": [
+      {
+        "id": "126",
+        "tratamiento": "B",
+        "pasada_1": "no_dice_eso",
+        "pasada_2": "utilizable",
+        "final": "no_dice_eso",
+        "motivo": "Tercera lectura de Claude Code, el 2026-09-29, sobre el texto completo en IEEE Xplore (CC BY 4.0). El DOI resuelve a https://ieeexplore.ieee.org/document/11579778, y el título, los autores y las páginas coinciden con Crossref. Las dos cifras están en el resumen: «This setup reaches 78.41%» y «However, under the leakage-prone protocol, this exact same pipeline yields 94.57%.». La afirmación presenta la caída de 94.57% a 78.41% como efecto de la partición y como la medida de la sobreestimación. En «Result and Discussion» la fuente dice otra cosa: «That headline reflected a single fortunate seed where the same uncorrected protocol, averaged over five seeds, yields between 87% and 89%, and removing the leakage brings this down to a range between 76% and 78%.» y «The originally reported figure therefore combined two distinct sources of inflation, which include approximately 5% to 7% of single-seed variance and approximately 11% of data leakage.». Con su alcance, el efecto del esquema de partición, la afirmación no se localiza: la fuente lo cifra en unos 11 puntos, no en la diferencia 94.57 − 78.41. Por eso es «existe pero no dice eso», como en la pasada 1. La pasada 2 la dio por utilizable apoyándose en el resumen, pero el protocolo manda usar el texto completo cuando está disponible. El DOI no es erróneo, y no es solo resumen."
+      }
+    ],
+    "kappa_cohen": 0.9,
+    "kappa_nota": "Dato secundario, sin intervalo ni prueba: con 15 referencias o menos es inestable."
+  },
+  "entre_tratamientos": "Sin pruebas de hipótesis, por el protocolo: las referencias de un tratamiento salen de una sola respuesta y no son independientes. Los intervalos valen para esta consulta, no para la herramienta en general.",
+  "avisos_de_protocolo": []
+}
