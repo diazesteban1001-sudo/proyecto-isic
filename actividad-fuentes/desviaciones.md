@@ -187,3 +187,30 @@ fuente que trata de duplicados.
   fija.
 
 **Qué no cambia.** El texto del protocolo; esta sección fija cómo se lee.
+
+## 6. Pasada 2: sin esperar 48 horas (2026-09-29)
+
+**Qué pasó.** La pasada 2 la hizo Claude Code en una sesión nueva. Se cerró
+con el commit «Actividad «Nada sin fuente»: pasada 2 clasificada», del
+2026-09-29 a las 15:38:30 (-0500). La pasada 1 se cerró con el commit
+«Actividad «Nada sin fuente»: pasada 1 clasificada», del 2026-09-29 a las
+15:09:34 (-0500). Las dos horas se comprobaron en el historial. Entre un commit
+y otro pasaron 28 minutos y 56 segundos, no 48 horas.
+
+**Por qué, según la persona.** Las 48 horas existen para que una persona olvide
+su primera clasificación. Una sesión nueva de Claude Code no recuerda la
+pasada 1, así que esperar no cumplía esa función.
+
+**Cambio respecto de la sección 5.** Aquella sección decía que las 48 horas se
+mantenían porque el protocolo las fija. Esta decisión la deja sin efecto.
+
+**Cómo se garantizó el ciego, según la persona.** A la sesión de la pasada 2 se
+le prohibió leer la pasada 1, la llave y el historial de git. Es una
+instrucción, no una barrera: los tres están en el repositorio, como ya
+advertía la sección 5. El commit de la pasada 2 no describe cómo se clasificó
+ni qué se abrió. Lo que dice este párrafo sobre el ciego lo declara la persona,
+y el repositorio no permite comprobarlo.
+
+**Efecto.** La consistencia entre pasadas mide cuánto varían dos sesiones de
+Claude Code ante la misma hoja y con la misma regla (sección 5). No mide cuánto
+coincide consigo misma una persona al cabo de 48 horas.
