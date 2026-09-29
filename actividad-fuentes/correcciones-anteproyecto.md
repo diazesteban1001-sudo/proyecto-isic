@@ -98,11 +98,15 @@ artificial:
   acceptable TPR"*
 
 **Qué hay que corregir.** Nada en el anteproyecto: la fuente dice lo que la
-frase le atribuye. Faltan dos cosas en el repositorio:
-- **En la ficha:** `referencias/yang-2019-two-way-partial-auc.md` localiza la
-  definición del área de dos vías, pero no la cita. Hay que añadir la segunda
-  cita de arriba, tomada del resumen publicado.
-- **En la trazabilidad:** la fila de esta frase pasa de PARCIAL a localizada
-  cuando la ficha tenga esa cita.
+frase le atribuye. Faltaban dos cosas en el repositorio, y las dos se hicieron
+el 2026-09-29:
+- **En la ficha:** `referencias/yang-2019-two-way-partial-auc.md` tiene ahora
+  la segunda cita de arriba, en la subsección «Del resumen de la versión
+  publicada».
+- **En la trazabilidad:** la fila de esta frase pasó de PARCIAL a localizada.
+  Sus tres citas se cotejaron con las copias locales del resumen publicado y
+  del preprint.
+
+*Hasta el 2026-09-29 esta entrada decía que las dos cosas faltaban.*
 
 **Corrección propuesta:** ninguna al anteproyecto.

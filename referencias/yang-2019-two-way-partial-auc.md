@@ -69,6 +69,22 @@ comparación:
 
 *"an synthetic" es así en el original.*
 
+### Del resumen de la versión publicada
+
+Resumen del artículo en *Statistical Methods in Medical Research* 28(1), tal
+como lo sirve PubMed. La copia local está en
+`referencias/_texto-completo/yang-2019-smmr-resumen-pubmed.txt`. El
+anteproyecto usa esta frase en la sección 2.2, para la definición del área de
+dos vías:
+
+> In this paper, a novel and intuitive performance measure, named as two-way
+> pAUC, is proposed, which directly quantifies partial area under ROC curve
+> with explicit restrictions on both TPR and FPR.
+
+*Añadida el 2026-09-29. Antes la ficha solo localizaba la definición, sin
+texto, y la frase del anteproyecto quedaba parcial en la trazabilidad
+(`actividad-fuentes/correcciones-anteproyecto.md`, entrada 2).*
+
 ## Localizadores del resto — sin texto
 
 - p. 2, Introducción: definición del *FPR pAUC* con límites `p1` y `p2`.
