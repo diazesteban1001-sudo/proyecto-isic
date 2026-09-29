@@ -214,3 +214,32 @@ y el repositorio no permite comprobarlo.
 **Efecto.** La consistencia entre pasadas mide cuánto varían dos sesiones de
 Claude Code ante la misma hoja y con la misma regla (sección 5). No mide cuánto
 coincide consigo misma una persona al cabo de 48 horas.
+
+## 7. Tercera lectura: quién la hizo y qué sabía (2026-09-29)
+
+**Qué se leyó.** Solo la referencia en que las dos pasadas no coinciden. Es 1
+de 15, con id 126 (Jamaludin y Kim, 2026): «existe pero no dice eso» en la
+pasada 1 y «utilizable» en la pasada 2. La clasificación y el motivo están en
+`tercera-lectura.csv`.
+
+**Quién la hizo.** Claude Code, a petición de la persona, en la misma sesión
+que construyó `respuestas.csv`.
+
+**Qué sabía quien leyó. No fue una lectura ciega.**
+- Esta sesión extrajo las respuestas y sabe de qué tratamiento sale cada
+  referencia.
+- Leyó las dos clasificaciones anteriores y sus notas antes de leer la fuente.
+- No abrió la llave. `analizar.py` la lee después.
+
+El protocolo no pide que la tercera lectura sea ciega, pero es la que da la
+clasificación final, así que se declara.
+
+**Cómo se leyó.**
+- Existencia: el DOI, contra doi.org y Crossref.
+- Afirmación: contra el texto completo en IEEE Xplore, leído con el navegador
+  integrado.
+- Las cuatro citas del motivo se comprobaron literales en el texto de la
+  página, con un control negativo.
+
+**Qué no cambia.** Las pasadas 1 y 2. La tercera lectura solo fija la
+clasificación final de la referencia discrepante.
