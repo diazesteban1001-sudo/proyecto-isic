@@ -115,3 +115,75 @@ texto de cada campo. Las diferencias de contenido entre tratamientos se
 quedan, porque son parte de las respuestas: por ejemplo, A etiqueta sus
 referencias con «Título:» y «Autor:», y B las da en formato APA. Se declaran
 con el ciego parcial.
+
+## 5. Pasada 1: quién clasificó, cómo, y cómo se lee «existe pero no dice eso» (2026-09-29)
+
+**Quién clasificó.** La pasada 1 la hizo Claude (Opus 5.5, en Claude Code), a
+petición de la persona. El protocolo no dice quién clasifica, pero «Las dos
+pasadas» mide cuánto coincide la clasificación consigo misma, así que supone el
+mismo clasificador en las dos.
+
+**Qué se abrió y qué no.**
+- No se abrieron la llave, `tratamientos.csv`, `respuestas.csv`, `respuestas/`
+  ni `corpus-c.md`.
+- Sí se leyeron las primeras 30 líneas de cuatro archivos de `referencias/`
+  (Little, Saeb, Kapoor y Cassidy), para saber si traían el texto completo. En
+  dos de ellos esas líneas incluían el comienzo de la sección de citas que usa
+  el proyecto. Se usaron además dos textos de `referencias/_texto-completo/`.
+- El ciego sigue siendo parcial, como declara el protocolo: quien clasificó
+  conoce el corpus de C.
+
+**Cómo se comprobó.**
+- Existencia: el DOI contra el servicio de resolución de doi.org y contra
+  Crossref, en lugar de pegarlo en el navegador. Si no resolvía, el título con
+  el primer autor en Google Scholar y en Crossref. La búsqueda de Scholar se
+  probó antes con dos trabajos que existen.
+- Afirmación: contra el texto completo de todas las que existen, tomado de
+  Europe PMC, de PMC o de la página de la editorial. Donde la editorial pedía
+  una verificación anti-bots, se leyó la versión publicada depositada en un
+  repositorio institucional. Ninguna quedó con solo el resumen.
+- Citas de las columnas ubicación y nota: comprobadas carácter a carácter contra
+  el texto leído, con un control negativo.
+
+**La ambigüedad.** El protocolo define «Existe pero no dice eso» y añade:
+*"Una afirmación sobre otro mecanismo (por ejemplo, duplicados de imagen en
+lugar de agrupación por paciente) o sobre otro dominio cuenta aquí."* La frase
+admite dos lecturas:
+1. El otro mecanismo o dominio se mide contra la consulta: una afirmación que la
+   fuente sí sostiene, pero sobre otro tema, va a «no dice eso».
+2. Se mide contra la fuente: la categoría solo compara la afirmación atribuida
+   con lo que dice la fuente.
+
+**Qué se decidió.** La persona eligió la segunda: «no dice eso» compara la
+afirmación atribuida con la fuente, no con la consulta. Si la fuente dice lo que
+se le atribuye, la referencia es «utilizable» aunque trate otro tema, y la falta
+de pertinencia a la consulta queda en la nota. El ejemplo del protocolo se lee
+entonces como una afirmación sobre agrupación por paciente atribuida a una
+fuente que trata de duplicados.
+
+**Orden de los hechos, que se declara.**
+- Claude clasificó primero con la primera lectura, marcó el caso como duda y
+  preguntó antes de cerrar la pasada.
+- La persona decidió después de ver la clasificación. Conocía el efecto de cada
+  lectura sobre los conteos, pero no la llave, así que la decisión no pudo
+  favorecer a ningún tratamiento.
+- La decisión cambió la categoría de algunas referencias. Cuáles y cuántas no se
+  dice aquí, porque la pasada 2 no debe saberlo; está en la hoja de la pasada 1.
+- La pasada se cerró con el commit «Actividad «Nada sin fuente»: pasada 1
+  clasificada», del 2026-09-29 a las 15:09:34 (-0500). Esta sección se escribió
+  después.
+
+**Efecto sobre la pasada 2.**
+- Se clasifica con la segunda lectura, para que las diferencias entre pasadas
+  vengan de la clasificación y no de la regla.
+- La hace también Claude, en una conversación nueva, sin abrir `pasada-1.csv`,
+  la hoja de texto de la pasada 1 ni la conversación de la pasada 1.
+  `pasada-1.csv` está versionada, así que esto es una instrucción, no una
+  barrera.
+- Límite: Claude no guardó nada de esta pasada en su memoria entre
+  conversaciones. Las 48 horas no cumplen para Claude la función de olvido que
+  tendrían para una persona: la repetición mide cuánto varía el clasificador
+  ante la misma hoja, no cuánto recuerda. Se mantienen porque el protocolo las
+  fija.
+
+**Qué no cambia.** El texto del protocolo; esta sección fija cómo se lee.
