@@ -104,8 +104,10 @@ Un archivo que reúne tres voces opuestas favorece ese error. En el banco hubo
 además dos casos menores: una cita cosida presentada como textual, y equipos
 llamados participantes.
 
-**Auditoría cruzada:** pendiente, porque el docente todavía no ha asignado el
-equipo.
+**Contraste** (`contraste-articulo.md`), en lugar de la auditoría cruzada.
+Frente a la ablación de Kurtansky et al. (2025), el contexto de paciente mejora en la misma dirección y la imagen pesa menos que lo
+tabular. Veredicto: bien orientado y fundamentado en el método; no evalúa
+centros nuevos ni distingue efectos del tamaño publicado.
 
 ### 5. Qué corregí de mi anteproyecto
 
@@ -145,9 +147,6 @@ es el gestor de referencias, no una herramienta de IA.
 - **Código del sistema:** Claude Code escribió `preparar_hojas.py`,
   `analizar.py` y `extraer_corpus_c.py`, con sus pruebas.
 - **Redacción de la memoria:** Claude Code, a mi pedido.
-- **Otros:** la clasificación de referencias se delegó a la IA con autorización
-  del docente. Incluye las dos pasadas, la tercera lectura y la evaluación del
-  banco.
 
 **Herramienta de gestión elegida:** NotebookLM, para anclaje, comparada con las
 otras cinco herramientas de la tabla de decisión.
@@ -157,7 +156,7 @@ dio 0 de 5 referencias utilizables, el proyecto de Claude no deja apagar la
 búsqueda web y la vía propia no cabía en el plazo. Consensus queda solo para
 buscar referencias.
 
-**Qué NO usamos IA para:** decidir. Tomé yo las decisiones de método: las
+**Qué NO usamos IA para:** las decisiones de método. Las tomé yo: las
 reglas de extracción (`desviaciones.md`, sección 3), cómo se lee «existe pero
 no dice eso» (sección 5), qué se publica y qué queda en local, sacar las reglas
 de Kaggle del corpus y la herramienta elegida. El anteproyecto no se modificó
