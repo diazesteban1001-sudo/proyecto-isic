@@ -992,6 +992,26 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
 - [x] Preparar demo en vivo: `informe/demo.html`, generada solo por
       `generar_demo.py`, abre por doble clic sin servidor y muestra cada cifra
       con su archivo y campo de origen al pasar el cursor
+- [ ] **Deuda de reproducibilidad: el comando con que se corrieron
+      `fase4_comparar.py` y `tiempo_inferencia.py`.**
+      - **Qué falta:** ningún archivo versionado trae el comando exacto que
+        produjo las cinco `outputs/fase4-*.json` ni `outputs/tiempo-inferencia.json`.
+      - **Dónde no está:** las salidas no guardan su invocación, y el `SKILL.md`
+        de `modelado-baseline` describe los dos scripts sin comando.
+      - **Lo más cercano** son los bloques «Uso:» de sus docstrings, que son
+        plantillas:
+        - el de `fase4_comparar.py` está completo solo para M1 → M2, abrevia con
+          «...» los de M4, M3 y M3 limpio, y no tiene ninguno para M4b;
+        - el de `tiempo_inferencia.py` trae los siete argumentos obligatorios,
+          pero dice «con caffeinate» sin incluirlo en la línea.
+      - **Mensajes de commit:** dicen «en segundo plano con caffeinate», sin el
+        comando.
+      - **También:** `evaluar_repetido.py`, que produce
+        `outputs/validacion-repetida.json`, está en la misma situación.
+      - **Qué se buscó (2026-10-02):** con `git grep`, en todos los archivos
+        versionados, «fase4_comparar», «tiempo_inferencia», «--base», «--nuevo»
+        y «caffeinate». También en las claves de las salidas y en los mensajes de
+        commit.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
