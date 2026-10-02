@@ -209,12 +209,14 @@ parte, y todavía no tienen lugar en la ruta:
 
 ```
 ├── CLAUDE.md              # bitácora de decisiones y contexto del proyecto
+├── PLAN.md                 # la ruta de trabajo: fases, condición de cierre y decisiones
 ├── .claude/skills/         # las seis carpetas de código, cada una con sus scripts y su SKILL.md
 ├── data/                   # no versionado
 ├── outputs/                # salidas verificables: de aquí debe salir cada cifra del informe
-├── referencias/            # fuentes primarias citadas, versionadas
-├── informe/                # borrador.md, informe-final.docx, demo.html
-└── docs/                   # copia de la demo publicada por GitHub Pages
+├── referencias/            # fuentes citadas (texto, extracto o ficha, con su procedencia) y registros de búsqueda
+├── informe/                # anteproyecto y su conversor a PDF, borrador del informe y su versión Word, casos de fallo y demo
+├── docs/                   # copia de la demo publicada por GitHub Pages
+└── actividad-fuentes/      # actividad «Nada sin fuente» del curso, con su propio índice
 ```
 
 `docs/index.html` no se edita nunca a mano: lo escribe `generar_demo.py`
