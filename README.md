@@ -20,21 +20,26 @@ eficiencia computacional del modelo. Esas tres señales, declaradas con
 premios reales, son la línea base de lo que la contraparte necesita —
 no solo lo que pidió en el leaderboard.
 
-## Qué hace el sistema
+## Método
 
-Un único flujo orquestado en Claude Code, con cinco etapas, cada una con un rol:
+El análisis se reparte en seis carpetas de código. Cinco son de
+instrumentos, que miden y reportan, cada uno en sus propios archivos de
+`outputs/`; la sexta, la de síntesis, interpreta a partir de esos archivos,
+redacta el informe y genera la demo.
 
-| Skill | Función |
-|---|---|
-| `eda-diagnostico` | Perfila el dataset: tipos, faltantes, desbalance, estructura de grupos por paciente |
-| `diseno-validacion` | Construye y audita la partición cruzada agrupada por paciente |
-| `auditoria-de-fugas` | Chequeos estructurales + escaneo de columnas con señal univariada sospechosa |
-| `modelado-baseline` | Entrena y evalúa niveles de referencia con la métrica oficial |
-| `sintesis-consultoria` | Lee los cuatro reportes anteriores y redacta el informe final |
+| Carpeta | Papel | Qué hace |
+|---|---|---|
+| `eda-diagnostico` | Instrumento | Perfila los datos: tipos, faltantes, desbalance y estructura de las lesiones por paciente |
+| `diseno-validacion` | Instrumento | Sella el conjunto reservado; construye y audita la partición cruzada agrupada por paciente |
+| `auditoria-de-fugas` | Instrumento | Chequeos estructurales y escaneo de columnas con señal univariada sospechosa |
+| `modelado-baseline` | Instrumento | Entrena y compara los modelos con la métrica oficial y los ejes de triaje, y mide el tiempo de inferencia |
+| `extraccion-imagen` | Instrumento | Extrae las variables de imagen con DINOv2, sin reentrenarlo |
+| `sintesis-consultoria` | Síntesis | Redacta el informe y genera la demo desde `outputs/`, y señala las cifras que no tienen respaldo en un archivo |
 
-Las primeras cuatro miden y reportan; la última interpreta. Ningún
-resultado del informe aparece si no está trazado hasta un archivo en
-`outputs/`.
+Hoy el informe y la demo todavía no usan las salidas de la Fase 4 de
+`PLAN.md`, la de la imagen ni la del tiempo de inferencia: entran cuando se reescriba el
+informe. La regla que gobierna el informe: ninguna cifra existe si no está
+en un archivo de `outputs/`.
 
 ## Hallazgos principales hasta ahora
 
@@ -139,17 +144,45 @@ renderizándola con todo el tráfico bloqueado, no solo leyendo el código.
 Las dos copias —esa y la publicada— las escribe `generar_demo.py` en la
 misma corrida, así que no pueden desincronizarse.
 
-## Cómo correrlo
+## Cómo reproducirlo
 
-```bash
-# Requiere Claude Code y Python 3
-git clone <url-del-repo>
-cd proyecto-isic
-claude   # lee CLAUDE.md automáticamente al arrancar
-```
+Los datos no se versionan. Son los de
+[la competencia ISIC 2024 en Kaggle](https://www.kaggle.com/competitions/isic-2024-challenge/overview)
+y van en `data/`: `train-metadata.csv`, `test-metadata.csv` y
+`train-image.hdf5`, que llega comprimido.
 
-Los datos (`data/`) no están versionados — se descargan por separado
-desde Kaggle (ver `CLAUDE.md` para el procedimiento).
+Cada carpeta de código está en `.claude/skills/`, con sus scripts y su
+descripción en `SKILL.md`. Tres scripts del modelado
+—`evaluar_repetido.py`, `fase4_comparar.py` y `tiempo_inferencia.py`— no
+tienen registrado el comando con que se corrieron; está anotado como
+pendiente.
+
+El orden importa:
+
+- Primero se sella el conjunto reservado, con
+  `diseno-validacion/scripts/sellar_reservado.py`. Después, los
+  instrumentos leen su lista de pacientes: la extracción de imagen, para
+  separar los dos conjuntos; los demás, para quedarse solo con el de
+  desarrollo.
+- La auditoría de fugas va antes del modelado, que se niega a correr sin
+  ella.
+- En el modelado, `evaluar_repetido.py` va antes de
+  `sensibilidad_repetida.py`, que exige su salida.
+- La extracción de imagen va antes de los modelos con imagen.
+- La síntesis va al final, y en ella el verificador va antes de la demo,
+  que lee su salida.
+
+El tiempo de inferencia se midió con Python 3.11.9, y en el mismo archivo
+están las versiones de los paquetes de cada modelo
+(`outputs/tiempo-inferencia.json > declaraciones`); las de la extracción de
+imagen están en `outputs/extraccion-imagen.json > software`.
+
+Tres pruebas comparan con código de 2024 del organizador o del ganador, y
+lo ejecutan en un intérprete aparte: se indica con la variable de entorno
+`PYTHON_GUION_ISIC` y lleva las versiones de
+`.claude/skills/modelado-baseline/requisitos-interprete-2024.txt`. La que
+compara con el guion del organizador necesita además una copia local que
+no se versiona, así que en un clon nuevo esa comparación no corre.
 
 ## Qué falta
 
@@ -176,9 +209,9 @@ parte, y todavía no tienen lugar en la ruta:
 
 ```
 ├── CLAUDE.md              # bitácora de decisiones y contexto del proyecto
-├── .claude/skills/         # las 5 skills
+├── .claude/skills/         # las seis carpetas de código, cada una con sus scripts y su SKILL.md
 ├── data/                   # no versionado
-├── outputs/                # salidas verificables de cada skill
+├── outputs/                # salidas verificables: de aquí debe salir cada cifra del informe
 ├── referencias/            # fuentes primarias citadas, versionadas
 ├── informe/                # borrador.md, informe-final.docx, demo.html
 └── docs/                   # copia de la demo publicada por GitHub Pages
