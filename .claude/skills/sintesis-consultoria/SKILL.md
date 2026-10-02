@@ -105,6 +105,56 @@ puede ser una cifra legítima que no viene de outputs/ (ej. "cinco
 skills", "393 positivos" citado dos veces con redondeo distinto), pero
 la revisión la hace una persona, no el script.
 
+**La tolerancia de redondeo depende de cómo está escrita la cifra.** Con
+decimales, admite media unidad de su último dígito: «0,1451» tiene que estar
+entre 0,14505 y 0,14515, y «0,14», entre 0,135 y 0,145. Sin decimales, sea
+recuento o porcentaje, tiene que coincidir exacta: «401.059» con 401059,
+«99%» con 99. `--tolerancia` impone en su lugar un margen fijo para todas, y
+la salida declara el modo en `modo_tolerancia`. *Hasta el 2026-10-02 el
+margen por defecto era 0,01, el 5 % de la escala del pAUC: el README pasaba
+con 0,1451 y 0,1331 cuando `outputs/` ya decía 0,1398 y 0,1326.* Control:
+`scripts/test_tolerancia_decimales.py`.
+
+**Límite que queda, medido.** El verificador busca cada cifra en todo el
+corpus, no en el campo que el texto cita. Sobre el `outputs/` del 2026-10-02,
+con 2.767 valores distintos en el corpus, pasarían por azar:
+
+- de los enteros del 1 al 200, 93 de 200 (46,5 %);
+- de los valores de cuatro decimales entre 0,0001 y 0,0499, 304 de 499
+  (60,9 %);
+- de los valores de cuatro decimales entre 0,0500 y 0,2000, 382 de 1.501
+  (25,4 %).
+
+Con el margen fijo de 0,01, los dos últimos eran el 100 %. Caso real, en el
+`README.md` de ese día: «±0,0055 frente a ±0,0173», la ventaja de
+estabilidad de 2b que `CLAUDE.md` retiró en su hallazgo 2, sigue pasando.
+El README la atribuye a los niveles 2b y 1 de `modelado-baseline.json`, cuyo
+`pauc_std` dice hoy 0,018 y 0,009, en ese orden. Lo que la respalda son
+diferencias por pliegue de otra comparación:
+
+- 0,0055: `fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.pauc.diferencias_nuevo_menos_base[24]`,
+  y también `….auc.diferencias_nuevo_menos_base[24]` y `….auc.media`;
+- 0,0173: `fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.pauc.diferencias_nuevo_menos_base[12]`
+  y `….auc.diferencias_nuevo_menos_base[28]`.
+
+Cómo rehacer las tres fracciones, desde la raíz del repositorio:
+
+```bash
+.venv/bin/python -c "
+import importlib.util as u
+s=u.spec_from_file_location('v','.claude/skills/sintesis-consultoria/scripts/verificar_trazabilidad.py');v=u.module_from_spec(s);s.loader.exec_module(v)
+P,Q=v.cargar_valores_permitidos('outputs/')
+f=lambda ts:sum(v.tiene_respaldo(v.candidatos(t),False,P,Q) for t in ts)
+print(len(P),f([str(n) for n in range(1,201)]),f([f'0,{k:04d}' for k in range(1,500)]),f([f'0,{k:04d}' for k in range(500,2001)]))
+"
+```
+
+Salida sobre el `outputs/` del 2026-10-02: `2767 93 304 382`. Con otro
+`outputs/` da otros números.
+
+**El verificador señala; que una cifra pase no prueba que salga del campo
+que se cita.**
+
 **No todo `outputs/` es corpus.** La lista `FUERA_DEL_CORPUS`, en el
 propio script, declara los archivos en los que no se busca respaldo, cada
 uno con su motivo: `holdout-pacientes.json`, los recuentos del conjunto
@@ -256,9 +306,15 @@ Reglas, idénticas a las del informe escrito:
   "numeros_sin_respaldo": [
     {"valor": str, "contexto": str, "linea_aprox": int}, ...
   ],
-  "tolerancia_redondeo": float
+  "modo_tolerancia": "decimales_escritos" | "fija",
+  "tolerancia_redondeo": float | null
 }
 ```
+
+`tolerancia_redondeo` solo tiene valor en el modo `fija`, el de
+`--tolerancia`. En `decimales_escritos` es `null`, porque cada cifra lleva la
+suya. *Hasta el 2026-10-02 no existía `modo_tolerancia`, y
+`tolerancia_redondeo` valía 0,01 salvo que se pasara otro valor.*
 
 ## No interpretes de más
 

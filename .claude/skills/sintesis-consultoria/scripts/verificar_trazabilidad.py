@@ -9,11 +9,16 @@ No decide si un número está bien citado en contexto — solo señala
 cuáles no tienen respaldo exacto (con tolerancia) en ningún archivo de
 outputs/. La revisión de cada señal la hace una persona.
 
+La tolerancia de cada cifra es media unidad de su último dígito escrito:
+"0,1451" admite ±0,00005 y "0,14", ±0,005. Una cifra sin decimales, sea
+recuento o porcentaje, tiene que coincidir exacta: "401.059" con 401059,
+"99%" con 99. Con --tolerancia se usa en su lugar un margen fijo para
+todas. La salida declara el modo en `modo_tolerancia`.
+
 Uso:
     python verificar_trazabilidad.py --borrador informe/borrador.md \
                                       --outputs-dir outputs/ \
-                                      --out outputs/sintesis-verificacion \
-                                      --tolerancia 0.01
+                                      --out outputs/sintesis-verificacion
 """
 
 import argparse
@@ -42,15 +47,25 @@ def candidatos(crudo):
     ("401.059" son cuatrocientos un mil) pero el anexo de trazabilidad cita
     los valores crudos del JSON ("0.098" es un decimal). No se adivina cuál
     es: se generan las dos lecturas y basta con que una tenga respaldo. El
-    script es un filtro, no un árbitro."""
+    script es un filtro, no un árbitro.
+
+    Cada lectura sale como (valor, tolerancia de redondeo). Con decimales, la
+    tolerancia es media unidad del último dígito: "401.059" leído como decimal
+    admite ±0,0005. Sin decimales es cero: "401059" tiene que estar tal cual.
+    Media unidad en los enteros sería ±0,5, y con los miles de valores del
+    corpus eso respalda por azar casi cualquier recuento: 78 por un NNT de
+    77,58. Los decimales se cuentan sobre el texto y no sobre el float, que
+    pierde los ceros finales: "0,140" son tres."""
     limpio = crudo.rstrip("%").rstrip(".,").replace(",", ".")
     lecturas = {limpio, MILES.sub("", limpio)}
     valores = []
     for lectura in lecturas:
         try:
-            valores.append(float(lectura))
+            valor = float(lectura)
         except ValueError:
-            pass
+            continue
+        decimales = len(lectura.partition(".")[2])
+        valores.append((valor, 0.5 * 10 ** -decimales if decimales else 0.0))
     return valores
 
 # Números triviales que casi siempre aparecen sin venir de outputs/
@@ -230,7 +245,7 @@ def extraer_numeros_del_borrador(texto):
     return encontrados
 
 
-def tiene_respaldo(valores, es_porcentaje, permitidos, permitidos_pct, tolerancia):
+def tiene_respaldo(lecturas, es_porcentaje, permitidos, permitidos_pct, tolerancia_fija=None):
     """¿Alguna lectura del token tiene respaldo en outputs/?
 
     El signo "%" del token decide en qué espacio se compara. Esto es
@@ -239,17 +254,29 @@ def tiene_respaldo(valores, es_porcentaje, permitidos, permitidos_pct, toleranci
     de redondeo, y con cientos de floats entre 0 y 1 eso equivale a aceptar
     cualquier porcentaje que caiga a menos de un punto porcentual de
     cualquier valor del corpus. El control se aflojaba al crecer la base de
-    datos — la dirección exacta en la que un verificador no puede fallar."""
-    if es_porcentaje:
-        return any(_respalda_porcentaje(v, permitidos, permitidos_pct, tolerancia)
-                   for v in valores)
-    return any(_respalda_directo(v, permitidos, tolerancia) for v in valores)
+    datos — la dirección exacta en la que un verificador no puede fallar.
+
+    La vía directa tuvo el mismo defecto hasta el 2026-10-02: la tolerancia
+    por defecto, 0,01 fija, es el 5 % de la escala del pAUC, y 0,1451
+    quedaba respaldado por 0,1398. Desde entonces cada lectura usa su propia
+    tolerancia —media unidad si tiene decimales, cero si no—, en las dos
+    vías, salvo que se pase `tolerancia_fija` (--tolerancia). EXACTO absorbe
+    el error de representación del float: sin él, 0,2 frente a 0,15 quedaría
+    fuera por 1e-17. Control: test_tolerancia_decimales.py."""
+    for valor, propia in lecturas:
+        tolerancia = propia + EXACTO if tolerancia_fija is None else tolerancia_fija
+        if es_porcentaje:
+            if _respalda_porcentaje(valor, permitidos, permitidos_pct, tolerancia):
+                return True
+        elif _respalda_directo(valor, permitidos, tolerancia):
+            return True
+    return False
 
 
 def _respalda_directo(valor, permitidos, tolerancia):
     """Un número sin "%" se compara solo contra sí mismo, con la tolerancia
     de redondeo. Sin reescalados: si el informe escribe 0,1451 el corpus
-    tiene que tener 0,1451, no 14,51."""
+    tiene que tener 0,1451, no 14,51 — ni 0,1398."""
     return any(abs(valor - p) <= tolerancia for p in permitidos)
 
 
@@ -278,8 +305,16 @@ def main():
     ap.add_argument("--borrador", required=True)
     ap.add_argument("--outputs-dir", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--tolerancia", type=float, default=0.01)
+    ap.add_argument(
+        "--tolerancia",
+        type=float,
+        default=None,
+        help="Margen fijo para todas las cifras. Sin él, cada cifra admite media "
+        "unidad de su último dígito escrito, y una sin decimales tiene que "
+        "coincidir exacta.",
+    )
     args = ap.parse_args()
+    modo = "decimales_escritos" if args.tolerancia is None else "fija"
 
     with open(args.borrador, encoding="utf-8") as f:
         texto = f.read()
@@ -301,7 +336,7 @@ def main():
         # declarada y se reporta aparte (ver PORCENTAJES_DE_METODO).
         if es_porcentaje:
             motivo = next((m for v, m in PORCENTAJES_DE_METODO.items()
-                           if any(abs(x - v) <= EXACTO for x in valores)), None)
+                           if any(abs(x - v) <= EXACTO for x, _ in valores)), None)
             if motivo:
                 excluidos_metodo.append({"valor": crudo, "motivo": motivo,
                                          "contexto": contexto, "linea_aprox": linea})
@@ -318,6 +353,8 @@ def main():
         "numeros_con_respaldo_en_outputs": con_respaldo,
         "numeros_sin_respaldo": sin_respaldo,
         "porcentajes_de_metodo_excluidos": excluidos_metodo,
+        "modo_tolerancia": modo,
+        # Solo con --tolerancia; en el modo por defecto cada cifra lleva la suya.
         "tolerancia_redondeo": args.tolerancia,
         "archivos_fuera_del_corpus": archivos_fuera,
         "campos_declarados_como_porcentaje_en_outputs": len(valores_pct),
@@ -331,7 +368,11 @@ def main():
     lineas = []
     lineas.append(f"# Verificación de trazabilidad — {args.borrador}")
     lineas.append(f"Números encontrados en el borrador: {len(encontrados)}")
-    lineas.append(f"Con respaldo exacto en outputs/ (tolerancia {args.tolerancia}): {con_respaldo}")
+    if args.tolerancia is None:
+        criterio = "tolerancia: media unidad del último dígito escrito; exacta sin decimales"
+    else:
+        criterio = f"tolerancia fija {args.tolerancia}, por --tolerancia"
+    lineas.append(f"Con respaldo exacto en outputs/ ({criterio}): {con_respaldo}")
     lineas.append(f"SIN respaldo — revisar uno por uno: {len(sin_respaldo)}")
     for s in sin_respaldo[:10]:
         lineas.append(f"  - línea ~{s['linea_aprox']}: \"{s['valor']}\" en «...{s['contexto']}...»")
