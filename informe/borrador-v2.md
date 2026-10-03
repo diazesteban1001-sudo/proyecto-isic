@@ -191,3 +191,121 @@ Por eso los tiempos solo comparan estos modelos entre sí, en este equipo, y
 no se comparan con los de la competencia, que usó otro subconjunto y otro
 equipo.
 <!-- F: PLAN.md, Fase 6, «Qué no se afirma»; CLAUDE.md, hallazgo 9 -->
+
+## Datos y validación
+
+<!-- Sección de informe/borrador-v2.md. Mismas convenciones que «Método»: cada
+     comentario «F:» da la fuente de lo que lo precede, y «LOCAL» marca lo que
+     se contrasta con referencias/_texto-completo/. -->
+
+### Los datos
+
+Los datos son la metadata del reto: una fila por lesión y 55 columnas, con
+las mediciones que el software de la fotografía corporal total calcula sobre
+cada lesión, datos del paciente y, solo en el conjunto de entrenamiento, el
+diagnóstico.
+<!-- F: outputs/eda-diagnostico.json > fuente.n_columnas y columnas_solo_en_train; referencias/slice3d-metadata-tbp-lv.md (las tbp_lv_* las computa el software sobre la captura) -->
+El archivo de prueba que publica el reto es un marcador de posición, sin
+casos reales, así que no hay contra qué medir un resultado final
+independiente fuera de lo que este proyecto aparte.
+<!-- F: outputs/eda-diagnostico.json > test_is_placeholder -->
+
+### El conjunto reservado
+
+Antes de volver a medir nada, se apartó el 20% de los pacientes —no de las
+filas—, estratificado por centro y por tener al menos una lesión maligna, con
+semilla 2026, y se selló.
+<!-- F: PLAN.md, Fase 1, «Qué se hace» y «Decisiones de la persona sobre el conjunto reservado (2026-09-25)» -->
+Ningún estrato quedó vacío: todos los centros tienen al menos un paciente con
+lesión maligna a cada lado.
+<!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -->
+Desde entonces, todas las mediciones de este informe son del conjunto de
+desarrollo, y ningún modelo se ha evaluado sobre el reservado.
+<!-- F: PLAN.md, Fase 1, «Estado»; outputs/*.json de las mediciones > datos.conjunto = "desarrollo" -->
+
+El reservado no es ajeno a lo que se decidió antes de apartarlo, con todos
+los datos: qué columnas se excluyen —salvo las dos de procedencia, decididas
+después del sellado—, qué niveles de referencia se comparan, y los
+hiperparámetros y las columnas descartadas de la solución ganadora.
+<!-- F: informe/anteproyecto.md, sección 4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y «Decisión de la persona sobre las columnas de procedencia (2026-09-25)»; commits «Fase 1: sellar el conjunto reservado» (2026-09-25 18:07) y «auditoria-de-fugas: columnas de procedencia» (2026-09-25 18:35) -->
+Tampoco al diseño de las variables de la solución ganadora, que siguen M2 y
+M3 limpio y que se publicó sin ningún conjunto reservado.
+<!-- F: CLAUDE.md, hallazgo 8, «Salvedad para la Fase 5»; PLAN.md, Fase 5, «Salvedad de M2» -->
+
+### El conjunto de desarrollo
+
+El conjunto de desarrollo tiene 318.229 lesiones de 833 pacientes.
+<!-- F: outputs/eda-diagnostico.json > estructura_grupos.n_filas y .n_grupos -->
+Solo 317 lesiones son malignas, el 0,0996%, y solo 207 pacientes tienen
+alguna.
+<!-- F: outputs/eda-diagnostico.json > desbalance_target.conteos y .pct_positivos; outputs/diseno-validacion.json > n_grupos_positivos -->
+Cada paciente aporta entre 1 y 6.267 lesiones, con una mediana de 245.
+<!-- F: outputs/eda-diagnostico.json > estructura_grupos.filas_por_grupo.min, .max y .mediana -->
+
+Entre las variables que se usan para modelar, faltan valores en tres: la
+edad, en el 0,851% de las filas; el sexo, en el 3,179%, y la zona
+anatómica, en el 1,808%.
+<!-- F: outputs/eda-diagnostico.json > faltantes.age_approx.pct, .sex.pct y .anatom_site_general.pct -->
+Las demás columnas con faltantes están entre las que se excluyen, más abajo.
+<!-- F: outputs/eda-diagnostico.json > faltantes (lesion_id, iddx_2 a iddx_5, mel_mitotic_index, mel_thick_mm); outputs/modelado-baseline.json > columnas_excluidas -->
+
+### La partición: por paciente
+
+La validación cruzada agrupa por paciente: cada paciente queda entero de un
+lado de cada pliegue.
+<!-- F: outputs/diseno-validacion.json > esquema.group_col y fuga_de_grupo_detectada -->
+En la partición de la semilla 42, cada pliegue de validación tiene entre 166
+y 168 pacientes y entre 63 y 64 lesiones malignas.
+<!-- F: outputs/diseno-validacion.json > esquema.seed y por_fold[*].n_val_grupos y .n_val_positivos -->
+
+Lo que evita esa agrupación se midió. Una partición aleatoria por filas, con
+la misma semilla, habría dejado a 824 pacientes, el 98,92%, con lesiones a
+los dos lados.
+<!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.n_grupos_con_fuga y .pct_grupos_con_fuga -->
+Con lesiones del mismo paciente en entrenamiento y en validación, la métrica
+sale inflada.
+<!-- F: CLAUDE.md, «Sobre el problema», «Nota metodológica clave» -->
+
+### La auditoría de columnas
+
+Antes de modelar, la auditoría de fugas revisa las columnas, y el modelado se
+niega a correr sin su reporte.
+<!-- F: .claude/skills/modelado-baseline/SKILL.md, requisitos; informe/casos-de-fallo.md, «Caso B» -->
+Quedan fuera de los modelos 15 columnas, por cuatro motivos:
+<!-- F: outputs/modelado-baseline.json > columnas_excluidas -->
+
+- **11 no existen al predecir.** El conjunto de prueba no las trae. Entre
+  ellas están la propia etiqueta, la taxonomía diagnóstica y dos medidas que
+  solo existen tras la biopsia.
+  <!-- F: outputs/auditoria-de-fugas.json > columnas_solo_en_train; CLAUDE.md, «Sobre el problema», «Tercera nota» -->
+- **Una es constante:** `image_type`.
+  <!-- F: outputs/auditoria-de-fugas.json > columnas_constantes -->
+- **Una identifica la fila:** `isic_id`.
+  <!-- F: outputs/auditoria-de-fugas.json > columnas_identificador -->
+- **Dos describen el centro y la licencia de la imagen, no la lesión:**
+  `attribution` y `copyright_license`. En un centro nuevo no aportan
+  información.
+  <!-- F: outputs/auditoria-de-fugas.json > columnas_procedencia y motivo_columnas_procedencia -->
+  Su exclusión se sostiene por razón de uso; los resultados muestran que no
+  cambia el desempeño de forma distinguible.
+  <!-- F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->
+
+La auditoría también mide, para cada una de las 41 columnas que no son
+identificadores, constantes ni exclusivas del entrenamiento, ni `patient_id`,
+su AUC por sí sola fuera de muestra, con la partición agrupada por paciente.
+Ninguna llega al umbral de sospecha de 0,9; la más alta es `tbp_lv_H`, con
+0,8045.
+<!-- F: outputs/auditoria-de-fugas.json > univariado (41 entradas, ninguna sospechosa), umbral_auc_sospechoso, univariado[0]; .claude/skills/auditoria-de-fugas/SKILL.md, description; .claude/skills/auditoria-de-fugas/scripts/audit_leakage.py, excluir_del_univariado -->
+
+De las preguntas abiertas de la auditoría, la única que no contestan los
+motivos de arriba es `tbp_lv_nevi_confidence`, por su nombre, aunque sí está
+en el conjunto de prueba.
+<!-- F: outputs/auditoria-de-fugas.json > preguntas_abiertas[0]; CLAUDE.md, «Cuarta nota» -->
+El artículo del conjunto de datos la define como *"a convolutional neural
+network classifier estimated probability that the lesion is a nevus"*, así
+que la calcula el software sobre la imagen y está disponible al predecir. Se
+usa. Su AUC por sí sola es 0,6422.
+<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1, cita literal; CLAUDE.md, «Cuarta nota — tbp_lv_nevi_confidence»; outputs/auditoria-de-fugas.json > univariado (tbp_lv_nevi_confidence.auc_oof) -->
+Queda una salvedad: el clasificador se entrenó con *"approximately 57,000
+lesions"*, y el artículo no dice si se solapan con las de este conjunto.
+<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2 -->
