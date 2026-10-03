@@ -484,3 +484,104 @@ triaje, no en la pAUC. Frente a M2, de los otros tres solo M3 limpio se
 distingue, y solo en la pAUC y en el AUC estándar; en los ejes de triaje no se
 distingue ninguno de los tres.
 <!-- F: PLAN.md, Fase 6 («La tabla final responde la pregunta del cliente entera, con sus tres ejes»); F21, F42, F4b y F3L > C.*.IC -->
+
+## Recomendación
+
+<!-- Sección de informe/borrador-v2.md. Mismas convenciones que las
+     anteriores; las abreviaturas F21, F42, F4b y F3L son las de «Resultados». -->
+
+### Qué se recomienda
+
+**Al cliente se le recomienda M3 limpio:** la parte tabular reproducida de la
+solución ganadora, sin los dos sesgos conocidos a su favor.
+<!-- F: «Resultados», «El modelo recomendado»; PLAN.md, Fase 4, «Modelo recomendado: decisión de la persona, 2026-09-26» -->
+Se eligió con una regla fijada antes de correr la comparación: el intervalo
+corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.
+<!-- F: PLAN.md, Fase 4, «Regla de recomendación»; F3L > C.pauc.IC -->
+
+**No se recomienda añadir las variables de imagen** tal como se probaron. No
+mejoraron ninguna métrica de forma distinguible, y al predecir cuestan 14,5156
+y 14,6321 segundos por cada 1.000 lesiones, frente a 0,0435 de M3 limpio.
+<!-- F: F42 y F4b > C.*.IC; outputs/tiempo-inferencia.json > tiempos.M4, tiempos.M4b y tiempos.M3limpio (mediana_segundos_por_1000_lesiones) -->
+
+**Y se recomienda no leer solo la pAUC.** El contexto de paciente no se nota
+en ella y sí en los dos ejes de triaje: la sensibilidad top-15 y el NNT80% SE.
+<!-- F: F21 > C.pauc.IC, C.setop15.IC y C.nnt80.IC -->
+
+### Qué se puede afirmar
+
+- En el conjunto de desarrollo, con validación cruzada repetida y el
+  intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.
+  <!-- F: F3L > C.pauc.IC y C.auc.IC -->
+- El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80%
+  SE.
+  <!-- F: F21 > C.setop15.IC y C.nnt80.IC -->
+- Las variables de imagen de DINOv2, como variables sueltas o apiladas, no
+  mejoran de forma distinguible ninguna de las métricas.
+  <!-- F: F42 y F4b > C.*.IC -->
+- Una partición por filas habría dejado al 98,92% de los pacientes a los dos
+  lados de la validación.
+  <!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga -->
+
+### Qué no se puede afirmar
+
+- **Que M3 limpio sea mejor en los ejes de triaje.** En la sensibilidad top-15
+  y en el NNT80% SE no se distingue de M2.
+  <!-- F: F3L > C.setop15.IC y C.nnt80.IC -->
+- **Cuál de los dos sesgos de M3 pesaba.** M3 limpio cambia tres cosas a la vez.
+  <!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->
+- **Cuánto rinde M3 limpio fuera del conjunto de desarrollo.** El conjunto
+  reservado no se ha abierto. Cuando se abra, la estimación principal seguirá
+  siendo la validación cruzada repetida, y la recomendación no cambiará por su
+  resultado.
+  <!-- F: PLAN.md, Fase 5, «Especificación» -->
+- **Nada sobre otras formas de usar la imagen.** Solo se probaron las
+  variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron
+  fuera.
+  <!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada) -->
+- **Que este trabajo supere o no a la solución ganadora.** Su evaluación usó
+  otros datos y otras particiones.
+  <!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
+- **Nada clínico.** Los modelos ordenan lesiones por sospecha; no dicen qué
+  tiene un paciente ni qué hacer con él. Son evidencia para una decisión
+  humana.
+  <!-- F: CLAUDE.md, «Guardarraíles del agente», 4 -->
+
+## Limitaciones
+
+- **La clase negativa no está confirmada.** Las lesiones malignas tienen
+  patología; de las benignas, *"most never underwent a skin biopsy"*. La
+  mayoría de los negativos son lesiones que un dermatólogo no consideró
+  preocupantes, no lesiones confirmadas como sanas.
+  <!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, línea 306, cita literal; CLAUDE.md, guardarraíl 4 -->
+- **Las imágenes tienen una resolución óptica comparable a la de un teléfono
+  inteligente.** Así las describe el artículo del conjunto de datos:
+  *"comparable in optical resolution to smartphone images"*. El resultado
+  de la imagen se limita a estas imágenes y a este extractor.
+  <!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, línea 99, cita literal; la última frase acota el alcance (interpretación) -->
+- **Muchas comparaciones a la vez.** Las cinco comparaciones M2 − M1, M4 − M2,
+  M4b − M2, M3 − M2 y M3 limpio − M2 se leen en cuatro métricas cada una, sin
+  corregir por multiplicidad, y el intervalo del NNT80% SE de M2 − M1 queda al
+  límite del cero.
+  <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC -->
+- **La corrección de la varianza es aproximada.** Nadeau y Bengio la derivan
+  para divisiones aleatorias independientes, y aquí se aplica a una validación
+  por pliegues.
+  <!-- F: «Método», «Cómo se compara»; referencias/nadeau-bengio-2003-t-corregido.md (LOCAL) -->
+- **El NNT80% SE se calcula con una lectura propia**, porque el organizador no
+  publica script para él.
+  <!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->
+- **El conjunto reservado no es del todo independiente.** No es ajeno a las
+  decisiones tomadas antes de sellarlo ni al diseño de las variables de la
+  solución ganadora, que siguen M2 y M3 limpio.
+  <!-- F: «Datos y validación», «El conjunto reservado»; PLAN.md, Fase 5, «Salvedad de M2» -->
+- **Los tiempos son de un solo equipo**, con DINOv2 en la GPU y los modelos
+  tabulares en la CPU. Solo comparan estos modelos entre sí.
+  <!-- F: «Método», «Cómo se mide el tiempo de inferencia»; CLAUDE.md, hallazgo 9 -->
+- **Dos supuestos sin verificar.** No se sabe si el clasificador de nevus que
+  produce `tbp_lv_nevi_confidence` se entrenó con lesiones de este conjunto. Y
+  nada comprueba la versión del código de DINOv2; solo sus pesos, por hash.
+  <!-- F: referencias/slice3d-metadata-tbp-lv.md, nota 2; .claude/skills/extraccion-imagen/SKILL.md, «Límites conocidos» -->
+- **Un mecanismo sin medir.** No se midió por qué el gradient boosting sin
+  balancear queda bajo el azar de la pAUC; el informe solo afirma que queda.
+  <!-- F: CLAUDE.md, Pendientes, «el mecanismo del nivel 2a está sin medir» -->
