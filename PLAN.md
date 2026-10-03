@@ -1150,6 +1150,30 @@ desempeño de forma distinguible: se sostiene por razón de uso. Además, es el
 segundo resultado de una sola partición que no sobrevive a la validación
 repetida.
 
+**Decisiones sobre la demo (2026-10-02, de la persona).** Tomadas sobre el
+inventario de lo desfasado en la demo publicada.
+- **Menciones del agente.** Se quitan el comentario CSS «cadena de skills» y el
+  comentario JS con el 0,0013. Los nombres de archivo y carpeta
+  (`eda-diagnostico.md`, etc.) se quedan, con el mismo criterio que el README.
+- **Cifras.**
+  - Desarrollo y reservado se muestran por separado; no se suman.
+  - Las malignas del reservado no se muestran hasta la Fase 5.
+  - El 384 aparece solo dentro del texto de `extraccion-imagen.json >
+    caracteristica`.
+  - Los recuentos derivados, como «50 de 50», van solo si el informe los
+    afirma, y hoy no lo hace.
+  - El 0,164 y el 0,695 quedan fuera.
+  - La Fase 5 se describe sin cifras.
+  - M3 sin limpiar queda fuera de la tabla.
+  - El porcentaje de positivos va con 4 decimales.
+- **Texto.** Todo el texto fijo nuevo sale de frases ya verificadas de
+  `informe/borrador-v2.md`. Donde ninguna sirva queda un hueco, y los huecos
+  los redacta la persona.
+- **Verificación.** La demo muestra los números de un
+  `outputs/sintesis-verificacion.json` regenerado sobre
+  `informe/borrador-v2.md`, con su `.md` al hacer clic. La explicación de cada
+  cifra señalada espera al anexo.
+
 ---
 
 ## Decisiones
