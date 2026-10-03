@@ -1143,9 +1143,12 @@ la ventaja de 2b. Sus cifras salen de
 `outputs/sensibilidad-procedencia-repetida.json`, y para que el informe pueda
 citarlas, el verificador de trazabilidad deja de excluir ese archivo (commit
 «Verificador: la exclusión de sensibilidad, por archivo»). Sigue excluido
-`outputs/sensibilidad-procedencia.json`. Motivo: es una sola partición,
-superada por la validación repetida, y por la regla de `CLAUDE.md` ninguna
-conclusión comparativa se escribe desde una sola partición.
+`outputs/sensibilidad-procedencia.json`, de una sola partición. Motivo: el
+informe tiene que justificar la exclusión de `attribution` y
+`copyright_license`, y este hallazgo muestra que esa exclusión no cambia el
+desempeño de forma distinguible: se sostiene por razón de uso. Además, es el
+segundo resultado de una sola partición que no sobrevive a la validación
+repetida.
 
 ---
 
