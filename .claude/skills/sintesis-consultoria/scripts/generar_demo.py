@@ -286,7 +286,7 @@ def construir_datos(outputs_dir, leidos):
     m21, m42, m4b, m32, m3l = (C[e] for e, _ in COMPARACIONES)
     afirmar(contiene_cero(m21["pauc"]["ic"]) and not contiene_cero(m21["setop15"]["ic"])
             and not contiene_cero(m21["nnt80"]["ic"]) and m21["setop15"]["media"] > 0 and m21["nnt80"]["media"] < 0,
-            "M2 se distingue de M1 en los dos ejes de triaje, no en la pAUC")
+            "M2 se distingue de M1 en las dos métricas de triaje, no en la pAUC")
     afirmar(all(contiene_cero(m42[k]["ic"]) for k in METRICAS)
             and all(m42[k]["media"] < 0 for k in ("pauc", "auc", "setop15")) and m42["nnt80"]["media"] > 0,
             "Ningún intervalo excluye el cero, y la estimación puntual es peor en las cuatro métricas")
@@ -1072,7 +1072,7 @@ const paneles = document.getElementById("paneles");
 document.getElementById("pie-paneles").innerHTML = esc(D.nota_nnt);
 // borrador-v2.md, l. 382-384, 386-388, 402-403, 405-406, 421-423, 433-434, 449-450 y 452-454.
 document.getElementById("lectura-4").innerHTML = L([
-  `<b>M2 − M1.</b> Quien solo lea la pAUC concluye que el contexto de paciente no aporta; los ejes de triaje que el cliente declaró dicen lo contrario. ` +
+  `<b>M2 − M1.</b> Quien solo lea la pAUC concluye que el contexto de paciente no aporta; la sensibilidad top-15, que el cliente premió aparte, y el NNT80% SE dicen lo contrario. ` +
   `Son cuatro métricas sobre una misma comparación, y el intervalo del NNT queda al límite del cero. ` +
   `<i>Interpretación, no medición:</i> las variables relativas al paciente ordenan las lesiones dentro de cada paciente, que es lo que mide la sensibilidad top-15, ` +
   `mientras que la pAUC ordena todas las lesiones juntas.`,
@@ -1096,9 +1096,9 @@ document.getElementById("tabla-ejes").innerHTML =
     `<td>${tiempoT(f.modelo)}</td></tr>`).join("") + `</tbody>`;
 // borrador-v2.md, l. 480-485 y 463-465.
 document.getElementById("texto-5").innerHTML = P([
-  `La tabla responde la pregunta con sus tres ejes: la métrica principal, la sensibilidad por paciente y el costo. ` +
-  `Son medias y medianas; las diferencias, con sus intervalos, están arriba. M2 se distingue de M1 en los dos ejes de triaje, no en la pAUC. ` +
-  `Frente a M2, de los otros tres solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar; en los ejes de triaje no se distingue ninguno de los tres.`,
+  `La tabla responde la pregunta con sus tres ejes —la métrica principal, la sensibilidad por paciente y el costo— y añade el NNT80% SE, la segunda métrica de triaje. ` +
+  `Son medias y medianas; las diferencias, con sus intervalos, están arriba. M2 se distingue de M1 en las dos métricas de triaje, no en la pAUC. ` +
+  `Frente a M2, de los otros tres solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar; en las métricas de triaje no se distingue ninguno de los tres.`,
   `M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo por cada ${milLesiones} lesiones. ` +
   `Lo caro, con diferencia, es la imagen, y los modelos con imagen no mejoraron la métrica principal de forma distinguible.`]);
 
@@ -1111,7 +1111,7 @@ document.getElementById("texto-6").innerHTML = P([
   `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`,
   `<b>No se recomienda añadir las variables de imagen</b> tal como se probaron. No mejoraron ninguna métrica de forma distinguible, ` +
   `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio.`,
-  `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en los dos ejes de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
+  `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
 // borrador-v2.md, l. 513-524.
 document.getElementById("se-puede").innerHTML = L([
   `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
@@ -1120,7 +1120,7 @@ document.getElementById("se-puede").innerHTML = L([
   `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`]);
 // borrador-v2.md, l. 528-547.
 document.getElementById("no-se-puede").innerHTML = L([
-  `<b>Que M3 limpio sea mejor en los ejes de triaje.</b> En la sensibilidad top-15 y en el NNT80% SE no se distingue de M2.`,
+  `<b>Que M3 limpio sea mejor en las métricas de triaje.</b> En la sensibilidad top-15 y en el NNT80% SE no se distingue de M2.`,
   `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
   `<b>Cuánto rinde M3 limpio fuera del conjunto de desarrollo.</b> El conjunto reservado no se ha abierto. Cuando se abra, la estimación principal ` +
   `seguirá siendo la validación cruzada repetida, y la recomendación no cambiará por su resultado.`,
