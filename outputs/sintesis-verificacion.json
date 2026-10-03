@@ -1,150 +1,164 @@
 {
-  "numeros_en_borrador": 344,
-  "numeros_con_respaldo_en_outputs": 298,
+  "numeros_en_borrador": 352,
+  "numeros_con_respaldo_en_outputs": 277,
   "numeros_sin_respaldo": [
     {
-      "valor": "15",
-      "contexto": "mpletos y un `.md` de resumen acotado a 15 líneas. Y",
-      "linea_aprox": 99
+      "valor": "7,500",
+      "contexto": "emio propio:** *\"Two Secondary Prizes: $7,500 each for",
+      "linea_aprox": 32
     },
     {
-      "valor": "200",
-      "contexto": "anizador y se verificó la corrección en 200 casos ale",
-      "linea_aprox": 149
+      "valor": "2025",
+      "contexto": ", como la describen   Kurtansky et al. (2025): *\"weigh",
+      "linea_aprox": 45
     },
     {
-      "valor": "80",
-      "contexto": "partición aleatoria a nivel de fila —el 80/20 por de",
-      "linea_aprox": 237
+      "valor": "2025",
+      "contexto": "- **NNT80% SE**, de Kurtansky et al. (2025): *\"the a",
+      "linea_aprox": 57
     },
     {
-      "valor": "20",
-      "contexto": "tición aleatoria a nivel de fila —el 80/20 por defec",
-      "linea_aprox": 237
+      "valor": "2003",
+      "contexto": ", con la corrección de Nadeau y Bengio (2003): la vari",
+      "linea_aprox": 81
     },
     {
-      "valor": "57.000",
-      "contexto": "tículo no indica si las aproximadamente 57.000 lesiones",
-      "linea_aprox": 329
+      "valor": "242",
+      "contexto": "que el artículo deriva la fórmula», p. 242 (LOCAL) -",
+      "linea_aprox": 89
     },
     {
-      "valor": "0,44",
-      "contexto": "hipotético de 0,10 queda en la posición 0,44 de esa es",
-      "linea_aprox": 361
+      "valor": "24",
+      "contexto": "e descartan las 22 columnas de la celda 24 del noteb",
+      "linea_aprox": 111
     },
     {
-      "valor": "11",
-      "contexto": "umnas presentes solo en entrenamiento | 11 | `eda-di",
-      "linea_aprox": 648
+      "valor": "384",
+      "contexto": "da 24 del notebook. | | M4 | M2 más las 384 variables",
+      "linea_aprox": 112
     },
     {
-      "valor": "385",
-      "contexto": "igieron: un promedio redondeado a \"casi 385\" cuando l",
-      "linea_aprox": 752
-    },
-    {
-      "valor": "85",
-      "contexto": "medida es 384,89 `[T7]`, y un \"menos de 85 positivos",
-      "linea_aprox": 753
-    },
-    {
-      "valor": "15",
-      "contexto": "á en `outputs/*.json` | |---|---|---| | 15 líneas |",
-      "linea_aprox": 767
-    },
-    {
-      "valor": "200",
-      "contexto": "d medida: ningún script la produce. | | 200 casos | §",
-      "linea_aprox": 768
-    },
-    {
-      "valor": "80",
-      "contexto": "ción, no un resultado del modelado. | | 80/20 | §5.3",
-      "linea_aprox": 769
-    },
-    {
-      "valor": "20",
-      "contexto": "n, no un resultado del modelado. | | 80/20 | §5.3 |",
-      "linea_aprox": 769
-    },
-    {
-      "valor": "57.000",
-      "contexto": "o un parámetro del diseño adoptado. | | 57.000 lesiones",
-      "linea_aprox": 770
-    },
-    {
-      "valor": "0,44",
-      "contexto": "arado. No procede de este proyecto. | | 0,44 | §7.1 |",
-      "linea_aprox": 771
+      "valor": "384,",
+      "contexto": "egresión logística balanceada sobre las 384, y esa pun",
+      "linea_aprox": 113
     },
     {
       "valor": "11",
-      "contexto": "delo del proyecto obtuvo ese valor. | | 11 columnas",
-      "linea_aprox": 772
+      "contexto": "line.json > columnas_excluidas -->  - **11 no existe",
+      "linea_aprox": 277
+    },
+    {
+      "valor": "30,55",
+      "contexto": "73] (46 de 50; 10 de 10); - NNT80% SE: −30,55 lesiones",
+      "linea_aprox": 378
+    },
+    {
+      "valor": "60,89",
+      "contexto": "SE: −30,55 lesiones por cada maligna, [−60,89; −0,20] (",
+      "linea_aprox": 378
+    },
+    {
+      "valor": "384",
+      "contexto": "## La imagen no justifica su costo  Las 384 variables",
+      "linea_aprox": 393
+    },
+    {
+      "valor": "0,0263",
+      "contexto": "caracteristica -->  - pAUC: −0,0065, [−0,0263; 0,0133]",
+      "linea_aprox": 397
+    },
+    {
+      "valor": "19,90",
+      "contexto": "de 50; 0 de 10); - NNT80% SE: +11,24, [−19,90; 42,37].",
+      "linea_aprox": 399
+    },
+    {
+      "valor": "384",
+      "contexto": "cia» --> *Interpretación, no medición:* 384 variables",
+      "linea_aprox": 408
+    },
+    {
+      "valor": "3,87,",
+      "contexto": "032] (22 de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10;",
+      "linea_aprox": 418
+    },
+    {
+      "valor": "25,10",
+      "contexto": "de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10; 17,35].",
+      "linea_aprox": 418
+    },
+    {
+      "valor": "0,0365",
+      "contexto": "stingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726],",
+      "linea_aprox": 430
+    },
+    {
+      "valor": "12,62,",
+      "contexto": "0,0181, [−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29;",
+      "linea_aprox": 431
+    },
+    {
+      "valor": "49,29",
+      "contexto": "−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29; 24,05].",
+      "linea_aprox": 431
+    },
+    {
+      "valor": "0,695",
+      "contexto": "r sin recortes de imagen obtuvo 0,164 y 0,695 en la eva",
+      "linea_aprox": 438
+    },
+    {
+      "valor": "20,06,",
+      "contexto": "0,0227, [−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74;",
+      "linea_aprox": 447
+    },
+    {
+      "valor": "49,74",
+      "contexto": "−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74; 9,61]. <",
+      "linea_aprox": 447
     }
   ],
   "porcentajes_de_metodo_excluidos": [
     {
       "valor": "80%",
       "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
-      "contexto": "restringida a sensibilidad superior al 80%, y justif",
-      "linea_aprox": 34
+      "contexto": "arcial bajo la curva ROC por encima del 80% de sensib",
+      "linea_aprox": 12
     },
     {
       "valor": "80%",
       "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
-      "contexto": "os de esta sección usan el **pAUC sobre 80% de sensib",
-      "linea_aprox": 348
+      "contexto": "o con el que la sensibilidad llega   al 80%, y el NNT",
+      "linea_aprox": 63
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
-      "contexto": "excede su tamaño. - Un intervalo *t* al 95% sobre esa",
-      "linea_aprox": 454
+      "contexto": "ecida solo si su intervalo corregido al 95% no contie",
+      "linea_aprox": 96
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
-      "contexto": "nza de Nadeau y Bengio, el intervalo al 95% va de **−",
-      "linea_aprox": 499
-    },
-    {
-      "valor": "80%",
-      "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
-      "contexto": "r, no una verdad.** Kaggle evalúa sobre 80% de sensib",
-      "linea_aprox": 537
-    },
-    {
-      "valor": "88%",
-      "motivo": "umbral de TPR del esquema de premios ISIC (cifra externa, no usada)",
-      "contexto": "premios del propio organizador ISIC usa 88% `[E7]` so",
-      "linea_aprox": 538
-    },
-    {
-      "valor": "95%",
-      "motivo": "nivel de confianza de los intervalos (convención, no medición)",
-      "contexto": "de 0,0125 `[T56]`; pero el intervalo al 95%   corregi",
-      "linea_aprox": 578
-    },
-    {
-      "valor": "95%",
-      "motivo": "nivel de confianza de los intervalos (convención, no medición)",
-      "contexto": ".desviacion` | | T57 | Intervalo *t* al 95% ingenuo s",
-      "linea_aprox": 696
-    },
-    {
-      "valor": "95%",
-      "motivo": "nivel de confianza de los intervalos (convención, no medición)",
-      "contexto": "ervalo_t_95` | | T58 | Intervalo *t* al 95% corregido",
-      "linea_aprox": 697
-    },
-    {
-      "valor": "88%",
-      "motivo": "umbral de TPR del esquema de premios ISIC (cifra externa, no usada)",
-      "contexto": "ios del organizador ISIC evalúa *\"above 88% true posi",
-      "linea_aprox": 718
+      "contexto": "ase», y su intervalo es el corregido al 95%. Los plie",
+      "linea_aprox": 324
     }
   ],
-  "tolerancia_redondeo": 0.01,
-  "campos_declarados_como_porcentaje_en_outputs": 27
+  "modo_tolerancia": "decimales_escritos",
+  "tolerancia_redondeo": null,
+  "archivos_fuera_del_corpus": [
+    {
+      "archivo": "holdout-pacientes.json",
+      "motivo": "Recuentos del conjunto reservado. No son mediciones del informe, y el conjunto reservado no se toca hasta la evaluación final."
+    },
+    {
+      "archivo": "sensibilidad-procedencia.json",
+      "motivo": "Análisis de sensibilidad de una sola partición (semilla 42), superado por sensibilidad-procedencia-repetida.json. Por la regla de CLAUDE.md (hallazgo 3), ninguna conclusión comparativa se escribe desde una sola partición, así que no respalda cifras del informe."
+    },
+    {
+      "archivo": "sintesis-verificacion.json",
+      "motivo": "La salida de este mismo script. Sus recuentos describen una verificación anterior del borrador, no mediciones; en el corpus, el borrador quedaría respaldado por su propia verificación."
+    }
+  ],
+  "campos_declarados_como_porcentaje_en_outputs": 16
 }
