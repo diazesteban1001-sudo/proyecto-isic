@@ -6,7 +6,7 @@ sintesis-consultoria.
 Extrae todo número presente en el borrador del informe y lo compara
 contra el conjunto de valores numéricos que aparecen en outputs/*.json.
 No decide si un número está bien citado en contexto — solo señala
-cuáles no tienen respaldo exacto (con tolerancia) en ningún archivo de
+cuáles no tienen respaldo (con tolerancia) en ningún archivo de
 outputs/. La revisión de cada señal la hace una persona.
 
 La tolerancia de cada cifra es media unidad de su último dígito escrito:
@@ -70,7 +70,9 @@ def candidatos(crudo):
 
 # Números triviales que casi siempre aparecen sin venir de outputs/
 # (numeración de secciones, años, "5 skills", etc.) — se listan aparte,
-# no se descartan en silencio.
+# en `numeros_en_contextos_omitidos`, no se descartan en silencio. *Hasta el
+# 2026-10-02 este comentario lo decía, pero el código los saltaba sin
+# registrarlos: sobre informe/borrador-v2.md faltaban 48 de 352.*
 IGNORAR_CONTEXTOS = ["2024", "2026", "Nivel 0", "Nivel 1", "Nivel 2"]
 
 
@@ -332,9 +334,11 @@ def main():
 
     sin_respaldo = []
     excluidos_metodo = []
+    omitidos = []
     con_respaldo = 0
     for valores, crudo, contexto, linea in encontrados:
         if any(ig in contexto for ig in IGNORAR_CONTEXTOS):
+            omitidos.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea})
             continue
 
         es_porcentaje = crudo.endswith("%")
@@ -355,11 +359,21 @@ def main():
         else:
             sin_respaldo.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea})
 
+    # Cada número cae en uno solo de los cuatro grupos. Si no suman el total,
+    # alguno se perdió sin registrarse, como los omitidos hasta el 2026-10-02.
+    agrupados = con_respaldo + len(sin_respaldo) + len(excluidos_metodo) + len(omitidos)
+    if agrupados != len(encontrados):
+        raise SystemExit(
+            f"Los grupos suman {agrupados} y el borrador tiene {len(encontrados)} números: "
+            "alguno se perdió sin registrarse."
+        )
+
     resultado = {
         "numeros_en_borrador": len(encontrados),
         "numeros_con_respaldo_en_outputs": con_respaldo,
         "numeros_sin_respaldo": sin_respaldo,
         "porcentajes_de_metodo_excluidos": excluidos_metodo,
+        "numeros_en_contextos_omitidos": omitidos,
         "modo_tolerancia": modo,
         # Solo con --tolerancia; en el modo por defecto cada cifra lleva la suya.
         "tolerancia_redondeo": args.tolerancia,
@@ -379,7 +393,7 @@ def main():
         criterio = "tolerancia: media unidad del último dígito escrito; exacta sin decimales"
     else:
         criterio = f"tolerancia fija {args.tolerancia}, por --tolerancia"
-    lineas.append(f"Con respaldo exacto en outputs/ ({criterio}): {con_respaldo}")
+    lineas.append(f"Con respaldo en outputs/ ({criterio}): {con_respaldo}")
     lineas.append(f"SIN respaldo — revisar uno por uno: {len(sin_respaldo)}")
     for s in sin_respaldo[:10]:
         lineas.append(f"  - línea ~{s['linea_aprox']}: \"{s['valor']}\" en «...{s['contexto']}...»")
@@ -389,6 +403,14 @@ def main():
         f"Porcentajes que son parámetros del método, excluidos por lista "
         f"declarada (no se les busca respaldo): {len(excluidos_metodo)}"
     )
+    lineas.append(
+        f"Omitidos por su contexto (IGNORAR_CONTEXTOS: {', '.join(IGNORAR_CONTEXTOS)}), "
+        f"sin buscarles respaldo: {len(omitidos)}"
+    )
+    for o in omitidos[:10]:
+        lineas.append(f"  - línea ~{o['linea_aprox']}: \"{o['valor']}\" en «...{o['contexto']}...»")
+    if len(omitidos) > 10:
+        lineas.append(f"  ... y {len(omitidos) - 10} más — detalle en el .json")
     lineas.append(
         f"Archivos de outputs/ en los que no se busca respaldo, por lista declarada: "
         f"{len(archivos_fuera)} {[a['archivo'] for a in archivos_fuera]}"
