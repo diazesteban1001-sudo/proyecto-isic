@@ -36,10 +36,10 @@ redacta el informe y genera la demo.
 | `extraccion-imagen` | Instrumento | Extrae las variables de imagen con DINOv2, sin reentrenarlo |
 | `sintesis-consultoria` | Síntesis | Redacta el informe y genera la demo desde `outputs/`, y señala las cifras que no tienen respaldo en un archivo |
 
-Hoy el informe y la demo todavía no usan las salidas de la Fase 4 de
-`PLAN.md`, la de la imagen ni la del tiempo de inferencia: entran cuando se reescriba el
-informe. La regla que gobierna el informe: ninguna cifra existe si no está
-en un archivo de `outputs/`.
+La demo ya usa las salidas de la Fase 4. El informe se está reescribiendo
+en `informe/borrador-v2.md`; `informe/borrador.md` es la versión anterior a
+la reserva de pacientes. La regla que gobierna el informe: ninguna cifra
+existe si no está en un archivo de `outputs/`.
 
 ## Hallazgos principales hasta ahora
 
@@ -130,12 +130,12 @@ Nadeau y Bengio.)*
 
 **▶ [Ver demo en vivo](https://diazesteban1001-sudo.github.io/proyecto-isic/)**
 — cada cifra muestra su archivo y campo de origen al pasar el cursor.
-**Sus cifras son anteriores a la reserva de pacientes:** salen de la
-corrida sobre el 100 % de los datos, y desde entonces `outputs/` se
-re-midió sobre el conjunto de desarrollo, así que ya no coinciden con las
-de arriba. Lo mismo vale para el borrador del informe
-(`informe/borrador.md`) y para `informe/casos-de-fallo.md`. Al cierre, la
-demo se regenera y el borrador se reescribe.
+Sus cifras son las del conjunto de desarrollo, como las de arriba; del
+reservado solo da cómo se apartó, su tamaño y cuántas de sus imágenes
+pasaron por el extractor, sin leer etiquetas, y no se ha abierto. El
+borrador anterior del informe (`informe/borrador.md`) e
+`informe/casos-de-fallo.md` son anteriores a la reserva: salen de la
+corrida sobre el 100 % de los datos y ya no coinciden con estas cifras.
 
 La misma demo está en `informe/demo.html`: **autocontenida de verdad**
 —datos y librería de gráficos empotrados, cero peticiones de red— así que
@@ -192,9 +192,8 @@ que queda en ella:
 - **Abrir el conjunto reservado, una sola vez**, con el modelo recomendado
   ya fijado en un commit anterior, y reportar el resultado con su
   intervalo, sea cual sea.
-- **Reescribir el informe y regenerar la demo** desde `outputs/`, con la
-  tabla final en los tres ejes que el cliente declaró: pAUC, sensibilidad
-  top-15 por paciente y tiempo de inferencia.
+- **Terminar el informe** (`informe/borrador-v2.md`) y regenerar la demo
+  cuando se abra el conjunto reservado.
 
 Dos puntos de una versión anterior de este README están cubiertos solo en
 parte, y todavía no tienen lugar en la ruta:
