@@ -1039,6 +1039,29 @@ Según `outputs/holdout-pacientes.json`:
   con el desarrollo y se aplica al reservado.
 - M2 se entrena igual y se puntúa en la misma corrida, como referencia. No estaba
   en el anteproyecto y se declara.
+- *Salvedad de M2, añadida el 2026-10-02, antes de abrir el reservado.* Sus
+  variables de contexto siguen el diseño de la solución ganadora
+  (`modelado-baseline/scripts/contexto_paciente.py`; celdas 7, 10 y 11 de
+  `top-model.ipynb`):
+  - el z-score dentro del paciente de cada una de las 34 variables numéricas
+    de M1;
+  - los conteos y las sumas de área por paciente;
+  - el LOF por paciente, con `n_neighbors=min(n, 30)`, sobre las 17 variables
+    de `top_lof_features`, repeticiones incluidas (15 distintas).
+
+  Ese diseño se publicó sin ningún conjunto reservado: el notebook lo aplica a
+  todo el `train-metadata.csv` del reto (celdas 3 y 12), que incluye a los
+  pacientes que este proyecto reservó, y no dice cómo se eligió. M2 no lo copia
+  entero. La desviación declarada en `contexto_paciente.py`, estandarizar e
+  imputar dentro de cada paciente las variables del LOF, no cambia qué variables
+  se construyen. Pero el z-score se calcula solo para las 34 variables numéricas
+  de M1, no para las 76 del ganador (esas 34 y sus 42 derivadas), y sobre la
+  edad sin imputar, que el ganador rellena antes con la mediana global (celda
+  7). M2 se puntúa en el reservado como referencia, y el reservado tampoco le es
+  ajeno: es la misma salvedad que la del diseño de las variables de M3 limpio
+  (`CLAUDE.md`, hallazgo 8). Además, M2 hereda de M1 el nivel 2b, que se eligió
+  como nivel de referencia con todos los datos, antes del sellado
+  (`informe/anteproyecto.md`, sección 4.2).
 - Los pacientes reservados se puntúan en una sola corrida. M3 limpio es el
   resultado principal.
 - Métricas: pAUC (principal), AUC, SEtop-15 y NNT80% SE.
