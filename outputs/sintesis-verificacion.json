@@ -1,6 +1,6 @@
 {
-  "numeros_en_borrador": 352,
-  "numeros_con_respaldo_en_outputs": 277,
+  "numeros_en_borrador": 397,
+  "numeros_con_respaldo_en_outputs": 287,
   "numeros_sin_respaldo": [
     {
       "valor": "7,500",
@@ -43,79 +43,109 @@
       "linea_aprox": 113
     },
     {
+      "valor": "352,034",
+      "contexto": "ento: *\"We selected a subset containing 352,034 tile imag",
+      "linea_aprox": 149
+    },
+    {
+      "valor": "244",
+      "contexto": "as/panderm-reduccion-examenes.md, línea 244 («a multi",
+      "linea_aprox": 150
+    },
+    {
+      "valor": "396,",
+      "contexto": "dermatology foundation model») y línea 396, cita lite",
+      "linea_aprox": 150
+    },
+    {
+      "valor": "364",
+      "contexto": "as/panderm-reduccion-examenes.md, línea 364 («unlabel",
+      "linea_aprox": 154
+    },
+    {
+      "valor": "2025,",
+      "contexto": "la cumple: su artículo es de agosto de 2025, y la secc",
+      "linea_aprox": 163
+    },
+    {
+      "valor": "2023,",
+      "contexto": "án descritos en un artículo de abril de 2023, y sus aut",
+      "linea_aprox": 169
+    },
+    {
       "valor": "11",
       "contexto": "line.json > columnas_excluidas -->  - **11 no existe",
-      "linea_aprox": 277
+      "linea_aprox": 323
     },
     {
       "valor": "30,55",
       "contexto": "73] (46 de 50; 10 de 10); - NNT80% SE: −30,55 lesiones",
-      "linea_aprox": 378
+      "linea_aprox": 424
     },
     {
       "valor": "60,89",
       "contexto": "SE: −30,55 lesiones por cada maligna, [−60,89; −0,20] (",
-      "linea_aprox": 378
+      "linea_aprox": 424
     },
     {
       "valor": "384",
       "contexto": "## La imagen no justifica su costo  Las 384 variables",
-      "linea_aprox": 393
+      "linea_aprox": 439
     },
     {
       "valor": "0,0263",
       "contexto": "caracteristica -->  - pAUC: −0,0065, [−0,0263; 0,0133]",
-      "linea_aprox": 397
+      "linea_aprox": 443
     },
     {
       "valor": "19,90",
       "contexto": "de 50; 0 de 10); - NNT80% SE: +11,24, [−19,90; 42,37].",
-      "linea_aprox": 399
+      "linea_aprox": 445
     },
     {
       "valor": "384",
       "contexto": "cia» --> *Interpretación, no medición:* 384 variables",
-      "linea_aprox": 408
+      "linea_aprox": 454
     },
     {
       "valor": "3,87,",
       "contexto": "032] (22 de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10;",
-      "linea_aprox": 418
+      "linea_aprox": 464
     },
     {
       "valor": "25,10",
       "contexto": "de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10; 17,35].",
-      "linea_aprox": 418
+      "linea_aprox": 464
     },
     {
       "valor": "0,0365",
       "contexto": "stingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726],",
-      "linea_aprox": 430
+      "linea_aprox": 476
     },
     {
       "valor": "12,62,",
       "contexto": "0,0181, [−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29;",
-      "linea_aprox": 431
+      "linea_aprox": 477
     },
     {
       "valor": "49,29",
       "contexto": "−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29; 24,05].",
-      "linea_aprox": 431
+      "linea_aprox": 477
     },
     {
       "valor": "0,695",
       "contexto": "r sin recortes de imagen obtuvo 0,164 y 0,695 en la eva",
-      "linea_aprox": 438
+      "linea_aprox": 484
     },
     {
       "valor": "20,06,",
       "contexto": "0,0227, [−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74;",
-      "linea_aprox": 447
+      "linea_aprox": 493
     },
     {
       "valor": "49,74",
       "contexto": "−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74; 9,61]. <",
-      "linea_aprox": 447
+      "linea_aprox": 493
     }
   ],
   "porcentajes_de_metodo_excluidos": [
@@ -141,7 +171,7 @@
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": "ase», y su intervalo es el corregido al 95%. Los plie",
-      "linea_aprox": 324
+      "linea_aprox": 370
     }
   ],
   "numeros_en_contextos_omitidos": [
@@ -191,199 +221,344 @@
       "linea_aprox": 128
     },
     {
+      "valor": "2026",
+      "contexto": "iesgo bloqueante», «Criterio, fijado el 2026-08-18, an",
+      "linea_aprox": 145
+    },
+    {
+      "valor": "-08",
+      "contexto": "o bloqueante», «Criterio, fijado el 2026-08-18, antes",
+      "linea_aprox": 145
+    },
+    {
+      "valor": "-18,",
+      "contexto": "loqueante», «Criterio, fijado el 2026-08-18, antes del",
+      "linea_aprox": 145
+    },
+    {
+      "valor": "2024",
+      "contexto": "artículo declara un subconjunto de ISIC 2024 entre sus",
+      "linea_aprox": 148
+    },
+    {
+      "valor": "2026",
+      "contexto": "ta literal; PLAN.md, Fase 2, «Decisión (2026-09-24, de",
+      "linea_aprox": 150
+    },
+    {
+      "valor": "-09",
+      "contexto": "iteral; PLAN.md, Fase 2, «Decisión (2026-09-24, de la",
+      "linea_aprox": 150
+    },
+    {
+      "valor": "-24,",
+      "contexto": "ral; PLAN.md, Fase 2, «Decisión (2026-09-24, de la per",
+      "linea_aprox": 150
+    },
+    {
+      "valor": "2026",
+      "contexto": "iesgo bloqueante», «Criterio, fijado el 2026-08-18, an",
+      "linea_aprox": 154
+    },
+    {
+      "valor": "-08",
+      "contexto": "o bloqueante», «Criterio, fijado el 2026-08-18, antes",
+      "linea_aprox": 154
+    },
+    {
+      "valor": "-18,",
+      "contexto": "loqueante», «Criterio, fijado el 2026-08-18, antes del",
+      "linea_aprox": 154
+    },
+    {
+      "valor": "2026",
+      "contexto": "hallazgo»; PLAN.md, Fase 2, «Decisión (2026-09-24, de",
+      "linea_aprox": 154
+    },
+    {
+      "valor": "-09",
+      "contexto": "lazgo»; PLAN.md, Fase 2, «Decisión (2026-09-24, de la",
+      "linea_aprox": 154
+    },
+    {
+      "valor": "-24,",
+      "contexto": "go»; PLAN.md, Fase 2, «Decisión (2026-09-24, de la per",
+      "linea_aprox": 154
+    },
+    {
+      "valor": "2026",
+      "contexto": "3D. <!-- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de",
+      "linea_aprox": 162
+    },
+    {
+      "valor": "-09",
+      "contexto": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de la",
+      "linea_aprox": 162
+    },
+    {
+      "valor": "-24,",
+      "contexto": "- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de la per",
+      "linea_aprox": 162
+    },
+    {
+      "valor": "2026",
+      "contexto": "es. <!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de",
+      "linea_aprox": 167
+    },
+    {
+      "valor": "-09",
+      "contexto": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la",
+      "linea_aprox": 167
+    },
+    {
+      "valor": "-25,",
+      "contexto": "- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la per",
+      "linea_aprox": 167
+    },
+    {
+      "valor": "2026",
+      "contexto": "to. <!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de",
+      "linea_aprox": 172
+    },
+    {
+      "valor": "-09",
+      "contexto": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la",
+      "linea_aprox": 172
+    },
+    {
+      "valor": "-25,",
+      "contexto": "- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la per",
+      "linea_aprox": 172
+    },
+    {
+      "valor": "2026",
+      "contexto": "ínea 10; PLAN.md, Fase 3, «Preparación (2026-09-25)»;",
+      "linea_aprox": 172
+    },
+    {
+      "valor": "-09",
+      "contexto": "10; PLAN.md, Fase 3, «Preparación (2026-09-25)»; ref",
+      "linea_aprox": 172
+    },
+    {
+      "valor": "-25",
+      "contexto": "; PLAN.md, Fase 3, «Preparación (2026-09-25)»; refere",
+      "linea_aprox": 172
+    },
+    {
+      "valor": "2026",
+      "contexto": "E.md, «Riesgo bloqueante», criterio del 2026-08-18; PL",
+      "linea_aprox": 180
+    },
+    {
+      "valor": "-08",
+      "contexto": ", «Riesgo bloqueante», criterio del 2026-08-18; PLAN.",
+      "linea_aprox": 180
+    },
+    {
+      "valor": "-18",
+      "contexto": "Riesgo bloqueante», criterio del 2026-08-18; PLAN.md,",
+      "linea_aprox": 180
+    },
+    {
+      "valor": "2,",
+      "contexto": "criterio del 2026-08-18; PLAN.md, Fase 2, «No se ex",
+      "linea_aprox": 180
+    },
+    {
       "valor": "2026,",
       "contexto": "l menos una lesión maligna, con semilla 2026, y se sell",
-      "linea_aprox": 217
+      "linea_aprox": 263
     },
     {
       "valor": "1,",
       "contexto": "2026, y se selló. <!-- F: PLAN.md, Fase 1, «Qué se h",
-      "linea_aprox": 218
+      "linea_aprox": 264
     },
     {
       "valor": "2026",
       "contexto": "la persona sobre el conjunto reservado (2026-09-25)» -",
-      "linea_aprox": 218
+      "linea_aprox": 264
     },
     {
       "valor": "-09",
       "contexto": "ersona sobre el conjunto reservado (2026-09-25)» -->",
-      "linea_aprox": 218
+      "linea_aprox": 264
     },
     {
       "valor": "-25",
       "contexto": "ona sobre el conjunto reservado (2026-09-25)» --> Nin",
-      "linea_aprox": 218
+      "linea_aprox": 264
     },
     {
       "valor": "2026",
       "contexto": "ado. <!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -",
-      "linea_aprox": 221
+      "linea_aprox": 267
     },
     {
       "valor": "-09",
       "contexto": "<!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -->",
-      "linea_aprox": 221
+      "linea_aprox": 267
     },
     {
       "valor": "-25",
       "contexto": "-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» --> Des",
-      "linea_aprox": 221
+      "linea_aprox": 267
     },
     {
       "valor": "2026",
       "contexto": "sección 4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-09",
       "contexto": "ión 4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y «D",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-25",
       "contexto": "4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y «Deci",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "2026",
       "contexto": "sona sobre las columnas de procedencia (2026-09-25)»;",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-09",
       "contexto": "sobre las columnas de procedencia (2026-09-25)»; com",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-25",
       "contexto": "bre las columnas de procedencia (2026-09-25)»; commit",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "1",
       "contexto": "rocedencia (2026-09-25)»; commits «Fase 1: sellar e",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "2026",
       "contexto": "«Fase 1: sellar el conjunto reservado» (2026-09-25 18:",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-09",
       "contexto": "e 1: sellar el conjunto reservado» (2026-09-25 18:07)",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-25",
       "contexto": ": sellar el conjunto reservado» (2026-09-25 18:07) y",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "18",
       "contexto": "llar el conjunto reservado» (2026-09-25 18:07) y «au",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "07",
       "contexto": "r el conjunto reservado» (2026-09-25 18:07) y «audit",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "2026",
       "contexto": "ria-de-fugas: columnas de procedencia» (2026-09-25 18:",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-09",
       "contexto": "de-fugas: columnas de procedencia» (2026-09-25 18:35)",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "-25",
       "contexto": "fugas: columnas de procedencia» (2026-09-25 18:35) --",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "18",
       "contexto": "s: columnas de procedencia» (2026-09-25 18:35) --> T",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "35",
       "contexto": "columnas de procedencia» (2026-09-25 18:35) --> Tamp",
-      "linea_aprox": 230
+      "linea_aprox": 276
     },
     {
       "valor": "2026",
       "contexto": "llazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
-      "linea_aprox": 291
+      "linea_aprox": 337
     },
     {
       "valor": "-10",
       "contexto": "go 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  L",
-      "linea_aprox": 291
+      "linea_aprox": 337
     },
     {
       "valor": "-02",
       "contexto": "3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  La a",
-      "linea_aprox": 291
+      "linea_aprox": 337
     },
     {
       "valor": "2026",
       "contexto": "llazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
-      "linea_aprox": 368
+      "linea_aprox": 414
     },
     {
       "valor": "-10",
       "contexto": "go 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  #",
-      "linea_aprox": 368
+      "linea_aprox": 414
     },
     {
       "valor": "-02",
       "contexto": "3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  ###",
-      "linea_aprox": 368
+      "linea_aprox": 414
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 451
+      "linea_aprox": 497
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> Q",
-      "linea_aprox": 451
+      "linea_aprox": 497
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Quit",
-      "linea_aprox": 451
+      "linea_aprox": 497
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 497
+      "linea_aprox": 543
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> S",
-      "linea_aprox": 497
+      "linea_aprox": 543
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Se e",
-      "linea_aprox": 497
+      "linea_aprox": 543
     },
     {
       "valor": "306,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 306, cita lite",
-      "linea_aprox": 556
+      "linea_aprox": 602
     },
     {
       "valor": "99,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 99, cita lite",
-      "linea_aprox": 561
+      "linea_aprox": 607
     }
   ],
   "modo_tolerancia": "decimales_escritos",
