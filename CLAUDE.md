@@ -1024,6 +1024,41 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         versionados, «fase4_comparar», «tiempo_inferencia», «prueba_tiempo»,
         «--base», «--nuevo» y «caffeinate». También en las claves de las salidas
         y en los mensajes de commit.
+- [ ] **El mecanismo del nivel 2a está sin medir** (2026-10-02).
+      - **Qué se afirma:** que el modelo sin balancear no colapsa a predecir
+        siempre negativo, sino que satura en probabilidad 1,0 sobre negativos y
+        los coloca por encima de los positivos, y que por eso su pAUC queda por
+        debajo del azar.
+      - **Por qué no basta:** el script oficial invierte las etiquetas (registro
+        de incidentes, séptima fila), así que la pAUC por encima del 80 % de
+        sensibilidad solo depende de dónde caen, frente a los negativos, el 20 %
+        de los positivos con menor puntuación. Que el 2a quede por debajo del
+        azar dice que esos positivos quedan por debajo de casi todos los
+        negativos. Unos negativos saturados en 1,0 están en lo alto del
+        ordenamiento: en esa región pesan solo por la fracción de negativos que
+        son, y el `SKILL.md` habla de «un puñado». Nada en `outputs/` mide la
+        saturación: es texto fijo del script, no una medición.
+      - **Dónde aparece:**
+        - la nota fija de `train_and_evaluate.py`, que el script escribe en
+          `outputs/modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.nota`,
+          y su línea del `.md`, «satura en 1.0 sobre negativos»;
+        - el hallazgo 1 de este archivo;
+        - el `SKILL.md` de `modelado-baseline`, en el nivel 2a y en el párrafo
+          de la «confianza máxima mal colocada».
+      - **También aparece en:** `outputs/sensibilidad-procedencia.json` y su
+        `.md`, con la misma nota; `generar_demo.py`, y con él `informe/demo.html`
+        y su copia `docs/index.html`; `informe/borrador.md`; e
+        `informe/casos-de-fallo.md`, caso A, que cita la nota.
+      - **Qué se buscó (2026-10-02):** con `git grep`, fuera de `referencias/`,
+        «satura», «colaps», «siempre negativo», «confianza máxima» y «mal
+        colocada». Las demás coincidencias no describen el mecanismo: hablan
+        del nivel 1, usan «colapsar» por la caída de la pAUC del 2a o son el
+        título del apartado 1.1 del anteproyecto, «sin saturar la consulta».
+      - **`informe/borrador-v2.md` no lo afirma:** su sección «Resultados» se
+        quedó solo con lo medido.
+      - **Qué lo cerraría:** medir la distribución de puntuaciones del 2a en un
+        pliegue de desarrollo: dónde caen los positivos de menor puntuación
+        frente a los negativos, y cuántos negativos llegan a 1,0.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
