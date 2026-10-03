@@ -309,3 +309,178 @@ usa. Su AUC por sí sola es 0,6422.
 Queda una salvedad: el clasificador se entrenó con *"approximately 57,000
 lesions"*, y el artículo no dice si se solapan con las de este conjunto.
 <!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2 -->
+
+## Resultados
+
+<!-- Sección de informe/borrador-v2.md. Mismas convenciones que las
+     anteriores. Abreviaturas de los comentarios: VR = outputs/validacion-repetida.json;
+     F21 = outputs/fase4-m2-vs-m1.json; F42 = outputs/fase4-m4-vs-m2.json;
+     F4b = outputs/fase4-m4b-vs-m2.json; F32 = outputs/fase4-m3-vs-m2.json;
+     F3L = outputs/fase4-m3limpio-vs-m2.json; C = comparaciones_nuevo_menos_base;
+     IC = intervalo_t_95_nadeau_bengio. -->
+
+Salvo donde se indica, las métricas de desempeño son del conjunto de
+desarrollo, con 10 semillas y 5 pliegues. Cada diferencia es «nuevo − base»,
+y su intervalo es el corregido al 95%. Los pliegues y semillas en que gana el
+nuevo se dan entre paréntesis.
+<!-- F: «Método», «Cómo se compara»; F*.json > C.*.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas -->
+
+### Una decisión por defecto cambia el veredicto
+
+El mismo gradient boosting da resultados opuestos según una sola opción. Sin
+balancear, su pAUC media es 0,0018, por debajo del piso aleatorio de 0,02 en
+los 50 pliegues. Con `class_weight="balanced"`, y nada más distinto, llega a
+0,1375.
+<!-- F: VR > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global y .pauc_por_semilla_y_fold (los 50 valores bajo 0,02); VR > nivel_2b_gradient_boosting_balanceado.pauc_media_global; outputs/modelado-baseline.json > escala_de_referencia_pauc.azar y nivel_2b_….nota («Única diferencia con 2a: class_weight») -->
+
+La métrica por defecto no es ciega a ese fallo, pero lo lee distinto. En la
+partición de la semilla 42, el AUC estándar del modelo sin balancear es
+0,582, por encima del azar de su escala, 0,5; su pAUC queda por debajo del
+azar de la suya. Las dos métricas discrepan sobre si el modelo supera al azar.
+<!-- F: outputs/modelado-baseline.json > esquema_cv.seed, nivel_2a_….auc_estandar_media y .pauc_media; outputs/modelado-baseline.json > nivel_0_referencia_univariada.nota («el AUC va de 0.5 (azar) a 1»); CLAUDE.md, hallazgo 1 -->
+
+### Mejor media no es mejor modelo
+
+El gradient boosting balanceado supera a la regresión logística balanceada
+por 0,005 en promedio, con intervalo [−0,0145; 0,0245] (29 de 50 pliegues; 8
+de 10 semillas). La ventaja no está establecida.
+<!-- F: VR > comparacion_pareada_2b_menos_1.media, .intervalo_t_95_nadeau_bengio, .gana_2b_en y .semillas_a_favor_de_2b -->
+
+Sobre una sola partición de los datos completos, el boosting parecía además
+más estable que la logística. Con las 10 semillas el orden se invierte: su
+desviación entre pliegues es 0,0165, frente a 0,0138. Ese argumento se retiró.
+<!-- F: CLAUDE.md, hallazgo 2 (la partición única); VR > nivel_2b_….pauc_std_entre_folds y nivel_1_regresion_logistica.pauc_std_entre_folds -->
+
+### Las columnas de procedencia no explican la ventaja
+
+Con las columnas de centro y licencia, la diferencia entre el boosting y la
+logística es 0,0046; sin ellas, 0,005.
+<!-- F: outputs/sensibilidad-procedencia-repetida.json > comparaciones.a_2b_menos_1_con_procedencia.media y .a_2b_menos_1_sin_procedencia.media -->
+Incluirlas mueve el boosting en 0,0021, con intervalo [−0,0082; 0,0124], y
+la logística en 0,0025, con [−0,0023; 0,0073].
+<!-- F: outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (media e IC) -->
+En la logística, incluirlas mejora en las 10 semillas y en 34 de 50
+pliegues. La magnitud no está establecida.
+<!-- F: outputs/sensibilidad-procedencia-repetida.json > comparaciones.c_1_con_menos_1_sin.gana_primer_termino_en_semillas y .gana_primer_termino_en_folds -->
+La exclusión se sostiene por razón de uso, no de desempeño. Una sola
+partición sugería lo contrario; es el segundo resultado de una sola partición
+que no sobrevive a la validación repetida.
+<!-- F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->
+
+### La métrica principal no agota lo que pidió el cliente
+
+Añadir contexto de paciente (M2 − M1) no mueve la pAUC de forma
+distinguible: +0,0065, [−0,0147; 0,0276] (28 de 50; 7 de 10). Sí mueve los
+dos ejes de triaje:
+<!-- F: F21 > C.pauc (media, IC, nuevo_mejor_en_folds, nuevo_mejor_en_semillas) -->
+
+- sensibilidad top-15: +0,0842, [0,021; 0,1473] (46 de 50; 10 de 10);
+- NNT80% SE: −30,55 lesiones por cada maligna, [−60,89; −0,20] (42 de 50;
+  10 de 10).
+<!-- F: F21 > C.setop15 y C.nnt80 (media, IC, nuevo_mejor_en_folds, nuevo_mejor_en_semillas) -->
+
+Quien solo lea la pAUC concluye que el contexto de paciente no aporta; los
+ejes de triaje que el cliente declaró dicen lo contrario. Son cuatro métricas
+sobre una misma comparación, y el intervalo del NNT queda al límite del cero.
+<!-- F: CLAUDE.md, hallazgo 4 -->
+*Interpretación, no medición:* las variables relativas al paciente ordenan
+las lesiones dentro de cada paciente, que es lo que mide la sensibilidad
+top-15, mientras que la pAUC ordena todas las lesiones juntas.
+<!-- F: CLAUDE.md, hallazgo 4, «Interpretación, no medición» -->
+
+### La imagen no justifica su costo
+
+Las 384 variables de DINOv2 tal cual (M4 − M2) no mejoran el modelo con
+contexto de paciente:
+<!-- F: outputs/extraccion-imagen.json > caracteristica -->
+
+- pAUC: −0,0065, [−0,0263; 0,0133] (19 de 50; 2 de 10);
+- sensibilidad top-15: −0,0332, [−0,085; 0,0185] (9 de 50; 0 de 10);
+- NNT80% SE: +11,24, [−19,90; 42,37].
+<!-- F: F42 > C.pauc, C.setop15 y C.nnt80 -->
+
+Ningún intervalo excluye el cero, y la estimación puntual es peor en las
+cuatro métricas.
+<!-- F: F42 > C.*.media e IC (auc: −0,0085) -->
+Por el criterio fijado antes de medir, la imagen, así incorporada, no
+justifica su costo.
+<!-- F: PLAN.md, Fase 4, «Contingencia» -->
+*Interpretación, no medición:* 384 variables adicionales frente a 317
+lesiones malignas probablemente diluyen la señal.
+<!-- F: CLAUDE.md, hallazgo 5; outputs/eda-diagnostico.json > desbalance_target.conteos.1 -->
+
+La variante secundaria, que resume la imagen en una puntuación apilada
+(M4b − M2), tampoco cambia la conclusión:
+<!-- F: PLAN.md, Fase 4, «Variante secundaria M4b» -->
+
+- pAUC: +0,0056, [−0,0091; 0,0202] (36 de 50; 8 de 10);
+- sensibilidad top-15: −0,0062, [−0,0444; 0,032] (22 de 50; 3 de 10);
+- NNT80% SE: −3,87, [−25,10; 17,35].
+<!-- F: F4b > C.pauc, C.setop15 y C.nnt80 -->
+
+*Patrón, no efecto establecido:* la forma de incorporar la imagen invierte la
+dirección de la pAUC. Como variables sueltas, M4 queda por encima de M2 en 2
+de 10 semillas; como puntuación apilada, M4b, en 8 de 10.
+<!-- F: F42 > C.pauc.nuevo_mejor_en_semillas; F4b > C.pauc.nuevo_mejor_en_semillas; CLAUDE.md, hallazgo 6 -->
+
+### El modelo recomendado
+
+La parte tabular reproducida del ganador (M3 − M2) supera a M2 en la métrica
+principal: +0,0185, [0,0007; 0,0364] (45 de 50; 10 de 10). En los ejes de
+triaje no se distingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726], y
+NNT80% SE −12,62, [−49,29; 24,05].
+<!-- F: F32 > C.pauc, C.setop15 y C.nnt80 -->
+Por la nota de lectura fijada antes de correr, esa ventaja no se puede
+separar de los dos sesgos conocidos a favor de M3.
+<!-- F: PLAN.md, Fase 4, «Nota de lectura, de la persona, fijada antes de correr» -->
+Como control de que la reproducción está bien montada, no como comparación:
+M3 obtiene una pAUC media de 0,1625 y una sensibilidad top-15 de 0,7245, y la
+variante del ganador sin recortes de imagen obtuvo 0,164 y 0,695 en la
+evaluación privada del reto, con otros datos, otras particiones y la
+etiqueta del hospital entre sus variables.
+<!-- F: F32 > metricas.M3.pauc.media_global y .setop15.media_global; referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (Meta-basic, Meta-WB360 y Patient context); PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
+
+Sin esos dos sesgos (M3 limpio − M2), la ventaja se mantiene: +0,0181,
+[0,0021; 0,0341] (43 de 50; 10 de 10), y en AUC estándar, +0,021,
+[0,0043; 0,0376]. En los ejes de triaje sigue sin
+distinguirse: sensibilidad top-15 +0,0227, [−0,0291; 0,0746], y NNT80% SE
+−20,06, [−49,74; 9,61].
+<!-- F: F3L > C.pauc, C.auc, C.setop15 y C.nnt80 -->
+El intervalo de la pAUC queda entero por encima de cero, así que, por la
+regla fijada antes de correr, el modelo recomendado es M3 limpio.
+<!-- F: PLAN.md, Fase 4, «Regla de recomendación» y «Modelo recomendado: decisión de la persona, 2026-09-26» -->
+Quitar los sesgos casi no movió la diferencia media: +0,0185 con ellos,
++0,0181 sin ellos. Esa comparación es descriptiva, entre dos corridas, sin
+intervalo propio y sin fijar antes.
+<!-- F: F32 > C.pauc.media; F3L > C.pauc.media; CLAUDE.md, hallazgo 8 -->
+
+### El costo de inferencia
+
+La mediana del tiempo de inferencia, en segundos por cada 1.000 lesiones, es
+0,0021 para M1, 0,0209 para M2, 0,0435 para M3 limpio, 14,5156 para M4 y
+14,6321 para M4b.
+<!-- F: outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones -->
+M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de
+segundo por cada 1.000 lesiones. Lo caro, con diferencia, es la imagen, y los
+modelos con imagen no mejoraron la métrica principal de forma distinguible.
+<!-- F: outputs/tiempo-inferencia.json > tiempos; CLAUDE.md, hallazgo 9 -->
+
+### La pregunta del cliente, entera
+
+| Modelo | pAUC | Sensibilidad top-15 | NNT80% SE | Segundos por 1.000 lesiones |
+|---|---|---|---|---|
+| M1 | 0,1375 | 0,6223 | 116,16 | 0,0021 |
+| M2 | 0,1440 | 0,7065 | 85,62 | 0,0209 |
+| M3 limpio | 0,1621 | 0,7292 | 65,55 | 0,0435 |
+| M4 | 0,1375 | 0,6732 | 96,85 | 14,5156 |
+| M4b | 0,1496 | 0,7003 | 81,74 | 14,6321 |
+
+<!-- F: medias de los 50 pliegues: F21 > metricas.M1 y metricas.M2 (*.media_global); F3L > metricas.M3limpio; F42 > metricas.M4; F4b > metricas.M4b. M2 es igual en los cuatro archivos (reproduccion_del_base.reproduce_fold_a_fold). Tiempos: outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones. M3 no está: no es candidato y su camino de predicción no se cronometró (PLAN.md, Fase 4, «Tiempo de inferencia») -->
+
+La tabla responde la pregunta con sus tres ejes: la métrica principal, la
+sensibilidad por paciente y el costo. Son medias y medianas; las diferencias,
+con sus intervalos, están arriba. M2 se distingue de M1 en los dos ejes de
+triaje, no en la pAUC. Frente a M2, de los otros tres solo M3 limpio se
+distingue, y solo en la pAUC y en el AUC estándar; en los ejes de triaje no se
+distingue ninguno de los tres.
+<!-- F: PLAN.md, Fase 6 («La tabla final responde la pregunta del cliente entera, con sus tres ejes»); F21, F42, F4b y F3L > C.*.IC -->
