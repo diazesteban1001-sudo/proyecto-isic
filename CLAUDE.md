@@ -145,6 +145,7 @@ el estadístico.
 | `diseno-validacion` | Propone y **verifica** el esquema de validación cruzada | instrumento |
 | `modelado-baseline` | Modelos de referencia, métricas con incertidumbre | instrumento |
 | `auditoria-de-fugas` | Checklist de *data leakage*, hallazgos priorizados | instrumento |
+| `extraccion-imagen` | Características congeladas de imagen con DINOv2, sin ajuste fino, y su cobertura | instrumento |
 | `sintesis-consultoria` | Lee todo `outputs/` y produce el informe | interpretación |
 
 `sintesis-consultoria` es distinta a las demás: no mide nada. Materializa la
@@ -537,17 +538,21 @@ detectar y confirmar que se dispara.
 ```
 proyecto-isic/
 ├── CLAUDE.md              ← este archivo
+├── PLAN.md                ← la ruta de trabajo: fases, condición de cierre y decisiones
 ├── .claude/skills/
 │   ├── eda-diagnostico/SKILL.md
 │   ├── diseno-validacion/SKILL.md
 │   ├── modelado-baseline/SKILL.md
 │   ├── auditoria-de-fugas/SKILL.md
+│   ├── extraccion-imagen/SKILL.md
 │   └── sintesis-consultoria/SKILL.md
 ├── data/                  ← en .gitignore, los datos NO se versionan
 ├── referencias/           ← fuentes: texto completo si la licencia es abierta, ficha si no
 │   └── _texto-completo/   ← textos con copyright, solo en local (en .gitignore)
 ├── outputs/               ← salidas de cada skill (.json + .md)
-└── informe/
+├── informe/
+├── docs/                  ← copia de la demo publicada por GitHub Pages
+└── actividad-fuentes/     ← actividad «Nada sin fuente» del curso, con su propio índice
 ```
 
 `referencias/` existe porque Kaggle no es legible por el agente (JavaScript +
