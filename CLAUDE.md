@@ -1037,18 +1037,21 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         negativos. Unos negativos saturados en 1,0 están en lo alto del
         ordenamiento: en esa región pesan solo por la fracción de negativos que
         son, y el `SKILL.md` habla de «un puñado». Nada en `outputs/` mide la
-        saturación: es texto fijo del script, no una medición.
+        saturación: era texto fijo del script, no una medición.
       - **Dónde aparece:**
-        - la nota fija de `train_and_evaluate.py`, que el script escribe en
-          `outputs/modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.nota`,
-          y su línea del `.md`, «satura en 1.0 sobre negativos»;
         - el hallazgo 1 de este archivo;
         - el `SKILL.md` de `modelado-baseline`, en el nivel 2a y en el párrafo
           de la «confianza máxima mal colocada».
-      - **También aparece en:** `outputs/sensibilidad-procedencia.json` y su
-        `.md`, con la misma nota; `generar_demo.py`, y con él `informe/demo.html`
-        y su copia `docs/index.html`; `informe/borrador.md`; e
-        `informe/casos-de-fallo.md`, caso A, que cita la nota.
+      - **También aparece en:** `informe/borrador.md`; e
+        `informe/casos-de-fallo.md`, caso A, que cita la nota que el script
+        escribía y ya no escribe.
+      - *Hasta el 2026-10-03 lo decían también la nota fija de
+        `train_and_evaluate.py` y su línea del `.md`, en
+        `outputs/modelado-baseline.*` y `outputs/sensibilidad-procedencia.*`,
+        y `generar_demo.py`, con `informe/demo.html` y su copia
+        `docs/index.html` (commits «modelado-baseline: la nota del nivel 2a
+        no afirma un mecanismo sin medir» y «generar_demo: la demo desde
+        frases verificadas de borrador-v2.md»).*
       - **Qué se buscó (2026-10-02):** con `git grep`, fuera de `referencias/`,
         «satura», «colaps», «siempre negativo», «confianza máxima» y «mal
         colocada». Las demás coincidencias no describen el mecanismo: hablan
@@ -1059,6 +1062,27 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Qué lo cerraría:** medir la distribución de puntuaciones del 2a en un
         pliegue de desarrollo: dónde caen los positivos de menor puntuación
         frente a los negativos, y cuántos negativos llegan a 1,0.
+- [ ] **El «200» de `informe/borrador-v2.md` tiene respaldo solo por
+      coincidencia** (2026-10-03).
+      - **Dónde:** línea 26, la pAUC «comprobada contra su script en 200
+        casos aleatorios».
+      - **Por qué pasa el verificador:** el único 200 de los archivos de
+        `outputs/` que entran al corpus es
+        `fase4-m3limpio-vs-m2.json > m3limpio.ajustes_por_semilla_y_fold.3[3].iteraciones_corridas`,
+        las iteraciones de CatBoost en un pliegue de M3 limpio. No tiene nada
+        que ver con la frase.
+      - **Su fuente real:** el `SKILL.md` de `modelado-baseline`, «Sobre la
+        métrica: VERIFICADA (2026-08-11)», que es lo que cita su comentario
+        `F:`. No es un archivo de `outputs/`.
+      - **Qué lo cerraría:** resolverlo en el anexo de trazabilidad.
+- [ ] **El informe nombra sus ejes de dos maneras** (2026-10-03).
+      `informe/borrador-v2.md` dice «tres ejes» (línea 526: la métrica
+      principal, la sensibilidad por paciente y el costo) y también «los dos
+      ejes de triaje» (líneas 420, 528 y 554: la sensibilidad top-15 y el
+      NNT80% SE). Su tabla (línea 516) tiene cuatro columnas de métricas:
+      pAUC, sensibilidad top-15, NNT80% SE y segundos por 1.000 lesiones. Y
+      los «dos ejes más» que declaró el cliente (línea 31) son otro par: la
+      sensibilidad top-15 y la eficiencia. Hay que unificar el término.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
