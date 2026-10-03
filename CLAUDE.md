@@ -1085,7 +1085,10 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 *Hasta el 2026-10-02 aquí decía «con tolerancia de redondeo 0,01»: era el
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
-(`outputs/sintesis-verificacion.json`, regenerado por el commit "Regenerar la verificacion de trazabilidad desde el estado actual"): **344 números en el
+(`outputs/sintesis-verificacion.json`, regenerado por última vez por el commit
+"Borrador: las referencias reducidas ya no son copias literales", del
+2026-09-21, con los mismos recuentos que el anterior, "Regenerar la
+verificacion de trazabilidad desde el estado actual", del 2026-09-17): **344 números en el
 borrador, 298 con respaldo, 16 señalados** —recuentos de la corrida anterior a
 la re-medición de la Fase 1 (2026-09-25), con la tolerancia de 0,01, sobre el
 borrador y el `outputs/` de entonces, pendientes de regenerar— para revisar
