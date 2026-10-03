@@ -119,9 +119,9 @@ Nadeau y Bengio.)*
   `comparaciones_nuevo_menos_base.nnt80`). Predice con una mediana de
   0,0435 segundos por cada 1.000 lesiones
   (`tiempo-inferencia.json > tiempos.M3limpio`). La regla de recomendación
-  se fijó antes de correr la comparación. Lo que esa limpieza no quita es
-  el diseño de sus variables, que su autor fijó sin ningún conjunto
-  reservado: el reservado de este proyecto no le es ajeno.
+  se fijó antes de correr la comparación. Entre lo que esa limpieza no
+  quita está el diseño de sus variables, que su autor fijó sin ningún
+  conjunto reservado: el reservado de este proyecto no le es ajeno.
 - **La implementación de la métrica se verificó contra el script oficial
   del organizador** —no contra una reimplementación propia ni de memoria—
   antes de confiar en ningún resultado de modelado
