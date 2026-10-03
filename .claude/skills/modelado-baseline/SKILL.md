@@ -94,11 +94,15 @@ alcance de esta skill a propósito.
 ## Sobre la métrica: VERIFICADA (2026-08-11)
 
 `pauc_above_tpr()` es una transcripción del algoritmo oficial del
-organizador (`p_auc_tpr`, Nicholas R. Kurtansky, MSKCC), cuya copia
-literal está versionada en `referencias/isic-primary-metric-pauc.py.md`.
+organizador (`p_auc_tpr`, Nicholas R. Kurtansky, MSKCC), cuya ficha, con
+la URL del script, está versionada en
+`referencias/isic-primary-metric-pauc.py.md`; el texto completo se guarda
+solo en local, en `referencias/_texto-completo/upstream-PrimaryMetric-pAUC.py`.
 Equivalencia comprobada numéricamente contra esa fuente en 200 casos
 aleatorios (coincidencia exacta, atol 1e-12) más el caso del
-clasificador perfecto, que devuelve 0.2 como debe.
+clasificador perfecto, que devuelve 0.2 como debe. *Hasta el 2026-10-02
+aquí decía «cuya copia literal está versionada»: la copia se redujo a ficha
+el 2026-09-21, por la regla 3 de `CLAUDE.md`.*
 
 **Procedencia de la verificación.** El notebook de Kaggle
 `isic-pauc-abovetpr` NO es legible por el agente: como el resto de
