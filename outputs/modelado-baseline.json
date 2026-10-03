@@ -146,7 +146,7 @@
       0.4782
     ],
     "auc_estandar_media": 0.582,
-    "nota": "Se conserva aunque quede por DEBAJO del piso aleatorio de la métrica (0.02): con 0.098% de positivos el modelo satura en probabilidad 1.0 sobre negativos y los coloca por encima de los positivos, destruyendo justo la región de sensibilidad alta que el pAUC mide. Es un hallazgo, no un fallo del script.",
+    "nota": "Se conserva aunque su pAUC quede por debajo del piso aleatorio de la métrica (ver escala_de_referencia_pauc). Por qué queda por debajo no se ha medido.",
     "posicion_en_escala": -0.1083
   },
   "nivel_2b_gradient_boosting_balanceado": {

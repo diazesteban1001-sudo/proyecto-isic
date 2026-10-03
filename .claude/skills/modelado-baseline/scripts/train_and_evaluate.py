@@ -348,11 +348,9 @@ def main():
             "auc_estandar_por_fold": [round(float(a), 4) for a in aucs_2a],
             "auc_estandar_media": round(float(np.mean(aucs_2a)), 4),
             "nota": (
-                "Se conserva aunque quede por DEBAJO del piso aleatorio de la "
-                "métrica (0.02): con 0.098% de positivos el modelo satura en "
-                "probabilidad 1.0 sobre negativos y los coloca por encima de los "
-                "positivos, destruyendo justo la región de sensibilidad alta que "
-                "el pAUC mide. Es un hallazgo, no un fallo del script."
+                "Se conserva aunque su pAUC quede por debajo del piso aleatorio "
+                "de la métrica (ver escala_de_referencia_pauc). Por qué queda por "
+                "debajo no se ha medido."
             ),
         },
         "nivel_2b_gradient_boosting_balanceado": {
@@ -451,7 +449,7 @@ def main():
     lineas.append(linea_nivel("Nivel 1 (logística balanceada)", resultado["nivel_1_regresion_logistica"]))
     lineas.append(linea_nivel("Nivel 2a (GB sin balancear)", resultado["nivel_2a_gradient_boosting_sin_balancear"]))
     lineas.append(linea_nivel("Nivel 2b (GB balanceado)", resultado["nivel_2b_gradient_boosting_balanceado"]))
-    lineas.append("2a por debajo del azar no es un bug: satura en 1.0 sobre negativos. Ver nota en el .json.")
+    lineas.append("2a por debajo del azar: se conserva. El mecanismo no está medido (ver la nota en el .json).")
     lineas.append(f"Detalle por fold: {args.out}.json")
 
     with open(f"{args.out}.md", "w", encoding="utf-8") as f:

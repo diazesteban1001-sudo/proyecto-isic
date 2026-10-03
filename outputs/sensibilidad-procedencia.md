@@ -9,5 +9,5 @@ Nivel 0 (mismo, en pAUC): pAUC media 0.0796 ± 0.0076 (33.1% del recorrido azar�
 Nivel 1 (logística balanceada): pAUC media 0.1336 ± 0.0099 (63.1% del recorrido azar→perfecto)
 Nivel 2a (GB sin balancear): pAUC media 0.0006 ± 0.0003 (-10.8% del recorrido azar→perfecto)
 Nivel 2b (GB balanceado): pAUC media 0.1467 ± 0.0155 (70.4% del recorrido azar→perfecto)
-2a por debajo del azar no es un bug: satura en 1.0 sobre negativos. Ver nota en el .json.
+2a por debajo del azar: se conserva. El mecanismo no está medido (ver la nota en el .json).
 Detalle por fold: outputs/sensibilidad-procedencia.json
