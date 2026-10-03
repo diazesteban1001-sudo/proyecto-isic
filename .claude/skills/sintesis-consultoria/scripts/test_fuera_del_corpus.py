@@ -4,18 +4,22 @@ test_fuera_del_corpus.py — control positivo de FUERA_DEL_CORPUS en
 verificar_trazabilidad.py.
 
 El verificador no debe buscar respaldo en holdout-pacientes.json ni en
-sensibilidad-*.json. Se fuerza el caso, por el corolario de la regla 6: un
-borrador sintético con tres cifras, cada una presente en un solo archivo de
-un outputs/ sintético, en un directorio temporal.
+sensibilidad-procedencia.json, el análisis de sensibilidad de una sola
+partición. Sí debe buscarlo en sensibilidad-procedencia-repetida.json, la
+validación repetida que lo supera: desde el 2026-10-02 se excluye por nombre,
+no con el patrón sensibilidad-*.json. Se fuerza el caso, por el corolario de la
+regla 6: un borrador sintético con cinco cifras, cada una presente en un solo
+archivo de un outputs/ sintético, en un directorio temporal.
 
   - 0,1234 solo en modelado-baseline.json: tiene que contar como respaldada.
+  - 0,4321 solo en sensibilidad-procedencia-repetida.json: tiene que contar.
   - 0,5678 solo en sensibilidad-procedencia.json: NO debe contar.
   - 777 solo en holdout-pacientes.json: NO debe contar.
   - 344 solo en sintesis-verificacion.json, la salida del propio
     verificador: NO debe contar.
 
-Y el caso discrimina: con los tres últimos archivos renombrados fuera de la
-lista, las cuatro cuentan como respaldadas. La diferencia la hace la lista y
+Y el caso discrimina: con los tres archivos excluidos renombrados fuera de la
+lista, las cinco cuentan como respaldadas. La diferencia la hace la lista y
 nada más.
 
 Uso:
@@ -33,6 +37,7 @@ VERIFICADOR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verifica
 BORRADOR = (
     "# Informe de prueba\n\n"
     "El modelo principal da 0,1234.\n\n"
+    "La validación repetida con otras columnas da 0,4321.\n\n"
     "La corrida con otras columnas da 0,5678.\n\n"
     "Quedan apartados 777 pacientes.\n\n"
     "La verificación anterior contó 344 números.\n"
@@ -59,12 +64,14 @@ def verificar(archivos):
 def main():
     con_lista = verificar({
         "modelado-baseline.json": {"pauc_media": 0.1234},
+        "sensibilidad-procedencia-repetida.json": {"pauc_media_global": 0.4321},
         "sensibilidad-procedencia.json": {"pauc_media": 0.5678},
         "holdout-pacientes.json": {"recuentos": {"pacientes": 777}},
         "sintesis-verificacion.json": {"numeros_en_borrador": 344},
     })
     renombrados = verificar({
         "modelado-baseline.json": {"pauc_media": 0.1234},
+        "sensibilidad-procedencia-repetida.json": {"pauc_media_global": 0.4321},
         "otra-corrida.json": {"pauc_media": 0.5678},
         "otros-recuentos.json": {"recuentos": {"pacientes": 777}},
         "otra-verificacion.json": {"numeros_en_borrador": 344},
@@ -80,20 +87,25 @@ def main():
 
     casos = [
         ("la cifra del archivo principal cuenta como respaldada",
-         "0,1234" not in senalados and con_lista["numeros_con_respaldo_en_outputs"] == 1,
-         f"señaladas: {sorted(senalados)}; con respaldo: {con_lista['numeros_con_respaldo_en_outputs']}"),
-        ("la cifra que solo está en un archivo de sensibilidad NO cuenta",
+         "0,1234" not in senalados, f"señaladas: {sorted(senalados)}"),
+        ("la cifra que solo está en sensibilidad-procedencia-repetida.json cuenta como respaldada",
+         "0,4321" not in senalados and "sensibilidad-procedencia-repetida.json" not in fuera,
+         f"señaladas: {sorted(senalados)}; fuera del corpus: {fuera}"),
+        ("la cifra que solo está en sensibilidad-procedencia.json, de una sola partición, NO cuenta",
          "0,5678" in senalados, f"señaladas: {sorted(senalados)}"),
         ("la cifra que solo está en holdout-pacientes.json NO cuenta",
          "777" in senalados, f"señaladas: {sorted(senalados)}"),
         ("la cifra que solo está en la salida del propio verificador NO cuenta",
          "344" in senalados, f"señaladas: {sorted(senalados)}"),
+        ("con la lista, cuentan exactamente las dos del corpus",
+         con_lista["numeros_con_respaldo_en_outputs"] == 2,
+         f"con respaldo: {con_lista['numeros_con_respaldo_en_outputs']}"),
         ("los tres archivos quedan registrados fuera del corpus, con su motivo",
          fuera == ["holdout-pacientes.json", "sensibilidad-procedencia.json", "sintesis-verificacion.json"]
          and all(a["motivo"] for a in con_lista["archivos_fuera_del_corpus"]),
          f"archivos_fuera_del_corpus: {fuera}"),
-        ("el caso discrimina: renombrados fuera de la lista, las cuatro cuentan",
-         not senalados_ren and renombrados["numeros_con_respaldo_en_outputs"] == 4,
+        ("el caso discrimina: renombrados fuera de la lista, las cinco cuentan",
+         not senalados_ren and renombrados["numeros_con_respaldo_en_outputs"] == 5,
          f"señaladas: {sorted(senalados_ren) or 'ninguna'}; con respaldo: {renombrados['numeros_con_respaldo_en_outputs']}"),
     ]
     fallos = 0

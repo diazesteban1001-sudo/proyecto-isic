@@ -141,14 +141,21 @@ def extraer_valores_numericos(obj, acumulador, ruta="", acumulador_pct=None):
 # motivo. Sus cifras existen, pero ninguna cifra del informe puede apoyarse
 # en ellas: si una coincide, es casualidad, no trazabilidad. Se comparan por
 # nombre de archivo, con comodines.
+#
+# Un análisis de sensibilidad nuevo entra al corpus, salvo que se excluya aquí
+# por nombre y con su motivo. Hasta el 2026-10-02 el patrón sensibilidad-*.json
+# los excluía todos, también sensibilidad-procedencia-repetida.json, cuyas cifras
+# sostienen el hallazgo 3 de CLAUDE.md, que entra al informe.
 FUERA_DEL_CORPUS = {
     "holdout-pacientes.json": (
         "Recuentos del conjunto reservado. No son mediciones del informe, y el "
         "conjunto reservado no se toca hasta la evaluación final."
     ),
-    "sensibilidad-*.json": (
-        "Análisis de sensibilidad. No sustituyen a la corrida principal ni se usan "
-        "para elegir nada, así que no respaldan cifras del informe."
+    "sensibilidad-procedencia.json": (
+        "Análisis de sensibilidad de una sola partición (semilla 42), superado por "
+        "sensibilidad-procedencia-repetida.json. Por la regla de CLAUDE.md (hallazgo "
+        "3), ninguna conclusión comparativa se escribe desde una sola partición, así "
+        "que no respalda cifras del informe."
     ),
     "sintesis-verificacion.json": (
         "La salida de este mismo script. Sus recuentos describen una verificación "
