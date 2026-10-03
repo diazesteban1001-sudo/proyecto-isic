@@ -753,9 +753,10 @@ sí se contestan con la Tercera nota.
 
 ## Estado actual
 
-Las cinco skills están escritas, corridas y auditadas. El alcance
-original —metadata tabular, sin imágenes— está cerrado. Lo que sigue es la
-extensión documentada en la última sección de este archivo.
+Las seis skills están escritas y corridas; las cinco del alcance original,
+también auditadas. El alcance original —metadata tabular, sin imágenes— está
+cerrado. Lo que sigue es la extensión documentada en la última sección de este
+archivo, a la que pertenece la sexta, `extraccion-imagen`.
 
 | Skill | Estado | Salida en `outputs/` |
 |---|---|---|
@@ -763,6 +764,7 @@ extensión documentada en la última sección de este archivo.
 | `diseno-validacion` | completa, auditada (`3df25fc`, `a53b199`) | `.json` + `.md` |
 | `auditoria-de-fugas` | completa, auditada (`958cee0`) | `.json` + `.md` |
 | `modelado-baseline` | completa, auditada (`50ba80d`, `30fbff5`, `ad22ba0`) | `.json` + `.md` |
+| `extraccion-imagen` | completa (Fase 3 de `PLAN.md`, cerrada el 2026-09-25) | `.json` + `.md` |
 | `sintesis-consultoria` | completa (`c3467a7`, `6d5754a`, `3e144e0`, `8a1f3ab`) | `sintesis-verificacion.json` + `.md` |
 
 *Deuda declarada:* los once hashes de esta tabla **violan la regla derivada en
@@ -772,8 +774,9 @@ estaban sin subir, y estos son anteriores; es decir, sobrevivieron por suerte,
 no por diseño. Se dejan a la vista en vez de arreglarlos en silencio: está en
 Pendientes reemplazarlos por asunto y fecha.
 
-Ninguna se dio por buena sin correrla contra `data/train-metadata.csv` y
-encontrarle defectos. Las cuatro instrumento tenían al menos uno. El detalle de
+Ninguna de las cinco del alcance original se dio por buena sin correrla contra
+`data/train-metadata.csv` y encontrarle defectos. Las cuatro instrumento
+tenían al menos uno. El detalle de
 cada corrección está en el historial de commits, que es parte del entregable.
 
 `sintesis-consultoria` produjo `informe/borrador.md`, `informe/informe-final.docx`,
