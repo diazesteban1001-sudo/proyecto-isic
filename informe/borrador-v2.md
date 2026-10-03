@@ -133,6 +133,52 @@ M4b − M2 se reporta como secundaria, y M3 limpio − M2 es la corrida de la
 regla de recomendación.
 <!-- F: PLAN.md, Fase 4, «Variante secundaria M4b» y «M3 limpio y regla de recomendación» -->
 
+### El extractor de imagen
+
+Un modelo de imagen preentrenado puede traer fuga en sus pesos: si se
+preentrenó con estas mismas imágenes, lo que aporte no se puede atribuir al
+método, y esa fuga no se puede quitar después.
+<!-- F: PLAN.md, Fase 2, «No se extrae ni una característica antes de cerrar esto» -->
+Por eso no se extrajo ninguna característica antes de decidir qué modelo usar,
+y los criterios para decidirlo se fijaron antes de conocer lo que cada fuente
+decía sobre SLICE-3D.
+<!-- F: PLAN.md, Fase 2, «No se extrae ni una característica antes de cerrar esto» y regla «fijada antes de leer su fuente»; CLAUDE.md, «Riesgo bloqueante», «Criterio, fijado el 2026-08-18, antes del hallazgo» -->
+
+PanDerm, un modelo fundacional de dermatología, no se usa. Su artículo declara
+un subconjunto de ISIC 2024 entre sus datos de preentrenamiento: *"We selected
+a subset containing 352,034 tile images, stratified by institutions"*.
+<!-- F: referencias/panderm-reduccion-examenes.md, línea 244 («a multimodal dermatology foundation model») y línea 396, cita literal; PLAN.md, Fase 2, «Decisión (2026-09-24, de la persona)» -->
+El criterio, fijado antes de conocer ese dato, era no usarlo si había solape.
+Que ese preentrenamiento fuera sin etiquetas no se admitió como excepción,
+porque el criterio no la preveía.
+<!-- F: CLAUDE.md, «Riesgo bloqueante», «Criterio, fijado el 2026-08-18, antes del hallazgo»; PLAN.md, Fase 2, «Decisión (2026-09-24, de la persona)»; referencias/panderm-reduccion-examenes.md, línea 364 («unlabeled») -->
+
+Para los modelos genéricos se fijó una regla, también antes de leer sus
+fuentes. Un modelo cuenta como verificado si sus pesos o sus datos de
+preentrenamiento son anteriores a la primera fecha en que los datos de
+SLICE-3D fueron públicos y sus autores no pertenecen a las instituciones que
+los aportaron, o si su documentación enumera fuentes cerradas que excluyen
+SLICE-3D.
+<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de la persona): regla de verificación del extractor de imagen» -->
+DINOv3 no la cumple: su artículo es de agosto de 2025, y la sección que
+describe sus datos no da la fecha en que se recogieron sus imágenes de
+Instagram ni nombra los conjuntos semilla con que se seleccionó una de
+sus partes.
+<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/simeoni-2025-dinov3.md, «Dónde» y «Lo que se buscó y no se encontró» -->
+DINOv2 sí: sus datos de preentrenamiento, LVD-142M, están descritos en un
+artículo de abril de 2023, y sus autores no pertenecen a las instituciones que
+aportaron los datos. El punto de control que se usó documenta LVD-142M como
+sus datos de entrenamiento.
+<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/oquab-2023-dinov2.md, línea 10; PLAN.md, Fase 3, «Preparación (2026-09-25)»; referencias/dinov2-repositorio.md -->
+Queda una salvedad: ninguna fuente fija la primera fecha en que SLICE-3D fue
+público, y el orden temporal se apoya en una cadena de evidencia.
+<!-- F: PLAN.md, Fase 2, «Salvedad declarada»; referencias/slice3d-fechas-de-publicacion.md, sección 5 -->
+
+*Interpretación, no medición:* es el razonamiento de la auditoría de fugas, un
+nivel más arriba. Con modelos fundacionales, la fuga puede venir del
+preentrenamiento de un tercero y no del conjunto de datos.
+<!-- F: CLAUDE.md, «Riesgo bloqueante», criterio del 2026-08-18; PLAN.md, Fase 2, «No se extrae ni una característica antes de cerrar esto» -->
+
 ### Qué se fijó antes de medir
 
 - **Un resultado negativo también es un resultado.** Si el intervalo
