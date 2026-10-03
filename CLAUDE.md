@@ -1013,10 +1013,14 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         comando.
       - **También:** `evaluar_repetido.py`, que produce
         `outputs/validacion-repetida.json`, está en la misma situación.
+      - **En la extracción:** `prueba_tiempo.py`, de `extraccion-imagen`, que
+        produce `outputs/prueba-tiempo-dinov2.json`, también. Su docstring
+        trae una plantilla «Uso:», su `SKILL.md` lo describe sin comando, y ni
+        la salida ni el mensaje del commit que la añadió guardan la invocación.
       - **Qué se buscó (2026-10-02):** con `git grep`, en todos los archivos
-        versionados, «fase4_comparar», «tiempo_inferencia», «--base», «--nuevo»
-        y «caffeinate». También en las claves de las salidas y en los mensajes de
-        commit.
+        versionados, «fase4_comparar», «tiempo_inferencia», «prueba_tiempo»,
+        «--base», «--nuevo» y «caffeinate». También en las claves de las salidas
+        y en los mensajes de commit.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
