@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 prueba_tiempo.py — prueba de tiempo de la extracción de imagen, antes de la
-Fase 3. Primer script de la futura skill extraccion-imagen, que todavía no
-tiene SKILL.md.
+Fase 3. Primer script de la skill extraccion-imagen, escrito antes que su
+SKILL.md.
 
 Mide cuánto tarda una pasada hacia adelante congelada de cada punto de control
 de DINOv2 sobre una muestra de imágenes del conjunto de desarrollo, en MPS, y
