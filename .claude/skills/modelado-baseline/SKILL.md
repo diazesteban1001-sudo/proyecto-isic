@@ -77,8 +77,14 @@ entre las dos es `class_weight`:
   script y no se borra: con 0.098% de positivos el modelo satura en
   probabilidad 1.0 sobre un puñado de negativos y los coloca por encima de
   los positivos reales, destruyendo justo la región de sensibilidad alta
-  que el pAUC mide. Su AUC estándar (0.67) no deja ver el problema; el
-  pAUC sí. Es el hallazgo más citable de esta skill.
+  que el pAUC mide. Su AUC estándar, 0.582 en el conjunto de desarrollo
+  (`auc_estandar_media`), lo pone por encima del azar de su escala, y el
+  pAUC lo deja por debajo del de la suya: la métrica por defecto no es ciega
+  al problema, y las dos discrepan sobre las mismas predicciones
+  (`CLAUDE.md`, hallazgo 1). Es el hallazgo más citable de esta skill.
+  *Hasta el 2026-10-02 decía: «Su AUC estándar (0.67) no deja ver el
+  problema; el pAUC sí». El 0.67 era el AUC del primer fold en la corrida
+  sobre el 100 % de los datos, no la media del modelo.*
 - **2b — balanceado** (`class_weight="balanced"`). Mismo modelo, misma
   semilla, mismos folds.
 
