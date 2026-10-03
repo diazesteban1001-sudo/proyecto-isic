@@ -23,8 +23,6 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 
-from scipy import stats
-
 
 # Los .md de cada instrumento se muestran al hacer clic en su casilla del
 # diagrama. sintesis-consultoria no mide nada, así que no tiene un .md de
@@ -177,29 +175,6 @@ def construir_datos(outputs_dir, leidos):
             "nota": bloque.get("nota", ""),
         })
 
-    n1 = modelado["nivel_1_regresion_logistica"]["pauc_por_fold"]
-    b2 = modelado["nivel_2b_gradient_boosting_balanceado"]["pauc_por_fold"]
-    diferencias = [round(b - a, 6) for a, b in zip(n1, b2)]
-    n = len(diferencias)
-    media_dif = sum(diferencias) / n
-    # Desviación muestral (n-1): las cinco diferencias son una muestra, no
-    # la población de todas las particiones posibles.
-    var = sum((d - media_dif) ** 2 for d in diferencias) / (n - 1)
-    sd_dif = var ** 0.5
-    t_critico = float(stats.t.ppf(0.975, n - 1))
-    margen = t_critico * sd_dif / (n ** 0.5)
-
-    pareado = {
-        "diferencias": diferencias,
-        "media": media_dif,
-        "sd": sd_dif,
-        "t_critico": t_critico,
-        "ic_bajo": media_dif - margen,
-        "ic_alto": media_dif + margen,
-        "folds_a_favor": sum(1 for d in diferencias if d > 0),
-        "n_folds": n,
-    }
-
     excluidas = []
     for col in modelado["columnas_excluidas"]:
         excluidas.append({
@@ -285,7 +260,6 @@ def construir_datos(outputs_dir, leidos):
         "n_features_usadas": modelado["n_features_usadas"],
         "nevi": nevi,
         "modelos": modelos,
-        "pareado": pareado,
         "escala": modelado["escala_de_referencia_pauc"],
         "metrica": modelado["metrica"],
         "metrica_fuente": modelado["metrica_fuente"],
@@ -345,7 +319,6 @@ PLANTILLA = r"""<!DOCTYPE html>
     background: #fff; border: 1px solid var(--linea); border-radius: 10px;
     padding: 22px; box-shadow: 0 1px 2px rgba(22,32,43,.05);
   }
-  /* ---- cadena de skills ---- */
   .cadena { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; }
   .paso {
     flex: 1 1 165px; text-align: left; cursor: pointer; background: #fff;
@@ -406,14 +379,7 @@ PLANTILLA = r"""<!DOCTYPE html>
   .exploratorio b { color: var(--alarma); }
   .contra { margin-top: 18px; border-left: 4px solid var(--bien); background: #f2faf6; padding: 14px 16px; border-radius: 0 8px 8px 0; }
   .contra b { color: var(--bien); }
-  /* ---- toggle ---- */
   .barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
-  .toggle { display: inline-flex; border: 1px solid var(--linea); border-radius: 8px; overflow: hidden; background: #fff; }
-  .toggle button {
-    border: 0; background: #fff; padding: 9px 18px; font: inherit; font-size: 13.5px;
-    cursor: pointer; color: var(--suave); font-weight: 600;
-  }
-  .toggle button[aria-pressed="true"] { background: var(--acento); color: #fff; }
   .lienzo { position: relative; height: 340px; }
   /* ---- cierre ---- */
   .cierre { display: grid; gap: 16px; }
@@ -483,10 +449,6 @@ __AVISO_EXPLORATORIO__
   </div>
   <div class="tarjeta">
     <div class="barra">
-      <div class="toggle" role="group" aria-label="Vista de resultados">
-        <button id="btn-medias" aria-pressed="true">Medias</button>
-        <button id="btn-pareada" aria-pressed="false">Pareada por fold</button>
-      </div>
       <div class="pie-grafico" id="escala"></div>
     </div>
     <div class="lienzo"><canvas id="gr-modelos"></canvas></div>
@@ -669,8 +631,6 @@ const bigotes = {
   }
 };
 
-// Linea del piso aleatorio: sin ella, el 0,0013 del nivel 2a parece
-// solo "bajo" en vez de estar por debajo del azar, que es el hallazgo.
 const piso = {
   id: "piso",
   beforeDatasetsDraw(ch) {
@@ -739,37 +699,6 @@ function vistaMedias() {
   };
 }
 
-function vistaPareada() {
-  const n1 = D.modelos.find(m => m.etiqueta === "Nivel 1");
-  const b2 = D.modelos.find(m => m.etiqueta === "Nivel 2b");
-  return {
-    type: "bar",
-    data: {
-      labels: D.pareado.diferencias.map((_, i) => "Fold " + i),
-      datasets: [
-        { label: n1.etiqueta + " \u2014 " + n1.descripcion, data: n1.por_fold, backgroundColor: "#4a7fa5", borderRadius: 4 },
-        { label: b2.etiqueta + " \u2014 " + b2.descripcion, data: b2.por_fold, backgroundColor: "#1f5f8b", borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: { y: { beginAtZero: true, title: { display: true, text: "pAUC en el fold" } } },
-      plugins: {
-        legend: { position: "bottom" },
-        tooltip: {
-          callbacks: {
-            label: it => it.dataset.label + ": " + num(it.parsed.y),
-            afterBody: it => {
-              const d = D.pareado.diferencias[it[0].dataIndex];
-              return "Diferencia 2b \u2212 1: " + (d > 0 ? "+" : "\u2212") + num(Math.abs(d));
-            }
-          }
-        }
-      }
-    }
-  };
-}
-
 const PIE = {
   medias: () => {
     const n2a = D.modelos.find(m => m.etiqueta === "Nivel 2a");
@@ -777,31 +706,14 @@ const PIE = {
       `por debajo del piso aleatorio</span>: no colapsa a predecir siempre negativo, satura en probabilidad 1 sobre negativos y los coloca ` +
       `encima de los positivos, arrasando justo la región de sensibilidad alta que el cliente mide. Su AUC estándar no delata nada. ` +
       `Los bigotes son &plusmn;1 desviación entre folds, no un intervalo de confianza.`;
-  },
-  pareada: () => {
-    const p = D.pareado;
-    const signo = p.ic_bajo < 0 && p.ic_alto > 0;
-    return `2b gana en ${cifra(p.folds_a_favor + " de " + p.n_folds, "derivado de pauc_por_fold de ambos niveles")} folds. ` +
-      `Diferencia media ${cifra(num(p.media), "derivado: media de 2b menos nivel 1, fold a fold")}, ` +
-      `desviación ${cifra(num(p.sd), "derivado: desviación muestral de las 5 diferencias")}, ` +
-      `intervalo t al 95% de ${num(p.ic_bajo)} a ${num(p.ic_alto)}. ` +
-      `<span class="destacado">El intervalo cruza el cero: la comparación pareada no confirma la superioridad de 2b, la debilita.</span> ` +
-      `Y además es optimista &mdash; los folds comparten la mayor parte del entrenamiento, así que las diferencias no son independientes ` +
-      `y el intervalo subestima la varianza. En esta partición, el peor fold de 2b ` +
-      `(${cifra(num(Math.min(...D.modelos.find(m => m.etiqueta === "Nivel 2b").por_fold)), "modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.pauc_por_fold")}) ` +
-      `supera a los dos peores del nivel 1.`;
   }
 };
 
 function pintar(vista) {
   if (grafico) grafico.destroy();
-  grafico = new Chart(lienzo, vista === "medias" ? vistaMedias() : vistaPareada());
+  grafico = new Chart(lienzo, vistaMedias());
   document.getElementById("pie-modelos").innerHTML = PIE[vista]();
-  document.getElementById("btn-medias").setAttribute("aria-pressed", vista === "medias");
-  document.getElementById("btn-pareada").setAttribute("aria-pressed", vista === "pareada");
 }
-document.getElementById("btn-medias").onclick = () => pintar("medias");
-document.getElementById("btn-pareada").onclick = () => pintar("pareada");
 
 document.getElementById("tit-reco").innerHTML =
   cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media");
@@ -828,11 +740,8 @@ document.getElementById("cierre-hallazgos").innerHTML =
   `${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} no existen al predecir &mdash;el test no las trae, y entre ellas va la propia respuesta&mdash;, ` +
   `<code>image_type</code> es constante en todo el archivo, <code>isic_id</code> identifica la fila, y ` +
   `<code>patient_id</code> no se descarta por sospechosa: se usa para agrupar los folds, no para predecir. ` +
-  `Eso evitó que información no disponible en producción entrara al modelo. Y la comparación honesta entre modelos &mdash;no solo la media, sino par a par por fold&mdash; mostró que la ventaja ` +
-  `del gradient boosting balanceado no es estadísticamente sostenible con la evidencia disponible: gana en ` +
-  `${cifra(D.pareado.folds_a_favor + " de " + D.pareado.n_folds, "derivado de pauc_por_fold de los niveles 1 y 2b")} folds, y el intervalo ` +
-  `de confianza de la diferencia (${cifra(num(D.pareado.ic_bajo) + " a " + num(D.pareado.ic_alto), "derivado: intervalo t al 95% sobre las 5 diferencias")}) ` +
-  `cruza cero. <span class="destacado">En esta partición 2b fue además menos disperso</span>: ` +
+  `Eso evitó que información no disponible en producción entrara al modelo. ` +
+  `<span class="destacado">En esta partición 2b fue además menos disperso</span>: ` +
   `&plusmn;${cifra(num(M("Nivel 2b").std), campo("Nivel 2b") + ".pauc_std")} entre folds frente a ` +
   `&plusmn;${cifra(num(M("Nivel 1").std), campo("Nivel 1") + ".pauc_std")} de la logística &mdash; una ventaja que ` +
   `no se mantiene al repetir la validación con diez particiones distintas.`;

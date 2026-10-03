@@ -51,10 +51,10 @@ mitad de la etapa.
 |---|---|---|
 | `verificar_trazabilidad.py` | solo biblioteca estándar | sí |
 | `md_a_docx.py` | `python-docx` | **no** |
-| `generar_demo.py` | `scipy` | **no** |
+| `generar_demo.py` | solo biblioteca estándar | sí |
 
 Si `.venv/` no existe, se recrea con
-`python3 -m venv .venv && .venv/bin/pip install python-docx scipy`.
+`python3 -m venv .venv && .venv/bin/pip install python-docx`.
 
 ### Etapa 1 — Borrador en Markdown
 
