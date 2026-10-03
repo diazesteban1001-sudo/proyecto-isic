@@ -123,13 +123,17 @@ con 0,1451 y 0,1331 cuando `outputs/` ya decía 0,1398 y 0,1326.* Control:
 
 **Límite que queda, medido.** El verificador busca cada cifra en todo el
 corpus, no en el campo que el texto cita. Sobre el `outputs/` del 2026-10-02,
-con 2.767 valores distintos en el corpus, pasarían por azar:
+con 2.864 valores distintos en el corpus, pasarían por azar:
 
-- de los enteros del 1 al 200, 93 de 200 (46,5 %);
-- de los valores de cuatro decimales entre 0,0001 y 0,0499, 304 de 499
-  (60,9 %);
-- de los valores de cuatro decimales entre 0,0500 y 0,2000, 382 de 1.501
-  (25,4 %).
+- de los enteros del 1 al 200, 95 de 200 (47,5 %);
+- de los valores de cuatro decimales entre 0,0001 y 0,0499, 320 de 499
+  (64,1 %);
+- de los valores de cuatro decimales entre 0,0500 y 0,2000, 432 de 1.501
+  (28,8 %).
+
+*Antes de que `sensibilidad-procedencia-repetida.json` entrara al corpus, ese
+mismo día, eran 2.767 valores y 93, 304 y 382 (46,5 %, 60,9 % y 25,4 %): más
+corpus, más cifras que pasan por azar.*
 
 Con el margen fijo de 0,01, los dos últimos eran el 100 %. Caso real, en el
 `README.md` de ese día: «±0,0055 frente a ±0,0173», la ventaja de
@@ -139,7 +143,8 @@ El README la atribuye a los niveles 2b y 1 de `modelado-baseline.json`, cuyo
 diferencias por pliegue de otra comparación:
 
 - 0,0055: `fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.pauc.diferencias_nuevo_menos_base[24]`,
-  y también `….auc.diferencias_nuevo_menos_base[24]` y `….auc.media`;
+  y también `….auc.diferencias_nuevo_menos_base[24]` y `….auc.media`, y
+  `sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin.diferencias[17]`;
 - 0,0173: `fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.pauc.diferencias_nuevo_menos_base[12]`
   y `….auc.diferencias_nuevo_menos_base[28]`.
 
@@ -155,8 +160,9 @@ print(len(P),f([str(n) for n in range(1,201)]),f([f'0,{k:04d}' for k in range(1,
 "
 ```
 
-Salida sobre el `outputs/` del 2026-10-02: `2767 93 304 382`. Con otro
-`outputs/` da otros números.
+Salida sobre el `outputs/` del 2026-10-02, con el corpus vigente:
+`2864 95 320 432`. Con otro `outputs/` o con otra lista `FUERA_DEL_CORPUS` da
+otros números.
 
 **El verificador señala; que una cifra pase no prueba que salga del campo
 que se cita.**
@@ -164,9 +170,13 @@ que se cita.**
 **No todo `outputs/` es corpus.** La lista `FUERA_DEL_CORPUS`, en el
 propio script, declara los archivos en los que no se busca respaldo, cada
 uno con su motivo: `holdout-pacientes.json`, los recuentos del conjunto
-reservado; `sensibilidad-*.json`, los análisis de sensibilidad, que no
-sustituyen a la corrida principal; y `sintesis-verificacion.json`, la salida
-del propio verificador, cuyos recuentos describen una verificación anterior. Si una cifra del borrador solo
+reservado; `sensibilidad-procedencia.json`, el análisis de sensibilidad de una
+sola partición, superado por `sensibilidad-procedencia-repetida.json`, que sí
+es corpus; y `sintesis-verificacion.json`, la salida del propio verificador,
+cuyos recuentos describen una verificación anterior. Un análisis de
+sensibilidad nuevo entra al corpus salvo que se excluya por nombre y con su
+motivo. *Hasta el 2026-10-02 el patrón `sensibilidad-*.json` los excluía
+todos.* Si una cifra del borrador solo
 coincide con uno de ellos, es casualidad, no trazabilidad. La salida los
 lista en `archivos_fuera_del_corpus`. Control positivo:
 `scripts/test_fuera_del_corpus.py`.
