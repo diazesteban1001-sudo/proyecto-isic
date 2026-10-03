@@ -1161,8 +1161,8 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
-verificación de trazabilidad con «El extractor de imagen»», del 2026-10-02,
-sobre `informe/borrador-v2.md`): **397 números, 287 con respaldo, 29
+verificación de trazabilidad con las métricas de triaje», del 2026-10-03,
+sobre `informe/borrador-v2.md`): **402 números, 290 con respaldo, 31
 señalados**, para revisar uno por uno en el anexo. De los demás, 4 son
 porcentajes del método, excluidos por lista declarada, y 77 caen en
 contextos que el verificador omite (años y etiquetas de nivel) y se listan
