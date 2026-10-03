@@ -6,12 +6,13 @@ Entrena tres niveles de baseline sobre la partición agrupada auditada,
 evaluados con pAUC sobre 80% TPR. No decide cuál nivel es "el mejor" —
 mide y reporta. No optimiza hiperparámetros.
 
-ADVERTENCIA: la implementación de pauc_above_tpr() NO ha sido
-contrastada contra el script oficial del organizador, cuya copia literal
-está en referencias/isic-primary-metric-pauc.py.md. El notebook de Kaggle
-(isic-pauc-abovetpr) NO es legible por el agente —devuelve solo el shell
-de JavaScript—, así que no se verificó contra él. Ver SKILL.md, sección
-"Sobre la métrica".
+La implementación de pauc_above_tpr() se contrastó el 2026-08-11 contra el
+script oficial del organizador, cuya ficha, con la URL del script, está en
+referencias/isic-primary-metric-pauc.py.md; el texto completo se guarda solo
+en local, en referencias/_texto-completo/upstream-PrimaryMetric-pAUC.py.
+ADVERTENCIA: el notebook de Kaggle (isic-pauc-abovetpr) NO es legible por el
+agente —devuelve solo el shell de JavaScript—, así que no se verificó contra
+él. Ver SKILL.md, sección "Sobre la métrica".
 
 Uso:
     python train_and_evaluate.py --data data/train-metadata.csv \
@@ -56,7 +57,7 @@ MIN_TPR = 0.80
 
 def pauc_above_tpr(y_true, y_score, min_tpr=MIN_TPR):
     """pAUC sobre min_tpr. Transcripción del algoritmo oficial del
-    organizador (`p_auc_tpr`), copia versionada en
+    organizador (`p_auc_tpr`), cuya ficha está versionada en
     `referencias/isic-primary-metric-pauc.py.md`. Verificado el 2026-08-11.
 
     El oficial NO usa el AUC parcial corregido de McClish: invierte las
