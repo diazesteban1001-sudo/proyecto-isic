@@ -1136,6 +1136,17 @@ corrida siga siendo la vigente.
 columnas"*. Las 15 están en `outputs/auditoria-de-fugas.json`. El recuento de
 variables del informe final se toma de `outputs/`, no del anteproyecto.
 
+**Decisión (2026-10-02, de la persona): el hallazgo de procedencia entra al
+informe.** Es el hallazgo 3 de `CLAUDE.md`. Las columnas de procedencia, que se
+excluyen de los modelos desde la decisión del 2026-09-25 (Fase 1), no explican
+la ventaja de 2b. Sus cifras salen de
+`outputs/sensibilidad-procedencia-repetida.json`, y para que el informe pueda
+citarlas, el verificador de trazabilidad deja de excluir ese archivo (commit
+«Verificador: la exclusión de sensibilidad, por archivo»). Sigue excluido
+`outputs/sensibilidad-procedencia.json`. Motivo: es una sola partición,
+superada por la validación repetida, y por la regla de `CLAUDE.md` ninguna
+conclusión comparativa se escribe desde una sola partición.
+
 ---
 
 ## Decisiones
