@@ -1,6 +1,6 @@
 ---
 name: sintesis-consultoria
-description: Lee todo outputs/*.json, cruza los hallazgos de las cuatro skills instrumento, y produce los entregables de consultoría — el informe final en Word y la demo interactiva en HTML para la presentación en vivo. A diferencia de las demás skills del proyecto, esta SÍ interpreta — es su función. Pero cada cifra que aparezca en cualquiera de los dos entregables debe rastrearse hasta un campo específico de un archivo de outputs/, nunca inventarse ni recordarse de memoria. Úsala solo al final, cuando las cuatro skills instrumento ya corrieron sobre los datos reales.
+description: Lee todo outputs/*.json, cruza los hallazgos de las cinco skills instrumento, y produce los entregables de consultoría — el informe final en Word y la demo interactiva en HTML para la presentación en vivo. A diferencia de las demás skills del proyecto, esta SÍ interpreta — es su función. Pero cada cifra que aparezca en cualquiera de los dos entregables debe rastrearse hasta un campo específico de un archivo de outputs/, nunca inventarse ni recordarse de memoria. Úsala solo al final, cuando las cinco skills instrumento ya corrieron sobre los datos reales.
 ---
 
 # Síntesis de Consultoría
@@ -59,7 +59,7 @@ en formato. Estructura sugerida:
 1. **Resumen ejecutivo** — la tesis del proyecto en un párrafo: el
    agente como consultor, no como competidor de Kaggle.
 2. **Contexto y objetivo** — de dónde sale la pregunta, por qué ISIC 2024.
-3. **Metodología** — las cinco skills como cadena de instrumentos,
+3. **Metodología** — las seis skills, cinco instrumentos y esta síntesis,
    con la separación medir/interpretar como argumento metodológico.
 4. **Hallazgos de EDA** — desde `eda-diagnostico.json`.
 5. **Diseño de validación** — desde `diseno-validacion.json`. La cifra
