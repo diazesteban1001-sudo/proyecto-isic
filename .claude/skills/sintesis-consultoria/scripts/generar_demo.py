@@ -18,6 +18,9 @@ Uso:
 import argparse
 import json
 import os
+import subprocess
+import sys
+import tempfile
 from datetime import datetime, timezone
 
 from scipy import stats
@@ -136,9 +139,18 @@ def leer(path):
         return f.read()
 
 
-def construir_datos(outputs_dir):
+def cargar_json(outputs_dir, nombre, leidos):
+    """Lee outputs/<nombre>.json y lo anota en `leidos`. El aviso de estado
+    revisa todo lo que pasó por aquí, no una lista escrita a mano: un archivo
+    que la página empiece a leer queda cubierto sin tocar el aviso."""
+    contenido = json.loads(leer(os.path.join(outputs_dir, f"{nombre}.json")))
+    leidos[nombre] = contenido
+    return contenido
+
+
+def construir_datos(outputs_dir, leidos):
     def cargar(nombre):
-        return json.loads(leer(os.path.join(outputs_dir, f"{nombre}.json")))
+        return cargar_json(outputs_dir, nombre, leidos)
 
     eda = cargar("eda-diagnostico")
     validacion = cargar("diseno-validacion")
@@ -211,7 +223,7 @@ def construir_datos(outputs_dir):
 
     mejor_univariada = max(auditoria["univariado"], key=lambda u: u["auc_oof"])
     positivos_por_fold = [f["n_val_positivos"] for f in validacion["por_fold"]]
-    verificacion = json.loads(leer(os.path.join(outputs_dir, "sintesis-verificacion.json")))
+    verificacion = cargar("sintesis-verificacion")
 
     return {
         "generado": datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M"),
@@ -860,20 +872,105 @@ document.getElementById("pie").innerHTML =
 # no puede quedarse puesto en una demo regenerada con las cifras nuevas, ni
 # faltar en una hecha con las viejas. Va en el HTML servido, no en el script
 # de la página, para que se vea aunque el JavaScript falle.
-INSTRUMENTOS_DE_LA_DEMO = ("eda-diagnostico", "diseno-validacion", "auditoria-de-fugas", "modelado-baseline")
 AVISO_EXPLORATORIO = (
     '<div class="exploratorio" role="note"><b>Cifras exploratorias.</b> '
     "Las cifras de esta p&aacute;gina son de la corrida exploratoria sobre el 100&nbsp;% "
     "de los datos y se est&aacute;n re-midiendo sobre el conjunto de desarrollo.</div>"
 )
 
+# Nombre, sin extensión, de la salida de la Fase 5 en outputs/. No está
+# fijado: lo fija el guion que abra el reservado (PLAN.md, Fase 5). Hasta
+# entonces ningún archivo que lea la página puede declarar el reservado.
+SALIDA_FASE_5 = None
 
-def aviso_exploratorio(outputs_dir):
-    for nombre in INSTRUMENTOS_DE_LA_DEMO:
-        datos = json.loads(leer(os.path.join(outputs_dir, f"{nombre}.json"))).get("datos", {})
-        if datos.get("conjunto") != "desarrollo":
-            return AVISO_EXPLORATORIO
-    return ""
+
+def comprobar_conjuntos(leidos, salida_fase_5=SALIDA_FASE_5):
+    """Devuelve el aviso exploratorio, o "" si no hace falta, mirando cada
+    archivo que la página leyó. El reservado solo se acepta en la salida de la
+    Fase 5: en cualquier otro archivo no se escribe la página, porque el aviso
+    diría «corrida exploratoria» de unas cifras que no lo son.
+    sintesis-verificacion no declara conjunto; se comprueba aparte."""
+    exploratorio = False
+    for nombre, contenido in leidos.items():
+        if nombre == "sintesis-verificacion":
+            continue
+        conjunto = (contenido.get("datos") or {}).get("conjunto")
+        if conjunto == "reservado":
+            if nombre != salida_fase_5:
+                raise SystemExit(
+                    f"outputs/{nombre}.json declara el conjunto reservado y no es la salida "
+                    "de la Fase 5. No se escribe la página."
+                )
+        elif conjunto != "desarrollo":
+            exploratorio = True
+    return AVISO_EXPLORATORIO if exploratorio else ""
+
+
+# La verificación que la página muestra tiene que ser la del borrador vigente,
+# hecha con el verificador de hoy. Se comprueba recalculándola, porque su JSON
+# no dice sobre qué borrador se corrió. Comparar resultado contra resultado
+# detecta además una verificación que se quedó atrás de outputs/: la cuarta
+# fila del registro de incidentes de CLAUDE.md fue exactamente eso.
+BORRADOR_VIGENTE = "informe/borrador-v2.md"
+RAIZ = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
+VERIFICADOR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verificar_trazabilidad.py")
+
+
+def comprobar_verificacion(outputs_dir):
+    with tempfile.TemporaryDirectory() as tmp:
+        recalculada = os.path.join(tmp, "sintesis-verificacion")
+        subprocess.run(
+            [sys.executable, VERIFICADOR, "--borrador", BORRADOR_VIGENTE,
+             "--outputs-dir", os.path.abspath(outputs_dir), "--out", recalculada],
+            cwd=RAIZ, check=True, capture_output=True,
+        )
+        esperado_json = json.loads(leer(f"{recalculada}.json"))
+        esperado_md = leer(f"{recalculada}.md")
+    actual_json = json.loads(leer(os.path.join(outputs_dir, "sintesis-verificacion.json")))
+    actual_md = leer(os.path.join(outputs_dir, "sintesis-verificacion.md"))
+    if actual_json == esperado_json and actual_md == esperado_md:
+        return
+    motivos = []
+    cabecera_actual = actual_md.split("\n", 1)[0]
+    if cabecera_actual != esperado_md.split("\n", 1)[0]:
+        motivos.append(f"se corrió sobre otro borrador («{cabecera_actual}»)")
+    if (actual_json.get("modo_tolerancia"), actual_json.get("tolerancia_redondeo")) != (
+            esperado_json["modo_tolerancia"], esperado_json["tolerancia_redondeo"]):
+        motivos.append(f"modo de tolerancia {actual_json.get('modo_tolerancia')!r} con margen "
+                       f"{actual_json.get('tolerancia_redondeo')!r}, no {esperado_json['modo_tolerancia']!r}")
+    if not motivos:
+        motivos.append("no coincide con recalcularla sobre el outputs/ actual")
+    raise SystemExit(
+        f"outputs/sintesis-verificacion no corresponde a {BORRADOR_VIGENTE} con el verificador "
+        f"actual: {'; '.join(motivos)}. Hay que regenerarla. No se escribe la página."
+    )
+
+
+# El modelo recomendado no está en ningún campo de outputs/: es la decisión de
+# la persona del 2026-09-26 (PLAN.md, Fase 4, «Modelo recomendado: decisión de
+# la persona, 2026-09-26»). El generador no lo da por supuesto: aplica la regla
+# fijada antes de correr sobre la salida de M3 limpio − M2 y no escribe la
+# página si el resultado no coincide con esta constante.
+RECOMENDADO = "M3 limpio"
+
+
+def regla_de_recomendacion(f3l):
+    """PLAN.md, Fase 4, «Regla de recomendación»: M3 limpio si el intervalo
+    corregido de la pAUC de M3 limpio − M2 queda entero por encima de cero; en
+    cualquier otro caso, M2."""
+    if (f3l["comparacion"]["nuevo"], f3l["comparacion"]["base"]) != ("M3limpio", "M2"):
+        raise SystemExit(f"fase4-m3limpio-vs-m2.json compara {f3l['comparacion']}, no M3 limpio − M2.")
+    bajo, _ = f3l["comparaciones_nuevo_menos_base"]["pauc"]["intervalo_t_95_nadeau_bengio"]
+    return "M3 limpio" if bajo > 0 else "M2"
+
+
+def comprobar_recomendacion(f3l):
+    regla = regla_de_recomendacion(f3l)
+    if regla != RECOMENDADO:
+        raise SystemExit(
+            f"La regla de recomendación da {regla} y RECOMENDADO dice {RECOMENDADO}. "
+            "No se escribe la página."
+        )
 
 
 def main():
@@ -889,7 +986,13 @@ def main():
     )
     args = ap.parse_args()
 
-    datos = construir_datos(args.outputs_dir)
+    # Las tres comprobaciones van antes de renderizar: si una se niega, no se
+    # escribe ningún destino, ni siquiera a medias.
+    leidos = {}
+    datos = construir_datos(args.outputs_dir, leidos)
+    comprobar_recomendacion(cargar_json(args.outputs_dir, "fase4-m3limpio-vs-m2", leidos))
+    comprobar_verificacion(args.outputs_dir)
+    aviso = comprobar_conjuntos(leidos)
     # </script> dentro de la cadena JSON cerraria la etiqueta que la contiene;
     # \/ es escape válido en JSON, así que el dato llega intacto al parser.
     crudo = json.dumps(datos, ensure_ascii=False).replace("</", "<\\/")
@@ -928,7 +1031,7 @@ def main():
     # que la igualdad sea estructural en vez de algo que haya que comprobar.
     html = (
         PLANTILLA.replace("__CHARTJS__", chartjs)
-        .replace("__AVISO_EXPLORATORIO__", aviso_exploratorio(args.outputs_dir))
+        .replace("__AVISO_EXPLORATORIO__", aviso)
         .replace("__DATOS__", crudo)
     )
 
