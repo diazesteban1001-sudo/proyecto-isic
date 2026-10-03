@@ -10,9 +10,14 @@ Es, literalmente, el trabajo del consultor: leer los instrumentos, resolver
 las contradicciones entre ellos, y emitir una recomendación defendible.
 
 Todas las demás skills existen para que esta pueda hacer su trabajo con
-material confiable. Si alguna de las cuatro no ha corrido sobre los datos
+material confiable. Si alguna de las cinco no ha corrido sobre los datos
 reales, o corrió pero no fue auditada, esta skill no debe usarse todavía
 — el informe heredaría esa falta de rigor sin decirlo.
+
+**Estado (2026-10-02):** las cinco corrieron sobre los datos reales. Las
+cuatro originales —`eda-diagnostico`, `diseno-validacion`,
+`auditoria-de-fugas` y `modelado-baseline`— están auditadas;
+`extraccion-imagen` todavía no, así que esta skill no debe usarse aún.
 
 ## Antes de empezar
 
@@ -23,6 +28,7 @@ sintético de prueba):
 - `outputs/diseno-validacion.json`
 - `outputs/auditoria-de-fugas.json`
 - `outputs/modelado-baseline.json`
+- `outputs/extraccion-imagen.json`
 
 Si falta alguno, dilo explícitamente y detente. No redactes el informe
 con huecos rellenados de memoria.
