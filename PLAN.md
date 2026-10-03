@@ -1174,6 +1174,27 @@ inventario de lo desfasado en la demo publicada.
   `informe/borrador-v2.md`, con su `.md` al hacer clic. La explicación de cada
   cifra señalada espera al anexo.
 
+**Respuestas sobre la demo (2026-10-02, de la persona)**, a lo que dejó abierto
+el primer paso:
+- Que el generador «falle» quiere decir que no escribe la página.
+- `extraccion-imagen.json` cuenta como no exploratorio solo si declara
+  `datos.reparto`, con el motivo en un comentario: no lee etiquetas (campo
+  `nota`). Control positivo: una copia sintética sin `datos.reparto` tiene que
+  disparar el aviso.
+- El título del eje sale de `modelado-baseline.json >
+  escala_de_referencia_pauc`.
+- El gráfico de comparaciones muestra los 20 intervalos, cinco comparaciones
+  por cuatro métricas: un panel por métrica, con la línea del cero. Elegir solo
+  los que cita el informe sería seleccionar, y «Limitaciones» ya describe el
+  conjunto completo.
+- El nivel 0 sale del gráfico. La historia del error de la métrica sale de la
+  demo. El pie deja de mencionar el `.docx`.
+- Commodities: no se confirma, y queda fuera.
+- Lo desfasado se actualiza: el guardarraíl 2 de `CLAUDE.md` y, en el
+  `SKILL.md` de `sintesis-consultoria`, el comando de la Etapa 2 y la
+  comprobación de «0,1451». Va después de corregir el verificador, porque sus
+  cifras cambian, y en un commit de higiene aparte.
+
 ---
 
 ## Decisiones
