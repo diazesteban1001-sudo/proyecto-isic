@@ -1123,27 +1123,27 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 *Hasta el 2026-10-02 aquí decía «con tolerancia de redondeo 0,01»: era el
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
-(`outputs/sintesis-verificacion.json`, regenerado por última vez por el commit
-"Borrador: las referencias reducidas ya no son copias literales", del
-2026-09-21, con los mismos recuentos que el anterior, "Regenerar la
-verificacion de trazabilidad desde el estado actual", del 2026-09-17): **344 números en el
-borrador, 298 con respaldo, 16 señalados** —recuentos de la corrida anterior a
-la re-medición de la Fase 1 (2026-09-25), con la tolerancia de 0,01, sobre el
-borrador y el `outputs/` de entonces, pendientes de regenerar— para revisar
-uno por uno; el
-resto cae en contextos que no son cifras medidas (años, etiquetas de
-nivel, numeración de secciones) y se descarta explícitamente. De esos 16,
-catorce son siete cifras contadas dos veces: la sección §10.4 del
-borrador tiene que reescribir cada cifra para justificarla, y el
-verificador no distingue una afirmación de su propia auditoría.
+(`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
+verificación de trazabilidad con los omitidos registrados», del 2026-10-02,
+sobre `informe/borrador-v2.md`): **352 números, 277 con respaldo, 23
+señalados**, para revisar uno por uno en el anexo. De los demás, 4 son
+porcentajes del método, excluidos por lista declarada, y 48 caen en
+contextos que el verificador omite (años y etiquetas de nivel) y se listan
+aparte, en `numeros_en_contextos_omitidos`. Los cuatro grupos suman el total,
+y el verificador se detiene si no. *Hasta el 2026-10-02 esta frase citaba la
+corrida sobre `informe/borrador.md`, del 2026-09-21: 344 números, 298 con
+respaldo y 16 señalados, con la tolerancia de 0,01; catorce de esos 16 eran
+siete cifras contadas dos veces por la sección §10.4 de ese borrador. Y
+decía que el resto, en esos contextos, «se descarta explícitamente»: el
+código lo saltaba sin registrarlo (commit «Verificador: registrar los
+números omitidos por su contexto»).*
 
-Estas tres cifras estuvieron desactualizadas —decían 331/291/13— y son
-un caso de la cuarta clase del registro de incidentes (regla 6): una
-cifra derivada de `outputs/` que se quedó atrás sin que nada lo
-advirtiera.
+Antes, esas cifras habían estado desactualizadas —decían 331/291/13—, un
+caso de la cuarta clase del registro de incidentes (regla 6): una cifra
+derivada de `outputs/` que se quedó atrás sin que nada lo advirtiera.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
-`informe/borrador.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
+`informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
 produjo un fallo real: este archivo atribuía al Nivel 2a una AUC estándar
 de 0,6685 que no existe en ningún `outputs/*.json`. **Retirada el
 2026-08-18** (sección "Hallazgos vivos"); el caso A de

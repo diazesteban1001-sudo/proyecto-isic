@@ -93,11 +93,13 @@ sueltos sin fuente.
 
 ### Etapa 2 — Verificación de trazabilidad (obligatoria antes de Word)
 
-Corre el script de verificación sobre el borrador:
+Corre el script de verificación sobre el borrador vigente, desde la raíz del
+repositorio y con esta ruta exacta: el generador de la demo lo vuelve a correr
+y exige que coincida, incluida la cabecera del `.md`.
 
 ```bash
 .venv/bin/python .claude/skills/sintesis-consultoria/scripts/verificar_trazabilidad.py \
-  --borrador informe/borrador.md \
+  --borrador informe/borrador-v2.md \
   --outputs-dir outputs/ \
   --out outputs/sintesis-verificacion
 ```
@@ -105,7 +107,7 @@ Corre el script de verificación sobre el borrador:
 El script extrae todo número que aparezca en el borrador y lo compara
 contra el conjunto de valores presentes en `outputs/*.json`. No decide
 si un número está bien citado en contexto — solo señala cuáles no
-tienen ningún respaldo numérico exacto (con tolerancia de redondeo) en
+tienen ningún respaldo numérico (con la tolerancia de redondeo) en
 ningún archivo de `outputs/`. Cada número señalado se revisa a mano:
 puede ser una cifra legítima que no viene de outputs/ (ej. "cinco
 skills", "393 positivos" citado dos veces con redondeo distinto), pero
@@ -269,7 +271,10 @@ grep -o -E '(src|href)="https?://[^"]*"' informe/demo.html   # sin salida
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
   --headless --disable-gpu --proxy-server="127.0.0.1:1" \
   --virtual-time-budget=6000 --dump-dom \
-  "file://$PWD/informe/demo.html" | grep -c "0,1451"          # debe dar 1
+  "file://$PWD/informe/demo.html" | grep -c "318\.229"       # más de 0
+# «318.229», con punto de miles, solo existe si el JavaScript corrió: en el
+# HTML fuente el dato va como 318229. Hasta el 2026-10-02 se buscaba «0,1451»,
+# que dejó de estar en la página con las cifras del conjunto de desarrollo.
 ```
 
 Reglas, idénticas a las del informe escrito:
@@ -332,10 +337,21 @@ Reglas, idénticas a las del informe escrito:
   "numeros_sin_respaldo": [
     {"valor": str, "contexto": str, "linea_aprox": int}, ...
   ],
+  "porcentajes_de_metodo_excluidos": [
+    {"valor": str, "motivo": str, "contexto": str, "linea_aprox": int}, ...
+  ],
+  "numeros_en_contextos_omitidos": [
+    {"valor": str, "contexto": str, "linea_aprox": int}, ...
+  ],
   "modo_tolerancia": "decimales_escritos" | "fija",
   "tolerancia_redondeo": float | null
 }
 ```
+
+Los cuatro grupos —con respaldo, sin respaldo, porcentajes del método y
+omitidos por su contexto (`IGNORAR_CONTEXTOS`)— suman `numeros_en_borrador`,
+y el verificador se detiene si no. *Hasta el 2026-10-02 los omitidos se
+saltaban sin registrarse.* Control: `scripts/test_contextos_omitidos.py`.
 
 `tolerancia_redondeo` solo tiene valor en el modo `fija`, el de
 `--tolerancia`. En `decimales_escritos` es `null`, porque cada cifra lleva la
