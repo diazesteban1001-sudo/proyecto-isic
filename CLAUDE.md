@@ -1074,8 +1074,11 @@ Es la regla 2 con un verificador detrás, no un propósito.
 **Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
 extrae todo número del borrador y lo busca en los `outputs/*.json`, salvo en
 los que declara fuera del corpus (`FUERA_DEL_CORPUS`, desde el 2026-09-25: el
-conjunto reservado, los análisis de sensibilidad y la salida del propio
-verificador). La tolerancia de redondeo depende de cómo está escrita la
+conjunto reservado; el análisis de sensibilidad de una sola partición,
+`sensibilidad-procedencia.json`, excluido por nombre y con su motivo, porque
+lo supera la validación repetida; y la salida del propio verificador. *Hasta
+el 2026-10-02 un patrón excluía todos los análisis de sensibilidad*). La
+tolerancia de redondeo depende de cómo está escrita la
 cifra: con decimales, media unidad de su último dígito («0,1451» tiene que
 estar entre 0,14505 y 0,14515); sin decimales, sea recuento o porcentaje,
 la coincidencia tiene que ser exacta. `--tolerancia` impone en su lugar un
