@@ -289,7 +289,16 @@ Reglas, idénticas a las del informe escrito:
   100 % de los datos. Lo decide el script con los datos de entrada, no una
   bandera, y va en el HTML servido. El conjunto reservado solo se acepta en
   la salida de la Fase 5; si otro archivo lo declara, el script no escribe
-  la página.
+  la página. Dos archivos reparten los dos conjuntos en vez de medir sobre
+  uno, y cuentan como no exploratorios solo si lo declaran:
+  `extraccion-imagen.json`, con `datos.reparto`, y `holdout-pacientes.json`,
+  con `fecha_sellado`; de este último la página lee solo la semilla y la
+  fracción.
+- **Las frases que dicen algo de los datos se comprueban al generar.** El
+  texto fijo sale de frases verificadas de `informe/borrador-v2.md`; las que
+  afirman algo que depende de `outputs/` —que un intervalo contiene el cero,
+  que un orden se invierte— pasan por `afirmar()`, y si una deja de ser
+  cierta, el script no escribe la página.
 - **Dos controles más que impiden escribirla** (2026-10-02; control
   positivo: `scripts/test_generar_demo.py`):
   - la regla de recomendación de `PLAN.md`, Fase 4, aplicada sobre

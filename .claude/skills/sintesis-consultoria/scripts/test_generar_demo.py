@@ -26,6 +26,10 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      informe/borrador.md. No se escribe.
   H. Verificación con otro modo de tolerancia: sobre informe/borrador-v2.md,
      con --tolerancia 0.01. No se escribe.
+  I. extraccion-imagen.json sin datos.reparto: reparte los dos conjuntos y
+     solo cuenta como no exploratorio si lo declara. Sale con el aviso.
+  J. holdout-pacientes.json sin fecha_sellado: lo mismo con el registro del
+     sellado, del que la página lee la semilla y la fracción.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -118,6 +122,12 @@ def main():
     def reservado(o):
         o["datos"]["conjunto"] = "reservado"
 
+    def sin_reparto(o):
+        o["datos"].pop("reparto", None)
+
+    def sin_sellado(o):
+        o.pop("fecha_sellado", None)
+
     corridas = {
         "A": generar("A"),
         "B": generar("B", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", intervalo_que_cruza)),
@@ -126,6 +136,8 @@ def main():
         "E": generar("E", lambda d: cambiar(d, "modelado-baseline", reservado)),
         "G": generar("G", lambda d: verificar(d, "informe/borrador.md")),
         "H": generar("H", lambda d: verificar(d, "informe/borrador-v2.md", "--tolerancia", "0.01")),
+        "I": generar("I", lambda d: cambiar(d, "extraccion-imagen", sin_reparto)),
+        "J": generar("J", lambda d: cambiar(d, "holdout-pacientes", sin_sellado)),
     }
     f_ok, f_detalle = caso_f()
 
@@ -146,6 +158,8 @@ def main():
         ("F. el reservado se acepta solo en la salida de la Fase 5", f_ok, f_detalle),
         ("G. verificación sobre informe/borrador.md: no escribe", *negada("G")),
         ("H. verificación con --tolerancia 0.01: no escribe", *negada("H")),
+        ("I. extraccion-imagen.json sin datos.reparto: escribe con aviso", *escrita("I", True)),
+        ("J. holdout-pacientes.json sin fecha_sellado: escribe con aviso", *escrita("J", True)),
     ]
     fallos = 0
     for titulo, ok, detalle in casos:

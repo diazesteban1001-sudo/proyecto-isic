@@ -8,6 +8,11 @@ se genera desde outputs/*.json igual que el informe, para que una
 corrección en los instrumentos llegue a los dos entregables o a
 ninguno. Un número tecleado en la plantilla sería una cifra inventada.
 
+El texto fijo sale de frases ya verificadas de informe/borrador-v2.md; los
+comentarios de la plantilla dan la línea de cada una. Las frases cuya verdad
+depende de los datos se comprueban al generar (afirmar): si una deja de ser
+cierta, no se escribe la página.
+
 Los datos van embebidos en el archivo, no se piden con fetch: la demo
 tiene que abrir con doble clic desde una USB, sin servidor.
 
@@ -18,16 +23,22 @@ Uso:
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
 from datetime import datetime, timezone
+
+RAIZ = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
+VERIFICADOR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verificar_trazabilidad.py")
 
 
 # Los .md de cada instrumento se muestran al hacer clic en su casilla del
 # diagrama. sintesis-consultoria no mide nada, así que no tiene un .md de
 # resultados propio: se le asocia el de la verificación de trazabilidad,
 # que es lo que esta skill sí produce como evidencia de su trabajo.
+# Los textos de las cuatro primeras etapas son los de antes; los de la
+# extracción, el modelado y la síntesis, los de huecos-demo.md, Parte B.
 CADENA = [
     {
         "nombre": "eda-diagnostico",
@@ -67,69 +78,79 @@ CADENA = [
                   "confirmar que todo está bien. Un chequeo que no puede fallar no vale nada.",
     },
     {
+        "nombre": "extraccion-imagen",
+        "etapa": "Extracción de imagen",
+        "tipo": "medición",
+        "funcion": "Se extrajeron características congeladas de cada imagen con DINOv2, sin ajuste fino",
+        "md": "extraccion-imagen",
+        # «mide» lleva cifras, así que se arma en la página (MIDE).
+        "mide": None,
+        "porque": "Para medir si la imagen añade algo a la metadata, y a qué costo, sin ajustar "
+                  "la red: las características se extraen una vez y alimentan M4 y M4b.",
+    },
+    {
         "nombre": "modelado-baseline",
         "etapa": "Modelos de referencia",
         "tipo": "medición",
-        "funcion": "Se entrenaron y evaluaron cuatro niveles con la métrica oficial",
+        "funcion": "Se entrenaron y evaluaron los niveles de referencia y los modelos M1 a M4b "
+                   "sobre pliegues agrupados por paciente",
         "md": "modelado-baseline",
-        "mide": "Cuatro niveles de referencia sobre los mismos folds, evaluados con la métrica "
-                "oficial de la competencia y no con la de por defecto, reportando el resultado de "
-                "cada fold y no solo la media.",
+        "mide": "Primero, los niveles de referencia con la métrica oficial. Después, los modelos "
+                "M1 a M4b en validación cruzada repetida, en cuatro métricas —la pAUC, el AUC "
+                "estándar, la sensibilidad top-15 y el NNT80% SE—, y el tiempo de inferencia de "
+                "todos menos M3.",
         "porque": "Los niveles existen para acotar: sin la referencia univariada no se sabe "
-                  "cuánto aporta combinar columnas, y sin el modelo desbalanceado no se ve que "
-                  "omitir el ajuste de clase produce un fallo silencioso.",
+                  "cuánto aporta combinar columnas. Y ninguna conclusión comparativa se escribe "
+                  "desde una sola partición: dos veces, un resultado de una sola partición no "
+                  "sobrevivió a la validación repetida.",
     },
     {
         "nombre": "sintesis-consultoria",
         "etapa": "Síntesis y verificación",
         "tipo": "interpretación",
-        "funcion": "Se cruzaron las cuatro salidas, se redactó el informe y se verificó su trazabilidad",
+        "funcion": "Se cruzaron las cinco salidas, se redactó el informe y se verificó su trazabilidad",
         # No mide nada, así que no tiene un .md de resultados propio: se le
         # asocia el de la verificación de trazabilidad, que es la evidencia
         # de que hizo su trabajo.
         "md": "sintesis-verificacion",
-        "mide": "Nada. Es la única etapa que interpreta: se cruzaron las cuatro salidas "
-                "anteriores, se resolvieron sus contradicciones y se emitió la recomendación. "
-                "Lo que sí se verificó fue a sí misma, extrayendo cada número del informe y "
-                "comprobando que tuviera respaldo en outputs/.",
+        "mide": "Nada. Es la única etapa que interpreta: cruza las cinco salidas anteriores, "
+                "resuelve sus contradicciones y emite la recomendación. Lo que sí hace es "
+                "verificarse a sí misma: extrae cada número del informe y busca su respaldo en "
+                "outputs/.",
         "porque": "Es el trabajo del consultor, y está separado de las etapas de medición a "
                   "propósito: una etapa que interpretara sus propios resultados tendería a "
                   "justificarlos.",
     },
 ]
 
-# Glosas por familia de columna. NO son medición: el JSON dice que una
-# columna no está en test, no dice por qué. El porqué es lectura del
-# consultor y en la página se marca como tal, en su propia columna
-# rotulada, nunca mezclada con lo medido.
-GLOSAS = {
-    "iddx": "Taxonomía diagnóstica: es la etiqueta con otro nombre.",
-    "mel_": "Solo existe tras la biopsia, y solo para melanomas. Predecir el pasado con información del futuro.",
-    "tbp_lv_dnn_lesion_confidence": "No es post-biopsia, pero al no estar en test cualquier modelo que la use es inservible en inferencia.",
-    "lesion_id": "Identificador de lesión, presente solo en train.",
-    "target": "Es la variable respuesta.",
-    "image_type": "Constante en todo el archivo: no distingue nada.",
-    "isic_id": "Identificador de fila.",
-}
-
-
-def glosa(col):
-    for clave, texto in GLOSAS.items():
-        if col.startswith(clave):
-            return texto
-    return ""
-
-
-def motivo_mecanico(col, auditoria):
-    """El motivo tal como lo dejó el instrumento, sin interpretar."""
-    motivos = []
-    if col in auditoria.get("columnas_solo_en_train", []):
-        motivos.append("no está en test")
-    if col in auditoria.get("columnas_constantes", []):
-        motivos.append("constante")
-    if col in auditoria.get("columnas_identificador", []):
-        motivos.append("identificador")
-    return " + ".join(motivos) if motivos else "excluida por el script de modelado"
+# Las cinco comparaciones de la Fase 4, en el orden de «Resultados».
+COMPARACIONES = [
+    ("M2 − M1", "fase4-m2-vs-m1"),
+    ("M4 − M2", "fase4-m4-vs-m2"),
+    ("M4b − M2", "fase4-m4b-vs-m2"),
+    ("M3 − M2", "fase4-m3-vs-m2"),
+    ("M3 limpio − M2", "fase4-m3limpio-vs-m2"),
+]
+METRICAS = ["pauc", "auc", "setop15", "nnt80"]
+# Las filas de la tabla de tres ejes: M3 sin limpiar queda fuera, porque no es
+# candidato y su camino de predicción no se cronometró (decisión de la persona,
+# 2026-10-02).
+TABLA = [
+    ("M1", "fase4-m2-vs-m1", "M1"),
+    ("M2", "fase4-m2-vs-m1", "M2"),
+    ("M3 limpio", "fase4-m3limpio-vs-m2", "M3limpio"),
+    ("M4", "fase4-m4-vs-m2", "M4"),
+    ("M4b", "fase4-m4b-vs-m2", "M4b"),
+]
+NIVELES_VR = [
+    ("Nivel 1", "Regresión logística", "nivel_1_regresion_logistica"),
+    ("Nivel 2a", "Gradient boosting sin balancear", "nivel_2a_gradient_boosting_sin_balancear"),
+    ("Nivel 2b", "Gradient boosting balanceado", "nivel_2b_gradient_boosting_balanceado"),
+]
+# La cita de PanDerm se lee de su texto versionado al generar: así se
+# comprueba cada vez, y su cifra no se teclea.
+CITA_PANDERM = ("referencias/panderm-reduccion-examenes.md",
+                re.compile(r"(We selected a subset containing )([\d,]+)( tile images, stratified by institutions)"))
 
 
 def leer(path):
@@ -146,6 +167,24 @@ def cargar_json(outputs_dir, nombre, leidos):
     return contenido
 
 
+def afirmar(condicion, frase):
+    """Las frases del texto fijo que dicen algo de los datos se comprueban
+    contra los datos. Si una deja de ser cierta, la página no se escribe."""
+    if not condicion:
+        raise SystemExit(f"La frase «{frase}» ya no es cierta con outputs/. No se escribe la página.")
+
+
+def contiene_cero(ic):
+    return ic[0] <= 0 <= ic[1]
+
+
+def extraer(patron, texto, que):
+    m = re.search(patron, texto)
+    if not m:
+        raise SystemExit(f"No se encontró {que} en «{texto}». No se escribe la página.")
+    return m
+
+
 def construir_datos(outputs_dir, leidos):
     def cargar(nombre):
         return cargar_json(outputs_dir, nombre, leidos)
@@ -154,116 +193,216 @@ def construir_datos(outputs_dir, leidos):
     validacion = cargar("diseno-validacion")
     auditoria = cargar("auditoria-de-fugas")
     modelado = cargar("modelado-baseline")
+    vr = cargar("validacion-repetida")
+    procedencia = cargar("sensibilidad-procedencia-repetida")
+    tiempo = cargar("tiempo-inferencia")
+    extraccion = cargar("extraccion-imagen")
+    sellado = cargar("holdout-pacientes")
+    verificacion = cargar("sintesis-verificacion")
+    fase4 = {archivo: cargar(archivo) for _, archivo in COMPARACIONES}
 
-    niveles = [
-        ("Nivel 0", "Referencia univariada", "nivel_0_referencia_univariada"),
-        ("Nivel 1", "Regresión logística", "nivel_1_regresion_logistica"),
-        ("Nivel 2a", "Gradient boosting sin balancear", "nivel_2a_gradient_boosting_sin_balancear"),
-        ("Nivel 2b", "Gradient boosting balanceado", "nivel_2b_gradient_boosting_balanceado"),
-    ]
-    modelos = []
-    for etiqueta, descripcion, clave in niveles:
-        bloque = modelado[clave]
-        modelos.append({
-            "etiqueta": etiqueta,
-            "descripcion": descripcion,
-            "campo": clave,
-            "media": bloque["pauc_media"],
-            "std": bloque["pauc_std"],
-            "auc": bloque.get("auc_estandar_media"),
-            "por_fold": bloque["pauc_por_fold"],
-            "nota": bloque.get("nota", ""),
+    escala = modelado["escala_de_referencia_pauc"]
+
+    # Cifras que outputs/ guarda dentro de un texto: se extraen del texto en
+    # vez de teclearse.
+    m = extraer(r"pAUC sobre (\d+)% TPR, rango \[(\d+(?:\.\d+)?), (\d+(?:\.\d+)?)\]",
+                modelado["metrica"], "el umbral y el rango de la métrica")
+    metrica = {"tpr": int(m.group(1)), "rmin": float(m.group(2)), "rmax": float(m.group(3))}
+    auc_azar = float(extraer(r"el AUC va de (\d+(?:\.\d+)?) \(azar\)",
+                             modelado["nivel_0_referencia_univariada"]["nota"], "el azar del AUC").group(1))
+    clave_ic = next(k for k in fase4["fase4-m2-vs-m1"]["comparaciones_nuevo_menos_base"]["pauc"]
+                    if re.fullmatch(r"intervalo_t_\d+_nadeau_bengio", k))
+    nivel_ic = int(re.fullmatch(r"intervalo_t_(\d+)_nadeau_bengio", clave_ic).group(1))
+    nota_nnt = extraer(r"En el NNT80% SE menos es mejor[^.]*\.", fase4["fase4-m2-vs-m1"]["nota"],
+                       "la nota del NNT").group(0)
+
+    ruta_cita, patron_cita = CITA_PANDERM
+    lineas_cita = [(i, patron_cita.search(l)) for i, l in enumerate(leer(os.path.join(RAIZ, ruta_cita)).split("\n"), 1)]
+    lineas_cita = [(i, c) for i, c in lineas_cita if c]
+    if len(lineas_cita) != 1:
+        raise SystemExit(f"La cita de PanDerm aparece {len(lineas_cita)} veces en {ruta_cita}, no una.")
+    linea_cita, cita = lineas_cita[0]
+
+    # --- validación repetida: niveles y comparación 2b − 1 ---
+    niveles = []
+    for etiqueta, descripcion, clave in NIVELES_VR:
+        bloque = vr[clave]
+        folds = [x for s in vr["semillas_corridas"] for x in bloque["pauc_por_semilla_y_fold"][str(s)]]
+        niveles.append({"etiqueta": etiqueta, "descripcion": descripcion, "campo": clave,
+                        "media": bloque["pauc_media_global"], "std": bloque["pauc_std_entre_folds"],
+                        "folds": folds})
+    n1, n2a, n2b = niveles
+    pareada = vr["comparacion_pareada_2b_menos_1"]
+    etiquetas_pareadas = [f"semilla {s}, pliegue {f}" for s in vr["semillas_corridas"] for f in range(vr["n_splits"])]
+
+    # --- comparaciones de la Fase 4 ---
+    comparaciones = []
+    for etiqueta, archivo in COMPARACIONES:
+        c = fase4[archivo]["comparaciones_nuevo_menos_base"]
+        comparaciones.append({
+            "etiqueta": etiqueta, "archivo": f"{archivo}.json",
+            "metricas": {k: {"media": c[k]["media"], "ic": c[k][clave_ic],
+                             "folds": c[k]["nuevo_mejor_en_folds"], "de_folds": c[k]["de_folds"],
+                             "semillas": c[k]["nuevo_mejor_en_semillas"], "de_semillas": c[k]["de_semillas"],
+                             "mayor_es_mejor": c[k]["mayor_es_mejor"]} for k in METRICAS},
         })
+    C = {c["etiqueta"]: c["metricas"] for c in comparaciones}
 
-    excluidas = []
-    for col in modelado["columnas_excluidas"]:
-        excluidas.append({
-            "columna": col,
-            "motivo": motivo_mecanico(col, auditoria),
-            "glosa": glosa(col),
-        })
+    tabla = []
+    for modelo, archivo, clave in TABLA:
+        mt = fase4[archivo]["metricas"][clave]
+        tabla.append({"modelo": modelo, "archivo": f"{archivo}.json", "clave": clave,
+                      "pauc": mt["pauc"]["media_global"], "setop15": mt["setop15"]["media_global"],
+                      "nnt80": mt["nnt80"]["media_global"],
+                      "tiempo": tiempo["tiempos"][clave]["mediana_segundos_por_1000_lesiones"]})
+    T = {f["modelo"]: f for f in tabla}
 
-    # El contraejemplo: nombre sospechoso, pero el instrumento la dejó
-    # pasar y la investigación confirmó que es legítima. Sin esta fila la
-    # tabla de exclusiones parece un filtro por nombre.
-    nevi = next(
-        (u for u in auditoria["univariado"] if u["columna"] == "tbp_lv_nevi_confidence"),
-        None,
-    )
+    # El modelo recomendado se muestra desde la constante comprobada, con su
+    # pAUC media; el texto de la recomendación describe M3 limpio.
+    origen_recomendado = {"M3 limpio": ("fase4-m3limpio-vs-m2", "M3limpio")}
+    if RECOMENDADO not in origen_recomendado:
+        raise SystemExit(f"El texto de la recomendación describe M3 limpio, no {RECOMENDADO}.")
+    archivo_rec, clave_rec = origen_recomendado[RECOMENDADO]
+
+    por_fold = validacion["por_fold"]
+    c_proc = procedencia["comparaciones"]
+    univariado = {u["columna"]: u for u in auditoria["univariado"]}
+    solo_train = auditoria["columnas_solo_en_train"]
+
+    # --- frases que dicen algo de los datos ---
+    afirmar(all(x < escala["azar"] for x in n2a["folds"]),
+            "por debajo del piso aleatorio de 0,02 en los 50 pliegues")
+    afirmar(modelado["nivel_2a_gradient_boosting_sin_balancear"]["auc_estandar_media"] > auc_azar
+            and modelado["nivel_2a_gradient_boosting_sin_balancear"]["pauc_media"] < escala["azar"],
+            "Las dos métricas discrepan sobre si el modelo supera al azar")
+    afirmar(contiene_cero(pareada["intervalo_t_95_nadeau_bengio"]), "La ventaja no está establecida")
+    afirmar(n2b["std"] > n1["std"], "Con las 10 semillas el orden se invierte")
+    afirmar(contiene_cero(c_proc["b_2b_con_menos_2b_sin"]["intervalo_t_95_nadeau_bengio"])
+            and contiene_cero(c_proc["c_1_con_menos_1_sin"]["intervalo_t_95_nadeau_bengio"]),
+            "La exclusión se sostiene por razón de uso, no de desempeño")
+    afirmar(c_proc["c_1_con_menos_1_sin"]["gana_primer_termino_en_semillas"]
+            == c_proc["c_1_con_menos_1_sin"]["de_semillas"],
+            "En la logística, incluirlas mejora en las 10 semillas")
+    m21, m42, m4b, m32, m3l = (C[e] for e, _ in COMPARACIONES)
+    afirmar(contiene_cero(m21["pauc"]["ic"]) and not contiene_cero(m21["setop15"]["ic"])
+            and not contiene_cero(m21["nnt80"]["ic"]) and m21["setop15"]["media"] > 0 and m21["nnt80"]["media"] < 0,
+            "M2 se distingue de M1 en los dos ejes de triaje, no en la pAUC")
+    afirmar(all(contiene_cero(m42[k]["ic"]) for k in METRICAS)
+            and all(m42[k]["media"] < 0 for k in ("pauc", "auc", "setop15")) and m42["nnt80"]["media"] > 0,
+            "Ningún intervalo excluye el cero, y la estimación puntual es peor en las cuatro métricas")
+    afirmar(all(contiene_cero(m4b[k]["ic"]) for k in METRICAS),
+            "Las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma "
+            "distinguible ninguna de las métricas")
+    afirmar(2 * m42["pauc"]["semillas"] < m42["pauc"]["de_semillas"] < 2 * m4b["pauc"]["semillas"],
+            "la forma de incorporar la imagen invierte la dirección de la pAUC")
+    afirmar(m32["pauc"]["ic"][0] > 0, "esa ventaja no se puede separar de los dos sesgos conocidos a favor de M3")
+    afirmar(m3l["pauc"]["ic"][0] > 0 and m3l["auc"]["ic"][0] > 0
+            and contiene_cero(m3l["setop15"]["ic"]) and contiene_cero(m3l["nnt80"]["ic"]),
+            "solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar")
+    afirmar(T["M2"]["tiempo"] < T["M3 limpio"]["tiempo"] < 0.1,
+            "M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo")
+    afirmar(min(T["M4"]["tiempo"], T["M4b"]["tiempo"]) > max(T[x]["tiempo"] for x in ("M1", "M2", "M3 limpio")),
+            "Lo caro, con diferencia, es la imagen")
+    afirmar(all(fase4[a]["metricas"]["M2"]["pauc"]["media_global"] == T["M2"]["pauc"] for _, a in COMPARACIONES[1:]),
+            "M2 es el mismo en las cuatro comparaciones contra M2")
+    afirmar(len(solo_train) + len(auditoria["columnas_constantes"]) + len(auditoria["columnas_identificador"])
+            + len(auditoria["columnas_procedencia"]) == len(modelado["columnas_excluidas"])
+            and len(auditoria["columnas_constantes"]) == 1 and len(auditoria["columnas_identificador"]) == 1
+            and len(auditoria["columnas_procedencia"]) == 2,
+            "Quedan fuera de los modelos 15 columnas, por cuatro motivos")
+    afirmar("target" in solo_train and any(c.startswith("iddx") for c in solo_train)
+            and {"mel_mitotic_index", "mel_thick_mm"} <= set(solo_train),
+            "Entre ellas están la propia etiqueta, la taxonomía diagnóstica y dos medidas que solo existen tras la biopsia")
+    preguntas = [p["columna"] for p in auditoria["preguntas_abiertas"]]
+    afirmar(preguntas[0] == "tbp_lv_nevi_confidence" and "tbp_lv_nevi_confidence" not in solo_train
+            and set(preguntas[1:]) <= set(solo_train),
+            "la única que no contestan los motivos de arriba es tbp_lv_nevi_confidence")
 
     resumenes = {}
-    for skill in CADENA:
-        ruta = os.path.join(outputs_dir, f"{skill['md']}.md")
-        resumenes[skill["md"]] = leer(ruta) if os.path.exists(ruta) else "(sin archivo)"
-
-    mejor_univariada = max(auditoria["univariado"], key=lambda u: u["auc_oof"])
-    positivos_por_fold = [f["n_val_positivos"] for f in validacion["por_fold"]]
-    verificacion = cargar("sintesis-verificacion")
+    for etapa in CADENA:
+        ruta = os.path.join(outputs_dir, f"{etapa['md']}.md")
+        resumenes[etapa["md"]] = leer(ruta) if os.path.exists(ruta) else "(sin archivo)"
 
     return {
         "generado": datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M"),
         "cadena": CADENA,
         "resumenes": resumenes,
-        "auditoria": {
-            "n_solo_en_train": len(auditoria["columnas_solo_en_train"]),
-            "n_constantes": len(auditoria["columnas_constantes"]),
-            "n_identificador": len(auditoria["columnas_identificador"]),
-            "n_evaluadas": len(auditoria["univariado"]),
-            "umbral": auditoria["umbral_auc_sospechoso"],
-            "auc_max": mejor_univariada["auc_oof"],
-            "columna_auc_max": mejor_univariada["columna"],
-            "n_preguntas_abiertas": len(auditoria["preguntas_abiertas"]),
-        },
-        "verificacion": {
-            "numeros": verificacion["numeros_en_borrador"],
-            "con_respaldo": verificacion["numeros_con_respaldo_en_outputs"],
-            "senalados": len(verificacion["numeros_sin_respaldo"]),
-            # Los tres no suman: el verificador extrae todo número y luego
-            # descarta los de contextos que no son cifras medidas. El resto
-            # es ese descarte, y sin nombrarlo la resta parece un error.
-            "ignorados": (
-                verificacion["numeros_en_borrador"]
-                - verificacion["numeros_con_respaldo_en_outputs"]
-                - len(verificacion["numeros_sin_respaldo"])
-            ),
-        },
-        "folds": {
-            "n_grupos_positivos": validacion["n_grupos_positivos"],
-            "min_positivos": min(positivos_por_fold),
-            "max_positivos": max(positivos_por_fold),
-        },
-        "test_es_marcador": eda["test_is_placeholder"],
+        "recomendado": RECOMENDADO,
+        "recomendado_pauc": fase4[archivo_rec]["metricas"][clave_rec]["pauc"]["media_global"],
+        "recomendado_fuente": f"{archivo_rec}.json > metricas.{clave_rec}.pauc.media_global",
+        "escala": {"azar": escala["azar"], "maximo": escala["maximo"]},
+        "metrica": metrica,
+        "auc_azar": auc_azar,
+        "nivel_ic": nivel_ic,
+        "clave_ic": clave_ic,
+        "nota_nnt": nota_nnt,
+        "panderm": {"antes": cita.group(1), "numero": cita.group(2), "despues": cita.group(3),
+                    "fuente": f"{ruta_cita}, línea {linea_cita} (cita literal)"},
         "eda": {
-            "n_filas": eda["fuente"]["n_filas"],
-            "n_columnas": eda["fuente"]["n_columnas"],
+            "n_filas": eda["estructura_grupos"]["n_filas"],
             "n_pacientes": eda["estructura_grupos"]["n_grupos"],
-            "media_por_paciente": eda["estructura_grupos"]["filas_por_grupo"]["media"],
-            "min_por_paciente": eda["estructura_grupos"]["filas_por_grupo"]["min"],
-            "max_por_paciente": eda["estructura_grupos"]["filas_por_grupo"]["max"],
-            "n_solo_en_train": len(eda["columnas_solo_en_train"]),
+            "n_columnas": eda["fuente"]["n_columnas"],
             "positivos": eda["desbalance_target"]["conteos"]["1"],
-            "negativos": eda["desbalance_target"]["conteos"]["0"],
             "pct_positivos": eda["desbalance_target"]["pct_positivos"],
+            "min": eda["estructura_grupos"]["filas_por_grupo"]["min"],
+            "max": eda["estructura_grupos"]["filas_por_grupo"]["max"],
+            "mediana": eda["estructura_grupos"]["filas_por_grupo"]["mediana"],
         },
-        "fuga": {
-            "metodo": validacion["esquema"]["metodo"],
-            "n_splits": validacion["esquema"]["n_splits"],
-            "group_col": validacion["esquema"]["group_col"],
-            "pct_naive": validacion["comparacion_particion_naive"]["pct_grupos_con_fuga"],
-            "n_grupos_naive": validacion["comparacion_particion_naive"]["n_grupos_con_fuga"],
-            "n_grupos_total": validacion["n_grupos_total"],
-            "descripcion_naive": validacion["comparacion_particion_naive"]["descripcion"],
-            "fuga_agrupada": validacion["fuga_de_grupo_detectada"],
-            "por_fold": validacion["por_fold"],
+        "sellado": {"pct": round(sellado["metodo"]["fraccion"] * 100), "semilla": sellado["semilla"]},
+        "extraccion": {
+            "caracteristica": extraccion["caracteristica"],
+            "desarrollo": {k: extraccion["conjuntos"]["desarrollo"]["cobertura"][k] for k in ("imagenes", "decodificadas", "pacientes")},
+            "reservado": {k: extraccion["conjuntos"]["reservado"]["cobertura"][k] for k in ("imagenes", "decodificadas", "pacientes")},
         },
-        "excluidas": excluidas,
-        "n_features_usadas": modelado["n_features_usadas"],
-        "nevi": nevi,
-        "modelos": modelos,
-        "escala": modelado["escala_de_referencia_pauc"],
-        "metrica": modelado["metrica"],
-        "metrica_fuente": modelado["metrica_fuente"],
-        "metrica_verificada": modelado["metrica_verificada_contra_fuente_oficial"],
+        "diseno": {
+            "seed": validacion["esquema"]["seed"],
+            "min_grupos": min(f["n_val_grupos"] for f in por_fold),
+            "max_grupos": max(f["n_val_grupos"] for f in por_fold),
+            "min_pos": min(f["n_val_positivos"] for f in por_fold),
+            "max_pos": max(f["n_val_positivos"] for f in por_fold),
+            "n_grupos_positivos": validacion["n_grupos_positivos"],
+            "naive_n": validacion["comparacion_particion_naive"]["n_grupos_con_fuga"],
+            "naive_pct": validacion["comparacion_particion_naive"]["pct_grupos_con_fuga"],
+        },
+        "auditoria": {
+            "n_excluidas": len(modelado["columnas_excluidas"]),
+            "n_solo_train": len(solo_train),
+            "nevi_auc": univariado["tbp_lv_nevi_confidence"]["auc_oof"],
+        },
+        "seed42": {
+            "seed": modelado["esquema_cv"]["seed"],
+            "auc_2a": modelado["nivel_2a_gradient_boosting_sin_balancear"]["auc_estandar_media"],
+        },
+        "vr": {
+            "semillas": len(vr["semillas_corridas"]),
+            "n_splits": vr["n_splits"],
+            "niveles": [{k: v for k, v in n.items() if k != "folds"} for n in niveles],
+            "n_folds_2a": len(n2a["folds"]),
+            "pareada": {"media": pareada["media"], "ic": pareada["intervalo_t_95_nadeau_bengio"],
+                        "gana": pareada["gana_2b_en"], "de": pareada["de"],
+                        "semillas": pareada["semillas_a_favor_de_2b"],
+                        "diferencias": pareada["diferencias"], "etiquetas": etiquetas_pareadas},
+        },
+        "procedencia": {
+            "a_con": c_proc["a_2b_menos_1_con_procedencia"]["media"],
+            "a_sin": c_proc["a_2b_menos_1_sin_procedencia"]["media"],
+            "b": {"media": c_proc["b_2b_con_menos_2b_sin"]["media"],
+                  "ic": c_proc["b_2b_con_menos_2b_sin"]["intervalo_t_95_nadeau_bengio"]},
+            "c": {"media": c_proc["c_1_con_menos_1_sin"]["media"],
+                  "ic": c_proc["c_1_con_menos_1_sin"]["intervalo_t_95_nadeau_bengio"],
+                  "semillas": c_proc["c_1_con_menos_1_sin"]["gana_primer_termino_en_semillas"],
+                  "folds": c_proc["c_1_con_menos_1_sin"]["gana_primer_termino_en_folds"],
+                  "de_folds": c_proc["c_1_con_menos_1_sin"]["de_folds"]},
+        },
+        "comparaciones": comparaciones,
+        "tabla": tabla,
+        "verificacion": {
+            "total": verificacion["numeros_en_borrador"],
+            "con": verificacion["numeros_con_respaldo_en_outputs"],
+            "sin": len(verificacion["numeros_sin_respaldo"]),
+            "metodo": len(verificacion["porcentajes_de_metodo_excluidos"]),
+            "omitidos": len(verificacion["numeros_en_contextos_omitidos"]),
+        },
     }
 
 
@@ -272,7 +411,7 @@ PLANTILLA = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Proyecto de consultor&iacute;a ISIC 2024 &mdash; Detecci&oacute;n de melanoma</title>
+<title>Proyecto de consultor&iacute;a ISIC 2024 &mdash; Detecci&oacute;n de c&aacute;ncer de piel</title>
 <script>__CHARTJS__</script>
 <style>
   :root {
@@ -291,6 +430,7 @@ PLANTILLA = r"""<!DOCTYPE html>
     color: var(--tinta);
     background: var(--fondo);
     line-height: 1.55;
+    overflow-wrap: break-word;
   }
   .hoja { max-width: 1080px; margin: 0 auto; padding: 0 28px 72px; }
   header { padding: 44px 0 28px; border-bottom: 3px solid var(--tinta); }
@@ -302,26 +442,25 @@ PLANTILLA = r"""<!DOCTYPE html>
   .contexto { margin: 0 0 22px; max-width: 860px; }
   .contexto p { margin: 0 0 12px; font-size: 15.5px; }
   .contexto b { color: var(--acento); }
-  .tesis {
-    font-size: 21px; line-height: 1.45; border-left: 5px solid var(--acento);
-    padding: 4px 0 4px 18px; margin: 0; color: var(--tinta);
-  }
-  .tesis strong { color: var(--acento); }
   section { margin-top: 52px; }
-  h2 { font-size: 21px; margin: 0 0 6px; }
+  h2 { font-size: 21px; margin: 0 0 6px; display: flex; align-items: center; }
   h2 .num {
-    display: inline-block; width: 30px; height: 30px; line-height: 30px;
+    flex: 0 0 30px; width: 30px; height: 30px; line-height: 30px;
     text-align: center; background: var(--tinta); color: #fff;
     border-radius: 50%; font-size: 14px; margin-right: 10px;
   }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
   .sub { color: var(--suave); margin: 0 0 20px; font-size: 15px; }
   .tarjeta {
     background: #fff; border: 1px solid var(--linea); border-radius: 10px;
     padding: 22px; box-shadow: 0 1px 2px rgba(22,32,43,.05);
   }
-  .cadena { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; }
+  .texto p { margin: 0 0 12px; font-size: 15px; }
+  .texto ul { margin: 0 0 12px; padding-left: 20px; font-size: 15px; }
+  .texto li { margin-bottom: 8px; }
+  .cadena { display: flex; align-items: stretch; gap: 4px; flex-wrap: wrap; }
   .paso {
-    flex: 1 1 165px; text-align: left; cursor: pointer; background: #fff;
+    flex: 1 1 120px; text-align: left; cursor: pointer; background: #fff;
     border: 1px solid var(--linea); border-top: 4px solid var(--suave);
     border-radius: 8px; padding: 13px 14px; font: inherit; color: inherit;
     transition: transform .12s, box-shadow .12s, border-color .12s;
@@ -333,11 +472,11 @@ PLANTILLA = r"""<!DOCTYPE html>
   .paso .nom { font-weight: 700; font-size: 14px; display: block; }
   .paso .tipo {
     font-size: 10px; text-transform: uppercase; letter-spacing: .1em;
-    color: var(--suave); font-weight: 600;
+    color: var(--suave); font-weight: 600; white-space: nowrap;
   }
   .paso.final .tipo { color: var(--acento); }
   .paso .fun { font-size: 12px; color: var(--suave); margin-top: 6px; display: block; }
-  .flecha { align-self: center; color: var(--suave); font-size: 20px; }
+  .flecha { align-self: center; color: var(--suave); font-size: 16px; }
   .salida {
     margin-top: 16px; background: #fff; border: 1px solid var(--linea);
     border-radius: 10px; padding: 0 20px 4px;
@@ -346,14 +485,15 @@ PLANTILLA = r"""<!DOCTYPE html>
   .ficha { margin: 0 0 16px; }
   .ficha p { margin: 0 0 9px; font-size: 14.5px; }
   .ficha b { color: var(--acento); }
-  .ficha .hallazgo { border-left: 3px solid var(--acento); background: #f4f8fb; padding: 9px 13px; border-radius: 0 6px 6px 0; }
+  .ficha .hallazgo { border-left: 3px solid var(--acento); background: #f4f8fb; padding: 9px 13px; border-radius: 0 6px 6px 0; font-size: 14.5px; }
+  .ficha .hallazgo p { margin: 0 0 8px; }
+  .ficha .hallazgo ul { margin: 0 0 8px; padding-left: 20px; }
   .salida pre {
     white-space: pre-wrap; font-family: Menlo, Consolas, monospace;
     font-size: 12.5px; line-height: 1.6; background: #fbfcfd;
     border: 1px solid var(--linea); border-radius: 6px; padding: 14px; overflow-x: auto;
   }
-  /* ---- fuga ---- */
-  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
   .medida { text-align: center; padding: 24px 18px; border-radius: 10px; border: 1px solid var(--linea); background: #fff; }
   .medida .cifra { font-size: 52px; font-weight: 700; line-height: 1; }
   .medida.mal { border-color: #f0c4bc; background: #fdf4f2; }
@@ -362,12 +502,12 @@ PLANTILLA = r"""<!DOCTYPE html>
   .medida.ok .cifra { color: var(--bien); }
   .medida .rot { font-weight: 600; margin-top: 10px; }
   .medida .det { font-size: 13px; color: var(--suave); margin-top: 4px; }
-  /* ---- tablas ---- */
-  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; }
-  th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--suave); }
-  td.mono { font-family: Menlo, Consolas, monospace; font-size: 12.5px; }
-  .lectura { color: var(--suave); }
+  .medida.sola { max-width: 420px; margin: 0 auto 18px; }
+  .tabla-envoltura { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--suave); white-space: normal; }
   .aviso {
     font-size: 12.5px; color: var(--suave); background: #fbfcfd;
     border-left: 3px solid var(--linea); padding: 8px 12px; margin: 14px 0 0;
@@ -377,29 +517,29 @@ PLANTILLA = r"""<!DOCTYPE html>
     border-radius: 8px; background: #fdf3f1; color: var(--tinta); font-size: 15px;
   }
   .exploratorio b { color: var(--alarma); }
-  .contra { margin-top: 18px; border-left: 4px solid var(--bien); background: #f2faf6; padding: 14px 16px; border-radius: 0 8px 8px 0; }
-  .contra b { color: var(--bien); }
   .barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
   .lienzo { position: relative; height: 340px; }
-  /* ---- cierre ---- */
-  .cierre { display: grid; gap: 16px; }
-  .bloque { background: #fff; border: 1px solid var(--linea); border-radius: 10px; padding: 20px 22px; border-left: 5px solid var(--suave); }
-  .bloque h3 { margin: 0 0 8px; font-size: 16px; }
-  .bloque p { margin: 0; font-size: 14.5px; }
-  .bloque.recomendacion { border-left-color: var(--bien); }
-  .bloque.recomendacion h3 { color: var(--bien); }
-  .bloque.limites { border-left-color: var(--alarma); }
-  .bloque.limites h3 { color: var(--alarma); }
+  .paneles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .panel h3 { margin: 0 0 6px; font-size: 14px; }
+  .panel .lienzo { height: 230px; }
   .pie-grafico { font-size: 13px; color: var(--suave); margin-top: 14px; }
-  .destacado { color: var(--tinta); }
   .cifra-fuente { border-bottom: 1px dotted var(--suave); cursor: help; }
   footer {
     margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--linea);
     font-size: 12.5px; color: var(--suave);
   }
   @media (max-width: 760px) {
-    .duo { grid-template-columns: 1fr; }
+    .hoja { padding: 0 16px 56px; }
+    h1 { font-size: 25px; }
+    .duo, .paneles { grid-template-columns: 1fr; }
     .flecha { display: none; }
+    .tarjeta { padding: 16px; }
+    .medida .cifra { font-size: 44px; }
+    .lienzo { height: 300px; }
+    /* La tabla de tres ejes cabe entera: el costo no queda fuera de la vista. */
+    table { font-size: 12.5px; }
+    th, td { padding: 6px 4px; }
+    th { font-size: 9.5px; letter-spacing: .03em; }
   }
 </style>
 </head>
@@ -412,20 +552,22 @@ __AVISO_EXPLORATORIO__
   <h1>Proyecto de consultor&iacute;a ISIC 2024</h1>
   <div class="contexto">
     <p><b>El problema.</b> <span id="ctx-problema"></span></p>
+    <p><b>Los datos.</b> <span id="ctx-datos"></span></p>
+    <p id="ctx-metrica"></p>
     <p><b>Por qu&eacute; este caso.</b> <span id="ctx-eleccion"></span></p>
   </div>
 </header>
 
 <section>
   <h2><span class="num">1</span>C&oacute;mo se desarroll&oacute; el trabajo</h2>
-  <p class="sub">Cinco etapas. Las cuatro primeras miden y dejan su salida en un archivo; la quinta interpreta y redacta. Haz clic en cualquiera para ver la salida real que produjo.</p>
+  <p class="sub">Seis etapas. Las cinco primeras miden y dejan su salida en un archivo; la sexta interpreta y redacta. Haz clic en cualquiera para ver la salida real que produjo.</p>
   <div class="cadena" id="cadena"></div>
   <div class="salida" id="salida" hidden>
     <h3 id="salida-nombre"></h3>
     <div class="ficha">
       <p><b>Qu&eacute; se midi&oacute;.</b> <span id="ficha-mide"></span></p>
       <p><b>Por qu&eacute; se hizo.</b> <span id="ficha-porque"></span></p>
-      <p class="hallazgo"><b>Un hallazgo concreto.</b> <span id="ficha-hallazgo"></span></p>
+      <div class="hallazgo"><p><b>Un hallazgo concreto.</b></p><div id="ficha-hallazgo"></div></div>
     </div>
     <h3 id="salida-titulo"></h3>
     <pre id="salida-texto"></pre>
@@ -433,68 +575,80 @@ __AVISO_EXPLORATORIO__
 </section>
 
 <section>
-  <h2><span class="num">2</span>Resultados</h2>
-  <p class="sub" id="sub-modelos"></p>
+  <h2><span class="num">2</span>Una decisi&oacute;n por defecto cambia el veredicto</h2>
+  <p class="sub" id="sub-resultados"></p>
   <div class="duo">
-    <div class="medida ok">
-      <div class="cifra" id="tit-reco"></div>
-      <div class="rot">Nivel 1 &mdash; regresi&oacute;n log&iacute;stica balanceada</div>
-      <div class="det">El modelo recomendado</div>
-    </div>
     <div class="medida mal">
-      <div class="cifra" id="tit-fallo"></div>
-      <div class="rot">Nivel 2a &mdash; colapsa bajo la m&eacute;trica del cliente</div>
-      <div class="det" id="tit-fallo-det"></div>
+      <div class="cifra" id="tit-2a"></div>
+      <div class="rot" id="rot-2a"></div>
+    </div>
+    <div class="medida ok">
+      <div class="cifra" id="tit-2b"></div>
+      <div class="rot" id="rot-2b"></div>
     </div>
   </div>
   <div class="tarjeta">
-    <div class="barra">
-      <div class="pie-grafico" id="escala"></div>
-    </div>
-    <div class="lienzo"><canvas id="gr-modelos"></canvas></div>
-    <p class="pie-grafico" id="pie-modelos"></p>
+    <div class="texto" id="texto-2"></div>
+    <div class="lienzo"><canvas id="gr-niveles"></canvas></div>
+    <p class="pie-grafico">Los bigotes marcan una desviaci&oacute;n est&aacute;ndar entre pliegues, no un intervalo de confianza.</p>
   </div>
 </section>
 
 <section>
-  <h2><span class="num">3</span>Conclusi&oacute;n</h2>
+  <h2><span class="num">3</span>Mejor media no es mejor modelo</h2>
+  <div class="tarjeta">
+    <div class="texto" id="texto-3"></div>
+    <div class="lienzo"><canvas id="gr-pareada"></canvas></div>
+    <h3>Las columnas de procedencia no explican la ventaja</h3>
+    <div class="texto" id="texto-3b"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>La m&eacute;trica principal no agota lo que pidi&oacute; el cliente</h2>
+  <div class="tarjeta">
+    <div class="texto" id="texto-4"></div>
+    <div class="paneles" id="paneles"></div>
+    <p class="pie-grafico" id="pie-paneles"></p>
+    <div class="texto" id="lectura-4"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>La pregunta del cliente, entera</h2>
+  <div class="tarjeta">
+    <div class="tabla-envoltura"><table id="tabla-ejes"></table></div>
+    <div class="texto" id="texto-5" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>Recomendaci&oacute;n</h2>
   <p class="sub">Lo que un consultor le entregar&iacute;a al cliente: el hallazgo, la recomendaci&oacute;n y lo que a&uacute;n no se puede afirmar.</p>
-  <div class="cierre">
-    <div class="bloque">
-      <h3>Lo que se encontr&oacute;</h3>
-      <p id="cierre-hallazgos"></p>
-    </div>
-    <div class="bloque recomendacion">
-      <h3>La recomendaci&oacute;n</h3>
-      <p id="cierre-recomendacion"></p>
-    </div>
-    <div class="bloque limites">
-      <h3>Las limitaciones honestas</h3>
-      <p id="cierre-limites"></p>
-    </div>
+  <div class="medida ok sola">
+    <div class="cifra" id="tit-reco"></div>
+    <div class="rot" id="rot-reco"></div>
+    <div class="det">El modelo recomendado &middot; pAUC</div>
+  </div>
+  <div class="tarjeta">
+    <div class="texto" id="texto-6"></div>
+    <h3>Qu&eacute; se puede afirmar</h3>
+    <div class="texto" id="se-puede"></div>
+    <h3>Qu&eacute; no se puede afirmar</h3>
+    <div class="texto" id="no-se-puede"></div>
   </div>
 </section>
 
 <section>
-  <h2><span class="num">4</span>Lo que sigue</h2>
-  <p class="sub">Trabajo previsto, no ejecutado. Sin cifras: todav&iacute;a no hay nada medido.</p>
+  <h2><span class="num">7</span>Limitaciones</h2>
+  <div class="tarjeta"><div class="texto" id="limitaciones"></div></div>
+</section>
+
+<section>
+  <h2><span class="num">8</span>Lo que sigue</h2>
+  <p class="sub">Trabajo previsto, no ejecutado. Sin cifras: el conjunto reservado no se ha abierto.</p>
   <div class="tarjeta">
-    <p><b>Modelado con im&aacute;genes.</b> Todo lo anterior usa solo la metadata tabular.
-    La extensi&oacute;n prevista incorpora las fotograf&iacute;as sin entrenar una red desde cero:
-    se extraer&iacute;an caracter&iacute;sticas congeladas de un modelo fundacional de imagen,
-    DINOv2, y se alimentar&iacute;an los mismos niveles de referencia, sobre
-    los mismos folds agrupados por paciente, para que la comparaci&oacute;n siga siendo v&aacute;lida.</p>
-    <p><b>El bloqueante, primero.</b> Antes de medir nada hay que verificar si SLICE-3D
-    &mdash;el conjunto de este caso&mdash; form&oacute; parte del preentrenamiento del modelo.
-    Si hubo solape, cualquier mejora observada estar&iacute;a inflada por una fuga que no viene
-    del dataset sino del preentrenamiento de un tercero, y no ser&iacute;a atribuible al m&eacute;todo.
-    Es el mismo razonamiento de la auditor&iacute;a de fugas, un nivel m&aacute;s arriba.</p>
-    <p><b>Lo que ya se decidi&oacute;.</b> PanDerm, un modelo fundacional de dermatolog&iacute;a, no se usa:
-    su art&iacute;culo declara un subconjunto de ISIC 2024 entre sus datos de preentrenamiento, y el
-    criterio fijado de antemano era no usarlo si hab&iacute;a solape. DINOv3, gen&eacute;rico, tampoco:
-    no cumpli&oacute; la regla de verificaci&oacute;n, fijada tambi&eacute;n de antemano. Se usa DINOv2: sus datos
-    de preentrenamiento est&aacute;n descritos en un art&iacute;culo de abril de 2023, y sus autores no
-    pertenecen a las instituciones que aportaron los datos.</p>
+    <div class="texto"><p>Abrir el conjunto reservado, una sola vez. M3 limpio se entrena una sola vez con los pacientes de desarrollo y se eval&uacute;a sobre los reservados, con punto e intervalo por bootstrap de pacientes; M2 se punt&uacute;a en la misma corrida, como referencia. Todo se fij&oacute; antes de abrirlo, y despu&eacute;s no se cambia nada: ni el modelo, ni las caracter&iacute;sticas, ni el criterio. El resultado se reporta sea cual sea, y la recomendaci&oacute;n no cambia por &eacute;l.</p></div>
     <p class="aviso">Ninguna cifra aparece en esta secci&oacute;n porque ninguna est&aacute; medida.
     A diferencia del resto de la p&aacute;gina, aqu&iacute; no hay archivo en <code>outputs/</code> que
     respalde nada &mdash; y por eso no se afirma nada.</p>
@@ -507,66 +661,149 @@ __AVISO_EXPLORATORIO__
 <script id="datos" type="application/json">__DATOS__</script>
 <script>
 const D = JSON.parse(document.getElementById("datos").textContent);
-const esc = t => String(t).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-const num = (v, d = 4) => v.toFixed(d).replace(".", ",");
+// Los ejes de los gráficos, con coma decimal como el texto.
+Chart.defaults.locale = "es";
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const menos = s => s.replace("-", "−");
+// Cifras con los decimales que trae el JSON, como las escribe el informe.
+const dec = v => menos(String(v).replace(".", ","));
+const fijo = (v, d) => menos(v.toFixed(d).replace(".", ","));
+const firmado = (v, d) => (v > 0 ? "+" : "") + (d === undefined ? dec(v) : fijo(v, d));
+// useGrouping "always" porque el defecto español omite el punto en los
+// números de cuatro cifras.
+const mil = v => v.toLocaleString("es", {useGrouping: "always"});
 // Cada cifra lleva su origen en el title: la trazabilidad del informe
 // escrito, disponible al pasar el raton en la version proyectada.
 const cifra = (v, fuente) => `<span class="cifra-fuente" title="${esc(fuente)}">${v}</span>`;
-// useGrouping "always" porque el defecto español omite el punto en los
-// números de cuatro cifras: "1042" al lado de "401.059" se lee como una
-// inconsistencia en una pantalla proyectada.
-const mil = v => v.toLocaleString("es", {useGrouping: "always"});
+const P = ps => ps.map(p => `<p>${p}</p>`).join("");
+const L = ls => `<ul>${ls.map(l => `<li>${l}</li>`).join("")}</ul>`;
 
-/* ---------- 0. contexto ---------- */
+const E = D.eda, R = D.extraccion.reservado, DS = D.extraccion.desarrollo, DI = D.diseno, A = D.auditoria;
+const VR = D.vr, PR = D.procedencia, V = D.verificacion;
+const fEda = c => "eda-diagnostico.json > " + c, fDis = c => "diseno-validacion.json > " + c;
+const fVR = c => "validacion-repetida.json > " + c, fPro = c => "sensibilidad-procedencia-repetida.json > comparaciones." + c;
+const fExt = c => "extraccion-imagen.json > " + c, fVer = c => "sintesis-verificacion.json > " + c;
+const fMod = c => "modelado-baseline.json > " + c;
+const azar = cifra(dec(D.escala.azar), fMod("escala_de_referencia_pauc.azar"));
+const nivelIC = cifra(D.nivel_ic + "%", "fase4-*.json > comparaciones_nuevo_menos_base.*." + D.clave_ic + " (nivel del intervalo)");
+const semillasVR = cifra(VR.semillas, fVR("semillas_corridas"));
+const ic = (lo, hi, fuente, d) => cifra("[" + (d === undefined ? dec(lo) : fijo(lo, d)) + "; " + (d === undefined ? dec(hi) : fijo(hi, d)) + "]", fuente);
+const COMP = Object.fromEntries(D.comparaciones.map(c => [c.etiqueta, c]));
+const fComp = (et, k, campo) => `${COMP[et].archivo} > comparaciones_nuevo_menos_base.${k}.${campo}`;
+const mediaC = (et, k) => cifra(firmado(COMP[et].metricas[k].media, k === "nnt80" ? 2 : undefined), fComp(et, k, "media"));
+const semC = (et, k) => cifra(COMP[et].metricas[k].semillas, fComp(et, k, "nuevo_mejor_en_semillas"));
+const deSemC = (et, k) => cifra(COMP[et].metricas[k].de_semillas, fComp(et, k, "de_semillas"));
+const NIV = Object.fromEntries(VR.niveles.map(n => [n.etiqueta, n]));
+const mediaN = et => cifra(dec(NIV[et].media), fVR(NIV[et].campo + ".pauc_media_global"));
+const stdN = et => cifra(dec(NIV[et].std), fVR(NIV[et].campo + ".pauc_std_entre_folds"));
+const T = Object.fromEntries(D.tabla.map(f => [f.modelo, f]));
+const tiempoT = m => cifra(dec(T[m].tiempo), `tiempo-inferencia.json > tiempos.${T[m].clave}.mediana_segundos_por_1000_lesiones`);
+const milLesiones = cifra(mil(1000), "tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones (unidad)");
+const reco = cifra(esc(D.recomendado), "RECOMENDADO, comprobado contra la regla de recomendación sobre fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.pauc." + D.clave_ic);
+
+/* ---------- 0. cabecera ---------- */
+// huecos-demo.md, Parte B, B2; borrador-v2.md, l. 557-559.
 document.getElementById("ctx-problema").innerHTML =
-  `ISIC 2024 pide detectar lesiones malignas de piel a partir de fotograf&iacute;as corporales totales en 3D ` +
-  `&mdash; im&aacute;genes de calidad tipo smartphone, no dermatoscopio cl&iacute;nico. El dataset: ` +
-  `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones de ` +
-  `${cifra(mil(D.eda.n_pacientes), "eda-diagnostico.json > estructura_grupos.n_grupos")} pacientes, con solo ` +
-  `${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} casos malignos confirmados ` +
-  `(${cifra(num(D.eda.pct_positivos, 3) + "%", "eda-diagnostico.json > desbalance_target.pct_positivos")}). ` +
-  `Cada paciente aporta entre ${cifra(mil(D.eda.min_por_paciente), "eda-diagnostico.json > estructura_grupos.filas_por_grupo.min")} y ` +
-  `${cifra(mil(D.eda.max_por_paciente), "eda-diagnostico.json > estructura_grupos.filas_por_grupo.max")} lesiones.`;
+  `El reto ISIC 2024 usa el conjunto SLICE-3D: recortes de lesiones de piel extraídos de fotografías corporales totales en 3D, para detectar cáncer de piel. ` +
+  `La clase maligna está confirmada por patología: melanoma, carcinoma basocelular o carcinoma escamocelular. ` +
+  `Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente. ` +
+  `Así las describe el artículo del conjunto de datos: <i>"comparable in optical resolution to smartphone images"</i>.`;
 
+// borrador-v2.md, l. 237, 239-240, 242, 215-217; Parte B, B3.
+document.getElementById("ctx-datos").innerHTML =
+  `El conjunto de desarrollo tiene ${cifra(mil(E.n_filas), fEda("estructura_grupos.n_filas"))} lesiones de ` +
+  `${cifra(mil(E.n_pacientes), fEda("estructura_grupos.n_grupos"))} pacientes. ` +
+  `Solo ${cifra(mil(E.positivos), fEda("desbalance_target.conteos.1"))} lesiones son malignas, el ` +
+  `${cifra(dec(E.pct_positivos) + "%", fEda("desbalance_target.pct_positivos"))}, y solo ` +
+  `${cifra(mil(DI.n_grupos_positivos), fDis("n_grupos_positivos"))} pacientes tienen alguna. ` +
+  `Cada paciente aporta entre ${cifra(mil(E.min), fEda("estructura_grupos.filas_por_grupo.min"))} y ` +
+  `${cifra(mil(E.max), fEda("estructura_grupos.filas_por_grupo.max"))} lesiones, con una mediana de ` +
+  `${cifra(mil(E.mediana), fEda("estructura_grupos.filas_por_grupo.mediana"))}. ` +
+  `Antes de volver a medir nada, se apartó el ${cifra(D.sellado.pct + "%", "holdout-pacientes.json > metodo.fraccion")} de los pacientes ` +
+  `—no de las filas—, estratificado por centro y por tener al menos una lesión maligna, con semilla ` +
+  `${cifra(String(D.sellado.semilla), "holdout-pacientes.json > semilla")}, y se selló. ` +
+  `El conjunto reservado tiene ${cifra(mil(R.pacientes), fExt("conjuntos.reservado.cobertura.pacientes"))} pacientes y ` +
+  `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} imágenes, y ningún modelo se ha evaluado sobre él.`;
+
+// borrador-v2.md, l. 11-12, 14-17, 19-20, 22.
+document.getElementById("ctx-metrica").innerHTML =
+  `<b>La métrica principal es la del reto:</b> el área parcial bajo la curva ROC por encima del ` +
+  `${cifra(D.metrica.tpr + "%", fMod("metrica"))} de sensibilidad, o pAUC, que va de ` +
+  `${cifra(dec(D.metrica.rmin), fMod("metrica"))} a ${cifra(dec(D.metrica.rmax), fMod("metrica"))}. ` +
+  `El organizador la justifica en términos clínicos, no estadísticos: <i>"there are regions in the ROC space where the values of TPR are unacceptable in clinical practice"</i>, ` +
+  `y <i>"Systems that aid in diagnosing cancers are required to be highly-sensitive"</i>. ` +
+  `Esa es la función de utilidad del cliente, escrita en su métrica: la región del espacio ROC donde la sensibilidad es clínicamente inaceptable no cuenta. ` +
+  `Un clasificador al azar obtiene ${azar} y uno perfecto, ${cifra(dec(D.escala.maximo), fMod("escala_de_referencia_pauc.maximo"))}.`;
+
+// Parte B, B4.
 document.getElementById("ctx-eleccion").innerHTML =
-  `Se eligi&oacute; sobre otras opciones (detecci&oacute;n en rodilla, columna lumbar, series de tiempo de commodities) ` +
-  `porque la metadata tabular permite trabajar sin GPU, el desbalance extremo y la agrupaci&oacute;n por paciente presentan ` +
-  `riesgos reales de fuga de datos, y la m&eacute;trica oficial &mdash;${cifra(esc(D.metrica), "modelado-baseline.json > metrica")}&mdash; ` +
-  `codifica expl&iacute;citamente la funci&oacute;n de utilidad del cliente: un sistema de apoyo diagn&oacute;stico debe ser ` +
-  `altamente sensible, as&iacute; que el desempe&ntilde;o solo cuenta en la regi&oacute;n donde una tasa de detecci&oacute;n alta ` +
-  `es cl&iacute;nicamente aceptable.`;
+  `Se eligió este caso y se descartaron dos de RSNA, de rodilla y de columna lumbar: son imágenes médicas en 3D, que exigen una GPU potente y aportan poco desde lo estadístico. ` +
+  `En este, la metadata tabular hace gran parte del trabajo, y el desbalance y la agrupación por paciente son estadísticamente interesantes. ` +
+  `La imagen entró después, como una extensión que profundiza la tesis sin reemplazarla.`;
 
 /* ---------- 1. cadena ---------- */
 // La prosa de cada instrumento (que mide, por que existe) viaja en el JSON
-// desde CADENA. El hallazgo concreto se arma aqui porque lleva cifras: cada
-// una pasa por cifra() y por tanto por su archivo y campo de origen.
+// desde CADENA. Lo que lleva cifras se arma aqui: cada una pasa por cifra()
+// y por tanto por su archivo y campo de origen.
+const MIDE = {
+  // Parte B, B6.
+  "extraccion-imagen": () =>
+    `Una característica por imagen: ${cifra(esc(D.extraccion.caracteristica), fExt("caracteristica"))}. ` +
+    `Se decodificaron ${cifra(mil(DS.decodificadas), fExt("conjuntos.desarrollo.cobertura.decodificadas"))} de ` +
+    `${cifra(mil(DS.imagenes), fExt("conjuntos.desarrollo.cobertura.imagenes"))} imágenes del desarrollo y ` +
+    `${cifra(mil(R.decodificadas), fExt("conjuntos.reservado.cobertura.decodificadas"))} de ` +
+    `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} del reservado. ` +
+    `No se leyó ninguna etiqueta ni se calculó ninguna métrica.`
+};
 const HALLAZGOS = {
-  "eda-diagnostico": () =>
-    `Se encontraron ${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} columnas presentes ` +
-    `solo en entrenamiento, de las ${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")} del archivo ` +
-    `&mdash; la primera se&ntilde;al de que algo ah&iacute; no estar&iacute;a disponible al predecir en producci&oacute;n.`,
-  "diseno-validacion": () =>
-    `Se cuantific&oacute; cu&aacute;nta fuga habr&iacute;a producido ignorar la agrupaci&oacute;n por paciente: ` +
-    `${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
-    `de los pacientes (${cifra(mil(D.fuga.n_grupos_naive), "diseno-validacion.json > comparacion_particion_naive.n_grupos_con_fuga")} ` +
-    `de ${cifra(mil(D.fuga.n_grupos_total), "diseno-validacion.json > n_grupos_total")}) habr&iacute;an caído a los dos lados de la partición.`,
+  // borrador-v2.md, l. 203-206 y 277-279.
+  "eda-diagnostico": () => P([
+    `Los datos son la metadata del reto: una fila por lesión y ${cifra(E.n_columnas, fEda("fuente.n_columnas"))} columnas, ` +
+    `con las mediciones que el software de la fotografía corporal total calcula sobre cada lesión, datos del paciente y, ` +
+    `solo en el conjunto de entrenamiento, el diagnóstico.`,
+    `<b>${cifra(A.n_solo_train, "auditoria-de-fugas.json > columnas_solo_en_train")} no existen al predecir.</b> ` +
+    `El conjunto de prueba no las trae. Entre ellas están la propia etiqueta, la taxonomía diagnóstica y dos medidas que solo existen tras la biopsia.`]),
+  // borrador-v2.md, l. 254-255, 257-258 y 261-263.
+  "diseno-validacion": () => P([
+    `La validación cruzada agrupa por paciente: cada paciente queda entero de un lado de cada pliegue. ` +
+    `En la partición de la semilla ${cifra(String(DI.seed), fDis("esquema.seed"))}, cada pliegue de validación tiene entre ` +
+    `${cifra(DI.min_grupos, fDis("por_fold[*].n_val_grupos (mínimo)"))} y ${cifra(DI.max_grupos, fDis("por_fold[*].n_val_grupos (máximo)"))} pacientes y entre ` +
+    `${cifra(DI.min_pos, fDis("por_fold[*].n_val_positivos (mínimo)"))} y ${cifra(DI.max_pos, fDis("por_fold[*].n_val_positivos (máximo)"))} lesiones malignas.`,
+    `Lo que evita esa agrupación se midió. Una partición aleatoria por filas, con la misma semilla, habría dejado a ` +
+    `${cifra(mil(DI.naive_n), fDis("comparacion_particion_naive.n_grupos_con_fuga"))} pacientes, el ` +
+    `${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))}, con lesiones a los dos lados.`]),
+  // borrador-v2.md, l. 274, 277, 281, 283, 285-286, 300-302 y 304-307.
   "auditoria-de-fugas": () =>
-    `Se generaron ${cifra(D.auditoria.n_preguntas_abiertas, "auditoria-de-fugas.json > preguntas_abiertas")} preguntas abiertas ` +
-    `sobre columnas sospechosas; ${cifra(D.auditoria.n_preguntas_abiertas - 1, "derivado: preguntas_abiertas menos la que exigió fuente externa")} ` +
-    `se resolvieron por su naturaleza post-biopsia, y la &uacute;ltima exigi&oacute; rastrear un paper cient&iacute;fico hasta confirmar ` +
-    `que <code>${esc(D.nevi ? D.nevi.columna : "")}</code>, de apariencia sospechosa, era en realidad leg&iacute;tima.`,
-  "modelado-baseline": () =>
-    `En el camino se descubri&oacute; que la implementaci&oacute;n inicial de la m&eacute;trica usaba un umbral de sensibilidad ` +
-    `equivocado y subestimaba el m&aacute;ximo posible de la escala, que es ` +
-    `${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}. Corregida y verificada contra ` +
-    `la fuente oficial (${cifra(esc(D.metrica_fuente), "modelado-baseline.json > metrica_fuente")}) antes de confiar en ning&uacute;n resultado.`,
-  "sintesis-consultoria": () =>
-    `Se extrajeron los ${cifra(mil(D.verificacion.numeros), "sintesis-verificacion.json > numeros_en_borrador")} n&uacute;meros del borrador ` +
-    `y se contrastaron contra <code>outputs/</code>: ` +
-    `${cifra(mil(D.verificacion.con_respaldo), "sintesis-verificacion.json > numeros_con_respaldo_en_outputs")} con respaldo exacto, ` +
-    `${cifra(D.verificacion.senalados, "sintesis-verificacion.json > numeros_sin_respaldo")} se&ntilde;alados para revisi&oacute;n a mano, ` +
-    `y ${cifra(D.verificacion.ignorados, "derivado: numeros_en_borrador menos los con respaldo y los señalados")} en contextos que el ` +
-    `verificador excluye por dise&ntilde;o (n&uacute;meros de secci&oacute;n, fechas y similares).`
+    P([`Quedan fuera de los modelos ${cifra(A.n_excluidas, fMod("columnas_excluidas"))} columnas, por cuatro motivos:`]) +
+    L([`<b>${cifra(A.n_solo_train, "auditoria-de-fugas.json > columnas_solo_en_train")} no existen al predecir.</b>`,
+       `<b>Una es constante:</b> <code>image_type</code>.`,
+       `<b>Una identifica la fila:</b> <code>isic_id</code>.`,
+       `<b>Dos describen el centro y la licencia de la imagen, no la lesión:</b> <code>attribution</code> y <code>copyright_license</code>.`]) +
+    P([`De las preguntas abiertas de la auditoría, la única que no contestan los motivos de arriba es <code>tbp_lv_nevi_confidence</code>, ` +
+       `por su nombre, aunque sí está en el conjunto de prueba.`,
+       `El artículo del conjunto de datos la define como <i>"a convolutional neural network classifier estimated probability that the lesion is a nevus"</i>, ` +
+       `así que la calcula el software sobre la imagen y está disponible al predecir. Se usa. Su AUC por sí sola es ` +
+       `${cifra(dec(A.nevi_auc), "auditoria-de-fugas.json > univariado (tbp_lv_nevi_confidence.auc_oof)")}.`]),
+  // borrador-v2.md, «El extractor de imagen»: las dos primeras frases de su
+  // segundo párrafo y la de interpretación (Parte B, B6).
+  "extraccion-imagen": () => P([
+    `PanDerm, un modelo fundacional de dermatología, no se usa. Su artículo declara un subconjunto de ISIC 2024 entre sus datos de preentrenamiento: ` +
+    `<i>"${esc(D.panderm.antes)}${cifra(esc(D.panderm.numero), D.panderm.fuente)}${esc(D.panderm.despues)}"</i>.`,
+    `<i>Interpretación, no medición:</i> es el razonamiento de la auditoría de fugas, un nivel más arriba. ` +
+    `Con modelos fundacionales, la fuga puede venir del preentrenamiento de un tercero y no del conjunto de datos.`]),
+  // borrador-v2.md, l. 330-333.
+  "modelado-baseline": () => P([
+    `El mismo gradient boosting da resultados opuestos según una sola opción. Sin balancear, su pAUC media es ${mediaN("Nivel 2a")}, ` +
+    `por debajo del piso aleatorio de ${azar} en los ${cifra(VR.n_folds_2a, fVR("nivel_2a_gradient_boosting_sin_balancear.pauc_por_semilla_y_fold (todos)"))} pliegues. ` +
+    `Con <code>class_weight="balanced"</code>, y nada más distinto, llega a ${mediaN("Nivel 2b")}.`]),
+  // Parte B, B8.
+  "sintesis-consultoria": () => P([
+    `El verificador encontró ${cifra(mil(V.total), fVer("numeros_en_borrador"))} números en el informe. ` +
+    `${cifra(V.omitidos, fVer("numeros_en_contextos_omitidos"))} se omiten por una lista declarada de contextos; ` +
+    `${cifra(V.metodo, fVer("porcentajes_de_metodo_excluidos"))} son parámetros del método; ` +
+    `${cifra(mil(V.con), fVer("numeros_con_respaldo_en_outputs"))} tienen respaldo en outputs/, y ` +
+    `${cifra(V.sin, fVer("numeros_sin_respaldo"))} quedan señalados para revisarlos a mano. ` +
+    `El verificador señala, no decide: un número señalado puede ser legítimo, como el año de una fuente.`])
 };
 
 const cadena = document.getElementById("cadena");
@@ -584,7 +821,7 @@ D.cadena.forEach((s, i) => {
     if (abierto) { caja.hidden = true; return; }
     b.setAttribute("aria-selected", "true");
     document.getElementById("salida-nombre").textContent = s.etapa;
-    document.getElementById("ficha-mide").textContent = s.mide;
+    document.getElementById("ficha-mide").innerHTML = MIDE[s.nombre] ? MIDE[s.nombre]() : esc(s.mide);
     document.getElementById("ficha-porque").textContent = s.porque;
     document.getElementById("ficha-hallazgo").innerHTML = HALLAZGOS[s.nombre]();
     document.getElementById("salida-titulo").textContent = "outputs/" + s.md + ".md";
@@ -594,22 +831,32 @@ D.cadena.forEach((s, i) => {
   cadena.appendChild(b);
   if (i < D.cadena.length - 1) {
     const f = document.createElement("div");
-    f.className = "flecha"; f.textContent = "\u2192";
+    f.className = "flecha"; f.textContent = "→";
     cadena.appendChild(f);
   }
 });
 
-/* ---------- 2. modelado ---------- */
-const M = et => D.modelos.find(m => m.etiqueta === et);
-const campo = et => "modelado-baseline.json > " + M(et).campo;
-document.getElementById("escala").innerHTML =
-  `Escala: azar = ${cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar")}, ` +
-  `máximo = ${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}`;
-document.getElementById("sub-modelos").textContent = D.metrica + ". Cinco folds, mismos folds para todos los niveles.";
+/* ---------- 2. una decision por defecto ---------- */
+// borrador-v2.md, l. 322-325.
+document.getElementById("sub-resultados").innerHTML =
+  `Salvo donde se indica, las métricas de desempeño son del conjunto de desarrollo, con ${semillasVR} semillas y ` +
+  `${cifra(VR.n_splits, fVR("n_splits"))} pliegues. Cada diferencia es «nuevo − base», y su intervalo es el corregido al ${nivelIC}. ` +
+  `Los pliegues y semillas en que gana el nuevo se dan entre paréntesis.`;
+document.getElementById("tit-2a").innerHTML = mediaN("Nivel 2a");
+document.getElementById("rot-2a").textContent = "Nivel 2a — " + NIV["Nivel 2a"].descripcion;
+document.getElementById("tit-2b").innerHTML = mediaN("Nivel 2b");
+document.getElementById("rot-2b").textContent = "Nivel 2b — " + NIV["Nivel 2b"].descripcion;
+// borrador-v2.md, l. 330-333 y 336-339.
+document.getElementById("texto-2").innerHTML = HALLAZGOS["modelado-baseline"]() + P([
+  `La métrica por defecto no es ciega a ese fallo, pero lo lee distinto. En la partición de la semilla ` +
+  `${cifra(String(D.seed42.seed), fMod("esquema_cv.seed"))}, el AUC estándar del modelo sin balancear es ` +
+  `${cifra(dec(D.seed42.auc_2a), fMod("nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media"))}, por encima del azar de su escala, ` +
+  `${cifra(dec(D.auc_azar), fMod("nivel_0_referencia_univariada.nota"))}; su pAUC queda por debajo del azar de la suya. ` +
+  `Las dos métricas discrepan sobre si el modelo supera al azar.`]);
 
 // Bigotes de +/- 1 desviacion entre folds. Se dibujan a mano porque
 // Chart.js no trae barras de error: sin ellas la vista de medias
-// sugiere una precision que estos cinco folds no tienen.
+// sugiere una precision que estos folds no tienen.
 const bigotes = {
   id: "bigotes",
   afterDatasetsDraw(ch) {
@@ -620,7 +867,7 @@ const bigotes = {
     meta.data.forEach((barra, i) => {
       const s = ds.desviaciones[i], v = ds.data[i];
       if (!s) return;
-      const arriba = ejeY.getPixelForValue(v + s), abajo = ejeY.getPixelForValue(v - s), x = barra.x;
+      const arriba = ejeY.getPixelForValue(v + s), abajo = ejeY.getPixelForValue(Math.max(0, v - s)), x = barra.x;
       cx.beginPath();
       cx.moveTo(x, arriba); cx.lineTo(x, abajo);
       cx.moveTo(x - 7, arriba); cx.lineTo(x + 7, arriba);
@@ -647,7 +894,7 @@ const piso = {
   afterDatasetsDraw(ch) {
     const y = ch.scales.y.getPixelForValue(D.escala.azar), cx = ch.ctx;
     if (!isFinite(y)) return;
-    const texto = "piso aleatorio " + num(D.escala.azar, 2);
+    const texto = "piso aleatorio " + dec(D.escala.azar);
     cx.save();
     cx.font = "600 11px -apple-system, sans-serif"; cx.textAlign = "right";
     const ancho = cx.measureText(texto).width;
@@ -660,113 +907,252 @@ const piso = {
   }
 };
 
-const COLORES = ["#8fa6b8", "#4a7fa5", "#c98b7a", "#1f5f8b"];
-const lienzo = document.getElementById("gr-modelos");
-let grafico = null;
+new Chart(document.getElementById("gr-niveles"), {
+  type: "bar",
+  plugins: [bigotes, piso],
+  data: {
+    labels: VR.niveles.map(n => n.etiqueta),
+    datasets: [{
+      label: "pAUC medio",
+      data: VR.niveles.map(n => n.media),
+      desviaciones: VR.niveles.map(n => n.std),
+      backgroundColor: ["#4a7fa5", "#c98b7a", "#1f5f8b"],
+      borderRadius: 4,
+      maxBarThickness: 96
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, suggestedMax: D.escala.maximo,
+           title: { display: true, text: `pAUC (${dec(D.escala.azar)} = azar, ${dec(D.escala.maximo)} = perfecto)` } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: it => VR.niveles[it[0].dataIndex].etiqueta + " — " + VR.niveles[it[0].dataIndex].descripcion,
+          label: it => "pAUC " + dec(VR.niveles[it.dataIndex].media) + "  ±" + dec(VR.niveles[it.dataIndex].std) + " entre folds",
+          afterLabel: it => "validacion-repetida.json > " + VR.niveles[it.dataIndex].campo
+        }
+      }
+    }
+  }
+});
 
-function vistaMedias() {
-  return {
+/* ---------- 3. mejor media no es mejor modelo ---------- */
+const PA = VR.pareada;
+// borrador-v2.md, l. 344-346 y 349-351.
+document.getElementById("texto-3").innerHTML = P([
+  `El gradient boosting balanceado supera a la regresión logística balanceada por ` +
+  `${cifra(dec(PA.media), fVR("comparacion_pareada_2b_menos_1.media"))} en promedio, con intervalo ` +
+  `${ic(PA.ic[0], PA.ic[1], fVR("comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio"))} ` +
+  `(${cifra(PA.gana, fVR("comparacion_pareada_2b_menos_1.gana_2b_en"))} de ${cifra(PA.de, fVR("comparacion_pareada_2b_menos_1.de"))} pliegues; ` +
+  `${cifra(PA.semillas, fVR("comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"))} de ${semillasVR} semillas). La ventaja no está establecida.`,
+  `Sobre una sola partición de los datos completos, el boosting parecía además más estable que la logística. ` +
+  `Con las ${semillasVR} semillas el orden se invierte: su desviación entre pliegues es ${stdN("Nivel 2b")}, frente a ${stdN("Nivel 1")}. ` +
+  `Ese argumento se retiró.`]);
+// borrador-v2.md, l. 356-357, 359-360, 362-363 y 365-367.
+document.getElementById("texto-3b").innerHTML = P([
+  `Con las columnas de centro y licencia, la diferencia entre el boosting y la logística es ` +
+  `${cifra(dec(PR.a_con), fPro("a_2b_menos_1_con_procedencia.media"))}; sin ellas, ${cifra(dec(PR.a_sin), fPro("a_2b_menos_1_sin_procedencia.media"))}. ` +
+  `Incluirlas mueve el boosting en ${cifra(dec(PR.b.media), fPro("b_2b_con_menos_2b_sin.media"))}, con intervalo ` +
+  `${ic(PR.b.ic[0], PR.b.ic[1], fPro("b_2b_con_menos_2b_sin.intervalo_t_95_nadeau_bengio"))}, y la logística en ` +
+  `${cifra(dec(PR.c.media), fPro("c_1_con_menos_1_sin.media"))}, con ${ic(PR.c.ic[0], PR.c.ic[1], fPro("c_1_con_menos_1_sin.intervalo_t_95_nadeau_bengio"))}. ` +
+  `En la logística, incluirlas mejora en las ${cifra(PR.c.semillas, fPro("c_1_con_menos_1_sin.gana_primer_termino_en_semillas"))} semillas y en ` +
+  `${cifra(PR.c.folds, fPro("c_1_con_menos_1_sin.gana_primer_termino_en_folds"))} de ${cifra(PR.c.de_folds, fPro("c_1_con_menos_1_sin.de_folds"))} pliegues. ` +
+  `La magnitud no está establecida. ` +
+  `La exclusión se sostiene por razón de uso, no de desempeño. Una sola partición sugería lo contrario; ` +
+  `es el segundo resultado de una sola partición que no sobrevive a la validación repetida.`]);
+
+// Líneas horizontales: el cero, la media y el intervalo corregido.
+const lineasH = {
+  id: "lineasH",
+  afterDatasetsDraw(ch) {
+    const ejeY = ch.scales.y, cx = ch.ctx, a = ch.chartArea;
+    const linea = (v, color, guion, ancho) => {
+      const y = ejeY.getPixelForValue(v);
+      cx.save(); cx.strokeStyle = color; cx.setLineDash(guion); cx.lineWidth = ancho;
+      cx.beginPath(); cx.moveTo(a.left, y); cx.lineTo(a.right, y); cx.stroke(); cx.restore();
+    };
+    linea(0, "#16202b", [], 1);
+    linea(PA.media, "#1f5f8b", [], 2);
+    linea(PA.ic[0], "#1f5f8b", [5, 4], 1.5);
+    linea(PA.ic[1], "#1f5f8b", [5, 4], 1.5);
+  }
+};
+new Chart(document.getElementById("gr-pareada"), {
+  type: "bar",
+  plugins: [lineasH],
+  data: {
+    labels: PA.etiquetas,
+    datasets: [
+      { label: "Diferencia 2b − 1 por pliegue", data: PA.diferencias,
+        backgroundColor: PA.diferencias.map(d => d > 0 ? "#1f5f8b" : "#c98b7a"), borderRadius: 2 },
+      { type: "line", label: "media", data: [], borderColor: "#1f5f8b", borderWidth: 2, pointStyle: "line" },
+      { type: "line", label: "intervalo corregido al " + D.nivel_ic + "%", data: [], borderColor: "#1f5f8b", borderDash: [5, 4], borderWidth: 1.5, pointStyle: "line" }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { display: false }, grid: { display: false } },
+      y: { title: { display: true, text: "Diferencia 2b − 1" } }
+    },
+    plugins: {
+      legend: { position: "bottom", labels: { usePointStyle: true, filter: it => it.datasetIndex > 0 } },
+      tooltip: {
+        filter: it => it.datasetIndex === 0,
+        callbacks: { label: it => firmado(it.parsed.y) }
+      }
+    }
+  }
+});
+
+/* ---------- 4. la metrica principal no agota lo que pidio el cliente ---------- */
+// borrador-v2.md, l. 95-97.
+document.getElementById("texto-4").innerHTML = P([
+  `<b>El criterio:</b> una diferencia se da por establecida solo si su intervalo corregido al ${nivelIC} no contiene el cero. ` +
+  `Junto al intervalo se reportan los pliegues y las semillas en que gana cada modelo.`]);
+const NOMBRES = { pauc: "pAUC", auc: "AUC estándar", setop15: "Sensibilidad top-15", nnt80: "NNT80% SE" };
+// Marca de la media sobre cada barra de intervalo, y la línea del cero.
+const mediasYcero = {
+  id: "mediasYcero",
+  afterDatasetsDraw(ch) {
+    const ds = ch.data.datasets[0], meta = ch.getDatasetMeta(0), ejeX = ch.scales.x, cx = ch.ctx, a = ch.chartArea;
+    const x0 = ejeX.getPixelForValue(0);
+    cx.save(); cx.strokeStyle = "#16202b"; cx.setLineDash([4, 3]); cx.lineWidth = 1.2;
+    cx.beginPath(); cx.moveTo(x0, a.top); cx.lineTo(x0, a.bottom); cx.stroke();
+    cx.setLineDash([]); cx.lineWidth = 2.5;
+    meta.data.forEach((barra, i) => {
+      const x = ejeX.getPixelForValue(ds.medias[i]);
+      cx.beginPath(); cx.moveTo(x, barra.y - 9); cx.lineTo(x, barra.y + 9); cx.stroke();
+    });
+    cx.restore();
+  }
+};
+const paneles = document.getElementById("paneles");
+["pauc", "auc", "setop15", "nnt80"].forEach(k => {
+  const div = document.createElement("div");
+  div.className = "panel";
+  div.innerHTML = `<h3>${NOMBRES[k]}</h3><div class="lienzo"><canvas></canvas></div>`;
+  paneles.appendChild(div);
+  const filas = D.comparaciones.map(c => c.metricas[k]);
+  const distinguible = filas.map(m => !(m.ic[0] <= 0 && 0 <= m.ic[1]));
+  const d = k === "nnt80" ? 2 : undefined;
+  new Chart(div.querySelector("canvas"), {
     type: "bar",
-    plugins: [bigotes, piso],
+    plugins: [mediasYcero],
     data: {
-      labels: D.modelos.map(m => m.etiqueta),
+      labels: D.comparaciones.map(c => c.etiqueta),
       datasets: [{
-        label: "pAUC medio",
-        data: D.modelos.map(m => m.media),
-        desviaciones: D.modelos.map(m => m.std),
-        backgroundColor: COLORES,
-        borderRadius: 4,
-        maxBarThickness: 96
+        data: filas.map(m => m.ic), medias: filas.map(m => m.media),
+        backgroundColor: distinguible.map(x => x ? "rgba(30,122,82,.55)" : "rgba(91,107,124,.35)"),
+        borderSkipped: false, borderRadius: 3, barPercentage: .55
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: {
-        y: { beginAtZero: true, suggestedMax: 0.2, title: { display: true, text: "pAUC (0,02 = azar, 0,2 = perfecto)" } },
-        x: { ticks: { callback: (v, i) => D.modelos[i].etiqueta } }
-      },
+      indexAxis: "y", responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            title: it => D.modelos[it[0].dataIndex].etiqueta + " \u2014 " + D.modelos[it[0].dataIndex].descripcion,
-            label: it => "pAUC " + num(D.modelos[it.dataIndex].media) + "  \u00b1" + num(D.modelos[it.dataIndex].std) + " entre folds",
-            afterLabel: it => "modelado-baseline.json > " + D.modelos[it.dataIndex].campo
+            label: it => {
+              const m = filas[it.dataIndex];
+              return `${firmado(m.media, d)}, [${d ? fijo(m.ic[0], d) : dec(m.ic[0])}; ${d ? fijo(m.ic[1], d) : dec(m.ic[1])}] ` +
+                     `(${m.folds} de ${m.de_folds}; ${m.semillas} de ${m.de_semillas})`;
+            },
+            afterLabel: it => `${D.comparaciones[it.dataIndex].archivo} > comparaciones_nuevo_menos_base.${k}`
           }
         }
       }
     }
-  };
-}
+  });
+});
+document.getElementById("pie-paneles").innerHTML = esc(D.nota_nnt);
+// borrador-v2.md, l. 382-384, 386-388, 402-403, 405-406, 421-423, 433-434, 449-450 y 452-454.
+document.getElementById("lectura-4").innerHTML = L([
+  `<b>M2 − M1.</b> Quien solo lea la pAUC concluye que el contexto de paciente no aporta; los ejes de triaje que el cliente declaró dicen lo contrario. ` +
+  `Son cuatro métricas sobre una misma comparación, y el intervalo del NNT queda al límite del cero. ` +
+  `<i>Interpretación, no medición:</i> las variables relativas al paciente ordenan las lesiones dentro de cada paciente, que es lo que mide la sensibilidad top-15, ` +
+  `mientras que la pAUC ordena todas las lesiones juntas.`,
+  `<b>M4 − M2.</b> Ningún intervalo excluye el cero, y la estimación puntual es peor en las cuatro métricas. ` +
+  `Por el criterio fijado antes de medir, la imagen, así incorporada, no justifica su costo.`,
+  `<b>M4b − M2.</b> <i>Patrón, no efecto establecido:</i> la forma de incorporar la imagen invierte la dirección de la pAUC. ` +
+  `Como variables sueltas, M4 queda por encima de M2 en ${semC("M4 − M2", "pauc")} de ${deSemC("M4 − M2", "pauc")} semillas; ` +
+  `como puntuación apilada, M4b, en ${semC("M4b − M2", "pauc")} de ${deSemC("M4b − M2", "pauc")}.`,
+  `<b>M3 − M2.</b> Por la nota de lectura fijada antes de correr, esa ventaja no se puede separar de los dos sesgos conocidos a favor de M3.`,
+  `<b>M3 limpio − M2.</b> El intervalo de la pAUC queda entero por encima de cero, así que, por la regla fijada antes de correr, el modelo recomendado es ${reco}. ` +
+  `Quitar los sesgos casi no movió la diferencia media: ${mediaC("M3 − M2", "pauc")} con ellos, ${mediaC("M3 limpio − M2", "pauc")} sin ellos. ` +
+  `Esa comparación es descriptiva, entre dos corridas, sin intervalo propio y sin fijar antes.`]);
 
-const PIE = {
-  medias: () => {
-    const n2a = D.modelos.find(m => m.etiqueta === "Nivel 2a");
-    return `El <span class="destacado">nivel 2a queda en ${cifra(num(n2a.media), "modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.pauc_media")}, ` +
-      `por debajo del piso aleatorio</span>: no colapsa a predecir siempre negativo, satura en probabilidad 1 sobre negativos y los coloca ` +
-      `encima de los positivos, arrasando justo la región de sensibilidad alta que el cliente mide. Su AUC estándar no delata nada. ` +
-      `Los bigotes son &plusmn;1 desviación entre folds, no un intervalo de confianza.`;
-  }
-};
+/* ---------- 5. la pregunta del cliente, entera ---------- */
+// borrador-v2.md, l. 470-476: la cabecera y las filas, con las cifras de outputs/.
+const fMet = (f, k) => `${f.archivo} > metricas.${f.clave}.${k}.media_global`;
+document.getElementById("tabla-ejes").innerHTML =
+  `<thead><tr><th>Modelo</th><th>pAUC</th><th>Sensibilidad top-15</th><th>NNT80% SE</th><th>Segundos por ${milLesiones} lesiones</th></tr></thead><tbody>` +
+  D.tabla.map(f => `<tr><td>${esc(f.modelo)}</td><td>${cifra(fijo(f.pauc, 4), fMet(f, "pauc"))}</td>` +
+    `<td>${cifra(fijo(f.setop15, 4), fMet(f, "setop15"))}</td><td>${cifra(fijo(f.nnt80, 2), fMet(f, "nnt80"))}</td>` +
+    `<td>${tiempoT(f.modelo)}</td></tr>`).join("") + `</tbody>`;
+// borrador-v2.md, l. 480-485 y 463-465.
+document.getElementById("texto-5").innerHTML = P([
+  `La tabla responde la pregunta con sus tres ejes: la métrica principal, la sensibilidad por paciente y el costo. ` +
+  `Son medias y medianas; las diferencias, con sus intervalos, están arriba. M2 se distingue de M1 en los dos ejes de triaje, no en la pAUC. ` +
+  `Frente a M2, de los otros tres solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar; en los ejes de triaje no se distingue ninguno de los tres.`,
+  `M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo por cada ${milLesiones} lesiones. ` +
+  `Lo caro, con diferencia, es la imagen, y los modelos con imagen no mejoraron la métrica principal de forma distinguible.`]);
 
-function pintar(vista) {
-  if (grafico) grafico.destroy();
-  grafico = new Chart(lienzo, vistaMedias());
-  document.getElementById("pie-modelos").innerHTML = PIE[vista]();
-}
+/* ---------- 6. recomendacion ---------- */
+document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
+document.getElementById("rot-reco").innerHTML = reco;
+// borrador-v2.md, l. 495-496, 498-499, 502-504 y 507-508.
+document.getElementById("texto-6").innerHTML = P([
+  `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
+  `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`,
+  `<b>No se recomienda añadir las variables de imagen</b> tal como se probaron. No mejoraron ninguna métrica de forma distinguible, ` +
+  `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio.`,
+  `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en los dos ejes de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
+// borrador-v2.md, l. 513-524.
+document.getElementById("se-puede").innerHTML = L([
+  `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
+  `El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80% SE.`,
+  `Las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas.`,
+  `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`]);
+// borrador-v2.md, l. 528-547.
+document.getElementById("no-se-puede").innerHTML = L([
+  `<b>Que M3 limpio sea mejor en los ejes de triaje.</b> En la sensibilidad top-15 y en el NNT80% SE no se distingue de M2.`,
+  `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
+  `<b>Cuánto rinde M3 limpio fuera del conjunto de desarrollo.</b> El conjunto reservado no se ha abierto. Cuando se abra, la estimación principal ` +
+  `seguirá siendo la validación cruzada repetida, y la recomendación no cambiará por su resultado.`,
+  `<b>Nada sobre otras formas de usar la imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron fuera.`,
+  `<b>Que este trabajo supere o no a la solución ganadora.</b> Su evaluación usó otros datos y otras particiones.`,
+  `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 
-document.getElementById("tit-reco").innerHTML =
-  cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media");
-document.getElementById("tit-fallo").innerHTML =
-  cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media");
-document.getElementById("tit-fallo-det").innerHTML =
-  "Boosting sin ajustar por desbalance. Su AUC est&aacute;ndar es " +
-  cifra(num(M("Nivel 2a").auc, 2), campo("Nivel 2a") + ".auc_estandar_media") +
-  ": por encima del azar. Bajo la m&eacute;trica del cliente queda por debajo de su piso de " +
-  cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar") +
-  ". Las dos m&eacute;tricas no coinciden ni en si el modelo supera al azar";
-
-pintar("medias");
-
-/* ---------- 3. cierre ---------- */
-document.getElementById("cierre-hallazgos").innerHTML =
-  `El desbalance extremo (${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} malignos entre ` +
-  `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones) y la agrupación por paciente hacían la partición ` +
-  `ingenua peligrosa: ${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
-  `de fuga potencial. La auditoría de columnas dejó el modelado con ` +
-  `${cifra(D.n_features_usadas, "modelado-baseline.json > n_features_usadas")} variables de las ` +
-  `${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")} del archivo. Las otras ` +
-  `${cifra(D.eda.n_columnas - D.n_features_usadas, "derivado: fuente.n_columnas menos n_features_usadas")} quedan fuera por razones distintas: ` +
-  `${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} no existen al predecir &mdash;el test no las trae, y entre ellas va la propia respuesta&mdash;, ` +
-  `<code>image_type</code> es constante en todo el archivo, <code>isic_id</code> identifica la fila, y ` +
-  `<code>patient_id</code> no se descarta por sospechosa: se usa para agrupar los folds, no para predecir. ` +
-  `Eso evitó que información no disponible en producción entrara al modelo. ` +
-  `<span class="destacado">En esta partición 2b fue además menos disperso</span>: ` +
-  `&plusmn;${cifra(num(M("Nivel 2b").std), campo("Nivel 2b") + ".pauc_std")} entre folds frente a ` +
-  `&plusmn;${cifra(num(M("Nivel 1").std), campo("Nivel 1") + ".pauc_std")} de la logística &mdash; una ventaja que ` +
-  `no se mantiene al repetir la validación con diez particiones distintas.`;
-
-document.getElementById("cierre-recomendacion").innerHTML =
-  `Regresión logística balanceada &mdash;Nivel 1, pAUC ${cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media")}&mdash; ` +
-  `como modelo de referencia: interpretable, con desempeño comparable al gradient boosting ` +
-  `(Nivel 2b, ${cifra(num(M("Nivel 2b").media), campo("Nivel 2b") + ".pauc_media")}), y sin la fragilidad que mostró el boosting ` +
-  `sin ajustar por desbalance: el Nivel 2a colapsó a ${cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media")}, ` +
-  `por debajo del piso aleatorio de ${cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar")}.`;
-
-document.getElementById("cierre-limites").innerHTML =
-  `La clase negativa tiene ruido estructural: la mayoría de los ` +
-  `${cifra(mil(D.eda.negativos), "eda-diagnostico.json > desbalance_target.conteos.0")} &laquo;benignos&raquo; nunca se biopsiaron. ` +
-  `No existe un conjunto de prueba real sobre el cual medir un resultado final independiente &mdash;el test publicado es ` +
-  `${cifra("un marcador de posición", "eda-diagnostico.json > test_is_placeholder = " + D.test_es_marcador)}, así que todo lo de ` +
-  `arriba es validación cruzada, no resultado sobre datos nuevos. Y la propia métrica del proyecto tuvo un error que solo se detectó ` +
-  `al contrastarla explícitamente contra la fuente oficial &mdash; recordatorio de que ninguna parte de este proceso, ni siquiera la ` +
-  `más técnica, estaba exenta de revisión.`;
+/* ---------- 7. limitaciones ---------- */
+// borrador-v2.md, l. 208-210 y 552-587.
+document.getElementById("limitaciones").innerHTML = P([
+  `El archivo de prueba que publica el reto es un marcador de posición, sin casos reales, así que no hay contra qué medir un resultado final ` +
+  `independiente fuera de lo que este proyecto aparte.`]) + L([
+  `<b>La clase negativa no está confirmada.</b> Las lesiones malignas tienen patología; de las benignas, <i>"most never underwent a skin biopsy"</i>. ` +
+  `La mayoría de los negativos son lesiones que un dermatólogo no consideró preocupantes, no lesiones confirmadas como sanas.`,
+  `<b>Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente.</b> Así las describe el artículo del conjunto de datos: ` +
+  `<i>"comparable in optical resolution to smartphone images"</i>. El resultado de la imagen se limita a estas imágenes y a este extractor.`,
+  `<b>Muchas comparaciones a la vez.</b> Las cinco comparaciones M2 − M1, M4 − M2, M4b − M2, M3 − M2 y M3 limpio − M2 se leen en cuatro métricas cada una, ` +
+  `sin corregir por multiplicidad, y el intervalo del NNT80% SE de M2 − M1 queda al límite del cero.`,
+  `<b>La corrección de la varianza es aproximada.</b> Nadeau y Bengio la derivan para divisiones aleatorias independientes, y aquí se aplica a una validación por pliegues.`,
+  `<b>El NNT80% SE se calcula con una lectura propia</b>, porque el organizador no publica script para él.`,
+  `<b>El conjunto reservado no es del todo independiente.</b> No es ajeno a las decisiones tomadas antes de sellarlo ni al diseño de las variables de la ` +
+  `solución ganadora, que siguen M2 y M3 limpio.`,
+  `<b>Los tiempos son de un solo equipo</b>, con DINOv2 en la GPU y los modelos tabulares en la CPU. Solo comparan estos modelos entre sí.`,
+  `<b>Dos supuestos sin verificar.</b> No se sabe si el clasificador de nevus que produce <code>tbp_lv_nevi_confidence</code> se entrenó con lesiones ` +
+  `de este conjunto. Y nada comprueba la versión del código de DINOv2; solo sus pesos, por hash.`,
+  `<b>Un mecanismo sin medir.</b> No se midió por qué el gradient boosting sin balancear queda bajo el azar de la pAUC; el informe solo afirma que queda.`]);
 
 /* ---------- pie ---------- */
+// Parte B, B10.
 document.getElementById("pie").innerHTML =
   `Generado el ${esc(D.generado)} por <code>generar_demo.py</code> desde <code>outputs/*.json</code>. ` +
-  `Ninguna cifra de esta página está escrita a mano: pasa el ratón sobre cualquiera para ver su archivo y campo de origen. ` +
-  `Mismo origen que <code>informe/informe-final.docx</code>.`;
+  `Ninguna cifra de esta página está escrita a mano: pasa el ratón sobre cualquiera para ver su archivo y campo de origen.`;
 </script>
 </body>
 </html>
@@ -792,6 +1178,18 @@ AVISO_EXPLORATORIO = (
 # entonces ningún archivo que lea la página puede declarar el reservado.
 SALIDA_FASE_5 = None
 
+# Archivos que no miden sobre un conjunto sino que reparten entre los dos, y
+# por eso no declaran datos.conjunto. Cuentan como no exploratorios solo si
+# declaran lo que los hace válidos:
+# - extraccion-imagen: datos.reparto. No lee etiquetas (su campo nota), así
+#   que extraer el reservado no es mirarlo. Decisión de la persona, 2026-10-02.
+# - holdout-pacientes: fecha_sellado. Es el registro del sellado de la Fase 1;
+#   la página lee solo su semilla y su fracción, nunca sus recuentos.
+REPARTOS = {
+    "extraccion-imagen": lambda c: bool((c.get("datos") or {}).get("reparto")),
+    "holdout-pacientes": lambda c: bool(c.get("fecha_sellado")),
+}
+
 
 def comprobar_conjuntos(leidos, salida_fase_5=SALIDA_FASE_5):
     """Devuelve el aviso exploratorio, o "" si no hace falta, mirando cada
@@ -802,6 +1200,9 @@ def comprobar_conjuntos(leidos, salida_fase_5=SALIDA_FASE_5):
     exploratorio = False
     for nombre, contenido in leidos.items():
         if nombre == "sintesis-verificacion":
+            continue
+        if nombre in REPARTOS:
+            exploratorio = exploratorio or not REPARTOS[nombre](contenido)
             continue
         conjunto = (contenido.get("datos") or {}).get("conjunto")
         if conjunto == "reservado":
@@ -821,8 +1222,6 @@ def comprobar_conjuntos(leidos, salida_fase_5=SALIDA_FASE_5):
 # detecta además una verificación que se quedó atrás de outputs/: la cuarta
 # fila del registro de incidentes de CLAUDE.md fue exactamente eso.
 BORRADOR_VIGENTE = "informe/borrador-v2.md"
-RAIZ = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
-VERIFICADOR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verificar_trazabilidad.py")
 
 
 def comprobar_verificacion(outputs_dir):
@@ -859,7 +1258,8 @@ def comprobar_verificacion(outputs_dir):
 # la persona del 2026-09-26 (PLAN.md, Fase 4, «Modelo recomendado: decisión de
 # la persona, 2026-09-26»). El generador no lo da por supuesto: aplica la regla
 # fijada antes de correr sobre la salida de M3 limpio − M2 y no escribe la
-# página si el resultado no coincide con esta constante.
+# página si el resultado no coincide con esta constante. La página muestra el
+# modelo recomendado desde esta constante, no desde texto tecleado.
 RECOMENDADO = "M3 limpio"
 
 
@@ -895,11 +1295,12 @@ def main():
     )
     args = ap.parse_args()
 
-    # Las tres comprobaciones van antes de renderizar: si una se niega, no se
-    # escribe ningún destino, ni siquiera a medias.
+    # Las comprobaciones van antes de renderizar: si una se niega, no se
+    # escribe ningún destino, ni siquiera a medias. La recomendación se
+    # comprueba antes de construir los datos, que la muestran.
     leidos = {}
-    datos = construir_datos(args.outputs_dir, leidos)
     comprobar_recomendacion(cargar_json(args.outputs_dir, "fase4-m3limpio-vs-m2", leidos))
+    datos = construir_datos(args.outputs_dir, leidos)
     comprobar_verificacion(args.outputs_dir)
     aviso = comprobar_conjuntos(leidos)
     # </script> dentro de la cadena JSON cerraria la etiqueta que la contiene;
@@ -950,9 +1351,8 @@ def main():
             f.write(html)
 
     print(
-        f"Escrito: {', '.join(args.salida)} — {len(datos['modelos'])} niveles, "
-        f"{len(datos['excluidas'])} columnas excluidas, "
-        f"{len(datos['cadena'])} etapas en la cadena"
+        f"Escrito: {', '.join(args.salida)} — {len(datos['cadena'])} etapas en la cadena, "
+        f"{len(datos['comparaciones'])} comparaciones, {len(datos['tabla'])} modelos en la tabla"
     )
 
 
