@@ -1,7 +1,7 @@
 # Verificación de trazabilidad — informe/borrador-v2.md
-Números encontrados en el borrador: 397
-Con respaldo en outputs/ (tolerancia: media unidad del último dígito escrito; exacta sin decimales): 287
-SIN respaldo — revisar uno por uno: 29
+Números encontrados en el borrador: 402
+Con respaldo en outputs/ (tolerancia: media unidad del último dígito escrito; exacta sin decimales): 290
+SIN respaldo — revisar uno por uno: 31
   - línea ~32: "7,500" en «...emio propio:** *"Two Secondary Prizes: $7,500 each for...»
   - línea ~45: "2025" en «..., como la describen   Kurtansky et al. (2025): *"weigh...»
   - línea ~57: "2025" en «...- **NNT80% SE**, de Kurtansky et al. (2025): *"the a...»
@@ -12,7 +12,7 @@ SIN respaldo — revisar uno por uno: 29
   - línea ~113: "384," en «...egresión logística balanceada sobre las 384, y esa pun...»
   - línea ~149: "352,034" en «...ento: *"We selected a subset containing 352,034 tile imag...»
   - línea ~150: "244" en «...as/panderm-reduccion-examenes.md, línea 244 («a multi...»
-  ... y 19 más — detalle en el .json
+  ... y 21 más — detalle en el .json
 Porcentajes que son parámetros del método, excluidos por lista declarada (no se les busca respaldo): 4
 Omitidos por su contexto (IGNORAR_CONTEXTOS: 2024, 2026, Nivel 0, Nivel 1, Nivel 2), sin buscarles respaldo: 77
   - línea ~29: "2026" en «...KILL.md, «Sobre la métrica: VERIFICADA (2026-08-11)»;...»

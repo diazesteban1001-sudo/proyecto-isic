@@ -1,6 +1,6 @@
 {
-  "numeros_en_borrador": 397,
-  "numeros_con_respaldo_en_outputs": 287,
+  "numeros_en_borrador": 402,
+  "numeros_con_respaldo_en_outputs": 290,
   "numeros_sin_respaldo": [
     {
       "valor": "7,500",
@@ -90,62 +90,72 @@
     {
       "valor": "384",
       "contexto": "## La imagen no justifica su costo  Las 384 variables",
-      "linea_aprox": 439
+      "linea_aprox": 440
     },
     {
       "valor": "0,0263",
       "contexto": "caracteristica -->  - pAUC: −0,0065, [−0,0263; 0,0133]",
-      "linea_aprox": 443
+      "linea_aprox": 444
     },
     {
       "valor": "19,90",
       "contexto": "de 50; 0 de 10); - NNT80% SE: +11,24, [−19,90; 42,37].",
-      "linea_aprox": 445
+      "linea_aprox": 446
     },
     {
       "valor": "384",
       "contexto": "cia» --> *Interpretación, no medición:* 384 variables",
-      "linea_aprox": 454
+      "linea_aprox": 455
     },
     {
       "valor": "3,87,",
       "contexto": "032] (22 de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10;",
-      "linea_aprox": 464
+      "linea_aprox": 465
     },
     {
       "valor": "25,10",
       "contexto": "de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10; 17,35].",
-      "linea_aprox": 464
+      "linea_aprox": 465
     },
     {
       "valor": "0,0365",
       "contexto": "stingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726],",
-      "linea_aprox": 476
+      "linea_aprox": 477
     },
     {
       "valor": "12,62,",
       "contexto": "0,0181, [−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29;",
-      "linea_aprox": 477
+      "linea_aprox": 478
     },
     {
       "valor": "49,29",
       "contexto": "−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29; 24,05].",
-      "linea_aprox": 477
+      "linea_aprox": 478
     },
     {
       "valor": "0,695",
       "contexto": "r sin recortes de imagen obtuvo 0,164 y 0,695 en la eva",
-      "linea_aprox": 484
+      "linea_aprox": 485
     },
     {
       "valor": "20,06,",
       "contexto": "0,0227, [−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74;",
-      "linea_aprox": 493
+      "linea_aprox": 494
     },
     {
       "valor": "49,74",
       "contexto": "−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74; 9,61]. <",
-      "linea_aprox": 493
+      "linea_aprox": 494
+    },
+    {
+      "valor": "59",
+      "contexto": ".IC; «Método», «Qué se mide», líneas 55–59 (NNT80% S",
+      "linea_aprox": 534
+    },
+    {
+      "valor": "495",
+      "contexto": "80% SE); informe/anteproyecto.md, línea 495 (la top-1",
+      "linea_aprox": 534
     }
   ],
   "porcentajes_de_metodo_excluidos": [
@@ -523,42 +533,42 @@
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 497
+      "linea_aprox": 498
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> Q",
-      "linea_aprox": 497
+      "linea_aprox": 498
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Quit",
-      "linea_aprox": 497
+      "linea_aprox": 498
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 543
+      "linea_aprox": 545
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> S",
-      "linea_aprox": 543
+      "linea_aprox": 545
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Se e",
-      "linea_aprox": 543
+      "linea_aprox": 545
     },
     {
       "valor": "306,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 306, cita lite",
-      "linea_aprox": 602
+      "linea_aprox": 604
     },
     {
       "valor": "99,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 99, cita lite",
-      "linea_aprox": 607
+      "linea_aprox": 609
     }
   ],
   "modo_tolerancia": "decimales_escritos",
