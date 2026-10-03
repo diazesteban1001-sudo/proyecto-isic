@@ -14,10 +14,10 @@ material confiable. Si alguna de las cinco no ha corrido sobre los datos
 reales, o corrió pero no fue auditada, esta skill no debe usarse todavía
 — el informe heredaría esa falta de rigor sin decirlo.
 
-**Estado (2026-10-02):** las cinco corrieron sobre los datos reales. Las
-cuatro originales —`eda-diagnostico`, `diseno-validacion`,
-`auditoria-de-fugas` y `modelado-baseline`— están auditadas;
-`extraccion-imagen` todavía no, así que esta skill no debe usarse aún.
+**Estado (2026-10-02):** las cinco corrieron sobre los datos reales y están
+auditadas: las cuatro originales —`eda-diagnostico`, `diseno-validacion`,
+`auditoria-de-fugas` y `modelado-baseline`— y `extraccion-imagen`, auditada
+ese mismo día sin defectos (`extraccion-imagen/scripts/test_extraccion.py`).
 
 ## Antes de empezar
 
