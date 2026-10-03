@@ -1060,14 +1060,24 @@ es un hallazgo sino una decisión de la persona (2026-09-25), escrita en
 Es la regla 2 con un verificador detrás, no un propósito.
 
 **Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
-extrae todo número del borrador y lo busca en los `outputs/*.json` con
-tolerancia de redondeo 0,01, salvo en los que declara fuera del corpus
-(`FUERA_DEL_CORPUS`, desde el 2026-09-25: el conjunto reservado, los análisis
-de sensibilidad y la salida del propio verificador). Última corrida
+extrae todo número del borrador y lo busca en los `outputs/*.json`, salvo en
+los que declara fuera del corpus (`FUERA_DEL_CORPUS`, desde el 2026-09-25: el
+conjunto reservado, los análisis de sensibilidad y la salida del propio
+verificador). La tolerancia de redondeo depende de cómo está escrita la
+cifra: con decimales, media unidad de su último dígito («0,1451» tiene que
+estar entre 0,14505 y 0,14515); sin decimales, sea recuento o porcentaje,
+la coincidencia tiene que ser exacta. `--tolerancia` impone en su lugar un
+margen fijo, y la salida declara el modo en `modo_tolerancia`. El
+verificador señala; que una cifra pase no prueba que salga del campo que se
+cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
+*Hasta el 2026-10-02 aquí decía «con tolerancia de redondeo 0,01»: era el
+margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
+duodécima fila).* Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit "Regenerar la verificacion de trazabilidad desde el estado actual"): **344 números en el
 borrador, 298 con respaldo, 16 señalados** —recuentos de la corrida anterior a
-la re-medición de la Fase 1 (2026-09-25), sobre el borrador y el `outputs/` de
-entonces, pendientes de regenerar— para revisar uno por uno; el
+la re-medición de la Fase 1 (2026-09-25), con la tolerancia de 0,01, sobre el
+borrador y el `outputs/` de entonces, pendientes de regenerar— para revisar
+uno por uno; el
 resto cae en contextos que no son cifras medidas (años, etiquetas de
 nivel, numeración de secciones) y se descarta explícitamente. De esos 16,
 catorce son siete cifras contadas dos veces: la sección §10.4 del
