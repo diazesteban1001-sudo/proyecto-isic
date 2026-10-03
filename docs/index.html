@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Proyecto de consultor&iacute;a ISIC 2024 &mdash; Detecci&oacute;n de melanoma</title>
+<title>Proyecto de consultor&iacute;a ISIC 2024 &mdash; Detecci&oacute;n de c&aacute;ncer de piel</title>
 <script>/*!
  * Chart.js v4.4.1
  * https://www.chartjs.org
@@ -36,6 +36,7 @@
     color: var(--tinta);
     background: var(--fondo);
     line-height: 1.55;
+    overflow-wrap: break-word;
   }
   .hoja { max-width: 1080px; margin: 0 auto; padding: 0 28px 72px; }
   header { padding: 44px 0 28px; border-bottom: 3px solid var(--tinta); }
@@ -47,27 +48,25 @@
   .contexto { margin: 0 0 22px; max-width: 860px; }
   .contexto p { margin: 0 0 12px; font-size: 15.5px; }
   .contexto b { color: var(--acento); }
-  .tesis {
-    font-size: 21px; line-height: 1.45; border-left: 5px solid var(--acento);
-    padding: 4px 0 4px 18px; margin: 0; color: var(--tinta);
-  }
-  .tesis strong { color: var(--acento); }
   section { margin-top: 52px; }
-  h2 { font-size: 21px; margin: 0 0 6px; }
+  h2 { font-size: 21px; margin: 0 0 6px; display: flex; align-items: center; }
   h2 .num {
-    display: inline-block; width: 30px; height: 30px; line-height: 30px;
+    flex: 0 0 30px; width: 30px; height: 30px; line-height: 30px;
     text-align: center; background: var(--tinta); color: #fff;
     border-radius: 50%; font-size: 14px; margin-right: 10px;
   }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
   .sub { color: var(--suave); margin: 0 0 20px; font-size: 15px; }
   .tarjeta {
     background: #fff; border: 1px solid var(--linea); border-radius: 10px;
     padding: 22px; box-shadow: 0 1px 2px rgba(22,32,43,.05);
   }
-  /* ---- cadena de skills ---- */
-  .cadena { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; }
+  .texto p { margin: 0 0 12px; font-size: 15px; }
+  .texto ul { margin: 0 0 12px; padding-left: 20px; font-size: 15px; }
+  .texto li { margin-bottom: 8px; }
+  .cadena { display: flex; align-items: stretch; gap: 4px; flex-wrap: wrap; }
   .paso {
-    flex: 1 1 165px; text-align: left; cursor: pointer; background: #fff;
+    flex: 1 1 120px; text-align: left; cursor: pointer; background: #fff;
     border: 1px solid var(--linea); border-top: 4px solid var(--suave);
     border-radius: 8px; padding: 13px 14px; font: inherit; color: inherit;
     transition: transform .12s, box-shadow .12s, border-color .12s;
@@ -79,11 +78,11 @@
   .paso .nom { font-weight: 700; font-size: 14px; display: block; }
   .paso .tipo {
     font-size: 10px; text-transform: uppercase; letter-spacing: .1em;
-    color: var(--suave); font-weight: 600;
+    color: var(--suave); font-weight: 600; white-space: nowrap;
   }
   .paso.final .tipo { color: var(--acento); }
   .paso .fun { font-size: 12px; color: var(--suave); margin-top: 6px; display: block; }
-  .flecha { align-self: center; color: var(--suave); font-size: 20px; }
+  .flecha { align-self: center; color: var(--suave); font-size: 16px; }
   .salida {
     margin-top: 16px; background: #fff; border: 1px solid var(--linea);
     border-radius: 10px; padding: 0 20px 4px;
@@ -92,14 +91,15 @@
   .ficha { margin: 0 0 16px; }
   .ficha p { margin: 0 0 9px; font-size: 14.5px; }
   .ficha b { color: var(--acento); }
-  .ficha .hallazgo { border-left: 3px solid var(--acento); background: #f4f8fb; padding: 9px 13px; border-radius: 0 6px 6px 0; }
+  .ficha .hallazgo { border-left: 3px solid var(--acento); background: #f4f8fb; padding: 9px 13px; border-radius: 0 6px 6px 0; font-size: 14.5px; }
+  .ficha .hallazgo p { margin: 0 0 8px; }
+  .ficha .hallazgo ul { margin: 0 0 8px; padding-left: 20px; }
   .salida pre {
     white-space: pre-wrap; font-family: Menlo, Consolas, monospace;
     font-size: 12.5px; line-height: 1.6; background: #fbfcfd;
     border: 1px solid var(--linea); border-radius: 6px; padding: 14px; overflow-x: auto;
   }
-  /* ---- fuga ---- */
-  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
   .medida { text-align: center; padding: 24px 18px; border-radius: 10px; border: 1px solid var(--linea); background: #fff; }
   .medida .cifra { font-size: 52px; font-weight: 700; line-height: 1; }
   .medida.mal { border-color: #f0c4bc; background: #fdf4f2; }
@@ -108,12 +108,12 @@
   .medida.ok .cifra { color: var(--bien); }
   .medida .rot { font-weight: 600; margin-top: 10px; }
   .medida .det { font-size: 13px; color: var(--suave); margin-top: 4px; }
-  /* ---- tablas ---- */
-  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; }
-  th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--suave); }
-  td.mono { font-family: Menlo, Consolas, monospace; font-size: 12.5px; }
-  .lectura { color: var(--suave); }
+  .medida.sola { max-width: 420px; margin: 0 auto 18px; }
+  .tabla-envoltura { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--suave); white-space: normal; }
   .aviso {
     font-size: 12.5px; color: var(--suave); background: #fbfcfd;
     border-left: 3px solid var(--linea); padding: 8px 12px; margin: 14px 0 0;
@@ -123,62 +123,57 @@
     border-radius: 8px; background: #fdf3f1; color: var(--tinta); font-size: 15px;
   }
   .exploratorio b { color: var(--alarma); }
-  .contra { margin-top: 18px; border-left: 4px solid var(--bien); background: #f2faf6; padding: 14px 16px; border-radius: 0 8px 8px 0; }
-  .contra b { color: var(--bien); }
-  /* ---- toggle ---- */
   .barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
-  .toggle { display: inline-flex; border: 1px solid var(--linea); border-radius: 8px; overflow: hidden; background: #fff; }
-  .toggle button {
-    border: 0; background: #fff; padding: 9px 18px; font: inherit; font-size: 13.5px;
-    cursor: pointer; color: var(--suave); font-weight: 600;
-  }
-  .toggle button[aria-pressed="true"] { background: var(--acento); color: #fff; }
   .lienzo { position: relative; height: 340px; }
-  /* ---- cierre ---- */
-  .cierre { display: grid; gap: 16px; }
-  .bloque { background: #fff; border: 1px solid var(--linea); border-radius: 10px; padding: 20px 22px; border-left: 5px solid var(--suave); }
-  .bloque h3 { margin: 0 0 8px; font-size: 16px; }
-  .bloque p { margin: 0; font-size: 14.5px; }
-  .bloque.recomendacion { border-left-color: var(--bien); }
-  .bloque.recomendacion h3 { color: var(--bien); }
-  .bloque.limites { border-left-color: var(--alarma); }
-  .bloque.limites h3 { color: var(--alarma); }
+  .paneles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .panel h3 { margin: 0 0 6px; font-size: 14px; }
+  .panel .lienzo { height: 230px; }
   .pie-grafico { font-size: 13px; color: var(--suave); margin-top: 14px; }
-  .destacado { color: var(--tinta); }
   .cifra-fuente { border-bottom: 1px dotted var(--suave); cursor: help; }
   footer {
     margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--linea);
     font-size: 12.5px; color: var(--suave);
   }
   @media (max-width: 760px) {
-    .duo { grid-template-columns: 1fr; }
+    .hoja { padding: 0 16px 56px; }
+    h1 { font-size: 25px; }
+    .duo, .paneles { grid-template-columns: 1fr; }
     .flecha { display: none; }
+    .tarjeta { padding: 16px; }
+    .medida .cifra { font-size: 44px; }
+    .lienzo { height: 300px; }
+    /* La tabla de tres ejes cabe entera: el costo no queda fuera de la vista. */
+    table { font-size: 12.5px; }
+    th, td { padding: 6px 4px; }
+    th { font-size: 9.5px; letter-spacing: .03em; }
   }
 </style>
 </head>
 <body>
 <div class="hoja">
-<div class="exploratorio" role="note"><b>Cifras exploratorias.</b> Las cifras de esta p&aacute;gina son de la corrida exploratoria sobre el 100&nbsp;% de los datos y se est&aacute;n re-midiendo sobre el conjunto de desarrollo.</div>
+
 
 <header>
   <div class="kicker">Consultor&iacute;a e Investigaci&oacute;n &middot; Estad&iacute;stica &middot; caso ISIC 2024</div>
   <h1>Proyecto de consultor&iacute;a ISIC 2024</h1>
   <div class="contexto">
     <p><b>El problema.</b> <span id="ctx-problema"></span></p>
+    <p><b>Los datos.</b> <span id="ctx-datos"></span></p>
+    <p id="ctx-metrica"></p>
     <p><b>Por qu&eacute; este caso.</b> <span id="ctx-eleccion"></span></p>
   </div>
 </header>
 
 <section>
   <h2><span class="num">1</span>C&oacute;mo se desarroll&oacute; el trabajo</h2>
-  <p class="sub">Cinco etapas. Las cuatro primeras miden y dejan su salida en un archivo; la quinta interpreta y redacta. Haz clic en cualquiera para ver la salida real que produjo.</p>
+  <p class="sub">Seis etapas. Las cinco primeras miden y dejan su salida en un archivo; la sexta interpreta y redacta. Haz clic en cualquiera para ver la salida real que produjo.</p>
   <div class="cadena" id="cadena"></div>
   <div class="salida" id="salida" hidden>
     <h3 id="salida-nombre"></h3>
     <div class="ficha">
       <p><b>Qu&eacute; se midi&oacute;.</b> <span id="ficha-mide"></span></p>
       <p><b>Por qu&eacute; se hizo.</b> <span id="ficha-porque"></span></p>
-      <p class="hallazgo"><b>Un hallazgo concreto.</b> <span id="ficha-hallazgo"></span></p>
+      <div class="hallazgo"><p><b>Un hallazgo concreto.</b></p><div id="ficha-hallazgo"></div></div>
     </div>
     <h3 id="salida-titulo"></h3>
     <pre id="salida-texto"></pre>
@@ -186,72 +181,80 @@
 </section>
 
 <section>
-  <h2><span class="num">2</span>Resultados</h2>
-  <p class="sub" id="sub-modelos"></p>
+  <h2><span class="num">2</span>Una decisi&oacute;n por defecto cambia el veredicto</h2>
+  <p class="sub" id="sub-resultados"></p>
   <div class="duo">
-    <div class="medida ok">
-      <div class="cifra" id="tit-reco"></div>
-      <div class="rot">Nivel 1 &mdash; regresi&oacute;n log&iacute;stica balanceada</div>
-      <div class="det">El modelo recomendado</div>
-    </div>
     <div class="medida mal">
-      <div class="cifra" id="tit-fallo"></div>
-      <div class="rot">Nivel 2a &mdash; colapsa bajo la m&eacute;trica del cliente</div>
-      <div class="det" id="tit-fallo-det"></div>
+      <div class="cifra" id="tit-2a"></div>
+      <div class="rot" id="rot-2a"></div>
+    </div>
+    <div class="medida ok">
+      <div class="cifra" id="tit-2b"></div>
+      <div class="rot" id="rot-2b"></div>
     </div>
   </div>
   <div class="tarjeta">
-    <div class="barra">
-      <div class="toggle" role="group" aria-label="Vista de resultados">
-        <button id="btn-medias" aria-pressed="true">Medias</button>
-        <button id="btn-pareada" aria-pressed="false">Pareada por fold</button>
-      </div>
-      <div class="pie-grafico" id="escala"></div>
-    </div>
-    <div class="lienzo"><canvas id="gr-modelos"></canvas></div>
-    <p class="pie-grafico" id="pie-modelos"></p>
+    <div class="texto" id="texto-2"></div>
+    <div class="lienzo"><canvas id="gr-niveles"></canvas></div>
+    <p class="pie-grafico">Los bigotes marcan una desviaci&oacute;n est&aacute;ndar entre pliegues, no un intervalo de confianza.</p>
   </div>
 </section>
 
 <section>
-  <h2><span class="num">3</span>Conclusi&oacute;n</h2>
+  <h2><span class="num">3</span>Mejor media no es mejor modelo</h2>
+  <div class="tarjeta">
+    <div class="texto" id="texto-3"></div>
+    <div class="lienzo"><canvas id="gr-pareada"></canvas></div>
+    <h3>Las columnas de procedencia no explican la ventaja</h3>
+    <div class="texto" id="texto-3b"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>La m&eacute;trica principal no agota lo que pidi&oacute; el cliente</h2>
+  <div class="tarjeta">
+    <div class="texto" id="texto-4"></div>
+    <div class="paneles" id="paneles"></div>
+    <p class="pie-grafico" id="pie-paneles"></p>
+    <div class="texto" id="lectura-4"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>La pregunta del cliente, entera</h2>
+  <div class="tarjeta">
+    <div class="tabla-envoltura"><table id="tabla-ejes"></table></div>
+    <div class="texto" id="texto-5" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>Recomendaci&oacute;n</h2>
   <p class="sub">Lo que un consultor le entregar&iacute;a al cliente: el hallazgo, la recomendaci&oacute;n y lo que a&uacute;n no se puede afirmar.</p>
-  <div class="cierre">
-    <div class="bloque">
-      <h3>Lo que se encontr&oacute;</h3>
-      <p id="cierre-hallazgos"></p>
-    </div>
-    <div class="bloque recomendacion">
-      <h3>La recomendaci&oacute;n</h3>
-      <p id="cierre-recomendacion"></p>
-    </div>
-    <div class="bloque limites">
-      <h3>Las limitaciones honestas</h3>
-      <p id="cierre-limites"></p>
-    </div>
+  <div class="medida ok sola">
+    <div class="cifra" id="tit-reco"></div>
+    <div class="rot" id="rot-reco"></div>
+    <div class="det">El modelo recomendado &middot; pAUC</div>
+  </div>
+  <div class="tarjeta">
+    <div class="texto" id="texto-6"></div>
+    <h3>Qu&eacute; se puede afirmar</h3>
+    <div class="texto" id="se-puede"></div>
+    <h3>Qu&eacute; no se puede afirmar</h3>
+    <div class="texto" id="no-se-puede"></div>
   </div>
 </section>
 
 <section>
-  <h2><span class="num">4</span>Lo que sigue</h2>
-  <p class="sub">Trabajo previsto, no ejecutado. Sin cifras: todav&iacute;a no hay nada medido.</p>
+  <h2><span class="num">7</span>Limitaciones</h2>
+  <div class="tarjeta"><div class="texto" id="limitaciones"></div></div>
+</section>
+
+<section>
+  <h2><span class="num">8</span>Lo que sigue</h2>
+  <p class="sub">Trabajo previsto, no ejecutado. Sin cifras: el conjunto reservado no se ha abierto.</p>
   <div class="tarjeta">
-    <p><b>Modelado con im&aacute;genes.</b> Todo lo anterior usa solo la metadata tabular.
-    La extensi&oacute;n prevista incorpora las fotograf&iacute;as sin entrenar una red desde cero:
-    se extraer&iacute;an caracter&iacute;sticas congeladas de un modelo fundacional de imagen,
-    DINOv2, y se alimentar&iacute;an los mismos niveles de referencia, sobre
-    los mismos folds agrupados por paciente, para que la comparaci&oacute;n siga siendo v&aacute;lida.</p>
-    <p><b>El bloqueante, primero.</b> Antes de medir nada hay que verificar si SLICE-3D
-    &mdash;el conjunto de este caso&mdash; form&oacute; parte del preentrenamiento del modelo.
-    Si hubo solape, cualquier mejora observada estar&iacute;a inflada por una fuga que no viene
-    del dataset sino del preentrenamiento de un tercero, y no ser&iacute;a atribuible al m&eacute;todo.
-    Es el mismo razonamiento de la auditor&iacute;a de fugas, un nivel m&aacute;s arriba.</p>
-    <p><b>Lo que ya se decidi&oacute;.</b> PanDerm, un modelo fundacional de dermatolog&iacute;a, no se usa:
-    su art&iacute;culo declara un subconjunto de ISIC 2024 entre sus datos de preentrenamiento, y el
-    criterio fijado de antemano era no usarlo si hab&iacute;a solape. DINOv3, gen&eacute;rico, tampoco:
-    no cumpli&oacute; la regla de verificaci&oacute;n, fijada tambi&eacute;n de antemano. Se usa DINOv2: sus datos
-    de preentrenamiento est&aacute;n descritos en un art&iacute;culo de abril de 2023, y sus autores no
-    pertenecen a las instituciones que aportaron los datos.</p>
+    <div class="texto"><p>Abrir el conjunto reservado, una sola vez. M3 limpio se entrena una sola vez con los pacientes de desarrollo y se eval&uacute;a sobre los reservados, con punto e intervalo por bootstrap de pacientes; M2 se punt&uacute;a en la misma corrida, como referencia. Todo se fij&oacute; antes de abrirlo, y despu&eacute;s no se cambia nada: ni el modelo, ni las caracter&iacute;sticas, ni el criterio. El resultado se reporta sea cual sea, y la recomendaci&oacute;n no cambia por &eacute;l.</p></div>
     <p class="aviso">Ninguna cifra aparece en esta secci&oacute;n porque ninguna est&aacute; medida.
     A diferencia del resto de la p&aacute;gina, aqu&iacute; no hay archivo en <code>outputs/</code> que
     respalde nada &mdash; y por eso no se afirma nada.</p>
@@ -261,69 +264,152 @@
 <footer id="pie"></footer>
 </div>
 
-<script id="datos" type="application/json">{"generado": "2026-09-25 19:41", "cadena": [{"nombre": "eda-diagnostico", "etapa": "Diagnóstico del dataset", "tipo": "medición", "funcion": "Se perfiló el archivo: tipos, faltantes, desbalance y estructura de grupos por paciente", "md": "eda-diagnostico", "mide": "Estructura del archivo, tipos, faltantes por columna, desbalance de la respuesta, tamaño de los grupos y qué columnas existen en train pero no en test.", "porque": "Ninguna decisión de diseño posterior se puede tomar sin esto. El esquema de validación depende de la estructura de grupos, y la auditoría de fugas parte de la lista de columnas asimétricas."}, {"nombre": "diseno-validacion", "etapa": "Diseño de la validación", "tipo": "medición", "funcion": "Se construyó y se verificó la validación cruzada agrupada por paciente", "md": "diseno-validacion", "mide": "Se construyeron los folds agrupando por paciente y estratificando por clase, y después se comprobó que ningún paciente cruzara de un lado al otro. Además se cuantificó cuánta fuga habría producido no hacerlo.", "porque": "Proponer un esquema es barato; verificarlo es lo que lo convierte en evidencia. Sin la comparación contra la partición ingenua, «hay que agrupar por paciente» es una recomendación de manual y no un hallazgo sobre estos datos."}, {"nombre": "auditoria-de-fugas", "etapa": "Auditoría de fugas", "tipo": "medición", "funcion": "Se auditó la fuga estructural y se escaneó columna por columna", "md": "auditoria-de-fugas", "mide": "Dos cosas distintas: fuga estructural —columnas ausentes en test, constantes, identificadores— y fuga oculta, entrenando un modelo por columna sobre los folds agrupados para ver si alguna predice el objetivo sospechosamente bien.", "porque": "Es el paso adversario: existe para encontrar defectos, no para confirmar que todo está bien. Un chequeo que no puede fallar no vale nada."}, {"nombre": "modelado-baseline", "etapa": "Modelos de referencia", "tipo": "medición", "funcion": "Se entrenaron y evaluaron cuatro niveles con la métrica oficial", "md": "modelado-baseline", "mide": "Cuatro niveles de referencia sobre los mismos folds, evaluados con la métrica oficial de la competencia y no con la de por defecto, reportando el resultado de cada fold y no solo la media.", "porque": "Los niveles existen para acotar: sin la referencia univariada no se sabe cuánto aporta combinar columnas, y sin el modelo desbalanceado no se ve que omitir el ajuste de clase produce un fallo silencioso."}, {"nombre": "sintesis-consultoria", "etapa": "Síntesis y verificación", "tipo": "interpretación", "funcion": "Se cruzaron las cuatro salidas, se redactó el informe y se verificó su trazabilidad", "md": "sintesis-verificacion", "mide": "Nada. Es la única etapa que interpreta: se cruzaron las cuatro salidas anteriores, se resolvieron sus contradicciones y se emitió la recomendación. Lo que sí se verificó fue a sí misma, extrayendo cada número del informe y comprobando que tuviera respaldo en outputs/.", "porque": "Es el trabajo del consultor, y está separado de las etapas de medición a propósito: una etapa que interpretara sus propios resultados tendería a justificarlos."}], "resumenes": {"eda-diagnostico": "# EDA diagnóstico — data/train-metadata.csv\nFilas: 401059 · Columnas: 55\nColumnas con al menos un faltante: 10\nTarget `target`: conteos {'0': 400666, '1': 393}, % positivos: 0.098\nGrupos por `patient_id`: 1042 grupos, 384.89 filas/grupo en promedio (min 1, max 9184)\nColumnas solo en train (11): ['iddx_1', 'iddx_2', 'iddx_3', 'iddx_4', 'iddx_5', 'iddx_full', 'lesion_id', 'mel_mitotic_index', 'mel_thick_mm', 'target', 'tbp_lv_dnn_lesion_confidence']\nColumnas solo en test (0): []\nTest es placeholder (3 filas), no se perfiló.\nDuplicados exactos (excluyendo 2 columnas identificador ['isic_id', 'lesion_id']): 0\nColumnas constantes: ['image_type']\n", "diseno-validacion": "# Diseño de validación — data/train-metadata.csv\nMétodo: StratifiedGroupKFold · n_splits=5 · seed=42\nGrupos totales: 1042 · grupos con al menos un positivo: 259\nFuga de grupo detectada en el esquema construido: False\nPositivos en validación por fold: min 77, max 83, promedio 78.6, total 393\nFilas en validación por fold: min 80210, max 80216 · grupos por fold: min 207, max 210\nDetalle fold a fold: outputs/diseno-validacion.json campo `por_fold`.\nPartición naive (ignora grupo): 1032 de 1042 grupos (99.04%) quedarían repartidos entre train y validación.\n", "auditoria-de-fugas": "# Auditoría de fugas — data/train-metadata.csv\nColumnas solo en train (excluidas de entrada): 11\nColumnas constantes: 1 · identificador: 1\nColumnas evaluadas univariadamente: 41 · umbral AUC >= 0.9\nColumnas sospechosas por AUC alto: 0\nPreguntas abiertas sin resolver por el script: 10\n  - tbp_lv_nevi_confidence: 'tbp_lv_nevi_confidence' tiene nombre sugerente pero SÍ está en test. ¿Por qué existiría en ambos conjuntos si fuera derivada del diagnóstico? Investigar el origen antes de usarla.\n  - iddx_full: 'iddx_full' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?\n  - iddx_1: 'iddx_1' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?\n  ... y 7 más\nDetalle completo: outputs/auditoria-de-fugas.json\n", "modelado-baseline": "# Modelado baseline — data/train-metadata.csv\nMétrica: pAUC sobre 80% TPR [0, 0.2] · verificada contra el script oficial (2026-08-11)\nEsquema CV: 5 folds agrupados por patient_id, seed 42\nColumnas excluidas: 13 · features usadas: 41\nEscala del pAUC: azar 0.02 · clasificador perfecto 0.2\nNivel 0 (univariado tbp_lv_H): AUC estándar 0.8053 — NO comparable con lo de abajo, escalas distintas\nNivel 0 (mismo, en pAUC): pAUC media 0.0809 ± 0.0247 (33.8% del recorrido azar→perfecto)\nNivel 1 (logística balanceada): pAUC media 0.1331 ± 0.0173 (62.8% del recorrido azar→perfecto)\nNivel 2a (GB sin balancear): pAUC media 0.0013 ± 0.0015 (-10.4% del recorrido azar→perfecto)\nNivel 2b (GB balanceado): pAUC media 0.1451 ± 0.0055 (69.5% del recorrido azar→perfecto)\n2a por debajo del azar no es un bug: satura en 1.0 sobre negativos. Ver nota en el .json.\nDetalle por fold: outputs/modelado-baseline.json\n", "sintesis-verificacion": "# Verificación de trazabilidad — informe/borrador.md\nNúmeros encontrados en el borrador: 344\nCon respaldo exacto en outputs/ (tolerancia 0.01): 298\nSIN respaldo — revisar uno por uno: 16\n  - línea ~99: \"15\" en «...mpletos y un `.md` de resumen acotado a 15 líneas. Y...»\n  - línea ~149: \"200\" en «...anizador y se verificó la corrección en 200 casos ale...»\n  - línea ~237: \"80\" en «...partición aleatoria a nivel de fila —el 80/20 por de...»\n  - línea ~237: \"20\" en «...tición aleatoria a nivel de fila —el 80/20 por defec...»\n  - línea ~329: \"57.000\" en «...tículo no indica si las aproximadamente 57.000 lesiones...»\n  - línea ~361: \"0,44\" en «...hipotético de 0,10 queda en la posición 0,44 de esa es...»\n  - línea ~648: \"11\" en «...umnas presentes solo en entrenamiento | 11 | `eda-di...»\n  - línea ~752: \"385\" en «...igieron: un promedio redondeado a \"casi 385\" cuando l...»\n  - línea ~753: \"85\" en «...medida es 384,89 `[T7]`, y un \"menos de 85 positivos...»\n  - línea ~767: \"15\" en «...á en `outputs/*.json` | |---|---|---| | 15 líneas |...»\n  ... y 6 más — detalle en el .json\nPorcentajes que son parámetros del método, excluidos por lista declarada (no se les busca respaldo): 10\nNota: este script señala, no decide. Un número sin respaldo puede ser legítimo (ej. un conteo estructural obvio) — revisar cada uno a mano.\n"}, "auditoria": {"n_solo_en_train": 11, "n_constantes": 1, "n_identificador": 1, "n_evaluadas": 41, "umbral": 0.9, "auc_max": 0.8053, "columna_auc_max": "tbp_lv_H", "n_preguntas_abiertas": 10}, "verificacion": {"numeros": 344, "con_respaldo": 298, "senalados": 16, "ignorados": 30}, "folds": {"n_grupos_positivos": 259, "min_positivos": 77, "max_positivos": 83}, "test_es_marcador": true, "eda": {"n_filas": 401059, "n_columnas": 55, "n_pacientes": 1042, "media_por_paciente": 384.89, "min_por_paciente": 1, "max_por_paciente": 9184, "n_solo_en_train": 11, "positivos": 393, "negativos": 400666, "pct_positivos": 0.098}, "fuga": {"metodo": "StratifiedGroupKFold", "n_splits": 5, "group_col": "patient_id", "pct_naive": 99.04, "n_grupos_naive": 1032, "n_grupos_total": 1042, "descripcion_naive": "partición aleatoria 80/20 a nivel de fila, misma semilla, ignorando group_col", "fuga_agrupada": false, "por_fold": [{"fold": 0, "n_train_grupos": 835, "n_val_grupos": 207, "n_train_filas": 320848, "n_val_filas": 80211, "n_val_positivos": 78, "pct_val_positivos": 0.0972}, {"fold": 1, "n_train_grupos": 834, "n_val_grupos": 208, "n_train_filas": 320848, "n_val_filas": 80211, "n_val_positivos": 78, "pct_val_positivos": 0.0972}, {"fold": 2, "n_train_grupos": 832, "n_val_grupos": 210, "n_train_filas": 320843, "n_val_filas": 80216, "n_val_positivos": 83, "pct_val_positivos": 0.1035}, {"fold": 3, "n_train_grupos": 833, "n_val_grupos": 209, "n_train_filas": 320848, "n_val_filas": 80211, "n_val_positivos": 77, "pct_val_positivos": 0.096}, {"fold": 4, "n_train_grupos": 834, "n_val_grupos": 208, "n_train_filas": 320849, "n_val_filas": 80210, "n_val_positivos": 77, "pct_val_positivos": 0.096}]}, "excluidas": [{"columna": "iddx_1", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_2", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_3", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_4", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_5", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "iddx_full", "motivo": "no está en test", "glosa": "Taxonomía diagnóstica: es la etiqueta con otro nombre."}, {"columna": "lesion_id", "motivo": "no está en test", "glosa": "Identificador de lesión, presente solo en train."}, {"columna": "mel_mitotic_index", "motivo": "no está en test", "glosa": "Solo existe tras la biopsia, y solo para melanomas. Predecir el pasado con información del futuro."}, {"columna": "mel_thick_mm", "motivo": "no está en test", "glosa": "Solo existe tras la biopsia, y solo para melanomas. Predecir el pasado con información del futuro."}, {"columna": "target", "motivo": "no está en test", "glosa": "Es la variable respuesta."}, {"columna": "tbp_lv_dnn_lesion_confidence", "motivo": "no está en test", "glosa": "No es post-biopsia, pero al no estar en test cualquier modelo que la use es inservible en inferencia."}, {"columna": "image_type", "motivo": "constante", "glosa": "Constante en todo el archivo: no distingue nada."}, {"columna": "isic_id", "motivo": "identificador", "glosa": "Identificador de fila."}], "n_features_usadas": 41, "nevi": {"columna": "tbp_lv_nevi_confidence", "tipo": "numerica", "auc_oof": 0.6457, "n_faltantes": 0, "sospechosa": false}, "modelos": [{"etiqueta": "Nivel 0", "descripcion": "Referencia univariada", "campo": "nivel_0_referencia_univariada", "media": 0.0809, "std": 0.0247, "auc": null, "por_fold": [0.0902, 0.082, 0.1197, 0.0451, 0.0676], "nota": "auc_estandar y pauc_media NO están en la misma escala: el AUC va de 0.5 (azar) a 1, el pAUC de 0.02 (azar) a 0.2. Compara contra los niveles 1 y 2 usando pauc_media, nunca auc_estandar."}, {"etiqueta": "Nivel 1", "descripcion": "Regresión logística", "campo": "nivel_1_regresion_logistica", "media": 0.1331, "std": 0.0173, "auc": 0.9013, "por_fold": [0.1524, 0.1253, 0.1553, 0.1142, 0.1184], "nota": ""}, {"etiqueta": "Nivel 2a", "descripcion": "Gradient boosting sin balancear", "campo": "nivel_2a_gradient_boosting_sin_balancear", "media": 0.0013, "std": 0.0015, "auc": 0.6159, "por_fold": [0.0009, 0.0043, 0.0002, 0.0008, 0.0003], "nota": "Se conserva aunque quede por DEBAJO del piso aleatorio de la métrica (0.02): con 0.098% de positivos el modelo satura en probabilidad 1.0 sobre negativos y los coloca por encima de los positivos, destruyendo justo la región de sensibilidad alta que el pAUC mide. Es un hallazgo, no un fallo del script."}, {"etiqueta": "Nivel 2b", "descripcion": "Gradient boosting balanceado", "campo": "nivel_2b_gradient_boosting_balanceado", "media": 0.1451, "std": 0.0055, "auc": 0.93, "por_fold": [0.1509, 0.1386, 0.1499, 0.1478, 0.1385], "nota": "Única diferencia con 2a: class_weight. Mismo modelo, misma semilla, mismos folds."}], "pareado": {"diferencias": [-0.0015, 0.0133, -0.0054, 0.0336, 0.0201], "media": 0.01202, "sd": 0.015959855889073685, "t_critico": 2.7764451051977934, "ic_bajo": -0.007796778473983121, "ic_alto": 0.03183677847398312, "folds_a_favor": 3, "n_folds": 5}, "escala": {"azar": 0.02, "maximo": 0.2, "nota": "Para situar cualquier pauc_media entre el azar y el clasificador perfecto. Esa cuenta ya está hecha: cada nivel trae el campo posicion_en_escala = (pauc_media - azar) / (maximo - azar). El informe debe citar ese campo, no rehacer la división."}, "metrica": "pAUC sobre 80% TPR, rango [0, 0.2]", "metrica_fuente": "referencias/isic-primary-metric-pauc.py.md (p_auc_tpr, ISIC/MSKCC), verificado 2026-08-11", "metrica_verificada": true}</script>
+<script id="datos" type="application/json">{"generado": "2026-10-03 00:32", "cadena": [{"nombre": "eda-diagnostico", "etapa": "Diagnóstico del dataset", "tipo": "medición", "funcion": "Se perfiló el archivo: tipos, faltantes, desbalance y estructura de grupos por paciente", "md": "eda-diagnostico", "mide": "Estructura del archivo, tipos, faltantes por columna, desbalance de la respuesta, tamaño de los grupos y qué columnas existen en train pero no en test.", "porque": "Ninguna decisión de diseño posterior se puede tomar sin esto. El esquema de validación depende de la estructura de grupos, y la auditoría de fugas parte de la lista de columnas asimétricas."}, {"nombre": "diseno-validacion", "etapa": "Diseño de la validación", "tipo": "medición", "funcion": "Se construyó y se verificó la validación cruzada agrupada por paciente", "md": "diseno-validacion", "mide": "Se construyeron los folds agrupando por paciente y estratificando por clase, y después se comprobó que ningún paciente cruzara de un lado al otro. Además se cuantificó cuánta fuga habría producido no hacerlo.", "porque": "Proponer un esquema es barato; verificarlo es lo que lo convierte en evidencia. Sin la comparación contra la partición ingenua, «hay que agrupar por paciente» es una recomendación de manual y no un hallazgo sobre estos datos."}, {"nombre": "auditoria-de-fugas", "etapa": "Auditoría de fugas", "tipo": "medición", "funcion": "Se auditó la fuga estructural y se escaneó columna por columna", "md": "auditoria-de-fugas", "mide": "Dos cosas distintas: fuga estructural —columnas ausentes en test, constantes, identificadores— y fuga oculta, entrenando un modelo por columna sobre los folds agrupados para ver si alguna predice el objetivo sospechosamente bien.", "porque": "Es el paso adversario: existe para encontrar defectos, no para confirmar que todo está bien. Un chequeo que no puede fallar no vale nada."}, {"nombre": "extraccion-imagen", "etapa": "Extracción de imagen", "tipo": "medición", "funcion": "Se extrajeron características congeladas de cada imagen con DINOv2, sin ajuste fino", "md": "extraccion-imagen", "mide": null, "porque": "Para medir si la imagen añade algo a la metadata, y a qué costo, sin ajustar la red: las características se extraen una vez y alimentan M4 y M4b."}, {"nombre": "modelado-baseline", "etapa": "Modelos de referencia", "tipo": "medición", "funcion": "Se entrenaron y evaluaron los niveles de referencia y los modelos M1 a M4b sobre pliegues agrupados por paciente", "md": "modelado-baseline", "mide": "Primero, los niveles de referencia con la métrica oficial. Después, los modelos M1 a M4b en validación cruzada repetida, en cuatro métricas —la pAUC, el AUC estándar, la sensibilidad top-15 y el NNT80% SE—, y el tiempo de inferencia de todos menos M3.", "porque": "Los niveles existen para acotar: sin la referencia univariada no se sabe cuánto aporta combinar columnas. Y ninguna conclusión comparativa se escribe desde una sola partición: dos veces, un resultado de una sola partición no sobrevivió a la validación repetida."}, {"nombre": "sintesis-consultoria", "etapa": "Síntesis y verificación", "tipo": "interpretación", "funcion": "Se cruzaron las cinco salidas, se redactó el informe y se verificó su trazabilidad", "md": "sintesis-verificacion", "mide": "Nada. Es la única etapa que interpreta: cruza las cinco salidas anteriores, resuelve sus contradicciones y emite la recomendación. Lo que sí hace es verificarse a sí misma: extrae cada número del informe y busca su respaldo en outputs/.", "porque": "Es el trabajo del consultor, y está separado de las etapas de medición a propósito: una etapa que interpretara sus propios resultados tendería a justificarlos."}], "resumenes": {"eda-diagnostico": "# EDA diagnóstico — data/train-metadata.csv, conjunto de desarrollo\nFilas: 318229 · Columnas: 55\nColumnas con al menos un faltante: 10\nTarget `target`: conteos {'0': 317912, '1': 317}, % positivos: 0.0996\nGrupos por `patient_id`: 833 grupos, 382.03 filas/grupo en promedio (min 1, max 6267)\nColumnas solo en train (11): ['iddx_1', 'iddx_2', 'iddx_3', 'iddx_4', 'iddx_5', 'iddx_full', 'lesion_id', 'mel_mitotic_index', 'mel_thick_mm', 'target', 'tbp_lv_dnn_lesion_confidence']\nColumnas solo en test (0): []\nTest es placeholder (3 filas), no se perfiló.\nDuplicados exactos (excluyendo 2 columnas identificador ['isic_id', 'lesion_id']): 0\nColumnas constantes: ['image_type']\n", "diseno-validacion": "# Diseño de validación — data/train-metadata.csv, conjunto de desarrollo\nMétodo: StratifiedGroupKFold · n_splits=5 · seed=42\nGrupos totales: 833 · grupos con al menos un positivo: 207\nFuga de grupo detectada en el esquema construido: False\nPositivos en validación por fold: min 63, max 64, promedio 63.4, total 317\nFilas en validación por fold: min 63645, max 63646 · grupos por fold: min 166, max 168\nDetalle fold a fold: outputs/diseno-validacion.json campo `por_fold`.\nPartición naive (ignora grupo): 824 de 833 grupos (98.92%) quedarían repartidos entre train y validación.\n", "auditoria-de-fugas": "# Auditoría de fugas — data/train-metadata.csv, conjunto de desarrollo\nColumnas solo en train (excluidas de entrada): 11\nColumnas constantes: 1 · identificador: 1 · procedencia, excluidas de los modelos por decisión: 2 ['attribution', 'copyright_license']\nColumnas evaluadas univariadamente: 41 · umbral AUC >= 0.9\nColumnas sospechosas por AUC alto: 0\nPreguntas abiertas sin resolver por el script: 10\n  - tbp_lv_nevi_confidence: 'tbp_lv_nevi_confidence' tiene nombre sugerente pero SÍ está en test. ¿Por qué existiría en ambos conjuntos si fuera derivada del diagnóstico? Investigar el origen antes de usarla.\n  - iddx_full: 'iddx_full' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?\n  - iddx_1: 'iddx_1' tiene nombre sugerente de derivación posterior y no está en test. ¿Es post-evento (excluir sin discusión) o una señal derivada que tampoco estaría disponible en inferencia real (excluir igual, pero por otra razón)?\n  ... y 7 más\nDetalle completo: outputs/auditoria-de-fugas.json\n", "extraccion-imagen": "# Extracción de imagen — DINOv2 ViT-S/14, token CLS (384 dimensiones)\nSin etiquetas leídas ni métricas calculadas. Preprocesado y modelo fijados en SKILL.md.\nEquipo: Apple M4, 16.0 GB · MPS · torch 2.14.0 · lote 64\nDesarrollo: 318229 de 318229 imágenes decodificadas (0 fallidas) · 833 pacientes · 69.2 min\n  archivo: data/dinov2-vits14-desarrollo.h5 · SHA-256 52a7fd12855ae754…\nReservado: 82830 de 82830 imágenes decodificadas (0 fallidas) · 209 pacientes · 17.9 min\n  archivo: data/dinov2-vits14-reservado.h5 · SHA-256 7e145c16238ded00…\nTiempo total: 87.2 min · código en el commit 134b9f0cda5f\nDetalle, tiempos por fase y hashes completos: outputs/extraccion-imagen.json\n", "modelado-baseline": "# Modelado baseline — data/train-metadata.csv, conjunto de desarrollo\nMétrica: pAUC sobre 80% TPR [0, 0.2] · verificada contra el script oficial (2026-08-11)\nEsquema CV: 5 folds agrupados por patient_id, seed 42\nColumnas excluidas: 15 · features usadas: 39\nEscala del pAUC: azar 0.02 · clasificador perfecto 0.2\nNivel 0 (univariado, elegido en entrenamiento: tbp_lv_H en 5 de 5): AUC estándar 0.8048 — NO comparable con lo de abajo, escalas distintas\nNivel 0 (mismo, en pAUC): pAUC media 0.0796 ± 0.0076 (33.1% del recorrido azar→perfecto)\nNivel 1 (logística balanceada): pAUC media 0.1326 ± 0.009 (62.6% del recorrido azar→perfecto)\nNivel 2a (GB sin balancear): pAUC media 0.0005 ± 0.0003 (-10.8% del recorrido azar→perfecto)\nNivel 2b (GB balanceado): pAUC media 0.1398 ± 0.018 (66.6% del recorrido azar→perfecto)\n2a por debajo del azar: se conserva. El mecanismo no está medido (ver la nota en el .json).\nDetalle por fold: outputs/modelado-baseline.json\n", "sintesis-verificacion": "# Verificación de trazabilidad — informe/borrador-v2.md\nNúmeros encontrados en el borrador: 397\nCon respaldo en outputs/ (tolerancia: media unidad del último dígito escrito; exacta sin decimales): 287\nSIN respaldo — revisar uno por uno: 29\n  - línea ~32: \"7,500\" en «...emio propio:** *\"Two Secondary Prizes: $7,500 each for...»\n  - línea ~45: \"2025\" en «..., como la describen   Kurtansky et al. (2025): *\"weigh...»\n  - línea ~57: \"2025\" en «...- **NNT80% SE**, de Kurtansky et al. (2025): *\"the a...»\n  - línea ~81: \"2003\" en «..., con la corrección de Nadeau y Bengio (2003): la vari...»\n  - línea ~89: \"242\" en «...que el artículo deriva la fórmula», p. 242 (LOCAL) -...»\n  - línea ~111: \"24\" en «...e descartan las 22 columnas de la celda 24 del noteb...»\n  - línea ~112: \"384\" en «...da 24 del notebook. | | M4 | M2 más las 384 variables...»\n  - línea ~113: \"384,\" en «...egresión logística balanceada sobre las 384, y esa pun...»\n  - línea ~149: \"352,034\" en «...ento: *\"We selected a subset containing 352,034 tile imag...»\n  - línea ~150: \"244\" en «...as/panderm-reduccion-examenes.md, línea 244 («a multi...»\n  ... y 19 más — detalle en el .json\nPorcentajes que son parámetros del método, excluidos por lista declarada (no se les busca respaldo): 4\nOmitidos por su contexto (IGNORAR_CONTEXTOS: 2024, 2026, Nivel 0, Nivel 1, Nivel 2), sin buscarles respaldo: 77\n  - línea ~29: \"2026\" en «...KILL.md, «Sobre la métrica: VERIFICADA (2026-08-11)»;...»\n  - línea ~29: \"-08\" en «....md, «Sobre la métrica: VERIFICADA (2026-08-11)»; out...»\n  - línea ~29: \"-11\" en «..., «Sobre la métrica: VERIFICADA (2026-08-11)»; output...»\n  - línea ~115: \"2026\" en «...<!-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1...»\n  - línea ~115: \"-09\" en «...-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M...»\n  - línea ~115: \"-25\" en «...F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M2,...»\n  - línea ~128: \"2026\" en «.... <!-- F: PLAN.md, Fase 4, decisión del 2026-09-25, «C...»\n  - línea ~128: \"-09\" en «...-- F: PLAN.md, Fase 4, decisión del 2026-09-25, «Comp...»\n  - línea ~128: \"-25,\" en «...F: PLAN.md, Fase 4, decisión del 2026-09-25, «Comparac...»\n  - línea ~145: \"2026\" en «...iesgo bloqueante», «Criterio, fijado el 2026-08-18, an...»\n  ... y 67 más — detalle en el .json\nArchivos de outputs/ en los que no se busca respaldo, por lista declarada: 3 ['holdout-pacientes.json', 'sensibilidad-procedencia.json', 'sintesis-verificacion.json']\nNota: este script señala, no decide. Un número sin respaldo puede ser legítimo (ej. un conteo estructural obvio) — revisar cada uno a mano.\n"}, "recomendado": "M3 limpio", "recomendado_pauc": 0.1621, "recomendado_fuente": "fase4-m3limpio-vs-m2.json > metricas.M3limpio.pauc.media_global", "escala": {"azar": 0.02, "maximo": 0.2}, "metrica": {"tpr": 80, "rmin": 0.0, "rmax": 0.2}, "auc_azar": 0.5, "nivel_ic": 95, "clave_ic": "intervalo_t_95_nadeau_bengio", "nota_nnt": "En el NNT80% SE menos es mejor: las victorias del modelo nuevo cuentan las diferencias negativas.", "panderm": {"antes": "We selected a subset containing ", "numero": "352,034", "despues": " tile images, stratified by institutions", "fuente": "referencias/panderm-reduccion-examenes.md, línea 396 (cita literal)"}, "eda": {"n_filas": 318229, "n_pacientes": 833, "n_columnas": 55, "positivos": 317, "pct_positivos": 0.0996, "min": 1, "max": 6267, "mediana": 245.0}, "sellado": {"pct": 20, "semilla": 2026}, "extraccion": {"caracteristica": "token CLS tras la normalización final (x_norm_clstoken), 384 dimensiones", "desarrollo": {"imagenes": 318229, "decodificadas": 318229, "pacientes": 833}, "reservado": {"imagenes": 82830, "decodificadas": 82830, "pacientes": 209}}, "diseno": {"seed": 42, "min_grupos": 166, "max_grupos": 168, "min_pos": 63, "max_pos": 64, "n_grupos_positivos": 207, "naive_n": 824, "naive_pct": 98.92}, "auditoria": {"n_excluidas": 15, "n_solo_train": 11, "nevi_auc": 0.6422}, "seed42": {"seed": 42, "auc_2a": 0.582}, "vr": {"semillas": 10, "n_splits": 5, "niveles": [{"etiqueta": "Nivel 1", "descripcion": "Regresión logística", "campo": "nivel_1_regresion_logistica", "media": 0.1325, "std": 0.0138}, {"etiqueta": "Nivel 2a", "descripcion": "Gradient boosting sin balancear", "campo": "nivel_2a_gradient_boosting_sin_balancear", "media": 0.0018, "std": 0.0037}, {"etiqueta": "Nivel 2b", "descripcion": "Gradient boosting balanceado", "campo": "nivel_2b_gradient_boosting_balanceado", "media": 0.1375, "std": 0.0165}], "n_folds_2a": 50, "pareada": {"media": 0.005, "ic": [-0.0145, 0.0245], "gana": 29, "de": 50, "semillas": 8, "diferencias": [-0.0062, 0.0284, 0.0219, -0.0011, 0.0153, 0.0396, -0.0042, 0.0035, -0.0294, -0.0024, 0.0327, -0.0243, 0.0177, -0.0161, -0.0174, 0.0046, -0.0118, 0.0216, -0.0035, 0.0069, 0.0313, 0.0045, 0.0221, -0.0246, 0.0214, 0.0508, -0.023, 0.0105, -0.0096, -0.0001, -0.0059, -0.0143, 0.0111, -0.0276, 0.0042, 0.0062, 0.0182, 0.0308, -0.0062, 0.0039, -0.003, 0.0025, 0.0167, 0.0334, 0.009, 0.0107, 0.0017, 0.0264, -0.0177, -0.008], "etiquetas": ["semilla 0, pliegue 0", "semilla 0, pliegue 1", "semilla 0, pliegue 2", "semilla 0, pliegue 3", "semilla 0, pliegue 4", "semilla 1, pliegue 0", "semilla 1, pliegue 1", "semilla 1, pliegue 2", "semilla 1, pliegue 3", "semilla 1, pliegue 4", "semilla 2, pliegue 0", "semilla 2, pliegue 1", "semilla 2, pliegue 2", "semilla 2, pliegue 3", "semilla 2, pliegue 4", "semilla 3, pliegue 0", "semilla 3, pliegue 1", "semilla 3, pliegue 2", "semilla 3, pliegue 3", "semilla 3, pliegue 4", "semilla 4, pliegue 0", "semilla 4, pliegue 1", "semilla 4, pliegue 2", "semilla 4, pliegue 3", "semilla 4, pliegue 4", "semilla 5, pliegue 0", "semilla 5, pliegue 1", "semilla 5, pliegue 2", "semilla 5, pliegue 3", "semilla 5, pliegue 4", "semilla 6, pliegue 0", "semilla 6, pliegue 1", "semilla 6, pliegue 2", "semilla 6, pliegue 3", "semilla 6, pliegue 4", "semilla 7, pliegue 0", "semilla 7, pliegue 1", "semilla 7, pliegue 2", "semilla 7, pliegue 3", "semilla 7, pliegue 4", "semilla 8, pliegue 0", "semilla 8, pliegue 1", "semilla 8, pliegue 2", "semilla 8, pliegue 3", "semilla 8, pliegue 4", "semilla 9, pliegue 0", "semilla 9, pliegue 1", "semilla 9, pliegue 2", "semilla 9, pliegue 3", "semilla 9, pliegue 4"]}}, "procedencia": {"a_con": 0.0046, "a_sin": 0.005, "b": {"media": 0.0021, "ic": [-0.0082, 0.0124]}, "c": {"media": 0.0025, "ic": [-0.0023, 0.0073], "semillas": 10, "folds": 34, "de_folds": 50}}, "comparaciones": [{"etiqueta": "M2 − M1", "archivo": "fase4-m2-vs-m1.json", "metricas": {"pauc": {"media": 0.0065, "ic": [-0.0147, 0.0276], "folds": 28, "de_folds": 50, "semillas": 7, "de_semillas": 10, "mayor_es_mejor": true}, "auc": {"media": 0.0134, "ic": [-0.0076, 0.0343], "folds": 36, "de_folds": 50, "semillas": 9, "de_semillas": 10, "mayor_es_mejor": true}, "setop15": {"media": 0.0842, "ic": [0.021, 0.1473], "folds": 46, "de_folds": 50, "semillas": 10, "de_semillas": 10, "mayor_es_mejor": true}, "nnt80": {"media": -30.549, "ic": [-60.8933, -0.2047], "folds": 42, "de_folds": 50, "semillas": 10, "de_semillas": 10, "mayor_es_mejor": false}}}, {"etiqueta": "M4 − M2", "archivo": "fase4-m4-vs-m2.json", "metricas": {"pauc": {"media": -0.0065, "ic": [-0.0263, 0.0133], "folds": 19, "de_folds": 50, "semillas": 2, "de_semillas": 10, "mayor_es_mejor": true}, "auc": {"media": -0.0085, "ic": [-0.0288, 0.0117], "folds": 16, "de_folds": 50, "semillas": 1, "de_semillas": 10, "mayor_es_mejor": true}, "setop15": {"media": -0.0332, "ic": [-0.085, 0.0185], "folds": 9, "de_folds": 50, "semillas": 0, "de_semillas": 10, "mayor_es_mejor": true}, "nnt80": {"media": 11.2372, "ic": [-19.8953, 42.3696], "folds": 17, "de_folds": 50, "semillas": 1, "de_semillas": 10, "mayor_es_mejor": false}}}, {"etiqueta": "M4b − M2", "archivo": "fase4-m4b-vs-m2.json", "metricas": {"pauc": {"media": 0.0056, "ic": [-0.0091, 0.0202], "folds": 36, "de_folds": 50, "semillas": 8, "de_semillas": 10, "mayor_es_mejor": true}, "auc": {"media": 0.0055, "ic": [-0.0096, 0.0207], "folds": 35, "de_folds": 50, "semillas": 9, "de_semillas": 10, "mayor_es_mejor": true}, "setop15": {"media": -0.0062, "ic": [-0.0444, 0.032], "folds": 22, "de_folds": 50, "semillas": 3, "de_semillas": 10, "mayor_es_mejor": true}, "nnt80": {"media": -3.8724, "ic": [-25.0965, 17.3517], "folds": 31, "de_folds": 50, "semillas": 8, "de_semillas": 10, "mayor_es_mejor": false}}}, {"etiqueta": "M3 − M2", "archivo": "fase4-m3-vs-m2.json", "metricas": {"pauc": {"media": 0.0185, "ic": [0.0007, 0.0364], "folds": 45, "de_folds": 50, "semillas": 10, "de_semillas": 10, "mayor_es_mejor": true}, "auc": {"media": 0.0204, "ic": [0.0011, 0.0397], "folds": 47, "de_folds": 50, "semillas": 9, "de_semillas": 10, "mayor_es_mejor": true}, "setop15": {"media": 0.0181, "ic": [-0.0365, 0.0726], "folds": 30, "de_folds": 50, "semillas": 8, "de_semillas": 10, "mayor_es_mejor": true}, "nnt80": {"media": -12.6194, "ic": [-49.2892, 24.0504], "folds": 38, "de_folds": 50, "semillas": 9, "de_semillas": 10, "mayor_es_mejor": false}}}, {"etiqueta": "M3 limpio − M2", "archivo": "fase4-m3limpio-vs-m2.json", "metricas": {"pauc": {"media": 0.0181, "ic": [0.0021, 0.0341], "folds": 43, "de_folds": 50, "semillas": 10, "de_semillas": 10, "mayor_es_mejor": true}, "auc": {"media": 0.021, "ic": [0.0043, 0.0376], "folds": 46, "de_folds": 50, "semillas": 10, "de_semillas": 10, "mayor_es_mejor": true}, "setop15": {"media": 0.0227, "ic": [-0.0291, 0.0746], "folds": 35, "de_folds": 50, "semillas": 9, "de_semillas": 10, "mayor_es_mejor": true}, "nnt80": {"media": -20.0618, "ic": [-49.7373, 9.6137], "folds": 36, "de_folds": 50, "semillas": 9, "de_semillas": 10, "mayor_es_mejor": false}}}], "tabla": [{"modelo": "M1", "archivo": "fase4-m2-vs-m1.json", "clave": "M1", "pauc": 0.1375, "setop15": 0.6223, "nnt80": 116.1648, "tiempo": 0.0021}, {"modelo": "M2", "archivo": "fase4-m2-vs-m1.json", "clave": "M2", "pauc": 0.144, "setop15": 0.7065, "nnt80": 85.6158, "tiempo": 0.0209}, {"modelo": "M3 limpio", "archivo": "fase4-m3limpio-vs-m2.json", "clave": "M3limpio", "pauc": 0.1621, "setop15": 0.7292, "nnt80": 65.554, "tiempo": 0.0435}, {"modelo": "M4", "archivo": "fase4-m4-vs-m2.json", "clave": "M4", "pauc": 0.1375, "setop15": 0.6732, "nnt80": 96.853, "tiempo": 14.5156}, {"modelo": "M4b", "archivo": "fase4-m4b-vs-m2.json", "clave": "M4b", "pauc": 0.1496, "setop15": 0.7003, "nnt80": 81.7435, "tiempo": 14.6321}], "verificacion": {"total": 397, "con": 287, "sin": 29, "metodo": 4, "omitidos": 77}}</script>
 <script>
 const D = JSON.parse(document.getElementById("datos").textContent);
-const esc = t => String(t).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-const num = (v, d = 4) => v.toFixed(d).replace(".", ",");
+// Los ejes de los gráficos, con coma decimal como el texto.
+Chart.defaults.locale = "es";
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const menos = s => s.replace("-", "−");
+// Cifras con los decimales que trae el JSON, como las escribe el informe.
+const dec = v => menos(String(v).replace(".", ","));
+const fijo = (v, d) => menos(v.toFixed(d).replace(".", ","));
+const firmado = (v, d) => (v > 0 ? "+" : "") + (d === undefined ? dec(v) : fijo(v, d));
+// useGrouping "always" porque el defecto español omite el punto en los
+// números de cuatro cifras.
+const mil = v => v.toLocaleString("es", {useGrouping: "always"});
 // Cada cifra lleva su origen en el title: la trazabilidad del informe
 // escrito, disponible al pasar el raton en la version proyectada.
 const cifra = (v, fuente) => `<span class="cifra-fuente" title="${esc(fuente)}">${v}</span>`;
-// useGrouping "always" porque el defecto español omite el punto en los
-// números de cuatro cifras: "1042" al lado de "401.059" se lee como una
-// inconsistencia en una pantalla proyectada.
-const mil = v => v.toLocaleString("es", {useGrouping: "always"});
+const P = ps => ps.map(p => `<p>${p}</p>`).join("");
+const L = ls => `<ul>${ls.map(l => `<li>${l}</li>`).join("")}</ul>`;
 
-/* ---------- 0. contexto ---------- */
+const E = D.eda, R = D.extraccion.reservado, DS = D.extraccion.desarrollo, DI = D.diseno, A = D.auditoria;
+const VR = D.vr, PR = D.procedencia, V = D.verificacion;
+const fEda = c => "eda-diagnostico.json > " + c, fDis = c => "diseno-validacion.json > " + c;
+const fVR = c => "validacion-repetida.json > " + c, fPro = c => "sensibilidad-procedencia-repetida.json > comparaciones." + c;
+const fExt = c => "extraccion-imagen.json > " + c, fVer = c => "sintesis-verificacion.json > " + c;
+const fMod = c => "modelado-baseline.json > " + c;
+const azar = cifra(dec(D.escala.azar), fMod("escala_de_referencia_pauc.azar"));
+const nivelIC = cifra(D.nivel_ic + "%", "fase4-*.json > comparaciones_nuevo_menos_base.*." + D.clave_ic + " (nivel del intervalo)");
+const semillasVR = cifra(VR.semillas, fVR("semillas_corridas"));
+const ic = (lo, hi, fuente, d) => cifra("[" + (d === undefined ? dec(lo) : fijo(lo, d)) + "; " + (d === undefined ? dec(hi) : fijo(hi, d)) + "]", fuente);
+const COMP = Object.fromEntries(D.comparaciones.map(c => [c.etiqueta, c]));
+const fComp = (et, k, campo) => `${COMP[et].archivo} > comparaciones_nuevo_menos_base.${k}.${campo}`;
+const mediaC = (et, k) => cifra(firmado(COMP[et].metricas[k].media, k === "nnt80" ? 2 : undefined), fComp(et, k, "media"));
+const semC = (et, k) => cifra(COMP[et].metricas[k].semillas, fComp(et, k, "nuevo_mejor_en_semillas"));
+const deSemC = (et, k) => cifra(COMP[et].metricas[k].de_semillas, fComp(et, k, "de_semillas"));
+const NIV = Object.fromEntries(VR.niveles.map(n => [n.etiqueta, n]));
+const mediaN = et => cifra(dec(NIV[et].media), fVR(NIV[et].campo + ".pauc_media_global"));
+const stdN = et => cifra(dec(NIV[et].std), fVR(NIV[et].campo + ".pauc_std_entre_folds"));
+const T = Object.fromEntries(D.tabla.map(f => [f.modelo, f]));
+const tiempoT = m => cifra(dec(T[m].tiempo), `tiempo-inferencia.json > tiempos.${T[m].clave}.mediana_segundos_por_1000_lesiones`);
+const milLesiones = cifra(mil(1000), "tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones (unidad)");
+const reco = cifra(esc(D.recomendado), "RECOMENDADO, comprobado contra la regla de recomendación sobre fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.pauc." + D.clave_ic);
+
+/* ---------- 0. cabecera ---------- */
+// huecos-demo.md, Parte B, B2; borrador-v2.md, l. 557-559.
 document.getElementById("ctx-problema").innerHTML =
-  `ISIC 2024 pide detectar lesiones malignas de piel a partir de fotograf&iacute;as corporales totales en 3D ` +
-  `&mdash; im&aacute;genes de calidad tipo smartphone, no dermatoscopio cl&iacute;nico. El dataset: ` +
-  `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones de ` +
-  `${cifra(mil(D.eda.n_pacientes), "eda-diagnostico.json > estructura_grupos.n_grupos")} pacientes, con solo ` +
-  `${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} casos malignos confirmados ` +
-  `(${cifra(num(D.eda.pct_positivos, 3) + "%", "eda-diagnostico.json > desbalance_target.pct_positivos")}). ` +
-  `Cada paciente aporta entre ${cifra(mil(D.eda.min_por_paciente), "eda-diagnostico.json > estructura_grupos.filas_por_grupo.min")} y ` +
-  `${cifra(mil(D.eda.max_por_paciente), "eda-diagnostico.json > estructura_grupos.filas_por_grupo.max")} lesiones.`;
+  `El reto ISIC 2024 usa el conjunto SLICE-3D: recortes de lesiones de piel extraídos de fotografías corporales totales en 3D, para detectar cáncer de piel. ` +
+  `La clase maligna está confirmada por patología: melanoma, carcinoma basocelular o carcinoma escamocelular. ` +
+  `Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente. ` +
+  `Así las describe el artículo del conjunto de datos: <i>"comparable in optical resolution to smartphone images"</i>.`;
 
+// borrador-v2.md, l. 237, 239-240, 242, 215-217; Parte B, B3.
+document.getElementById("ctx-datos").innerHTML =
+  `El conjunto de desarrollo tiene ${cifra(mil(E.n_filas), fEda("estructura_grupos.n_filas"))} lesiones de ` +
+  `${cifra(mil(E.n_pacientes), fEda("estructura_grupos.n_grupos"))} pacientes. ` +
+  `Solo ${cifra(mil(E.positivos), fEda("desbalance_target.conteos.1"))} lesiones son malignas, el ` +
+  `${cifra(dec(E.pct_positivos) + "%", fEda("desbalance_target.pct_positivos"))}, y solo ` +
+  `${cifra(mil(DI.n_grupos_positivos), fDis("n_grupos_positivos"))} pacientes tienen alguna. ` +
+  `Cada paciente aporta entre ${cifra(mil(E.min), fEda("estructura_grupos.filas_por_grupo.min"))} y ` +
+  `${cifra(mil(E.max), fEda("estructura_grupos.filas_por_grupo.max"))} lesiones, con una mediana de ` +
+  `${cifra(mil(E.mediana), fEda("estructura_grupos.filas_por_grupo.mediana"))}. ` +
+  `Antes de volver a medir nada, se apartó el ${cifra(D.sellado.pct + "%", "holdout-pacientes.json > metodo.fraccion")} de los pacientes ` +
+  `—no de las filas—, estratificado por centro y por tener al menos una lesión maligna, con semilla ` +
+  `${cifra(String(D.sellado.semilla), "holdout-pacientes.json > semilla")}, y se selló. ` +
+  `El conjunto reservado tiene ${cifra(mil(R.pacientes), fExt("conjuntos.reservado.cobertura.pacientes"))} pacientes y ` +
+  `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} imágenes, y ningún modelo se ha evaluado sobre él.`;
+
+// borrador-v2.md, l. 11-12, 14-17, 19-20, 22.
+document.getElementById("ctx-metrica").innerHTML =
+  `<b>La métrica principal es la del reto:</b> el área parcial bajo la curva ROC por encima del ` +
+  `${cifra(D.metrica.tpr + "%", fMod("metrica"))} de sensibilidad, o pAUC, que va de ` +
+  `${cifra(dec(D.metrica.rmin), fMod("metrica"))} a ${cifra(dec(D.metrica.rmax), fMod("metrica"))}. ` +
+  `El organizador la justifica en términos clínicos, no estadísticos: <i>"there are regions in the ROC space where the values of TPR are unacceptable in clinical practice"</i>, ` +
+  `y <i>"Systems that aid in diagnosing cancers are required to be highly-sensitive"</i>. ` +
+  `Esa es la función de utilidad del cliente, escrita en su métrica: la región del espacio ROC donde la sensibilidad es clínicamente inaceptable no cuenta. ` +
+  `Un clasificador al azar obtiene ${azar} y uno perfecto, ${cifra(dec(D.escala.maximo), fMod("escala_de_referencia_pauc.maximo"))}.`;
+
+// Parte B, B4.
 document.getElementById("ctx-eleccion").innerHTML =
-  `Se eligi&oacute; sobre otras opciones (detecci&oacute;n en rodilla, columna lumbar, series de tiempo de commodities) ` +
-  `porque la metadata tabular permite trabajar sin GPU, el desbalance extremo y la agrupaci&oacute;n por paciente presentan ` +
-  `riesgos reales de fuga de datos, y la m&eacute;trica oficial &mdash;${cifra(esc(D.metrica), "modelado-baseline.json > metrica")}&mdash; ` +
-  `codifica expl&iacute;citamente la funci&oacute;n de utilidad del cliente: un sistema de apoyo diagn&oacute;stico debe ser ` +
-  `altamente sensible, as&iacute; que el desempe&ntilde;o solo cuenta en la regi&oacute;n donde una tasa de detecci&oacute;n alta ` +
-  `es cl&iacute;nicamente aceptable.`;
+  `Se eligió este caso y se descartaron dos de RSNA, de rodilla y de columna lumbar: son imágenes médicas en 3D, que exigen una GPU potente y aportan poco desde lo estadístico. ` +
+  `En este, la metadata tabular hace gran parte del trabajo, y el desbalance y la agrupación por paciente son estadísticamente interesantes. ` +
+  `La imagen entró después, como una extensión que profundiza la tesis sin reemplazarla.`;
 
 /* ---------- 1. cadena ---------- */
 // La prosa de cada instrumento (que mide, por que existe) viaja en el JSON
-// desde CADENA. El hallazgo concreto se arma aqui porque lleva cifras: cada
-// una pasa por cifra() y por tanto por su archivo y campo de origen.
+// desde CADENA. Lo que lleva cifras se arma aqui: cada una pasa por cifra()
+// y por tanto por su archivo y campo de origen.
+const MIDE = {
+  // Parte B, B6.
+  "extraccion-imagen": () =>
+    `Una característica por imagen: ${cifra(esc(D.extraccion.caracteristica), fExt("caracteristica"))}. ` +
+    `Se decodificaron ${cifra(mil(DS.decodificadas), fExt("conjuntos.desarrollo.cobertura.decodificadas"))} de ` +
+    `${cifra(mil(DS.imagenes), fExt("conjuntos.desarrollo.cobertura.imagenes"))} imágenes del desarrollo y ` +
+    `${cifra(mil(R.decodificadas), fExt("conjuntos.reservado.cobertura.decodificadas"))} de ` +
+    `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} del reservado. ` +
+    `No se leyó ninguna etiqueta ni se calculó ninguna métrica.`
+};
 const HALLAZGOS = {
-  "eda-diagnostico": () =>
-    `Se encontraron ${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} columnas presentes ` +
-    `solo en entrenamiento, de las ${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")} del archivo ` +
-    `&mdash; la primera se&ntilde;al de que algo ah&iacute; no estar&iacute;a disponible al predecir en producci&oacute;n.`,
-  "diseno-validacion": () =>
-    `Se cuantific&oacute; cu&aacute;nta fuga habr&iacute;a producido ignorar la agrupaci&oacute;n por paciente: ` +
-    `${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
-    `de los pacientes (${cifra(mil(D.fuga.n_grupos_naive), "diseno-validacion.json > comparacion_particion_naive.n_grupos_con_fuga")} ` +
-    `de ${cifra(mil(D.fuga.n_grupos_total), "diseno-validacion.json > n_grupos_total")}) habr&iacute;an caído a los dos lados de la partición.`,
+  // borrador-v2.md, l. 203-206 y 277-279.
+  "eda-diagnostico": () => P([
+    `Los datos son la metadata del reto: una fila por lesión y ${cifra(E.n_columnas, fEda("fuente.n_columnas"))} columnas, ` +
+    `con las mediciones que el software de la fotografía corporal total calcula sobre cada lesión, datos del paciente y, ` +
+    `solo en el conjunto de entrenamiento, el diagnóstico.`,
+    `<b>${cifra(A.n_solo_train, "auditoria-de-fugas.json > columnas_solo_en_train")} no existen al predecir.</b> ` +
+    `El conjunto de prueba no las trae. Entre ellas están la propia etiqueta, la taxonomía diagnóstica y dos medidas que solo existen tras la biopsia.`]),
+  // borrador-v2.md, l. 254-255, 257-258 y 261-263.
+  "diseno-validacion": () => P([
+    `La validación cruzada agrupa por paciente: cada paciente queda entero de un lado de cada pliegue. ` +
+    `En la partición de la semilla ${cifra(String(DI.seed), fDis("esquema.seed"))}, cada pliegue de validación tiene entre ` +
+    `${cifra(DI.min_grupos, fDis("por_fold[*].n_val_grupos (mínimo)"))} y ${cifra(DI.max_grupos, fDis("por_fold[*].n_val_grupos (máximo)"))} pacientes y entre ` +
+    `${cifra(DI.min_pos, fDis("por_fold[*].n_val_positivos (mínimo)"))} y ${cifra(DI.max_pos, fDis("por_fold[*].n_val_positivos (máximo)"))} lesiones malignas.`,
+    `Lo que evita esa agrupación se midió. Una partición aleatoria por filas, con la misma semilla, habría dejado a ` +
+    `${cifra(mil(DI.naive_n), fDis("comparacion_particion_naive.n_grupos_con_fuga"))} pacientes, el ` +
+    `${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))}, con lesiones a los dos lados.`]),
+  // borrador-v2.md, l. 274, 277, 281, 283, 285-286, 300-302 y 304-307.
   "auditoria-de-fugas": () =>
-    `Se generaron ${cifra(D.auditoria.n_preguntas_abiertas, "auditoria-de-fugas.json > preguntas_abiertas")} preguntas abiertas ` +
-    `sobre columnas sospechosas; ${cifra(D.auditoria.n_preguntas_abiertas - 1, "derivado: preguntas_abiertas menos la que exigió fuente externa")} ` +
-    `se resolvieron por su naturaleza post-biopsia, y la &uacute;ltima exigi&oacute; rastrear un paper cient&iacute;fico hasta confirmar ` +
-    `que <code>${esc(D.nevi ? D.nevi.columna : "")}</code>, de apariencia sospechosa, era en realidad leg&iacute;tima.`,
-  "modelado-baseline": () =>
-    `En el camino se descubri&oacute; que la implementaci&oacute;n inicial de la m&eacute;trica usaba un umbral de sensibilidad ` +
-    `equivocado y subestimaba el m&aacute;ximo posible de la escala, que es ` +
-    `${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}. Corregida y verificada contra ` +
-    `la fuente oficial (${cifra(esc(D.metrica_fuente), "modelado-baseline.json > metrica_fuente")}) antes de confiar en ning&uacute;n resultado.`,
-  "sintesis-consultoria": () =>
-    `Se extrajeron los ${cifra(mil(D.verificacion.numeros), "sintesis-verificacion.json > numeros_en_borrador")} n&uacute;meros del borrador ` +
-    `y se contrastaron contra <code>outputs/</code>: ` +
-    `${cifra(mil(D.verificacion.con_respaldo), "sintesis-verificacion.json > numeros_con_respaldo_en_outputs")} con respaldo exacto, ` +
-    `${cifra(D.verificacion.senalados, "sintesis-verificacion.json > numeros_sin_respaldo")} se&ntilde;alados para revisi&oacute;n a mano, ` +
-    `y ${cifra(D.verificacion.ignorados, "derivado: numeros_en_borrador menos los con respaldo y los señalados")} en contextos que el ` +
-    `verificador excluye por dise&ntilde;o (n&uacute;meros de secci&oacute;n, fechas y similares).`
+    P([`Quedan fuera de los modelos ${cifra(A.n_excluidas, fMod("columnas_excluidas"))} columnas, por cuatro motivos:`]) +
+    L([`<b>${cifra(A.n_solo_train, "auditoria-de-fugas.json > columnas_solo_en_train")} no existen al predecir.</b>`,
+       `<b>Una es constante:</b> <code>image_type</code>.`,
+       `<b>Una identifica la fila:</b> <code>isic_id</code>.`,
+       `<b>Dos describen el centro y la licencia de la imagen, no la lesión:</b> <code>attribution</code> y <code>copyright_license</code>.`]) +
+    P([`De las preguntas abiertas de la auditoría, la única que no contestan los motivos de arriba es <code>tbp_lv_nevi_confidence</code>, ` +
+       `por su nombre, aunque sí está en el conjunto de prueba.`,
+       `El artículo del conjunto de datos la define como <i>"a convolutional neural network classifier estimated probability that the lesion is a nevus"</i>, ` +
+       `así que la calcula el software sobre la imagen y está disponible al predecir. Se usa. Su AUC por sí sola es ` +
+       `${cifra(dec(A.nevi_auc), "auditoria-de-fugas.json > univariado (tbp_lv_nevi_confidence.auc_oof)")}.`]),
+  // borrador-v2.md, «El extractor de imagen»: las dos primeras frases de su
+  // segundo párrafo y la de interpretación (Parte B, B6).
+  "extraccion-imagen": () => P([
+    `PanDerm, un modelo fundacional de dermatología, no se usa. Su artículo declara un subconjunto de ISIC 2024 entre sus datos de preentrenamiento: ` +
+    `<i>"${esc(D.panderm.antes)}${cifra(esc(D.panderm.numero), D.panderm.fuente)}${esc(D.panderm.despues)}"</i>.`,
+    `<i>Interpretación, no medición:</i> es el razonamiento de la auditoría de fugas, un nivel más arriba. ` +
+    `Con modelos fundacionales, la fuga puede venir del preentrenamiento de un tercero y no del conjunto de datos.`]),
+  // borrador-v2.md, l. 330-333.
+  "modelado-baseline": () => P([
+    `El mismo gradient boosting da resultados opuestos según una sola opción. Sin balancear, su pAUC media es ${mediaN("Nivel 2a")}, ` +
+    `por debajo del piso aleatorio de ${azar} en los ${cifra(VR.n_folds_2a, fVR("nivel_2a_gradient_boosting_sin_balancear.pauc_por_semilla_y_fold (todos)"))} pliegues. ` +
+    `Con <code>class_weight="balanced"</code>, y nada más distinto, llega a ${mediaN("Nivel 2b")}.`]),
+  // Parte B, B8.
+  "sintesis-consultoria": () => P([
+    `El verificador encontró ${cifra(mil(V.total), fVer("numeros_en_borrador"))} números en el informe. ` +
+    `${cifra(V.omitidos, fVer("numeros_en_contextos_omitidos"))} se omiten por una lista declarada de contextos; ` +
+    `${cifra(V.metodo, fVer("porcentajes_de_metodo_excluidos"))} son parámetros del método; ` +
+    `${cifra(mil(V.con), fVer("numeros_con_respaldo_en_outputs"))} tienen respaldo en outputs/, y ` +
+    `${cifra(V.sin, fVer("numeros_sin_respaldo"))} quedan señalados para revisarlos a mano. ` +
+    `El verificador señala, no decide: un número señalado puede ser legítimo, como el año de una fuente.`])
 };
 
 const cadena = document.getElementById("cadena");
@@ -341,7 +427,7 @@ D.cadena.forEach((s, i) => {
     if (abierto) { caja.hidden = true; return; }
     b.setAttribute("aria-selected", "true");
     document.getElementById("salida-nombre").textContent = s.etapa;
-    document.getElementById("ficha-mide").textContent = s.mide;
+    document.getElementById("ficha-mide").innerHTML = MIDE[s.nombre] ? MIDE[s.nombre]() : esc(s.mide);
     document.getElementById("ficha-porque").textContent = s.porque;
     document.getElementById("ficha-hallazgo").innerHTML = HALLAZGOS[s.nombre]();
     document.getElementById("salida-titulo").textContent = "outputs/" + s.md + ".md";
@@ -351,22 +437,32 @@ D.cadena.forEach((s, i) => {
   cadena.appendChild(b);
   if (i < D.cadena.length - 1) {
     const f = document.createElement("div");
-    f.className = "flecha"; f.textContent = "\u2192";
+    f.className = "flecha"; f.textContent = "→";
     cadena.appendChild(f);
   }
 });
 
-/* ---------- 2. modelado ---------- */
-const M = et => D.modelos.find(m => m.etiqueta === et);
-const campo = et => "modelado-baseline.json > " + M(et).campo;
-document.getElementById("escala").innerHTML =
-  `Escala: azar = ${cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar")}, ` +
-  `máximo = ${cifra(num(D.escala.maximo, 1), "modelado-baseline.json > escala_de_referencia_pauc.maximo")}`;
-document.getElementById("sub-modelos").textContent = D.metrica + ". Cinco folds, mismos folds para todos los niveles.";
+/* ---------- 2. una decision por defecto ---------- */
+// borrador-v2.md, l. 322-325.
+document.getElementById("sub-resultados").innerHTML =
+  `Salvo donde se indica, las métricas de desempeño son del conjunto de desarrollo, con ${semillasVR} semillas y ` +
+  `${cifra(VR.n_splits, fVR("n_splits"))} pliegues. Cada diferencia es «nuevo − base», y su intervalo es el corregido al ${nivelIC}. ` +
+  `Los pliegues y semillas en que gana el nuevo se dan entre paréntesis.`;
+document.getElementById("tit-2a").innerHTML = mediaN("Nivel 2a");
+document.getElementById("rot-2a").textContent = "Nivel 2a — " + NIV["Nivel 2a"].descripcion;
+document.getElementById("tit-2b").innerHTML = mediaN("Nivel 2b");
+document.getElementById("rot-2b").textContent = "Nivel 2b — " + NIV["Nivel 2b"].descripcion;
+// borrador-v2.md, l. 330-333 y 336-339.
+document.getElementById("texto-2").innerHTML = HALLAZGOS["modelado-baseline"]() + P([
+  `La métrica por defecto no es ciega a ese fallo, pero lo lee distinto. En la partición de la semilla ` +
+  `${cifra(String(D.seed42.seed), fMod("esquema_cv.seed"))}, el AUC estándar del modelo sin balancear es ` +
+  `${cifra(dec(D.seed42.auc_2a), fMod("nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media"))}, por encima del azar de su escala, ` +
+  `${cifra(dec(D.auc_azar), fMod("nivel_0_referencia_univariada.nota"))}; su pAUC queda por debajo del azar de la suya. ` +
+  `Las dos métricas discrepan sobre si el modelo supera al azar.`]);
 
 // Bigotes de +/- 1 desviacion entre folds. Se dibujan a mano porque
 // Chart.js no trae barras de error: sin ellas la vista de medias
-// sugiere una precision que estos cinco folds no tienen.
+// sugiere una precision que estos folds no tienen.
 const bigotes = {
   id: "bigotes",
   afterDatasetsDraw(ch) {
@@ -377,7 +473,7 @@ const bigotes = {
     meta.data.forEach((barra, i) => {
       const s = ds.desviaciones[i], v = ds.data[i];
       if (!s) return;
-      const arriba = ejeY.getPixelForValue(v + s), abajo = ejeY.getPixelForValue(v - s), x = barra.x;
+      const arriba = ejeY.getPixelForValue(v + s), abajo = ejeY.getPixelForValue(Math.max(0, v - s)), x = barra.x;
       cx.beginPath();
       cx.moveTo(x, arriba); cx.lineTo(x, abajo);
       cx.moveTo(x - 7, arriba); cx.lineTo(x + 7, arriba);
@@ -388,8 +484,6 @@ const bigotes = {
   }
 };
 
-// Linea del piso aleatorio: sin ella, el 0,0013 del nivel 2a parece
-// solo "bajo" en vez de estar por debajo del azar, que es el hallazgo.
 const piso = {
   id: "piso",
   beforeDatasetsDraw(ch) {
@@ -406,7 +500,7 @@ const piso = {
   afterDatasetsDraw(ch) {
     const y = ch.scales.y.getPixelForValue(D.escala.azar), cx = ch.ctx;
     if (!isFinite(y)) return;
-    const texto = "piso aleatorio " + num(D.escala.azar, 2);
+    const texto = "piso aleatorio " + dec(D.escala.azar);
     cx.save();
     cx.font = "600 11px -apple-system, sans-serif"; cx.textAlign = "right";
     const ancho = cx.measureText(texto).width;
@@ -419,164 +513,252 @@ const piso = {
   }
 };
 
-const COLORES = ["#8fa6b8", "#4a7fa5", "#c98b7a", "#1f5f8b"];
-const lienzo = document.getElementById("gr-modelos");
-let grafico = null;
+new Chart(document.getElementById("gr-niveles"), {
+  type: "bar",
+  plugins: [bigotes, piso],
+  data: {
+    labels: VR.niveles.map(n => n.etiqueta),
+    datasets: [{
+      label: "pAUC medio",
+      data: VR.niveles.map(n => n.media),
+      desviaciones: VR.niveles.map(n => n.std),
+      backgroundColor: ["#4a7fa5", "#c98b7a", "#1f5f8b"],
+      borderRadius: 4,
+      maxBarThickness: 96
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, suggestedMax: D.escala.maximo,
+           title: { display: true, text: `pAUC (${dec(D.escala.azar)} = azar, ${dec(D.escala.maximo)} = perfecto)` } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: it => VR.niveles[it[0].dataIndex].etiqueta + " — " + VR.niveles[it[0].dataIndex].descripcion,
+          label: it => "pAUC " + dec(VR.niveles[it.dataIndex].media) + "  ±" + dec(VR.niveles[it.dataIndex].std) + " entre folds",
+          afterLabel: it => "validacion-repetida.json > " + VR.niveles[it.dataIndex].campo
+        }
+      }
+    }
+  }
+});
 
-function vistaMedias() {
-  return {
+/* ---------- 3. mejor media no es mejor modelo ---------- */
+const PA = VR.pareada;
+// borrador-v2.md, l. 344-346 y 349-351.
+document.getElementById("texto-3").innerHTML = P([
+  `El gradient boosting balanceado supera a la regresión logística balanceada por ` +
+  `${cifra(dec(PA.media), fVR("comparacion_pareada_2b_menos_1.media"))} en promedio, con intervalo ` +
+  `${ic(PA.ic[0], PA.ic[1], fVR("comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio"))} ` +
+  `(${cifra(PA.gana, fVR("comparacion_pareada_2b_menos_1.gana_2b_en"))} de ${cifra(PA.de, fVR("comparacion_pareada_2b_menos_1.de"))} pliegues; ` +
+  `${cifra(PA.semillas, fVR("comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"))} de ${semillasVR} semillas). La ventaja no está establecida.`,
+  `Sobre una sola partición de los datos completos, el boosting parecía además más estable que la logística. ` +
+  `Con las ${semillasVR} semillas el orden se invierte: su desviación entre pliegues es ${stdN("Nivel 2b")}, frente a ${stdN("Nivel 1")}. ` +
+  `Ese argumento se retiró.`]);
+// borrador-v2.md, l. 356-357, 359-360, 362-363 y 365-367.
+document.getElementById("texto-3b").innerHTML = P([
+  `Con las columnas de centro y licencia, la diferencia entre el boosting y la logística es ` +
+  `${cifra(dec(PR.a_con), fPro("a_2b_menos_1_con_procedencia.media"))}; sin ellas, ${cifra(dec(PR.a_sin), fPro("a_2b_menos_1_sin_procedencia.media"))}. ` +
+  `Incluirlas mueve el boosting en ${cifra(dec(PR.b.media), fPro("b_2b_con_menos_2b_sin.media"))}, con intervalo ` +
+  `${ic(PR.b.ic[0], PR.b.ic[1], fPro("b_2b_con_menos_2b_sin.intervalo_t_95_nadeau_bengio"))}, y la logística en ` +
+  `${cifra(dec(PR.c.media), fPro("c_1_con_menos_1_sin.media"))}, con ${ic(PR.c.ic[0], PR.c.ic[1], fPro("c_1_con_menos_1_sin.intervalo_t_95_nadeau_bengio"))}. ` +
+  `En la logística, incluirlas mejora en las ${cifra(PR.c.semillas, fPro("c_1_con_menos_1_sin.gana_primer_termino_en_semillas"))} semillas y en ` +
+  `${cifra(PR.c.folds, fPro("c_1_con_menos_1_sin.gana_primer_termino_en_folds"))} de ${cifra(PR.c.de_folds, fPro("c_1_con_menos_1_sin.de_folds"))} pliegues. ` +
+  `La magnitud no está establecida. ` +
+  `La exclusión se sostiene por razón de uso, no de desempeño. Una sola partición sugería lo contrario; ` +
+  `es el segundo resultado de una sola partición que no sobrevive a la validación repetida.`]);
+
+// Líneas horizontales: el cero, la media y el intervalo corregido.
+const lineasH = {
+  id: "lineasH",
+  afterDatasetsDraw(ch) {
+    const ejeY = ch.scales.y, cx = ch.ctx, a = ch.chartArea;
+    const linea = (v, color, guion, ancho) => {
+      const y = ejeY.getPixelForValue(v);
+      cx.save(); cx.strokeStyle = color; cx.setLineDash(guion); cx.lineWidth = ancho;
+      cx.beginPath(); cx.moveTo(a.left, y); cx.lineTo(a.right, y); cx.stroke(); cx.restore();
+    };
+    linea(0, "#16202b", [], 1);
+    linea(PA.media, "#1f5f8b", [], 2);
+    linea(PA.ic[0], "#1f5f8b", [5, 4], 1.5);
+    linea(PA.ic[1], "#1f5f8b", [5, 4], 1.5);
+  }
+};
+new Chart(document.getElementById("gr-pareada"), {
+  type: "bar",
+  plugins: [lineasH],
+  data: {
+    labels: PA.etiquetas,
+    datasets: [
+      { label: "Diferencia 2b − 1 por pliegue", data: PA.diferencias,
+        backgroundColor: PA.diferencias.map(d => d > 0 ? "#1f5f8b" : "#c98b7a"), borderRadius: 2 },
+      { type: "line", label: "media", data: [], borderColor: "#1f5f8b", borderWidth: 2, pointStyle: "line" },
+      { type: "line", label: "intervalo corregido al " + D.nivel_ic + "%", data: [], borderColor: "#1f5f8b", borderDash: [5, 4], borderWidth: 1.5, pointStyle: "line" }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { display: false }, grid: { display: false } },
+      y: { title: { display: true, text: "Diferencia 2b − 1" } }
+    },
+    plugins: {
+      legend: { position: "bottom", labels: { usePointStyle: true, filter: it => it.datasetIndex > 0 } },
+      tooltip: {
+        filter: it => it.datasetIndex === 0,
+        callbacks: { label: it => firmado(it.parsed.y) }
+      }
+    }
+  }
+});
+
+/* ---------- 4. la metrica principal no agota lo que pidio el cliente ---------- */
+// borrador-v2.md, l. 95-97.
+document.getElementById("texto-4").innerHTML = P([
+  `<b>El criterio:</b> una diferencia se da por establecida solo si su intervalo corregido al ${nivelIC} no contiene el cero. ` +
+  `Junto al intervalo se reportan los pliegues y las semillas en que gana cada modelo.`]);
+const NOMBRES = { pauc: "pAUC", auc: "AUC estándar", setop15: "Sensibilidad top-15", nnt80: "NNT80% SE" };
+// Marca de la media sobre cada barra de intervalo, y la línea del cero.
+const mediasYcero = {
+  id: "mediasYcero",
+  afterDatasetsDraw(ch) {
+    const ds = ch.data.datasets[0], meta = ch.getDatasetMeta(0), ejeX = ch.scales.x, cx = ch.ctx, a = ch.chartArea;
+    const x0 = ejeX.getPixelForValue(0);
+    cx.save(); cx.strokeStyle = "#16202b"; cx.setLineDash([4, 3]); cx.lineWidth = 1.2;
+    cx.beginPath(); cx.moveTo(x0, a.top); cx.lineTo(x0, a.bottom); cx.stroke();
+    cx.setLineDash([]); cx.lineWidth = 2.5;
+    meta.data.forEach((barra, i) => {
+      const x = ejeX.getPixelForValue(ds.medias[i]);
+      cx.beginPath(); cx.moveTo(x, barra.y - 9); cx.lineTo(x, barra.y + 9); cx.stroke();
+    });
+    cx.restore();
+  }
+};
+const paneles = document.getElementById("paneles");
+["pauc", "auc", "setop15", "nnt80"].forEach(k => {
+  const div = document.createElement("div");
+  div.className = "panel";
+  div.innerHTML = `<h3>${NOMBRES[k]}</h3><div class="lienzo"><canvas></canvas></div>`;
+  paneles.appendChild(div);
+  const filas = D.comparaciones.map(c => c.metricas[k]);
+  const distinguible = filas.map(m => !(m.ic[0] <= 0 && 0 <= m.ic[1]));
+  const d = k === "nnt80" ? 2 : undefined;
+  new Chart(div.querySelector("canvas"), {
     type: "bar",
-    plugins: [bigotes, piso],
+    plugins: [mediasYcero],
     data: {
-      labels: D.modelos.map(m => m.etiqueta),
+      labels: D.comparaciones.map(c => c.etiqueta),
       datasets: [{
-        label: "pAUC medio",
-        data: D.modelos.map(m => m.media),
-        desviaciones: D.modelos.map(m => m.std),
-        backgroundColor: COLORES,
-        borderRadius: 4,
-        maxBarThickness: 96
+        data: filas.map(m => m.ic), medias: filas.map(m => m.media),
+        backgroundColor: distinguible.map(x => x ? "rgba(30,122,82,.55)" : "rgba(91,107,124,.35)"),
+        borderSkipped: false, borderRadius: 3, barPercentage: .55
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: {
-        y: { beginAtZero: true, suggestedMax: 0.2, title: { display: true, text: "pAUC (0,02 = azar, 0,2 = perfecto)" } },
-        x: { ticks: { callback: (v, i) => D.modelos[i].etiqueta } }
-      },
+      indexAxis: "y", responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            title: it => D.modelos[it[0].dataIndex].etiqueta + " \u2014 " + D.modelos[it[0].dataIndex].descripcion,
-            label: it => "pAUC " + num(D.modelos[it.dataIndex].media) + "  \u00b1" + num(D.modelos[it.dataIndex].std) + " entre folds",
-            afterLabel: it => "modelado-baseline.json > " + D.modelos[it.dataIndex].campo
+            label: it => {
+              const m = filas[it.dataIndex];
+              return `${firmado(m.media, d)}, [${d ? fijo(m.ic[0], d) : dec(m.ic[0])}; ${d ? fijo(m.ic[1], d) : dec(m.ic[1])}] ` +
+                     `(${m.folds} de ${m.de_folds}; ${m.semillas} de ${m.de_semillas})`;
+            },
+            afterLabel: it => `${D.comparaciones[it.dataIndex].archivo} > comparaciones_nuevo_menos_base.${k}`
           }
         }
       }
     }
-  };
-}
+  });
+});
+document.getElementById("pie-paneles").innerHTML = esc(D.nota_nnt);
+// borrador-v2.md, l. 382-384, 386-388, 402-403, 405-406, 421-423, 433-434, 449-450 y 452-454.
+document.getElementById("lectura-4").innerHTML = L([
+  `<b>M2 − M1.</b> Quien solo lea la pAUC concluye que el contexto de paciente no aporta; los ejes de triaje que el cliente declaró dicen lo contrario. ` +
+  `Son cuatro métricas sobre una misma comparación, y el intervalo del NNT queda al límite del cero. ` +
+  `<i>Interpretación, no medición:</i> las variables relativas al paciente ordenan las lesiones dentro de cada paciente, que es lo que mide la sensibilidad top-15, ` +
+  `mientras que la pAUC ordena todas las lesiones juntas.`,
+  `<b>M4 − M2.</b> Ningún intervalo excluye el cero, y la estimación puntual es peor en las cuatro métricas. ` +
+  `Por el criterio fijado antes de medir, la imagen, así incorporada, no justifica su costo.`,
+  `<b>M4b − M2.</b> <i>Patrón, no efecto establecido:</i> la forma de incorporar la imagen invierte la dirección de la pAUC. ` +
+  `Como variables sueltas, M4 queda por encima de M2 en ${semC("M4 − M2", "pauc")} de ${deSemC("M4 − M2", "pauc")} semillas; ` +
+  `como puntuación apilada, M4b, en ${semC("M4b − M2", "pauc")} de ${deSemC("M4b − M2", "pauc")}.`,
+  `<b>M3 − M2.</b> Por la nota de lectura fijada antes de correr, esa ventaja no se puede separar de los dos sesgos conocidos a favor de M3.`,
+  `<b>M3 limpio − M2.</b> El intervalo de la pAUC queda entero por encima de cero, así que, por la regla fijada antes de correr, el modelo recomendado es ${reco}. ` +
+  `Quitar los sesgos casi no movió la diferencia media: ${mediaC("M3 − M2", "pauc")} con ellos, ${mediaC("M3 limpio − M2", "pauc")} sin ellos. ` +
+  `Esa comparación es descriptiva, entre dos corridas, sin intervalo propio y sin fijar antes.`]);
 
-function vistaPareada() {
-  const n1 = D.modelos.find(m => m.etiqueta === "Nivel 1");
-  const b2 = D.modelos.find(m => m.etiqueta === "Nivel 2b");
-  return {
-    type: "bar",
-    data: {
-      labels: D.pareado.diferencias.map((_, i) => "Fold " + i),
-      datasets: [
-        { label: n1.etiqueta + " \u2014 " + n1.descripcion, data: n1.por_fold, backgroundColor: "#4a7fa5", borderRadius: 4 },
-        { label: b2.etiqueta + " \u2014 " + b2.descripcion, data: b2.por_fold, backgroundColor: "#1f5f8b", borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: { y: { beginAtZero: true, title: { display: true, text: "pAUC en el fold" } } },
-      plugins: {
-        legend: { position: "bottom" },
-        tooltip: {
-          callbacks: {
-            label: it => it.dataset.label + ": " + num(it.parsed.y),
-            afterBody: it => {
-              const d = D.pareado.diferencias[it[0].dataIndex];
-              return "Diferencia 2b \u2212 1: " + (d > 0 ? "+" : "\u2212") + num(Math.abs(d));
-            }
-          }
-        }
-      }
-    }
-  };
-}
+/* ---------- 5. la pregunta del cliente, entera ---------- */
+// borrador-v2.md, l. 470-476: la cabecera y las filas, con las cifras de outputs/.
+const fMet = (f, k) => `${f.archivo} > metricas.${f.clave}.${k}.media_global`;
+document.getElementById("tabla-ejes").innerHTML =
+  `<thead><tr><th>Modelo</th><th>pAUC</th><th>Sensibilidad top-15</th><th>NNT80% SE</th><th>Segundos por ${milLesiones} lesiones</th></tr></thead><tbody>` +
+  D.tabla.map(f => `<tr><td>${esc(f.modelo)}</td><td>${cifra(fijo(f.pauc, 4), fMet(f, "pauc"))}</td>` +
+    `<td>${cifra(fijo(f.setop15, 4), fMet(f, "setop15"))}</td><td>${cifra(fijo(f.nnt80, 2), fMet(f, "nnt80"))}</td>` +
+    `<td>${tiempoT(f.modelo)}</td></tr>`).join("") + `</tbody>`;
+// borrador-v2.md, l. 480-485 y 463-465.
+document.getElementById("texto-5").innerHTML = P([
+  `La tabla responde la pregunta con sus tres ejes: la métrica principal, la sensibilidad por paciente y el costo. ` +
+  `Son medias y medianas; las diferencias, con sus intervalos, están arriba. M2 se distingue de M1 en los dos ejes de triaje, no en la pAUC. ` +
+  `Frente a M2, de los otros tres solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar; en los ejes de triaje no se distingue ninguno de los tres.`,
+  `M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo por cada ${milLesiones} lesiones. ` +
+  `Lo caro, con diferencia, es la imagen, y los modelos con imagen no mejoraron la métrica principal de forma distinguible.`]);
 
-const PIE = {
-  medias: () => {
-    const n2a = D.modelos.find(m => m.etiqueta === "Nivel 2a");
-    return `El <span class="destacado">nivel 2a queda en ${cifra(num(n2a.media), "modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.pauc_media")}, ` +
-      `por debajo del piso aleatorio</span>: no colapsa a predecir siempre negativo, satura en probabilidad 1 sobre negativos y los coloca ` +
-      `encima de los positivos, arrasando justo la región de sensibilidad alta que el cliente mide. Su AUC estándar no delata nada. ` +
-      `Los bigotes son &plusmn;1 desviación entre folds, no un intervalo de confianza.`;
-  },
-  pareada: () => {
-    const p = D.pareado;
-    const signo = p.ic_bajo < 0 && p.ic_alto > 0;
-    return `2b gana en ${cifra(p.folds_a_favor + " de " + p.n_folds, "derivado de pauc_por_fold de ambos niveles")} folds. ` +
-      `Diferencia media ${cifra(num(p.media), "derivado: media de 2b menos nivel 1, fold a fold")}, ` +
-      `desviación ${cifra(num(p.sd), "derivado: desviación muestral de las 5 diferencias")}, ` +
-      `intervalo t al 95% de ${num(p.ic_bajo)} a ${num(p.ic_alto)}. ` +
-      `<span class="destacado">El intervalo cruza el cero: la comparación pareada no confirma la superioridad de 2b, la debilita.</span> ` +
-      `Y además es optimista &mdash; los folds comparten la mayor parte del entrenamiento, así que las diferencias no son independientes ` +
-      `y el intervalo subestima la varianza. En esta partición, el peor fold de 2b ` +
-      `(${cifra(num(Math.min(...D.modelos.find(m => m.etiqueta === "Nivel 2b").por_fold)), "modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.pauc_por_fold")}) ` +
-      `supera a los dos peores del nivel 1.`;
-  }
-};
+/* ---------- 6. recomendacion ---------- */
+document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
+document.getElementById("rot-reco").innerHTML = reco;
+// borrador-v2.md, l. 495-496, 498-499, 502-504 y 507-508.
+document.getElementById("texto-6").innerHTML = P([
+  `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
+  `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`,
+  `<b>No se recomienda añadir las variables de imagen</b> tal como se probaron. No mejoraron ninguna métrica de forma distinguible, ` +
+  `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio.`,
+  `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en los dos ejes de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
+// borrador-v2.md, l. 513-524.
+document.getElementById("se-puede").innerHTML = L([
+  `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
+  `El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80% SE.`,
+  `Las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas.`,
+  `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`]);
+// borrador-v2.md, l. 528-547.
+document.getElementById("no-se-puede").innerHTML = L([
+  `<b>Que M3 limpio sea mejor en los ejes de triaje.</b> En la sensibilidad top-15 y en el NNT80% SE no se distingue de M2.`,
+  `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
+  `<b>Cuánto rinde M3 limpio fuera del conjunto de desarrollo.</b> El conjunto reservado no se ha abierto. Cuando se abra, la estimación principal ` +
+  `seguirá siendo la validación cruzada repetida, y la recomendación no cambiará por su resultado.`,
+  `<b>Nada sobre otras formas de usar la imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron fuera.`,
+  `<b>Que este trabajo supere o no a la solución ganadora.</b> Su evaluación usó otros datos y otras particiones.`,
+  `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 
-function pintar(vista) {
-  if (grafico) grafico.destroy();
-  grafico = new Chart(lienzo, vista === "medias" ? vistaMedias() : vistaPareada());
-  document.getElementById("pie-modelos").innerHTML = PIE[vista]();
-  document.getElementById("btn-medias").setAttribute("aria-pressed", vista === "medias");
-  document.getElementById("btn-pareada").setAttribute("aria-pressed", vista === "pareada");
-}
-document.getElementById("btn-medias").onclick = () => pintar("medias");
-document.getElementById("btn-pareada").onclick = () => pintar("pareada");
-
-document.getElementById("tit-reco").innerHTML =
-  cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media");
-document.getElementById("tit-fallo").innerHTML =
-  cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media");
-document.getElementById("tit-fallo-det").innerHTML =
-  "Boosting sin ajustar por desbalance. Su AUC est&aacute;ndar es " +
-  cifra(num(M("Nivel 2a").auc, 2), campo("Nivel 2a") + ".auc_estandar_media") +
-  ": por encima del azar. Bajo la m&eacute;trica del cliente queda por debajo de su piso de " +
-  cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar") +
-  ". Las dos m&eacute;tricas no coinciden ni en si el modelo supera al azar";
-
-pintar("medias");
-
-/* ---------- 3. cierre ---------- */
-document.getElementById("cierre-hallazgos").innerHTML =
-  `El desbalance extremo (${cifra(mil(D.eda.positivos), "eda-diagnostico.json > desbalance_target.conteos.1")} malignos entre ` +
-  `${cifra(mil(D.eda.n_filas), "eda-diagnostico.json > fuente.n_filas")} lesiones) y la agrupación por paciente hacían la partición ` +
-  `ingenua peligrosa: ${cifra(num(D.fuga.pct_naive, 2) + "%", "diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga")} ` +
-  `de fuga potencial. La auditoría de columnas dejó el modelado con ` +
-  `${cifra(D.n_features_usadas, "modelado-baseline.json > n_features_usadas")} variables de las ` +
-  `${cifra(D.eda.n_columnas, "eda-diagnostico.json > fuente.n_columnas")} del archivo. Las otras ` +
-  `${cifra(D.eda.n_columnas - D.n_features_usadas, "derivado: fuente.n_columnas menos n_features_usadas")} quedan fuera por razones distintas: ` +
-  `${cifra(D.eda.n_solo_en_train, "eda-diagnostico.json > columnas_solo_en_train")} no existen al predecir &mdash;el test no las trae, y entre ellas va la propia respuesta&mdash;, ` +
-  `<code>image_type</code> es constante en todo el archivo, <code>isic_id</code> identifica la fila, y ` +
-  `<code>patient_id</code> no se descarta por sospechosa: se usa para agrupar los folds, no para predecir. ` +
-  `Eso evitó que información no disponible en producción entrara al modelo. Y la comparación honesta entre modelos &mdash;no solo la media, sino par a par por fold&mdash; mostró que la ventaja ` +
-  `del gradient boosting balanceado no es estadísticamente sostenible con la evidencia disponible: gana en ` +
-  `${cifra(D.pareado.folds_a_favor + " de " + D.pareado.n_folds, "derivado de pauc_por_fold de los niveles 1 y 2b")} folds, y el intervalo ` +
-  `de confianza de la diferencia (${cifra(num(D.pareado.ic_bajo) + " a " + num(D.pareado.ic_alto), "derivado: intervalo t al 95% sobre las 5 diferencias")}) ` +
-  `cruza cero. <span class="destacado">En esta partición 2b fue además menos disperso</span>: ` +
-  `&plusmn;${cifra(num(M("Nivel 2b").std), campo("Nivel 2b") + ".pauc_std")} entre folds frente a ` +
-  `&plusmn;${cifra(num(M("Nivel 1").std), campo("Nivel 1") + ".pauc_std")} de la logística &mdash; una ventaja que ` +
-  `no se mantiene al repetir la validación con diez particiones distintas.`;
-
-document.getElementById("cierre-recomendacion").innerHTML =
-  `Regresión logística balanceada &mdash;Nivel 1, pAUC ${cifra(num(M("Nivel 1").media), campo("Nivel 1") + ".pauc_media")}&mdash; ` +
-  `como modelo de referencia: interpretable, con desempeño comparable al gradient boosting ` +
-  `(Nivel 2b, ${cifra(num(M("Nivel 2b").media), campo("Nivel 2b") + ".pauc_media")}), y sin la fragilidad que mostró el boosting ` +
-  `sin ajustar por desbalance: el Nivel 2a colapsó a ${cifra(num(M("Nivel 2a").media), campo("Nivel 2a") + ".pauc_media")}, ` +
-  `por debajo del piso aleatorio de ${cifra(num(D.escala.azar, 2), "modelado-baseline.json > escala_de_referencia_pauc.azar")}.`;
-
-document.getElementById("cierre-limites").innerHTML =
-  `La clase negativa tiene ruido estructural: la mayoría de los ` +
-  `${cifra(mil(D.eda.negativos), "eda-diagnostico.json > desbalance_target.conteos.0")} &laquo;benignos&raquo; nunca se biopsiaron. ` +
-  `No existe un conjunto de prueba real sobre el cual medir un resultado final independiente &mdash;el test publicado es ` +
-  `${cifra("un marcador de posición", "eda-diagnostico.json > test_is_placeholder = " + D.test_es_marcador)}, así que todo lo de ` +
-  `arriba es validación cruzada, no resultado sobre datos nuevos. Y la propia métrica del proyecto tuvo un error que solo se detectó ` +
-  `al contrastarla explícitamente contra la fuente oficial &mdash; recordatorio de que ninguna parte de este proceso, ni siquiera la ` +
-  `más técnica, estaba exenta de revisión.`;
+/* ---------- 7. limitaciones ---------- */
+// borrador-v2.md, l. 208-210 y 552-587.
+document.getElementById("limitaciones").innerHTML = P([
+  `El archivo de prueba que publica el reto es un marcador de posición, sin casos reales, así que no hay contra qué medir un resultado final ` +
+  `independiente fuera de lo que este proyecto aparte.`]) + L([
+  `<b>La clase negativa no está confirmada.</b> Las lesiones malignas tienen patología; de las benignas, <i>"most never underwent a skin biopsy"</i>. ` +
+  `La mayoría de los negativos son lesiones que un dermatólogo no consideró preocupantes, no lesiones confirmadas como sanas.`,
+  `<b>Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente.</b> Así las describe el artículo del conjunto de datos: ` +
+  `<i>"comparable in optical resolution to smartphone images"</i>. El resultado de la imagen se limita a estas imágenes y a este extractor.`,
+  `<b>Muchas comparaciones a la vez.</b> Las cinco comparaciones M2 − M1, M4 − M2, M4b − M2, M3 − M2 y M3 limpio − M2 se leen en cuatro métricas cada una, ` +
+  `sin corregir por multiplicidad, y el intervalo del NNT80% SE de M2 − M1 queda al límite del cero.`,
+  `<b>La corrección de la varianza es aproximada.</b> Nadeau y Bengio la derivan para divisiones aleatorias independientes, y aquí se aplica a una validación por pliegues.`,
+  `<b>El NNT80% SE se calcula con una lectura propia</b>, porque el organizador no publica script para él.`,
+  `<b>El conjunto reservado no es del todo independiente.</b> No es ajeno a las decisiones tomadas antes de sellarlo ni al diseño de las variables de la ` +
+  `solución ganadora, que siguen M2 y M3 limpio.`,
+  `<b>Los tiempos son de un solo equipo</b>, con DINOv2 en la GPU y los modelos tabulares en la CPU. Solo comparan estos modelos entre sí.`,
+  `<b>Dos supuestos sin verificar.</b> No se sabe si el clasificador de nevus que produce <code>tbp_lv_nevi_confidence</code> se entrenó con lesiones ` +
+  `de este conjunto. Y nada comprueba la versión del código de DINOv2; solo sus pesos, por hash.`,
+  `<b>Un mecanismo sin medir.</b> No se midió por qué el gradient boosting sin balancear queda bajo el azar de la pAUC; el informe solo afirma que queda.`]);
 
 /* ---------- pie ---------- */
+// Parte B, B10.
 document.getElementById("pie").innerHTML =
   `Generado el ${esc(D.generado)} por <code>generar_demo.py</code> desde <code>outputs/*.json</code>. ` +
-  `Ninguna cifra de esta página está escrita a mano: pasa el ratón sobre cualquiera para ver su archivo y campo de origen. ` +
-  `Mismo origen que <code>informe/informe-final.docx</code>.`;
+  `Ninguna cifra de esta página está escrita a mano: pasa el ratón sobre cualquiera para ver su archivo y campo de origen.`;
 </script>
 </body>
 </html>
