@@ -798,9 +798,10 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
    Nivel 2a da pAUC 0,0005, *por debajo del piso aleatorio de la métrica* (0,02).
-   No colapsa a "predecir siempre negativo" —el diagnóstico de manual— sino que
-   satura en probabilidad 1.0 sobre negativos y los coloca encima de los
-   positivos, arrasando justo la región de sensibilidad alta. Con
+   *Hipótesis sin medir* (Pendientes, «El mecanismo del nivel 2a está sin
+   medir»): no colapsa a "predecir siempre negativo" —el diagnóstico de
+   manual— sino que satura en probabilidad 1.0 sobre negativos y los coloca
+   encima de los positivos, arrasando justo la región de sensibilidad alta. Con
    `class_weight="balanced"` (2b): 0,1398. La métrica del cliente ve el
    problema; la métrica por defecto no. Cifras del conjunto de desarrollo
    (`outputs/modelado-baseline.json`); las conclusiones son las mismas que sobre
@@ -851,8 +852,8 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
    conclusión comparativa se escribe desde una sola partición.**
 
 4. **El contexto de paciente no cambia de forma distinguible la métrica
-   principal, pero sí los ejes de triaje que el cliente declaró** (conjunto de
-   desarrollo, 10 semillas × 5 pliegues; `outputs/fase4-m2-vs-m1.json`). M2 − M1:
+   principal, pero sí las métricas de triaje** (conjunto de desarrollo, 10
+   semillas × 5 pliegues; `outputs/fase4-m2-vs-m1.json`). M2 − M1:
    - pAUC +0,0065, corregido [−0,0147; 0,0276], 28 de 50 pliegues;
    - SEtop-15 +0,0842, corregido [0,021; 0,1473], 46 de 50 pliegues y 10 de 10
      semillas;
@@ -860,8 +861,9 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
      y 10 de 10.
 
    Si solo se lee el pAUC, se concluye que el contexto de paciente no aporta;
-   los ejes de triaje del cliente dicen lo contrario. Salvedades: son cuatro
-   métricas sobre una misma comparación, y el NNT queda al límite.
+   la sensibilidad top-15, que el cliente premió aparte, y el NNT80% SE dicen
+   lo contrario. Salvedades: son cuatro métricas sobre una misma comparación,
+   y el NNT queda al límite.
    *Interpretación, no medición:* las variables relativas al paciente ordenan
    las lesiones dentro de cada paciente, que es lo que mide SEtop-15, mientras
    que el pAUC ordena todas las lesiones juntas.
@@ -905,7 +907,7 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
      10 de 10 semillas;
    - AUC +0,0204, corregido [0,0011; 0,0397].
 
-   En los ejes de triaje no se distingue:
+   En las métricas de triaje no se distingue:
    - SEtop-15 +0,0181, corregido [−0,0365; 0,0726];
    - NNT80% SE −12,62, corregido [−49,29; 24,05].
 
@@ -923,7 +925,7 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
      las 10 semillas;
    - AUC +0,021 [0,0043; 0,0376].
 
-   En los ejes de triaje la diferencia no se distingue de cero:
+   En las métricas de triaje la diferencia no se distingue de cero:
    - SEtop-15 +0,0227 [−0,0291; 0,0746];
    - NNT80% SE −20,06 [−49,74; 9,61].
 
@@ -1036,12 +1038,13 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         azar dice que esos positivos quedan por debajo de casi todos los
         negativos. Unos negativos saturados en 1,0 están en lo alto del
         ordenamiento: en esa región pesan solo por la fracción de negativos que
-        son, y el `SKILL.md` habla de «un puñado». Nada en `outputs/` mide la
+        son, y el `SKILL.md` hablaba de «un puñado». Nada en `outputs/` mide la
         saturación: era texto fijo del script, no una medición.
       - **Dónde aparece:**
-        - el hallazgo 1 de este archivo;
-        - el `SKILL.md` de `modelado-baseline`, en el nivel 2a y en el párrafo
-          de la «confianza máxima mal colocada».
+        - el hallazgo 1 de este archivo, marcado como hipótesis sin medir
+          desde el 2026-10-03;
+        - el `SKILL.md` de `modelado-baseline`, en el párrafo de la «confianza
+          máxima mal colocada».
       - **También aparece en:** `informe/borrador.md`; e
         `informe/casos-de-fallo.md`, caso A, que cita la nota que el script
         escribía y ya no escribe.
@@ -1051,7 +1054,9 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         y `generar_demo.py`, con `informe/demo.html` y su copia
         `docs/index.html` (commits «modelado-baseline: la nota del nivel 2a
         no afirma un mecanismo sin medir» y «generar_demo: la demo desde
-        frases verificadas de borrador-v2.md»).*
+        frases verificadas de borrador-v2.md»); y el nivel 2a del `SKILL.md`
+        de `modelado-baseline`, que describía esa nota. El hallazgo 1 lo
+        afirmaba como hecho.*
       - **Qué se buscó (2026-10-02):** con `git grep`, fuera de `referencias/`,
         «satura», «colaps», «siempre negativo», «confianza máxima» y «mal
         colocada». Las demás coincidencias no describen el mecanismo: hablan
@@ -1075,7 +1080,7 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         métrica: VERIFICADA (2026-08-11)», que es lo que cita su comentario
         `F:`. No es un archivo de `outputs/`.
       - **Qué lo cerraría:** resolverlo en el anexo de trazabilidad.
-- [ ] **El informe nombra sus ejes de dos maneras** (2026-10-03).
+- [x] **El informe nombra sus ejes de dos maneras** (2026-10-03).
       `informe/borrador-v2.md` dice «tres ejes» (línea 526: la métrica
       principal, la sensibilidad por paciente y el costo) y también «los dos
       ejes de triaje» (líneas 420, 528 y 554: la sensibilidad top-15 y el
@@ -1083,6 +1088,14 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       pAUC, sensibilidad top-15, NNT80% SE y segundos por 1.000 lesiones. Y
       los «dos ejes más» que declaró el cliente (línea 31) son otro par: la
       sensibilidad top-15 y la eficiencia. Hay que unificar el término.
+      *Cumplido el 2026-10-03. El anteproyecto (línea 495) llama «ejes de
+      triaje» a la top-15 y al NNT80% SE, definidos por los organizadores; el
+      informe lo precisa como tres ejes, uno por premio (pAUC, top-15 y
+      eficiencia), y en el de triaje se leen dos métricas, la top-15 y el
+      NNT. «Ejes de triaje» pasó a «métricas de triaje» en
+      `informe/borrador-v2.md`, `generar_demo.py`, el README y los hallazgos
+      4, 7 y 8; el anteproyecto no se toca, porque es un documento
+      entregado.*
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---

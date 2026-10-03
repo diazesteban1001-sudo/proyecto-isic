@@ -32,7 +32,7 @@ redacta el informe y genera la demo.
 | `eda-diagnostico` | Instrumento | Perfila los datos: tipos, faltantes, desbalance y estructura de las lesiones por paciente |
 | `diseno-validacion` | Instrumento | Sella el conjunto reservado; construye y audita la partición cruzada agrupada por paciente |
 | `auditoria-de-fugas` | Instrumento | Chequeos estructurales y escaneo de columnas con señal univariada sospechosa |
-| `modelado-baseline` | Instrumento | Entrena y compara los modelos con la métrica oficial y los ejes de triaje, y mide el tiempo de inferencia |
+| `modelado-baseline` | Instrumento | Entrena y compara los modelos con la métrica oficial y las métricas de triaje, y mide el tiempo de inferencia |
 | `extraccion-imagen` | Instrumento | Extrae las variables de imagen con DINOv2, sin reentrenarlo |
 | `sintesis-consultoria` | Síntesis | Redacta el informe y genera la demo desde `outputs/`, y señala las cifras que no tienen respaldo en un archivo |
 
@@ -112,7 +112,7 @@ Nadeau y Bengio.)*
   con contexto de paciente en pAUC: +0,0181 [0,0021; 0,0341], mejor en 43
   de 50 pliegues
   (`fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.pauc`). En
-  los ejes de triaje la diferencia no se distingue de cero: ni en
+  las métricas de triaje la diferencia no se distingue de cero: ni en
   sensibilidad top-15 ni en el número de lesiones que hay que revisar por
   cada maligna detectada al 80% de sensibilidad, NNT80% SE
   (`fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.setop15` y
@@ -129,7 +129,8 @@ Nadeau y Bengio.)*
   URL, en `referencias/isic-primary-metric-pauc.py.md`).
 
 **▶ [Ver demo en vivo](https://diazesteban1001-sudo.github.io/proyecto-isic/)**
-— cada cifra muestra su archivo y campo de origen al pasar el cursor.
+— cada cifra del texto muestra su origen al pasar el cursor: el archivo y
+el campo de `outputs/`, o el archivo y la línea de la fuente.
 Sus cifras son las del conjunto de desarrollo, como las de arriba; del
 reservado solo da cómo se apartó, su tamaño y cuántas de sus imágenes
 pasaron por el extractor, sin leer etiquetas, y no se ha abierto. El
