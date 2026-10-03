@@ -94,6 +94,24 @@ modelo (`outputs/prueba-tiempo-dinov2.json`); no extrae nada.
   características, y el commit del código.
 - `outputs/extraccion-imagen.md`: resumen legible de máximo 15 líneas.
 
+## Límites conocidos (auditoría del 2026-10-02)
+
+Son límites, no defectos: ninguno produce en silencio una salida equivocada.
+Control de la auditoría: `scripts/test_extraccion.py`.
+
+- **Nada comprueba el commit de la copia local del código de DINOv2.** El
+  script importa el código de la carpeta que recibe con `--repo` y graba como
+  `repositorio_commit` el nombre de esa carpeta. La copia no es un clon de git,
+  y `referencias/dinov2-repositorio.md` registra el SHA-256 de tres archivos de
+  documentación, no del código. Solo se verifican los pesos, por hash, antes de
+  extraer.
+- **Un `isic_id` ausente detiene la extracción.** Si un `isic_id` del CSV no
+  está en `data/train-image.hdf5`, la lectura falla con `KeyError` y el script
+  se detiene: no lo cuenta entre las fallidas ni escribe el JSON de salida. Si
+  el ausente es del reservado, el archivo de desarrollo ya quedó escrito. Lo
+  comprueba el caso B de las pruebas. En los datos reales no ocurre: las
+  401.059 filas del CSV tienen su imagen.
+
 ## No interpretes aquí
 
 No interpretes los resultados aquí — eso lo hace el agente. Esta skill no dice
