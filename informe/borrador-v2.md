@@ -416,8 +416,8 @@ que no sobrevive a la validación repetida.
 ### La métrica principal no agota lo que pidió el cliente
 
 Añadir contexto de paciente (M2 − M1) no mueve la pAUC de forma
-distinguible: +0,0065, [−0,0147; 0,0276] (28 de 50; 7 de 10). Sí mueve los
-dos ejes de triaje:
+distinguible: +0,0065, [−0,0147; 0,0276] (28 de 50; 7 de 10). Sí mueve las
+dos métricas de triaje:
 <!-- F: F21 > C.pauc (media, IC, nuevo_mejor_en_folds, nuevo_mejor_en_semillas) -->
 
 - sensibilidad top-15: +0,0842, [0,021; 0,1473] (46 de 50; 10 de 10);
@@ -425,10 +425,11 @@ dos ejes de triaje:
   10 de 10).
 <!-- F: F21 > C.setop15 y C.nnt80 (media, IC, nuevo_mejor_en_folds, nuevo_mejor_en_semillas) -->
 
-Quien solo lea la pAUC concluye que el contexto de paciente no aporta; los
-ejes de triaje que el cliente declaró dicen lo contrario. Son cuatro métricas
-sobre una misma comparación, y el intervalo del NNT queda al límite del cero.
-<!-- F: CLAUDE.md, hallazgo 4 -->
+Quien solo lea la pAUC concluye que el contexto de paciente no aporta; la
+sensibilidad top-15, que el cliente premió aparte, y el NNT80% SE dicen lo
+contrario. Son cuatro métricas sobre una misma comparación, y el intervalo del
+NNT queda al límite del cero.
+<!-- F: CLAUDE.md, hallazgo 4; «Método», «Qué se mide», líneas 31–33 -->
 *Interpretación, no medición:* las variables relativas al paciente ordenan
 las lesiones dentro de cada paciente, que es lo que mide la sensibilidad
 top-15, mientras que la pAUC ordena todas las lesiones juntas.
@@ -472,7 +473,7 @@ de 10 semillas; como puntuación apilada, M4b, en 8 de 10.
 ### El modelo recomendado
 
 La parte tabular reproducida del ganador (M3 − M2) supera a M2 en la métrica
-principal: +0,0185, [0,0007; 0,0364] (45 de 50; 10 de 10). En los ejes de
+principal: +0,0185, [0,0007; 0,0364] (45 de 50; 10 de 10). En las métricas de
 triaje no se distingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726], y
 NNT80% SE −12,62, [−49,29; 24,05].
 <!-- F: F32 > C.pauc, C.setop15 y C.nnt80 -->
@@ -488,7 +489,7 @@ etiqueta del hospital entre sus variables.
 
 Sin esos dos sesgos (M3 limpio − M2), la ventaja se mantiene: +0,0181,
 [0,0021; 0,0341] (43 de 50; 10 de 10), y en AUC estándar, +0,021,
-[0,0043; 0,0376]. En los ejes de triaje sigue sin
+[0,0043; 0,0376]. En las métricas de triaje sigue sin
 distinguirse: sensibilidad top-15 +0,0227, [−0,0291; 0,0746], y NNT80% SE
 −20,06, [−49,74; 9,61].
 <!-- F: F3L > C.pauc, C.auc, C.setop15 y C.nnt80 -->
@@ -523,13 +524,14 @@ modelos con imagen no mejoraron la métrica principal de forma distinguible.
 
 <!-- F: medias de los 50 pliegues: F21 > metricas.M1 y metricas.M2 (*.media_global); F3L > metricas.M3limpio; F42 > metricas.M4; F4b > metricas.M4b. M2 es igual en los cuatro archivos (reproduccion_del_base.reproduce_fold_a_fold). Tiempos: outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones. M3 no está: no es candidato y su camino de predicción no se cronometró (PLAN.md, Fase 4, «Tiempo de inferencia») -->
 
-La tabla responde la pregunta con sus tres ejes: la métrica principal, la
-sensibilidad por paciente y el costo. Son medias y medianas; las diferencias,
-con sus intervalos, están arriba. M2 se distingue de M1 en los dos ejes de
-triaje, no en la pAUC. Frente a M2, de los otros tres solo M3 limpio se
-distingue, y solo en la pAUC y en el AUC estándar; en los ejes de triaje no se
-distingue ninguno de los tres.
-<!-- F: PLAN.md, Fase 6 («La tabla final responde la pregunta del cliente entera, con sus tres ejes»); F21, F42, F4b y F3L > C.*.IC -->
+La tabla responde la pregunta con sus tres ejes —la métrica principal, la
+sensibilidad por paciente y el costo— y añade el NNT80% SE, la segunda métrica
+de triaje. Son medias y medianas; las diferencias, con sus intervalos, están
+arriba. M2 se distingue de M1 en las dos métricas de triaje, no en la pAUC.
+Frente a M2, de los otros tres solo M3 limpio se distingue, y solo en la pAUC
+y en el AUC estándar; en las métricas de triaje no se distingue ninguno de los
+tres.
+<!-- F: PLAN.md, Fase 6 («La tabla final responde la pregunta del cliente entera, con sus tres ejes»); F21, F42, F4b y F3L > C.*.IC; «Método», «Qué se mide», líneas 55–59 (NNT80% SE); informe/anteproyecto.md, línea 495 (la top-15 y el NNT como las dos de triaje) -->
 
 ## Recomendación
 
@@ -551,7 +553,7 @@ y 14,6321 segundos por cada 1.000 lesiones, frente a 0,0435 de M3 limpio.
 <!-- F: F42 y F4b > C.*.IC; outputs/tiempo-inferencia.json > tiempos.M4, tiempos.M4b y tiempos.M3limpio (mediana_segundos_por_1000_lesiones) -->
 
 **Y se recomienda no leer solo la pAUC.** El contexto de paciente no se nota
-en ella y sí en los dos ejes de triaje: la sensibilidad top-15 y el NNT80% SE.
+en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.
 <!-- F: F21 > C.pauc.IC, C.setop15.IC y C.nnt80.IC -->
 
 ### Qué se puede afirmar
@@ -571,7 +573,7 @@ en ella y sí en los dos ejes de triaje: la sensibilidad top-15 y el NNT80% SE.
 
 ### Qué no se puede afirmar
 
-- **Que M3 limpio sea mejor en los ejes de triaje.** En la sensibilidad top-15
+- **Que M3 limpio sea mejor en las métricas de triaje.** En la sensibilidad top-15
   y en el NNT80% SE no se distingue de M2.
   <!-- F: F3L > C.setop15.IC y C.nnt80.IC -->
 - **Cuál de los dos sesgos de M3 pesaba.** M3 limpio cambia tres cosas a la vez.
