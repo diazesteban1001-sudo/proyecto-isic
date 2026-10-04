@@ -32,6 +32,16 @@ Por pliegue y en total, sobre validación (medir()):
     estrictamente mayor que la mediana de las de los positivos.
   - pauc: la pAUC sobre 80% TPR, con pauc_above_tpr() de
     train_and_evaluate.py.
+La cola baja de los positivos (añadido el 2026-10-04, sin cambiar lo de
+arriba):
+  - p20_neg y frac_pos_bajo_p20_neg: el percentil 20 de las probabilidades
+    de los negativos del pliegue (np.percentile, interpolación lineal) y la
+    fracción de positivos con probabilidad menor o igual que él.
+  - minimo_predicho, n_neg_en_el_minimo y n_pos_en_el_minimo: el valor
+    mínimo predicho en el pliegue y cuántos negativos y cuántos positivos
+    comparten ese valor.
+  - deciles_rango_pos: los deciles (10, 20, …, 90) del rango percentil de
+    los positivos, el mismo rango cuya media es rango_medio_pos.
 «En total» es lo mismo sobre las predicciones de validación de los cinco
 pliegues juntas: cada lesión de desarrollo aparece una vez, con la
 probabilidad del modelo del pliegue en que fue validación. La pAUC total se
@@ -103,11 +113,28 @@ def medir(y, p):
         "rango_medio_pos": float(np.mean(rango_pos)),
         "frac_neg_sobre_mediana_pos": float(np.mean(neg > np.median(pos))),
         "pauc": float(pauc_above_tpr(y, p)),
+        "p20_neg": float(np.percentile(neg, 20)),
+        "frac_pos_bajo_p20_neg": float(np.mean(pos <= np.percentile(neg, 20))),
+        "minimo_predicho": float(p.min()),
+        "n_neg_en_el_minimo": int(np.sum(neg == p.min())),
+        "n_pos_en_el_minimo": int(np.sum(pos == p.min())),
+        "deciles_rango_pos": [float(v) for v in np.percentile(rango_pos, list(range(10, 100, 10)))],
     }
 
 
+# Valores que pueden ser muy pequeños: con seis decimales, el mínimo del 2a
+# saldría 0,0 sin serlo. Se guardan con seis cifras significativas.
+SIGNIFICATIVAS = {"p20_neg", "minimo_predicho"}
+
+
 def redondear(d):
-    return {k: (round(v, 6) if isinstance(v, float) else v) for k, v in d.items()}
+    def r(v):
+        if isinstance(v, float):
+            return round(v, 6)
+        if isinstance(v, list):
+            return [r(x) for x in v]
+        return v
+    return {k: (float(f"{v:.6g}") if k in SIGNIFICATIVAS else r(v)) for k, v in d.items()}
 
 
 def main():
@@ -198,6 +225,9 @@ def main():
             "frac_neg_sobre_mediana_pos": "fracción de negativos con probabilidad estrictamente mayor que la mediana de las de los positivos",
             "pauc": "pAUC sobre 80% TPR, pauc_above_tpr() de train_and_evaluate.py",
             "total": "las mismas medidas sobre las predicciones de validación de todos los pliegues juntas; pauc_media_de_pliegues es la media de las pAUC por pliegue",
+            "p20_neg / frac_pos_bajo_p20_neg": "percentil 20 de las probabilidades de los negativos del conjunto (np.percentile, interpolación lineal) y fracción de positivos con probabilidad menor o igual que él",
+            "minimo_predicho / n_neg_en_el_minimo / n_pos_en_el_minimo": "valor mínimo predicho en el conjunto y cuántos negativos y positivos lo comparten",
+            "deciles_rango_pos": "deciles 10 a 90 del rango percentil de los positivos (el de rango_medio_pos), en escala 0–1",
         },
         "niveles": resultado_niveles,
     }
@@ -212,6 +242,14 @@ def main():
             f"en el máx: neg {t['frac_neg_en_max']:.4f}, pos {t['frac_pos_en_max']:.4f} · "
             f"rango percentil medio pos {t['rango_medio_pos']:.4f} · "
             f"neg sobre la mediana pos {t['frac_neg_sobre_mediana_pos']:.4f}"
+        )
+
+    def cola(etiqueta, t):
+        deciles = ", ".join(f"{x:.3f}" for x in t["deciles_rango_pos"])
+        return (
+            f"{etiqueta}, total: pos ≤ p20 de neg {t['frac_pos_bajo_p20_neg']:.4f} · en el mínimo "
+            f"({t['minimo_predicho']:.3g}): neg {t['n_neg_en_el_minimo']}, pos {t['n_pos_en_el_minimo']} · "
+            f"deciles del rango pos {deciles}"
         )
 
     n2a = resultado_niveles["nivel_2a_gradient_boosting_sin_balancear"]
@@ -229,6 +267,8 @@ def main():
         "2a por pliegue, neg ≥0.999: " + ", ".join(f"{f['frac_neg_ge_0999']:.4f}" for f in n2a["por_pliegue"]),
         "2a por pliegue, rango percentil medio pos: " + ", ".join(f"{f['rango_medio_pos']:.4f}" for f in n2a["por_pliegue"]),
         "2b por pliegue, rango percentil medio pos: " + ", ".join(f"{f['rango_medio_pos']:.4f}" for f in n2b["por_pliegue"]),
+        cola("2a", n2a["total"]),
+        cola("2b", n2b["total"]),
         f"Definiciones y detalle por pliegue: {args.out}.json",
     ]
     with open(f"{args.out}.md", "w", encoding="utf-8") as f:

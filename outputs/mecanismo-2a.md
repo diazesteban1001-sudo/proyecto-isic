@@ -9,4 +9,6 @@ pAUC media de pliegues: 2a 0.0005 · 2b 0.1398
 2a por pliegue, neg ≥0.999: 0.0007, 0.0010, 0.0010, 0.0009, 0.0012
 2a por pliegue, rango percentil medio pos: 0.6038, 0.6668, 0.5595, 0.6013, 0.4782
 2b por pliegue, rango percentil medio pos: 0.9006, 0.9070, 0.9601, 0.9333, 0.9204
+2a, total: pos ≤ p20 de neg 0.3628 · en el mínimo (0): neg 191, pos 18 · deciles del rango pos 0.002, 0.007, 0.048, 0.493, 0.775, 0.927, 0.978, 0.990, 0.997
+2b, total: pos ≤ p20 de neg 0.0158 · en el mínimo (0.00692): neg 9, pos 0 · deciles del rango pos 0.786, 0.913, 0.951, 0.971, 0.984, 0.989, 0.995, 0.998, 0.999
 Definiciones y detalle por pliegue: outputs/mecanismo-2a.json

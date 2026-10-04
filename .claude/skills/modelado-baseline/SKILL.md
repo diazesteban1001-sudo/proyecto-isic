@@ -311,7 +311,12 @@ reporta:
 - el rango percentil medio de los positivos (`rango_medio_pos`, en escala
   0–1);
 - la fracción de negativos por encima de la mediana de los positivos;
-- la pAUC.
+- la pAUC;
+- desde el 2026-10-04, la cola baja de los positivos: la fracción de
+  positivos en o bajo el percentil 20 de los negativos, cuántos negativos y
+  positivos comparten el valor mínimo predicho, y los deciles del rango
+  percentil de los positivos (`deciles_rango_pos`). Se añadieron sin cambiar
+  lo que ya medía.
 
 **Control:** la pAUC de cada pliegue, del 2a y del 2b, tiene que coincidir
 con `outputs/modelado-baseline.json`; si no, se detiene sin escribir.

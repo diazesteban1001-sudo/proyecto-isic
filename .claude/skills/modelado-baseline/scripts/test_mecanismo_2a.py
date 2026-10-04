@@ -15,6 +15,14 @@ Parte 1, medir() sobre puntuaciones construidas:
      rango percentil, la mediana de los positivos y el número de valores
      distintos.
   La pAUC de medir() es la de pauc_above_tpr() en A y B.
+  La cola baja de los positivos (2026-10-04):
+  F. Un caso de ocho lesiones calculado a mano, con un empate de dos
+     negativos y un positivo en el mínimo: el percentil 20 de los negativos
+     es 0, un positivo de tres queda en o bajo él, y la mediana del rango
+     percentil de los positivos es 0,6875.
+  G. La medida discrimina: en A, donde los positivos quedan abajo, la
+     fracción de positivos bajo el percentil 20 de los negativos es mayor
+     que en B, donde quedan arriba, y en B es cero.
 
 Parte 2, de extremo a extremo sobre un CSV sintético:
   D. Con la referencia que escribe train_and_evaluate.py sobre los mismos
@@ -110,6 +118,17 @@ def main():
                   abs(mc["rango_medio_pos"] - 0.6875) < 1e-12 and mc["n_valores_distintos"] == 3
                   and mc["frac_neg_sobre_mediana_pos"] == 0.0 and mc["frac_pos_en_max"] == 0.5,
                   mc))
+    mf = medir([0, 0, 0, 0, 0, 1, 1, 1], [0.0, 0.0, 0.2, 0.5, 0.9, 0.0, 0.6, 0.95])
+    casos.append(("F. caso a mano: p20 de neg 0, un positivo de tres en o bajo él, 2 neg y 1 pos en el mínimo, "
+                  "mediana del rango pos 0,6875",
+                  mf["p20_neg"] == 0.0 and abs(mf["frac_pos_bajo_p20_neg"] - 1 / 3) < 1e-12
+                  and mf["minimo_predicho"] == 0.0 and mf["n_neg_en_el_minimo"] == 2 and mf["n_pos_en_el_minimo"] == 1
+                  and len(mf["deciles_rango_pos"]) == 9 and abs(mf["deciles_rango_pos"][4] - 0.6875) < 1e-12,
+                  {k: mf[k] for k in ("p20_neg", "frac_pos_bajo_p20_neg", "minimo_predicho", "n_neg_en_el_minimo",
+                                      "n_pos_en_el_minimo", "deciles_rango_pos")}))
+    casos.append(("G. la cola baja discrimina: en A más positivos bajo el p20 de los negativos que en B, y en B ninguno",
+                  ma["frac_pos_bajo_p20_neg"] > mb["frac_pos_bajo_p20_neg"] and mb["frac_pos_bajo_p20_neg"] == 0.0,
+                  (ma["frac_pos_bajo_p20_neg"], mb["frac_pos_bajo_p20_neg"])))
     casos.append(("la pAUC de medir() es la de pauc_above_tpr()",
                   ma["pauc"] == pauc_above_tpr(ya, pa) and mb["pauc"] == pauc_above_tpr(yb, pb),
                   (ma["pauc"], mb["pauc"])))

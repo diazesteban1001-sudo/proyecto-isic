@@ -54,7 +54,10 @@
     "rango_medio_pos": "rango percentil medio de los positivos, en escala 0–1: media sobre los positivos de (n menores + 0,5 · n iguales) / n, entre todas las lesiones del conjunto; 0 la más baja, 1 la más alta",
     "frac_neg_sobre_mediana_pos": "fracción de negativos con probabilidad estrictamente mayor que la mediana de las de los positivos",
     "pauc": "pAUC sobre 80% TPR, pauc_above_tpr() de train_and_evaluate.py",
-    "total": "las mismas medidas sobre las predicciones de validación de todos los pliegues juntas; pauc_media_de_pliegues es la media de las pAUC por pliegue"
+    "total": "las mismas medidas sobre las predicciones de validación de todos los pliegues juntas; pauc_media_de_pliegues es la media de las pAUC por pliegue",
+    "p20_neg / frac_pos_bajo_p20_neg": "percentil 20 de las probabilidades de los negativos del conjunto (np.percentile, interpolación lineal) y fracción de positivos con probabilidad menor o igual que él",
+    "minimo_predicho / n_neg_en_el_minimo / n_pos_en_el_minimo": "valor mínimo predicho en el conjunto y cuántos negativos y positivos lo comparten",
+    "deciles_rango_pos": "deciles 10 a 90 del rango percentil de los positivos (el de rango_medio_pos), en escala 0–1"
   },
   "niveles": {
     "nivel_2a_gradient_boosting_sin_balancear": {
@@ -72,7 +75,23 @@
           "frac_pos_en_max": 0.0,
           "rango_medio_pos": 0.603768,
           "frac_neg_sobre_mediana_pos": 0.128165,
-          "pauc": 0.000943
+          "pauc": 0.000943,
+          "p20_neg": 0.000442868,
+          "frac_pos_bajo_p20_neg": 0.390625,
+          "minimo_predicho": 0.0,
+          "n_neg_en_el_minimo": 34,
+          "n_pos_en_el_minimo": 4,
+          "deciles_rango_pos": [
+            0.004352,
+            0.018446,
+            0.122543,
+            0.705292,
+            0.836353,
+            0.924402,
+            0.979034,
+            0.991299,
+            0.997249
+          ]
         },
         {
           "n_lesiones": 63646,
@@ -86,7 +105,23 @@
           "frac_pos_en_max": 0.015873,
           "rango_medio_pos": 0.66682,
           "frac_neg_sobre_mediana_pos": 0.077206,
-          "pauc": 0.000525
+          "pauc": 0.000525,
+          "p20_neg": 0.000462964,
+          "frac_pos_bajo_p20_neg": 0.269841,
+          "minimo_predicho": 0.0,
+          "n_neg_en_el_minimo": 26,
+          "n_pos_en_el_minimo": 2,
+          "deciles_rango_pos": [
+            0.00134,
+            0.016062,
+            0.623258,
+            0.821631,
+            0.91756,
+            0.945923,
+            0.977909,
+            0.98787,
+            0.994883
+          ]
         },
         {
           "n_lesiones": 63646,
@@ -100,7 +135,23 @@
           "frac_pos_en_max": 0.015625,
           "rango_medio_pos": 0.559513,
           "frac_neg_sobre_mediana_pos": 0.16912,
-          "pauc": 0.000166
+          "pauc": 0.000166,
+          "p20_neg": 0.000489579,
+          "frac_pos_bajo_p20_neg": 0.375,
+          "minimo_predicho": 0.0,
+          "n_neg_en_el_minimo": 91,
+          "n_pos_en_el_minimo": 11,
+          "deciles_rango_pos": [
+            0.000801,
+            0.002553,
+            0.009996,
+            0.509446,
+            0.801072,
+            0.941586,
+            0.979098,
+            0.982652,
+            0.996778
+          ]
         },
         {
           "n_lesiones": 63646,
@@ -114,7 +165,23 @@
           "frac_pos_en_max": 0.063492,
           "rango_medio_pos": 0.601272,
           "frac_neg_sobre_mediana_pos": 0.092808,
-          "pauc": 0.00084
+          "pauc": 0.00084,
+          "p20_neg": 0.000439141,
+          "frac_pos_bajo_p20_neg": 0.460317,
+          "minimo_predicho": 0.0,
+          "n_neg_en_el_minimo": 22,
+          "n_pos_en_el_minimo": 0,
+          "deciles_rango_pos": [
+            0.00327,
+            0.017418,
+            0.098828,
+            0.491665,
+            0.900418,
+            0.958788,
+            0.978957,
+            0.98798,
+            0.996993
+          ]
         },
         {
           "n_lesiones": 63645,
@@ -128,7 +195,23 @@
           "frac_pos_en_max": 0.015873,
           "rango_medio_pos": 0.478249,
           "frac_neg_sobre_mediana_pos": 0.083467,
-          "pauc": 0.000249
+          "pauc": 0.000249,
+          "p20_neg": 0.000473474,
+          "frac_pos_bajo_p20_neg": 0.634921,
+          "minimo_predicho": 0.0,
+          "n_neg_en_el_minimo": 18,
+          "n_pos_en_el_minimo": 1,
+          "deciles_rango_pos": [
+            0.000624,
+            0.006651,
+            0.030207,
+            0.081881,
+            0.504219,
+            0.504219,
+            0.960273,
+            0.987705,
+            0.996936
+          ]
         }
       ],
       "total": {
@@ -144,6 +227,22 @@
         "rango_medio_pos": 0.564563,
         "frac_neg_sobre_mediana_pos": 0.217617,
         "pauc": 0.000431,
+        "p20_neg": 0.000439141,
+        "frac_pos_bajo_p20_neg": 0.362776,
+        "minimo_predicho": 0.0,
+        "n_neg_en_el_minimo": 191,
+        "n_pos_en_el_minimo": 18,
+        "deciles_rango_pos": [
+          0.001611,
+          0.007479,
+          0.04776,
+          0.492626,
+          0.774772,
+          0.92714,
+          0.977781,
+          0.989525,
+          0.99661
+        ],
         "pauc_media_de_pliegues": 0.000545
       }
     },
@@ -162,7 +261,23 @@
           "frac_pos_en_max": 0.046875,
           "rango_medio_pos": 0.900573,
           "frac_neg_sobre_mediana_pos": 0.01469,
-          "pauc": 0.116322
+          "pauc": 0.116322,
+          "p20_neg": 0.0241547,
+          "frac_pos_bajo_p20_neg": 0.03125,
+          "minimo_predicho": 0.00752703,
+          "n_neg_en_el_minimo": 1,
+          "n_pos_en_el_minimo": 0,
+          "deciles_rango_pos": [
+            0.6272,
+            0.916128,
+            0.943047,
+            0.971368,
+            0.985034,
+            0.991844,
+            0.995202,
+            0.998476,
+            0.999048
+          ]
         },
         {
           "n_lesiones": 63646,
@@ -176,7 +291,23 @@
           "frac_pos_en_max": 0.0,
           "rango_medio_pos": 0.907041,
           "frac_neg_sobre_mediana_pos": 0.018464,
-          "pauc": 0.129686
+          "pauc": 0.129686,
+          "p20_neg": 0.0596366,
+          "frac_pos_bajo_p20_neg": 0.031746,
+          "minimo_predicho": 0.0184368,
+          "n_neg_en_el_minimo": 1,
+          "n_pos_en_el_minimo": 0,
+          "deciles_rango_pos": [
+            0.783859,
+            0.87546,
+            0.932302,
+            0.957523,
+            0.981044,
+            0.985168,
+            0.991885,
+            0.997279,
+            0.999232
+          ]
         },
         {
           "n_lesiones": 63646,
@@ -190,7 +321,23 @@
           "frac_pos_en_max": 0.0,
           "rango_medio_pos": 0.96012,
           "frac_neg_sobre_mediana_pos": 0.011953,
-          "pauc": 0.169325
+          "pauc": 0.169325,
+          "p20_neg": 0.0369739,
+          "frac_pos_bajo_p20_neg": 0.0,
+          "minimo_predicho": 0.017183,
+          "n_neg_en_el_minimo": 1,
+          "n_pos_en_el_minimo": 0,
+          "deciles_rango_pos": [
+            0.910701,
+            0.95806,
+            0.972748,
+            0.98066,
+            0.987635,
+            0.993337,
+            0.998146,
+            0.999029,
+            0.999678
+          ]
         },
         {
           "n_lesiones": 63646,
@@ -204,7 +351,23 @@
           "frac_pos_en_max": 0.0,
           "rango_medio_pos": 0.933268,
           "frac_neg_sobre_mediana_pos": 0.015916,
-          "pauc": 0.148528
+          "pauc": 0.148528,
+          "p20_neg": 0.026467,
+          "frac_pos_bajo_p20_neg": 0.015873,
+          "minimo_predicho": 0.0127832,
+          "n_neg_en_el_minimo": 1,
+          "n_pos_en_el_minimo": 0,
+          "deciles_rango_pos": [
+            0.82147,
+            0.925266,
+            0.954509,
+            0.969143,
+            0.983605,
+            0.98922,
+            0.991369,
+            0.993952,
+            0.998424
+          ]
         },
         {
           "n_lesiones": 63645,
@@ -218,7 +381,23 @@
           "frac_pos_en_max": 0.015873,
           "rango_medio_pos": 0.920358,
           "frac_neg_sobre_mediana_pos": 0.015193,
-          "pauc": 0.134926
+          "pauc": 0.134926,
+          "p20_neg": 0.0314005,
+          "frac_pos_bajo_p20_neg": 0.031746,
+          "minimo_predicho": 0.00691979,
+          "n_neg_en_el_minimo": 9,
+          "n_pos_en_el_minimo": 0,
+          "deciles_rango_pos": [
+            0.833714,
+            0.91876,
+            0.950181,
+            0.973018,
+            0.984327,
+            0.988283,
+            0.997299,
+            0.999087,
+            0.999544
+          ]
         }
       ],
       "total": {
@@ -234,6 +413,22 @@
         "rango_medio_pos": 0.919941,
         "frac_neg_sobre_mediana_pos": 0.015558,
         "pauc": 0.134797,
+        "p20_neg": 0.02937,
+        "frac_pos_bajo_p20_neg": 0.015773,
+        "minimo_predicho": 0.00691979,
+        "n_neg_en_el_minimo": 9,
+        "n_pos_en_el_minimo": 0,
+        "deciles_rango_pos": [
+          0.785952,
+          0.912769,
+          0.951227,
+          0.971396,
+          0.98396,
+          0.98922,
+          0.994981,
+          0.998315,
+          0.999301
+        ],
         "pauc_media_de_pliegues": 0.139758
       }
     }
