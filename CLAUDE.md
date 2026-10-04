@@ -987,6 +987,11 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
     recortes de SLICE-3D, no sobre fotos de teléfono (Pendientes). No se midió
     tiempo: el costo de la imagen es el de M4 (hallazgo 9). M1 reproduce
     `outputs/fase4-m2-vs-m1.json` pliegue a pliegue en las cuatro métricas.
+    *Las fuentes no coinciden sobre la zona del cuerpo* que usa «Imagen +
+    básicos»: el descriptor de SLICE-3D la marca como métrica del Lesion
+    Visualizer (`referencias/kurtansky-2024-slice3d-descriptor.md`, líneas 194
+    y 226) y Kurtansky 2025 la cuenta entre los datos básicos, que *"are not
+    directly attained from images"* (línea 299).
     *Salvedad de la salida:* su campo `comando` registra `python` y no el
     intérprete con que se corrió; el script ya está corregido y la salida no se
     rehízo (`PLAN.md`, Fase 6).
