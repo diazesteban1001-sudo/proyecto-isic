@@ -444,7 +444,7 @@ Los datos son la metadata del reto: una fila por lesión y 55 columnas, con
 las mediciones que el software de la fotografía corporal total calcula sobre
 cada lesión, datos del paciente y, solo en el conjunto de entrenamiento, el
 diagnóstico.
-<!-- F: outputs/eda-diagnostico.json > fuente.n_columnas y columnas_solo_en_train; referencias/slice3d-metadata-tbp-lv.md (las tbp_lv_* las computa el software sobre la captura) -->
+<!-- F: outputs/eda-diagnostico.json > fuente.n_columnas y columnas_solo_en_train; referencias/kurtansky-2024-slice3d-descriptor.md, Tabla 1 (las tbp_lv_*, el diámetro mayor y la zona del cuerpo llevan el asterisco de la línea 226, «Canfield Scientific, Inc. Lesion Visualizer metric»; la edad y el sexo, no) y línea 199 (el tipo de captura, la luz de la foto 3D); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 («estimated solely from 3D TBP images by proprietary Vectra WB360 tooling») -->
 El archivo de prueba que publica el reto es un marcador de posición, sin
 casos reales, así que no hay contra qué medir un resultado final
 independiente fuera de lo que este proyecto aparte.
@@ -893,10 +893,11 @@ de datos pone como objetivo: algoritmos que decidan a partir de *"clinical
 photos resembling the resolution of smartphone images"*.
 <!-- F: «Resultados», «La imagen sola, sin el sistema de fotografía corporal total»; referencias/kurtansky-2024-slice3d-descriptor.md, línea 109, cita literal -->
 Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que
-mejora el AUC de la imagen sola; antes de usarla habría que medirla con fotos
-de teléfono. Cómo mejorarla, por ejemplo ajustando redes propias, no se ha
-medido.
-<!-- F: IS > C.imagen_basicos_menos_imagen.auc.IC; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera) -->
+mejora el AUC de la imagen sola. Esa mejora se midió con una zona del cuerpo
+que pudo venir del software del sistema, así que antes de usarla habría que
+medirla con fotos de teléfono y con la zona que informe la persona. Cómo
+mejorarla, por ejemplo ajustando redes propias, no se ha medido.
+<!-- F: IS > C.imagen_basicos_menos_imagen.auc.IC; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera); «Resultados», «La imagen sola, sin el sistema de fotografía corporal total» (las fuentes sobre la zona del cuerpo) -->
 
 **Y se recomienda no leer solo la pAUC.** El contexto de paciente no se nota
 en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.
