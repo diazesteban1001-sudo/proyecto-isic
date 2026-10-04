@@ -762,6 +762,10 @@ establecidas:
 Para capturar el 80% de las malignas, la imagen sola marca 426,14 lesiones por
 cada una, frente a 116,16 de M1.
 <!-- F: IS > metricas.Imagen.nnt80.media_global y metricas.M1.nnt80.media_global; «Método», «Qué se mide» (la definición del NNT80% SE) -->
+Esa distancia no mide solo lo que aportan las mediciones del sistema: M1
+también usa la edad y el sexo, y la imagen con los datos básicos no se comparó
+con M1.
+<!-- F: outputs/modelado-baseline.json > features_usadas (age_approx y sex); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 (la edad y el sexo, entre los datos básicos); PLAN.md, Fase 6, especificación de la imagen sola (las dos comparaciones fijadas) -->
 El tiempo de inferencia de la imagen sola no se midió.
 <!-- F: IS (sin tiempos); outputs/tiempo-inferencia.json > tiempos (M1, M2, M3 limpio, M4 y M4b) -->
 
@@ -777,15 +781,22 @@ las otras tres métricas la mejora no se da por establecida:
   10 de 10).
 <!-- F: IS > C.imagen_basicos_menos_imagen.auc, .pauc, .setop15 y .nnt80 (media, IC, nuevo_mejor_en_folds, nuevo_mejor_en_semillas); PLAN.md, Fase 6, «La imagen sola: dos decisiones sobre el resultado», 1 -->
 
+Sobre la zona del cuerpo, las fuentes no coinciden. La tabla de variables del
+artículo del conjunto de datos la marca como una métrica del software del
+sistema; el artículo de los organizadores la cuenta entre los datos básicos,
+que *"are not directly attained from images"*.
+<!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, líneas 194 y 226 (el asterisco: «Canfield Scientific, Inc. Lesion Visualizer metric»); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299, cita literal -->
+
 *Interpretación, no medición:* sin el sistema de fotografía corporal total, la
 imagen sí sirve para ordenar lesiones por sospecha, aunque con este extractor
 congelado queda lejos de M1. Edad, sexo y zona del
-cuerpo son datos que cualquiera puede dar sin aparatos. El ganador ajustó sus
+cuerpo son datos que una persona puede informar sin aparatos, aunque en estos
+datos la zona del cuerpo pudo venir del software del sistema. El ganador ajustó sus
 propias redes de imagen, y su variante con solo los recortes llega a un AUC de
 0,922, pero en otros datos y con otra evaluación, así que las cifras no se
 comparan. Y todo esto se midió sobre los recortes del sistema de fotografía
 corporal total, no sobre fotos de teléfono.
-<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 216) y línea 272; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Estado del arte» («el ganador ajustó sus propias redes»); IS > datos -->
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 216) y línea 272; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Estado del arte» («el ganador ajustó sus propias redes»); IS > datos; referencias/kurtansky-2024-slice3d-descriptor.md, líneas 194 y 226; referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 -->
 
 ### El modelo recomendado
 
