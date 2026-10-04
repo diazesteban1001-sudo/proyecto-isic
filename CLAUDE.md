@@ -1296,23 +1296,26 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
-verificación de trazabilidad con la imagen sola», del 2026-10-04, sobre
-`informe/borrador-v2.md`): **600 números, 273 con respaldo, 43 señalados**,
+verificación de trazabilidad con la zona del cuerpo», del 2026-10-04, sobre
+`informe/borrador-v2.md`): **648 números, 311 con respaldo, 45 señalados**,
 para revisar uno por uno en el anexo. *La subsección de la imagen sola trae
-nueve negativos de `outputs/imagen-sola.json` que el verificador lee sin signo
-(defecto (b) del registro de incidentes, duodécima fila): tres quedan
-señalados (−0,0579, −0,2364 y −0,323) y seis pasan solo porque su valor sin
-signo aparece en otro archivo. Y el 0,922, que sale de Kurtansky 2025 y no de
+negativos de `outputs/imagen-sola.json` que el verificador lee sin signo
+(defecto (b) del registro de incidentes, duodécima fila): cinco quedan
+señalados (−0,0579, −0,2364, −0,323, −35,57 y −86,90) y siete pasan solo
+porque su valor sin signo aparece en otro archivo. Y el 0,922, que sale de Kurtansky 2025 y no de
 `outputs/`, pasa por coincidencia con AUC de `outputs/efecto-particion.json`.* *El «11» de «La
 auditoría de columnas», las columnas que solo trae el entrenamiento, pasó de
 señalado a respaldado por coincidencia: lo respalda un recuento de
 `outputs/mecanismo-2a.json`, no la lista de `auditoria-de-fugas.json`.* De los
 demás, 7 son porcentajes del método, excluidos por lista declarada; 9 caen en
 contextos que el verificador omite (años y etiquetas de nivel), listados en
-`numeros_en_contextos_omitidos`; y 268 están dentro de comentarios HTML,
+`numeros_en_contextos_omitidos`; y 276 están dentro de comentarios HTML,
 listados en `numeros_en_comentarios`. Los cinco grupos suman el total, y el
-verificador se detiene si no. *La corrida anterior, del mismo día y sobre el
-borrador sin la imagen sola, daba 553 números: 252, 39, 6, 9 y 247.* *Hasta el 2026-10-04 los números de los
+verificador se detiene si no. *Las corridas anteriores, del mismo día: sobre
+el borrador sin la imagen sola, 553 números (252, 39, 6, 9 y 247); con la
+imagen sola, 600 (273, 43, 7, 9 y 268), y con sus ajustes, 640 (311, 45, 7, 9
+y 268). Esta frase se quedó en la de 600 durante la corrida de 640: no se
+actualizó al regenerarla.* *Hasta el 2026-10-04 los números de los
 comentarios se buscaban como los demás: la corrida anterior, del 2026-10-03,
 daba 290 con respaldo, 31 señalados y 77 omitidos.* *Hasta el 2026-10-02 esta frase citaba la
 corrida sobre `informe/borrador.md`, del 2026-09-21: 344 números, 298 con
