@@ -30,6 +30,10 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      solo cuenta como no exploratorio si lo declara. Sale con el aviso.
   J. holdout-pacientes.json sin fecha_sellado: lo mismo con el registro del
      sellado, del que la página lee la semilla y la fracción.
+  K. Los cinco grupos de la verificación no suman el total: se quita un
+     número de numeros_en_comentarios en sintesis-verificacion.json. La ficha
+     de síntesis los enumera como si cubrieran todo, así que no se escribe, y
+     el motivo tiene que ser la suma, no la correspondencia con el borrador.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -128,6 +132,9 @@ def main():
     def sin_sellado(o):
         o.pop("fecha_sellado", None)
 
+    def grupos_que_no_suman(o):
+        o["numeros_en_comentarios"].pop()
+
     corridas = {
         "A": generar("A"),
         "B": generar("B", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", intervalo_que_cruza)),
@@ -138,6 +145,7 @@ def main():
         "H": generar("H", lambda d: verificar(d, "informe/borrador-v2.md", "--tolerancia", "0.01")),
         "I": generar("I", lambda d: cambiar(d, "extraccion-imagen", sin_reparto)),
         "J": generar("J", lambda d: cambiar(d, "holdout-pacientes", sin_sellado)),
+        "K": generar("K", lambda d: cambiar(d, "sintesis-verificacion", grupos_que_no_suman)),
     }
     f_ok, f_detalle = caso_f()
 
@@ -160,6 +168,8 @@ def main():
         ("H. verificación con --tolerancia 0.01: no escribe", *negada("H")),
         ("I. extraccion-imagen.json sin datos.reparto: escribe con aviso", *escrita("I", True)),
         ("J. holdout-pacientes.json sin fecha_sellado: escribe con aviso", *escrita("J", True)),
+        ("K. los cinco grupos de la verificación no suman el total: no escribe, por la suma",
+         not corridas["K"][0] and "suman" in corridas["K"][2], f"escrita: {corridas['K'][0]}; {corridas['K'][2]}"),
     ]
     fallos = 0
     for titulo, ok, detalle in casos:

@@ -174,6 +174,27 @@ def afirmar(condicion, frase):
         raise SystemExit(f"La frase «{frase}» ya no es cierta con outputs/. No se escribe la página.")
 
 
+# Los grupos en que la verificación reparte los números del borrador, además
+# de numeros_con_respaldo_en_outputs, que es un recuento y no una lista.
+GRUPOS_VERIFICACION = ("numeros_sin_respaldo", "porcentajes_de_metodo_excluidos",
+                       "numeros_en_contextos_omitidos", "numeros_en_comentarios")
+
+
+def comprobar_suma_verificacion(verificacion):
+    """La ficha de síntesis reparte el total de números en cinco grupos. Si no
+    suman el total, la frase que los enumera sería falsa: no se escribe la
+    página. Control positivo: test_generar_demo.py, caso K."""
+    try:
+        grupos = verificacion["numeros_con_respaldo_en_outputs"] + sum(
+            len(verificacion[g]) for g in GRUPOS_VERIFICACION)
+    except KeyError as e:
+        raise SystemExit(f"sintesis-verificacion.json no trae el grupo {e}. No se escribe la página.")
+    if grupos != verificacion["numeros_en_borrador"]:
+        raise SystemExit(
+            f"Los cinco grupos de la verificación suman {grupos} y el borrador tiene "
+            f"{verificacion['numeros_en_borrador']} números. No se escribe la página.")
+
+
 def contiene_cero(ic):
     return ic[0] <= 0 <= ic[1]
 
@@ -199,6 +220,12 @@ def construir_datos(outputs_dir, leidos):
     extraccion = cargar("extraccion-imagen")
     sellado = cargar("holdout-pacientes")
     verificacion = cargar("sintesis-verificacion")
+    comprobar_suma_verificacion(verificacion)
+    # Parte B, B8: el ejemplo tiene que seguir existiendo entre los señalados.
+    afirmar(any(re.fullmatch(r"(19|20)\d\d", s["valor"].rstrip(".,"))
+                and f"({s['valor'].rstrip('.,')})" in s["contexto"]
+                for s in verificacion["numeros_sin_respaldo"]),
+            "un número señalado puede ser legítimo, como el año de una fuente")
     fase4 = {archivo: cargar(archivo) for _, archivo in COMPARACIONES}
 
     escala = modelado["escala_de_referencia_pauc"]
@@ -402,6 +429,7 @@ def construir_datos(outputs_dir, leidos):
             "sin": len(verificacion["numeros_sin_respaldo"]),
             "metodo": len(verificacion["porcentajes_de_metodo_excluidos"]),
             "omitidos": len(verificacion["numeros_en_contextos_omitidos"]),
+            "comentarios": len(verificacion["numeros_en_comentarios"]),
         },
     }
 
@@ -796,9 +824,11 @@ const HALLAZGOS = {
     `El mismo gradient boosting da resultados opuestos según una sola opción. Sin balancear, su pAUC media es ${mediaN("Nivel 2a")}, ` +
     `por debajo del piso aleatorio de ${azar} en los ${cifra(VR.n_folds_2a, fVR("nivel_2a_gradient_boosting_sin_balancear.pauc_por_semilla_y_fold (todos)"))} pliegues. ` +
     `Con <code>class_weight="balanced"</code>, y nada más distinto, llega a ${mediaN("Nivel 2b")}.`]),
-  // Parte B, B8.
+  // Parte B, B8, con el texto de la persona del 2026-10-04.
   "sintesis-consultoria": () => P([
     `El verificador encontró ${cifra(mil(V.total), fVer("numeros_en_borrador"))} números en el informe. ` +
+    `${cifra(mil(V.comentarios), fVer("numeros_en_comentarios"))} están en los comentarios que dan la fuente de cada frase, ` +
+    `y no se les busca respaldo; ` +
     `${cifra(V.omitidos, fVer("numeros_en_contextos_omitidos"))} se omiten por una lista declarada de contextos; ` +
     `${cifra(V.metodo, fVer("porcentajes_de_metodo_excluidos"))} son parámetros del método; ` +
     `${cifra(mil(V.con), fVer("numeros_con_respaldo_en_outputs"))} tienen respaldo en outputs/, y ` +

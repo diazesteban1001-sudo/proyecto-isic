@@ -299,14 +299,16 @@ Reglas, idénticas a las del informe escrito:
   afirman algo que depende de `outputs/` —que un intervalo contiene el cero,
   que un orden se invierte— pasan por `afirmar()`, y si una deja de ser
   cierta, el script no escribe la página.
-- **Dos controles más que impiden escribirla** (2026-10-02; control
-  positivo: `scripts/test_generar_demo.py`):
+- **Tres controles más que impiden escribirla** (2026-10-02 y 2026-10-04;
+  control positivo: `scripts/test_generar_demo.py`):
   - la regla de recomendación de `PLAN.md`, Fase 4, aplicada sobre
     `outputs/fase4-m3limpio-vs-m2.json`, tiene que dar el modelo de la
     constante `RECOMENDADO`;
   - `outputs/sintesis-verificacion.json` y su `.md` tienen que coincidir
     con recalcular la verificación sobre `informe/borrador-v2.md` con el
-    verificador actual.
+    verificador actual;
+  - los cinco grupos de la verificación tienen que sumar el total, porque la
+    ficha de síntesis los enumera como si lo cubrieran (caso K).
 - **Mismo alcance de interpretación.** La demo puede ordenar, resaltar
   y comparar lo medido; no puede afirmar nada que el informe no
   sostenga. Donde muestre una lectura y no una medición —el porqué de
