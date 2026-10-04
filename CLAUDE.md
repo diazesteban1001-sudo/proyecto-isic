@@ -670,9 +670,12 @@ este proyecto manda Kaggle — es la evaluación que estamos replicando.
       CC-BY (https://challenge.isic-archive.com/data/2024/)
 
 **Nota metodológica clave:** la agrupación por paciente hace que
-`auditoria-de-fugas` tenga algo real que encontrar. Si se parten los datos al
-azar, lesiones del mismo paciente caen en entrenamiento y validación, y la
-métrica sale inflada. Error clásico, verificable, y material de primera para el
+`auditoria-de-fugas` tenga algo real que encontrar. *La inflación no la
+sostiene la medición* (Pendientes, «El efecto de la partición sobre el
+resultado de un modelo no está medido», cerrada el 2026-10-04;
+`outputs/efecto-particion.json`): si se parten los datos al azar, lesiones del
+mismo paciente caen en entrenamiento y validación, y la métrica sale inflada.
+Error clásico, verificable, y material de primera para el
 informe. Con 401.059 lesiones sobre 1.042 pacientes —≈385 lesiones por paciente
 en promedio— la fuga por partición aleatoria no es un riesgo teórico: es la
 partición por defecto.
@@ -1073,6 +1076,10 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         saturación sobre los negativos tal como estaba escrita. Falta describir
         la cola baja de los positivos. Su lectura queda pendiente con la
         persona.
+      - **La cola baja, medida el 2026-10-04** (`outputs/mecanismo-2a.json`,
+        campos `frac_pos_bajo_p20_neg`, `n_neg_en_el_minimo`,
+        `n_pos_en_el_minimo` y `deciles_rango_pos`, añadidos sin cambiar lo que
+        ya medía). La lectura queda pendiente con la persona.
 - [ ] **El «200» de `informe/borrador-v2.md` tiene respaldo solo por
       coincidencia** (2026-10-03).
       - **Dónde:** línea 26, la pAUC «comprobada contra su script en 200
@@ -1102,7 +1109,7 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       `informe/borrador-v2.md`, `generar_demo.py`, el README y los hallazgos
       4, 7 y 8; el anteproyecto no se toca, porque es un documento
       entregado.*
-- [ ] **El efecto de la partición sobre el resultado de un modelo no está
+- [x] **El efecto de la partición sobre el resultado de un modelo no está
       medido** (2026-10-04).
       - **Qué se mide hoy:** solo cuántos pacientes quedarían a los dos lados
         con una partición por filas, el 98,92 %
@@ -1118,6 +1125,25 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Qué propone la literatura:** Little propone probar las dos
         particiones (`referencias/little-2017-perspectivas-sobre-saeb.md`,
         línea 231).
+      - *Cumplido: medido el 2026-10-04 en `outputs/efecto-particion.json`.
+        Con la regla fijada antes (`PLAN.md`, Fase 6), la partición por filas
+        no infla la pAUC, el AUC ni el NNT80% SE de los niveles 1 y 2b, ni
+        cambia el veredicto de 2b − 1 en la pAUC. La sensibilidad top-15 queda
+        fuera de la regla por el motivo registrado en `PLAN.md`.*
+- [ ] **La frase de la inflación en el borrador** (2026-10-04).
+      `informe/borrador-v2.md`, «La partición: por paciente», afirma que con
+      lesiones del mismo paciente a los dos lados la métrica sale inflada, y su
+      comentario F: cita la «Nota metodológica clave» de este archivo, que la
+      medición del 2026-10-04 no sostiene (`outputs/efecto-particion.json`).
+      Hay que reescribir la frase.
+- [ ] **«Mejor media no es mejor modelo» solo da la pAUC de 2b − 1**
+      (2026-10-04). La sección de `informe/borrador-v2.md` da la diferencia,
+      su intervalo y las victorias en la pAUC
+      (`outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1`).
+      `outputs/efecto-particion.json > particiones.paciente.comparacion_2b_menos_1`
+      trae las otras tres métricas, el AUC, la sensibilidad top-15 y el NNT80%
+      SE, con la misma partición: reproduce la de la validación repetida
+      pliegue a pliegue.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
