@@ -99,7 +99,8 @@ Nadeau y Bengio.)*
   la sensibilidad top-15 por paciente, uno de los ejes que ISIC premió
   aparte: +0,0842 [0,021; 0,1473]
   (`fase4-m2-vs-m1.json > comparaciones_nuevo_menos_base.setop15`).
-- **La imagen no justifica su costo.** El modelo de imagen se eligió con
+- **Añadida al modelo con contexto de paciente, la imagen no justifica su
+  costo.** El modelo de imagen se eligió con
   dos criterios sobre sus datos de preentrenamiento, fijados antes de
   aplicarlos. El primero descartó PanDerm, específico de dermatología,
   porque su artículo declara un subconjunto de ISIC 2024 entre sus datos de
@@ -112,6 +113,12 @@ Nadeau y Bengio.)*
   (`tiempo-inferencia.json > tiempos.M4` y `tiempos.M2`).
   DINOv2 corre en la GPU del equipo y los modelos tabulares en la CPU, así
   que los tiempos solo comparan estos modelos entre sí, en el mismo equipo.
+  Eso vale donde se toma la fotografía corporal total, cuyo software calcula
+  las mediciones de las que dependen los modelos tabulares. Sin ese sistema,
+  la imagen sola distingue lesiones malignas muy por encima del azar, aunque
+  por debajo de M1: pAUC 0,0796 frente a 0,1375
+  (`imagen-sola.json > metricas.Imagen.pauc.media_global` y
+  `metricas.M1.pauc.media_global`). No se ha medido con fotos de teléfono.
 - **Modelo recomendado: la parte tabular de la solución ganadora del reto,
   reproducida y sin los dos sesgos conocidos que esa reproducción
   conservaba a su favor**: los hiperparámetros y las columnas descartadas,
