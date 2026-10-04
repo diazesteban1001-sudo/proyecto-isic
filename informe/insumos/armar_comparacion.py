@@ -296,6 +296,19 @@ L += [
     "",
     "```",
 ] + tabla3 + ["```", ""]
+# Nota junto a la tabla, con la decisión de la persona (2026-10-04).
+fr196 = "NNT80% SE = 51.57"
+comprobar(K25, 196, 196, "The winning model realized " + fr196)
+fr22 = "22 additional"
+comprobar(K25, 248, 248, fr22)
+assert any(l.startswith("\t\tx\tx\tx\tx\t0.173\t0.967\t50.57\t") for l in tabla3), "la fila del ganador no da 50.57"
+L += [
+    f"**Nota.** La línea 196 de Kurtansky 2025 da «{fr196}» (`{K25}`, l. 196) y la Tabla 3 y la línea 248 dan",
+    f"50.57. Esta última cuadra con las «{fr22}» de la línea 248 (72,68 − 50,57 = 22,11; con 51,57 serían 21,11).",
+    "Si se cita, se usa la de la tabla y se declara la discrepancia. *Decisión de la persona, 2026-10-04. El artículo",
+    "no declara errata.*",
+    "",
+]
 l248 = lineas(K25)[247]
 comprobar(K25, 248, 248, l248)
 L += [f"Línea 248, literal (`{K25}`, l. 248):", "", "> " + l248, ""]
@@ -331,19 +344,7 @@ for desc, texto, a, b, met in COMPARACIONES_248:
     va, vb = filas_t[a], filas_t[b]
     i = 0 if met == "auc" else 1
     L.append(f"- {desc}: la línea 248 dice «{texto}»; la tabla da {va[i]} y {vb[i]}.")
-l196 = lineas(K25)[195]
-fr196 = "The winning model realized NNT80% SE = 51.57 and NNT90% SE = 98.20"
-comprobar(K25, 196, 196, fr196)
-fr248 = "triaged 22 additional non-malignant lesions (NNT80% SE = 72.68 vs. NNT80% SE = 50.57)"
-comprobar(K25, 248, 248, fr248)
-L += [
-    "",
-    f"**Discrepancia interna del artículo.** La línea 196 dice «{fr196}» (`{K25}`, l. 196); la Tabla 3 da",
-    f"50.57 para el ganador con las cuatro clases, y la línea 248 dice «{fr248}». El «22 additional» cuadra con 50.57",
-    "(72,68 − 50,57 = 22,11), no con 51,57 (21,11). El artículo no declara errata. Si el informe cita el NNT del ganador,",
-    "conviene citar la tabla y declarar la discrepancia.",
-    "",
-]
+L.append("")
 
 # ---------- (a) contrastes ----------
 L += ["## (a) Contrastes que el texto permite", "",

@@ -89,6 +89,11 @@ Open in a new tab
 For each metric, the high score over all 4998 ISIC’24 submissions is reported. All model variants performed in the ablation study are summarized, including the winning model of ISIC’24, which utilized all four feature classes. The included feature classes are noted with an “x” for each model variant.
 ```
 
+**Nota.** La línea 196 de Kurtansky 2025 da «NNT80% SE = 51.57» (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, l. 196) y la Tabla 3 y la línea 248 dan
+50.57. Esta última cuadra con las «22 additional» de la línea 248 (72,68 − 50,57 = 22,11; con 51,57 serían 21,11).
+Si se cita, se usa la de la tabla y se declara la discrepancia. *Decisión de la persona, 2026-10-04. El artículo
+no declara errata.*
+
 Línea 248, literal (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, l. 248):
 
 > Extensive ablation studies were conducted to evaluate the relative importance of various input feature classes (i.e., tiles, WB360 “appearance” metadata, basic “demographics” metadata, and patient contextual information) on the diagnostic performance of the winning model. Notably, patient context (i.e., putting the lesion in the context of all other lesions from the given patient) had a substantial effect. When patient-contextual features were withheld from the full model, skin cancer discrimination was significantly lower (AUC = 0.956 vs. AUC = 0.967, p < 0.001) and, at the threshold of 80% sensitivity, triaged 22 additional non-malignant lesions (NNT80% SE = 72.68 vs. NNT80% SE = 50.57). Tiles were less informative than the pre-extracted WB360 measurements. The model variant restricted to WB360 “appearance” metadata significantly outperformed the variant that utilized only tiles (AUC = 0.939 vs. AUC = 0.922, p = 0.016), and the effect of excluding tiles from the full model was less detrimental than excluding the WB360 “appearance” metadata (AUC = 0.957 vs. AUC = 0.948, p = 0.068). Patient age, sex, lesion anatomical location, and hospital/institution label were also a critical factor. The inclusion of basic “demographics” metadata significantly improved the model variant that utilized only WB360 “appearance” metadata and patient context (AUC = 0.957 vs. AUC = 0.949, p = 0.003). All ablation study results are reported in Table 3.
@@ -100,11 +105,6 @@ Cada comparación de la línea 248 contra la fila de la Tabla 3 (clasificación 
 - solo WB360 frente a solo imágenes: la línea 248 dice «AUC = 0.939 vs. AUC = 0.922»; la tabla da 0.939 y 0.922.
 - sin imágenes frente a sin WB360: la línea 248 dice «AUC = 0.957 vs. AUC = 0.948»; la tabla da 0.957 y 0.948.
 - con datos demográficos frente a sin ellos, sobre WB360 y contexto: la línea 248 dice «AUC = 0.957 vs. AUC = 0.949»; la tabla da 0.957 y 0.949.
-
-**Discrepancia interna del artículo.** La línea 196 dice «The winning model realized NNT80% SE = 51.57 and NNT90% SE = 98.20» (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, l. 196); la Tabla 3 da
-50.57 para el ganador con las cuatro clases, y la línea 248 dice «triaged 22 additional non-malignant lesions (NNT80% SE = 72.68 vs. NNT80% SE = 50.57)». El «22 additional» cuadra con 50.57
-(72,68 − 50,57 = 22,11), no con 51,57 (21,11). El artículo no declara errata. Si el informe cita el NNT del ganador,
-conviene citar la tabla y declarar la discrepancia.
 
 ## (a) Contrastes que el texto permite
 
