@@ -326,6 +326,36 @@ Salida: `outputs/mecanismo-2a.json` y `.md`.
   --referencia outputs/modelado-baseline.json --out outputs/mecanismo-2a
 ```
 
+## El efecto de la partición (2026-10-04)
+
+`scripts/efecto_particion.py` corre el nivel 1 y el 2b con la configuración
+de `evaluar_repetido.py`, importada de él, en dos particiones del conjunto de
+desarrollo: la de siempre, agrupada por paciente, y una por filas
+(`StratifiedKFold`, sin agrupar). En las dos usa 5 pliegues y semillas de la 0
+a la 9. Por partición reporta:
+- las cuatro métricas de cada nivel, en media global y por semilla;
+- la diferencia 2b − 1 en cada métrica, con el intervalo corregido de Nadeau y
+  Bengio;
+- por nivel y métrica, la diferencia de medias filas − paciente y en cuántas
+  semillas la de filas es mayor y en cuántas es mejor (en el NNT80% SE, menor).
+
+**Control:** la partición por paciente tiene que reproducir
+`outputs/validacion-repetida.json` pliegue a pliegue en los niveles 1 y 2b; se
+comprueba antes de correr la otra, y si no coincide se detiene sin escribir.
+`scripts/test_efecto_particion.py` lo fuerza con una referencia alterada, y
+comprueba la medida con dos conjuntos sintéticos: uno con efecto de sujeto,
+donde la partición por filas tiene que dar más, y otro sin él. La
+especificación y la regla de lectura son de la persona, fijadas antes de
+correr (`PLAN.md`, Fase 6); el script no las aplica. Salida:
+`outputs/efecto-particion.json` y `.md`.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/efecto_particion.py \
+  --data data/train-metadata.csv --group-col patient_id --target-col target \
+  --leakage-report outputs/auditoria-de-fugas.json \
+  --referencia outputs/validacion-repetida.json --out outputs/efecto-particion
+```
+
 ## Cómo correrlo
 
 ```bash
