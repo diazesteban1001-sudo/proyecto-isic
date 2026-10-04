@@ -562,7 +562,7 @@ lesions"*, y el artículo no dice si se solapan con las de este conjunto.
      F4b = outputs/fase4-m4b-vs-m2.json; F32 = outputs/fase4-m3-vs-m2.json;
      F3L = outputs/fase4-m3limpio-vs-m2.json; C = comparaciones_nuevo_menos_base;
      IC = intervalo_t_95_nadeau_bengio; EP = outputs/efecto-particion.json;
-     MEC = outputs/mecanismo-2a.json. -->
+     MEC = outputs/mecanismo-2a.json; IS = outputs/imagen-sola.json. -->
 
 Salvo donde se indica, las métricas de desempeño son del conjunto de
 desarrollo, con 10 semillas y 5 pliegues. Cada diferencia es «nuevo − base»,
@@ -690,7 +690,7 @@ las lesiones dentro de cada paciente, que es lo que mide la sensibilidad
 top-15, mientras que la pAUC ordena todas las lesiones juntas.
 <!-- F: CLAUDE.md, hallazgo 4, «Interpretación, no medición» -->
 
-### La imagen no justifica su costo
+### Añadida al modelo con contexto de paciente, la imagen no justifica su costo
 
 Las 384 variables de DINOv2 tal cual (M4 − M2) no mejoran el modelo con
 contexto de paciente:
@@ -724,6 +724,60 @@ La variante secundaria, que resume la imagen en una puntuación apilada
 dirección de la pAUC. Como variables sueltas, M4 queda por encima de M2 en 2
 de 10 semillas; como puntuación apilada, M4b, en 8 de 10.
 <!-- F: F42 > C.pauc.nuevo_mejor_en_semillas; F4b > C.pauc.nuevo_mejor_en_semillas; CLAUDE.md, hallazgo 6 -->
+
+### La imagen sola, sin el sistema de fotografía corporal total
+
+Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software
+de la fotografía corporal total; sin ese sistema, esos modelos no se pueden
+aplicar tal cual.
+<!-- F: «Datos y validación», «Los datos»; outputs/modelado-baseline.json > features_usadas (las variables de M1: F21 > modelos.M1); F21 > variables_de_contexto (las que añade M2); F32 > m3.variables (M3 limpio las conserva: F3L > modelos.M3limpio.descripcion); referencias/kurtansky-2025-triaje-automatizado-tbp.md, líneas 268 y 299 -->
+Los organizadores del reto describen ese sistema como *"less accessible and
+more expensive than standard clinical and dermoscopic imaging methods"*.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 292, cita literal -->
+M2 y M3 limpio, además, comparan cada lesión con las demás del mismo
+paciente. Del modelo ganador, que hace lo mismo, los organizadores advierten
+que por eso *"cannot be directly applied to analyze single lesions at a
+time"*.
+<!-- F: «Método», «Qué se compara» (M2 y M3); F32 > m3.variables.entran.z_score_dentro_del_paciente y conteos_y_sumas_por_paciente; .claude/skills/modelado-baseline/scripts/ganador_m3.py, variables_m3_en_pliegue (M3 limpio); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 268, cita literal -->
+
+Para ese escenario se midió qué da la imagen sola, con una especificación
+fijada antes de correr: una regresión logística balanceada sobre las 384
+variables de DINOv2, sola y con edad, sexo y zona del cuerpo, en los mismos
+pliegues de M1. Las dos versiones analizan cada lesión por separado.
+<!-- F: PLAN.md, Fase 6, «La imagen sola: especificación y regla de lectura (2026-10-04, de la persona)»; IS > esquema y modelos; .claude/skills/modelado-baseline/scripts/imagen_sola.py, puntuar_fold (ninguna variable de contexto de paciente) -->
+
+La imagen sola distingue lesiones malignas muy por encima del azar: su pAUC
+es de 0,0796, frente a 0,02 del azar, y su AUC, de 0,8213. Pero queda por
+debajo de M1 en las cuatro métricas, y las cuatro diferencias están
+establecidas:
+<!-- F: IS > metricas.Imagen.pauc.media_global y metricas.Imagen.auc.media_global; IS > metricas.Imagen.pauc.por_semilla_y_fold (los 50 pliegues por encima del azar); outputs/modelado-baseline.json > escala_de_referencia_pauc.azar; «Método», «Cómo se compara» (el criterio) -->
+
+- pAUC: −0,0579, [−0,084; −0,0319];
+- AUC: −0,0997, [−0,1383; −0,061];
+- sensibilidad top-15: −0,2364, [−0,323; −0,1498];
+- NNT80% SE: +309,97 lesiones por cada maligna, [177,89; 442,06].
+<!-- F: IS > C.imagen_menos_m1.pauc, .auc, .setop15 y .nnt80 (media e IC) -->
+
+Para capturar el 80% de las malignas, la imagen sola marca 426,14 lesiones por
+cada una, frente a 116,16 de M1.
+<!-- F: IS > metricas.Imagen.nnt80.media_global y metricas.M1.nnt80.media_global; «Método», «Qué se mide» (la definición del NNT80% SE) -->
+
+Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible:
++0,0082, [0,0016; 0,0149]. En la pAUC, con la precisión guardada, el
+intervalo no excluye el cero, [0,0; 0,0089], así que esa mejora no se da por
+establecida; en la sensibilidad top-15 y en el NNT80% SE, el intervalo
+contiene el cero.
+<!-- F: IS > C.imagen_basicos_menos_imagen.auc, .pauc, .setop15 y .nnt80 (media e IC); PLAN.md, Fase 6, «La imagen sola: dos decisiones sobre el resultado», 1 -->
+
+*Interpretación, no medición:* sin el sistema de fotografía corporal total, la
+imagen sí sirve para ordenar lesiones por sospecha, pero con este extractor
+congelado rinde bastante menos que las mediciones. Edad, sexo y zona del
+cuerpo son datos que cualquiera puede dar sin aparatos. El ganador ajustó sus
+propias redes de imagen, y su variante con solo los recortes llega a un AUC de
+0,922, pero en otros datos y con otra evaluación, así que las cifras no se
+comparan. Y todo esto se midió sobre los recortes del sistema de fotografía
+corporal total, no sobre fotos de teléfono.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 216) y línea 272; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Estado del arte» («el ganador ajustó sus propias redes»); IS > datos -->
 
 ### El modelo recomendado
 
@@ -791,7 +845,7 @@ tres.
 ## Recomendación
 
 <!-- Sección de informe/borrador-v2.md. Mismas convenciones que las
-     anteriores; las abreviaturas F21, F42, F4b, F3L, EP y MEC son las de «Resultados». -->
+     anteriores; las abreviaturas F21, F42, F4b, F3L, EP, MEC e IS son las de «Resultados». -->
 
 ### Qué se recomienda
 
@@ -802,10 +856,28 @@ Se eligió con una regla fijada antes de correr la comparación: el intervalo
 corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.
 <!-- F: PLAN.md, Fase 4, «Regla de recomendación»; F3L > C.pauc.IC -->
 
-**No se recomienda añadir las variables de imagen** tal como se probaron. No
-mejoraron ninguna métrica de forma distinguible, y al predecir cuestan 14,5156
-y 14,6321 segundos por cada 1.000 lesiones, frente a 0,0435 de M3 limpio.
+**Donde se toma la fotografía corporal total, no se recomienda añadir las
+variables de imagen** tal como se probaron. Añadidas al modelo con contexto de
+paciente no mejoraron ninguna métrica de forma distinguible, y al predecir
+cuestan 14,5156 y 14,6321 segundos por cada 1.000 lesiones, frente a 0,0435 de
+M3 limpio.
 <!-- F: F42 y F4b > C.*.IC; outputs/tiempo-inferencia.json > tiempos.M4, tiempos.M4b y tiempos.M3limpio (mediana_segundos_por_1000_lesiones) -->
+Eso no dice que la imagen no sirva para detectar cáncer: en la ablación de los
+organizadores, la variante del modelo ganador que solo usa los recortes llega
+a un AUC de 0,922, y la presentan como una base sólida para cuando no se pueden
+recoger los metadatos, como al usar la cámara de un teléfono.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 216) y líneas 272 y 284 -->
+
+**Donde no hay ese sistema, M3 limpio no se puede aplicar tal cual, y la
+imagen es el insumo disponible.** Es el escenario que el artículo del conjunto
+de datos pone como objetivo: algoritmos que decidan a partir de *"clinical
+photos resembling the resolution of smartphone images"*.
+<!-- F: «Resultados», «La imagen sola, sin el sistema de fotografía corporal total»; referencias/kurtansky-2024-slice3d-descriptor.md, línea 109, cita literal -->
+Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que
+mejora el AUC de la imagen sola; antes de usarla habría que medirla con fotos
+de teléfono. Cómo mejorarla, por ejemplo ajustando redes propias, no se ha
+medido.
+<!-- F: IS > C.imagen_basicos_menos_imagen.auc.IC; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera) -->
 
 **Y se recomienda no leer solo la pAUC.** El contexto de paciente no se nota
 en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.
@@ -819,9 +891,14 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
 - El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80%
   SE.
   <!-- F: F21 > C.setop15.IC y C.nnt80.IC -->
-- Las variables de imagen de DINOv2, como variables sueltas o apiladas, no
-  mejoran de forma distinguible ninguna de las métricas.
+- Añadidas al modelo con contexto de paciente, las variables de imagen de
+  DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible
+  ninguna de las métricas.
   <!-- F: F42 y F4b > C.*.IC -->
+- Sin el sistema de fotografía corporal total, la imagen sola distingue
+  lesiones malignas muy por encima del azar, pero con este extractor queda por
+  debajo de M1 en las cuatro métricas.
+  <!-- F: «Resultados», «La imagen sola, sin el sistema de fotografía corporal total»; IS > metricas.Imagen.pauc.por_semilla_y_fold; IS > C.imagen_menos_m1.*.IC -->
 - Una partición por filas habría dejado al 98,92% de los pacientes a los dos
   lados de la validación.
   <!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga -->
@@ -838,10 +915,15 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   siendo la validación cruzada repetida, y la recomendación no cambiará por su
   resultado.
   <!-- F: PLAN.md, Fase 5, «Especificación» -->
-- **Nada sobre otras formas de usar la imagen.** Solo se probaron las
+- **Nada sobre otros extractores de imagen.** Solo se probaron las
   variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron
   fuera.
   <!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada) -->
+- **Cuánto rinde un modelo con fotos de teléfono.** La imagen sola se midió
+  sobre los recortes estandarizados del sistema de fotografía corporal total.
+  El artículo del conjunto de datos advierte que las fotos que toman los
+  pacientes *"vary greatly in lighting and FOV"*.
+  <!-- F: IS > datos; referencias/kurtansky-2024-slice3d-descriptor.md, línea 115, cita literal -->
 - **Que este trabajo supere o no a la solución ganadora.** Su evaluación usó
   otros datos y otras particiones.
   <!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
