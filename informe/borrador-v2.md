@@ -502,9 +502,13 @@ Lo que evita esa agrupación se midió. Una partición aleatoria por filas, con
 la misma semilla, habría dejado a 824 pacientes, el 98,92%, con lesiones a
 los dos lados.
 <!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.n_grupos_con_fuga y .pct_grupos_con_fuga -->
-Con lesiones del mismo paciente en entrenamiento y en validación, la métrica
-sale inflada.
-<!-- F: CLAUDE.md, «Sobre el problema», «Nota metodológica clave» -->
+Si eso cambia el resultado también se midió, y con los dos modelos probados
+no lo cambia de forma distinguible (ver «Resultados», «Partir por filas no
+cambia el veredicto»).
+<!-- F: outputs/efecto-particion.json; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->
+La agrupación se sostiene por el uso: el reto se evalúa con pacientes
+distintos de los de entrenamiento.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 («albeit different patients than the training dataset») -->
 
 ### La auditoría de columnas
 
@@ -557,7 +561,8 @@ lesions"*, y el artículo no dice si se solapan con las de este conjunto.
      F21 = outputs/fase4-m2-vs-m1.json; F42 = outputs/fase4-m4-vs-m2.json;
      F4b = outputs/fase4-m4b-vs-m2.json; F32 = outputs/fase4-m3-vs-m2.json;
      F3L = outputs/fase4-m3limpio-vs-m2.json; C = comparaciones_nuevo_menos_base;
-     IC = intervalo_t_95_nadeau_bengio. -->
+     IC = intervalo_t_95_nadeau_bengio; EP = outputs/efecto-particion.json;
+     MEC = outputs/mecanismo-2a.json. -->
 
 Salvo donde se indica, las métricas de desempeño son del conjunto de
 desarrollo, con 10 semillas y 5 pliegues. Cada diferencia es «nuevo − base»,
@@ -579,12 +584,37 @@ partición de la semilla 42, el AUC estándar del modelo sin balancear es
 azar de la suya. Las dos métricas discrepan sobre si el modelo supera al azar.
 <!-- F: outputs/modelado-baseline.json > esquema_cv.seed, nivel_2a_….auc_estandar_media y .pauc_media; outputs/modelado-baseline.json > nivel_0_referencia_univariada.nota («el AUC va de 0.5 (azar) a 1»); CLAUDE.md, hallazgo 1 -->
 
-### Mejor media no es mejor modelo
+Se midió también cómo falla el modelo sin balancear, en la partición de la
+semilla 42. No es que ponga arriba a más negativos que positivos, en
+proporción: con probabilidad de 0,999 o más queda el 0,09% de los negativos y
+el 4,42% de los positivos.
+<!-- F: MEC > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_neg_ge_0999 y .frac_pos_ge_0999; MEC > esquema_cv -->
+Lo que hace es hundir a una parte de los positivos al fondo del ordenamiento:
+el 36,28% queda en o por debajo del percentil 20 de los negativos, frente al
+1,58% con el modelo balanceado, y 18 positivos comparten con 191 negativos la
+probabilidad mínima, 0.
+<!-- F: MEC > niveles.nivel_2a_….total.frac_pos_bajo_p20_neg, .n_pos_en_el_minimo, .n_neg_en_el_minimo y .minimo_predicho; MEC > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg -->
+Eso es coherente con una pAUC bajo el azar: para capturar el 80% de los
+positivos, el umbral tiene que bajar hasta el 20% de positivos de menor rango,
+y ese 20% está entre el 0,75% de lesiones con menor puntuación. Ahí queda
+marcado más del 99% de las lesiones, cuando al azar quedaría marcado el 80%.
+<!-- F: MEC > niveles.nivel_2a_gradient_boosting_sin_balancear.total.deciles_rango_pos[1]; definición de la pAUC («Método», «Qué se mide») -->
+Por qué el modelo los hunde no se midió.
+<!-- F: CLAUDE.md, Pendientes, el mecanismo del 2a -->
+
+### Una ventaja que la pAUC no ve
 
 El gradient boosting balanceado supera a la regresión logística balanceada
 por 0,005 en promedio, con intervalo [−0,0145; 0,0245] (29 de 50 pliegues; 8
 de 10 semillas). La ventaja no está establecida.
 <!-- F: VR > comparacion_pareada_2b_menos_1.media, .intervalo_t_95_nadeau_bengio, .gana_2b_en y .semillas_a_favor_de_2b -->
+En las otras tres métricas sí lo está: AUC +0,0228, [0,0012; 0,0444];
+sensibilidad top-15 +0,1633, [0,0874; 0,2393]; NNT80% SE −94,82 lesiones por
+cada maligna, [−152,31; −37,33].
+<!-- F: EP > particiones.paciente.comparacion_2b_menos_1.auc, .setop15 y .nnt80 (media e intervalo_t_95_nadeau_bengio); EP > control_paciente_contra_referencia (reproduce la validación repetida pliegue a pliegue) -->
+Como en M2 − M1, la pAUC no distingue una ventaja que las métricas de triaje
+sí distinguen.
+<!-- F: «La métrica principal no agota lo que pidió el cliente» (M2 − M1) -->
 
 Sobre una sola partición de los datos completos, el boosting parecía además
 más estable que la logística. Con las 10 semillas el orden se invierte: su
@@ -606,6 +636,37 @@ La exclusión se sostiene por razón de uso, no de desempeño. Una sola
 partición sugería lo contrario; es el segundo resultado de una sola partición
 que no sobrevive a la validación repetida.
 <!-- F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->
+
+### Partir por filas no cambia el veredicto
+
+Se probaron las dos particiones con la logística y el gradient boosting
+balanceados, con una regla de lectura fijada antes de correr. La partición por
+filas infla una métrica si da mejor en las 10 semillas, y cambia el veredicto
+si el intervalo de 2b − 1 en la pAUC excluye el cero en una partición y no en
+la otra.
+<!-- F: PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura»; EP > esquema -->
+
+No se cumple ninguna de las dos. Partir por filas mueve la pAUC en +0,0005 con
+la logística y en +0,0002 con el boosting, y da mejor en 6 y en 5 de las 10
+semillas.
+<!-- F: EP > filas_menos_paciente.nivel_1_regresion_logistica.pauc y nivel_2b_gradient_boosting_balanceado.pauc (diferencia_de_medias y semillas_filas_mejor) -->
+En el AUC y el NNT80% SE de la logística da mejor en 9 de 10, no en las 10
+que pedía la regla; con el boosting, en 5 y en 7.
+<!-- F: EP > filas_menos_paciente.nivel_1_….auc y .nnt80; nivel_2b_….auc y .nnt80 (semillas_filas_mejor) -->
+El intervalo de 2b − 1 en la pAUC contiene el cero en las dos particiones:
+[−0,0145; 0,0245] por paciente y [−0,0134; 0,0227] por filas.
+<!-- F: EP > particiones.paciente.comparacion_2b_menos_1.pauc.intervalo_t_95_nadeau_bengio y particiones.filas.comparacion_2b_menos_1.pauc.intervalo_t_95_nadeau_bengio -->
+
+La sensibilidad top-15 sí sube con filas, pero queda fuera de la regla: con
+esa partición cada paciente tiene en validación solo una parte de sus
+lesiones, y el top-15 no mide lo mismo.
+<!-- F: EP > filas_menos_paciente.*.setop15; EP > nota; PLAN.md, Fase 6, regla (a) -->
+
+*Interpretación, no medición:* con estos datos y estos dos modelos, que el
+98,92% de los pacientes quede a los dos lados no se traduce en una métrica
+inflada. Lo medido vale para la logística y el boosting balanceados; no se
+probó con el contexto de paciente ni con M3 limpio.
+<!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga; EP > esquema.niveles -->
 
 ### La métrica principal no agota lo que pidió el cliente
 
@@ -730,7 +791,7 @@ tres.
 ## Recomendación
 
 <!-- Sección de informe/borrador-v2.md. Mismas convenciones que las
-     anteriores; las abreviaturas F21, F42, F4b y F3L son las de «Resultados». -->
+     anteriores; las abreviaturas F21, F42, F4b, F3L, EP y MEC son las de «Resultados». -->
 
 ### Qué se recomienda
 
@@ -824,6 +885,11 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   produce `tbp_lv_nevi_confidence` se entrenó con lesiones de este conjunto. Y
   nada comprueba la versión del código de DINOv2; solo sus pesos, por hash.
   <!-- F: referencias/slice3d-metadata-tbp-lv.md, nota 2; .claude/skills/extraccion-imagen/SKILL.md, «Límites conocidos» -->
-- **Un mecanismo sin medir.** No se midió por qué el gradient boosting sin
-  balancear queda bajo el azar de la pAUC; el informe solo afirma que queda.
-  <!-- F: CLAUDE.md, Pendientes, «el mecanismo del nivel 2a está sin medir» -->
+- **Un mecanismo medido a medias.** Se midió cómo falla el gradient boosting
+  sin balancear: hunde a una parte de los positivos al fondo del ordenamiento.
+  Por qué lo hace no se midió.
+  <!-- F: MEC; «Resultados», «Una decisión por defecto cambia el veredicto» -->
+- **La prueba de la partición cubre dos modelos.** Que partir por filas no
+  cambie el veredicto se midió con la logística y el boosting balanceados, no
+  con los modelos que usan el contexto de paciente.
+  <!-- F: EP > esquema.niveles -->
