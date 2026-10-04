@@ -162,6 +162,7 @@ CITAS_IMAGEN_SOLA = {
     "lesiones_sueltas": (KURTANSKY_2025, "cannot be directly applied to analyze single lesions at a time"),
     "telefono": (KURTANSKY_2024, "clinical photos resembling the resolution of smartphone images"),
     "luz_y_campo": (KURTANSKY_2024, "vary greatly in lighting and FOV"),
+    "datos_basicos": (KURTANSKY_2025, "are not directly attained from images"),
 }
 
 
@@ -282,6 +283,7 @@ def datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion, tiempo):
     afirmar(all(any(v.startswith("tbp_lv_") for v in lista) for lista in
                 (modelado["features_usadas"], fase4["fase4-m2-vs-m1"]["variables_de_contexto"], m3_brutas)),
             "Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software de la fotografía corporal total")
+    afirmar({"age_approx", "sex"} <= set(modelado["features_usadas"]), "M1 también usa la edad y el sexo")
     pliegues = [v for s in imagen_sola["esquema"]["semillas"] for v in m["Imagen"]["pauc"]["por_semilla_y_fold"][str(s)]]
     afirmar(all(v > escala["azar"] for v in pliegues), "La imagen sola distingue lesiones malignas muy por encima del azar")
     im1 = c["imagen_menos_m1"]
@@ -1406,15 +1408,18 @@ document.getElementById("texto-4b").innerHTML = P([
   `Para capturar el ${cifra(D.metrica.tpr + "%", fMod("metrica"))} de las malignas, la imagen sola marca ` +
   `${cifra(fijo(IS.medias.Imagen.nnt80, 2), fIS("metricas.Imagen.nnt80.media_global"))} lesiones por cada una, frente a ` +
   `${cifra(fijo(IS.medias.M1.nnt80, 2), fIS("metricas.M1.nnt80.media_global"))} de M1. ` +
-  `El tiempo de inferencia de la imagen sola no se midió.`,
+  `Esa distancia no mide solo lo que aportan las mediciones del sistema: M1 también usa la edad y el sexo, y la imagen con ` +
+  `los datos básicos no se comparó con M1. El tiempo de inferencia de la imagen sola no se midió.`,
   `Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible; en las otras tres métricas la mejora no se da por establecida:`]) + L([
   `AUC: ${mediaIS(IB, "auc")}, ${icIS(IB, "auc")} (${vicIS(IB, "auc")});`,
   `pAUC: ${mediaIS(IB, "pauc")}, ${icIS(IB, "pauc")} (${vicIS(IB, "pauc")}), un intervalo que, con la precisión guardada, no excluye el cero;`,
   `sensibilidad top-15: ${mediaIS(IB, "setop15")}, ${icIS(IB, "setop15")} (${vicIS(IB, "setop15")});`,
   `NNT80% SE: ${mediaIS(IB, "nnt80")} lesiones por cada maligna, ${icIS(IB, "nnt80")} (${vicIS(IB, "nnt80")}).`]) + P([
+  `Sobre la zona del cuerpo, las fuentes no coinciden. La tabla de variables del artículo del conjunto de datos la marca como ` +
+  `una métrica del software del sistema; el artículo de los organizadores la cuenta entre los datos básicos, que ${citaIS("datos_basicos")}.`,
   `<i>Interpretación, no medición:</i> sin el sistema de fotografía corporal total, la imagen sí sirve para ordenar lesiones ` +
   `por sospecha, aunque con este extractor congelado queda lejos de M1. Edad, sexo y zona del cuerpo son ` +
-  `datos que cualquiera puede dar sin aparatos. El ganador ajustó sus propias redes de imagen, y su variante con solo los ` +
+  `datos que una persona puede informar sin aparatos, aunque en estos datos la zona del cuerpo pudo venir del software del sistema. El ganador ajustó sus propias redes de imagen, y su variante con solo los ` +
   `recortes llega a un AUC de ${auc922}, pero en otros datos y con otra evaluación, así que las cifras no se comparan. ` +
   `Y todo esto se midió sobre los recortes del sistema de fotografía corporal total, no sobre fotos de teléfono.`]);
 

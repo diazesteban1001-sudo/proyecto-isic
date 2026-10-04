@@ -43,7 +43,8 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      intervalo para que excluya el cero.
   M. Las dos lecturas de referencias/ que hace la subsección: con la fila de
      solo recortes de la Tabla 3 duplicada, el 0,922 no se lee; con una cita
-     quitada de su archivo, la página no se escribe. Sobre copias en una raíz
+     quitada de su archivo —la de las fotos de los pacientes o la de los datos
+     básicos—, la página no se escribe. Sobre copias en una raíz
      temporal; con las copias sin tocar, las dos lecturas pasan.
 
 Uso:
@@ -169,6 +170,13 @@ def caso_m():
             open(ruta24, "w", encoding="utf-8").write(texto.replace("vary greatly in lighting and FOV", "vary in lighting"))
             _, err = correr(datos)
             resultado["cita"] = (err is not None and "vary greatly in lighting and FOV" in err, err or "no falló")
+            open(ruta24, "w", encoding="utf-8").write(texto)
+            texto = open(ruta25, encoding="utf-8").read()
+            open(ruta25, "w", encoding="utf-8").write(texto.replace("are not directly attained from images",
+                                                                     "are not attained from images"))
+            _, err = correr(datos)
+            resultado["cita_basicos"] = (err is not None and "are not directly attained from images" in err,
+                                         err or "no falló")
         finally:
             g.RAIZ = raiz_real
     return resultado
@@ -226,6 +234,9 @@ def main():
     def segundos_en_imagen_sola(o):
         o["segundos_por_pliegue"] = {"Imagen": [1.0]}
 
+    def sin_sexo(o):
+        o["features_usadas"] = [v for v in o["features_usadas"] if v != "sex"]
+
     def m4_barato(o):
         o["tiempos"]["M4"]["mediana_segundos_por_1000_lesiones"] = 0.001
 
@@ -260,6 +271,7 @@ def main():
          "El tiempo de inferencia de la imagen sola no se midió"),
         ("imagen-sola.json con segundos", IS, segundos_en_imagen_sola,
          "El tiempo de inferencia de la imagen sola no se midió"),
+        ("M1 sin la variable sex", "modelado-baseline", sin_sexo, "M1 también usa la edad y el sexo"),
         ("M4 más barato que M3 limpio al predecir", "tiempo-inferencia", m4_barato,
          "Lo caro, con diferencia, es la imagen, y ni M4 ni M4b"),
         ("M4b − M2 establecida en la pAUC (viñeta de DINOv2)", "fase4-m4b-vs-m2", m4b_establecida,
@@ -312,6 +324,7 @@ def main():
         ("M. copias sin tocar: se leen el 0,922 y las citas", *m["base"]),
         ("M. fila de solo recortes duplicada en la Tabla 3: no se lee", *m["tabla"]),
         ("M. cita quitada de su archivo: no se escribe", *m["cita"]),
+        ("M. cita de los datos básicos quitada de Kurtansky 2025: no se escribe", *m["cita_basicos"]),
     ]
     fallos = 0
     for titulo, ok, detalle in casos:
