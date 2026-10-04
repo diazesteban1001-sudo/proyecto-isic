@@ -298,6 +298,34 @@ Después quita cada paso, uno por vez, y exige que la comprobación falle. Para
 la imputación compara la matriz que entra al modelo. Si algo falla, no
 cronometra. Cinco repeticiones por modelo, en segundos por 1.000 lesiones.
 
+## El mecanismo del 2a (2026-10-04)
+
+`scripts/mecanismo_2a.py` mide cómo se reparten, sobre validación, las
+probabilidades que predicen el 2a y, como control, el 2b. Usa la partición
+de la semilla 42 y los mismos modelos, columnas y codificación que
+`train_and_evaluate.py`, importados de ese script. Por pliegue y en total
+reporta:
+- el número de valores distintos de la probabilidad;
+- la fracción de negativos y de positivos con probabilidad ≥ 0,999 y con la
+  probabilidad máxima;
+- el rango percentil medio de los positivos (`rango_medio_pos`, en escala
+  0–1);
+- la fracción de negativos por encima de la mediana de los positivos;
+- la pAUC.
+
+**Control:** la pAUC de cada pliegue, del 2a y del 2b, tiene que coincidir
+con `outputs/modelado-baseline.json`; si no, se detiene sin escribir.
+`scripts/test_mecanismo_2a.py` fuerza las medidas con un caso que satura
+sobre los negativos y otro que no, y el control con una referencia alterada.
+Salida: `outputs/mecanismo-2a.json` y `.md`.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/mecanismo_2a.py \
+  --data data/train-metadata.csv --group-col patient_id --target-col target \
+  --n-splits 5 --seed 42 --leakage-report outputs/auditoria-de-fugas.json \
+  --referencia outputs/modelado-baseline.json --out outputs/mecanismo-2a
+```
+
 ## Cómo correrlo
 
 ```bash

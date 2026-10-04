@@ -1,0 +1,241 @@
+{
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "esquema_cv": {
+    "group_col": "patient_id",
+    "n_splits": 5,
+    "seed": 42
+  },
+  "referencia": "outputs/modelado-baseline.json",
+  "control_pauc_contra_referencia": {
+    "nivel_2a_gradient_boosting_sin_balancear": {
+      "pauc_por_fold_obtenido": [
+        0.0009,
+        0.0005,
+        0.0002,
+        0.0008,
+        0.0002
+      ],
+      "pauc_por_fold_referencia": [
+        0.0009,
+        0.0005,
+        0.0002,
+        0.0008,
+        0.0002
+      ],
+      "coincide": true
+    },
+    "nivel_2b_gradient_boosting_balanceado": {
+      "pauc_por_fold_obtenido": [
+        0.1163,
+        0.1297,
+        0.1693,
+        0.1485,
+        0.1349
+      ],
+      "pauc_por_fold_referencia": [
+        0.1163,
+        0.1297,
+        0.1693,
+        0.1485,
+        0.1349
+      ],
+      "coincide": true
+    }
+  },
+  "umbral_alto": 0.999,
+  "definiciones": {
+    "n_valores_distintos": "valores distintos de la probabilidad predicha en validación",
+    "frac_neg_ge_0999 / frac_pos_ge_0999": "fracción de negativos / positivos con probabilidad >= umbral_alto",
+    "frac_neg_en_max / frac_pos_en_max": "fracción de negativos / positivos con la probabilidad máxima del conjunto",
+    "rango_medio_pos": "rango percentil medio de los positivos, en escala 0–1: media sobre los positivos de (n menores + 0,5 · n iguales) / n, entre todas las lesiones del conjunto; 0 la más baja, 1 la más alta",
+    "frac_neg_sobre_mediana_pos": "fracción de negativos con probabilidad estrictamente mayor que la mediana de las de los positivos",
+    "pauc": "pAUC sobre 80% TPR, pauc_above_tpr() de train_and_evaluate.py",
+    "total": "las mismas medidas sobre las predicciones de validación de todos los pliegues juntas; pauc_media_de_pliegues es la media de las pAUC por pliegue"
+  },
+  "niveles": {
+    "nivel_2a_gradient_boosting_sin_balancear": {
+      "modelo": "HistGradientBoostingClassifier(random_state=42)",
+      "por_pliegue": [
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63582,
+          "n_positivos": 64,
+          "n_valores_distintos": 1455,
+          "probabilidad_maxima": 1.0,
+          "frac_neg_ge_0999": 0.000676,
+          "frac_pos_ge_0999": 0.0,
+          "frac_neg_en_max": 6.3e-05,
+          "frac_pos_en_max": 0.0,
+          "rango_medio_pos": 0.603768,
+          "frac_neg_sobre_mediana_pos": 0.128165,
+          "pauc": 0.000943
+        },
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63583,
+          "n_positivos": 63,
+          "n_valores_distintos": 2047,
+          "probabilidad_maxima": 1.0,
+          "frac_neg_ge_0999": 0.001007,
+          "frac_pos_ge_0999": 0.031746,
+          "frac_neg_en_max": 0.000315,
+          "frac_pos_en_max": 0.015873,
+          "rango_medio_pos": 0.66682,
+          "frac_neg_sobre_mediana_pos": 0.077206,
+          "pauc": 0.000525
+        },
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63582,
+          "n_positivos": 64,
+          "n_valores_distintos": 1004,
+          "probabilidad_maxima": 1.0,
+          "frac_neg_ge_0999": 0.000991,
+          "frac_pos_ge_0999": 0.046875,
+          "frac_neg_en_max": 0.000283,
+          "frac_pos_en_max": 0.015625,
+          "rango_medio_pos": 0.559513,
+          "frac_neg_sobre_mediana_pos": 0.16912,
+          "pauc": 0.000166
+        },
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63583,
+          "n_positivos": 63,
+          "n_valores_distintos": 1053,
+          "probabilidad_maxima": 1.0,
+          "frac_neg_ge_0999": 0.000865,
+          "frac_pos_ge_0999": 0.063492,
+          "frac_neg_en_max": 0.000204,
+          "frac_pos_en_max": 0.063492,
+          "rango_medio_pos": 0.601272,
+          "frac_neg_sobre_mediana_pos": 0.092808,
+          "pauc": 0.00084
+        },
+        {
+          "n_lesiones": 63645,
+          "n_negativos": 63582,
+          "n_positivos": 63,
+          "n_valores_distintos": 1116,
+          "probabilidad_maxima": 1.0,
+          "frac_neg_ge_0999": 0.001164,
+          "frac_pos_ge_0999": 0.079365,
+          "frac_neg_en_max": 0.000236,
+          "frac_pos_en_max": 0.015873,
+          "rango_medio_pos": 0.478249,
+          "frac_neg_sobre_mediana_pos": 0.083467,
+          "pauc": 0.000249
+        }
+      ],
+      "total": {
+        "n_lesiones": 318229,
+        "n_negativos": 317912,
+        "n_positivos": 317,
+        "n_valores_distintos": 6665,
+        "probabilidad_maxima": 1.0,
+        "frac_neg_ge_0999": 0.000941,
+        "frac_pos_ge_0999": 0.044164,
+        "frac_neg_en_max": 0.00022,
+        "frac_pos_en_max": 0.022082,
+        "rango_medio_pos": 0.564563,
+        "frac_neg_sobre_mediana_pos": 0.217617,
+        "pauc": 0.000431,
+        "pauc_media_de_pliegues": 0.000545
+      }
+    },
+    "nivel_2b_gradient_boosting_balanceado": {
+      "modelo": "HistGradientBoostingClassifier(random_state=42, class_weight='balanced')",
+      "por_pliegue": [
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63582,
+          "n_positivos": 64,
+          "n_valores_distintos": 45130,
+          "probabilidad_maxima": 0.963762,
+          "frac_neg_ge_0999": 0.0,
+          "frac_pos_ge_0999": 0.0,
+          "frac_neg_en_max": 0.000393,
+          "frac_pos_en_max": 0.046875,
+          "rango_medio_pos": 0.900573,
+          "frac_neg_sobre_mediana_pos": 0.01469,
+          "pauc": 0.116322
+        },
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63583,
+          "n_positivos": 63,
+          "n_valores_distintos": 20770,
+          "probabilidad_maxima": 0.933174,
+          "frac_neg_ge_0999": 0.0,
+          "frac_pos_ge_0999": 0.0,
+          "frac_neg_en_max": 4.7e-05,
+          "frac_pos_en_max": 0.0,
+          "rango_medio_pos": 0.907041,
+          "frac_neg_sobre_mediana_pos": 0.018464,
+          "pauc": 0.129686
+        },
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63582,
+          "n_positivos": 64,
+          "n_valores_distintos": 43726,
+          "probabilidad_maxima": 0.950484,
+          "frac_neg_ge_0999": 0.0,
+          "frac_pos_ge_0999": 0.0,
+          "frac_neg_en_max": 1.6e-05,
+          "frac_pos_en_max": 0.0,
+          "rango_medio_pos": 0.96012,
+          "frac_neg_sobre_mediana_pos": 0.011953,
+          "pauc": 0.169325
+        },
+        {
+          "n_lesiones": 63646,
+          "n_negativos": 63583,
+          "n_positivos": 63,
+          "n_valores_distintos": 48055,
+          "probabilidad_maxima": 0.966006,
+          "frac_neg_ge_0999": 0.0,
+          "frac_pos_ge_0999": 0.0,
+          "frac_neg_en_max": 0.00011,
+          "frac_pos_en_max": 0.0,
+          "rango_medio_pos": 0.933268,
+          "frac_neg_sobre_mediana_pos": 0.015916,
+          "pauc": 0.148528
+        },
+        {
+          "n_lesiones": 63645,
+          "n_negativos": 63582,
+          "n_positivos": 63,
+          "n_valores_distintos": 32074,
+          "probabilidad_maxima": 0.957671,
+          "frac_neg_ge_0999": 0.0,
+          "frac_pos_ge_0999": 0.0,
+          "frac_neg_en_max": 1.6e-05,
+          "frac_pos_en_max": 0.015873,
+          "rango_medio_pos": 0.920358,
+          "frac_neg_sobre_mediana_pos": 0.015193,
+          "pauc": 0.134926
+        }
+      ],
+      "total": {
+        "n_lesiones": 318229,
+        "n_negativos": 317912,
+        "n_positivos": 317,
+        "n_valores_distintos": 189755,
+        "probabilidad_maxima": 0.966006,
+        "frac_neg_ge_0999": 0.0,
+        "frac_pos_ge_0999": 0.0,
+        "frac_neg_en_max": 2.2e-05,
+        "frac_pos_en_max": 0.0,
+        "rango_medio_pos": 0.919941,
+        "frac_neg_sobre_mediana_pos": 0.015558,
+        "pauc": 0.134797,
+        "pauc_media_de_pliegues": 0.139758
+      }
+    }
+  }
+}
