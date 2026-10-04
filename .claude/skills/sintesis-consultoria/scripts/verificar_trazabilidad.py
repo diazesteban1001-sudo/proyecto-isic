@@ -75,6 +75,16 @@ def candidatos(crudo):
 # registrarlos: sobre informe/borrador-v2.md faltaban 48 de 352.*
 IGNORAR_CONTEXTOS = ["2024", "2026", "Nivel 0", "Nivel 1", "Nivel 2"]
 
+# Los comentarios HTML del borrador (<!-- F: … -->) son trazabilidad, no
+# afirmaciones: dicen de dónde sale la frase de encima. Sus números —líneas,
+# páginas, fechas, nombres de campo— no se buscan en outputs/: se cuentan y se
+# listan aparte, en `numeros_en_comentarios`, como los omitidos por su
+# contexto. *Hasta el 2026-10-04 se buscaban como cualquier otro, y daban
+# señales que nadie tenía que revisar (el 59 y el 495, números de línea) y
+# respaldos por coincidencia (el 31, el 33 y el 55, también números de
+# línea). Control: test_comentarios_html.py.*
+COMENTARIO_HTML = re.compile(r"<!--.*?-->", re.DOTALL)
+
 
 # ---------------------------------------------------------------------------
 # Porcentajes que NO son mediciones
@@ -232,9 +242,12 @@ def es_numeracion_de_seccion(texto, ini, linea_texto, col):
 
 
 def extraer_numeros_del_borrador(texto):
+    """Devuelve, por número, (lecturas, crudo, contexto, línea, en_comentario):
+    el último es True si el número está dentro de un comentario HTML."""
     encontrados = []
     inicios_de_linea = [m.end() for m in re.finditer(r"^", texto, re.MULTILINE)]
     lineas = texto.split("\n")
+    comentarios = [(m.start(), m.end()) for m in COMENTARIO_HTML.finditer(texto)]
     for match in NUM_PATTERN.finditer(texto):
         crudo = match.group()
         if es_parte_de_identificador(texto, match.start(), match.end()):
@@ -250,7 +263,8 @@ def extraer_numeros_del_borrador(texto):
         fin = min(len(texto), match.end() + 10)
         contexto = texto[inicio:fin].replace("\n", " ").strip()
         linea_aprox = texto[: match.start()].count("\n") + 1
-        encontrados.append((valores, crudo, contexto, linea_aprox))
+        en_comentario = any(ini <= match.start() < fin for ini, fin in comentarios)
+        encontrados.append((valores, crudo, contexto, linea_aprox, en_comentario))
     return encontrados
 
 
@@ -335,8 +349,15 @@ def main():
     sin_respaldo = []
     excluidos_metodo = []
     omitidos = []
+    comentarios = []
     con_respaldo = 0
-    for valores, crudo, contexto, linea in encontrados:
+    for valores, crudo, contexto, linea, en_comentario in encontrados:
+        # Trazabilidad, no afirmación: no se le busca respaldo, se registra
+        # (ver COMENTARIO_HTML). Va antes que los contextos omitidos, así que
+        # un año dentro de un comentario cuenta aquí y no allí.
+        if en_comentario:
+            comentarios.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea})
+            continue
         if any(ig in contexto for ig in IGNORAR_CONTEXTOS):
             omitidos.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea})
             continue
@@ -359,9 +380,10 @@ def main():
         else:
             sin_respaldo.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea})
 
-    # Cada número cae en uno solo de los cuatro grupos. Si no suman el total,
+    # Cada número cae en uno solo de los cinco grupos. Si no suman el total,
     # alguno se perdió sin registrarse, como los omitidos hasta el 2026-10-02.
-    agrupados = con_respaldo + len(sin_respaldo) + len(excluidos_metodo) + len(omitidos)
+    agrupados = (con_respaldo + len(sin_respaldo) + len(excluidos_metodo) + len(omitidos)
+                 + len(comentarios))
     if agrupados != len(encontrados):
         raise SystemExit(
             f"Los grupos suman {agrupados} y el borrador tiene {len(encontrados)} números: "
@@ -374,6 +396,7 @@ def main():
         "numeros_sin_respaldo": sin_respaldo,
         "porcentajes_de_metodo_excluidos": excluidos_metodo,
         "numeros_en_contextos_omitidos": omitidos,
+        "numeros_en_comentarios": comentarios,
         "modo_tolerancia": modo,
         # Solo con --tolerancia; en el modo por defecto cada cifra lleva la suya.
         "tolerancia_redondeo": args.tolerancia,
@@ -411,6 +434,14 @@ def main():
         lineas.append(f"  - línea ~{o['linea_aprox']}: \"{o['valor']}\" en «...{o['contexto']}...»")
     if len(omitidos) > 10:
         lineas.append(f"  ... y {len(omitidos) - 10} más — detalle en el .json")
+    lineas.append(
+        f"En comentarios HTML (<!-- … -->: trazabilidad, no afirmaciones), "
+        f"sin buscarles respaldo: {len(comentarios)}"
+    )
+    for c in comentarios[:10]:
+        lineas.append(f"  - línea ~{c['linea_aprox']}: \"{c['valor']}\" en «...{c['contexto']}...»")
+    if len(comentarios) > 10:
+        lineas.append(f"  ... y {len(comentarios) - 10} más — detalle en el .json")
     lineas.append(
         f"Archivos de outputs/ en los que no se busca respaldo, por lista declarada: "
         f"{len(archivos_fuera)} {[a['archivo'] for a in archivos_fuera]}"

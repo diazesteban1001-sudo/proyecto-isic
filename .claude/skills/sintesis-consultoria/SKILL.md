@@ -352,15 +352,27 @@ Reglas, idénticas a las del informe escrito:
   "numeros_en_contextos_omitidos": [
     {"valor": str, "contexto": str, "linea_aprox": int}, ...
   ],
+  "numeros_en_comentarios": [
+    {"valor": str, "contexto": str, "linea_aprox": int}, ...
+  ],
   "modo_tolerancia": "decimales_escritos" | "fija",
   "tolerancia_redondeo": float | null
 }
 ```
 
-Los cuatro grupos —con respaldo, sin respaldo, porcentajes del método y
-omitidos por su contexto (`IGNORAR_CONTEXTOS`)— suman `numeros_en_borrador`,
-y el verificador se detiene si no. *Hasta el 2026-10-02 los omitidos se
-saltaban sin registrarse.* Control: `scripts/test_contextos_omitidos.py`.
+Los cinco grupos —con respaldo, sin respaldo, porcentajes del método,
+omitidos por su contexto (`IGNORAR_CONTEXTOS`) y en comentarios HTML— suman
+`numeros_en_borrador`, y el verificador se detiene si no. *Hasta el
+2026-10-02 los omitidos se saltaban sin registrarse.* Control:
+`scripts/test_contextos_omitidos.py`.
+
+Los números dentro de un comentario HTML (`<!-- F: … -->`) no se buscan en
+`outputs/`: el comentario es trazabilidad, no una afirmación del informe. Se
+cuentan y se listan en `numeros_en_comentarios`. El comentario va antes que
+los contextos omitidos: un año dentro de un comentario cuenta ahí. *Hasta el
+2026-10-04 se buscaban como cualquier otro número, y daban señales que nadie
+tenía que revisar y respaldos por coincidencia, casi siempre números de
+línea.* Control: `scripts/test_comentarios_html.py`.
 
 `tolerancia_redondeo` solo tiene valor en el modo `fija`, el de
 `--tolerancia`. En `decimales_escritos` es `null`, porque cada cifra lleva la
