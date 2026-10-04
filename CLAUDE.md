@@ -1185,9 +1185,12 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
-verificación de trazabilidad con los comentarios aparte», del 2026-10-04,
-sobre `informe/borrador-v2.md`): **402 números, 200 con respaldo, 25
-señalados**, para revisar uno por uno en el anexo. De los demás, 4 son
+verificación de trazabilidad con las salidas nuevas», del 2026-10-04, sobre
+`informe/borrador-v2.md`): **402 números, 201 con respaldo, 24 señalados**,
+para revisar uno por uno en el anexo. *El «11» de la línea 323, las columnas
+que solo trae el entrenamiento, pasó de señalado a respaldado por
+coincidencia: lo respalda un recuento de `outputs/mecanismo-2a.json`, no la
+lista de `auditoria-de-fugas.json`.* De los demás, 4 son
 porcentajes del método, excluidos por lista declarada; 2 caen en contextos
 que el verificador omite (años y etiquetas de nivel), listados en
 `numeros_en_contextos_omitidos`; y 171 están dentro de comentarios HTML,
