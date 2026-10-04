@@ -1180,10 +1180,11 @@ document.getElementById("limitaciones").innerHTML = P([
   `<b>Un mecanismo sin medir.</b> No se midió por qué el gradient boosting sin balancear queda bajo el azar de la pAUC; el informe solo afirma que queda.`]);
 
 /* ---------- pie ---------- */
-// Parte B, B10.
+// Parte B, B10, con el texto de la persona del 2026-10-04.
 document.getElementById("pie").innerHTML =
   `Generado el ${esc(D.generado)} por <code>generar_demo.py</code> desde <code>outputs/*.json</code>. ` +
-  `Ninguna cifra de esta página está escrita a mano: pasa el ratón sobre cualquiera para ver su archivo y campo de origen.`;
+  `Ninguna cifra de esta página está escrita a mano: pasa el ratón sobre cualquiera para ver su origen, ` +
+  `el archivo y el campo de outputs/ o el archivo y la línea de la fuente.`;
 </script>
 </body>
 </html>
