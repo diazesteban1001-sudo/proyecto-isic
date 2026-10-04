@@ -22,6 +22,7 @@ Uso:
 
 import argparse
 import json
+import math
 import os
 import re
 import subprocess
@@ -206,6 +207,79 @@ def extraer(patron, texto, que):
     return m
 
 
+def datos_mecanismo(mecanismo, metrica):
+    """borrador-v2.md, «Una decisión por defecto cambia el veredicto», el
+    párrafo de cómo falla el 2a (outputs/mecanismo-2a.json). Los porcentajes
+    se calculan aquí desde los campos; ninguno se teclea."""
+    m2a = mecanismo["niveles"]["nivel_2a_gradient_boosting_sin_balancear"]["total"]
+    m2b = mecanismo["niveles"]["nivel_2b_gradient_boosting_balanceado"]["total"]
+    percentil = int(extraer(r"percentil (\d+) de las probabilidades de los negativos",
+                            mecanismo["definiciones"]["p20_neg / frac_pos_bajo_p20_neg"],
+                            "el percentil de los negativos").group(1))
+    # Capturar el tpr% de los positivos deja fuera la cola de 100 − tpr: su
+    # decil en deciles_rango_pos (10, 20, …, 90) es el que dice dónde cae.
+    cola = 100 - metrica["tpr"]
+    afirmar(cola % 10 == 0 and 10 <= cola <= 90,
+            "el umbral tiene que bajar hasta el … de positivos de menor rango (un decil)")
+    indice = cola // 10 - 1
+    decil = m2a["deciles_rango_pos"][indice]
+    marcadas = math.floor((1 - decil) * 100)
+    afirmar(m2a["frac_neg_ge_0999"] < m2a["frac_pos_ge_0999"],
+            "No es que ponga arriba a más negativos que positivos, en proporción")
+    afirmar(marcadas > metrica["tpr"],
+            "Ahí queda marcado más del … de las lesiones, cuando al azar quedaría marcado el …")
+    return {
+        "seed": mecanismo["esquema_cv"]["seed"],
+        "umbral_alto": mecanismo["umbral_alto"],
+        "neg_alto": round(m2a["frac_neg_ge_0999"] * 100, 2),
+        "pos_alto": round(m2a["frac_pos_ge_0999"] * 100, 2),
+        "percentil": percentil,
+        "pos_bajo": round(m2a["frac_pos_bajo_p20_neg"] * 100, 2),
+        "pos_bajo_2b": round(m2b["frac_pos_bajo_p20_neg"] * 100, 2),
+        "n_pos_min": m2a["n_pos_en_el_minimo"],
+        "n_neg_min": m2a["n_neg_en_el_minimo"],
+        "minimo": m2a["minimo_predicho"],
+        "cola": cola,
+        "indice_decil": indice,
+        "decil": round(decil * 100, 2),
+        "marcadas": marcadas,
+    }
+
+
+def datos_particion(particion):
+    """borrador-v2.md, «Una ventaja que la pAUC no ve» y «Partir por filas no
+    cambia el veredicto» (outputs/efecto-particion.json)."""
+    clave_ic = "intervalo_t_95_nadeau_bengio"
+    afirmar(all(c["coincide"] for c in particion["control_paciente_contra_referencia"].values()),
+            "la partición por paciente reproduce la validación repetida pliegue a pliegue")
+    cp = particion["particiones"]["paciente"]["comparacion_2b_menos_1"]
+    cf = particion["particiones"]["filas"]["comparacion_2b_menos_1"]
+    fmp = particion["filas_menos_paciente"]
+    n1, n2b = "nivel_1_regresion_logistica", "nivel_2b_gradient_boosting_balanceado"
+    afirmar(contiene_cero(cp["pauc"][clave_ic]) and cp["auc"][clave_ic][0] > 0 and cp["setop15"][clave_ic][0] > 0
+            and cp["nnt80"][clave_ic][1] < 0,
+            "En las otras tres métricas sí lo está … la pAUC no distingue una ventaja que las métricas de triaje sí distinguen")
+    en_la_regla = [(n, m) for n in (n1, n2b) for m in ("pauc", "auc", "nnt80")
+                   if fmp[n][m]["semillas_filas_mejor"] == fmp[n][m]["de_semillas"]]
+    afirmar(not en_la_regla and contiene_cero(cp["pauc"][clave_ic]) and contiene_cero(cf["pauc"][clave_ic]),
+            "No se cumple ninguna de las dos")
+    afirmar(fmp[n1]["auc"]["semillas_filas_mejor"] == fmp[n1]["nnt80"]["semillas_filas_mejor"],
+            "En el AUC y el NNT80% SE de la logística da mejor en … de …")
+    afirmar(fmp[n1]["setop15"]["diferencia_de_medias"] > 0 and fmp[n2b]["setop15"]["diferencia_de_medias"] > 0,
+            "La sensibilidad top-15 sí sube con filas")
+    return {
+        "otras": {k: {"media": cp[k]["media"], "ic": cp[k][clave_ic]} for k in ("auc", "setop15", "nnt80")},
+        "ic_paciente": cp["pauc"][clave_ic],
+        "ic_filas": cf["pauc"][clave_ic],
+        "semillas": len(particion["esquema"]["semillas"]),
+        "filas_menos_paciente": {
+            corto: {m: {"dif": fmp[n][m]["diferencia_de_medias"], "mejor": fmp[n][m]["semillas_filas_mejor"]}
+                    for m in ("pauc", "auc", "nnt80")}
+            for corto, n in (("n1", n1), ("n2b", n2b))
+        },
+    }
+
+
 def construir_datos(outputs_dir, leidos):
     def cargar(nombre):
         return cargar_json(outputs_dir, nombre, leidos)
@@ -227,6 +301,8 @@ def construir_datos(outputs_dir, leidos):
                 for s in verificacion["numeros_sin_respaldo"]),
             "un número señalado puede ser legítimo, como el año de una fuente")
     fase4 = {archivo: cargar(archivo) for _, archivo in COMPARACIONES}
+    mecanismo = cargar("mecanismo-2a")
+    particion = cargar("efecto-particion")
 
     escala = modelado["escala_de_referencia_pauc"]
 
@@ -423,6 +499,8 @@ def construir_datos(outputs_dir, leidos):
         },
         "comparaciones": comparaciones,
         "tabla": tabla,
+        "mecanismo": datos_mecanismo(mecanismo, metrica),
+        "particion": datos_particion(particion),
         "verificacion": {
             "total": verificacion["numeros_en_borrador"],
             "con": verificacion["numeros_con_respaldo_en_outputs"],
@@ -623,12 +701,14 @@ __AVISO_EXPLORATORIO__
 </section>
 
 <section>
-  <h2><span class="num">3</span>Mejor media no es mejor modelo</h2>
+  <h2><span class="num">3</span>Una ventaja que la pAUC no ve</h2>
   <div class="tarjeta">
     <div class="texto" id="texto-3"></div>
     <div class="lienzo"><canvas id="gr-pareada"></canvas></div>
     <h3>Las columnas de procedencia no explican la ventaja</h3>
     <div class="texto" id="texto-3b"></div>
+    <h3>Partir por filas no cambia el veredicto</h3>
+    <div class="texto" id="texto-3c"></div>
   </div>
 </section>
 
@@ -712,6 +792,7 @@ const fEda = c => "eda-diagnostico.json > " + c, fDis = c => "diseno-validacion.
 const fVR = c => "validacion-repetida.json > " + c, fPro = c => "sensibilidad-procedencia-repetida.json > comparaciones." + c;
 const fExt = c => "extraccion-imagen.json > " + c, fVer = c => "sintesis-verificacion.json > " + c;
 const fMod = c => "modelado-baseline.json > " + c;
+const MC = D.mecanismo, fMec = c => "mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total." + c;
 const azar = cifra(dec(D.escala.azar), fMod("escala_de_referencia_pauc.azar"));
 const nivelIC = cifra(D.nivel_ic + "%", "fase4-*.json > comparaciones_nuevo_menos_base.*." + D.clave_ic + " (nivel del intervalo)");
 const semillasVR = cifra(VR.semillas, fVR("semillas_corridas"));
@@ -882,7 +963,25 @@ document.getElementById("texto-2").innerHTML = HALLAZGOS["modelado-baseline"]() 
   `${cifra(String(D.seed42.seed), fMod("esquema_cv.seed"))}, el AUC estándar del modelo sin balancear es ` +
   `${cifra(dec(D.seed42.auc_2a), fMod("nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media"))}, por encima del azar de su escala, ` +
   `${cifra(dec(D.auc_azar), fMod("nivel_0_referencia_univariada.nota"))}; su pAUC queda por debajo del azar de la suya. ` +
-  `Las dos métricas discrepan sobre si el modelo supera al azar.`]);
+  `Las dos métricas discrepan sobre si el modelo supera al azar.`,
+  `Se midió también cómo falla el modelo sin balancear, en la partición de la semilla ` +
+  `${cifra(String(MC.seed), "mecanismo-2a.json > esquema_cv.seed")}. No es que ponga arriba a más negativos que ` +
+  `positivos, en proporción: con probabilidad de ${cifra(dec(MC.umbral_alto), "mecanismo-2a.json > umbral_alto")} o más queda el ` +
+  `${cifra(dec(MC.neg_alto) + "%", fMec("frac_neg_ge_0999"))} de los negativos y el ` +
+  `${cifra(dec(MC.pos_alto) + "%", fMec("frac_pos_ge_0999"))} de los positivos. ` +
+  `Lo que hace es hundir a una parte de los positivos al fondo del ordenamiento: el ` +
+  `${cifra(dec(MC.pos_bajo) + "%", fMec("frac_pos_bajo_p20_neg"))} queda en o por debajo del percentil ` +
+  `${cifra(MC.percentil, "mecanismo-2a.json > definiciones (p20_neg)")} de los negativos, frente al ` +
+  `${cifra(dec(MC.pos_bajo_2b) + "%", "mecanismo-2a.json > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg")} ` +
+  `con el modelo balanceado, y ${cifra(MC.n_pos_min, fMec("n_pos_en_el_minimo"))} positivos comparten con ` +
+  `${cifra(MC.n_neg_min, fMec("n_neg_en_el_minimo"))} negativos la probabilidad mínima, ${cifra(dec(MC.minimo), fMec("minimo_predicho"))}. ` +
+  `Eso es coherente con una pAUC bajo el azar: para capturar el ${cifra(D.metrica.tpr + "%", fMod("metrica"))} de los ` +
+  `positivos, el umbral tiene que bajar hasta el ${cifra(MC.cola + "%", fMod("metrica") + " (100 menos el umbral de sensibilidad)")} ` +
+  `de positivos de menor rango, y ese ${cifra(MC.cola + "%", fMod("metrica") + " (100 menos el umbral de sensibilidad)")} está entre el ` +
+  `${cifra(dec(MC.decil) + "%", fMec("deciles_rango_pos[" + MC.indice_decil + "] (× 100)"))} de lesiones con menor puntuación. ` +
+  `Ahí queda marcado más del ${cifra(MC.marcadas + "%", fMec("deciles_rango_pos[" + MC.indice_decil + "] (100 · (1 − valor), por abajo)"))} ` +
+  `de las lesiones, cuando al azar quedaría marcado el ${cifra(D.metrica.tpr + "%", fMod("metrica"))}. ` +
+  `Por qué el modelo los hunde no se midió.`]);
 
 // Bigotes de +/- 1 desviacion entre folds. Se dibujan a mano porque
 // Chart.js no trae barras de error: sin ellas la vista de medias
@@ -970,15 +1069,24 @@ new Chart(document.getElementById("gr-niveles"), {
   }
 });
 
-/* ---------- 3. mejor media no es mejor modelo ---------- */
-const PA = VR.pareada;
-// borrador-v2.md, «Resultados», «Mejor media no es mejor modelo».
+/* ---------- 3. una ventaja que la pAUC no ve ---------- */
+const PA = VR.pareada, EP = D.particion;
+const fEP = c => "efecto-particion.json > particiones.paciente.comparacion_2b_menos_1." + c;
+const fEPf = c => "efecto-particion.json > filas_menos_paciente." + c;
+// borrador-v2.md, «Resultados», «Una ventaja que la pAUC no ve».
 document.getElementById("texto-3").innerHTML = P([
   `El gradient boosting balanceado supera a la regresión logística balanceada por ` +
   `${cifra(dec(PA.media), fVR("comparacion_pareada_2b_menos_1.media"))} en promedio, con intervalo ` +
   `${ic(PA.ic[0], PA.ic[1], fVR("comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio"))} ` +
   `(${cifra(PA.gana, fVR("comparacion_pareada_2b_menos_1.gana_2b_en"))} de ${cifra(PA.de, fVR("comparacion_pareada_2b_menos_1.de"))} pliegues; ` +
-  `${cifra(PA.semillas, fVR("comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"))} de ${semillasVR} semillas). La ventaja no está establecida.`,
+  `${cifra(PA.semillas, fVR("comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"))} de ${semillasVR} semillas). La ventaja no está establecida. ` +
+  `En las otras tres métricas sí lo está: AUC ${cifra(firmado(EP.otras.auc.media), fEP("auc.media"))}, ` +
+  `${ic(EP.otras.auc.ic[0], EP.otras.auc.ic[1], fEP("auc.intervalo_t_95_nadeau_bengio"))}; sensibilidad top-15 ` +
+  `${cifra(firmado(EP.otras.setop15.media), fEP("setop15.media"))}, ` +
+  `${ic(EP.otras.setop15.ic[0], EP.otras.setop15.ic[1], fEP("setop15.intervalo_t_95_nadeau_bengio"))}; NNT80% SE ` +
+  `${cifra(firmado(EP.otras.nnt80.media, 2), fEP("nnt80.media"))} lesiones por cada maligna, ` +
+  `${ic(EP.otras.nnt80.ic[0], EP.otras.nnt80.ic[1], fEP("nnt80.intervalo_t_95_nadeau_bengio"), 2)}. ` +
+  `Como en M2 − M1, la pAUC no distingue una ventaja que las métricas de triaje sí distinguen.`,
   `Sobre una sola partición de los datos completos, el boosting parecía además más estable que la logística. ` +
   `Con las ${semillasVR} semillas el orden se invierte: su desviación entre pliegues es ${stdN("Nivel 2b")}, frente a ${stdN("Nivel 1")}. ` +
   `Ese argumento se retiró.`]);
@@ -994,6 +1102,29 @@ document.getElementById("texto-3b").innerHTML = P([
   `La magnitud no está establecida. ` +
   `La exclusión se sostiene por razón de uso, no de desempeño. Una sola partición sugería lo contrario; ` +
   `es el segundo resultado de una sola partición que no sobrevive a la validación repetida.`]);
+// borrador-v2.md, «Resultados», «Partir por filas no cambia el veredicto».
+const FP = EP.filas_menos_paciente, semEP = cifra(EP.semillas, "efecto-particion.json > esquema.semillas");
+const mejorF = (n, m, nivel) => cifra(FP[n][m].mejor, fEPf(nivel + "." + m + ".semillas_filas_mejor"));
+const N1 = "nivel_1_regresion_logistica", N2B = "nivel_2b_gradient_boosting_balanceado";
+document.getElementById("texto-3c").innerHTML = P([
+  `Se probaron las dos particiones con la logística y el gradient boosting balanceados, con una regla de lectura ` +
+  `fijada antes de correr. La partición por filas infla una métrica si da mejor en las ${semEP} semillas, y cambia el ` +
+  `veredicto si el intervalo de 2b − 1 en la pAUC excluye el cero en una partición y no en la otra.`,
+  `No se cumple ninguna de las dos. Partir por filas mueve la pAUC en ` +
+  `${cifra(firmado(FP.n1.pauc.dif), fEPf(N1 + ".pauc.diferencia_de_medias"))} con la logística y en ` +
+  `${cifra(firmado(FP.n2b.pauc.dif), fEPf(N2B + ".pauc.diferencia_de_medias"))} con el boosting, y da mejor en ` +
+  `${mejorF("n1", "pauc", N1)} y en ${mejorF("n2b", "pauc", N2B)} de las ${semEP} semillas. ` +
+  `En el AUC y el NNT80% SE de la logística da mejor en ${mejorF("n1", "auc", N1)} de ${semEP}, no en las ${semEP} que pedía la ` +
+  `regla; con el boosting, en ${mejorF("n2b", "auc", N2B)} y en ${mejorF("n2b", "nnt80", N2B)}. ` +
+  `El intervalo de 2b − 1 en la pAUC contiene el cero en las dos particiones: ` +
+  `${ic(EP.ic_paciente[0], EP.ic_paciente[1], fEP("pauc.intervalo_t_95_nadeau_bengio"))} por paciente y ` +
+  `${ic(EP.ic_filas[0], EP.ic_filas[1], "efecto-particion.json > particiones.filas.comparacion_2b_menos_1.pauc.intervalo_t_95_nadeau_bengio")} por filas.`,
+  `La sensibilidad top-15 sí sube con filas, pero queda fuera de la regla: con esa partición cada paciente tiene en ` +
+  `validación solo una parte de sus lesiones, y el top-15 no mide lo mismo.`,
+  `<i>Interpretación, no medición:</i> con estos datos y estos dos modelos, que el ` +
+  `${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes quede a los dos ` +
+  `lados no se traduce en una métrica inflada. Lo medido vale para la logística y el boosting balanceados; no se probó con ` +
+  `el contexto de paciente ni con M3 limpio.`]);
 
 // Líneas horizontales: el cero, la media y el intervalo corregido.
 const lineasH = {
@@ -1177,7 +1308,10 @@ document.getElementById("limitaciones").innerHTML = P([
   `<b>Los tiempos son de un solo equipo</b>, con DINOv2 en la GPU y los modelos tabulares en la CPU. Solo comparan estos modelos entre sí.`,
   `<b>Dos supuestos sin verificar.</b> No se sabe si el clasificador de nevus que produce <code>tbp_lv_nevi_confidence</code> se entrenó con lesiones ` +
   `de este conjunto. Y nada comprueba la versión del código de DINOv2; solo sus pesos, por hash.`,
-  `<b>Un mecanismo sin medir.</b> No se midió por qué el gradient boosting sin balancear queda bajo el azar de la pAUC; el informe solo afirma que queda.`]);
+  `<b>Un mecanismo medido a medias.</b> Se midió cómo falla el gradient boosting sin balancear: hunde a una parte de los ` +
+  `positivos al fondo del ordenamiento. Por qué lo hace no se midió.`,
+  `<b>La prueba de la partición cubre dos modelos.</b> Que partir por filas no cambie el veredicto se midió con la logística ` +
+  `y el boosting balanceados, no con los modelos que usan el contexto de paciente.`]);
 
 /* ---------- pie ---------- */
 // Parte B, B10, con el texto de la persona del 2026-10-04.
