@@ -1276,6 +1276,22 @@ persona).** Fijadas antes de correr nada.
   también la huella de los pliegues de cada semilla con la de
   `fase4-m2-vs-m1.json`.
 
+**La imagen sola: dos decisiones sobre el resultado (2026-10-04, de la
+persona).** Tomadas después de correr.
+
+1. **El intervalo de la pAUC de (Imagen + básicos) − Imagen se lee con la
+   precisión guardada.** En `outputs/imagen-sola.json` es [0,0; 0,0089]: no
+   excluye el cero, así que esa mejora no se da por establecida. No se vuelve
+   a correr, y el recálculo sin redondear que el agente hizo en su scratchpad
+   no se cita.
+2. **El campo `comando` de la salida.** `imagen_sola.py` lo escribía como
+   `python` seguido de los argumentos, y la corrida fue con el intérprete del
+   entorno virtual. Se corrige el script para que registre el intérprete y los
+   argumentos reales (`sys.executable` y `sys.argv`, con rutas relativas al
+   repositorio). `outputs/imagen-sola.json` no se edita a mano ni se vuelve a
+   correr: conserva el `comando` de la corrida, y el commit de la corrección lo
+   anota.
+
 ---
 
 ## Decisiones
