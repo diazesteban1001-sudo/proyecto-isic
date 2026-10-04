@@ -1144,8 +1144,10 @@ es un hallazgo sino una decisión de la persona (2026-09-25), escrita en
 Es la regla 2 con un verificador detrás, no un propósito.
 
 **Mecanismo.** `sintesis-consultoria/scripts/verificar_trazabilidad.py`
-extrae todo número del borrador y lo busca en los `outputs/*.json`, salvo en
-los que declara fuera del corpus (`FUERA_DEL_CORPUS`, desde el 2026-09-25: el
+extrae todo número del borrador y lo busca en los `outputs/*.json` —salvo
+los de los comentarios HTML (`<!-- F: … -->`), que son trazabilidad y se
+registran aparte desde el 2026-10-04—, y no lo busca en los archivos que
+declara fuera del corpus (`FUERA_DEL_CORPUS`, desde el 2026-09-25: el
 conjunto reservado; el análisis de sensibilidad de una sola partición,
 `sensibilidad-procedencia.json`, excluido por nombre y con su motivo, porque
 lo supera la validación repetida; y la salida del propio verificador. *Hasta
@@ -1161,13 +1163,16 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
-verificación de trazabilidad con las métricas de triaje», del 2026-10-03,
-sobre `informe/borrador-v2.md`): **402 números, 290 con respaldo, 31
+verificación de trazabilidad con los comentarios aparte», del 2026-10-04,
+sobre `informe/borrador-v2.md`): **402 números, 200 con respaldo, 25
 señalados**, para revisar uno por uno en el anexo. De los demás, 4 son
-porcentajes del método, excluidos por lista declarada, y 77 caen en
-contextos que el verificador omite (años y etiquetas de nivel) y se listan
-aparte, en `numeros_en_contextos_omitidos`. Los cuatro grupos suman el total,
-y el verificador se detiene si no. *Hasta el 2026-10-02 esta frase citaba la
+porcentajes del método, excluidos por lista declarada; 2 caen en contextos
+que el verificador omite (años y etiquetas de nivel), listados en
+`numeros_en_contextos_omitidos`; y 171 están dentro de comentarios HTML,
+listados en `numeros_en_comentarios`. Los cinco grupos suman el total, y el
+verificador se detiene si no. *Hasta el 2026-10-04 los números de los
+comentarios se buscaban como los demás: la corrida anterior, del 2026-10-03,
+daba 290 con respaldo, 31 señalados y 77 omitidos.* *Hasta el 2026-10-02 esta frase citaba la
 corrida sobre `informe/borrador.md`, del 2026-09-21: 344 números, 298 con
 respaldo y 16 señalados, con la tolerancia de 0,01; catorce de esos 16 eran
 siete cifras contadas dos veces por la sección §10.4 de ese borrador. Y
