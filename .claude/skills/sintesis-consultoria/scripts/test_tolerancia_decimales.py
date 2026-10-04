@@ -42,17 +42,21 @@ Casos, cada uno con un borrador de una sola cifra sobre un outputs/ sintético
   - el caso discrimina: con --tolerancia 0.01, "0,1451" vuelve a quedar
     respaldada y la salida declara el modo fijo.
 
-Informativo, no cuenta para el resultado: tres defectos de lectura abiertos
----------------------------------------------------------------------------
+Informativo, no cuenta para el resultado: tres defectos de lectura
+-----------------------------------------------------------------
+(a) y (c) siguen abiertos; (b) se cerró el 2026-10-04 (test_signo_menos.py).
   (a) candidatos() cambia la coma por punto antes de aplicar MILES, así que
       "0,008" recibe también la lectura 8: un 8 del corpus la respalda.
   (b) NUM_PATTERN solo reconoce el guion ASCII como signo. "−0,1398", con el
       signo menos U+2212 que usa el borrador, se lee como 0,1398: respaldada
       por {0.1398} y señalada frente a {-0.1398}, las dos al revés. Con guion
-      ASCII se lee bien. Lo mismo "−0,0263" frente a {0.0263}.
+      ASCII se lee bien. Lo mismo "−0,0263" frente a {0.0263}. *Cerrado el
+      2026-10-04: «−» pegado a un dígito, sin otro dígito delante, es signo;
+      control en test_signo_menos.py. Desde entonces estas líneas
+      informativas muestran la lectura corregida.*
   (c) El "%" solo se reconoce pegado al número: "99 %" se lee como "99" y va
       por la vía directa, sin la lista de PORCENTAJES_DE_METODO.
-No se corrigen en el commit de la regla de decimales.
+No se corrigieron en el commit de la regla de decimales.
 
 Uso
 ---
@@ -149,7 +153,7 @@ def main():
         fallos += not ok
     print(f"\n{len(casos) - fallos} de {len(casos)} casos como se esperaba.")
 
-    print("\nInformativo, no cuenta para el resultado: defectos de lectura abiertos")
+    print("\nInformativo, no cuenta para el resultado: defectos de lectura ((a) y (c) abiertos; (b) cerrado)")
     for defecto, corpus, cifra in [
         ("(a) coma y MILES", {"recuento": 8}, "0,008"),
         ("(b) signo U+2212", pauc(0.1398), "−0,1398"),

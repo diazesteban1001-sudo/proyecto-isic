@@ -34,7 +34,18 @@ import re
 # "0,8053" en dos números y lee "401.059" como cuatrocientos uno con cincuenta
 # y nueve — ninguno de los dos tiene respaldo en outputs/ y ambos se señalan
 # como falsos positivos.
-NUM_PATTERN = re.compile(r"-?\d[\d.,]*%?")
+#
+# El signo: el borrador escribe los negativos con el signo menos tipográfico
+# (U+2212), «−0,0579». Es signo si va pegado a un dígito y no lo precede otro
+# dígito: «[−0,084; −0,0319]» son dos negativos; en «M2 − M1» y «2b − 1» el
+# «−» va separado y no es signo; «60−64» es un rango y se lee 60 y 64. El
+# guion ASCII se lee como siempre: es signo pegado a un dígito, también
+# entre dígitos («2015-2024» da −2024). *Hasta el 2026-10-04 solo se
+# reconocía el guion ASCII, y «−0,0579» se leía como 0,0579: lo respaldaba un
+# 0.0579 positivo y quedaba señalado frente al −0.0579 de outputs/ (registro
+# de incidentes, duodécima fila, defecto (b)). Control: test_signo_menos.py.*
+SIGNO_MENOS = "\u2212"
+NUM_PATTERN = re.compile(r"(?:-|(?<!\d)\u2212)?\d[\d.,]*%?")
 
 # Punto seguido de exactamente tres dígitos = separador de miles, no decimal.
 MILES = re.compile(r"(?<=\d)\.(?=\d{3}(?!\d))")
@@ -56,7 +67,7 @@ def candidatos(crudo):
     corpus eso respalda por azar casi cualquier recuento: 78 por un NNT de
     77,58. Los decimales se cuentan sobre el texto y no sobre el float, que
     pierde los ceros finales: "0,140" son tres."""
-    limpio = crudo.rstrip("%").rstrip(".,").replace(",", ".")
+    limpio = crudo.rstrip("%").rstrip(".,").replace(",", ".").replace(SIGNO_MENOS, "-")
     lecturas = {limpio, MILES.sub("", limpio)}
     valores = []
     for lectura in lecturas:

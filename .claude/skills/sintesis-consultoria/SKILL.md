@@ -123,6 +123,16 @@ margen por defecto era 0,01, el 5 % de la escala del pAUC: el README pasaba
 con 0,1451 y 0,1331 cuando `outputs/` ya decía 0,1398 y 0,1326.* Control:
 `scripts/test_tolerancia_decimales.py`.
 
+**El signo menos.** El borrador escribe los negativos con el signo menos
+tipográfico (U+2212). Es signo si va pegado a un dígito y no lo precede otro
+dígito: «[−0,084; −0,0319]» son dos negativos; en «M2 − M1» y «2b − 1», con el
+«−» separado por un espacio, no lo es; «60−64» se lee 60 y 64. El guion ASCII
+se lee como antes, también entre dígitos: «2015-2024» da −2024. *Hasta el
+2026-10-04 solo se reconocía el guion ASCII, y «−0,0579» se leía como 0,0579:
+al corregirlo, 19 negativos de `informe/borrador-v2.md` pasaron de señalados a
+respaldados por su propio campo, y ninguno quedó sin respaldo.* Control:
+`scripts/test_signo_menos.py`.
+
 **Límite que queda, medido.** El verificador busca cada cifra en todo el
 corpus, no en el campo que el texto cita. Sobre el `outputs/` del 2026-10-02,
 con 2.864 valores distintos en el corpus, pasarían por azar:
