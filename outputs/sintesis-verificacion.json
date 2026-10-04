@@ -1,6 +1,6 @@
 {
   "numeros_en_borrador": 402,
-  "numeros_con_respaldo_en_outputs": 200,
+  "numeros_con_respaldo_en_outputs": 201,
   "numeros_sin_respaldo": [
     {
       "valor": "7,500",
@@ -51,11 +51,6 @@
       "valor": "2023,",
       "contexto": "án descritos en un artículo de abril de 2023, y sus aut",
       "linea_aprox": 169
-    },
-    {
-      "valor": "11",
-      "contexto": "line.json > columnas_excluidas -->  - **11 no existe",
-      "linea_aprox": 323
     },
     {
       "valor": "30,55",
