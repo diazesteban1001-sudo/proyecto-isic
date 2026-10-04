@@ -1195,6 +1195,44 @@ el primer paso:
   comprobación de «0,1451». Va después de corregir el verificador, porque sus
   cifras cambian, y en un commit de higiene aparte.
 
+**El efecto de la partición: especificación y regla de lectura (2026-10-04, de
+la persona).** Fijadas antes de correr nada. Responde la pendiente de
+`CLAUDE.md` «El efecto de la partición sobre el resultado de un modelo no está
+medido».
+
+- **Qué se corre.** El nivel 1 (logística balanceada) y el nivel 2b (= M1),
+  con la configuración de `evaluar_repetido.py`, sobre el conjunto de
+  desarrollo y en dos particiones: la de siempre (`StratifiedGroupKFold` por
+  `patient_id`) y una por filas (`StratifiedKFold`, sin agrupar). En las dos, 5
+  pliegues y semillas de la 0 a la 9.
+- **Qué se reporta, por partición:**
+  - las cuatro métricas de cada nivel (pAUC, AUC, sensibilidad top-15 y
+    NNT80% SE), en media global y por semilla;
+  - la diferencia 2b − 1 en cada métrica, con su intervalo corregido de Nadeau
+    y Bengio, como en `outputs/validacion-repetida.json`;
+  - por nivel y métrica, la diferencia de medias filas − paciente y en cuántas
+    semillas la de filas supera a la de paciente.
+- **Control.** La corrida por paciente tiene que reproducir
+  `outputs/validacion-repetida.json` pliegue a pliegue en los niveles 1 y 2b.
+  Si no, se para.
+- **Regla de lectura, fijada antes de correr:**
+  - (a) La partición por filas infla una métrica de un nivel si su media
+    supera a la de la partición por paciente en las 10 semillas. Vale para la
+    pAUC, el AUC y el NNT80% SE, no para la sensibilidad top-15: con partición
+    por filas, cada paciente solo tiene en validación una parte de sus
+    lesiones, así que el top-15 no mide lo mismo. Se reporta, pero queda fuera
+    de la regla. *Precisión de la persona, el mismo día y antes de correr: en
+    el NNT80% SE, donde menos es mejor, «supera» se lee como «es mejor», es
+    decir, menor. La salida da también los conteos numéricos, sin dirección.*
+  - (b) La partición cambia el veredicto si el intervalo corregido de 2b − 1
+    en la pAUC excluye el cero en una partición y no en la otra.
+  - Si no se cumple ninguna de las dos, se reporta así.
+- **Prueba sintética primero:** un caso con un efecto de sujeto fuerte, en el
+  que la partición por filas tiene que dar una métrica más alta, y otro sin
+  efecto de sujeto.
+- **Salida:** `outputs/efecto-particion.json` y `.md` (máximo 15 líneas, sin
+  interpretación). El cargador se niega a leer el reservado.
+
 ---
 
 ## Decisiones
