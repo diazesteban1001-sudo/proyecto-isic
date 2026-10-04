@@ -790,12 +790,12 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman nueve del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman diez del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
-`outputs/fase4-m3-vs-m2.json`, `outputs/fase4-m3limpio-vs-m2.json` y
-`outputs/tiempo-inferencia.json`. Desde el 2026-09-25 sus
+`outputs/fase4-m3-vs-m2.json`, `outputs/fase4-m3limpio-vs-m2.json`,
+`outputs/tiempo-inferencia.json` y `outputs/imagen-sola.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -962,6 +962,34 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
    *Salvedad:* DINOv2 corre en la GPU del equipo (MPS) y los modelos tabulares en
    CPU. Los tiempos solo comparan estos modelos entre sí, en este equipo.
+
+10. **Sin las mediciones del sistema de fotografía corporal total, la imagen
+    sola distingue lesiones malignas por encima del azar, pero queda por debajo
+    de M1 en las cuatro métricas** (conjunto de desarrollo, 10 semillas × 5
+    pliegues, los mismos pliegues de M1; `outputs/imagen-sola.json`). «Imagen»
+    es una logística balanceada sobre las 384 variables de DINOv2; «Imagen +
+    básicos» añade edad, sexo y zona del cuerpo. Especificación y regla de
+    lectura fijadas antes de correr (`PLAN.md`, Fase 6).
+    - Imagen: pAUC 0,0796, frente a 0,02 del azar, con los 50 pliegues por
+      encima; AUC 0,8213.
+    - Imagen − M1: pAUC −0,0579 [−0,084; −0,0319], Imagen mejor en 1 de 50
+      pliegues y 0 de 10 semillas; AUC −0,0997 [−0,1383; −0,061]; SEtop-15
+      −0,2364 [−0,323; −0,1498]; NNT80% SE +309,97 [177,89; 442,06]. Los
+      cuatro intervalos excluyen el cero.
+    - (Imagen + básicos) − Imagen: AUC +0,0082 [0,0016; 0,0149], establecido;
+      pAUC +0,0045 [0,0; 0,0089], que con la precisión guardada no excluye el
+      cero y no se da por establecida (decisión de la persona, `PLAN.md`, Fase
+      6); SEtop-15 +0,0026 [−0,034; 0,0393]; NNT80% SE −35,57
+      [−86,90; 15,75].
+
+    Por la regla de lectura, es descriptivo: no cambia la recomendación, que
+    vale donde se toma la fotografía corporal total. Se midió sobre los
+    recortes de SLICE-3D, no sobre fotos de teléfono (Pendientes). No se midió
+    tiempo: el costo de la imagen es el de M4 (hallazgo 9). M1 reproduce
+    `outputs/fase4-m2-vs-m1.json` pliegue a pliegue en las cuatro métricas.
+    *Salvedad de la salida:* su campo `comando` registra `python` y no el
+    intérprete con que se corrió; el script ya está corregido y la salida no se
+    rehízo (`PLAN.md`, Fase 6).
 
 ### Dónde se lee la fase vigente
 
@@ -1180,6 +1208,22 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Qué se hace:** el entregado no se corrige; el informe nuevo sí
         (`informe/borrador-v2.md`, «Estado del arte»), y también `PLAN.md`,
         Fase 0. Si se pregunta en la sustentación, se reconoce.
+- [ ] **El rendimiento con fotos de teléfono no está medido** (2026-10-04).
+      - **Qué dice el informe:** donde no hay sistema de fotografía corporal
+        total, el punto de partida es la imagen con edad, sexo y zona del
+        cuerpo, y antes de usarla habría que medirla con fotos de teléfono
+        (`informe/borrador-v2.md`, «Qué se recomienda»; y «Qué no se puede
+        afirmar», «Cuánto rinde un modelo con fotos de teléfono»).
+      - **Qué hay medido:** solo la imagen sobre los recortes estandarizados de
+        SLICE-3D (`outputs/imagen-sola.json`, hallazgo 10). El artículo del
+        conjunto de datos dice que las fotos que toman los pacientes *"vary
+        greatly in lighting and FOV"*
+        (`referencias/kurtansky-2024-slice3d-descriptor.md`, línea 115).
+      - **Qué lo cerraría:** evaluar el modelo sobre fotos de teléfono con
+        diagnóstico confirmado. `data/` no tiene ninguna (listado el
+        2026-10-04): la metadata y las imágenes del reto, las características
+        de DINOv2 extraídas de ellas y el código de DINOv2, con las figuras de
+        su documentación.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
@@ -1247,17 +1291,23 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
-verificación de trazabilidad con el estado del arte y la partición», del
-2026-10-04, sobre `informe/borrador-v2.md`): **553 números, 252 con respaldo,
-39 señalados**, para revisar uno por uno en el anexo. *El «11» de «La
+verificación de trazabilidad con la imagen sola», del 2026-10-04, sobre
+`informe/borrador-v2.md`): **600 números, 273 con respaldo, 43 señalados**,
+para revisar uno por uno en el anexo. *La subsección de la imagen sola trae
+nueve negativos de `outputs/imagen-sola.json` que el verificador lee sin signo
+(defecto (b) del registro de incidentes, duodécima fila): tres quedan
+señalados (−0,0579, −0,2364 y −0,323) y seis pasan solo porque su valor sin
+signo aparece en otro archivo. Y el 0,922, que sale de Kurtansky 2025 y no de
+`outputs/`, pasa por coincidencia con AUC de `outputs/efecto-particion.json`.* *El «11» de «La
 auditoría de columnas», las columnas que solo trae el entrenamiento, pasó de
 señalado a respaldado por coincidencia: lo respalda un recuento de
 `outputs/mecanismo-2a.json`, no la lista de `auditoria-de-fugas.json`.* De los
-demás, 6 son porcentajes del método, excluidos por lista declarada; 9 caen en
+demás, 7 son porcentajes del método, excluidos por lista declarada; 9 caen en
 contextos que el verificador omite (años y etiquetas de nivel), listados en
-`numeros_en_contextos_omitidos`; y 247 están dentro de comentarios HTML,
+`numeros_en_contextos_omitidos`; y 268 están dentro de comentarios HTML,
 listados en `numeros_en_comentarios`. Los cinco grupos suman el total, y el
-verificador se detiene si no. *Hasta el 2026-10-04 los números de los
+verificador se detiene si no. *La corrida anterior, del mismo día y sobre el
+borrador sin la imagen sola, daba 553 números: 252, 39, 6, 9 y 247.* *Hasta el 2026-10-04 los números de los
 comentarios se buscaban como los demás: la corrida anterior, del 2026-10-03,
 daba 290 con respaldo, 31 señalados y 77 omitidos.* *Hasta el 2026-10-02 esta frase citaba la
 corrida sobre `informe/borrador.md`, del 2026-09-21: 344 números, 298 con
