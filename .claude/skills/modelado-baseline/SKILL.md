@@ -361,6 +361,44 @@ correr (`PLAN.md`, Fase 6); el script no las aplica. Salida:
   --referencia outputs/validacion-repetida.json --out outputs/efecto-particion
 ```
 
+## La imagen sola (2026-10-04)
+
+`scripts/imagen_sola.py` corre dos modelos en los pliegues de M1 de la
+validación repetida, sobre el conjunto de desarrollo: 5 pliegues agrupados
+por paciente, semillas de la 0 a la 9.
+- «Imagen»: `modelo_imagen()` de `apilado_imagen.py`, la primera etapa de M4b,
+  sobre las 384 variables de DINOv2. Estandariza y ajusta una regresión
+  logística balanceada con el pliegue de entrenamiento.
+- «Imagen + básicos»: lo mismo, más `age_approx`, `sex` y
+  `anatom_site_general`, codificadas con `codificar_fold` como en M1.
+
+Reporta las cuatro métricas de cada modelo y de M1, y las diferencias
+Imagen − M1 e (Imagen + básicos) − Imagen, con el intervalo corregido de
+Nadeau y Bengio. No mide tiempo. Las características se leen con
+`cargar_imagen` de `fase4_comparar.py`, que usa el cargador protegido del
+conjunto de desarrollo y comprueba el hash contra
+`outputs/extraccion-imagen.json`.
+
+**Control:** M1 tiene que reproducir `outputs/fase4-m2-vs-m1.json` pliegue a
+pliegue en las cuatro métricas, con la misma huella de pliegues; se comprueba
+al terminar cada semilla, y si no coincide se detiene sin escribir.
+`scripts/test_imagen_sola.py`, con datos sintéticos, fuerza el control con un
+valor y una huella alterados y el cargador con el archivo del conjunto
+reservado. También comprueba que barajar las etiquetas de validación no mueve
+ninguna puntuación, con un mutante que tiene que detectarse, y que las
+variables básicas entran en un modelo y no en el otro. La especificación y la
+regla de lectura son de la persona, fijadas antes de correr (`PLAN.md`, Fase
+6); el script no las aplica. Salida: `outputs/imagen-sola.json` y `.md`. El
+JSON guarda el comando con que se corrió.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/imagen_sola.py \
+  --data data/train-metadata.csv --group-col patient_id --target-col target \
+  --leakage-report outputs/auditoria-de-fugas.json \
+  --imagen data/dinov2-vits14-desarrollo.h5 --extraccion outputs/extraccion-imagen.json \
+  --referencia outputs/fase4-m2-vs-m1.json --out outputs/imagen-sola
+```
+
 ## Cómo correrlo
 
 ```bash
