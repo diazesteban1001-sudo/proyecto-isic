@@ -1,5 +1,5 @@
 {
-  "numeros_en_borrador": 648,
+  "numeros_en_borrador": 652,
   "numeros_con_respaldo_en_outputs": 311,
   "numeros_sin_respaldo": [
     {
@@ -1061,6 +1061,26 @@
       "linea_aprox": 433
     },
     {
+      "valor": "1",
+      "contexto": "ansky-2024-slice3d-descriptor.md, Tabla 1 (las tbp_",
+      "linea_aprox": 447
+    },
+    {
+      "valor": "226,",
+      "contexto": "cuerpo llevan el asterisco de la línea 226, «Canfield",
+      "linea_aprox": 447
+    },
+    {
+      "valor": "199",
+      "contexto": "metric»; la edad y el sexo, no) y línea 199 (el tipo",
+      "linea_aprox": 447
+    },
+    {
+      "valor": "299",
+      "contexto": "-2025-triaje-automatizado-tbp.md, línea 299 («estimat",
+      "linea_aprox": 447
+    },
+    {
       "valor": "1,",
       "contexto": "2026, y se selló. <!-- F: PLAN.md, Fase 1, «Qué se h",
       "linea_aprox": 458
@@ -1638,67 +1658,67 @@
     {
       "valor": "4,",
       "contexto": "cosas a la vez.   <!-- F: PLAN.md, Fase 4, «Lectura,",
-      "linea_aprox": 931
+      "linea_aprox": 932
     },
     {
       "valor": "5,",
       "contexto": "su   resultado.   <!-- F: PLAN.md, Fase 5, «Especifi",
-      "linea_aprox": 936
+      "linea_aprox": 937
     },
     {
       "valor": "4,",
       "contexto": "étodo», «Qué se compara»; PLAN.md, Fase 4, «Quedan f",
-      "linea_aprox": 940
+      "linea_aprox": 941
     },
     {
       "valor": "115,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 115, cita lite",
-      "linea_aprox": 945
+      "linea_aprox": 946
     },
     {
       "valor": "4,",
       "contexto": "as particiones.   <!-- F: PLAN.md, Fase 4, «Orden de",
-      "linea_aprox": 948
+      "linea_aprox": 949
     },
     {
       "valor": "4",
       "contexto": "CLAUDE.md, «Guardarraíles del agente», 4 -->  ## L",
-      "linea_aprox": 952
+      "linea_aprox": 953
     },
     {
       "valor": "306,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 306, cita lite",
-      "linea_aprox": 960
+      "linea_aprox": 961
     },
     {
       "valor": "4",
       "contexto": "6, cita literal; CLAUDE.md, guardarraíl 4 --> - **L",
-      "linea_aprox": 960
+      "linea_aprox": 961
     },
     {
       "valor": "99,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 99, cita lite",
-      "linea_aprox": 965
+      "linea_aprox": 966
     },
     {
       "valor": "4",
       "contexto": "del cero.   <!-- F: CLAUDE.md, hallazgo 4 («son cua",
-      "linea_aprox": 972
+      "linea_aprox": 973
     },
     {
       "valor": "5,",
       "contexto": "«El conjunto reservado»; PLAN.md, Fase 5, «Salvedad",
-      "linea_aprox": 983
+      "linea_aprox": 984
     },
     {
       "valor": "9",
       "contexto": "mpo de inferencia»; CLAUDE.md, hallazgo 9 --> - **D",
-      "linea_aprox": 986
+      "linea_aprox": 987
     },
     {
       "valor": "2",
       "contexto": "encias/slice3d-metadata-tbp-lv.md, nota 2; .claude/",
-      "linea_aprox": 990
+      "linea_aprox": 991
     }
   ],
   "modo_tolerancia": "decimales_escritos",
