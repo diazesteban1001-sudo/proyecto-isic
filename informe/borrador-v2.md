@@ -752,26 +752,34 @@ debajo de M1 en las cuatro métricas, y las cuatro diferencias están
 establecidas:
 <!-- F: IS > metricas.Imagen.pauc.media_global y metricas.Imagen.auc.media_global; IS > metricas.Imagen.pauc.por_semilla_y_fold (los 50 pliegues por encima del azar); outputs/modelado-baseline.json > escala_de_referencia_pauc.azar; «Método», «Cómo se compara» (el criterio) -->
 
-- pAUC: −0,0579, [−0,084; −0,0319];
-- AUC: −0,0997, [−0,1383; −0,061];
-- sensibilidad top-15: −0,2364, [−0,323; −0,1498];
-- NNT80% SE: +309,97 lesiones por cada maligna, [177,89; 442,06].
-<!-- F: IS > C.imagen_menos_m1.pauc, .auc, .setop15 y .nnt80 (media e IC) -->
+- pAUC: −0,0579, [−0,084; −0,0319] (1 de 50; 0 de 10);
+- AUC: −0,0997, [−0,1383; −0,061] (0 de 50; 0 de 10);
+- sensibilidad top-15: −0,2364, [−0,323; −0,1498] (0 de 50; 0 de 10);
+- NNT80% SE: +309,97 lesiones por cada maligna, [177,89; 442,06] (0 de 50;
+  0 de 10).
+<!-- F: IS > C.imagen_menos_m1.pauc, .auc, .setop15 y .nnt80 (media, IC, nuevo_mejor_en_folds, nuevo_mejor_en_semillas) -->
 
 Para capturar el 80% de las malignas, la imagen sola marca 426,14 lesiones por
 cada una, frente a 116,16 de M1.
 <!-- F: IS > metricas.Imagen.nnt80.media_global y metricas.M1.nnt80.media_global; «Método», «Qué se mide» (la definición del NNT80% SE) -->
+El tiempo de inferencia de la imagen sola no se midió.
+<!-- F: IS (sin tiempos); outputs/tiempo-inferencia.json > tiempos (M1, M2, M3 limpio, M4 y M4b) -->
 
-Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible:
-+0,0082, [0,0016; 0,0149]. En la pAUC, con la precisión guardada, el
-intervalo no excluye el cero, [0,0; 0,0089], así que esa mejora no se da por
-establecida; en la sensibilidad top-15 y en el NNT80% SE, el intervalo
-contiene el cero.
-<!-- F: IS > C.imagen_basicos_menos_imagen.auc, .pauc, .setop15 y .nnt80 (media e IC); PLAN.md, Fase 6, «La imagen sola: dos decisiones sobre el resultado», 1 -->
+Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible; en
+las otras tres métricas la mejora no se da por establecida:
+<!-- F: «Método», «Cómo se compara» (el criterio) -->
+
+- AUC: +0,0082, [0,0016; 0,0149] (46 de 50; 10 de 10);
+- pAUC: +0,0045, [0,0; 0,0089] (45 de 50; 10 de 10), un intervalo que, con la
+  precisión guardada, no excluye el cero;
+- sensibilidad top-15: +0,0026, [−0,034; 0,0393] (26 de 50; 4 de 10);
+- NNT80% SE: −35,57 lesiones por cada maligna, [−86,90; 15,75] (37 de 50;
+  10 de 10).
+<!-- F: IS > C.imagen_basicos_menos_imagen.auc, .pauc, .setop15 y .nnt80 (media, IC, nuevo_mejor_en_folds, nuevo_mejor_en_semillas); PLAN.md, Fase 6, «La imagen sola: dos decisiones sobre el resultado», 1 -->
 
 *Interpretación, no medición:* sin el sistema de fotografía corporal total, la
-imagen sí sirve para ordenar lesiones por sospecha, pero con este extractor
-congelado rinde bastante menos que las mediciones. Edad, sexo y zona del
+imagen sí sirve para ordenar lesiones por sospecha, aunque con este extractor
+congelado queda lejos de M1. Edad, sexo y zona del
 cuerpo son datos que cualquiera puede dar sin aparatos. El ganador ajustó sus
 propias redes de imagen, y su variante con solo los recortes llega a un AUC de
 0,922, pero en otros datos y con otra evaluación, así que las cifras no se
@@ -817,8 +825,8 @@ La mediana del tiempo de inferencia, en segundos por cada 1.000 lesiones, es
 14,6321 para M4b.
 <!-- F: outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones -->
 M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de
-segundo por cada 1.000 lesiones. Lo caro, con diferencia, es la imagen, y los
-modelos con imagen no mejoraron la métrica principal de forma distinguible.
+segundo por cada 1.000 lesiones. Lo caro, con diferencia, es la imagen, y ni
+M4 ni M4b mejoraron a M2 en la métrica principal de forma distinguible.
 <!-- F: outputs/tiempo-inferencia.json > tiempos; CLAUDE.md, hallazgo 9 -->
 
 ### La pregunta del cliente, entera
@@ -944,11 +952,13 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   *"comparable in optical resolution to smartphone images"*. El resultado
   de la imagen se limita a estas imágenes y a este extractor.
   <!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, línea 99, cita literal; la última frase acota el alcance (interpretación) -->
-- **Muchas comparaciones a la vez.** Las cinco comparaciones M2 − M1, M4 − M2,
-  M4b − M2, M3 − M2 y M3 limpio − M2 se leen en cuatro métricas cada una, sin
-  corregir por multiplicidad, y el intervalo del NNT80% SE de M2 − M1 queda al
-  límite del cero.
-  <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC -->
+- **Muchas comparaciones a la vez.** Cada comparación (M2 − M1, M4 − M2,
+  M4b − M2, M3 − M2, M3 limpio − M2, 2b − 1 en las dos particiones, Imagen − M1
+  e (Imagen + básicos) − Imagen) se lee en cuatro métricas, y las dos de las
+  columnas de procedencia —con y sin ellas, en el boosting y en la logística—,
+  solo en la pAUC. Ninguna se corrige por multiplicidad, y el intervalo del
+  NNT80% SE de M2 − M1 queda al límite del cero.
+  <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC; EP > particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; IS > C.imagen_menos_m1 y C.imagen_basicos_menos_imagen; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (solo la pAUC) -->
 - **La corrección de la varianza es aproximada.** Nadeau y Bengio la derivan
   para divisiones aleatorias independientes, y aquí se aplica a una validación
   por pliegues.
