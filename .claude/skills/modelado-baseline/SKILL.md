@@ -76,7 +76,7 @@ entre las dos es `class_weight`:
   quede *por debajo del piso aleatorio de la métrica* (ver
   `escala_de_referencia_pauc`). No es un fallo del script y no se borra. Por
   qué queda por debajo no se ha medido: es lo que dice su nota en el `.json`
-  (`CLAUDE.md`, Pendientes, «El mecanismo del nivel 2a está sin medir»). *Hasta
+  (`CLAUDE.md`, Pendientes, «Por qué el nivel 2a hunde a una parte de los positivos está sin medir»). *Hasta
   el 2026-10-03 este punto describía como hecho un mecanismo que nada en
   `outputs/` mide, con una cifra de la corrida sobre el 100 % de los datos.*
   Su AUC estándar, 0.582 en el conjunto de desarrollo

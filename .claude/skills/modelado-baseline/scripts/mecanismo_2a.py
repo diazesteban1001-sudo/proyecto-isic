@@ -5,8 +5,8 @@ mecanismo_2a.py — instrumento de medición para la skill modelado-baseline.
 Mide cómo se distribuyen, sobre validación, las probabilidades que predice el
 nivel 2a (gradient boosting sin balancear) y, como control, el 2b (el mismo
 modelo con class_weight="balanced"). Mide y reporta; no interpreta ni dice
-por qué la pAUC del 2a queda donde queda (CLAUDE.md, Pendientes, «El
-mecanismo del nivel 2a está sin medir»).
+por qué la pAUC del 2a queda donde queda (CLAUDE.md, Pendientes,
+«Por qué el nivel 2a hunde a una parte de los positivos está sin medir»).
 
 Usa la misma partición y los mismos modelos que train_and_evaluate.py: el
 conjunto de desarrollo, la partición de la semilla 42, las mismas columnas

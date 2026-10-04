@@ -801,10 +801,16 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
    Nivel 2a da pAUC 0,0005, *por debajo del piso aleatorio de la métrica* (0,02).
-   *Hipótesis sin medir* (Pendientes, «El mecanismo del nivel 2a está sin
-   medir»): no colapsa a "predecir siempre negativo" —el diagnóstico de
-   manual— sino que satura en probabilidad 1.0 sobre negativos y los coloca
-   encima de los positivos, arrasando justo la región de sensibilidad alta. Con
+   *Medida el 2026-10-04 (`outputs/mecanismo-2a.json`) y no sostenida tal
+   como estaba escrita: el 2a no pone arriba a más negativos que positivos,
+   en proporción; hunde a una parte de los positivos al fondo del
+   ordenamiento. Por qué lo hace sigue sin medir (Pendientes, «Por qué el
+   nivel 2a hunde a una parte de los positivos está sin medir»). El informe lo
+   dice así en «Resultados», «Una decisión por defecto cambia el veredicto».*
+   Lo que se escribió: no colapsa a "predecir siempre negativo" —el
+   diagnóstico de manual— sino que satura en probabilidad 1.0 sobre negativos y
+   los coloca encima de los positivos, arrasando justo la región de
+   sensibilidad alta. Con
    `class_weight="balanced"` (2b): 0,1398. La métrica del cliente ve el
    problema; la métrica por defecto no. Cifras del conjunto de desarrollo
    (`outputs/modelado-baseline.json`); las conclusiones son las mismas que sobre
@@ -1029,7 +1035,8 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         versionados, «fase4_comparar», «tiempo_inferencia», «prueba_tiempo»,
         «--base», «--nuevo» y «caffeinate». También en las claves de las salidas
         y en los mensajes de commit.
-- [ ] **El mecanismo del nivel 2a está sin medir** (2026-10-02).
+- [ ] **Por qué el nivel 2a hunde a una parte de los positivos está sin medir** (2026-10-02; hasta el 2026-10-04, «El mecanismo
+      del nivel 2a está sin medir»).
       - **Qué se afirma:** que el modelo sin balancear no colapsa a predecir
         siempre negativo, sino que satura en probabilidad 1,0 sobre negativos y
         los coloca por encima de los positivos, y que por eso su pAUC queda por
@@ -1069,7 +1076,10 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         quedó solo con lo medido.
       - **Qué lo cerraría:** medir la distribución de puntuaciones del 2a en un
         pliegue de desarrollo: dónde caen los positivos de menor puntuación
-        frente a los negativos, y cuántos negativos llegan a 1,0.
+        frente a los negativos, y cuántos negativos llegan a 1,0. *Cumplido el
+        2026-10-04: las dos cosas están en `outputs/mecanismo-2a.json` (abajo).*
+      - **Lo único abierto (2026-10-04):** por qué el modelo hunde a esa parte
+        de los positivos. No hay todavía una medición especificada para eso.
       - **Medido el 2026-10-04** (`outputs/mecanismo-2a.json`, de
         `modelado-baseline/scripts/mecanismo_2a.py`, partición de la semilla
         42). *De la persona:* la medición no sostiene la hipótesis de
