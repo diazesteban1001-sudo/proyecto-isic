@@ -389,7 +389,10 @@ ninguna puntuación, con un mutante que tiene que detectarse, y que las
 variables básicas entran en un modelo y no en el otro. La especificación y la
 regla de lectura son de la persona, fijadas antes de correr (`PLAN.md`, Fase
 6); el script no las aplica. Salida: `outputs/imagen-sola.json` y `.md`. El
-JSON guarda el comando con que se corrió.
+JSON guarda el comando con que se corrió: el intérprete y los argumentos
+reales, con rutas relativas al repositorio. *La salida del 2026-10-04 es
+anterior a esa corrección y registra `python` en lugar del intérprete;
+no se volvió a correr (`PLAN.md`, Fase 6).*
 
 ```bash
 .venv/bin/python .claude/skills/modelado-baseline/scripts/imagen_sola.py \

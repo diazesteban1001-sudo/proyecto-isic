@@ -17,6 +17,8 @@ real (PLAN.md, Fase 6, «La imagen sola»).
      incluido tiene que detectarse.
   F. «Imagen + básicos» usa las tres variables básicas e «Imagen» no: permutar
      age_approx cambia las puntuaciones del primero y no las del segundo.
+  G. El campo «comando» registra el intérprete real, el script y las rutas de
+     los argumentos, relativos a la raíz del repositorio.
 
 La referencia de A se construye aquí con las piezas de train_and_evaluate.py,
 del mismo modo que fase4_comparar.py construye M1. Con datos sintéticos; no
@@ -129,7 +131,7 @@ def referencia_m1(rutas, ruta_salida):
 
 def correr(rutas, referencia, out, imagen=None):
     """Corre main() con estos argumentos; devuelve (mensaje de parada o None, archivos escritos)."""
-    sys.argv = ["imagen_sola.py", "--data", rutas["csv"], "--group-col", "patient_id", "--target-col", "target",
+    sys.argv = [isola.__file__, "--data", rutas["csv"], "--group-col", "patient_id", "--target-col", "target",
                 "--leakage-report", rutas["fugas"], "--imagen", imagen or rutas["h5_des"],
                 "--extraccion", rutas["extraccion"], "--referencia", referencia, "--holdout", rutas["holdout"],
                 "--out", out, "--semillas", *map(str, SEMILLAS)]
@@ -173,6 +175,14 @@ def main():
             detalle = (f"{len(lineas)} líneas en el .md; M1 igual a la referencia: {m1_igual}; "
                        f"semillas comprobadas {control['semillas_comprobadas']}")
         casos.append(("A. referencia que M1 reproduce: corre, escribe, .md ≤ 15 líneas", ok, detalle))
+        if parada is None:
+            partes = r["comando"].split(" ")
+            interprete = os.path.relpath(sys.executable, isola.RAIZ)
+            script = os.path.join(".claude", "skills", "modelado-baseline", "scripts", "imagen_sola.py")
+            data = os.path.relpath(rutas["csv"], isola.RAIZ)
+            casos.append(("G. el comando registra el intérprete, el script y las rutas, relativos al repositorio",
+                          partes[:2] == [interprete, script] and data in partes and "patient_id" in partes,
+                          f"{r['comando'][:110]}…"))
 
         alterada = copy.deepcopy(ref)
         alterada["metricas"]["M1"]["nnt80"]["por_semilla_y_fold"]["1"][3] += 0.0001

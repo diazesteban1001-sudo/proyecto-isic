@@ -31,6 +31,9 @@ semilla; si no coincide, el script se detiene sin escribir nada.
 No se mide tiempo: el costo de la imagen ya está medido en M4
 (outputs/tiempo-inferencia.json).
 
+La salida guarda el comando con que se corrió: el intérprete y los argumentos
+reales (sys.executable y sys.argv), con rutas relativas al repositorio.
+
 Uso:
     python imagen_sola.py --data data/train-metadata.csv \\
         --group-col patient_id --target-col target \\
@@ -58,6 +61,7 @@ from evaluar_repetido import cargar_columnas_excluidas  # noqa: E402
 from train_and_evaluate import codificar_fold, construir_folds, preparar_features  # noqa: E402
 from datos_desarrollo import RUTA_HOLDOUT, cargar_desarrollo  # noqa: E402
 
+RAIZ = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
 BASICOS_NUMERICAS = ["age_approx"]
 BASICOS_CATEGORICAS = ["sex", "anatom_site_general"]
 MODELOS = ("M1", "Imagen", "Imagen + básicos")
@@ -87,6 +91,17 @@ def puntuar_fold(df, x_img, numericas, categoricas, target_col, tr, va, seed):
     con, n_con = _ajustar_imagen(np.hstack([x_img[tr], b_tr]), y[tr], np.hstack([x_img[va], b_va]))
     puntuaciones = {"M1": m1.predict_proba(x_va)[:, 1], "Imagen": solo, "Imagen + básicos": con}
     return puntuaciones, {"Imagen": n_solo, "Imagen + básicos": n_con}
+
+
+def comando_real():
+    """El intérprete y los argumentos con que se corrió (sys.executable y
+    sys.argv), con las rutas relativas a la raíz del repositorio. Se toma
+    como ruta el script y todo argumento que contenga un separador."""
+    def relativa(ruta):
+        return os.path.relpath(os.path.abspath(ruta), RAIZ)
+    argumentos = [relativa(sys.argv[0])] + [relativa(a) if os.sep in a and not a.startswith("-") else a
+                                            for a in sys.argv[1:]]
+    return " ".join([relativa(sys.executable), *argumentos])
 
 
 def resumen(por_semilla, semillas):
@@ -173,7 +188,7 @@ def main():
             comparaciones[nombre][k] = comparacion(diffs, args.n_splits, semillas, mayor)
 
     resultado = {
-        "comando": " ".join(["python", *sys.argv]),
+        "comando": comando_real(),
         "datos": datos,
         "esquema": {
             "group_col": args.group_col, "n_splits": args.n_splits, "semillas": semillas,
