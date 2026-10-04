@@ -1067,6 +1067,12 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Qué lo cerraría:** medir la distribución de puntuaciones del 2a en un
         pliegue de desarrollo: dónde caen los positivos de menor puntuación
         frente a los negativos, y cuántos negativos llegan a 1,0.
+      - **Medido el 2026-10-04** (`outputs/mecanismo-2a.json`, de
+        `modelado-baseline/scripts/mecanismo_2a.py`, partición de la semilla
+        42). *De la persona:* la medición no sostiene la hipótesis de
+        saturación sobre los negativos tal como estaba escrita. Falta describir
+        la cola baja de los positivos. Su lectura queda pendiente con la
+        persona.
 - [ ] **El «200» de `informe/borrador-v2.md` tiene respaldo solo por
       coincidencia** (2026-10-03).
       - **Dónde:** línea 26, la pAUC «comprobada contra su script en 200
@@ -1096,6 +1102,22 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       `informe/borrador-v2.md`, `generar_demo.py`, el README y los hallazgos
       4, 7 y 8; el anteproyecto no se toca, porque es un documento
       entregado.*
+- [ ] **El efecto de la partición sobre el resultado de un modelo no está
+      medido** (2026-10-04).
+      - **Qué se mide hoy:** solo cuántos pacientes quedarían a los dos lados
+        con una partición por filas, el 98,92 %
+        (`outputs/diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga`).
+      - **Qué se afirma sin medición:** `informe/borrador-v2.md`, «La
+        partición: por paciente», dice que con lesiones del mismo paciente a
+        los dos lados la métrica sale inflada, y su comentario F: cita este
+        archivo, «Nota metodológica clave», no una medición.
+      - **Qué se buscó (2026-10-04):** «naive», «ingenua», «por_fila» y
+        «record» en `outputs/*.json`. Solo `diseno-validacion.json` los usa,
+        y para contar pacientes: ningún archivo de salida evalúa un modelo con
+        la partición por filas.
+      - **Qué propone la literatura:** Little propone probar las dos
+        particiones (`referencias/little-2017-perspectivas-sobre-saeb.md`,
+        línea 231).
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
