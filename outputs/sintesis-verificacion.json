@@ -1,6 +1,6 @@
 {
   "numeros_en_borrador": 652,
-  "numeros_con_respaldo_en_outputs": 311,
+  "numeros_con_respaldo_en_outputs": 330,
   "numeros_sin_respaldo": [
     {
       "valor": "2023",
@@ -113,44 +113,9 @@
       "linea_aprox": 593
     },
     {
-      "valor": "94,82",
-      "contexto": "5 +0,1633, [0,0874; 0,2393]; NNT80% SE −94,82 lesiones",
-      "linea_aprox": 612
-    },
-    {
-      "valor": "152,31",
-      "contexto": "SE −94,82 lesiones por cada maligna, [−152,31; −37,33].",
-      "linea_aprox": 613
-    },
-    {
-      "valor": "37,33",
-      "contexto": "2 lesiones por cada maligna, [−152,31; −37,33]. <!-- F:",
-      "linea_aprox": 613
-    },
-    {
-      "valor": "30,55",
-      "contexto": "73] (46 de 50; 10 de 10); - NNT80% SE: −30,55 lesiones",
-      "linea_aprox": 679
-    },
-    {
-      "valor": "60,89",
-      "contexto": "SE: −30,55 lesiones por cada maligna, [−60,89; −0,20] (",
-      "linea_aprox": 679
-    },
-    {
       "valor": "384",
       "contexto": "e, la imagen no justifica su costo  Las 384 variables",
       "linea_aprox": 695
-    },
-    {
-      "valor": "0,0263",
-      "contexto": "caracteristica -->  - pAUC: −0,0065, [−0,0263; 0,0133]",
-      "linea_aprox": 699
-    },
-    {
-      "valor": "19,90",
-      "contexto": "de 50; 0 de 10); - NNT80% SE: +11,24, [−19,90; 42,37].",
-      "linea_aprox": 701
     },
     {
       "valor": "384",
@@ -158,74 +123,14 @@
       "linea_aprox": 710
     },
     {
-      "valor": "3,87,",
-      "contexto": "032] (22 de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10;",
-      "linea_aprox": 720
-    },
-    {
-      "valor": "25,10",
-      "contexto": "de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10; 17,35].",
-      "linea_aprox": 720
-    },
-    {
       "valor": "384",
       "contexto": "egresión logística balanceada sobre las 384 variables",
       "linea_aprox": 744
     },
     {
-      "valor": "0,0579,",
-      "contexto": "se compara» (el criterio) -->  - pAUC: −0,0579, [−0,084;",
-      "linea_aprox": 755
-    },
-    {
-      "valor": "0,2364,",
-      "contexto": "e 50; 0 de 10); - sensibilidad top-15: −0,2364, [−0,323;",
-      "linea_aprox": 757
-    },
-    {
-      "valor": "0,323",
-      "contexto": "10); - sensibilidad top-15: −0,2364, [−0,323; −0,1498]",
-      "linea_aprox": 757
-    },
-    {
-      "valor": "35,57",
-      "contexto": "393] (26 de 50; 4 de 10); - NNT80% SE: −35,57 lesiones",
-      "linea_aprox": 780
-    },
-    {
-      "valor": "86,90",
-      "contexto": "SE: −35,57 lesiones por cada maligna, [−86,90; 15,75] (",
-      "linea_aprox": 780
-    },
-    {
-      "valor": "0,0365",
-      "contexto": "stingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726],",
-      "linea_aprox": 805
-    },
-    {
-      "valor": "12,62,",
-      "contexto": "0,0181, [−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29;",
-      "linea_aprox": 806
-    },
-    {
-      "valor": "49,29",
-      "contexto": "−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29; 24,05].",
-      "linea_aprox": 806
-    },
-    {
       "valor": "0,695",
       "contexto": "r sin recortes de imagen obtuvo 0,164 y 0,695 en la eva",
       "linea_aprox": 813
-    },
-    {
-      "valor": "20,06,",
-      "contexto": "0,0227, [−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74;",
-      "linea_aprox": 822
-    },
-    {
-      "valor": "49,74",
-      "contexto": "−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74; 9,61]. <",
-      "linea_aprox": 822
     }
   ],
   "porcentajes_de_metodo_excluidos": [
@@ -1386,8 +1291,8 @@
       "linea_aprox": 691
     },
     {
-      "valor": "0,0085",
-      "contexto": "as. <!-- F: F42 > C.*.media e IC (auc: −0,0085) --> Por",
+      "valor": "−0,0085",
+      "contexto": "cas. <!-- F: F42 > C.*.media e IC (auc: −0,0085) --> Por",
       "linea_aprox": 706
     },
     {
