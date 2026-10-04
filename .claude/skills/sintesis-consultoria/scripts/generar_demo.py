@@ -236,10 +236,44 @@ def auc_solo_recortes():
     return {"auc": float(m.group(2)), "fuente": f"{KURTANSKY_2025}, Tabla 3, línea {i + 1} (solo la columna Tiles)"}
 
 
-def datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion):
+def victorias_coherentes(comp, n_splits, n_semillas):
+    """Los conteos de pliegues y semillas en que gana el nuevo, contra sus
+    diferencias por pliegue. Las diferencias están redondeadas a 4 decimales y
+    los conteos se hicieron sin redondear, así que cada conteo tiene que caer
+    entre el recuento estricto y el que cuenta como victoria lo que el
+    redondeo dejó en el límite (media unidad del cuarto decimal)."""
+    tol = 5e-5
+    for k in METRICAS:
+        x, d = comp[k], comp[k]["diferencias_nuevo_menos_base"]
+        signo = 1 if x["mayor_es_mejor"] else -1
+        if not (len(d) == x["de_folds"] == n_splits * n_semillas and x["de_semillas"] == n_semillas):
+            return False
+        if not sum(signo * v > 0 for v in d) <= x["nuevo_mejor_en_folds"] <= sum(signo * v >= 0 for v in d):
+            return False
+        medias = [sum(d[i * n_splits:(i + 1) * n_splits]) / n_splits for i in range(n_semillas)]
+        if not sum(signo * m > tol for m in medias) <= x["nuevo_mejor_en_semillas"] <= sum(signo * m > -tol for m in medias):
+            return False
+    return True
+
+
+def claves_anidadas(o):
+    if isinstance(o, dict):
+        for k, v in o.items():
+            yield k
+            yield from claves_anidadas(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from claves_anidadas(v)
+
+
+# Los modelos cuyo tiempo de inferencia está medido (outputs/tiempo-inferencia.json > tiempos).
+MODELOS_CRONOMETRADOS = {"M1", "M2", "M3limpio", "M4", "M4b"}
+
+
+def datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion, tiempo):
     """Cifras de «La imagen sola, sin el sistema de fotografía corporal total» y
     las frases que dependen de ellas. Control positivo: test_generar_demo.py,
-    caso L, con un imagen-sola.json que rompe cada frase."""
+    caso L, con un archivo alterado que rompe cada frase."""
     m, c = imagen_sola["metricas"], imagen_sola["comparaciones_nuevo_menos_base"]
     clave_ic = "intervalo_t_95_nadeau_bengio"
     ctrl = imagen_sola["control_m1_contra_referencia"]
@@ -256,12 +290,21 @@ def datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion):
                 f"queda por debajo de M1 en las cuatro métricas, y las cuatro diferencias están establecidas ({frase})")
     afirmar(im1["nnt80"]["media"] > 0 and im1["nnt80"][clave_ic][0] > 0,
             "queda por debajo de M1 en las cuatro métricas, y las cuatro diferencias están establecidas (el NNT80% SE)")
+    n_splits, n_semillas = imagen_sola["esquema"]["n_splits"], len(imagen_sola["esquema"]["semillas"])
+    afirmar(victorias_coherentes(im1, n_splits, n_semillas),
+            "Imagen − M1: los pliegues y las semillas en que gana el nuevo, entre paréntesis")
+    afirmar(not any(re.search(r"tiempo|segundo", k) for k in claves_anidadas(imagen_sola))
+            and set(tiempo["tiempos"]) <= MODELOS_CRONOMETRADOS,
+            "El tiempo de inferencia de la imagen sola no se midió")
     ib = c["imagen_basicos_menos_imagen"]
     afirmar(ib["auc"]["media"] > 0 and ib["auc"][clave_ic][0] > 0,
             "Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible")
-    afirmar(contiene_cero(ib["pauc"][clave_ic]), "En la pAUC, con la precisión guardada, el intervalo no excluye el cero")
-    afirmar(contiene_cero(ib["setop15"][clave_ic]) and contiene_cero(ib["nnt80"][clave_ic]),
-            "en la sensibilidad top-15 y en el NNT80% SE, el intervalo contiene el cero")
+    afirmar(contiene_cero(ib["pauc"][clave_ic]), "un intervalo que, con la precisión guardada, no excluye el cero")
+    afirmar(all(contiene_cero(ib[k][clave_ic]) for k in ("pauc", "setop15", "nnt80"))
+            and ib["pauc"]["media"] > 0 and ib["setop15"]["media"] > 0 and ib["nnt80"]["media"] < 0,
+            "en las otras tres métricas la mejora no se da por establecida")
+    afirmar(victorias_coherentes(ib, n_splits, n_semillas),
+            "(Imagen + básicos) − Imagen: los pliegues y las semillas en que gana el nuevo, entre paréntesis")
     citas = {}
     for clave, (ruta, texto) in CITAS_IMAGEN_SOLA.items():
         if texto not in leer(os.path.join(RAIZ, ruta)):
@@ -271,7 +314,10 @@ def datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion):
         "n_variables": int(extraer(r"(\d+) dimensiones", extraccion["caracteristica"],
                                    "las dimensiones de la característica").group(1)),
         "medias": {mod: {k: m[mod][k]["media_global"] for k in METRICAS} for mod in ("M1", "Imagen", "Imagen + básicos")},
-        "comp": {n: {k: {"media": c[n][k]["media"], "ic": c[n][k][clave_ic]} for k in METRICAS}
+        "comp": {n: {k: {"media": c[n][k]["media"], "ic": c[n][k][clave_ic],
+                         "folds": c[n][k]["nuevo_mejor_en_folds"], "de_folds": c[n][k]["de_folds"],
+                         "semillas": c[n][k]["nuevo_mejor_en_semillas"], "de_semillas": c[n][k]["de_semillas"]}
+                     for k in METRICAS}
                  for n in ("imagen_menos_m1", "imagen_basicos_menos_imagen")},
         "clave_ic": clave_ic,
         "auc_recortes": auc_solo_recortes(),
@@ -477,8 +523,9 @@ def construir_datos(outputs_dir, leidos):
             "solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar")
     afirmar(T["M2"]["tiempo"] < T["M3 limpio"]["tiempo"] < 0.1,
             "M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo")
-    afirmar(min(T["M4"]["tiempo"], T["M4b"]["tiempo"]) > max(T[x]["tiempo"] for x in ("M1", "M2", "M3 limpio")),
-            "Lo caro, con diferencia, es la imagen")
+    afirmar(min(T["M4"]["tiempo"], T["M4b"]["tiempo"]) > max(T[x]["tiempo"] for x in ("M1", "M2", "M3 limpio"))
+            and contiene_cero(m42["pauc"]["ic"]) and contiene_cero(m4b["pauc"]["ic"]),
+            "Lo caro, con diferencia, es la imagen, y ni M4 ni M4b mejoraron a M2 en la métrica principal de forma distinguible")
     afirmar(all(fase4[a]["metricas"]["M2"]["pauc"]["media_global"] == T["M2"]["pauc"] for _, a in COMPARACIONES[1:]),
             "M2 es el mismo en las cuatro comparaciones contra M2")
     afirmar(len(solo_train) + len(auditoria["columnas_constantes"]) + len(auditoria["columnas_identificador"])
@@ -574,7 +621,7 @@ def construir_datos(outputs_dir, leidos):
         "tabla": tabla,
         "mecanismo": datos_mecanismo(mecanismo, metrica),
         "particion": datos_particion(particion),
-        "imagen_sola": datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion),
+        "imagen_sola": datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion, tiempo),
         "verificacion": {
             "total": verificacion["numeros_en_borrador"],
             "con": verificacion["numeros_con_respaldo_en_outputs"],
@@ -1335,6 +1382,10 @@ const icIS = (n, k) => k === "nnt80"
   : cifra("[" + decG(IS.comp[n][k].ic[0]) + "; " + decG(IS.comp[n][k].ic[1]) + "]", fISc(n, k, IS.clave_ic));
 const auc922 = cifra(dec(IS.auc_recortes.auc), IS.auc_recortes.fuente);
 const citaIS = k => `<i>"${esc(IS.citas[k])}"</i>`;
+const IM1 = "imagen_menos_m1", IB = "imagen_basicos_menos_imagen";
+const vicIS = (n, k) => `${cifra(IS.comp[n][k].folds, fISc(n, k, "nuevo_mejor_en_folds"))} de ` +
+  `${cifra(IS.comp[n][k].de_folds, fISc(n, k, "de_folds"))}; ${cifra(IS.comp[n][k].semillas, fISc(n, k, "nuevo_mejor_en_semillas"))} de ` +
+  `${cifra(IS.comp[n][k].de_semillas, fISc(n, k, "de_semillas"))}`;
 document.getElementById("texto-4b").innerHTML = P([
   `Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software de la fotografía corporal total; ` +
   `sin ese sistema, esos modelos no se pueden aplicar tal cual. ` +
@@ -1348,19 +1399,21 @@ document.getElementById("texto-4b").innerHTML = P([
   `${cifra(dec(IS.medias.Imagen.pauc), fIS("metricas.Imagen.pauc.media_global"))}, frente a ${azar} del azar, y su AUC, de ` +
   `${cifra(dec(IS.medias.Imagen.auc), fIS("metricas.Imagen.auc.media_global"))}. Pero queda por debajo de M1 en las cuatro ` +
   `métricas, y las cuatro diferencias están establecidas:`]) + L([
-  `pAUC: ${mediaIS("imagen_menos_m1", "pauc")}, ${icIS("imagen_menos_m1", "pauc")};`,
-  `AUC: ${mediaIS("imagen_menos_m1", "auc")}, ${icIS("imagen_menos_m1", "auc")};`,
-  `sensibilidad top-15: ${mediaIS("imagen_menos_m1", "setop15")}, ${icIS("imagen_menos_m1", "setop15")};`,
-  `NNT80% SE: ${mediaIS("imagen_menos_m1", "nnt80")} lesiones por cada maligna, ${icIS("imagen_menos_m1", "nnt80")}.`]) + P([
+  `pAUC: ${mediaIS(IM1, "pauc")}, ${icIS(IM1, "pauc")} (${vicIS(IM1, "pauc")});`,
+  `AUC: ${mediaIS(IM1, "auc")}, ${icIS(IM1, "auc")} (${vicIS(IM1, "auc")});`,
+  `sensibilidad top-15: ${mediaIS(IM1, "setop15")}, ${icIS(IM1, "setop15")} (${vicIS(IM1, "setop15")});`,
+  `NNT80% SE: ${mediaIS(IM1, "nnt80")} lesiones por cada maligna, ${icIS(IM1, "nnt80")} (${vicIS(IM1, "nnt80")}).`]) + P([
   `Para capturar el ${cifra(D.metrica.tpr + "%", fMod("metrica"))} de las malignas, la imagen sola marca ` +
   `${cifra(fijo(IS.medias.Imagen.nnt80, 2), fIS("metricas.Imagen.nnt80.media_global"))} lesiones por cada una, frente a ` +
-  `${cifra(fijo(IS.medias.M1.nnt80, 2), fIS("metricas.M1.nnt80.media_global"))} de M1.`,
-  `Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible: ` +
-  `${mediaIS("imagen_basicos_menos_imagen", "auc")}, ${icIS("imagen_basicos_menos_imagen", "auc")}. ` +
-  `En la pAUC, con la precisión guardada, el intervalo no excluye el cero, ${icIS("imagen_basicos_menos_imagen", "pauc")}, ` +
-  `así que esa mejora no se da por establecida; en la sensibilidad top-15 y en el NNT80% SE, el intervalo contiene el cero.`,
+  `${cifra(fijo(IS.medias.M1.nnt80, 2), fIS("metricas.M1.nnt80.media_global"))} de M1. ` +
+  `El tiempo de inferencia de la imagen sola no se midió.`,
+  `Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible; en las otras tres métricas la mejora no se da por establecida:`]) + L([
+  `AUC: ${mediaIS(IB, "auc")}, ${icIS(IB, "auc")} (${vicIS(IB, "auc")});`,
+  `pAUC: ${mediaIS(IB, "pauc")}, ${icIS(IB, "pauc")} (${vicIS(IB, "pauc")}), un intervalo que, con la precisión guardada, no excluye el cero;`,
+  `sensibilidad top-15: ${mediaIS(IB, "setop15")}, ${icIS(IB, "setop15")} (${vicIS(IB, "setop15")});`,
+  `NNT80% SE: ${mediaIS(IB, "nnt80")} lesiones por cada maligna, ${icIS(IB, "nnt80")} (${vicIS(IB, "nnt80")}).`]) + P([
   `<i>Interpretación, no medición:</i> sin el sistema de fotografía corporal total, la imagen sí sirve para ordenar lesiones ` +
-  `por sospecha, pero con este extractor congelado rinde bastante menos que las mediciones. Edad, sexo y zona del cuerpo son ` +
+  `por sospecha, aunque con este extractor congelado queda lejos de M1. Edad, sexo y zona del cuerpo son ` +
   `datos que cualquiera puede dar sin aparatos. El ganador ajustó sus propias redes de imagen, y su variante con solo los ` +
   `recortes llega a un AUC de ${auc922}, pero en otros datos y con otra evaluación, así que las cifras no se comparan. ` +
   `Y todo esto se midió sobre los recortes del sistema de fotografía corporal total, no sobre fotos de teléfono.`]);
@@ -1379,7 +1432,7 @@ document.getElementById("texto-5").innerHTML = P([
   `Son medias y medianas; las diferencias, con sus intervalos, están arriba. M2 se distingue de M1 en las dos métricas de triaje, no en la pAUC. ` +
   `Frente a M2, de los otros tres solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar; en las métricas de triaje no se distingue ninguno de los tres.`,
   `M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo por cada ${milLesiones} lesiones. ` +
-  `Lo caro, con diferencia, es la imagen, y los modelos con imagen no mejoraron la métrica principal de forma distinguible.`]);
+  `Lo caro, con diferencia, es la imagen, y ni M4 ni M4b mejoraron a M2 en la métrica principal de forma distinguible.`]);
 
 /* ---------- 6. recomendacion ---------- */
 document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
@@ -1427,8 +1480,10 @@ document.getElementById("limitaciones").innerHTML = P([
   `La mayoría de los negativos son lesiones que un dermatólogo no consideró preocupantes, no lesiones confirmadas como sanas.`,
   `<b>Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente.</b> Así las describe el artículo del conjunto de datos: ` +
   `<i>"comparable in optical resolution to smartphone images"</i>. El resultado de la imagen se limita a estas imágenes y a este extractor.`,
-  `<b>Muchas comparaciones a la vez.</b> Las cinco comparaciones M2 − M1, M4 − M2, M4b − M2, M3 − M2 y M3 limpio − M2 se leen en cuatro métricas cada una, ` +
-  `sin corregir por multiplicidad, y el intervalo del NNT80% SE de M2 − M1 queda al límite del cero.`,
+  `<b>Muchas comparaciones a la vez.</b> Cada comparación (M2 − M1, M4 − M2, M4b − M2, M3 − M2, M3 limpio − M2, 2b − 1 en las dos particiones, ` +
+  `Imagen − M1 e (Imagen + básicos) − Imagen) se lee en cuatro métricas, y las dos de las columnas de procedencia —con y sin ellas, ` +
+  `en el boosting y en la logística—, solo en la pAUC. Ninguna se corrige por multiplicidad, y el intervalo del NNT80% SE de M2 − M1 ` +
+  `queda al límite del cero.`,
   `<b>La corrección de la varianza es aproximada.</b> Nadeau y Bengio la derivan para divisiones aleatorias independientes, y aquí se aplica a una validación por pliegues.`,
   `<b>El NNT80% SE se calcula con una lectura propia</b>, porque el organizador no publica script para él.`,
   `<b>El conjunto reservado no es del todo independiente.</b> No es ajeno a las decisiones tomadas antes de sellarlo ni al diseño de las variables de la ` +

@@ -133,7 +133,8 @@ def caso_m():
     sys.path.insert(0, SCRIPTS)
     import generar_demo as g
     salidas = {n: json.load(open(os.path.join(OUTPUTS, f"{n}.json"), encoding="utf-8"))
-               for n in ("imagen-sola", "modelado-baseline", "fase4-m2-vs-m1", "fase4-m3-vs-m2", "extraccion-imagen")}
+               for n in ("imagen-sola", "modelado-baseline", "fase4-m2-vs-m1", "fase4-m3-vs-m2", "extraccion-imagen",
+                         "tiempo-inferencia")}
 
     def correr(fn):
         try:
@@ -145,7 +146,7 @@ def caso_m():
         return g.datos_imagen_sola(salidas["imagen-sola"], salidas["modelado-baseline"]["escala_de_referencia_pauc"],
                                    salidas["modelado-baseline"],
                                    {n: salidas[n] for n in ("fase4-m2-vs-m1", "fase4-m3-vs-m2")},
-                                   salidas["extraccion-imagen"])
+                                   salidas["extraccion-imagen"], salidas["tiempo-inferencia"])
     raiz_real = g.RAIZ
     resultado = {}
     with tempfile.TemporaryDirectory() as tmp:
@@ -213,6 +214,21 @@ def main():
     def m4b_establecida(o):
         o["comparaciones_nuevo_menos_base"]["pauc"]["intervalo_t_95_nadeau_bengio"] = [0.001, 0.0202]
 
+    def victoria_de_mas(o, n, k, campo):
+        o["comparaciones_nuevo_menos_base"][n][k][campo] += 1
+
+    def victoria_de_menos(o, n, k, campo):
+        o["comparaciones_nuevo_menos_base"][n][k][campo] -= 1
+
+    def tiempo_de_la_imagen_sola(o):
+        o["tiempos"]["Imagen"] = dict(o["tiempos"]["M4"])
+
+    def segundos_en_imagen_sola(o):
+        o["segundos_por_pliegue"] = {"Imagen": [1.0]}
+
+    def m4_barato(o):
+        o["tiempos"]["M4"]["mediana_segundos_por_1000_lesiones"] = 0.001
+
     IS, IM1, IB = "imagen-sola", "imagen_menos_m1", "imagen_basicos_menos_imagen"
     casos_l = [
         ("control de M1 en falso", IS, sin_control, "en los mismos pliegues de M1"),
@@ -227,9 +243,25 @@ def main():
         ("(Imagen + básicos) − Imagen invertida en el AUC", IS, lambda o: invertir(o, IB, "auc"),
          "mejora el AUC de forma distinguible"),
         ("(Imagen + básicos) − Imagen, la pAUC excluye el cero", IS, lambda o: excluir_cero(o, IB, "pauc"),
-         "En la pAUC, con la precisión guardada"),
+         "un intervalo que, con la precisión guardada, no excluye el cero"),
         ("(Imagen + básicos) − Imagen, la sensibilidad top-15 excluye el cero", IS,
-         lambda o: excluir_cero(o, IB, "setop15"), "en la sensibilidad top-15 y en el NNT80% SE"),
+         lambda o: excluir_cero(o, IB, "setop15"), "en las otras tres métricas la mejora no se da por establecida"),
+        ("Imagen − M1, un pliegue ganado de más en la pAUC", IS,
+         lambda o: victoria_de_mas(o, IM1, "pauc", "nuevo_mejor_en_folds"), "Imagen − M1: los pliegues y las semillas"),
+        ("Imagen − M1, una semilla ganada de más en el AUC", IS,
+         lambda o: victoria_de_mas(o, IM1, "auc", "nuevo_mejor_en_semillas"), "Imagen − M1: los pliegues y las semillas"),
+        ("(Imagen + básicos) − Imagen, un pliegue ganado de menos en el AUC", IS,
+         lambda o: victoria_de_menos(o, IB, "auc", "nuevo_mejor_en_folds"),
+         "(Imagen + básicos) − Imagen: los pliegues y las semillas"),
+        ("(Imagen + básicos) − Imagen, una semilla ganada de menos en el NNT80% SE", IS,
+         lambda o: victoria_de_menos(o, IB, "nnt80", "nuevo_mejor_en_semillas"),
+         "(Imagen + básicos) − Imagen: los pliegues y las semillas"),
+        ("tiempo-inferencia.json con un tiempo de la imagen sola", "tiempo-inferencia", tiempo_de_la_imagen_sola,
+         "El tiempo de inferencia de la imagen sola no se midió"),
+        ("imagen-sola.json con segundos", IS, segundos_en_imagen_sola,
+         "El tiempo de inferencia de la imagen sola no se midió"),
+        ("M4 más barato que M3 limpio al predecir", "tiempo-inferencia", m4_barato,
+         "Lo caro, con diferencia, es la imagen, y ni M4 ni M4b"),
         ("M4b − M2 establecida en la pAUC (viñeta de DINOv2)", "fase4-m4b-vs-m2", m4b_establecida,
          "Añadidas al modelo con contexto de paciente, las variables de imagen de DINOv2"),
     ]
