@@ -129,30 +129,9 @@
     {
       "dimension": "datos",
       "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
-      "linea_ini": 9,
-      "linea_fin": 9,
-      "cita": "Eligible participants were those with a whole-body 3D-image captured within 90 days prior to the diagnostic skin biopsy."
-    },
-    {
-      "dimension": "datos",
-      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
-      "linea_ini": 11,
-      "linea_fin": 11,
-      "cita": "All were White patients and 23 (66%) were males."
-    },
-    {
-      "dimension": "datos",
-      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
       "linea_ini": 11,
       "linea_fin": 11,
       "cita": "23,538 automatically identified skin lesions >2 mm in largest diameter (102-3021 lesions per participant)."
-    },
-    {
-      "dimension": "datos",
-      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
-      "linea_ini": 5,
-      "linea_fin": 5,
-      "cita": "Existing artificial intelligence for melanoma detection has relied on analysing images of lesions of clinical interest, which may lead to missed melanomas. Tools analysing the entire skin surface are lacking."
     },
     {
       "dimension": "datos",
@@ -191,5 +170,34 @@
     }
   ],
   "citados_comparables": [],
-  "observaciones": "Solo hay resumen de PubMed, sin lista de referencias: citados_comparables queda vacío. Las cifras de la tabla de la ficha y su sección 'Cruce con la fuente del proyecto' son nuestras y no se citan."
+  "observaciones": "Solo hay resumen de PubMed, sin lista de referencias: citados_comparables queda vacío. Las cifras de la tabla de la ficha y su sección 'Cruce con la fuente del proyecto' son nuestras y no se citan.",
+  "podadas": [
+    {
+      "donde": "contrastes[1]",
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 9,
+      "linea_fin": 9,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    },
+    {
+      "donde": "contrastes[2]",
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 11,
+      "linea_fin": 11,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    },
+    {
+      "donde": "contrastes[4]",
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 5,
+      "linea_fin": 5,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    }
+  ]
 }

@@ -63,6 +63,15 @@ def qc(clave, i):
     return cita(J[clave]["contrastes"][i])
 
 
+def qc_linea(clave, linea):
+    """El contraste que empieza en esa línea. Para los trabajos con citas
+    podadas, cuyos índices cambiaron al podar."""
+    hallados = [c for c in J[clave]["contrastes"] if int(c["linea_ini"]) == linea]
+    if len(hallados) != 1:
+        raise SystemExit(f"{clave}: {len(hallados)} contrastes empiezan en la línea {linea}, no uno.")
+    return cita(hallados[0])
+
+
 # --- citas del borrador y campos de outputs, comprobados igual ---
 BORRADOR = "informe/borrador-v2.md"
 
@@ -221,11 +230,19 @@ def anexo(clave):
 def comprobar_todas():
     """Cada cita de cada extracción contra su rango de líneas, no solo las que
     usa este archivo. Devuelve (total, idénticas, iguales salvo espacios, las
-    claves con citas de la segunda clase)."""
+    claves con citas de la segunda clase). Las podadas (regla 3) ya no tienen
+    texto: cuentan con la comprobación que se registró al extraerlas."""
     total = identicas = normalizadas = 0
     claves_normalizadas = set()
     for k in ORDEN:
         d = J[k]
+        for p in d.get("podadas", []):
+            total += 1
+            if p["comprobacion_al_extraer"] == "idéntica":
+                identicas += 1
+            else:
+                normalizadas += 1
+                claves_normalizadas.add(k)
         items = [(c, c["cita"]) for v in d["celdas"].values() if isinstance(v, list) for c in v]
         items += [(c, c["cita"]) for c in d.get("contrastes", [])]
         items += [(c, c["referencia"]) for c in d.get("citados_comparables", [])]
@@ -434,7 +451,7 @@ B = [
         ("Este proyecto reporta los dos sobre las mismas predicciones", qo("modelado-baseline.json", "nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media")),
         ("", qo("validacion-repetida.json", "nivel_2a_gradient_boosting_sin_balancear.pauc_media_global"))]),
     ("yang-2019", [
-        ("Sus datos se suponen independientes", qc("yang-2019", 5)),
+        ("Sus datos se suponen independientes", qc_linea("yang-2019", 130)),
         ("Este proyecto trabaja con lesiones agrupadas en pacientes, y lo mide", qo("eda-diagnostico.json", "estructura_grupos.filas_por_grupo.max")),
         ("", qb(300, 301, "La validación cruzada agrupa por paciente: cada paciente queda entero de un lado de cada pliegue."))]),
     ("saeb-2017", [

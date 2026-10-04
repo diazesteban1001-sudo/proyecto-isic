@@ -152,30 +152,9 @@
     {
       "dimension": "métrica",
       "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
-      "linea_ini": 53,
-      "linea_fin": 56,
-      "cita": "Unlike utilizing an artiﬁcial FPR lower bound to indirectly control acceptable TPR, two-way pAUC provides a straightforward measure to substitute existing methods with independent vertical and horizontal limits."
-    },
-    {
-      "dimension": "métrica",
-      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
       "linea_ini": 211,
       "linea_fin": 212,
       "cita": "Similar to FPR pAUC, there exists another indirect synthetic approach, named as TPR pAUC (11)."
-    },
-    {
-      "dimension": "métrica",
-      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
-      "linea_ini": 655,
-      "linea_fin": 656,
-      "cita": "Breast cancer is a lethal disease. If malignant subjects cannot be identiﬁed, ethical consequences will be serious. Therefore, we set FPR (≤p0) and TPR (≥q0) constraints as (p0,q 0) = (0.35, 0.5)."
-    },
-    {
-      "dimension": "métrica",
-      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
-      "linea_ini": 737,
-      "linea_fin": 740,
-      "cita": "For clinical needs, high TPR lower bound and low FPR upper bound are preferred. In this case, ethical and economical consequences can be controlled. In contrast, from a statistical perspective, low TPR lower bound and high FPR upper bound would be better."
     },
     {
       "dimension": "unidad",
@@ -183,13 +162,6 @@
       "linea_ini": 130,
       "linea_fin": 133,
       "cita": "Denote {Xi}m i=1 and{Yj}n j=1 as i.i.d random instances from F (x) and G(y) respectively, together with mutual independency."
-    },
-    {
-      "dimension": "unidad",
-      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
-      "linea_ini": 228,
-      "linea_fin": 229,
-      "cita": "In practice, two classiﬁers are usually obtained from the same individuals, and thus correlated (12; 13)."
     }
   ],
   "citados_comparables": [
@@ -206,5 +178,43 @@
     "La línea 139 del preprint escribe «given bounds on TPR ( ≥ p0) and FPR (≤ q0)», con p0 y q0 intercambiados respecto de la línea 74 y del resto del artículo. No se cita.",
     "Las líneas de referencias/_texto-completo/yang-2019-smmr-resumen-pubmed.txt terminan en un espacio; las citas de ese archivo que cruzan líneas, unidas con un espacio, tienen por eso dos espacios en cada salto.",
     "Fuera de citados_comparables por no ser de triaje de lesiones de piel ni de validación agrupada, aunque sí de la métrica: [4] McClish (línea 752) y [11] Jiang, Metz y Nishikawa, «A receiver operating characteristic partial area index for highly sensitive diagnostic tests» (líneas 766-767), que Yang cita como origen del «TPR pAUC» (líneas 211-212)."
+  ],
+  "podadas": [
+    {
+      "donde": "contrastes[1]",
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 53,
+      "linea_fin": 56,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    },
+    {
+      "donde": "contrastes[3]",
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 655,
+      "linea_fin": 656,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    },
+    {
+      "donde": "contrastes[4]",
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 737,
+      "linea_fin": 740,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    },
+    {
+      "donde": "contrastes[6]",
+      "dimension": "unidad",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 228,
+      "linea_fin": 229,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    }
   ]
 }

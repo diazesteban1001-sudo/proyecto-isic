@@ -148,14 +148,18 @@
       "linea_ini": 99,
       "linea_fin": 103,
       "cita": "Data other than the Competition Data (\"External Data\") may be used to develop and test Submissions. However, the External Data must be publicly available and equally accessible to use by all participants of the Competition for purposes of the competition at no cost to the other participants."
-    },
+    }
+  ],
+  "citados_comparables": [],
+  "podadas": [
     {
+      "donde": "contrastes[6]",
       "dimension": "datos (licencia y uso)",
       "archivo": "referencias/_texto-completo/kaggle-rules.md",
       "linea_ini": 87,
       "linea_fin": 91,
-      "cita": "Competition Use and Non-Commercial & Academic Research: the Competition Data may be accessed and used for non-commercial purposes only, including participation in the Competition, forum use, and academic research and education. Subject to CC BY-NC 4.0 (Attribution-NonCommercial 4.0 International)."
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
     }
-  ],
-  "citados_comparables": []
+  ]
 }

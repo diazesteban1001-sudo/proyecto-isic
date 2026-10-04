@@ -96,13 +96,6 @@
       "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
       "linea_ini": 49,
       "linea_fin": 49,
-      "cita": "When comparing two ROC curves, though, problems arise when interest does not lie in the entire range of false-positive rates (and hence the entire area)."
-    },
-    {
-      "dimension": "métrica",
-      "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
-      "linea_ini": 49,
-      "linea_fin": 49,
       "cita": "The areas under the two ROC curves over an a priori range of false-positive rates are examined, as well as the areas under the two curves at a specific point."
     },
     {
@@ -113,5 +106,16 @@
       "cita": "The method is applicable for either continuous or rating scale binormal data, from independent or dependent samples."
     }
   ],
-  "citados_comparables": []
+  "citados_comparables": [],
+  "podadas": [
+    {
+      "donde": "contrastes[0]",
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+      "linea_ini": 49,
+      "linea_fin": 49,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    }
+  ]
 }

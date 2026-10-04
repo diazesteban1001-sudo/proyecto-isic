@@ -125,22 +125,28 @@
       "archivo": "referencias/_texto-completo/walter-2005-pauc-sroc-en-metaanalisis.md",
       "linea_ini": 48,
       "linea_fin": 48,
-      "cita": "Comparisons between tests are more difficult, especially if an empirical truncation process is used."
-    },
-    {
-      "dimension": "métrica",
-      "archivo": "referencias/_texto-completo/walter-2005-pauc-sroc-en-metaanalisis.md",
-      "linea_ini": 48,
-      "linea_fin": 48,
-      "cita": "Finally, the partial area lacks a useful symmetry property enjoyed by the full AUC."
-    },
-    {
-      "dimension": "métrica",
-      "archivo": "referencias/_texto-completo/walter-2005-pauc-sroc-en-metaanalisis.md",
-      "linea_ini": 48,
-      "linea_fin": 48,
       "cita": "Although the partial AUC may sometimes have clinical appeal, on balance the use of the full AUC is preferred."
     }
   ],
-  "citados_comparables": []
+  "citados_comparables": [],
+  "podadas": [
+    {
+      "donde": "contrastes[3]",
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/walter-2005-pauc-sroc-en-metaanalisis.md",
+      "linea_ini": 48,
+      "linea_fin": 48,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    },
+    {
+      "donde": "contrastes[4]",
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/walter-2005-pauc-sroc-en-metaanalisis.md",
+      "linea_ini": 48,
+      "linea_fin": 48,
+      "comprobacion_al_extraer": "idéntica",
+      "motivo": "Fuente sin licencia abierta (regla 3 de CLAUDE.md): el insumo no usa esta cita y no está literal en la ficha versionada de la fuente. Se quitó su texto el 2026-10-04 y se conserva solo su ubicación."
+    }
+  ]
 }
