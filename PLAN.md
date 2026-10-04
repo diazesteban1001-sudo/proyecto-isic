@@ -175,8 +175,18 @@ anteproyecto; las cuatro están cerradas, con sus fuentes versionadas en
    Las búsquedas que las encontraron están en
    `referencias/busqueda-pubmed-colombia-2026-09-21.md`, con sus expresiones,
    campos, fecha y resultados completos. Un hallazgo condiciona cómo se usan:
-   ninguno de los tres trabajos de aprendizaje automático usa datos de pacientes
-   colombianos. Los tres entrenan y evalúan sobre conjuntos internacionales.
+   los tres trabajos de aprendizaje automático entrenan y evalúan con
+   conjuntos públicos ya publicados, y Rios-Duarte et al. advierten que esas
+   fuentes no dan la ascendencia de los pacientes. Los datos de este trabajo
+   no son colombianos: ninguno de los centros de SLICE-3D está en América
+   Latina. *Hasta el 2026-10-04 aquí decía que ninguno de los tres usaba datos
+   de pacientes colombianos y que los tres entrenaban y evaluaban sobre
+   conjuntos internacionales. Sus fuentes no lo sostienen: Rios-Duarte et al.
+   dicen que las fuentes no dan la ascendencia de los pacientes
+   (`referencias/rios-duarte-2024-cnn-melanoma-uniandes.md`, línea 256), y su
+   referencia 22, la que acompaña a ISIC, es la colección «Hospital Italiano de
+   Buenos Aires Skin Lesions» (línea 800); los dos trabajos de Jojoa no dicen
+   de dónde son los pacientes.*
 
 **Pendiente del estado del arte — no se atiende.** Con la fase cerrada, el
 documento no se vuelve a pulir salvo que el curso lo pida. Quedan anotadas como
