@@ -1080,6 +1080,12 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         campos `frac_pos_bajo_p20_neg`, `n_neg_en_el_minimo`,
         `n_pos_en_el_minimo` y `deciles_rango_pos`, añadidos sin cambiar lo que
         ya medía). La lectura queda pendiente con la persona.
+      - **Estado (2026-10-04): el cómo está medido; el porqué sigue abierto.**
+        El 2a hunde a una parte de los positivos al fondo del ordenamiento:
+        `informe/borrador-v2.md`, «Una decisión por defecto cambia el
+        veredicto», lo describe con `outputs/mecanismo-2a.json`, y
+        «Limitaciones», «Un mecanismo medido a medias», dice que por qué lo hace
+        no se midió.
 - [ ] **El «200» de `informe/borrador-v2.md` tiene respaldo solo por
       coincidencia** (2026-10-03).
       - **Dónde:** línea 26, la pAUC «comprobada contra su script en 200
@@ -1130,13 +1136,17 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         no infla la pAUC, el AUC ni el NNT80% SE de los niveles 1 y 2b, ni
         cambia el veredicto de 2b − 1 en la pAUC. La sensibilidad top-15 queda
         fuera de la regla por el motivo registrado en `PLAN.md`.*
-- [ ] **La frase de la inflación en el borrador** (2026-10-04).
+- [x] **La frase de la inflación en el borrador** (2026-10-04).
       `informe/borrador-v2.md`, «La partición: por paciente», afirma que con
       lesiones del mismo paciente a los dos lados la métrica sale inflada, y su
       comentario F: cita la «Nota metodológica clave» de este archivo, que la
       medición del 2026-10-04 no sostiene (`outputs/efecto-particion.json`).
       Hay que reescribir la frase.
-- [ ] **«Mejor media no es mejor modelo» solo da la pAUC de 2b − 1**
+      *Cumplido el 2026-10-04 (commit «Borrador v2: la partición y el
+      mecanismo del 2a»): la frase dice ahora que el efecto se midió y no
+      cambia de forma distinguible, y que la agrupación se sostiene por el
+      uso.*
+- [x] **«Mejor media no es mejor modelo» solo da la pAUC de 2b − 1**
       (2026-10-04). La sección de `informe/borrador-v2.md` da la diferencia,
       su intervalo y las victorias en la pAUC
       (`outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1`).
@@ -1144,6 +1154,8 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       trae las otras tres métricas, el AUC, la sensibilidad top-15 y el NNT80%
       SE, con la misma partición: reproduce la de la validación repetida
       pliegue a pliegue.
+      *Cumplido el 2026-10-04 (mismo commit): la subsección se llama ahora
+      «Una ventaja que la pAUC no ve» y da las otras tres métricas.*
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
