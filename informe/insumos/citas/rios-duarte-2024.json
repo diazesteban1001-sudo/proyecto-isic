@@ -1,0 +1,274 @@
+{
+  "clave": "rios-duarte-2024",
+  "archivos_leidos": [
+    "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 250,
+        "linea_fin": 250,
+        "cita": "We conducted a comparative accuracy study to evaluate and compare the performance of CNN models trained using different image inputs: clinical, dermoscopy, and a combination of clinical and dermoscopy."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 250,
+        "linea_fin": 250,
+        "cita": "This study aimed to adhere to the CLEAR Derm Consensus Guidelines established by the International Skin Imaging Collaboration Artificial Intelligence Working Group."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 252,
+        "linea_fin": 252,
+        "cita": "A total of 914 pairs of images were gathered from public dermatology image repositories, comprising 822 from the “7‐point criteria evaluation database”"
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 254,
+        "linea_fin": 256,
+        "cita": "and 92 from “The International Skin Imaging Collaboration” 22 (ISIC) repository."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 662,
+        "linea_fin": 662,
+        "cita": "In consideration of our research, which involves the use of images that have been previously published in public repositories"
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 175,
+        "linea_fin": 175,
+        "cita": "We divided 914 image pairs into training, validation, and test sets."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 258,
+        "linea_fin": 258,
+        "cita": "Finally, the dataset was divided into 676 pairs of images for training, 119 for validation, and 119 for testing."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 265,
+        "linea_fin": 273,
+        "cita": "Non melanoma Melanoma Overall  N  619 295 914"
+      }
+    ],
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó el texto completo (líneas 92-851) y se buscó con Python: 'Colombia', 'Spain', 'Argentin', 'Buenos Aires', 'Australia', 'Italy', 'Portugal', 'country', 'hospital', 'patient'. 'Colombia' solo aparece en afiliaciones (líneas 100-153). El texto no dice de qué país son los pacientes o las imágenes; línea 256 dice que las fuentes no dan la ascendencia de los pacientes. La referencia 22, que el texto cita junto a «The International Skin Imaging Collaboration» (líneas 254-255), es «Hospital Italiano de Buenos Aires Skin Lesions» (líneas 799-801), pero el texto no atribuye a ese hospital ni a un país las 92 imágenes."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 256,
+        "linea_fin": 256,
+        "cita": "Image selection was based on the availability of paired dermoscopy and clinical photographs from the same pigmented skin lesion, diagnosis of melanoma or nevi (any type), and a license/permit for research use."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 258,
+        "linea_fin": 258,
+        "cita": "For the classification algorithm, all lesions were reclassified into binary categories: “1” denoting any type of melanoma and “0” for non‐melanoma lesions (nevi)."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 171,
+        "linea_fin": 171,
+        "cita": "a combination of paired clinical and dermoscopy images from the same lesion."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 258,
+        "linea_fin": 258,
+        "cita": "The diagnoses as reported in the repositories were used for a stratified data splitting into training, validation, and test set."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 258,
+        "linea_fin": 258,
+        "cita": "The training set was employed to train the models, while the validation set was used for initial analysis and to compare model performance metrics across the different hyperparameter sets (further details in the “modeling” section). Subsequently, the test set was employed to compare the performance metrics of the best models, determined by their validation AUC‐ROC scores."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 560,
+        "linea_fin": 560,
+        "cita": "For performance evaluation and comparison on the test set, we selected the best model of each type based on validation AUC‐ROC, and then, we used the De‐Long test to compare correlated ROC curves and the McNemar's test for non‐independent samples to compare sensitivity and specificity."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó el texto completo (líneas 92-851) y se buscó con Python: 'patient', 'subject', 'group', 'stratif', 'split'. La única descripción de la partición es la estratificación por diagnóstico (línea 258: «The diagnoses as reported in the repositories were used for a stratified data splitting»). 'patient' aparece solo para características demográficas o ascendencia (líneas 256, 258, 642); 'group' solo como «study groups» (línea 262) y «three groups» de modelos (línea 572). No se dice si la partición agrupa por paciente."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 175,
+        "linea_fin": 175,
+        "cita": "Best models were chosen based on validation AUC‐ROC."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 244,
+        "linea_fin": 244,
+        "cita": "By systematically analyzing metrics such as the Area Under the Receiver Operating Characteristic Curve (AUC‐ROC), sensitivity, and specificity"
+      }
+    ],
+    "desbalance": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 258,
+        "linea_fin": 258,
+        "cita": "Our dataset had predominantly non‐melanoma lesions (class imbalance), which can influence the final models' performance. However, we used a weighted loss function during training to reduce model prediction biases toward non‐malignant lesions."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 422,
+        "linea_fin": 422,
+        "cita": "Training employed Adam for optimization, and loss function weighting adjusted for class imbalance."
+      }
+    ],
+    "resultado_principal": [
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 580,
+        "linea_fin": 580,
+        "cita": "The dermoscopy model displayed the highest AUC‐ROC value of 0.869, followed by the clinical + dermoscopy model at 0.822, and finally, the clinical model at 0.661."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 588,
+        "linea_fin": 588,
+        "cita": "In terms of sensitivity, the clinical + dermoscopy model achieved the highest value at 1.000, followed by the dermoscopy model at 0.799, and the clinical model at 0.513."
+      },
+      {
+        "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+        "linea_ini": 588,
+        "linea_fin": 588,
+        "cita": "Regarding model specificity, the dermoscopy model exhibited the highest value of 0.800, while the clinical model achieved a specificity of 0.650, and the clinical + dermoscopy model registered a specificity of 0.288."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 256,
+      "linea_fin": 256,
+      "cita": "paired dermoscopy and clinical photographs from the same pigmented skin lesion"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 258,
+      "linea_fin": 258,
+      "cita": "The diagnoses as reported in the repositories were used for a stratified data splitting into training, validation, and test set."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 560,
+      "linea_fin": 560,
+      "cita": "we selected the best model of each type based on validation AUC‐ROC"
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 560,
+      "linea_fin": 560,
+      "cita": "we used the De‐Long test to compare correlated ROC curves and the McNemar's test for non‐independent samples to compare sensitivity and specificity."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 258,
+      "linea_fin": 258,
+      "cita": "we used a weighted loss function during training to reduce model prediction biases toward non‐malignant lesions."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 409,
+      "linea_fin": 409,
+      "cita": "Model training was conducted solely on imaging information, no metadata was used during training."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 258,
+      "linea_fin": 258,
+      "cita": "Images of metastatic melanoma were excluded from our dataset to ensure that our models were trained exclusively on primary melanoma lesions"
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 256,
+      "linea_fin": 256,
+      "cita": "These sources did not provide details regarding the ancestry of patients or the technical specifications of the imaging systems used."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 642,
+      "linea_fin": 642,
+      "cita": "The relatively small sample size, especially within the context of deep learning and big data, was primarily due to the scarcity of paired clinical and dermoscopy images from the same lesion available in public repositories."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 753,
+      "linea_fin": 754,
+      "referencia": "13. Brinker TJ, Hekler A, Enk AH, et al. Deep learning outperformed 136 of 157 dermatologists in a head‐to‐head dermoscopic melanoma image classification task. Eur J Cancer. 2019;113:47‐54. doi: 10.1016/j.ejca.2019.04.001",
+      "por_que": "Comparación de una red convolucional con dermatólogos en clasificación de melanoma en dermatoscopia."
+    },
+    {
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 764,
+      "linea_fin": 765,
+      "referencia": "15. Haenssle HA, Fink C, Schneiderbauer R, et al. Man against machine: diagnostic performance of a deep learning convolutional neural network for dermoscopic melanoma recognition in comparison to 58 dermatologists. Ann Oncol. 2018;29(8):1836‐1842. doi: 10.1093/annonc/mdy166",
+      "por_que": "Red convolucional para reconocimiento dermatoscópico de melanoma comparada con 58 dermatólogos."
+    },
+    {
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 774,
+      "linea_fin": 777,
+      "referencia": "17. Zhang Y, Wang C. SIIM‐ISIC melanoma classification with DenseNet. In: 2021 IEEE 2nd International Conference on Big Data, Artificial Intelligence and Internet of Things Engineering (ICBAIE) . IEEE; 2021:14‐17. doi: 10.1109/ICBAIE52039.2021.9389983",
+      "por_que": "Clasificación de melanoma sobre los datos del reto SIIM-ISIC, del mismo archivo ISIC."
+    },
+    {
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 785,
+      "linea_fin": 786,
+      "referencia": "19. Birkenfeld JS, Tucker‐Schwartz JM, Soenksen LR, Avilés‐Izquierdo JA, Marti‐Fuster B. Computer‐aided classification of suspicious pigmented lesions using wide‐field images. Comput Methods Programs Biomed. 2020;195:105631. doi: 10.1016/j.cmpb.2020.105631",
+      "por_que": "Clasificación de lesiones pigmentadas sospechosas en imágenes de campo amplio, la modalidad más cercana a la fotografía corporal total."
+    },
+    {
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 790,
+      "linea_fin": 791,
+      "referencia": "20. Daneshjou R, Barata C, Betz‐Stablein B, et al. Checklist for evaluation of image‐based artificial intelligence reports in dermatology: CLEAR derm consensus guidelines from the international skin imaging collaboration artificial intelligence working group. JAMA Dermatol. 2022;158(1):90. doi: 10.1001/jamadermatol.2021.4915",
+      "por_que": "Lista de comprobación para evaluar informes de IA en dermatología con imágenes (CLEAR Derm), que el trabajo dice seguir."
+    },
+    {
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 795,
+      "linea_fin": 796,
+      "referencia": "21. Kawahara J, Daneshvar S, Argenziano G, Hamarneh G. Seven‐point checklist and skin lesion classification using multitask multimodal neural nets. IEEE J Biomed Health Inform. 2019;23(2):538‐546. doi: 10.1109/JBHI.2018.2824327",
+      "por_que": "Origen de la base de los 7 criterios usada como fuente principal de datos; clasificación de lesiones multimodal."
+    },
+    {
+      "archivo": "referencias/rios-duarte-2024-cnn-melanoma-uniandes.md",
+      "linea_ini": 814,
+      "linea_fin": 815,
+      "referencia": "25. Han SS, Kim MS, Lim W, Park GH, Park I, Chang SE. Classification of the clinical images for benign and malignant cutaneous tumors using a deep learning algorithm. J Invest Dermatol. 2018;138(7):1529‐1538. doi: 10.1016/j.jid.2018.01.028",
+      "por_que": "Clasificación de tumores cutáneos benignos y malignos en imágenes clínicas con aprendizaje profundo."
+    }
+  ]
+}

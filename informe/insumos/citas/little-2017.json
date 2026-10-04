@@ -1,0 +1,355 @@
+{
+  "clave": "little-2017",
+  "archivos_leidos": [
+    "referencias/little-2017-perspectivas-sobre-saeb.md"
+  ],
+  "nota_secciones": "Texto original: líneas 177-235 sección de M. A. Little; 237-279 sección de G. Varoquaux; 281-301 respuesta de Saeb et al. El campo 'seccion' de cada cita dice de cuál sale.",
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 171,
+        "linea_fin": 171,
+        "cita": "This three-part review takes a detailed look at the complexities of cross-validation, fostered by the peer review of Saeb et al.’s paper entitled “The need to approximate the use-case in clinical machine learning.”",
+        "seccion": "resumen y presentación (común)"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 171,
+        "linea_fin": 171,
+        "cita": "It contains perspectives by reviewers and by the original authors that touch upon cross-validation: the suitability of different strategies and their interpretation.",
+        "seccion": "resumen y presentación (común)"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 175,
+        "linea_fin": 175,
+        "cita": "This review is organized in three sections, each presenting a different view on the suitability of different cross-validation strategies: one by M.A. Little, one by G. Varoquaux (who both also reviewed the original paper), and one by Saeb et al.",
+        "seccion": "resumen y presentación (común)"
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 181,
+        "linea_fin": 181,
+        "cita": "This model is grounded in my practical experience with this kind of data and evidence from real data in this discipline (see Fig. 1).",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 187,
+        "linea_fin": 187,
+        "cita": "Data from [3]",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 327,
+        "linea_fin": 329,
+        "cita": "3. Tsanas A, Little MA, McSharry PE et al. Accurate telemonitoring of Parkinsons disease progression by non-invasive speech tests. IEEE Trans Biomed Eng 2010;57(4):884–93.",
+        "seccion": "bibliografía (referencia 3, citada en la figura 1 de Little)"
+      }
+    ],
+    "datos_tamano": {
+      "no_lo_dice": true,
+      "buscado": "Leída entera la sección de Little (líneas 177-235), incluida la leyenda de la figura 1 (línea 187), que es el único dato empírico del texto: no da número de sujetos, registros ni observaciones; solo porcentajes ('100% for all subjects', '10% of subjects') y la correlación 0.06. Se buscó también 'subjects', 'observations', 'records' y cifras en las secciones de Varoquaux (237-279) y de Saeb et al. (281-301): ninguna describe un conjunto de datos propio con su tamaño."
+    },
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "Leído entero el texto original (líneas 90-401). Los únicos nombres de país (UK, France, USA) están en las afiliaciones de los autores (líneas 97-155), no en la descripción de datos. La figura 1 de Little (línea 187) remite a 'Data from [3]' sin país. Se buscó 'country', 'countries', 'UK', 'France', 'USA', 'Italy'."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 179,
+        "linea_fin": 179,
+        "cita": "where there are multiple observations from each individual and small numbers of individuals",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 199,
+        "linea_fin": 199,
+        "cita": "To be clear: in this model, observations do depend upon their identity variable – that is what we mean by clustering on identity here – but they do not depend upon each other [3].",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 247,
+        "linea_fin": 247,
+        "cita": "applications often have dependencies across observations that are due to unobserved confounding effects: samples belong to multiple subjects, and movements differ across populations.",
+        "seccion": "Varoquaux"
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 231,
+        "linea_fin": 231,
+        "cita": "It may be that a purely pragmatic solution, where appropriate given the probabilistic dependency and distributional structure of the data, is to try out both record-wise and subject-wise CV on a problem just to see what you find.",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 259,
+        "linea_fin": 259,
+        "cita": "Leave-one-out must be avoided. Cross-validation strategies with large test sets - typically 10% of the data - can be more robust to confounding effects. Keeping the number of folds large is still possible with strategies known as repeated test-train split, shuffle-split, repeated K-Fold, or Monte-Carlo Cross-Validation [2,14].",
+        "seccion": "Varoquaux"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 293,
+        "linea_fin": 293,
+        "cita": "To deal with this problem, we can use large data sets where train and test sets are completely isolated from the beginning or run a pre-registered replication study.",
+        "seccion": "Saeb et al. (respuesta)"
+      }
+    ],
+    "agrupa_por_paciente": [
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 211,
+        "linea_fin": 211,
+        "cita": "Subject-wise CV does not always work, and in some realistic cases it fails where record-wise CV does not, even when the data are clustered on identity.",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 277,
+        "linea_fin": 277,
+        "cita": "If Z models subjects and the goal is to predict across to new subjects, the expectancies must be marginal with respect to Z. This tells us that all the data from a given subject should be either in the train or the test.",
+        "seccion": "Varoquaux"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 287,
+        "linea_fin": 287,
+        "cita": "In this setting, subject-wise CV obviously mimics the use-case scenario by dividing the data set into known (train) and future (test) subjects.",
+        "seccion": "Saeb et al. (respuesta)"
+      }
+    ],
+    "metrica_principal": [
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 187,
+        "linea_fin": 187,
+        "cita": "Here the leave-one-subject-out train/test distribution mismatch is 100% for all subjects for this feature (two-sample Kolmogorov-Smirnov test at 0.05 significance, Bonferroni corrected).",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 273,
+        "linea_fin": 273,
+        "cita": "The purpose of cross-validation is to estimate this error.",
+        "seccion": "Varoquaux"
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Leído entero el texto original (líneas 90-401). Se buscó 'balanc', 'imbalanc', 'unbalanc', 'class', 'prevalen'. La única aparición de 'balanced' es la línea 257, 'creating a balanced test set in age prediction [10]' (sección de Varoquaux), que habla de un conjunto de prueba en predicción de edad, no del desbalance de clases. 'class' solo aparece en el título de la referencia 4 (línea 333)."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 187,
+        "linea_fin": 187,
+        "cita": "Here the leave-one-subject-out train/test distribution mismatch is 100% for all subjects for this feature (two-sample Kolmogorov-Smirnov test at 0.05 significance, Bonferroni corrected). This means that leave-one-subject-out CV cannot provide a consistent out-of-sample estimator for this data. The mean absolute serial (Pearson) correlation within subject for each feature for all subjects is an unimportant 0.06, with no correlations reaching significance (at the 0.05 level, Bonferroni corrected), barring only one feature that is weakly correlated just above significance for only 10% of subjects.",
+        "seccion": "Little"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 263,
+        "linea_fin": 263,
+        "cita": "Yet, in a clear application setting, as for a clinical purpose, the intended usage should dictate the cross-validation setting.",
+        "seccion": "Varoquaux"
+      },
+      {
+        "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "We can not, however, agree with Dr. Little’s three criticisms of our paper. We strongly urge scientists and clinicians who want to diagnose diseases to avoid record-wise cross-validation.",
+        "seccion": "Saeb et al. (respuesta)"
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 211,
+      "linea_fin": 211,
+      "cita": "Subject-wise CV does not always work, and in some realistic cases it fails where record-wise CV does not, even when the data are clustered on identity.",
+      "seccion": "Little"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 217,
+      "linea_fin": 217,
+      "cita": "Because this problem does not lie with the CV method itself, we should find the actual source of the confound and fix that first.",
+      "seccion": "Little"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 219,
+      "linea_fin": 219,
+      "cita": "Because of this mismatch, subject-wise CV causes systematic underfitting in practice in this situation: an alternative explanation for Saeb et al.’s empirical findings that we cannot rule out.",
+      "seccion": "Little"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 221,
+      "linea_fin": 221,
+      "cita": "Leave-one-subject-out CV is not a panacea and suffers from additional problems. It often results in estimators with large variance because of the considerable heterogeneity between individuals in practice and the often small number of individuals available to each study.",
+      "seccion": "Little"
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 207,
+      "linea_fin": 207,
+      "cita": "in my experience, real data I have encountered in this context do not exhibit any detectable signs of within-subject dependence between observations (see, for example, Fig. 1, where the serial correlation within features is effectively non-existent) [4].",
+      "seccion": "Little"
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 229,
+      "linea_fin": 229,
+      "cita": "consider the case where all the healthy subjects in the data set are younger than those with the condition we want to diagnose. In this case, since many aspects of aging can be detected in features, we could have an obvious age-related confound in the predictor, and again, subject-wise CV will not fix this.",
+      "seccion": "Little"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 233,
+      "linea_fin": 233,
+      "cita": "However, I do not agree with the uncritical application of this simplified prescription because whether subject-wise CV is applicable or not depends upon the dependency and distributional structure of the data, and this may or may not coincide with the intended ‘use-case.’",
+      "seccion": "Little"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 245,
+      "linea_fin": 245,
+      "cita": "If a diagnostic method is meant to be applied to new patients, it must be evaluated as such. Hence, the cross-validation strategy must test generalization to new subjects, as recommended by Saeb et al. [1].",
+      "seccion": "Varoquaux"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 263,
+      "linea_fin": 263,
+      "cita": "Yet, in a clear application setting, as for a clinical purpose, the intended usage should dictate the cross-validation setting.",
+      "seccion": "Varoquaux"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 247,
+      "linea_fin": 247,
+      "cita": "However, if the method is meant for prognosis from continuous measurements, it may fine-tune to a subject’s data. In such a case, the cross-validation must be made by leaving out future measurements, and not full subjects.",
+      "seccion": "Varoquaux"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 249,
+      "linea_fin": 249,
+      "cita": "To test this question, we measured prediction by leaving out full sites in the cross-validation.",
+      "seccion": "Varoquaux"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 255,
+      "linea_fin": 255,
+      "cita": "The standard recommendation in machine learning is to use test sets of 10% to 20% of the data (see [11,12] for historical references and [13, 7.10] for a modern text book).",
+      "seccion": "Varoquaux"
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 257,
+      "linea_fin": 257,
+      "cita": "It is not legit to accumulate statistics in the union of all test sets across cross-validation folds. Indeed this would break their independence with the train sets and open the door to leaking of information from the train sets to the corresponding statistics [5].",
+      "seccion": "Varoquaux"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 251,
+      "linea_fin": 251,
+      "cita": "In the first section of this review, Dr. Little correctly points out that, in the presence of a confounds changing the cross-validation method can measure the impact of a confound but not fix it.",
+      "seccion": "Varoquaux"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 293,
+      "linea_fin": 293,
+      "cita": "Therefore, the most important issue with subject-wise CV is the implicit re-use of test data. To deal with this problem, we can use large data sets where train and test sets are completely isolated from the beginning or run a pre-registered replication study.",
+      "seccion": "Saeb et al. (respuesta)"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 297,
+      "linea_fin": 297,
+      "cita": "Quite simply, whenever there is any subject-specific component in the data, there will likely be a bias.",
+      "seccion": "Saeb et al. (respuesta)"
+    }
+  ],
+  "citados_comparables": [
+    {
+      "referencia": "1. Saeb S, Lonini L, Jayaraman A et al. The need to approximate the use-case in clinical machine learning. Gigascience 2017;6(5):1–9.",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 319,
+      "linea_fin": 321,
+      "seccion": "las tres",
+      "por_que": "El artículo comentado: validación por sujeto frente a validación por registro."
+    },
+    {
+      "referencia": "5. Xu G, Huang JZ. Asymptotic optimality and effecient computation of the leave-subject-out cross-validation. Ann Stat 2012;40(6):3003–30.",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 335,
+      "linea_fin": 337,
+      "seccion": "Little",
+      "por_que": "Little lo cita (línea 223) como estudio teórico de la validación dejando fuera sujetos."
+    },
+    {
+      "referencia": "8. Kaufman S, Rosset S, Perlich C. Leakage in data mining: formulation, detection and avoidance. in: KDD’11: Proceedings of the 17th ACM SIGKDD international conference on Knowledge discovery and data mining, 2011. p. 556–63.",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 347,
+      "linea_fin": 349,
+      "seccion": "Little",
+      "por_que": "Little lo cita (línea 229) por las fugas ('leakages') en minería de datos."
+    },
+    {
+      "referencia": "9. Abraham A, Milham M, Martino AD et al. Deriving reproducible biomarkers from multi-site resting-state data: an autism-based example. Neuroimage 2016; in press.",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 351,
+      "linea_fin": 353,
+      "seccion": "Varoquaux",
+      "por_que": "Varoquaux lo cita (línea 249) como validación que deja fuera centros completos."
+    },
+    {
+      "referencia": "14. Varoquaux G, Raamana PR, Engemann DA et al. Assessing and tuning brain decoders: cross-validation, caveats, and guidelines. NeuroImage 2016; in press.",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 371,
+      "linea_fin": 373,
+      "seccion": "Varoquaux",
+      "por_que": "Varoquaux lo cita (líneas 255 y 259) para el tamaño del conjunto de prueba y las particiones repetidas."
+    },
+    {
+      "referencia": "3. Tsanas A, Little MA, McSharry PE et al. Accurate telemonitoring of Parkinsons disease progression by non-invasive speech tests. IEEE Trans Biomed Eng 2010;57(4):884–93.",
+      "archivo": "referencias/little-2017-perspectivas-sobre-saeb.md",
+      "linea_ini": 327,
+      "linea_fin": 329,
+      "seccion": "Little",
+      "por_que": "Fuente de los datos clínicos de la figura 1 de Little (línea 187), con varias observaciones por sujeto."
+    }
+  ]
+}

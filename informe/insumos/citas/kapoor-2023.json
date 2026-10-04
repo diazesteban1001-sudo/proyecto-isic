@@ -1,0 +1,306 @@
+{
+  "clave": "kapoor-2023",
+  "archivos_leidos": [
+    "referencias/kapoor-2023-fuga-y-reproducibilidad.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 108,
+        "linea_fin": 108,
+        "cita": "Through a survey of literature in fields that have adopted ML methods, we find 17 fields where leakage has been found, collectively affecting 294 papers and, in some cases, leading to wildly overoptimistic conclusions."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 108,
+        "linea_fin": 108,
+        "cita": "Finally, we conduct a reproducibility study of civil war prediction, where complex ML models are believed to vastly outperform traditional statistical models such as logistic regression (LR)."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 170,
+        "linea_fin": 170,
+        "cita": "Therefore, we do not present our results as a systematic meta-review of leakage from a coherent sample of papers but rather as a lower bound of reproducibility issues in ML-based science."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 300,
+        "linea_fin": 300,
+        "cita": "We conducted a systematic search to find relevant literature (detailed in supplemental experimental procedures, section S2.1)."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 286,
+        "linea_fin": 286,
+        "cita": "Table S6 gives an overview of the training data used for the papers we considered."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 168,
+        "linea_fin": 168,
+        "cita": "Here we conduct a cross-disciplinary analysis by building on these individual reviews."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 300,
+        "linea_fin": 300,
+        "cita": "This yielded 124 papers. We narrowed this list to the 12 papers that focused on predicting civil war, evaluated performance using a train-test split, and shared the complete code and data."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 148,
+        "linea_fin": 148,
+        "cita": "Survey of 22 papers that identify pitfalls in the adoption of ML methods across 17 fields, collectively affecting 294 papers"
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "As an illustration, we examine this issue in detail in the case of Blair and Sambanis86 because their test dataset has a particularly small number of instances of civil war onset (only 11)."
+      }
+    ],
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "En el texto original (líneas 70–628 de referencias/kapoor-2023-fuga-y-reproducibilidad.md) se buscaron «countr», «nation», «Africa» y «world»: solo aparecen «Country» en el título de la referencia 80 (Scimago Journal and Country Rank), «nation» dentro de «international relations»/«National»/«International» y «world» en «real-world» y títulos de referencias. El estudio de caso dice «a region and time period» (línea 286) sin nombrar países; la Table S6, a la que remite, está en el suplemento, que no está en el repositorio."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 286,
+        "linea_fin": 286,
+        "cita": "The goal of these papers is to predict civil war in a region and time period using features such as GDP, poverty rates, whether it is a democracy, etc."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "They propose a model of civil war onset that uses theoretically informed features and report that it outperforms other baseline models of civil war onset using the AUC metric on an out-of-sample dataset."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 300,
+        "linea_fin": 300,
+        "cita": "We narrowed this list to the 12 papers that focused on predicting civil war, evaluated performance using a train-test split, and shared the complete code and data."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 300,
+        "linea_fin": 300,
+        "cita": "For these 12, we attempted to identify errors and reproducibility issues from the text and by reviewing the code provided with the papers. When we identified errors, we re-analyzed the data with the errors corrected."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "Further, all models have large confidence intervals for their out-of-sample performance. For instance, while the smoothed AUC performance reported by the authors is 0.85, the 95% confidence interval calculated using bootstrapped test set re-sampling is 0.66–0.95."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "En el estudio de caso (líneas 282–320) y en Experimental procedures (356–398) se buscaron «patient», «group», «block», «cross-valid», «split» y «independ»: el estudio de caso solo dice que los 12 artículos «evaluated performance using a train-test split» (línea 300), sin decir si la partición agrupa por país, región o periodo. Lo que el artículo dice sobre agrupar por sujeto es normativo —la taxonomía [L3.2], línea 218: «training and test samples come from the same people or units» y «The train-test split should account for the dependencies in the data»— y va en «contrastes», no aquí."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 304,
+        "linea_fin": 304,
+        "cita": "where the difference between the area under the curve (AUC) of the complex ML models and LR models drops from 0.14 to 0.01."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "for a one-tailed significance test comparing the smoothed AUC performance of the model proposed in the paper—the escalation model—with other baseline models reported in their paper—quad, goldstein, cameo, and average, respectively)."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "En el estudio de caso (líneas 282–320) se buscaron «imbalanc», «oversampl», «sampling», «weight» y «class»: no se dice cómo se trató el desbalance al corregir los cuatro artículos; solo que el conjunto de prueba de Blair y Sambanis tiene «only 11» inicios de guerra civil (línea 320). El tema aparece en el título de las referencias 75 y 77 («Class-Imbalanced») y, de forma normativa, en [L1.2] (línea 204) y en «Metric choice issues» (línea 236), que van en «contrastes». La sección S2 del suplemento, que describe la metodología de corrección, no está en el repositorio."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 304,
+        "linea_fin": 304,
+        "cita": "We found errors in 4 of the 12 papers—exactly the 4 papers that claimed superior performance of complex ML models over baseline LR models for predicting civil war."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 304,
+        "linea_fin": 304,
+        "cita": "When the errors are corrected, complex ML models perform no better than baseline LR models in each case except Wang,77 where the difference between the area under the curve (AUC) of the complex ML models and LR models drops from 0.14 to 0.01."
+      },
+      {
+        "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+        "linea_ini": 172,
+        "linea_fin": 172,
+        "cita": "We find 22 papers from 17 fields that outline errors in ML-based science in their field, collectively affecting 294 papers. A prominent finding that emerges is that data leakage is a pitfall in every single case."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "validacion (agrupacion por sujeto)",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 218,
+      "linea_fin": 218,
+      "cita": "[L3.2] Nonindependence between training and test samples. Nonindependence between training and test samples constitutes leakage, unless the scientific claim is about a distribution that has the same dependence structure. In the extreme (but unfortunately common) case, training and test samples come from the same people or units."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 218,
+      "linea_fin": 218,
+      "cita": "For example, Oner et al.56 find that a recent study on histopathology uses different observations of the same patient in the training and test sets."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 218,
+      "linea_fin": 218,
+      "cita": "The train-test split should account for the dependencies in the data to ensure correct performance evaluation. Methods such as “block cross-validation” can partition the dataset strategically so that the performance evaluation does not suffer from data leakage and overoptimism.58,59"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 214,
+      "linea_fin": 214,
+      "cita": "[L3] Test set is not drawn from the distribution of scientific interest. The distribution of data on which the performance of an ML model is evaluated differs from the distribution of data about which the scientific claims are made."
+    },
+    {
+      "dimension": "datos (duplicados)",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 208,
+      "linea_fin": 208,
+      "cita": "[L1.4] Duplicates in datasets. If a dataset with duplicates is used for the purposes of training and evaluating an ML model, the same data could exist in the training set and the test set."
+    },
+    {
+      "dimension": "datos (variables)",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 210,
+      "linea_fin": 210,
+      "cita": "[L2] Model uses features that are not legitimate. If the model has access to features that should not be legitimately available for use in the modeling exercise, this could result in leakage."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 204,
+      "linea_fin": 204,
+      "cita": "Using the entire dataset for any pre-processing steps, such as imputation or over/under sampling, results in leakage. For instance, using oversampling before splitting the data into training and test sets leads to an imperfect separation between the training and test sets because data generated using oversampling from the training set will also be present in the test set."
+    },
+    {
+      "dimension": "metrica (desbalance)",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 236,
+      "linea_fin": 236,
+      "cita": "For example, using accuracy as the evaluation metric with a heavily imbalanced dataset leads to overoptimistic results, because the model can get a high accuracy score by always predicting the majority class."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 346,
+      "linea_fin": 346,
+      "cita": "However, one undesirable outcome that has been observed in communities that have adopted the common task framework is a singular focus on optimizing a particular accuracy metric to the exclusion of other scientific and normatively desirable properties of models."
+    },
+    {
+      "dimension": "validacion (competiciones)",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 184,
+      "linea_fin": 184,
+      "cita": "In predictive modeling competitions, dataset creation and model evaluation are left to impartial third parties who have the expertise and incentives to avoid errors. Within this framework, none of the participants have access to the held-out evaluation set before the competition ends."
+    },
+    {
+      "dimension": "datos (centro)",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 220,
+      "linea_fin": 220,
+      "cita": "For example, Zech et al.62 find that models for pneumonia prediction trained on images from one hospital do not generalize to images from another hospital because of subtle differences in how images are generated in each hospital."
+    },
+    {
+      "dimension": "validacion (incertidumbre)",
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 320,
+      "linea_fin": 320,
+      "cita": "We implement the comparison test for smoothed receiver operating characteristic curves detailed by Robin et al.87"
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 512,
+      "linea_fin": 512,
+      "referencia": "56.Oner M.U., Cheng Y.-C., Lee H.K., Sung W.-K. Cold Spring Ha1rbor Laboratory Press Distributor: Cold Spring Harbor Laboratory Press Label: Cold Spring Harbor Laboratory Press Type: article; 2020. Training Machine Learning Models on Patient Level Data Segregation Is Crucial in Practical Clinical Applications; Tech. rep., Company; p. 2020. [Google Scholar]",
+      "por_que": "Es el ejemplo de [L3.2] en el texto (línea 218): observaciones del mismo paciente en entrenamiento y prueba en histopatología; validación segregada por paciente."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 454,
+      "linea_fin": 454,
+      "referencia": "27.Oner M.U., Cheng Y.-C., Lee H.K., Sung W.-K. techreport; 2020. Training Machine Learning Models on Patient Level Data Segregation Is Crucial in Practical Clinical Applications. [DOI] [Google Scholar]",
+      "por_que": "La misma obra de Oner et al. (segregación por paciente), citada como referencia 27 en la encuesta de la Figura 1."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 516,
+      "linea_fin": 516,
+      "referencia": "58.Roberts D.R., Bahn V., Ciuti S., Boyce M.S., Elith J., Guillera-Arroita G., Hauenstein S., Lahoz-Monfort J.J., Schröder B., Thuiller W., et al. Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography. 2017;40:913–929. [Google Scholar]",
+      "por_que": "Citada para la «block cross-validation» de [L3.2]: estrategias de validación cruzada para datos con estructura jerárquica, análoga a la agrupación por paciente."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 518,
+      "linea_fin": 518,
+      "referencia": "59.Valavi R., Elith J., Lahoz-Monfort J., Guillera-Arroita G. 2021. Block Cross-Validation for Species Distribution Modelling. [Google Scholar]",
+      "por_que": "Citada junto a la 58 para la «block cross-validation» de [L3.2]."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 524,
+      "linea_fin": 524,
+      "referencia": "62.Zech J.R., Badgeley M.A., Liu M., Costa A.B., Titano J.J., Oermann E.K. Variable generalization performance of a deep learning model to detect pneumonia in chest radiographs: A cross-sectional study. PLoS Med. 2018;15 doi: 10.1371/journal.pmed.1002683. Publisher: Public Library of Science, e1002683. [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Ejemplo de [L3.3] (línea 220): un clasificador de imágenes médicas que no generaliza de un hospital a otro; comparable por la estructura multicéntrica."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 466,
+      "linea_fin": 466,
+      "referencia": "33.Roberts M., Driggs D., Thorpe M., Gilbey J., Yeung M., Ursprung S., Aviles-Rivero A.I., Etmann C., McCague C., Beer L., Weir-McCall J.R., Teng Z., Gkrania-Klotsas E., Rudd J.H.F., Sala E., Schönlieb C.-B. Common Pitfalls and Recommendations for Using Machine Learning to Detect and Prognosticate for COVID-19 Using Chest Radiographs and CT Scans. Nat. Mach. Intell. 2021;3:199–217. doi: 10.1038/s42256-021-00307-0. [DOI] [Google Scholar]",
+      "por_que": "Fallos comunes del ML sobre imagen médica (radiografías y TC), parte de la encuesta de la Figura 1."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 446,
+      "linea_fin": 446,
+      "referencia": "23.Christodoulou E., Ma J., Collins G.S., Steyerberg E.W., Verbakel J.Y., Van Calster B. A Systematic Review Shows No Performance Benefit of Machine Learning over Logistic Regression for Clinical Prediction Models. J. Clin. Epidemiol. 2019;110:12–22. doi: 10.1016/j.jclinepi.2019.02.004. [DOI] [PubMed] [Google Scholar]",
+      "por_que": "Comparación entre ML y regresión logística en modelos de predicción clínica, la misma pregunta que el estudio de caso."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 470,
+      "linea_fin": 470,
+      "referencia": "35.Vandewiele G., Dehaene I., Kovács G., Sterckx L., Janssens O., Ongenae F., De Backere F., De Turck F., Roelens K., Decruyenaere J., Van Hoecke S., Demeester T. Overly Optimistic Prediction Results on Imbalanced Data: A Case Study of Flaws and Benefits When Applying over-Sampling. Artif. Intell. Med. 2021;111 doi: 10.1016/j.artmed.2020.101987. [DOI] [PubMed] [Google Scholar]",
+      "por_que": "Optimismo por sobremuestreo en datos desbalanceados, tipo de fuga [L1.2]."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 436,
+      "linea_fin": 436,
+      "referencia": "18.Blagus R., Lusa L. Joint Use of Over- and under-Sampling Techniques and Cross-Validation for the Development and Assessment of Prediction Models. BMC Bioinformatics. 2015;16:363. doi: 10.1186/s12859-015-0784-9. [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Sobre- y submuestreo combinados con validación cruzada: orden correcto entre balanceo y partición."
+    },
+    {
+      "archivo": "referencias/kapoor-2023-fuga-y-reproducibilidad.md",
+      "linea_ini": 476,
+      "linea_fin": 476,
+      "referencia": "38.Mongan J., Moy L., Kahn C.E. Checklist for Artificial Intelligence in Medical Imaging (CLAIM): A Guide for Authors and Reviewers. Radiology: Artif. Intell. 2020;2 doi: 10.1148/ryai.2020200029. Publisher: Radiological Society of North America. [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Lista de verificación para IA en imagen médica (CLAIM), citada como estándar de reporte."
+    }
+  ]
+}

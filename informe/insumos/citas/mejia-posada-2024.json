@@ -1,0 +1,230 @@
+{
+  "clave": "mejia-posada-2024",
+  "archivos_leidos": [
+    "referencias/mejia-posada-2024-mapeo-corporal-medellin.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 219,
+        "linea_fin": 219,
+        "cita": "This was a health record-based cohort, retrospective, observational, and follow-up trial."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 189,
+        "linea_fin": 189,
+        "cita": "We conducted a retrospective follow-up study of a cohort of patients seen at a specialized skin cancer and digital body mapping clinic in Medellin, Colombia, between January 2017 and December 2022."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 219,
+        "linea_fin": 219,
+        "cita": "The study was conducted with patients from a private clinic specialized in the management of skin cancer and total body mapping (FotoFinder ATBM Classic) from Medellin, Colombia, with a mean annual volume of nearly 2700 patients treated."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 226,
+        "linea_fin": 226,
+        "cita": "Information on digital dermatoscopy changes was obtained from clinical and dermoscopic photographic records (FotoFinder ATBM Classic). The remaining variables were obtained from the health records."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 227,
+        "linea_fin": 227,
+        "cita": "Information was obtained by researchers from the Dermatology working group at Universidad CES from health records drafted by an expert female dermatologist in the management of skin cancer and digital dermatoscopy."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 230,
+        "linea_fin": 230,
+        "cita": "A total of 989 out of 1357 potentially eligible patients who were under digital dermatoscopy follow-up were excluded for being unable to meet the inclusion criteria. Finally, the study included a total of 368 patients with a median age of 43 years (IQR, 37-51], 187 of whom (50.8%) were women."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 219,
+        "linea_fin": 219,
+        "cita": "The study included patients treated from January 2017 through December 2022. Data were collected from November 2022 through January 2023."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 318,
+        "linea_fin": 318,
+        "cita": "The median follow-up for all patients included in the study was 24.60 months (IQR, 20-72)."
+      }
+    ],
+    "datos_pais": [
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 189,
+        "linea_fin": 189,
+        "cita": "a specialized skin cancer and digital body mapping clinic in Medellin, Colombia"
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 219,
+        "linea_fin": 219,
+        "cita": "(FotoFinder ATBM Classic) from Medellin, Colombia"
+      }
+    ],
+    "datos_unidad": [
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 230,
+        "linea_fin": 230,
+        "cita": "Finally, the study included a total of 368 patients"
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 275,
+        "linea_fin": 275,
+        "cita": "In the initial findings, 92 patients (25%) showed atypical networks, 59 (16.1%) asymmetric globules, 26 (7.1%) white-gray regression, 26 (7.1%) lesion regression, 10 (2.7%) inverted reticulum, 7 (1.9%) asymmetric blotch, 4 (1.1%) asymmetric projections, and 4 (1.1%) asymmetry in vascular pattern."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 319,
+        "linea_fin": 319,
+        "cita": "At the end of the follow-up, 45 patients (12.2%) developed melanomas, 15 (4.0%) invasive melanomas, and 30 (8.2%) in situ melanomas."
+      }
+    ],
+    "validacion": {
+      "no_lo_dice": true,
+      "buscado": "Texto original leído entero (líneas 126–512). grep -i de «validat», «split», «partition», «cross», «fold», «train», «external» y «holdout»: 0 coincidencias; «test» solo como «pathology lab test results» (líneas 222 y 227), «log-rank test» (línea 228) y «Kolmogorov-Smirnov test» (línea 229). No se describe partición ni validación de un modelo predictivo; el análisis es Kaplan-Meier y regresión de Cox sobre la cohorte (línea 229, citada en metrica_principal)."
+    },
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Mismas búsquedas que en validacion, en el texto original (líneas 126–512): no se describe ninguna partición. Lo más cercano es que las evaluaciones se tratan como medidas repetidas en el modelo lineal generalizado (línea 229, citado en contrastes); eso no es una partición."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 221,
+        "linea_fin": 221,
+        "cita": "The primary outcome variable was defined as melanoma-free time."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 229,
+        "linea_fin": 229,
+        "cita": "The melanoma-free survival rate was calculated using the Kaplan-Meier method, the analysis of characteristics associated with dermatoscopy, and other clinical and sociodemographic characteristics of the patients. Additionally, their association with the melanoma-free survival rate was analyzed using Cox regression analyses."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Texto original leído entero (líneas 126–512). grep -i de «imbalanc», «balanc», «weight», «oversampl» y «prevalen»: 0 coincidencias. No menciona desbalance de clases."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 190,
+        "linea_fin": 190,
+        "cita": "Melanoma was diagnosed in 12.2% of patients during follow-up. Features significantly associated with a shorter time to melanoma onset were grayish-white areas (P<.001), asymmetric globules (P=.011), asymmetric eccentric pigmentation (P=.047), and a negative pigment network (P=.001)."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 319,
+        "linea_fin": 319,
+        "cita": "At the end of the follow-up, 45 patients (12.2%) developed melanomas, 15 (4.0%) invasive melanomas, and 30 (8.2%) in situ melanomas."
+      },
+      {
+        "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+        "linea_ini": 330,
+        "linea_fin": 330,
+        "cita": "Among the sociodemographic factors, male sex was a risk factor for the development of melanoma (P=.009) (table 4)."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "datos (un solo centro, clínica privada)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 219,
+      "linea_fin": 219,
+      "cita": "The study was conducted with patients from a private clinic specialized in the management of skin cancer and total body mapping (FotoFinder ATBM Classic) from Medellin, Colombia"
+    },
+    {
+      "dimension": "datos (modalidad: registros fotográficos clínicos y dermatoscópicos, FotoFinder ATBM Classic)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 226,
+      "linea_fin": 226,
+      "cita": "Information on digital dermatoscopy changes was obtained from clinical and dermoscopic photographic records (FotoFinder ATBM Classic)."
+    },
+    {
+      "dimension": "datos (población preseleccionada, con confirmación histopatológica como criterio de inclusión)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 220,
+      "linea_fin": 220,
+      "cita": "1) diagnosis of atypical nevus syndrome, defined as the presence of >3 of the following criteria: a) presence of >2 clinically atypical nevi, b) >100 nevi in patients between 20 and 50 years old, c) >50 nevi in patients younger than 20 years or older than 50 years, d) >1 nevus on the buttocks or instep, e) nevi on the anterior region of the scalp; 2) histopathological confirmation of some degree of dysplasia or melanoma, before or at the follow-up"
+    },
+    {
+      "dimension": "datos (selección: 989 de 1357 excluidos)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 230,
+      "linea_fin": 230,
+      "cita": "A total of 989 out of 1357 potentially eligible patients who were under digital dermatoscopy follow-up were excluded for being unable to meet the inclusion criteria."
+    },
+    {
+      "dimension": "unidad (paciente)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 275,
+      "linea_fin": 275,
+      "cita": "In the initial findings, 92 patients (25%) showed atypical networks, 59 (16.1%) asymmetric globules, 26 (7.1%) white-gray regression, 26 (7.1%) lesion regression, 10 (2.7%) inverted reticulum, 7 (1.9%) asymmetric blotch, 4 (1.1%) asymmetric projections, and 4 (1.1%) asymmetry in vascular pattern."
+    },
+    {
+      "dimension": "unidad (evaluaciones repetidas tratadas como medidas repetidas)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 229,
+      "linea_fin": 229,
+      "cita": "The analysis of digital dermatoscopy changes was performed using the generalized linear model and the binomial family with logarithmic link function, while assessments were considered as repeated measurements."
+    },
+    {
+      "dimension": "métrica (tiempo libre de melanoma)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 221,
+      "linea_fin": 221,
+      "cita": "The primary outcome variable was defined as melanoma-free time."
+    },
+    {
+      "dimension": "validación de la medición (dos observadores independientes)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 222,
+      "linea_fin": 222,
+      "cita": "Two independent observers took duplicate measurements. In cases of evaluator disagreement, the difference was resolved by a third evaluator."
+    },
+    {
+      "dimension": "validación de la medición (acuerdo entre observadores)",
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 313,
+      "linea_fin": 313,
+      "cita": "The inter-observer agreement percentage was >97%."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 431,
+      "linea_fin": 434,
+      "referencia": "[10]G. Salerni, C. Carrera, L. Lovatto, R.M. Martí-Laborda, G. Isern, J. Palou, et al. Characterization of 1152 lesions excised over 10 years using total-body photography and digital dermatoscopy in the surveillance of patients at high risk for melanoma.  J Am Acad Dermatol [Internet]., 67 (2012), pp. 836-845 https://dx.doi.org/10.1016/j.jaad.2012.01.028",
+      "por_que": "Lesiones extirpadas en la vigilancia con fotografía corporal total y dermatoscopia digital de pacientes de alto riesgo; el texto (línea 221) la cita por las estructuras específicas de melanoma."
+    },
+    {
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 507,
+      "linea_fin": 510,
+      "referencia": "[26]G. Salerni, C. Carrera, L. Lovatto, J.A. Puig-Butille, C. Badenas, E. Plana, et al. Benefits of total body photography and digital dermatoscopy (“two-step method of digital follow-up”) in the early diagnosis of melanoma in patients at high risk for melanoma.  J Am Acad Dermatol [Internet]., 67 (2012), pp. e17-e27 https://dx.doi.org/10.1016/j.jaad.2011.04.008",
+      "por_que": "Fotografía corporal total y dermatoscopia digital en el diagnóstico temprano de melanoma en alto riesgo; el texto (línea 378) la cita junto con [25] para el 31.2% de melanomas hallados con mapeo corporal."
+    },
+    {
+      "archivo": "referencias/mejia-posada-2024-mapeo-corporal-medellin.md",
+      "linea_ini": 411,
+      "linea_fin": 414,
+      "referencia": "[6]P. Rubegni, G. Cevenini, M. Burroni, R. Bono, P. Sbano, M. Biagioli, et al. Objective follow-up of atypical melanocytic skin lesions: a retrospective study.  Arch Derm Res [Internet]., 302 (2010), pp. 551-560 https://dx.doi.org/10.1007/s00403-010-1051-6",
+      "por_que": "Seguimiento objetivo de lesiones melanocíticas atípicas; el texto (línea 216) la cita por la dificultad de distinguir lesiones atípicas de melanomas tempranos."
+    }
+  ]
+}

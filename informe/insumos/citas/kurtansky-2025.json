@@ -1,0 +1,477 @@
+{
+  "clave": "kurtansky-2025",
+  "archivos_leidos": [
+    "referencias/kurtansky-2025-triaje-automatizado-tbp.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 61,
+        "linea_fin": 61,
+        "cita": "Here we summarize the results of the competition, ‘ISIC 2024 – Skin Cancer Detection with 3D-TBP’, demonstrate superiority of a model that utilized intra-patient context against a prior published approach, and explore clinical plausibility of automated atypical skin lesion triage through an ablation study."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 81,
+        "linea_fin": 81,
+        "cita": "This study analyzes the results of ISIC’24 against the previously reported model (hereafter referred to as Marchetti et al.)27 and conducts an ablation study using the competition winner to understand how various information types (i.e., tiles and metadata describing demographics, appearance, and patient-context) affect model performance."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 313,
+        "linea_fin": 313,
+        "cita": "The solution that placed 1st in ISIC’24 was selected for a post-hoc ablation study to evaluate the influence of key features on diagnostic performance."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "The official training dataset was the previously described and publicly available SLICE-3D dataset23, compiled from seven medical centers across North America, Europe, and Australia."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "Competing submissions were judged on test data compiled from the same medical centers (albeit different patients than the training dataset), plus from two additional sources."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 307,
+        "linea_fin": 307,
+        "cita": "Officially scored ISIC’24 submission outputs were acquired to further study the diagnostic performance of TBP-based ML-models."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 137,
+        "linea_fin": 137,
+        "cita": "Unless otherwise stated, all analyses are based on the private leaderboard set, containing 370,704 lesions from 935 patients; 243 was the median number of lesions per patient (Q1 = 109.5, Q3 = 491.5); the diseased class contained 342 lesions, including 99 melanomas (55 in-situ), 190 basal cell carcinomas (BCCs), and 53 squamous cell carcinomas (SCCs)."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "In summary, the training dataset consisted of about 400,000 lesion tiles that were cropped from 3D TBP images of about 1000 patients and extracted in JPEG format."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "Test data comprised about 500,000 lesion tiles from more than 1200 patients."
+      }
+    ],
+    "datos_pais": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "compiled from seven medical centers across North America, Europe, and Australia."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 155,
+        "linea_fin": 167,
+        "cita": "Patients by source Australia  ACEMID MIA\t44\t4.2%\t13\t3.8%\t34\t3.6%  FNQH Cairns\t0\t0.0%\t74\t21.6%\t177\t18.9%  Monash University and Alfred Health\t0\t0.0%\t11\t3.2%\t30\t3.2%  University of Queensland\t176\t16.9%\t50\t14.6%\t134\t14.3% Europe  Hospital Clinic de Barcelona\t163\t15.6%\t47\t13.7%\t135\t14.4%  Medical University of Vienna\t15\t1.4%\t4\t1.2%\t12\t1.3%  University Hospital of Basel\t230\t22.1%\t51\t14.9%\t203\t21.7%  University of Athens\t16\t1.5%\t3\t0.9%\t11\t1.2% Americas   Memorial Sloan Kettering Cancer Center\t398\t38.2%\t89\t26.0%\t199\t21.3%"
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 303,
+        "linea_fin": 303,
+        "cita": "Data from the University Hospital Basel were acquired with written consent for publication and transferring of data as part of a trial approved by the local ethics committee in Switzerland (2020-02482)"
+      }
+    ],
+    "datos_unidad": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "Each tile encompassed 15 mm-by-15 mm areas of skin centered on distinct lesions identified by Vectra WB360 lesion-detection tooling."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 196,
+        "linea_fin": 196,
+        "cita": "Put in terms of a patient-level perspective as opposed to the lesion-centric metrics, ISIC’24 models were observed to detect skin cancer in upwards of 79% of true-positive patients when triaging the most concerning 15 lesions per patient (highest overall SEtop-15 = 0.7903) for clinical evaluation."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 307,
+        "linea_fin": 307,
+        "cita": "The computation of SEtop-15 weighed each diseased patient equally to avoid being more strongly influenced by patients who had multiple malignancies."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "Competing submissions were judged on test data compiled from the same medical centers (albeit different patients than the training dataset), plus from two additional sources."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 301,
+        "linea_fin": 301,
+        "cita": "The test dataset was further partitioned into public and private leaderboard subsets to mitigate result probing while offering an interim benchmark. There was no patient overlap across subsets, with 70% of patients allocated to the private leaderboard subset."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 313,
+        "linea_fin": 313,
+        "cita": "Five versions of each model were trained with cross-validation, where 80% of the training data was used for training and the remaining 20% for validation. For each fold, final parameters were determined by highest performance on the set-aside validation set."
+      }
+    ],
+    "agrupa_por_paciente": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 299,
+        "linea_fin": 299,
+        "cita": "test data compiled from the same medical centers (albeit different patients than the training dataset)"
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 301,
+        "linea_fin": 301,
+        "cita": "There was no patient overlap across subsets, with 70% of patients allocated to the private leaderboard subset."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 317,
+        "linea_fin": 317,
+        "cita": "The model was evaluated over the ISIC’24 private leaderboard set, minus one patient who was also included in the study by Marchetti et al.27."
+      }
+    ],
+    "metrica_principal": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 186,
+        "linea_fin": 186,
+        "cita": "Focusing on thresholds with low false negative rates required in the clinical setting, the primary metric for leaderboard scoring was partial area under the receiver operating characteristic (ROC) curve above 80% sensitivity (pAUC>80% TPR ∈ [0,0.2])."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 301,
+        "linea_fin": 301,
+        "cita": "The primary scoring metric was the partial area under the receiver operating characteristic (ROC) curve above an 80% true positive rate (pAUC>80% TPR), with possible values ranging from 0.0 to 0.2."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 307,
+        "linea_fin": 307,
+        "cita": "Measures of diagnostic discrimination included pAUC>80% TPR and area under the full ROC curve (AUC). To gauge performance in theoretical triaging scenarios, two additional metrics were defined: SEtop-15 and NNTx% SE."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó entero el archivo y se buscaron 'balanc', 'weight', 'sampl', 'oversampl', 'undersampl', 'SMOTE', 'focal', 'loss' y 'prevalence'. Ninguna técnica de tratamiento del desbalance (pesos, remuestreo, función de pérdida) aparece; 'sampl' solo sale en 'patient sample(s)' (líneas 75 y 290). La descripción del modelo ganador (líneas 272 y 313) no la menciona. El texto sí describe la prevalencia (líneas 236, 264 y 294) y la escasez de positivos como fuente de variabilidad (línea 266): van en 'contrastes', dimensión desbalance."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 196,
+        "linea_fin": 196,
+        "cita": "The winning model scored pAUC>80% TPR = 0.1726 on the private leaderboard with an area under the full ROC curve (AUC) = 0.9668 for differentiating skin cancer. Precision is reported as the average number of lesions needing to be treated to detect a true positive (NNTx% SE). The winning model realized NNT80% SE = 51.57 and NNT90% SE = 98.20, meaning one true positive for every 52 and 98 lesions identified for expert evaluation when capturing 80% and 90% of overall skin cancers, respectively."
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 203,
+        "linea_fin": 229,
+        "cita": "pAUC>80% TPR\tAUC\tNNT80% SE\tNNT90% SE\tSEtop-15 Malignancy classification\tBest across all ISIC'24 submissions\t\t\t\t\t0.173\t0.968\t42.26\t88.60\t0.790 \tMarchetti et al.a\t\t\t\t\t0.032\t0.704\t874.27\t1013.24\t0.360 \tISIC'24 winner - ablation variants\tMeta-basic\tMeta-WB360\tTiles\tPatient context\t\t\t\t\t \t\tx\tx\tx\tx\t0.173\t0.967\t50.57\t98.20\t0.729 \t\tx\tx\tx\t\t0.165\t0.956\t72.68\t145.72\t0.687 \t\tx\tx\t\tx\t0.164\t0.957\t63.62\t167.16\t0.695 \t\tx\tx\t\t\t0.152\t0.941\t111.34\t230.96\t0.646 \t\tx\t\tx\tx\t0.161\t0.948\t97.79\t165.34\t0.597 \t\tx\t\tx\t\t0.154\t0.937\t121.46\t206.42\t0.566 \t\t\tx\t\tx\t0.157\t0.949\t85.36\t193.69\t0.644 \t\t\tx\t\t\t0.150\t0.939\t111.41\t241.17\t0.657 \t\t\t\tx\tx\t0.142\t0.923\t160.88\t306.20\t0.544 \t\t\t\tx\t\t0.142\t0.922\t143.21\t308.64\t0.548 Melanoma classification\tBest across all ISIC'24 submissions\t\t\t\t\t0.176\t0.970\t126.31\t261.92\t0.791 \tMarchetti et al.a\t\t\t\t\t0.114\t0.893\t739.45\t1610.18\t0.541 \tISIC'24 winner - ablation variants\tMeta-basic\tMeta-WB360\tTiles\tPatient context\t\t\t\t\t \t\tx\tx\tx\tx\t0.169\t0.962\t212.36\t412.60\t0.689 \t\tx\tx\tx\t\t0.164\t0.954\t299.32\t664.92\t0.617 \t\tx\tx\t\tx\t0.168\t0.961\t156.65\t505.10\t0.708 \t\tx\tx\t\t\t0.155\t0.943\t352.25\t849.32\t0.627 \t\tx\t\tx\tx\t0.163\t0.949\t338.96\t487.13\t0.605 \t\tx\t\tx\t\t0.157\t0.940\t373.31\t593.00\t0.551 \t\t\tx\t\tx\t0.159\t0.950\t344.88\t595.41\t0.614 \t\t\tx\t\t\t0.153\t0.940\t430.91\t712.12\t0.640 \t\t\t\tx\tx\t0.152\t0.934\t435.42\t804.10\t0.541 \t\t\t\tx\t\t0.148\t0.929\t446.84\t841.38\t0.504"
+      },
+      {
+        "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+        "linea_ini": 248,
+        "linea_fin": 248,
+        "cita": "Notably, patient context (i.e., putting the lesion in the context of all other lesions from the given patient) had a substantial effect. When patient-contextual features were withheld from the full model, skin cancer discrimination was significantly lower (AUC = 0.956 vs. AUC = 0.967, p < 0.001) and, at the threshold of 80% sensitivity, triaged 22 additional non-malignant lesions (NNT80% SE = 72.68 vs. NNT80% SE = 50.57). Tiles were less informative than the pre-extracted WB360 measurements. The model variant restricted to WB360 “appearance” metadata significantly outperformed the variant that utilized only tiles (AUC = 0.939 vs. AUC = 0.922, p = 0.016), and the effect of excluding tiles from the full model was less detrimental than excluding the WB360 “appearance” metadata (AUC = 0.957 vs. AUC = 0.948, p = 0.068). Patient age, sex, lesion anatomical location, and hospital/institution label were also a critical factor. The inclusion of basic “demographics” metadata significantly improved the model variant that utilized only WB360 “appearance” metadata and patient context (AUC = 0.957 vs. AUC = 0.949, p = 0.003)."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 299,
+      "linea_fin": 299,
+      "cita": "Competing submissions were judged on test data compiled from the same medical centers (albeit different patients than the training dataset), plus from two additional sources."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 301,
+      "linea_fin": 301,
+      "cita": "There was no patient overlap across subsets, with 70% of patients allocated to the private leaderboard subset."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 313,
+      "linea_fin": 313,
+      "cita": "Five versions of each model were trained with cross-validation, where 80% of the training data was used for training and the remaining 20% for validation. For each fold, final parameters were determined by highest performance on the set-aside validation set."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 186,
+      "linea_fin": 186,
+      "cita": "Successful teams tended to submit dozens to several hundreds of entries for real-time “validation” scoring. This led to a degree of overfitting, as 95.5% of official submissions scored higher on the public leaderboard than on the private leaderboard."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 319,
+      "linea_fin": 319,
+      "cita": "Two-sided DeLong’s test was used to statistically compare model variants in discriminating skin cancer."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 272,
+      "linea_fin": 272,
+      "cita": "Given that the image models were trained independently of other features, it was deemed unnecessary to retrain them for each ablation variant."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 234,
+      "linea_fin": 234,
+      "cita": "aExcluded 209 lesions from one patient who was included in both studies."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 307,
+      "linea_fin": 307,
+      "cita": "SEtop-15 measured sensitivity under the hypothetical task of identifying 15 lesions with the highest risk scores on each patient. This patient-centric metric was used as a secondary prize metric in ISIC’24 to conceptualize how full-body skin examinations may be supported by automated lesion selection. The computation of SEtop-15 weighed each diseased patient equally to avoid being more strongly influenced by patients who had multiple malignancies."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 282,
+      "linea_fin": 282,
+      "cita": "Prior dermoscopic imaging datasets containing patient-clustered observations failed to contain rich phenotype information and skewed towards lesions of heightened clinical concern. Past efforts to develop models using those resources failed to effectively demonstrate the utility of patient-context2,29."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 307,
+      "linea_fin": 307,
+      "cita": "NNTx% SE defined the average number of lesions needed to triage to undergo expert evaluation to detect a single malignancy, using a threshold corresponding to a given sensitivity based on the private leaderboard set."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 196,
+      "linea_fin": 196,
+      "cita": "At these two thresholds, other ISIC’24 models were more precise despite a lower overall AUC."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 294,
+      "linea_fin": 294,
+      "cita": "In a dataset with a prevalence of 0.09% (342 skin cancers in 370,704 lesions), the winning algorithm could lower the number of lesions needing expert assessment by 95% or 91% while identifying 80% or 90% of true positives, respectively."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 236,
+      "linea_fin": 236,
+      "cita": "In comparison, the baseline melanoma prevalence in the evaluation set was 1 per 3744 lesions."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 266,
+      "linea_fin": 266,
+      "cita": "Another factor could be the limited number of diseased class examples, creating higher variability in submission scores."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 299,
+      "linea_fin": 299,
+      "cita": "There were no known duplicated lesions in the dataset; all qualified23 lesions larger than 2.5 mm, and any that were later biopsied, were included from each patient."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 299,
+      "linea_fin": 299,
+      "cita": "Disease negative examples included lesions that were not biopsied, many of which appear clinically as nevi and lentigines, and other pathology-confirmed cases such as benign or indeterminate melanocytic proliferations, vascular lesions, fibromas, benign keratoses, and actinic keratoses."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 75,
+      "linea_fin": 75,
+      "cita": "Additionally, 3D TBP offers an effective way to account for all lesions in a patient, except those located on soles of feet or obstructed by hair or clothing. Therefore, it facilitates quick data gathering while mitigating potential lesion selection bias."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 290,
+      "linea_fin": 290,
+      "cita": "Furthermore, ISIC’24 models used hospital labels to inform predictions in the evaluation set that do not describe all potential use settings."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 299,
+      "linea_fin": 299,
+      "cita": "The participants were also allowed to use publicly available external data."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 313,
+      "linea_fin": 313,
+      "cita": "The first EVA model is trained on external dermoscopy data, while the EdgeNext and second EVA model are trained independently on tiles exclusively."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 374,
+      "linea_fin": 374,
+      "referencia": "27.Marchetti, M. A. et al. 3D Whole-body skin imaging for automated melanoma detection. J. Eur. Acad. Dermatol. Venereol.37, 945–950 (2023). [DOI] [PubMed] [Google Scholar]",
+      "por_que": "Trabajo previo de triaje automatizado sobre fotografía corporal total 3D: el artículo lo llama el único estudio previo en esa área (línea 77) y su modelo es la referencia comparada en la Tabla 3."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 370,
+      "linea_fin": 370,
+      "referencia": "23.Kurtansky, N. R. et al. The SLICE-3D dataset: 400,000 skin lesion image crops extracted from 3D TBP for skin cancer detection. Sci. Data11, 884 (2024). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Descriptor de SLICE-3D, el conjunto de entrenamiento de ISIC 2024: misma modalidad (recortes de 3D TBP) y misma tarea."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 369,
+      "linea_fin": 369,
+      "referencia": "22.Betz-Stablein, B. et al. Reproducible naevus counts using 3D total body photography and convolutional neural networks. Dermatology238, 4–11 (2021). [DOI] [PubMed] [Google Scholar]",
+      "por_que": "Red convolucional sobre 3D TBP (recuento de nevus); se cita para la detección de lesiones del Vectra WB360 (línea 73)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 366,
+      "linea_fin": 366,
+      "referencia": "19.Primiero, C. A. et al. A narrative review: opportunities and challenges in artificial intelligence skin image analyses using total body photography. J. Investig. Dermatol.144, 1200–1207 (2024). [DOI] [PubMed] [Google Scholar]",
+      "por_que": "Revisión narrativa de IA sobre fotografía corporal total; se cita al presentar la TBP como vía al triaje asistido (línea 73)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 363,
+      "linea_fin": 363,
+      "referencia": "16.Koh, U. et al. ACEMID cohort study: protocol of a prospective cohort study using 3D total body photography for melanoma imaging and diagnosis. BMJ Open13, e072788 (2023). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Cohorte prospectiva con 3D TBP para diagnóstico de melanoma (ACEMID), una de las fuentes de datos (línea 303)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 367,
+      "linea_fin": 367,
+      "referencia": "20.Rayner, J. E. et al. Clinical perspective of 3D total body photography for early detection and screening of melanoma. Front. Med.5, 152 (2018). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Perspectiva clínica de la 3D TBP para detección y cribado de melanoma; contexto de la modalidad, no un modelo."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 349,
+      "linea_fin": 349,
+      "referencia": "2.Kurtansky, N. R. et al. Effect of patient-contextual skin images in human- and artificial intelligence-based diagnosis of melanoma: Results from the 2020 SIIM-ISIC melanoma classification challenge. J. Eur. Acad. Dermatol. Venereol. 8, 1489–1499 (2024). [DOI] [PMC free article] [PubMed]",
+      "por_que": "Reto SIIM-ISIC 2020 con imágenes contextuales del paciente; se cita como esfuerzo previo que no demostró la utilidad del contexto de paciente (línea 282)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 376,
+      "linea_fin": 376,
+      "referencia": "29.Rotemberg, V. et al. A patient-centric dataset of images and metadata for identifying melanomas using clinical context. Sci. Data. 8, 34 (2021). [DOI] [PMC free article] [PubMed]",
+      "por_que": "Conjunto de datos centrado en el paciente (SIIM-ISIC 2020), con observaciones agrupadas por paciente; citado junto a la ref. 2 en la línea 282."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 382,
+      "linea_fin": 382,
+      "referencia": "35.Yu, Z. et al. End-to-end ugly duckling sign detection for melanoma identification with transformers. in Medical Image Computing and Computer Assisted Intervention – MICCAI 2021 (eds De Bruijne, M., Cattin, P. C., Cotin, S., Padoy, N., Speidel, S., Zheng, Y. et al.) 176–84 (Springer International Publishing, 2021). https://link.springer.com/, 10.1007/978-3-030-87234-2_17.",
+      "por_que": "Detección del signo del patito feo con transformers: modelo que usa el contexto de las demás lesiones del paciente (citado en la línea 268)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 348,
+      "linea_fin": 348,
+      "referencia": "1.Marchetti, M. A. et al. Prospective validation of dermoscopy-based open-source artificial intelligence for melanoma diagnosis (PROVE-AI study). NPJ Digit. Med.6, 127 (2023). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Validación prospectiva de IA dermatoscópica para diagnóstico de melanoma."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 354,
+      "linea_fin": 354,
+      "referencia": "7.Heinlein, L. et al. Prospective multicenter study using artificial intelligence to improve dermoscopic melanoma diagnosis in patient care. Commun. Med.4, 177 (2024). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Estudio prospectivo multicéntrico de IA para diagnóstico dermatoscópico de melanoma."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 350,
+      "linea_fin": 350,
+      "referencia": "3.Marchetti, M. A. et al. Results of the 2016 International Skin Imaging Collaboration International Symposium on Biomedical Imaging challenge: comparison of the accuracy of computer algorithms to dermatologists for the diagnosis of melanoma from dermoscopic images. J. Am. Acad. Dermatol78, 270–277.e1 (2018). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Reto ISIC 2016 (ISBI): clasificación de melanoma en dermatoscopia, algoritmos frente a dermatólogos."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 352,
+      "linea_fin": 352,
+      "referencia": "5.Codella, N. C. F. et al. Skin lesion analysis toward melanoma detection: a challenge at the 2017 International Symposium on Biomedical Imaging (ISBI), hosted by the International Skin Imaging Collaboration (ISIC). In: Proc. IEEE 15th International Symposium on Biomedical Imaging (ISBI 2018) 168–172 (IEEE, 2018). https://ieeexplore.ieee.org/document/8363547/",
+      "por_que": "Reto ISIC 2017 (ISBI): análisis de lesiones para detección de melanoma."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 351,
+      "linea_fin": 351,
+      "referencia": "4.Codella, N. et al. Skin lesion analysis toward melanoma detection 2018: a challenge hosted by the International Skin Imaging Collaboration (ISIC). arXiv. 10.48550/arXiv.1902.03368 (2019).",
+      "por_que": "Reto ISIC 2018: análisis de lesiones para detección de melanoma."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 353,
+      "linea_fin": 353,
+      "referencia": "6.Combalia, M. et al. Validation of artificial intelligence prediction models for skin cancer diagnosis using dermoscopy images: the 2019 International Skin Imaging Collaboration Grand Challenge. Lancet Digit. Health5, e330–e339 (2022). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Reto ISIC 2019: validación de modelos de predicción de cáncer de piel con dermatoscopia."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 375,
+      "linea_fin": 375,
+      "referencia": "28.Tschandl, P., Rosendahl, C. & Kittler, H. The HAM10000 dataset, a large collection of multi-source dermatoscopic images of common pigmented skin lesions. Sci. Data5, 180161 (2018). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "HAM10000, conjunto de imágenes dermatoscópicas multi-fuente para clasificación."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 377,
+      "linea_fin": 377,
+      "referencia": "30.Hernández-Pérez, C. et al. BCN20000: dermoscopic lesions in the wild. Sci. Data11, 641 (2024). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "BCN20000, conjunto de lesiones dermatoscópicas para clasificación."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 392,
+      "linea_fin": 392,
+      "referencia": "45.Marchetti, M. A. et al. Number needed to biopsy ratio and diagnostic accuracy for melanoma detection. J. Am. Acad. Dermatol.83, 780–787 (2020). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Número necesario a biopsiar (NNB), la métrica en que se basa el NNTx% SE (línea 307)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 355,
+      "linea_fin": 355,
+      "referencia": "8.Jeong, H. K., Park, C., Henao, R. & Kheterpal, M. Deep learning in dermatology: a systematic review of current approaches, outcomes, and limitations. JID Innov. Ski. Sci. Mol. Popul. Health3, 100150 (2023). [DOI] [PMC free article] [PubMed] [Google Scholar]",
+      "por_que": "Revisión sistemática de aprendizaje profundo en dermatología."
+    },
+    {
+      "archivo": "referencias/kurtansky-2025-triaje-automatizado-tbp.md",
+      "linea_ini": 356,
+      "linea_fin": 356,
+      "referencia": "9.İsmailMendi, B. et al. Artificial intelligence in the non-invasive detection of melanoma. Life14, 1602 (2024). [DOI] [PMC free article] [PubMed]",
+      "por_que": "Revisión de IA en la detección no invasiva de melanoma."
+    }
+  ],
+  "observaciones": "Discrepancia interna del artículo en el NNT80% SE del modelo ganador: 51.57 en el texto de la línea 196 (y 'one true positive for every 52', misma línea) frente a 50.57 en la Tabla 3 (línea 207) y en el texto de la ablación (línea 248). Se citan las dos sin elegir."
+}

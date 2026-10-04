@@ -1,0 +1,210 @@
+{
+  "clave": "yang-2019",
+  "archivos_leidos": [
+    "referencias/yang-2019-two-way-partial-auc.md",
+    "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+    "referencias/_texto-completo/yang-2019-smmr-resumen-pubmed.txt"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 8,
+        "linea_fin": 10,
+        "cita": "In this paper, a novel and intuitive performance measure, named as two-way pAUC, is proposed, which directly quantiﬁes partial area under the ROC curve with explicit restrictions on both TPR and FPR."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-2019-smmr-resumen-pubmed.txt",
+        "linea_ini": 21,
+        "linea_fin": 24,
+        "cita": "In this paper, a  novel and intuitive performance measure, named as two-way pAUC, is proposed,  which directly quantifies partial area under ROC curve with explicit  restrictions on both TPR and FPR."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 69,
+        "linea_fin": 70,
+        "cita": "Simulation study and real data analysis are conducted in Section 5 and 6."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 622,
+        "linea_fin": 622,
+        "cita": "In this section, we apply the above methods into Wisconsin Breast Cancer Data (Diagnostic)."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-2019-smmr-resumen-pubmed.txt",
+        "linea_ini": 28,
+        "linea_fin": 30,
+        "cita": "Advantages of  the proposed methods are illustrated by simulation and Wisconsin Breast Cancer  Data."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 557,
+        "linea_fin": 559,
+        "cita": "In dataset A, X and Y are generated from N(1, 1) and N(0, 1) respectively; in dataset B, Y follows N(0, 1), and X follows Exp(1); in dataset C, X follows Exp(1) and Y follows Exp(0.5)."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 622,
+        "linea_fin": 624,
+        "cita": "This dataset records diagnosis results of breast cancer, in which 30 biomarkers are measured from 469 subjects (189 malignant and 280 benign)."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 556,
+        "linea_fin": 557,
+        "cita": "Sample sizes (m,n ) are chosen as: (30, 30), (50, 50), (80, 80), (100, 100), (150, 100), (150, 150), (200, 150), and (200, 200)."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 559,
+        "linea_fin": 560,
+        "cita": "We repeat 1000 times in each setting."
+      }
+    ],
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "«country», «hospital», «center», «centre» y «USA» en referencias/_texto-completo/yang-arxiv-1508.00298v3.txt, y el resumen completo de referencias/_texto-completo/yang-2019-smmr-resumen-pubmed.txt. Solo aparecen las afiliaciones de los autores (txt, líneas 19-24, repetidas en 798-803; resumen, líneas 8-14), que no son el origen de los datos. El nombre del conjunto contiene «Wisconsin» (txt, línea 622), pero el texto no dice dónde se recogieron los datos."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 623,
+        "linea_fin": 624,
+        "cita": "30 biomarkers are measured from 469 subjects (189 malignant and 280 benign)."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 124,
+        "linea_fin": 124,
+        "cita": "Let X, Y be the classiﬁer outputs from diseased and non-diseased subjects respectively"
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 554,
+        "linea_fin": 555,
+        "cita": "We study coverage probability of conﬁdence interval (4.1) to support the asymptotic normality of ˆU(p0,q 0) in Theorem 4.1."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 576,
+        "linea_fin": 578,
+        "cita": "To justify the argument that two-way pAUC improves the eﬃciency of ROC curve comparison in Scenario 1 of Section 2, we compare two-way pAUC and FPR pAUC via statistical power."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "«patient», «cluster», «group», «split», «cross», «test set» y «subject» en referencias/_texto-completo/yang-arxiv-1508.00298v3.txt (las 2.747 líneas) y en el resumen publicado. No hay ninguna partición: «patient», «group» y «test set» no aparecen; «cluster» solo en el título de la referencia [12] (línea 768); «subject» solo como unidad (líneas 28, 36, 124-125, 167-169, 624, 655, 2703). La línea 229 («obtained from the same individuals») habla de la correlación entre dos clasificadores medidos en los mismos individuos, no de una partición; está en contrastes."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 73,
+        "linea_fin": 74,
+        "cita": "Graphical representation of two-way partial AUC is the shaded region (area A) in Figure 1. Note that the shaded region is directly determined by explicit TPR (≥q0) and FPR (≤p0) restrictions."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 580,
+        "linea_fin": 581,
+        "cita": "If power is higher, the corresponding measure is more powerful (aka, more eﬃcient) in classiﬁer comparison."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "«imbalanc», «balance», «prevalen» y «weight» en referencias/_texto-completo/yang-arxiv-1508.00298v3.txt y en el resumen publicado. Solo aparece «weighty» (líneas 109 y 112), referido a áreas de la curva. El conjunto de Wisconsin tiene 189 malignos y 280 benignos (línea 624), pero el texto no describe ningún tratamiento del desbalance."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 662,
+        "linea_fin": 664,
+        "cita": "Table 4 demonstrates that only two-way pAUC selects Concavity SE as the better classiﬁer. However, due to a redundant region S is taken into consideration, FPR pAUC leads to the opposite selection."
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 675,
+        "linea_fin": 677,
+        "cita": "Biomarker AUC FPR pAUC Two-way pAUC Concavity SE 0.7808 0.1101 0.0311 Worst Smoothness 0.7541 0.1253 0.0278"
+      },
+      {
+        "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+        "linea_ini": 593,
+        "linea_fin": 593,
+        "cita": "As shown in Table 2, two-way pAUC apparently has the highest power in all settings."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 7,
+      "linea_fin": 8,
+      "cita": "However, its indirect control on TPR is conceptually and practically misleading."
+    },
+    {
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 53,
+      "linea_fin": 56,
+      "cita": "Unlike utilizing an artiﬁcial FPR lower bound to indirectly control acceptable TPR, two-way pAUC provides a straightforward measure to substitute existing methods with independent vertical and horizontal limits."
+    },
+    {
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 211,
+      "linea_fin": 212,
+      "cita": "Similar to FPR pAUC, there exists another indirect synthetic approach, named as TPR pAUC (11)."
+    },
+    {
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 655,
+      "linea_fin": 656,
+      "cita": "Breast cancer is a lethal disease. If malignant subjects cannot be identiﬁed, ethical consequences will be serious. Therefore, we set FPR (≤p0) and TPR (≥q0) constraints as (p0,q 0) = (0.35, 0.5)."
+    },
+    {
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 737,
+      "linea_fin": 740,
+      "cita": "For clinical needs, high TPR lower bound and low FPR upper bound are preferred. In this case, ethical and economical consequences can be controlled. In contrast, from a statistical perspective, low TPR lower bound and high FPR upper bound would be better."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 130,
+      "linea_fin": 133,
+      "cita": "Denote {Xi}m i=1 and{Yj}n j=1 as i.i.d random instances from F (x) and G(y) respectively, together with mutual independency."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 228,
+      "linea_fin": 229,
+      "cita": "In practice, two classiﬁers are usually obtained from the same individuals, and thus correlated (12; 13)."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/_texto-completo/yang-arxiv-1508.00298v3.txt",
+      "linea_ini": 768,
+      "linea_fin": 769,
+      "referencia": "[12] Obuchowski NA. Nonparametric analysis of clustered ROC curve data. Biometrics 1997; 53(2): 567–578.",
+      "por_que": "Por su título, análisis ROC de datos agrupados (clustered); Yang lo cita en la línea 229 para la correlación entre clasificadores medidos en los mismos individuos. Comparable con la validación agrupada por sujeto."
+    }
+  ],
+  "notas": [
+    "Contradicción interna del preprint: el texto (líneas 662-664) dice que solo el two-way pAUC elige Concavity SE, y las cifras de la Tabla 4 (líneas 676-677: 0.0311 frente a 0.0278) lo confirman; la nota de la misma tabla (líneas 680-681) dice «only two-way pAUC selects Worst Smoothness». No se cita la nota.",
+    "La línea 139 del preprint escribe «given bounds on TPR ( ≥ p0) and FPR (≤ q0)», con p0 y q0 intercambiados respecto de la línea 74 y del resto del artículo. No se cita.",
+    "Las líneas de referencias/_texto-completo/yang-2019-smmr-resumen-pubmed.txt terminan en un espacio; las citas de ese archivo que cruzan líneas, unidas con un espacio, tienen por eso dos espacios en cada salto.",
+    "Fuera de citados_comparables por no ser de triaje de lesiones de piel ni de validación agrupada, aunque sí de la métrica: [4] McClish (línea 752) y [11] Jiang, Metz y Nishikawa, «A receiver operating characteristic partial area index for highly sensitive diagnostic tests» (líneas 766-767), que Yang cita como origen del «TPR pAUC» (líneas 211-212)."
+  ]
+}

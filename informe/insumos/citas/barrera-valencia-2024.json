@@ -1,0 +1,168 @@
+{
+  "clave": "barrera-valencia-2024",
+  "archivos_leidos": [
+    "referencias/barrera-valencia-2024-costos-teledermatologia.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 62,
+        "linea_fin": 64,
+        "cita": "This article examines the > implementation of a teledermatology service using a PC and camera versus > smartphone technology."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 78,
+        "linea_fin": 81,
+        "cita": "a descriptive analysis of the data was conducted, utilizing > absolute frequencies and percentages for qualitative variables and measures of > central tendency (mean, median, standard deviation, and interquartile range) for > quantitative variables."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 69,
+        "linea_fin": 74,
+        "cita": "The data collection > instrument from the general practitioner or referring provider covered three > consultation moments: (1) sending an initial consultation, (2) providing a > response to the patient, and (3) sending a follow-up consultation. Seven hundred > forty-seven records were completed by the general practitioner for the three > consultation moments."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 74,
+        "linea_fin": 77,
+        "cita": "Furthermore, 372 consultations were documented by the > dermatologist or referring provider for two moments: (1) response to the initial > consultation by the dermatologist, and (2) response to the follow-up > consultation by the dermatologist."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 66,
+        "linea_fin": 69,
+        "cita": "A total of 542 teledermatology visits were conducted, involving 478 > patients, in addition to 64 visits for clinical follow-up for patients as per > the dermatologist's recommendation. Out of the 478 patients, 461 met the > inclusion criteria and agreed to participate in the study."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 81,
+        "linea_fin": 83,
+        "cita": "The data were analyzed from 747 records of the referring > provider instrument related to 461 patients, between 18 and 98 years of age, > with a predominantly female representation."
+      }
+    ],
+    "datos_pais": [
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 60,
+        "linea_fin": 62,
+        "cita": "One of the challenges faced by the Colombian Health System is to > improve access to health services for the dispersed and isolated rural > population, particularly in the field of dermatology."
+      }
+    ],
+    "datos_unidad": [
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 81,
+        "linea_fin": 83,
+        "cita": "The data were analyzed from 747 records of the referring > provider instrument related to 461 patients, between 18 and 98 years of age, > with a predominantly female representation."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 72,
+        "linea_fin": 74,
+        "cita": "Seven hundred > forty-seven records were completed by the general practitioner for the three > consultation moments."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 88,
+        "linea_fin": 90,
+        "cita": "Additionally, it was observed that the time taken to store, send, and capture a > single image (clinical or dermoscopic) using the mobile device was three times > lower than that on the conventional platform (25 vs. 75 s)."
+      }
+    ],
+    "validacion": {
+      "no_lo_dice": true,
+      "buscado": "Solo existe el resumen de PubMed (ficha, líneas 60–98); no hay copia en referencias/_texto-completo/ y la ficha declara el texto completo no accesible. grep -i en el resumen de «split», «partition», «cross», «fold», «train», «test», «external», «holdout» y «validat»: la única coincidencia es «After validating the information reported in the instruments» (línea 77), sobre la información de los instrumentos. El resumen describe un análisis descriptivo, sin partición ni validación de un modelo."
+    },
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Solo existe el resumen de PubMed (ficha, líneas 60–98); no hay copia en referencias/_texto-completo/ y la ficha declara el texto completo no accesible. Mismas búsquedas que en validacion: el resumen no describe ninguna partición. Sí dice que 747 registros corresponden a 461 pacientes (líneas 81–82, citado en datos_unidad y contrastes)."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 78,
+        "linea_fin": 81,
+        "cita": "a descriptive analysis of the data was conducted, utilizing > absolute frequencies and percentages for qualitative variables and measures of > central tendency (mean, median, standard deviation, and interquartile range) for > quantitative variables."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 86,
+        "linea_fin": 86,
+        "cita": "the average total duration of the teleconsultation"
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 88,
+        "linea_fin": 89,
+        "cita": "the time taken to store, send, and capture a > single image (clinical or dermoscopic)"
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Solo existe el resumen de PubMed (ficha, líneas 60–98); no hay copia en referencias/_texto-completo/ y la ficha declara el texto completo no accesible. grep -i en el resumen de «balanc», «imbalanc», «weight», «prevalen» y «class»: 0 coincidencias. No hay clasificación ni se menciona desbalance."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 85,
+        "linea_fin": 90,
+        "cita": "The results indicated that for teleconsultations conducted using a > mobile device, the average total duration of the teleconsultation was longer on > the traditional platform compared with the mobile device (13.03 vs. 8.27 min). > Additionally, it was observed that the time taken to store, send, and capture a > single image (clinical or dermoscopic) using the mobile device was three times > lower than that on the conventional platform (25 vs. 75 s)."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 90,
+        "linea_fin": 93,
+        "cita": "Similar findings > were noted for teleconsultations carried out by the dermatologist, predominantly > utilizing a mobile device. The average consultation time was shorter for the > mobile device compared with the traditional platform (8.14 vs. 12 min)."
+      },
+      {
+        "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+        "linea_ini": 95,
+        "linea_fin": 97,
+        "cita": "The cost reduction suggests that the operation of the service is > more efficient with smartphone technology in comparison to the use of a PC and > camera."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "datos (población rural dispersa y aislada)",
+      "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+      "linea_ini": 61,
+      "linea_fin": 62,
+      "cita": "improve access to health services for the dispersed and isolated rural > population, particularly in the field of dermatology."
+    },
+    {
+      "dimension": "unidad (registros; 747 para 461 pacientes)",
+      "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+      "linea_ini": 81,
+      "linea_fin": 82,
+      "cita": "The data were analyzed from 747 records of the referring > provider instrument related to 461 patients"
+    },
+    {
+      "dimension": "validación (análisis descriptivo)",
+      "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+      "linea_ini": 77,
+      "linea_fin": 81,
+      "cita": "After validating the information reported in > the instruments, a descriptive analysis of the data was conducted, utilizing > absolute frequencies and percentages for qualitative variables and measures of > central tendency (mean, median, standard deviation, and interquartile range) for > quantitative variables."
+    },
+    {
+      "dimension": "métrica (costo y eficiencia de operación, no desempeño diagnóstico)",
+      "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+      "linea_ini": 95,
+      "linea_fin": 97,
+      "cita": "The cost reduction suggests that the operation of the service is > more efficient with smartphone technology in comparison to the use of a PC and > camera."
+    },
+    {
+      "dimension": "datos (imágenes clínicas y dermatoscópicas con teléfono)",
+      "archivo": "referencias/barrera-valencia-2024-costos-teledermatologia.md",
+      "linea_ini": 97,
+      "linea_fin": 98,
+      "cita": "Teledermatology with smartphones provides a streamlined, efficient, and > technically sound process for obtaining clinical and dermoscopic images."
+    }
+  ],
+  "citados_comparables": []
+}

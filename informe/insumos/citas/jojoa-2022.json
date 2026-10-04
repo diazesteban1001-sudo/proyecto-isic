@@ -1,0 +1,242 @@
+{
+  "clave": "jojoa-2022",
+  "archivos_leidos": [
+    "referencias/jojoa-2022-redes-complejas-melanoma.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 135,
+        "linea_fin": 135,
+        "cita": "We use a comparative study of two convolution networks in the Complex and Real numerical domains."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 334,
+        "linea_fin": 334,
+        "cita": "We found it necessary to design two-factor experiments in this stage of the research. The structure factor has two levels, which are complex-valued and real-valued. Moreover, the database factor has the ISIC2017, PH2, and PASCAL levels."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 247,
+        "linea_fin": 247,
+        "cita": "To achieve the objective of comparing complex-valued and real-valued structures, three clinical datasets of different types have been selected; ISIC2017 and PH2, related to melanoma pathology, and Pascal, associated with heart sounds."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 251,
+        "linea_fin": 251,
+        "cita": "This dataset was published with a challenge [21] to researchers across the world to join forces to achieve good enough performance metrics to bring these models into production. This dataset is available at https://challenge.isic-archive.com/data/ (accessed on 1 February 2022)."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 261,
+        "linea_fin": 261,
+        "cita": "We chose to use the PH2 dermatoscopy image database for this research. It includes manual segmentation, clinical diagnosis, and identification of several dermatoscopy structures performed by expert dermatologists on a set of 200 images."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 251,
+        "linea_fin": 251,
+        "cita": "The dataset is composed of 1995 images for deep learning analysis [19,20]."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 285,
+        "linea_fin": 301,
+        "cita": "Name of the Database Normal Data Abnormal Data Data Type Associated Illness  ISIC2017 1621 374 Dermatoscopy image Melanoma  PH2 160 40 Dermatoscopy image Melanoma"
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 271,
+        "linea_fin": 271,
+        "cita": "The PASCAL database comprises 461 recordings for the classification of heart sounds. Of these, 320 are normal sounds and 141 are abnormal/pathological sounds."
+      }
+    ],
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó el texto completo (líneas 78-1442) y se buscó con Python: 'Colombia', 'Spain', 'Portugal', 'Australia', 'Argentin', 'country', 'hospital', 'patient'. 'Colombia' y 'Spain' solo aparecen en afiliaciones (líneas 85-109) y en los agradecimientos («Government of Nariño Colombia», línea 1326); 'China' solo en la tabla 1, para otro trabajo (línea 197). El texto da los repositorios (ISIC, PH2, PASCAL; líneas 251, 261, 271) pero no el país de los pacientes o de las imágenes."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 251,
+        "linea_fin": 251,
+        "cita": "The dataset is composed of 1995 images for deep learning analysis [19,20]."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 261,
+        "linea_fin": 261,
+        "cita": "performed by expert dermatologists on a set of 200 images."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 323,
+        "linea_fin": 323,
+        "cita": "The images were scaled to a standard dimension of 224 × 224 pixels and normalized based on the mean and standard deviation of the sets of pixels that form them."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 468,
+        "linea_fin": 468,
+        "cita": "For this study, we decided to use a k folds cross-validation with k = 10 [30]."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 498,
+        "linea_fin": 498,
+        "cita": "Table 6 shows the results obtained for 10 folds using the complex-valued convolution structure for melanoma detection in the set of dermatoscopy images from the ISIC2017 repository."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 472,
+        "linea_fin": 472,
+        "cita": "Hence, the two-tailed Student’s t-test [31] was chosen to observe whether there was sufficient statistical evidence to indicate that the means of the metrics calculated for the complex-valued networks are different from the means of the metrics calculated for the real-valued networks."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó el texto completo (líneas 78-1442) y se buscó con Python: 'patient', 'subject', 'group', 'stratif', 'fold'. La validación se describe solo como «a k folds cross-validation with k = 10» (línea 468), sin decir cómo se forman los pliegues. 'patient' y 'subject' solo aparecen en la tabla 1 para otros trabajos (líneas 165, 170, 197, 220, 228) y en «patients of all ages» (línea 1318); 'stratif' y 'group' no aparecen. No se dice si los pliegues agrupan por paciente."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 143,
+        "linea_fin": 143,
+        "cita": "The following metrics were proposed for this study: F1 Score, Precision, Recall/Sensitivity, Accuracy, and Specificity."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 357,
+        "linea_fin": 357,
+        "cita": "The F1 Score, Precision, Recall, Accuracy, and Specificity metrics were calculated for each factor combination in all the datasets studied."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 1290,
+        "linea_fin": 1290,
+        "cita": "Conversely, we decided to draw the specificity and sensitivity/recall metrics to observe the behavior of the classifiers obtained in the Figure 7 ROC space."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó el texto completo (líneas 78-1442) y se buscó con Python: 'imbalanc', 'unbalanc', 'balanc', 'weight', 'augment', 'sampl', 'oversampl', 'undersampl', 'SMOTE'. Ninguna coincidencia describe un tratamiento del desbalance de clases: 'augment' solo en «augmented intelligence» (línea 141) y en la tabla 1 para otro trabajo (línea 238); 'weight' solo en «susceptibility-weighted imaging» de otros trabajos (líneas 229, 1388); 'sampl' solo en sentidos ajenos (muestras de otros trabajos, «samples of metrics»). La tabla 2 (líneas 285-307) da los conteos por clase (ISIC2017: 1621 normales y 374 anormales; PH2: 160 y 40), pero el texto no dice cómo se trata el desbalance."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 135,
+        "linea_fin": 135,
+        "cita": "The best complex number-based classifier obtained in the Receiving Operating Characteristic (ROC) space presents a Euclidean distance of 0.26127 with respect to the ideal classifier, as opposed to the best real number-based classifier, whose Euclidean distance to the ideal is 0.36022 for the same task of melanoma detection."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 135,
+        "linea_fin": 135,
+        "cita": "In all cases, complex-valued networks presented a superior performance for the Precision, Recall, F1 Score, Accuracy, and Specificity metrics in the detection of associated anomalies."
+      },
+      {
+        "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+        "linea_ini": 1298,
+        "linea_fin": 1298,
+        "cita": "We achieved the best behavior in the ROC space for the classifier trained with the ISIC2017 dataset, with a Euclidean distance to the ideal coordinate classifier (0, 1) of 0.26127. Similarly, for the PH2 and Pascal datasets, better results were obtained with classifiers in the complex numbers domain, with distances of 0.31681 and 0.29447, respectively."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 468,
+      "linea_fin": 468,
+      "cita": "we decided to use a k folds cross-validation with k = 10"
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 330,
+      "linea_fin": 330,
+      "cita": "It is remarkable that this stage of normalization is executed in the training stage and in the testing stage with the same values to reduce the distortion caused by data normalization."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 484,
+      "linea_fin": 484,
+      "cita": "We decided to use the Student’s t-test for F1, Precision, Recall, and Specificity mean metrics comparison. The Mann–Whitney U test was applied for Accuracy metric means comparison since this one did not accomplish the Shapiro–Wilks normality test."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 143,
+      "linea_fin": 143,
+      "cita": "The following metrics were proposed for this study: F1 Score, Precision, Recall/Sensitivity, Accuracy, and Specificity."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 247,
+      "linea_fin": 247,
+      "cita": "three clinical datasets of different types have been selected; ISIC2017 and PH2, related to melanoma pathology, and Pascal, associated with heart sounds."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 135,
+      "linea_fin": 135,
+      "cita": "Two similar algorithmic structures were chosen so that there is no bias determined by the number of parameters to train."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 1380,
+      "linea_fin": 1380,
+      "referencia": "12.Jojoa Acosta M.F., Caballero Tovar L.Y., Garcia-Zapirain M.B., Percybrooks W.S. Melanoma diagnosis using deep learning techniques on dermatoscopic images. BMC Med. Imaging. 2021;21:6. doi: 10.1186/s12880-020-00534-8.",
+      "por_que": "Trabajo previo de los mismos autores: clasificación de melanoma en dermatoscopia con Mask R-CNN y ResNet152 sobre ISIC 2017."
+    },
+    {
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 1394,
+      "linea_fin": 1394,
+      "referencia": "19.Cassidy B., Kendrick C., Brodzicki A., Jaworek-Korjakowska J., Yap M.H. Analysis of the ISIC image datasets: Usage, benchmarks and recommendations. Med. Image Anal. 2022;75:102305. doi: 10.1016/j.media.2021.102305.",
+      "por_que": "Análisis de los conjuntos de imágenes ISIC, su uso y sus referencias de comparación: el archivo del que sale ISIC2017."
+    },
+    {
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 1398,
+      "linea_fin": 1398,
+      "referencia": "21.Yilmaz A., Samoylenko Y. Benchmarking of Lightweight Deep Learning Architectures for Skin Cancer Classification using ISIC 2017 Dataset 4 rd Mehmet Erhan Guvenilir 5 th Huseyin Uvet. arXiv. 20212110.12270",
+      "por_que": "Comparación de arquitecturas ligeras para clasificar cáncer de piel sobre ISIC 2017."
+    },
+    {
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 1402,
+      "linea_fin": 1402,
+      "referencia": "23.Javed R., Rahim M.S.M., Saba T., Rehman A. A comparative study of features selection for skin lesion detection from dermoscopic images. Netw. Modeling Anal. Health Inform. Bioinform. 2020;9:1–13. doi: 10.1007/s13721-019-0209-1.",
+      "por_que": "Selección de características para detectar lesiones de piel en imágenes dermatoscópicas."
+    },
+    {
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 1416,
+      "linea_fin": 1416,
+      "referencia": "30.Wieczorek J., Guerin C., McMahon T. K-fold cross-validation for complex sample surveys. Stat. 2022;11:e454. doi: 10.1002/sta4.454.",
+      "por_que": "Validación cruzada k-fold para muestras de diseño complejo, el caso de observaciones agrupadas."
+    },
+    {
+      "archivo": "referencias/jojoa-2022-redes-complejas-melanoma.md",
+      "linea_ini": 1386,
+      "linea_fin": 1386,
+      "referencia": "15.Xiao L., Liu Y., Yi Z., Zhao Y., Xie L., Cao P., Leong A.T.L., Wu E.X. Partial Fourier reconstruction of complex MR images using complex-valued convolutional neural networks. Wiley Online Libr. 2022;87:999–1014. doi: 10.1002/mrm.29033.",
+      "por_que": "La tabla 1 lo describe con partición por sujeto: «57 and 10 subjects with 200 axial slices extracted from each subject were used for training and testing» (línea 220)."
+    }
+  ]
+}

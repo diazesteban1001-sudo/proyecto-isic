@@ -1,0 +1,195 @@
+{
+  "clave": "marchetti-2023",
+  "archivos_leidos": [
+    "referencias/marchetti-2023-modelo-morfologico-3dtbp.md",
+    "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 9,
+        "linea_fin": 9,
+        "cita": "Single-centre, retrospective, observational convenience sample of patients diagnosed with melanoma at a tertiary care cancer hospital."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 13,
+        "linea_fin": 13,
+        "cita": "In this proof-of-concept pilot study"
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 9,
+        "linea_fin": 9,
+        "cita": "Single-centre, retrospective, observational convenience sample of patients diagnosed with melanoma at a tertiary care cancer hospital."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 9,
+        "linea_fin": 9,
+        "cita": "3D-images were obtained as standard of care using VECTRA WB360 Whole Body 3-dimensional Imaging System (Canfield Scientific)."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 9,
+        "linea_fin": 9,
+        "cita": "Automated data from image processing (i.e. lesion size, colour, border) for all eligible participants were exported from VECTRA DermaGraphix research software for analysis."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 11,
+        "linea_fin": 11,
+        "cita": "A total of 35 patients contributed 23,538 automatically identified skin lesions >2 mm in largest diameter (102-3021 lesions per participant)."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 11,
+        "linea_fin": 11,
+        "cita": "There were 49 lesions of melanoma and 22,489 lesions that were not melanoma."
+      }
+    ],
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó entero el resumen (referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt, líneas 5-13) y se buscaron nombres de país, ciudad o institución ('United States', 'USA', 'New York', 'Memorial', 'Sloan', 'MSKCC'): solo dice 'Single-centre' y 'a tertiary care cancer hospital' (línea 9), sin país. La ficha nombra MSKCC solo en una nota nuestra ('Dato de contexto', líneas 33-38), que no es texto del trabajo."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 7,
+        "linea_fin": 7,
+        "cita": "To determine if melanoma can be distinguished from other skin lesions using data from automated analysis of 3D-images."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 11,
+        "linea_fin": 11,
+        "cita": "There were 49 lesions of melanoma and 22,489 lesions that were not melanoma."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 11,
+        "linea_fin": 11,
+        "cita": "Considering all lesions in a patient-level analysis, 14 (28%) melanoma lesions had the highest predicted score or were in the 99th percentile among all lesions for an individual patient."
+      }
+    ],
+    "validacion": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó entero el resumen (líneas 5-13) y se buscaron 'validat', 'cross', 'split', 'train', 'test', 'fold', 'hold', 'bootstrap' e 'internal': 'validate' solo aparece en la conclusión, referido a estudios futuros ('would be needed to improve and validate these results', línea 13); los demás términos no aparecen. No hay texto completo (tras muro de pago, según la ficha, líneas 6-7)."
+    },
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Se buscaron 'patient', 'group', 'cluster', 'split' y 'fold' en el resumen (líneas 5-13). 'patient-level analysis' (línea 11) describe la posición de cada melanoma entre las lesiones de su paciente ('had the highest predicted score or were in the 99th percentile'), no una partición; el resumen no describe ninguna partición."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 9,
+        "linea_fin": 9,
+        "cita": "The main outcome was the area under the receiver operating characteristic curve (AUC)."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Se buscaron 'imbalanc', 'balanc', 'weight', 'sampl', 'prevalence', 'oversampl' y 'undersampl' en el resumen (líneas 5-13): 'sampl' solo sale en 'convenience sample' (línea 9), que se refiere a la selección de pacientes; los demás no aparecen. El resumen sí da los conteos de clase (línea 11; ver datos_tamano y contrastes)."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 11,
+        "linea_fin": 11,
+        "cita": "The AUC for the prediction model was 0.94 (95% CI: 0.92-0.96)."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 11,
+        "linea_fin": 11,
+        "cita": "Considering all lesions in a patient-level analysis, 14 (28%) melanoma lesions had the highest predicted score or were in the 99th percentile among all lesions for an individual patient."
+      },
+      {
+        "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+        "linea_ini": 13,
+        "linea_fin": 13,
+        "cita": "In this proof-of-concept pilot study, we demonstrated that automated analysis of whole-body 3D-images using simple image processing techniques can discriminate melanoma from other skin lesions with high accuracy."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 9,
+      "linea_fin": 9,
+      "cita": "Single-centre, retrospective, observational convenience sample of patients diagnosed with melanoma at a tertiary care cancer hospital."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 9,
+      "linea_fin": 9,
+      "cita": "Eligible participants were those with a whole-body 3D-image captured within 90 days prior to the diagnostic skin biopsy."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 11,
+      "linea_fin": 11,
+      "cita": "All were White patients and 23 (66%) were males."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 11,
+      "linea_fin": 11,
+      "cita": "23,538 automatically identified skin lesions >2 mm in largest diameter (102-3021 lesions per participant)."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 5,
+      "linea_fin": 5,
+      "cita": "Existing artificial intelligence for melanoma detection has relied on analysing images of lesions of clinical interest, which may lead to missed melanomas. Tools analysing the entire skin surface are lacking."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 9,
+      "linea_fin": 9,
+      "cita": "Automated data from image processing (i.e. lesion size, colour, border) for all eligible participants were exported from VECTRA DermaGraphix research software for analysis."
+    },
+    {
+      "dimension": "tarea",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 7,
+      "linea_fin": 7,
+      "cita": "To determine if melanoma can be distinguished from other skin lesions using data from automated analysis of 3D-images."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 9,
+      "linea_fin": 9,
+      "cita": "The main outcome was the area under the receiver operating characteristic curve (AUC)."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 11,
+      "linea_fin": 11,
+      "cita": "Considering all lesions in a patient-level analysis, 14 (28%) melanoma lesions had the highest predicted score or were in the 99th percentile among all lesions for an individual patient."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt",
+      "linea_ini": 11,
+      "linea_fin": 11,
+      "cita": "There were 49 lesions of melanoma and 22,489 lesions that were not melanoma."
+    }
+  ],
+  "citados_comparables": [],
+  "observaciones": "Solo hay resumen de PubMed, sin lista de referencias: citados_comparables queda vacío. Las cifras de la tabla de la ficha y su sección 'Cruce con la fuente del proyecto' son nuestras y no se citan."
+}

@@ -1,0 +1,161 @@
+{
+  "clave": "kaggle-2024",
+  "archivos_leidos": [
+    "referencias/kaggle-evaluation.md",
+    "referencias/kaggle-rules.md",
+    "referencias/_texto-completo/kaggle-evaluation.md",
+    "referencias/_texto-completo/kaggle-rules.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/_texto-completo/kaggle-rules.md",
+        "linea_ini": 39,
+        "linea_fin": 39,
+        "cita": "COMPETITION TITLE: ISIC 2024 - Skin Cancer Detection with 3D-TBP"
+      },
+      {
+        "archivo": "referencias/_texto-completo/kaggle-rules.md",
+        "linea_ini": 40,
+        "linea_fin": 40,
+        "cita": "COMPETITION HOST & SPONSOR: Memorial Sloan Kettering Cancer Center"
+      },
+      {
+        "archivo": "referencias/_texto-completo/kaggle-rules.md",
+        "linea_ini": 45,
+        "linea_fin": 45,
+        "cita": "TOTAL PRIZES AVAILABLE: $80,000"
+      }
+    ],
+    "datos_origen": {
+      "no_lo_dice": true,
+      "buscado": "Leidas enteras las dos fichas y los dos textos completos (referencias/_texto-completo/kaggle-evaluation.md, 38 lineas; referencias/_texto-completo/kaggle-rules.md, 126 lineas). Buscadas 'center', 'centre', 'hospital', 'institution', 'SLICE', 'collected', 'source', '3D', 'TBP': 'center' solo en el anfitrion (rules, linea 40); '3D-TBP' solo en el titulo (rules, linea 39); 'source' solo como 'open source'/'source code'. Las paginas regulan el uso y la licencia de los 'Competition Data' (rules, lineas 54-56 y 87-91) sin decir de donde salen."
+    },
+    "datos_tamano": {
+      "no_lo_dice": true,
+      "buscado": "Leidos enteros los dos textos completos y las dos fichas. Buscadas 'image', 'lesion', 'patient' y cifras: 'image' y 'lesion' solo en la frase del archivo de envio (evaluation, lineas 28-29), sin recuento; 'patient' no aparece; las unicas cifras son de premios, limites de envio y equipo, direcciones y la metrica."
+    },
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "Leidos enteros los dos textos completos. Buscadas 'country', 'countries', 'Australia', 'Spain', 'USA': 'USA' solo en las direcciones del anfitrion y del patrocinador (rules, lineas 41 y 43) y en la ley aplicable (linea 126); la elegibilidad de participantes (lineas 65-68) habla de residentes, no de los datos."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+        "linea_ini": 28,
+        "linea_fin": 29,
+        "cita": "For each image (`isic_id`) in the test set, you must predict the probability (`target`) that the lesion is malignant."
+      },
+      {
+        "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+        "linea_ini": 33,
+        "linea_fin": 33,
+        "cita": "isic_id,target"
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+        "linea_ini": 28,
+        "linea_fin": 28,
+        "cita": "For each image (`isic_id`) in the test set, you must predict the probability"
+      },
+      {
+        "archivo": "referencias/_texto-completo/kaggle-rules.md",
+        "linea_ini": 29,
+        "linea_fin": 29,
+        "cita": "You may submit a maximum of 5 entries per day."
+      },
+      {
+        "archivo": "referencias/_texto-completo/kaggle-rules.md",
+        "linea_ini": 30,
+        "linea_fin": 30,
+        "cita": "You may select up to 2 final submissions for judging."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Leidos enteros los dos textos completos y las dos fichas. Buscadas 'patient', 'group', 'split', 'partition', 'fold', 'public', 'private', 'leaderboard': 'patient', 'group', 'split', 'partition', 'fold' y 'leaderboard' no aparecen; 'public'/'private' solo en reglas de comparticion de codigo y datos externos (rules, lineas 14-15, 101, 108-118). El conjunto de prueba solo se nombra (evaluation, linea 28)."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+        "linea_ini": 10,
+        "linea_fin": 11,
+        "cita": "Submissions are evaluated on partial area under the ROC curve (pAUC) above 80% true positive rate (TPR) for binary classification of malignant examples."
+      },
+      {
+        "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+        "linea_ini": 17,
+        "linea_fin": 20,
+        "cita": "Systems that aid in diagnosing cancers are required to be highly-sensitive, so this metric focuses on the area under the ROC curve AND above 80% TPR. Hence, scores range from [0.0, 0.2]."
+      },
+      {
+        "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+        "linea_ini": 12,
+        "linea_fin": 12,
+        "cita": "(See the implementation in the notebook ISIC pAUC-aboveTPR.)"
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Leidos enteros los dos textos completos. Buscadas 'imbalance', 'balance', 'prevalence', 'rare', 'weight': ninguna aparece. La justificacion de la metrica (evaluation, lineas 14-20) habla de sensibilidad, no de desbalance."
+    },
+    "resultado_principal": {
+      "no_lo_dice": true,
+      "buscado": "Leidos enteros los dos textos completos. Buscadas 'result', 'score', 'winner', 'leaderboard': 'result' y 'leaderboard' no aparecen; 'score' solo en el rango de la metrica (evaluation, linea 19); 'winner' solo en licencias y obligaciones de los ganadores (rules, lineas 53-63, 72-75, 104). Las paginas son las de la convocatoria y no traen resultados."
+    }
+  },
+  "contrastes": [
+    {
+      "dimension": "metrica (region clinicamente inaceptable)",
+      "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+      "linea_ini": 16,
+      "linea_fin": 17,
+      "cita": "However, there are regions in the ROC space where the values of TPR are unacceptable in clinical practice."
+    },
+    {
+      "dimension": "metrica (sensibilidad alta)",
+      "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+      "linea_ini": 17,
+      "linea_fin": 20,
+      "cita": "Systems that aid in diagnosing cancers are required to be highly-sensitive, so this metric focuses on the area under the ROC curve AND above 80% TPR. Hence, scores range from [0.0, 0.2]."
+    },
+    {
+      "dimension": "metrica (premio secundario por recuperacion top-15)",
+      "archivo": "referencias/_texto-completo/kaggle-rules.md",
+      "linea_ini": 51,
+      "linea_fin": 51,
+      "cita": "Two Secondary Prizes: $7,500 each for \"Top-15 Retrieval Sensitivity\" and"
+    },
+    {
+      "dimension": "metrica (premio secundario por eficiencia)",
+      "archivo": "referencias/_texto-completo/kaggle-rules.md",
+      "linea_ini": 52,
+      "linea_fin": 52,
+      "cita": "\"Model Efficiency\". Refer to Secondary Prize Metrics page for details."
+    },
+    {
+      "dimension": "unidad (prediccion por imagen)",
+      "archivo": "referencias/_texto-completo/kaggle-evaluation.md",
+      "linea_ini": 28,
+      "linea_fin": 29,
+      "cita": "For each image (`isic_id`) in the test set, you must predict the probability (`target`) that the lesion is malignant."
+    },
+    {
+      "dimension": "datos (datos externos permitidos)",
+      "archivo": "referencias/_texto-completo/kaggle-rules.md",
+      "linea_ini": 99,
+      "linea_fin": 103,
+      "cita": "Data other than the Competition Data (\"External Data\") may be used to develop and test Submissions. However, the External Data must be publicly available and equally accessible to use by all participants of the Competition for purposes of the competition at no cost to the other participants."
+    },
+    {
+      "dimension": "datos (licencia y uso)",
+      "archivo": "referencias/_texto-completo/kaggle-rules.md",
+      "linea_ini": 87,
+      "linea_fin": 91,
+      "cita": "Competition Use and Non-Commercial & Academic Research: the Competition Data may be accessed and used for non-commercial purposes only, including participation in the Competition, forum use, and academic research and education. Subject to CC BY-NC 4.0 (Attribution-NonCommercial 4.0 International)."
+    }
+  ],
+  "citados_comparables": []
+}

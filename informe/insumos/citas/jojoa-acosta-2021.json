@@ -1,0 +1,279 @@
+{
+  "clave": "jojoa-acosta-2021",
+  "archivos_leidos": [
+    "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 177,
+        "linea_fin": 177,
+        "cita": "We propose an automated classification method for cutaneous lesion in digital dermatoscopic images, in order to detect the presence of melanoma."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 141,
+        "linea_fin": 141,
+        "cita": "The method proposed in this paper involves an initial stage that automatically crops the region of interest within a dermatoscopic image using the Mask and Region-based Convolutional Neural Network technique, and a second stage based on a ResNet152 structure, which classifies lesions as either “benign” or “malignant”."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 145,
+        "linea_fin": 145,
+        "cita": "Training, validation and testing of the proposed model was carried out using the database associated to the challenge set out at the 2017 International Symposium on Biomedical Imaging."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 237,
+        "linea_fin": 237,
+        "cita": "Lastly, in model 5 we included dermatoscopic images with “malignant” skin lesions extracted from the PH2 database [28]."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 724,
+        "linea_fin": 724,
+        "cita": "The datasets analysed during the current study are available in the ISIC repository"
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 185,
+        "linea_fin": 185,
+        "cita": "using the dataset from the ISIC 2017 challenge [24], which contains 1995 dermatoscopic images with their respective masks for training, 149 dermatoscopic images for validation and 598 dermatoscopic images for testing [25]."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 285,
+        "linea_fin": 285,
+        "cita": "which contains 1995 dermatoscopic images for training, of which 1620 correspond to benign lesions and 375 to malignant lesions; as well as 149 dermatoscopic images for validation purposes, 119 corresponding to benign lesions and 30 to malignant lesions."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 285,
+        "linea_fin": 285,
+        "cita": "when tested with the test data from ISBI 2017 challenge, which comprises 598 dermatoscopic images, 481 corresponding to benign lesions and 117 to malignant lesions."
+      }
+    ],
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó el texto completo (líneas 83-844) y se buscó con Python: 'Spain', 'Colombia', 'Argentin', 'Australia', 'Portugal', 'Italy', 'country', 'hospital', 'patient'. 'Spain' y 'Colombia' solo aparecen en afiliaciones (líneas 90-119); 'United States' solo en la estadística de incidencia de la ACS (línea 155). El texto da los repositorios (ISIC, PH2/ADDI, línea 724) pero no el país de los pacientes o de las imágenes."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 185,
+        "linea_fin": 185,
+        "cita": "which contains 1995 dermatoscopic images with their respective masks for training"
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 205,
+        "linea_fin": 205,
+        "cita": "in which the ratio between the number of malignant and benign dermatoscopic images is modified."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 195,
+        "linea_fin": 195,
+        "cita": "A “malignant” class being understood as referring to those skin lesions identified as melanoma and “benign” class referring to all those lesions not identified as melanoma."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 185,
+        "linea_fin": 185,
+        "cita": "We then train, validate and test the model in this stage using the dataset from the ISIC 2017 challenge [24], which contains 1995 dermatoscopic images with their respective masks for training, 149 dermatoscopic images for validation and 598 dermatoscopic images for testing [25]."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 285,
+        "linea_fin": 285,
+        "cita": "All testing results we provide in this section for the five models were obtained over this same test data set."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 335,
+        "linea_fin": 335,
+        "cita": "Lastly, the best model from the previous tests (i.e. model 2) was retrained for 60 more epochs and a lower learning rate of 0.0001."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Se leyó el texto completo (líneas 83-844) y se buscó con Python: 'patient', 'subject', 'group', 'stratif', 'split'. La partición es la del reto ISBI/ISIC 2017 en entrenamiento, validación y prueba (líneas 185 y 285), descrita en imágenes. 'patient' solo aparece en «patient care» (línea 155) y «highly selected patient populations» (línea 157); 'group' solo en «grouped into 3 main categories» (línea 159). No se dice si la partición agrupa por paciente."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 271,
+        "linea_fin": 271,
+        "cita": "thus resulting in a binary classifier whose performance is evaluated using specificity, sensitivity, accuracy and balance accuracy metrics, in which the reference class is the “malignant” class."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 171,
+        "linea_fin": 171,
+        "cita": "However, we added another metric—balance accuracy—suggested for this particular case in which there is an unbalanced database [20–22]."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 613,
+        "linea_fin": 613,
+        "cita": "Bearing in mind that the best model is the one whose singular point in the ROC space is found closest to the coordinate (0, 1), where the perfect classifier is located, we then measured these Euclidean distances"
+      }
+    ],
+    "desbalance": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 237,
+        "linea_fin": 237,
+        "cita": "we expanded the size of the “malignant” class training data set by 90% by generating modified versions of the dermatoscopic images and applying the following data augmentation techniques: rotation augmentation (image rotation by 180 degrees) and vertical flip augmentation (pixel reordering by row reversal). In models 3 and 4, we also reduced the number of dermatoscopic images from the “benign” class by different ratios."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 295,
+        "linea_fin": 295,
+        "cita": "To obtain model 2, a 90% transform augmentation is applied on the dermatoscopic images from the “malignant” class, thus increasing the balance ratio between the two classes from 0.231 to 0.440."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 671,
+        "linea_fin": 671,
+        "cita": "The experiments in data augmentation described in \"Results\" section show that reducing data imbalance may be helpful to improve classification performance, but careful fine tuning is required, e.g. making training data perfectly balanced not necessarily results on a better model."
+      }
+    ],
+    "resultado_principal": [
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 673,
+        "linea_fin": 673,
+        "cita": "Finally, the eVida M6 model is a reliable predictor with an excellent balance between overall accuracy (0.904), sensitivity (0.820) and specificity (0.925)."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 145,
+        "linea_fin": 145,
+        "cita": "On the test data set, the proposed model achieves an increase in accuracy and balanced accuracy of 3.66% and 9.96%, respectively, with respect to the best accuracy and the best sensitivity/specificity ratio reported to date for melanoma detection in this challenge."
+      },
+      {
+        "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+        "linea_ini": 397,
+        "linea_fin": 411,
+        "cita": "Organization ACC_M AUC_M SE_M SP_M Balance accuracy Overall score  eVida (proposed method M6) 0.904 0.872 0.820 0.925 0.872 0.848"
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 285,
+      "linea_fin": 285,
+      "cita": "All testing results we provide in this section for the five models were obtained over this same test data set."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 335,
+      "linea_fin": 335,
+      "cita": "the best model from the previous tests (i.e. model 2) was retrained for 60 more epochs and a lower learning rate of 0.0001."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 237,
+      "linea_fin": 237,
+      "cita": "In models 3 and 4, we also reduced the number of dermatoscopic images from the “benign” class by different ratios."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 323,
+      "linea_fin": 323,
+      "cita": "Despite the fact that the training data is perfectly balanced, the number of correctly classified images from the “benign” class was reduced considerably."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 271,
+      "linea_fin": 271,
+      "cita": "this metric is not suitable when the data set is highly unbalanced, as a classifier that is biased towards the most frequently occurring class leads to an optimistic estimate that would provide misleading results."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 603,
+      "linea_fin": 603,
+      "cita": "The metric called overall score in Table 4, which is defined as the average of the ACC, AUC, SE_M, and SP_M metrics, evidences the advantage of the eVida model over the previously reported models."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 391,
+      "linea_fin": 391,
+      "cita": "In this research work, we only consider the AUC for melanoma detection, since no keratosis tests were performed."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 659,
+      "linea_fin": 659,
+      "cita": "if we include new images then these need to be of the same nature, i.e. two databases that have not been subject to the same pre-processing are not necessarily complementary to each other."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 195,
+      "linea_fin": 195,
+      "cita": "“benign” class referring to all those lesions not identified as melanoma."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 768,
+      "linea_fin": 768,
+      "referencia": "7.Ferrante di Ruffano L, et al. Computer-assisted diagnosis techniques (dermoscopy and spectroscopy-based) for diagnosing skin cancer in adults. Cochrane Database Syst Rev. 2018 doi: 10.1002/14651858.CD013186.",
+      "por_que": "Revisión Cochrane de técnicas de diagnóstico asistido por computador para cáncer de piel."
+    },
+    {
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 776,
+      "linea_fin": 776,
+      "referencia": "11.Harangi B. Skin lesion classification with ensembles of deep convolutional neural networks. J Biomed Inform. 2018;86:25–32. doi: 10.1016/j.jbi.2018.08.006.",
+      "por_que": "Clasificación de lesiones de piel con conjuntos de redes convolucionales."
+    },
+    {
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 792,
+      "linea_fin": 792,
+      "referencia": "19.Schaefer G, Krawczyk B, Celebi ME, Iyatomi H. An ensemble classification approach for melanoma diagnosis. Memetic Comput. 2014 doi: 10.1007/s12293-014-0144-8.",
+      "por_que": "Clasificación por conjuntos para el diagnóstico de melanoma."
+    },
+    {
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 812,
+      "linea_fin": 812,
+      "referencia": "29.“Covalic,” ISIC 2017: skin lesion analysis towards melanoma detection. International Skin Imaging Collaboration. 2017. https://challenge.kitware.com/#phase/584b0afccad3a51cc66c8e38. Accessed 12 May 2020.",
+      "por_que": "Página del reto ISIC 2017, cuyos resultados el trabajo usa como comparación (tabla 4)."
+    },
+    {
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 814,
+      "linea_fin": 814,
+      "referencia": "30.Navarrete-Dechent C, Dusza SW, Liopyris K, Marghoob AA, Halpern AC, Marchetti MA. Automated dermatological diagnosis: hype or reality? J Invest Dermatol. 2018;138(10):2277–2279. doi: 10.1016/j.jid.2018.04.040.",
+      "por_que": "Análisis crítico del diagnóstico dermatológico automatizado."
+    },
+    {
+      "archivo": "referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md",
+      "linea_ini": 826,
+      "linea_fin": 826,
+      "referencia": "36.Tschandl P, et al. Human–computer collaboration for skin cancer recognition. Nat Med. 2020 doi: 10.1038/s41591-020-0942-0.",
+      "por_que": "Colaboración humano-computador en el reconocimiento de cáncer de piel."
+    }
+  ]
+}

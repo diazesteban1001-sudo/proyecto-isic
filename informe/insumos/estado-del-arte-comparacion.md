@@ -16,8 +16,9 @@ las extraídas; el anexo da todas.
 script, contra el rango de líneas que declaran: 578 citas, 531 idénticas carácter a carácter y 47, todas de Cassidy
 et al. (2022), idénticas salvo espacios, porque su texto viene de un PDF con cortes de línea a mitad de frase. Ninguna
 sale de las secciones nuestras de las fichas («análisis nuestro», cabeceras); todas, de «Texto original», del resumen
-de PubMed o de la copia local de la página. El archivo lo arma un script que vuelve a comprobar cada cita al escribirla;
-ni el script ni las extracciones se versionan.
+de PubMed o de la copia local de la página. El archivo lo arma `informe/insumos/armar_comparacion.py` desde las
+extracciones de `informe/insumos/citas/`, y en cada corrida vuelve a comprobar todas las citas de las extracciones,
+no solo las que usa.
 
 **Acceso.** «texto completo versionado»: el artículo entero está en `referencias/`. «ficha + LOCAL»: la ficha está en
 `referencias/` y el texto completo solo en `referencias/_texto-completo/`, que no se versiona. «solo resumen»: no hubo

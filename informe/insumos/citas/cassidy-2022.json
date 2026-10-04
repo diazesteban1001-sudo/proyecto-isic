@@ -1,0 +1,339 @@
+{
+  "clave": "cassidy-2022",
+  "archivos_leidos": [
+    "referencias/cassidy-2022-duplicados-isic.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 152,
+        "linea_fin": 154,
+        "cita": "In this paper, we summarise the usage of the ISIC dataset images and present an analysis of yearly releases over a period of 2016 - 2020."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 156,
+        "linea_fin": 157,
+        "cita": "Due to these irregularities, we propose a duplicate removal strategy and recommend a curated dataset for researchers to use when working on ISIC datasets."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 157,
+        "linea_fin": 159,
+        "cita": "Given that ISIC 2020 focused on melanoma classi- ﬁcation, we conduct experiments to provide benchmark results on the ISIC 2020 test set, with additional analysis on the smaller ISIC 2017 test set."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 222,
+        "linea_fin": 225,
+        "cita": "Therefore, in this pa- per we analyse images from the largest dermoscopic open datasets released over the past ﬁve years - the International Skin Imaging Collaboration (ISIC) datasets."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 538,
+        "linea_fin": 540,
+        "cita": "The ISIC datasets (2016–2020) comprise of 18 underlying sub- datasets. A summary of these sub-datasets is shown in Table 4 . We obtained these ﬁgures from the ISIC Archive Gallery ( ISIC, 2020 )."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 599,
+        "linea_fin": 602,
+        "cita": "we curated a new cleaned and balanced dataset (henceforth curated dataset), using images from the ISIC 2017 - 2020 datasets (ISIC 2016 was excluded due to missing labels of the type melanoma and non-melanoma);"
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 869,
+        "linea_fin": 873,
+        "cita": "Our duplicate removal strategy resulted in a curated dataset with a total of 45,590 image ﬁles in the training set (3,924 melanoma and 41,6 6 6 other) and a total of 11,397 image ﬁles in the validation set (981 melanoma and 10,416 other). The total number of image ﬁles is 56,987 (4,905 melanoma and 52,082 other)."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 878,
+        "linea_fin": 882,
+        "cita": "This resulted in a total of 7848 image ﬁles in the training set (3924 melanoma and 3924 others) and 1962 image ﬁles in the validation set (981 melanoma and 981 others). The total number of image ﬁles is 9810 (4905 melanoma and 4905 other) with a 1:1 ratio."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 1183,
+        "linea_fin": 1186,
+        "cita": "However, we note that the ISIC 2020 testing set we used to evaluate our models is sig- niﬁcantly larger than our training set - 7848 training examples vs 10,982 test examples."
+      }
+    ],
+    "datos_pais": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 453,
+        "linea_fin": 455,
+        "cita": "They provide biopsy-proven digital high resolution skin lesion image datasets, with expert annota- tions and metadata from around the world."
+      }
+    ],
+    "datos_unidad": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 531,
+        "linea_fin": 535,
+        "cita": "Of the 33,126 images in the training set, there are 2056 unique patient IDs and 32,701 unique lesion IDs. This would suggest that a large number of lesion images have been sourced from a relatively small pool of patients at different intervals."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 850,
+        "linea_fin": 858,
+        "cita": "The ISIC 2020 dataset includes patient ID for each image. As a further dataset cleaning step to make the data more heteroge- neous, it might be appropriate to include only images from unique patient IDs. We observed that from a total of 33,126 images in the ISIC 2020 training set, there are 3078 unique patient IDs and 30,048 duplicates. With duplicate patient IDs removed, there are a total of 428 melanoma and 2650 non-melanoma cases. In the ISIC 2020 test set, there are a total of 10,982 images with 690 unique patient IDs and 10,292 duplicates."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 705,
+        "linea_fin": 708,
+        "cita": "Additionally, we do not count multiplets as duplicates, given that they represent lesions at different levels of magniﬁcation with slight variations in angle and lighting."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 938,
+        "linea_fin": 941,
+        "cita": "For training data, we used an 80:20 split for training and validation using our curated balanced dataset based on images from the ISIC 2017 - 2020 datasets."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 982,
+        "linea_fin": 987,
+        "cita": "We evaluate the performance of the baseline models on Kaggle, however, given that we do not have access to the ground truth la- bels for the ISIC 2020 test set, we cannot perform further analysis on this dataset. In order to discuss the performance of the baseline models, we use the ISIC 2017 test set, which is fully exclusive from our curated balanced training set."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 646,
+        "linea_fin": 648,
+        "cita": "The main aim of our experiments was to remove duplicates from the training sets only, as we would be evaluating our base- line results on the ISIC 2020 challenge website."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "En el texto original (líneas 122–1596 de referencias/cassidy-2022-duplicados-isic.md) se buscaron «patient», «fold», «split», «valid» y «cross». Las menciones de pacientes (líneas 474–477, 516–536 y 850–867) describen los metadatos y los ID de paciente de cada conjunto, y en 850–853 sugieren, como paso de limpieza, incluir solo imágenes de ID de paciente únicos. Las particiones propias se describen como «an 80:20 split for training and validation» (líneas 939–940) y «with 20% reserved for validation» (línea 1136), y la evaluación final se hace sobre los conjuntos de prueba oficiales de ISIC 2020 (Kaggle) e ISIC 2017 (líneas 982–987). Ninguna de esas frases dice si la partición agrupa por paciente, ni si los pacientes de entrenamiento y de prueba se solapan."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 1001,
+        "linea_fin": 1004,
+        "cita": "Note that the ground truth for ISIC 2020 is not publicly available, therefore the metric provided by the organ- iser on Kaggle is used - area under the Receiver Operating Charac- teristics Curve (AUC)."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 1092,
+        "linea_fin": 1093,
+        "cita": "F1-score is the best indicator of overall network performance, indicating the harmonic mean between precision and recall."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 1104,
+        "linea_fin": 1107,
+        "cita": "As the ground truth of this dataset is not publicly available, we evaluate our re- sults on the live leaderboard and report the Balanced Multi-class Accuracy ( Codella et al., 2018b )."
+      }
+    ],
+    "desbalance": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 843,
+        "linea_fin": 848,
+        "cita": "Our initial experiments showed that the signiﬁcant class imbal- ance in the curated dataset resulted in model over-ﬁtting, despite the use of categorical crossentropy as a means to address the im- balance. For our subsequent experiments, we balanced the dataset using undersampling by removing images from the majority class (non-melanoma)."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 876,
+        "linea_fin": 878,
+        "cita": "Due to the high level of class imbalance (with a ratio of 1:10.62 for melanoma versus others), we recommend a cleaned and bal- anced dataset (curated balanced dataset)."
+      }
+    ],
+    "resultado_principal": [
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 154,
+        "linea_fin": 155,
+        "cita": "Our analysis found a signiﬁcant number of duplicate images, both within and between the datasets. Additionally, we also noted duplicates spread across testing and training sets."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 642,
+        "linea_fin": 645,
+        "cita": "The total number of binary iden- tical image ﬁles across all training and test sets is 13,976 which includes duplicates found both within individual training and test sets, and across training and test sets."
+      },
+      {
+        "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+        "linea_ini": 160,
+        "linea_fin": 162,
+        "cita": "As a result of removing 14,310 duplicate im- ages from the training set, our benchmark results show good levels of melanoma prediction with an AUC of 0.80 for the best performing model."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "datos (duplicados en la literatura)",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 263,
+      "linea_fin": 266,
+      "cita": "Table 1 shows a summary of the 35 papers we surveyed. From these publications, only 5 implemented some sort of dupli- cate removal. The remaining 30 papers did not mention any form of duplicate removal."
+    },
+    {
+      "dimension": "datos (duplicados)",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 269,
+      "linea_fin": 272,
+      "cita": "Given the large num- ber of duplicates across the ISIC datasets, we observe that exper- iments that utilise multiple ISIC datasets that do not implement some form of duplicate removal may exhibit bias in their results."
+    },
+    {
+      "dimension": "datos (duplicados en prueba)",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1187,
+      "linea_fin": 1189,
+      "cita": "We also note that the ISIC 2020 test set contains 78 duplicate image ﬁles, iden- tiﬁed using FSlint."
+    },
+    {
+      "dimension": "datos (metodo de deteccion)",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 770,
+      "linea_fin": 774,
+      "cita": "All stages of our duplicate removal strategy were completed us- ing the Linux application FSlint, created by Brady (2014) , which uses rigorous ﬁle comparison techniques that compare ﬁle size, hardlinks, Message Digest 5 (MD5) and Secure Hash Algorithm 1 (SHA-1)."
+    },
+    {
+      "dimension": "datos (limite de la deteccion)",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 813,
+      "linea_fin": 814,
+      "cita": "We observe that there may be edge cases where our duplicate removal strategy may have missed some duplicates."
+    },
+    {
+      "dimension": "datos (artefactos)",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1097,
+      "linea_fin": 1100,
+      "cita": "Given that the ground truth data is not publicly available for the ISIC 2020 test set, we present these results to demonstrate that the trained net- works are clearly focusing on noise present within the dataset."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 519,
+      "linea_fin": 521,
+      "cita": "Lesion ID is speciﬁed for 23,247 images, and unspeciﬁed for 2084 images, with 11,848 unique IDs from a total of 25,331 images."
+    },
+    {
+      "dimension": "unidad (agrupacion por paciente)",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 850,
+      "linea_fin": 853,
+      "cita": "As a further dataset cleaning step to make the data more heteroge- neous, it might be appropriate to include only images from unique patient IDs."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 826,
+      "linea_fin": 829,
+      "cita": "For researchers who do not intend on uploading their results to the ISIC competition website, we recommend an additional step for duplicate removal. This step would involve the removal of all duplicates found across all test sets."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1089,
+      "linea_fin": 1091,
+      "cita": "Measures for all networks using the ISIC 2017 test set demon- strated poor performance compared to those returned by the ISIC 2020 test set experiment."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1272,
+      "linea_fin": 1273,
+      "cita": "Note: when removing artefacts we re-balance the dataset to the class with the lowest number of remaining images, then take 20% from both classes for validation."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1548,
+      "linea_fin": 1553,
+      "referencia": "Rotemberg, V., Kurtansky, N., Betz-Stablein, B., Caffery, L., Chousakos, E., Codella, N., Combalia, M., Dusza, S., Guitera, P., Gutman, D., Halpern, A., Kittler, H., Kose, K., Langer, S., Lioprys, K., Malvehy, J., Musthaq, S., Nanda, J., Reiter, O., Shih, G., Stratigos, A., Tschandl, P., Weber, J., Soyer, H. P., 2020. A patient-centric dataset of images and metadata for identifying melanomas using clinical con- text. 2008.07360.",
+      "por_que": "Descriptor del conjunto ISIC 2020, centrado en el paciente: la edición inmediatamente anterior a ISIC 2024, con varias imágenes por paciente."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1452,
+      "linea_fin": 1454,
+      "referencia": "Ha, Q., Liu, B., Liu, F., 2020. Identifying melanoma images using eﬃcientnet en- semble: Winning solution to the siim-isic melanoma classiﬁcation challenge. 2010.05351.",
+      "por_que": "Solución ganadora del reto SIIM-ISIC 2020 (Kaggle), clasificación de melanoma sobre ISIC 2020."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1431,
+      "linea_fin": 1433,
+      "referencia": "Esteva, A. , Kuprel, B. , Novoa, R.A. , Ko, J. , Swetter, S.M. , Blau, H.M. , Thrun, S. , 2017. Dermatologist-level classiﬁcation of skin cancer with deep neural networks. Na- ture 542 (7639), 115–118 .",
+      "por_que": "Clasificación de cáncer de piel con redes profundas a nivel de dermatólogo."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1574,
+      "linea_fin": 1581,
+      "referencia": "Tschandl, P., Codella, N., Akay, B., Argenziano, G., Braun, R., Cabo, H., Gutman, D., Halpern, A., Helba, B., Hofmann-Wellenhof, R., Lallas, A., Lapins, J., Longo, C., Malvehy, J., Marchetti, M., Marghoob, A., Menzies, S., Oakley, A., Paoli, J., Puig, S., Rinner, C., Rosendahl, C., Scope, A., Sinz, C., Soyer, P., Thomas, L., Zalaudek, I., Kittler, H., 2019. Comparison of the accuracy of human readers versus machine- learning algorithms for pigmented skin lesion classiﬁcation: an open, web- based, international, diagnostic study. Lancet Oncol. 20, 938–947. doi: 10.1016/ S1470-2045(19)30333-X .",
+      "por_que": "Comparación de lectores humanos y algoritmos en la clasificación de lesiones pigmentadas."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1572,
+      "linea_fin": 1573,
+      "referencia": "Tschandl, P., 2018. The HAM10 0 0 0 dataset, a large collection of multi-source der- matoscopic images of common pigmented skin lesions. 10.7910/DVN/DBW86T",
+      "por_que": "HAM10000, subconjunto que forma parte de ISIC 2018–2020 y que el artículo identifica como fuente de solape."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1415,
+      "linea_fin": 1417,
+      "referencia": "Combalia, M., Codella, N. C. F., Rotemberg, V., Helba, B., Vilaplana, V., Reiter, O., Car- rera, C., Barreiro, A., Halpern, A. C., Puig, S., Malvehy, J., 2019. Bcn20 0 0 0: Der- moscopic lesions in the wild. 1908.02288.",
+      "por_que": "BCN20000, subconjunto de ISIC 2019 y 2020."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1400,
+      "linea_fin": 1403,
+      "referencia": "Codella, N., Rotemberg, V., Tschandl, P., Celebi, M. E., Dusza, S., Gutman, D., Helba, B., Kalloo, A., Liopyris, K., Marchetti, M., Kittler, H., Halpern, A., 2018a. Skin lesion analysis toward melanoma detection 2018: A challenge hosted by the interna- tional skin imaging collaboration (isic). 1902.03368.",
+      "por_que": "Descripción del reto ISIC 2018."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1439,
+      "linea_fin": 1441,
+      "referencia": "Gessert, N., Nielsen, M., Shaikh, M., Werner, R., Schlaefer, A., 2020. Skin lesion classi- ﬁcation using ensembles of multi-resolution eﬃcientnets with meta data. Meth- odsX 7, 100864. doi: 10.1016/j.mex.2020.100864 .",
+      "por_que": "Clasificación de lesiones que combina imagen y metadatos del paciente, como hace este proyecto con la metadata tabular."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1472,
+      "linea_fin": 1477,
+      "referencia": "Hekler, A., Kather, J.N., Krieghoff-Henning, E., Utikal, J.S., Meier, F., Gellrich, F.F., Upmeier zu Belzen, J., French, L., Schlager, J.G., Ghoreschi, K., Wilhelm, T., Kutzner, H., Berking, C., Heppt, M.V., Haferkamp, S., Sondermann, W., Schaden- dorf, D., Schilling, B., Izar, B., Maron, R., Schmitt, M., Frhling, S., Lipka, D.B., Brinker, T.J., 2020. Effects of label noise on deep learning-based skin cancer clas- siﬁcation. Front Med (Lausanne) 7, 177. doi: 10.3389/fmed.2020.00177 .",
+      "por_que": "Ruido de etiqueta en clasificación de cáncer de piel, con etiquetas no verificadas por biopsia (la clase negativa de SLICE-3D tiene ese problema)."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1367,
+      "linea_fin": 1369,
+      "referencia": "Bissoto, A. , Fornaciali, M. , Valle, E. , Avila, S. , 2019. (de)constructing bias on skin le- sion datasets. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops .",
+      "por_que": "Sesgos en conjuntos de datos de lesiones de piel."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1508,
+      "linea_fin": 1510,
+      "referencia": "Le, D. N. T., Le, H. X., Ngo, L. T., Ngo, H. T., 2020. Transfer learning with class- weighted and focal loss function for automatic skin cancer classiﬁcation. 2009.05977.",
+      "por_que": "Tratamiento del desbalance de clases con ponderación y focal loss en clasificación de cáncer de piel."
+    },
+    {
+      "archivo": "referencias/cassidy-2022-duplicados-isic.md",
+      "linea_ini": 1434,
+      "linea_fin": 1438,
+      "referencia": "Fujisawa, Y., Otomo, Y., Ogata, Y., Nakamura, Y., Fujita, R., Ishitsuka, Y., Watanabe, R., Okiyama, N., Ohara, K., Fujimoto, M., 2019. Deep-learning-based, computer- aided classiﬁer developed with a small dataset of clinical images surpasses board-certiﬁed dermatologists in skin tumour diagnosis. Br. J. Dermatol. 180 (2), 373–381. doi: 10.1111/bjd.16924 .",
+      "por_que": "Clasificación con imágenes clínicas («clinical images» en el título), no dermoscópicas; comparable por modalidad con los recortes de fotografía corporal total."
+    }
+  ]
+}

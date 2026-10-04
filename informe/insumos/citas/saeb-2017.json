@@ -1,0 +1,279 @@
+{
+  "clave": "saeb-2017",
+  "archivos_leidos": [
+    "referencias/saeb-2017-validacion-por-sujeto.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 146,
+        "linea_fin": 146,
+        "cita": "The aim of this paper is (i) to demonstrate the potential bias caused by using inappropriate CV methods for clinical prediction applications, and (ii) to examine how widespread the problem is."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 120,
+        "linea_fin": 120,
+        "cita": "Here we compared two popular CV methods: record-wise and subject-wise."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 120,
+        "linea_fin": 120,
+        "cita": "We also conducted a systematic review of the relevant literature, and found that this overly optimistic method was used by almost half of the retrieved studies that used accelerometers, wearable sensors, or smartphones to predict clinical outcomes."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 152,
+        "linea_fin": 152,
+        "cita": "We chose a publicly available human activity recognition dataset [20, 21], which contained recordings of 30 subjects performing 6 activities: sitting, standing, walking, stair climbing up/down, and laying down."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 176,
+        "linea_fin": 176,
+        "cita": "We used a generative model to create the simulated dataset."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 216,
+        "linea_fin": 216,
+        "cita": "To account for these search criteria, we used Google Scholar [24] with the following search query:"
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 152,
+        "linea_fin": 152,
+        "cita": "The dataset contained a total of 10 299 records, with an average of 343 records per subject and an approximately equal number of records per activity."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 182,
+        "linea_fin": 182,
+        "cita": "We generated datasets with variable number of subjects, from 4 to 32. These numbers were within the range used in the reviewed studies, as well as in the activity recognition dataset. In each simulated dataset, half of the subjects were set to diseased (βs = 1) and half were healthy (βs = −1). We used N = 10 features and R = 100 records for each subject."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 274,
+        "linea_fin": 274,
+        "cita": "A total of 369 papers were initially retrieved from Google Scholar. Of these, we screened the first 200 papers. 113 papers were excluded upon the review of the title and the abstract because they: (i) reported studies that were not related to any clinical or rehabilitation outcomes (n = 98), (ii) were review of the literature or book chapters (n = 10), (iii) were dissertation reports (n = 4), or (iv) used personal models (n = 1). We retrieved the full text of the remaining 87 papers. Of these, we excluded 25 more papers, based on the criteria detailed in Fig. 4. We included the remaining 62 papers in our systematic review."
+      }
+    ],
+    "datos_pais": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 334,
+        "linea_fin": 334,
+        "cita": "The human activity recognition dataset used in our study was collected by a group of researchers at the University of Genova, Italy, and Polytechnic University of Catalonia, Spain."
+      }
+    ],
+    "datos_unidad": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 152,
+        "linea_fin": 152,
+        "cita": "Each data record was a vector of 561 features computed from the sensors signal over a time window of 2.56 s."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 184,
+        "linea_fin": 184,
+        "cita": "to predict whether a record came from a patient (βs = 1) or a healthy subject (βs = − 1)."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 228,
+        "linea_fin": 228,
+        "cita": "4) Studies which used more than one data point (record) for each subject. In fact, when there is only one record per subject, record-wise CV and subject-wise CV are the same."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 156,
+        "linea_fin": 156,
+        "cita": "For each of the record-wise and subject-wise methods, we used 2, 10, or 30 subjects, and k-fold CV1 with k = 2, 10, or 30. For record-wise, data was randomly split into CV folds regardless of which subject it came from. For subject-wise, we split data by subjects such that training and test folds contained records from different subjects. In both methods, the classifier was trained on all but one fold and tested on the remaining fold. The number of trees for the random forest classifier was set to 50, which was optimized based on the out of bag error [22]. We repeated the training procedure 100 times, such that new subjects and folds were randomly generated in each repetition."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 184,
+        "linea_fin": 184,
+        "cita": "For record-wise, we randomly split the dataset into 50% training and 50% test, regardless of the subject IDs. For subject-wise, we did the same but we ensured that same subjects were not present in both training and test sets."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 186,
+        "linea_fin": 186,
+        "cita": "To find the true prediction error, we generated an additional dataset of 10 subjects, which were not used for CV, using the same generative model (Equation 1). We calculated the true prediction error by evaluating the performance of each of the trained classifiers on this new dataset."
+      }
+    ],
+    "agrupa_por_paciente": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 156,
+        "linea_fin": 156,
+        "cita": "For record-wise, data was randomly split into CV folds regardless of which subject it came from. For subject-wise, we split data by subjects such that training and test folds contained records from different subjects."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 134,
+        "linea_fin": 134,
+        "cita": "If the use-case is diagnosis, i.e., we want to develop global models that can be used for new subjects, CV must be subject-wise, meaning that the training and test sets contain records from different subjects."
+      }
+    ],
+    "metrica_principal": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 184,
+        "linea_fin": 184,
+        "cita": "For each CV method and each value of b and c, we measured the classification error on the test set."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 166,
+        "linea_fin": 166,
+        "cita": "Effect of subject-wise and record-wise CV on the classification error for the UCI activity recognition dataset."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 258,
+        "linea_fin": 258,
+        "cita": "Since papers used different metrics to report the classification accuracy of their algorithms, we used the following rules to find their accuracies:"
+      }
+    ],
+    "desbalance": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 152,
+        "linea_fin": 152,
+        "cita": "an approximately equal number of records per activity."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 182,
+        "linea_fin": 182,
+        "cita": "In each simulated dataset, half of the subjects were set to diseased (βs = 1) and half were healthy (βs = −1)."
+      }
+    ],
+    "resultado_principal": [
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 160,
+        "linea_fin": 160,
+        "cita": "When using 2 folds and 2 subjects only, the error rate started at a value of 27% and, as the number of subjects increased to 30, it decreased significantly and reached 9% (Fig. 2). Similarly, as the number of folds increased, i.e., data from more subjects were used for training the classifier, the error rate decreased and leveled around 7% with 30 folds (Fig. 2, green lines)."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 168,
+        "linea_fin": 168,
+        "cita": "Interestingly, the classification error already started at a value of 2% when using data from only two subjects, and did not significantly change when either number of subjects or folds increased (Fig. 2, orange lines). Therefore, regardless of the amount of data used for training the classifier, record-wise CV significantly overestimated the classification accuracy on this dataset."
+      },
+      {
+        "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+        "linea_ini": 276,
+        "linea_fin": 276,
+        "cita": "As shown in Fig. 5A, for subject-wise CV papers, the median classification error (1 - accuracy) was 13.00%, more than twice that of record-wise CV papers, which was 5.60%. These values were significantly different (P < 0.01, two-tailed Wilcoxon rank sum test)"
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "datos",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 152,
+      "linea_fin": 152,
+      "cita": "Data consisted of recordings from the accelerometer and gyroscope sensors of a smartphone carried by the subjects."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 128,
+      "linea_fin": 128,
+      "cita": "In medicine, a great hope for machine learning is to automatically detect or predict disease states as well as assist doctors in diagnosis, using data collected by phones and wearable sensors."
+    },
+    {
+      "dimension": "unidad",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 152,
+      "linea_fin": 152,
+      "cita": "Each data record was a vector of 561 features computed from the sensors signal over a time window of 2.56 s."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 156,
+      "linea_fin": 156,
+      "cita": "For record-wise, data was randomly split into CV folds regardless of which subject it came from. For subject-wise, we split data by subjects such that training and test folds contained records from different subjects."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 134,
+      "linea_fin": 134,
+      "cita": "In more complex scenarios, we may want to generalize from one clinical site to another, in which case CV needs to be across these sites [19]."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 290,
+      "linea_fin": 290,
+      "cita": "The correct way for adjusting these hyperparameters is to further divide the training set into training and validation subsets, and then minimize the prediction error on those validation subsets rather than on the whole dataset."
+    },
+    {
+      "dimension": "validacion",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 202,
+      "linea_fin": 202,
+      "cita": "The difference between the record-wise and subject-wise errors was largest when the number of subjects was small, and gradually decreased as we increased the number of subjects."
+    },
+    {
+      "dimension": "metrica",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 184,
+      "linea_fin": 184,
+      "cita": "For each CV method and each value of b and c, we measured the classification error on the test set."
+    },
+    {
+      "dimension": "desbalance",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 182,
+      "linea_fin": 182,
+      "cita": "In each simulated dataset, half of the subjects were set to diseased (βs = 1) and half were healthy (βs = −1)."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "referencia": "30. Varoquaux G, Raamana P, Engemann D et al. Assessing and tuning brain decoders: cross-validation, caveats, and guidelines. 2016, preprint (arXiv:1606.05201).",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 511,
+      "linea_fin": 513,
+      "por_que": "Guía de validación cruzada para decodificadores de imagen cerebral; Saeb et al. la citan (línea 134) como fuente de que entrenamiento y prueba deben ser independientes."
+    },
+    {
+      "referencia": "19. Abraham A, Milham M, Di Martino A et al. Deriving robust biomarkers from multi-site resting-state data: an autism-based example. bioRxiv 2016; 075853.",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 465,
+      "linea_fin": 467,
+      "por_que": "Datos multicéntricos; Saeb et al. la citan (línea 134) para el caso en que la validación cruzada debe hacerse entre centros."
+    },
+    {
+      "referencia": "18. Arlot S, Celisse A. A survey of cross-validation procedures for model selection. Stat Surveys 2010;4:40–79.",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 461,
+      "linea_fin": 463,
+      "por_que": "Revisión de procedimientos de validación cruzada; Saeb et al. la citan (línea 132) para los métodos de partición."
+    },
+    {
+      "referencia": "34. Little MA, Varoquaux G, Saeb S et al. Using and understanding cross-validation strategies. Perspectives on Saeb et al.GigaScience 2017;6(5):1–6.",
+      "archivo": "referencias/saeb-2017-validacion-por-sujeto.md",
+      "linea_ini": 527,
+      "linea_fin": 529,
+      "por_que": "Réplica publicada en el mismo número, sobre la elección entre validación por registro y por sujeto (línea 354)."
+    }
+  ]
+}

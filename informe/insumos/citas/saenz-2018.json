@@ -1,0 +1,273 @@
+{
+  "clave": "saenz-2018",
+  "archivos_leidos": [
+    "referencias/saenz-2018-app-teledermatologia-colombia.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 176,
+        "linea_fin": 176,
+        "cita": "An exploratory study was conducted in a remote area without access to a dermatologist."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 226,
+        "linea_fin": 226,
+        "cita": "This paper reports the results of the first-time use of Skinhealth in a rural area in Colombia [20]."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 685,
+        "linea_fin": 685,
+        "cita": "The conclusions drawn in this paper do not represent a final validation of Skinhealth but a preliminary evaluation to determine its potential as a tool that can support medical staff in regions where there are no dermatology specialists."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 234,
+        "linea_fin": 234,
+        "cita": "A health brigade conducted in a rural area in Colombia without immediate access to a dermatologist was selected as the scenario to analyze the ability of Skinhealth and ONTODerm in supporting remote diagnosis of dermatological lesions. The study population included all patients who attended the brigade without any exclusion criteria."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 226,
+        "linea_fin": 226,
+        "cita": "The use of the app was made within the context of a program called Health Brigades in Colombia. Health brigades have been carried out since 2003 and are organized by the foundation “Alas Para la Gente” (Wings for the People) [21]."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 236,
+        "linea_fin": 236,
+        "cita": "The characterization of the skin lesion made by the physician, along with his suggested diagnosis, was registered by the assistant in the mobile application."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 176,
+        "linea_fin": 176,
+        "cita": "A total of 64 dermatological queries were recorded in the application and consulted with ONTODerm."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 325,
+        "linea_fin": 325,
+        "cita": "The number of men who attended the dermatological consultation (n = 20) was less than half the number of women (n = 44)"
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 321,
+        "linea_fin": 321,
+        "cita": "During the three-day brigade, 895 medical consultations were performed, distributed as follows: optometry, 18.43% (n = 165), general medicine, 14.18% (n = 127), pediatrics, 14.07% (n = 126), internal medicine, 9.72% (n = 87), alternative medicine, 8.04% (n = 72), gynecology, 7.26% (n = 65), dermatology, 7.26% (n = 65)"
+      }
+    ],
+    "datos_pais": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 319,
+        "linea_fin": 319,
+        "cita": "Phase 1 of this study was conducted on the 26, 27, and 28 July 2013 in Colombian municipality Cubará"
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 184,
+        "linea_fin": 184,
+        "cita": "This approach was found to be pertinent in the Colombian rural context, particularly in forest regions, where dermatology specialists are not available."
+      }
+    ],
+    "datos_unidad": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 176,
+        "linea_fin": 176,
+        "cita": "A total of 64 dermatological queries were recorded in the application and consulted with ONTODerm."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 295,
+        "linea_fin": 295,
+        "cita": "The second measure is the percentage of correct diagnoses retrieved by the knowledge base; it indicates the proportion of queries in which the differentials were accurate given a certain lesion characterization."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 283,
+        "linea_fin": 283,
+        "cita": "Based on this review, each diagnosis was classified as accurate or inaccurate, for both the diagnosis given by the general physician and the differentials obtained from the web service."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 283,
+        "linea_fin": 283,
+        "cita": "The second stage was performed once the health brigade concluded. A dermatologist with broad experience in skin diseases examined the characterization of each query and compared this information with the diagnosis made by the general practitioner, as well as with the results obtained from the web service."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 421,
+        "linea_fin": 421,
+        "cita": "Phase 2 of the study took place in Bogotá two weeks after the brigade. In this phase, the dermatologist followed the established validation protocol; namely, she analyzed the values given by the general practitioner for each parameter of Table 1 during phase 1. The characterizations of the lesions were validated along with the diagnosis given by both the general physician and the ontology, and each query was assessed by the dermatologist as accurate or inaccurate."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 679,
+        "linea_fin": 679,
+        "cita": "All the statistical analysis was performed on a sample of 64 dermatologic consultations. It should be remarked that the conclusions drawn from this sample can be generalizable just to the population from which the sample was extracted"
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Texto original leído entero (líneas 106–747). grep -i de «split», «partition», «cross-valid», «fold», «holdout» y «test»: 0 coincidencias; «train» solo aparece como «no specialty training» (línea 168) y «no special training in dermatology» (línea 236). El texto no describe ninguna partición de los datos: las 64 consultas se evalúan todas contra la dermatóloga (ver validacion)."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 295,
+        "linea_fin": 295,
+        "cita": "The second measure is the percentage of correct diagnoses retrieved by the knowledge base; it indicates the proportion of queries in which the differentials were accurate given a certain lesion characterization. Confidence intervals were used to establish a more objective measure."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 283,
+        "linea_fin": 283,
+        "cita": "In the case of the ontology, the set of eight differentials was marked as accurate if at least one of the differentials was consistent with the dermatologist's diagnosis."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "Texto original leído entero (líneas 106–747). grep -i de «imbalanc», «balanc», «prevalen» y «sensitiv»: 0 coincidencias; «weight» solo como el síntoma «weight loss» de la tabla 1 (línea 276). No se menciona desbalance de clases ni ningún tratamiento de él."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 180,
+        "linea_fin": 180,
+        "cita": "The results showed that the probability of obtaining a correct diagnosis was between 64.4% and 85.6% with a confidence interval of 95%. A higher accuracy rate was obtained when the skin lesion occurred on the face or when its border was categorized as poorly demarcated."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 423,
+        "linea_fin": 423,
+        "cita": "In 75% (n = 48) of the cases, the ontology provided accurate results."
+      },
+      {
+        "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+        "linea_ini": 592,
+        "linea_fin": 592,
+        "cita": "An individual analysis of the behavior of queries by type of demarcation showed that 81.40% of poorly demarcated lesions were correctly identified by the ontology, while the percentage of those well demarcated was 61.90%."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "unidad (consulta)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 176,
+      "linea_fin": 176,
+      "cita": "A total of 64 dermatological queries were recorded in the application and consulted with ONTODerm."
+    },
+    {
+      "dimension": "datos (la entrada es una caracterización por parámetros, no una imagen)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 216,
+      "linea_fin": 216,
+      "cita": "In step one, the healthcare professional in a remote area uses the Skinhealth mobile application to characterize a dermatologic lesion according to a fixed set of parameters."
+    },
+    {
+      "dimension": "datos (población sin criterios de exclusión)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 234,
+      "linea_fin": 234,
+      "cita": "The study population included all patients who attended the brigade without any exclusion criteria."
+    },
+    {
+      "dimension": "datos (un solo lugar, una brigada de tres días)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 319,
+      "linea_fin": 319,
+      "cita": "Phase 1 of this study was conducted on the 26, 27, and 28 July 2013 in Colombian municipality Cubará"
+    },
+    {
+      "dimension": "validación (estándar de referencia: una dermatóloga)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 283,
+      "linea_fin": 283,
+      "cita": "A dermatologist with broad experience in skin diseases examined the characterization of each query and compared this information with the diagnosis made by the general practitioner, as well as with the results obtained from the web service."
+    },
+    {
+      "dimension": "validación (el médico general no ve la salida del sistema)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 236,
+      "linea_fin": 236,
+      "cita": "It is important to note that the general practitioner neither knows nor has access to the results sent by DKB to avoid being influenced by the ontology."
+    },
+    {
+      "dimension": "métrica (acierto si al menos uno de ocho diferenciales coincide)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 283,
+      "linea_fin": 283,
+      "cita": "In the case of the ontology, the set of eight differentials was marked as accurate if at least one of the differentials was consistent with the dermatologist's diagnosis."
+    },
+    {
+      "dimension": "validación (valores excluidos según el resultado sobre la misma muestra)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 303,
+      "linea_fin": 303,
+      "cita": "Based on the results of the inferential analysis, the values that negatively affected the accuracy of the differentials retrieved by DKB were excluded from the queries."
+    },
+    {
+      "dimension": "validación (valores excluidos según el resultado sobre la misma muestra)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 612,
+      "linea_fin": 612,
+      "cita": "We performed an analysis of the sample excluding the queries with these values that seemingly had a negative impact on the accuracy."
+    },
+    {
+      "dimension": "validación (generalización limitada a la población de la brigada)",
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 679,
+      "linea_fin": 679,
+      "cita": "It should be remarked that the conclusions drawn from this sample can be generalizable just to the population from which the sample was extracted"
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 717,
+      "linea_fin": 717,
+      "referencia": "7.Kaliyadan F., Amin T. T., Kuruvilla J., Ali W. H. A. B. Mobile teledermatology - patient satisfaction, diagnostic and management concordance, and factors affecting patient refusal to participate in Saudi Arabia. Journal of Telemedicine and Telecare. 2013;19(6):315–319. doi: 10.1177/1357633X13501778.",
+      "por_que": "Teledermatología móvil con concordancia diagnóstica y de manejo (según el título de la referencia)."
+    },
+    {
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 731,
+      "linea_fin": 731,
+      "referencia": "14.Maragoudakis M., Maglogiannis I., Lymberopoulos D. A medical, description logic based, ontology for skin lesion images. Proceedings of the 8th IEEE International Conference on BioInformatics and BioEngineering, BIBE 2008; October 2008; Greece.",
+      "por_que": "Ontología para imágenes de lesiones de piel; el texto (línea 196) la cita por facilitar la comprensión del desarrollo de cánceres de piel tempranos."
+    },
+    {
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 735,
+      "linea_fin": 735,
+      "referencia": "16.Tran K., Ayad M., Weinberg J., et al. Mobile teledermatology in the developing world: Implications of a feasibility study on 30 Egyptian patients with common skin diseases. Journal of the American Academy of Dermatology. 2011;64(2):302–309. doi: 10.1016/j.jaad.2010.01.010.",
+      "por_que": "Factibilidad de teledermatología móvil en 30 pacientes con enfermedades comunes de la piel (según el título de la referencia)."
+    },
+    {
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 739,
+      "linea_fin": 739,
+      "referencia": "18.Ebner C., Wurm E. M. T., Binder B., et al. Mobile teledermatology: A feasibility study of 58 subjects using mobile phones. Journal of Telemedicine and Telecare. 2008;14(1):2–7. doi: 10.1258/jtt.2007.070302.",
+      "por_que": "Teledermatología móvil con 58 sujetos; el texto (línea 206) la describe como envío de imágenes de cámara de teléfono a un dermatólogo."
+    },
+    {
+      "archivo": "referencias/saenz-2018-app-teledermatologia-colombia.md",
+      "linea_ini": 743,
+      "linea_fin": 743,
+      "referencia": "20.Sáenz J. P., Novoa M. P., Correal D., Eapen B. R. Skinhealth, a mobile application for supporting teledermatology: A case study in a rural area in Colombia. Lecture Notes of the Institute for Computer Sciences, Social-Informatics and Telecommunications Engineering, LNICST. 2017;192:160–163. doi: 10.1007/978-3-319-58877-3_21.",
+      "por_que": "Informe previo del mismo caso de Skinhealth en zona rural de Colombia (el texto lo cita en la línea 226)."
+    }
+  ]
+}

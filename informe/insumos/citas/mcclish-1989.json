@@ -1,0 +1,117 @@
+{
+  "clave": "mcclish-1989",
+  "archivos_leidos": [
+    "referencias/mcclish-1989-pauc-original.md",
+    "referencias/_texto-completo/mcclish-1989-pauc-original.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "Numerical integration is suggested for evaluating the area under a portion of the ROC curve."
+      },
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "The method is applicable for either continuous or rating scale binormal data, from independent or dependent samples."
+      },
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "An example is presented which looks at rating scale data of computed tomographic scans of the head with and without concomitant use of clinical history."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "An example is presented which looks at rating scale data of computed tomographic scans of the head with and without concomitant use of clinical history."
+      }
+    ],
+    "datos_tamano": {
+      "no_lo_dice": true,
+      "buscado": "Cifras de tamaño (número de exploraciones, pacientes, lectores o categorías de la escala) en el resumen de PubMed (referencias/_texto-completo/mcclish-1989-pauc-original.md, línea 49), único texto disponible: el artículo está tras muro de pago. El resumen no da ninguna cifra."
+    },
+    "datos_pais": {
+      "no_lo_dice": true,
+      "buscado": "País, centro o institución de origen de las tomografías del ejemplo en el resumen de PubMed (referencias/_texto-completo/mcclish-1989-pauc-original.md, línea 49), único texto disponible: el artículo está tras muro de pago. No se nombra ninguno."
+    },
+    "datos_unidad": [
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "An example is presented which looks at rating scale data of computed tomographic scans of the head with and without concomitant use of clinical history."
+      }
+    ],
+    "validacion": {
+      "no_lo_dice": true,
+      "buscado": "Partición, validación cruzada, conjunto externo o remuestreo en el resumen de PubMed (referencias/_texto-completo/mcclish-1989-pauc-original.md, línea 49), único texto disponible: el artículo está tras muro de pago. No describe ninguna; el ejemplo compara dos curvas ROC sobre los mismos datos. El término MeSH «Computer Simulation» (línea 55) es indexación de la NLM, no texto del artículo, y no se cita."
+    },
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "«patient», «subject», «cluster», «group» y cualquier mención de partición en el resumen de PubMed (referencias/_texto-completo/mcclish-1989-pauc-original.md, línea 49), único texto disponible: el artículo está tras muro de pago. No aparecen. La única mención a la estructura de las muestras es «from independent or dependent samples», que describe a qué datos se aplica el método, no una partición."
+    },
+    "metrica_principal": [
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "Numerical integration is suggested for evaluating the area under a portion of the ROC curve."
+      },
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "The areas under the two ROC curves over an a priori range of false-positive rates are examined, as well as the areas under the two curves at a specific point."
+      }
+    ],
+    "desbalance": {
+      "no_lo_dice": true,
+      "buscado": "«imbalance», «prevalence», proporción de casos y cualquier tratamiento de clases en el resumen de PubMed (referencias/_texto-completo/mcclish-1989-pauc-original.md, línea 49), único texto disponible: el artículo está tras muro de pago. No aparecen."
+    },
+    "resultado_principal": [
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "Numerical integration is suggested for evaluating the area under a portion of the ROC curve."
+      },
+      {
+        "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+        "linea_ini": 49,
+        "linea_fin": 49,
+        "cita": "Variance estimates are derived."
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+      "linea_ini": 49,
+      "linea_fin": 49,
+      "cita": "When comparing two ROC curves, though, problems arise when interest does not lie in the entire range of false-positive rates (and hence the entire area)."
+    },
+    {
+      "dimension": "métrica",
+      "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+      "linea_ini": 49,
+      "linea_fin": 49,
+      "cita": "The areas under the two ROC curves over an a priori range of false-positive rates are examined, as well as the areas under the two curves at a specific point."
+    },
+    {
+      "dimension": "datos",
+      "archivo": "referencias/_texto-completo/mcclish-1989-pauc-original.md",
+      "linea_ini": 49,
+      "linea_fin": 49,
+      "cita": "The method is applicable for either continuous or rating scale binormal data, from independent or dependent samples."
+    }
+  ],
+  "citados_comparables": []
+}

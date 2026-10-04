@@ -1,0 +1,371 @@
+{
+  "clave": "kurtansky-2024",
+  "archivos_leidos": [
+    "referencias/kurtansky-2024-slice3d-descriptor.md"
+  ],
+  "celdas": {
+    "tipo": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 109,
+        "linea_fin": 109,
+        "cita": "The objective for this data descriptor is to publicize a large, novel dataset and to facilitate the development of open-source AI algorithms capable of rendering diagnostic decisions from reduced quality, clinical photos resembling the resolution of smartphone images."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 105,
+        "linea_fin": 105,
+        "cita": "With this work, we have published the SLICE-3D (“Skin Lesion Image Crops Extracted from 3D TBP”) dataset of 400,000+ standardized, de-identified, and diagnostically labeled skin images relevant to use-cases outside of specialized clinics."
+      }
+    ],
+    "datos_origen": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 134,
+        "linea_fin": 134,
+        "cita": "Users from seven institutions ultimately received ethics approval from their respective institutional review board (IRB) or human research ethics committee (HREC) and contributed data to ISIC for the present dataset: (1) Memorial Sloan Kettering Cancer Center, New York, USA; (2) Hospital Clínic de Barcelona, Barcelona, Spain; (3) the University of Queensland, Brisbane, Australia; (4) Medical University of Vienna, Vienna, Austria; (5) University of Athens, Athens, Greece; (6) Melanoma Institute Australia, Sydney, Australia; and (7) the University Hospital of Basel, Basel, Switzerland."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 111,
+        "linea_fin": 111,
+        "cita": "The images in this dataset are extracted from 3D total body photographs (3D TBP)."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 136,
+        "linea_fin": 136,
+        "cita": "Each site identified patients who had been imaged with 3D TBP between 2015 and 2024."
+      }
+    ],
+    "datos_tamano": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 99,
+        "linea_fin": 99,
+        "cita": "The SLICE-3D (“Skin Lesion Image Crops Extracted from 3D TBP”) dataset described here addresses those concerns and contains images of over 400,000 distinct skin lesions from seven dermatologic centers from around the world."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 111,
+        "linea_fin": 111,
+        "cita": "The SLICE-3D dataset represents every lesion from a sample of 1,000+ patients seen between 2015 and 2024 across seven high-risk dermatologic practices and three continents."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 235,
+        "linea_fin": 235,
+        "cita": "Unique lesions\t401,059\t100.0%"
+      }
+    ],
+    "datos_pais": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 134,
+        "linea_fin": 134,
+        "cita": "(1) Memorial Sloan Kettering Cancer Center, New York, USA; (2) Hospital Clínic de Barcelona, Barcelona, Spain; (3) the University of Queensland, Brisbane, Australia; (4) Medical University of Vienna, Vienna, Austria; (5) University of Athens, Athens, Greece; (6) Melanoma Institute Australia, Sydney, Australia; and (7) the University Hospital of Basel, Basel, Switzerland."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "Two other sites provided data that was allocated entirely to the test set: (8) Alfred Hospital, Melbourne, Australia; and (9) FNQH Cairns, Westcourt, Australia."
+      }
+    ],
+    "datos_unidad": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 179,
+        "linea_fin": 179,
+        "cita": "This dataset consists of diagnostically labeled images (tiles)."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 314,
+        "linea_fin": 314,
+        "cita": "There are no exact duplicate tiles in the dataset, and each corresponds to a unique lesion."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 316,
+        "linea_fin": 316,
+        "cita": "Numerous tiles can be associated to the same patient with the metadata element patient_id."
+      }
+    ],
+    "validacion": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "The SLICE-3D dataset was used as the training dataset for the ISIC 2024 Grand Challenge."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "Additional data from each of the seven contributors (1–7) was collected for a separate test set, not described here, for evaluating results of that competition."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 320,
+        "linea_fin": 320,
+        "cita": "While the methods of curating the SLICE-3D dataset and the ISIC 2024 test set were consistent, the test set is beyond the scope of this data descriptor."
+      }
+    ],
+    "agrupa_por_paciente": {
+      "no_lo_dice": true,
+      "buscado": "Leido entero el texto del articulo (lineas 88-421 de referencias/kurtansky-2024-slice3d-descriptor.md). Buscadas 'split', 'partition', 'fold', 'overlap', 'group', 'test set' y 'patient': 'split', 'partition', 'fold' y 'overlap' no aparecen; 'group' solo como 'working group', 'user group' y 'Nature Publishing Group' (lineas 134, 421); patient_id aparece como identificador (lineas 179, 190, 316) y el conjunto de prueba se menciona en la linea 320 sin decir si sus pacientes son distintos de los de entrenamiento. No se encontro ninguna particion descrita, agrupada o no."
+    },
+    "metrica_principal": {
+      "no_lo_dice": true,
+      "buscado": "Leido entero el texto del articulo (lineas 88-421). Buscadas 'AUC', 'metric', 'sensitiv', 'specificity', 'accuracy', 'cross-valid': 'metric' solo como 'Lesion Visualizer metric' y en la descripcion de tbp_lv_symm_2axis (lineas 221, 226); 'accuracy' solo en la motivacion (linea 105) y en titulos de la bibliografia; 'AUC', 'specificity' y 'cross-valid' no aparecen en el cuerpo. No se encontro ninguna metrica de desempeno reportada."
+    },
+    "desbalance": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 238,
+        "linea_fin": 238,
+        "cita": "Malignant\t393\t0.1%"
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 248,
+        "linea_fin": 248,
+        "cita": "Benign\t400,552\t99.9%"
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 111,
+        "linea_fin": 111,
+        "cita": "Utilizing 3D TBP helps circumvent the lesion-selection bias inherent to routinely collected dermoscopy image datasets47, where the ordinary benign examples tend to be underrepresented."
+      }
+    ],
+    "resultado_principal": [
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 105,
+        "linea_fin": 105,
+        "cita": "With this work, we have published the SLICE-3D (“Skin Lesion Image Crops Extracted from 3D TBP”) dataset of 400,000+ standardized, de-identified, and diagnostically labeled skin images relevant to use-cases outside of specialized clinics."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 113,
+        "linea_fin": 113,
+        "cita": "The dataset presented here is novel because it represents each individual’s lesion phenotype more completely."
+      },
+      {
+        "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+        "linea_ini": 238,
+        "linea_fin": 238,
+        "cita": "Malignant\t393\t0.1%"
+      }
+    ]
+  },
+  "contrastes": [
+    {
+      "dimension": "datos (seleccion de lesiones)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 111,
+      "linea_fin": 111,
+      "cita": "The SLICE-3D dataset represents every lesion from a sample of 1,000+ patients seen between 2015 and 2024 across seven high-risk dermatologic practices and three continents."
+    },
+    {
+      "dimension": "datos (sesgo de seleccion de lesiones benignas)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 111,
+      "linea_fin": 111,
+      "cita": "Utilizing 3D TBP helps circumvent the lesion-selection bias inherent to routinely collected dermoscopy image datasets47, where the ordinary benign examples tend to be underrepresented."
+    },
+    {
+      "dimension": "datos (calidad de imagen)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 99,
+      "linea_fin": 99,
+      "cita": "De-identified images were systematically extracted from sensitive 3D Total Body Photographs and are comparable in optical resolution to smartphone images."
+    },
+    {
+      "dimension": "datos (estandarizacion de la captura)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 115,
+      "linea_fin": 115,
+      "cita": "This dataset is comprised of standardized images captured using a consistent device model and field of view (FOV)."
+    },
+    {
+      "dimension": "datos (seleccion de pacientes)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 136,
+      "linea_fin": 136,
+      "cita": "Patients who had previously undergone a skin lesion biopsy or who were known to have been diagnosed with skin cancer were prioritized, although neither were required for inclusion."
+    },
+    {
+      "dimension": "datos (etiquetas fuertes y debiles)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 146,
+      "linea_fin": 146,
+      "cita": "The term “strong-labels” refers to tiles associated with a pathology report for a primary biopsy performed within 3 months of the 3D TBP capture, while “weak-labels” refers to tiles assumed benign based on clinical evaluation, which were not associated with a reported biopsy."
+    },
+    {
+      "dimension": "datos (etiquetas de la clase benigna)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 306,
+      "linea_fin": 306,
+      "cita": "The benign diagnostic class contains both strong-labels and weak-labels because, while some were attributable to a pathology report dated within 3 months of 3D TBP capture, most never underwent a skin biopsy."
+    },
+    {
+      "dimension": "unidad (una imagen por lesion)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 148,
+      "linea_fin": 148,
+      "cita": "When multiple qualifying strong labeled tiles were available for a given biopsied lesion (due to multiple 3D TBPs) one was selected at random."
+    },
+    {
+      "dimension": "unidad (contexto de paciente)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 113,
+      "linea_fin": 113,
+      "cita": "The dataset presented here is novel because it represents each individual’s lesion phenotype more completely."
+    },
+    {
+      "dimension": "unidad (agrupacion por paciente)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 316,
+      "linea_fin": 316,
+      "cita": "Numerous tiles can be associated to the same patient with the metadata element patient_id."
+    },
+    {
+      "dimension": "validacion (conjunto de entrenamiento del reto)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 320,
+      "linea_fin": 320,
+      "cita": "The SLICE-3D dataset was used as the training dataset for the ISIC 2024 Grand Challenge."
+    },
+    {
+      "dimension": "validacion (centros solo en prueba)",
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 320,
+      "linea_fin": 320,
+      "cita": "Two other sites provided data that was allocated entirely to the test set: (8) Alfred Hospital, Melbourne, Australia; and (9) FNQH Cairns, Westcourt, Australia."
+    }
+  ],
+  "citados_comparables": [
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 343,
+      "linea_fin": 343,
+      "referencia": "1.James, O. T. et al. Artificial intelligence and machine learning algorithms for early detection of skin cancer in community and primary care settings: a systematic review. Lancet Digit. Health4, e466–e476 (2022). 10.1016/S2589-7500(22)00023-1",
+      "por_que": "Revision sistematica de algoritmos de IA para la deteccion precoz de cancer de piel en atencion primaria y comunitaria: el mismo uso de triaje."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 350,
+      "linea_fin": 350,
+      "referencia": "8.Udrea, A. et al. Accuracy of a smartphone application for triage of skin lesions based on machine learning algorithms. J Eur Acad Dermatol Venereol34, 648–655 (2020). 10.1111/jdv.15935",
+      "por_que": "Triaje de lesiones de piel con una aplicacion de telefono movil basada en aprendizaje automatico: triaje con imagen de calidad similar."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 358,
+      "linea_fin": 358,
+      "referencia": "16.Tschandl, P., Rosendahl, C. & Kittler, H. The HAM10000 dataset, a large collection of multi-source dermatoscopic images of common pigmented skin lesions. Sci Data5, 180161 (2018). 10.1038/sdata.2018.161",
+      "por_que": "HAM10000, conjunto dermatoscopico de referencia para clasificacion de lesiones pigmentadas."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 359,
+      "linea_fin": 359,
+      "referencia": "17.Ricci Lara, M. A. et al. A dataset of skin lesion images collected in Argentina for the evaluation of AI tools in this population. Sci Data10, 712 (2023). 10.1038/s41597-023-02630-0",
+      "por_que": "Conjunto de imagenes de lesiones de piel para evaluar herramientas de IA en otra poblacion (Argentina)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 360,
+      "linea_fin": 360,
+      "referencia": "18.Rotemberg, V., et al. A patient-centric dataset of images and metadata for identifying melanomas using clinical context. Sci Data8 2021.",
+      "por_que": "Conjunto de ISIC centrado en el paciente, con varias imagenes dermatoscopicas por paciente (linea 113): estructura agrupada por sujeto."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 361,
+      "linea_fin": 361,
+      "referencia": "19.Marchetti, M.A. et al. Prospective validation of dermoscopy-based open-source artificial intelligence for melanoma diagnosis (PROVE-AI study). Npj Digit Med6 (2023).",
+      "por_que": "Validacion prospectiva de IA dermatoscopica para diagnostico de melanoma."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 363,
+      "linea_fin": 363,
+      "referencia": "21.Cerminara, S.E. et al. Diagnostic performance of augmented intelligence with 2D and 3D total body photography and convolutional neural networks in a high-risk population for melanoma under real-world conditions: A new era of skin cancer screening? Eur J Cancer190 (2023).",
+      "por_que": "Desempeno de IA con fotografia corporal total 2D y 3D y redes convolucionales en poblacion de alto riesgo: misma modalidad."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 372,
+      "linea_fin": 372,
+      "referencia": "30.Marchetti, M. A. et al. Results of the 2016 International Skin Imaging Collaboration International Symposium on Biomedical Imaging challenge: Comparison of the accuracy of computer algorithms to dermatologists for the diagnosis of melanoma from dermoscopic images. J Am Acad Dermatol78, 270–277.e1 (2018). 10.1016/j.jaad.2017.08.016",
+      "por_que": "Resultados del reto ISIC 2016: algoritmos frente a dermatologos en imagenes dermatoscopicas."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 373,
+      "linea_fin": 373,
+      "referencia": "31.Marchetti, M. A. et al. Computer algorithms show potential for improving dermatologists’ accuracy to diagnose cutaneous melanoma: Results of the International Skin Imaging Collaboration 2017. J Am Acad Dermatol82, 622–627 (2020). 10.1016/j.jaad.2019.07.016",
+      "por_que": "Resultados del reto ISIC 2017 sobre diagnostico de melanoma."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 374,
+      "linea_fin": 374,
+      "referencia": "32.Codella, N. et al. Skin lesion analysis toward melanoma detection 2018: a challenge hosted by the International Skin Imaging Collaboration (ISIC). arXiv.10.48550/arXiv.1902.03368 (2019). 10.48550/arXiv.1902.03368",
+      "por_que": "Reto ISIC 2018 de analisis de lesiones de piel para deteccion de melanoma."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 375,
+      "linea_fin": 375,
+      "referencia": "33.Combalia, M. et al. Validation of artificial intelligence prediction models for skin cancer diagnosis using dermoscopy images: the 2019 International Skin Imaging Collaboration Grand Challenge. Lancet Digit Health4, e330–e339 (2022). 10.1016/S2589-7500(22)00021-8",
+      "por_que": "Reto ISIC 2019: validacion de modelos de prediccion de cancer de piel con dermatoscopia."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 376,
+      "linea_fin": 376,
+      "referencia": "34.Tschandl, P. et al. Comparison of the accuracy of human readers versus machine-learning algorithms for pigmented skin lesion classification: an open, web-based, international, diagnostic study. Lancet Oncol20, 938–947 (2019). 10.1016/S1470-2045(19)30333-X",
+      "por_que": "Estudio de lectores: humanos frente a algoritmos en clasificacion de lesiones pigmentadas."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 377,
+      "linea_fin": 377,
+      "referencia": "35.Esteva, A. et al. Dermatologist-level classification of skin cancer with deep neural networks. Nature542, 115–118 (2017). 10.1038/nature21056",
+      "por_que": "Clasificacion de cancer de piel con redes profundas a nivel de dermatologo."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 385,
+      "linea_fin": 385,
+      "referencia": "43.Betz-Stablein, B. et al. Reproducible naevus counts using 3D total body photography and convolutional neural networks. Dermatology.238, 4–11 (2021). 10.1159/000517218",
+      "por_que": "Redes convolucionales sobre fotografia corporal total 3D; es la referencia del puntaje de confianza de nevus (linea 214)."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 388,
+      "linea_fin": 388,
+      "referencia": "46.Marchetti, M. A. et al. 3D Whole-body skin imaging for automated melanoma detection. J Eur Acad Dermatol Venereol37, 945–950 (2023). 10.1111/jdv.18924",
+      "por_que": "Deteccion automatizada de melanoma con imagen 3D de cuerpo entero: misma modalidad que SLICE-3D."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 389,
+      "linea_fin": 389,
+      "referencia": "47.Wen, D. et al. Characteristics of publicly available skin cancer image datasets: a systematic review. Lancet Digit Health4, e64–e74 (2022). 10.1016/S2589-7500(21)00252-1",
+      "por_que": "Revision sistematica de las caracteristicas de los conjuntos publicos de imagenes de cancer de piel."
+    },
+    {
+      "archivo": "referencias/kurtansky-2024-slice3d-descriptor.md",
+      "linea_ini": 393,
+      "linea_fin": 393,
+      "referencia": "51.Primiero, C. A. et al. A narrative review: opportunities and challenges in artificial intelligence skin image analyses using total body photography. J Invest Dermatol10.1016/j.jid.2023.11.007 (2024). 10.1016/j.jid.2023.11.007",
+      "por_que": "Revision narrativa de IA sobre fotografia corporal total: misma modalidad."
+    }
+  ]
+}
