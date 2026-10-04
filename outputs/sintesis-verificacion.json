@@ -1,6 +1,6 @@
 {
-  "numeros_en_borrador": 553,
-  "numeros_con_respaldo_en_outputs": 252,
+  "numeros_en_borrador": 600,
+  "numeros_con_respaldo_en_outputs": 273,
   "numeros_sin_respaldo": [
     {
       "valor": "2023",
@@ -139,7 +139,7 @@
     },
     {
       "valor": "384",
-      "contexto": "## La imagen no justifica su costo  Las 384 variables",
+      "contexto": "e, la imagen no justifica su costo  Las 384 variables",
       "linea_aprox": 695
     },
     {
@@ -168,34 +168,54 @@
       "linea_aprox": 720
     },
     {
+      "valor": "384",
+      "contexto": "egresión logística balanceada sobre las 384 variables",
+      "linea_aprox": 744
+    },
+    {
+      "valor": "0,0579,",
+      "contexto": "se compara» (el criterio) -->  - pAUC: −0,0579, [−0,084;",
+      "linea_aprox": 755
+    },
+    {
+      "valor": "0,2364,",
+      "contexto": ",1383; −0,061]; - sensibilidad top-15: −0,2364, [−0,323;",
+      "linea_aprox": 757
+    },
+    {
+      "valor": "0,323",
+      "contexto": "061]; - sensibilidad top-15: −0,2364, [−0,323; −0,1498]",
+      "linea_aprox": 757
+    },
+    {
       "valor": "0,0365",
       "contexto": "stingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726],",
-      "linea_aprox": 732
+      "linea_aprox": 786
     },
     {
       "valor": "12,62,",
       "contexto": "0,0181, [−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29;",
-      "linea_aprox": 733
+      "linea_aprox": 787
     },
     {
       "valor": "49,29",
       "contexto": "−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29; 24,05].",
-      "linea_aprox": 733
+      "linea_aprox": 787
     },
     {
       "valor": "0,695",
       "contexto": "r sin recortes de imagen obtuvo 0,164 y 0,695 en la eva",
-      "linea_aprox": 740
+      "linea_aprox": 794
     },
     {
       "valor": "20,06,",
       "contexto": "0,0227, [−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74;",
-      "linea_aprox": 749
+      "linea_aprox": 803
     },
     {
       "valor": "49,74",
       "contexto": "−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74; 9,61]. <",
-      "linea_aprox": 749
+      "linea_aprox": 803
     }
   ],
   "porcentajes_de_metodo_excluidos": [
@@ -234,6 +254,12 @@
       "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
       "contexto": "nes, cuando al azar quedaría marcado el 80%. <!-- F:",
       "linea_aprox": 600
+    },
+    {
+      "valor": "80%",
+      "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
+      "contexto": "nt80 (media e IC) -->  Para capturar el 80% de las ma",
+      "linea_aprox": 761
     }
   ],
   "numeros_en_contextos_omitidos": [
@@ -1360,164 +1386,269 @@
       "linea_aprox": 726
     },
     {
+      "valor": "268",
+      "contexto": "2025-triaje-automatizado-tbp.md, líneas 268 y 299 -->",
+      "linea_aprox": 733
+    },
+    {
+      "valor": "299",
+      "contexto": "riaje-automatizado-tbp.md, líneas 268 y 299 --> Los o",
+      "linea_aprox": 733
+    },
+    {
+      "valor": "292,",
+      "contexto": "-2025-triaje-automatizado-tbp.md, línea 292, cita lite",
+      "linea_aprox": 736
+    },
+    {
+      "valor": "268,",
+      "contexto": "-2025-triaje-automatizado-tbp.md, línea 268, cita lite",
+      "linea_aprox": 741
+    },
+    {
+      "valor": "6,",
+      "contexto": "ión por separado. <!-- F: PLAN.md, Fase 6, «La image",
+      "linea_aprox": 747
+    },
+    {
+      "valor": "2026",
+      "contexto": "ola: especificación y regla de lectura (2026-10-04, de",
+      "linea_aprox": 747
+    },
+    {
+      "valor": "-10",
+      "contexto": "especificación y regla de lectura (2026-10-04, de la",
+      "linea_aprox": 747
+    },
+    {
+      "valor": "-04,",
+      "contexto": "pecificación y regla de lectura (2026-10-04, de la per",
+      "linea_aprox": 747
+    },
+    {
+      "valor": "50",
+      "contexto": "cas.Imagen.pauc.por_semilla_y_fold (los 50 pliegues",
+      "linea_aprox": 753
+    },
+    {
+      "valor": "6,",
+      "contexto": "15 y .nnt80 (media e IC); PLAN.md, Fase 6, «La image",
+      "linea_aprox": 770
+    },
+    {
+      "valor": "1",
+      "contexto": "la: dos decisiones sobre el resultado», 1 -->  *Int",
+      "linea_aprox": 770
+    },
+    {
+      "valor": "3",
+      "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 21",
+      "linea_aprox": 780
+    },
+    {
+      "valor": "216",
+      "contexto": "aje-automatizado-tbp.md, Tabla 3 (línea 216) y línea",
+      "linea_aprox": 780
+    },
+    {
+      "valor": "272",
+      "contexto": "ado-tbp.md, Tabla 3 (línea 216) y línea 272; PLAN.md,",
+      "linea_aprox": 780
+    },
+    {
+      "valor": "4,",
+      "contexto": "(línea 216) y línea 272; PLAN.md, Fase 4, «Orden de",
+      "linea_aprox": 780
+    },
+    {
       "valor": "4,",
       "contexto": "os a favor de M3. <!-- F: PLAN.md, Fase 4, «Nota de",
-      "linea_aprox": 737
+      "linea_aprox": 791
     },
     {
       "valor": "3",
       "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3 (Meta-bas",
-      "linea_aprox": 743
+      "linea_aprox": 797
     },
     {
       "valor": "4,",
       "contexto": "WB360 y Patient context); PLAN.md, Fase 4, «Orden de",
-      "linea_aprox": 743
+      "linea_aprox": 797
     },
     {
       "valor": "4,",
       "contexto": "ado es M3 limpio. <!-- F: PLAN.md, Fase 4, «Regla de",
-      "linea_aprox": 753
+      "linea_aprox": 807
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 753
+      "linea_aprox": 807
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> Q",
-      "linea_aprox": 753
+      "linea_aprox": 807
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Quit",
-      "linea_aprox": 753
+      "linea_aprox": 807
     },
     {
       "valor": "8",
       "contexto": "F3L > C.pauc.media; CLAUDE.md, hallazgo 8 -->  ###",
-      "linea_aprox": 757
+      "linea_aprox": 811
     },
     {
       "valor": "9",
       "contexto": "cia.json > tiempos; CLAUDE.md, hallazgo 9 -->  ###",
-      "linea_aprox": 768
+      "linea_aprox": 822
     },
     {
       "valor": "50",
       "contexto": "1,74 | 14,6321 |  <!-- F: medias de los 50 pliegues:",
-      "linea_aprox": 780
+      "linea_aprox": 834
     },
     {
       "valor": "4,",
       "contexto": "dicción no se cronometró (PLAN.md, Fase 4, «Tiempo d",
-      "linea_aprox": 780
+      "linea_aprox": 834
     },
     {
       "valor": "6",
       "contexto": "guno de los tres. <!-- F: PLAN.md, Fase 6 («La tabl",
-      "linea_aprox": 789
+      "linea_aprox": 843
     },
     {
       "valor": "55",
       "contexto": "C.*.IC; «Método», «Qué se mide», líneas 55–59 (NNT80",
-      "linea_aprox": 789
+      "linea_aprox": 843
     },
     {
       "valor": "59",
       "contexto": ".IC; «Método», «Qué se mide», líneas 55–59 (NNT80% S",
-      "linea_aprox": 789
+      "linea_aprox": 843
     },
     {
       "valor": "495",
       "contexto": "80% SE); informe/anteproyecto.md, línea 495 (la top-1",
-      "linea_aprox": 789
+      "linea_aprox": 843
     },
     {
       "valor": "4,",
       "contexto": "«El modelo recomendado»; PLAN.md, Fase 4, «Modelo r",
-      "linea_aprox": 800
+      "linea_aprox": 854
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 800
+      "linea_aprox": 854
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> S",
-      "linea_aprox": 800
+      "linea_aprox": 854
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Se e",
-      "linea_aprox": 800
+      "linea_aprox": 854
     },
     {
       "valor": "4,",
       "contexto": "r encima de cero. <!-- F: PLAN.md, Fase 4, «Regla de",
-      "linea_aprox": 803
+      "linea_aprox": 857
+    },
+    {
+      "valor": "3",
+      "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 21",
+      "linea_aprox": 869
+    },
+    {
+      "valor": "216",
+      "contexto": "aje-automatizado-tbp.md, Tabla 3 (línea 216) y líneas",
+      "linea_aprox": 869
+    },
+    {
+      "valor": "272",
+      "contexto": "do-tbp.md, Tabla 3 (línea 216) y líneas 272 y 284 -->",
+      "linea_aprox": 869
+    },
+    {
+      "valor": "284",
+      "contexto": ".md, Tabla 3 (línea 216) y líneas 272 y 284 -->  **Do",
+      "linea_aprox": 869
+    },
+    {
+      "valor": "109,",
+      "contexto": "ansky-2024-slice3d-descriptor.md, línea 109, cita lite",
+      "linea_aprox": 875
     },
     {
       "valor": "4,",
       "contexto": "cosas a la vez.   <!-- F: PLAN.md, Fase 4, «Lectura,",
-      "linea_aprox": 835
+      "linea_aprox": 912
     },
     {
       "valor": "5,",
       "contexto": "su   resultado.   <!-- F: PLAN.md, Fase 5, «Especifi",
-      "linea_aprox": 840
+      "linea_aprox": 917
     },
     {
       "valor": "4,",
       "contexto": "étodo», «Qué se compara»; PLAN.md, Fase 4, «Quedan f",
-      "linea_aprox": 844
+      "linea_aprox": 921
+    },
+    {
+      "valor": "115,",
+      "contexto": "ansky-2024-slice3d-descriptor.md, línea 115, cita lite",
+      "linea_aprox": 926
     },
     {
       "valor": "4,",
       "contexto": "as particiones.   <!-- F: PLAN.md, Fase 4, «Orden de",
-      "linea_aprox": 847
+      "linea_aprox": 929
     },
     {
       "valor": "4",
       "contexto": "CLAUDE.md, «Guardarraíles del agente», 4 -->  ## L",
-      "linea_aprox": 851
+      "linea_aprox": 933
     },
     {
       "valor": "306,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 306, cita lite",
-      "linea_aprox": 859
+      "linea_aprox": 941
     },
     {
       "valor": "4",
       "contexto": "6, cita literal; CLAUDE.md, guardarraíl 4 --> - **L",
-      "linea_aprox": 859
+      "linea_aprox": 941
     },
     {
       "valor": "99,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 99, cita lite",
-      "linea_aprox": 864
+      "linea_aprox": 946
     },
     {
       "valor": "4",
       "contexto": "del cero.   <!-- F: CLAUDE.md, hallazgo 4 («son cua",
-      "linea_aprox": 869
+      "linea_aprox": 951
     },
     {
       "valor": "5,",
       "contexto": "«El conjunto reservado»; PLAN.md, Fase 5, «Salvedad",
-      "linea_aprox": 880
+      "linea_aprox": 962
     },
     {
       "valor": "9",
       "contexto": "mpo de inferencia»; CLAUDE.md, hallazgo 9 --> - **D",
-      "linea_aprox": 883
+      "linea_aprox": 965
     },
     {
       "valor": "2",
       "contexto": "encias/slice3d-metadata-tbp-lv.md, nota 2; .claude/",
-      "linea_aprox": 887
+      "linea_aprox": 969
     }
   ],
   "modo_tolerancia": "decimales_escritos",
