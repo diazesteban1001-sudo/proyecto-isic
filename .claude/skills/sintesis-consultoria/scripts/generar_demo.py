@@ -1454,8 +1454,9 @@ document.getElementById("texto-6").innerHTML = P([
   `los metadatos, como al usar la cámara de un teléfono.`,
   `<b>Donde no hay ese sistema, M3 limpio no se puede aplicar tal cual, y la imagen es el insumo disponible.</b> ` +
   `Es el escenario que el artículo del conjunto de datos pone como objetivo: algoritmos que decidan a partir de ${citaIS("telefono")}. ` +
-  `Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que mejora el AUC de la imagen sola; antes de usarla ` +
-  `habría que medirla con fotos de teléfono. Cómo mejorarla, por ejemplo ajustando redes propias, no se ha medido.`,
+  `Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que mejora el AUC de la imagen sola. Esa mejora se ` +
+  `midió con una zona del cuerpo que pudo venir del software del sistema, así que antes de usarla habría que medirla con fotos ` +
+  `de teléfono y con la zona que informe la persona. Cómo mejorarla, por ejemplo ajustando redes propias, no se ha medido.`,
   `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
 // borrador-v2.md, «Recomendación», «Qué se puede afirmar».
 document.getElementById("se-puede").innerHTML = L([
