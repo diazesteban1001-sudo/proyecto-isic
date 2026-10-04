@@ -1,3 +1,197 @@
+## Estado del arte
+
+<!-- Sección nueva de informe/borrador-v2.md, antes de «Método». Versión 2:
+     incluye el resultado de outputs/efecto-particion.json. Responde a la
+     retroalimentación del docente: comparar con otros trabajos académicos,
+     darles reconocimiento y declarar qué suma este proyecto. Mismas
+     convenciones que las demás secciones; LOCAL = contrastar en
+     referencias/_texto-completo/. Las citas salen de
+     informe/insumos/estado-del-arte-comparacion.md, que ya las comprobó
+     contra referencias/. -->
+
+Este trabajo se apoya en cuatro líneas de trabajo previo. De cada una se dice
+qué hizo, en qué se contrasta con las demás y qué toma o añade este proyecto.
+
+### El triaje sobre fotografía corporal total
+
+El conjunto de datos, SLICE-3D, se publicó con un objetivo explícito: *"to
+facilitate the development of open-source AI algorithms capable of rendering
+diagnostic decisions from reduced quality, clinical photos resembling the
+resolution of smartphone images"*.
+<!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, línea 109, cita literal -->
+Reúne todas las lesiones de más de 1.000 pacientes, atendidos en siete
+consultas dermatológicas de alto riesgo de tres continentes.
+<!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, línea 111 («every lesion from a sample of 1,000+ patients … across seven high-risk dermatologic practices and three continents») -->
+
+Antes del reto, Marchetti et al. (2023) estudiaron si el melanoma se
+distingue de otras lesiones con los datos del análisis automático de esas
+imágenes. En una muestra de conveniencia de un solo centro, con 35 pacientes
+y 23.538 lesiones, obtuvieron un AUC de 0,94.
+<!-- F: referencias/_texto-completo/marchetti-2023-resumen-pubmed.txt, líneas 7, 9 y 11 (LOCAL; solo resumen) -->
+Los organizadores evaluaron después ese enfoque en los datos de evaluación del
+reto: en la clasificación de melanoma obtuvo un AUC de 0,893 y una pAUC de
+0,114, frente a 0,176 de la mejor entrega.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3, «Melanoma classification», filas «Marchetti et al.» y «Best across all ISIC'24 submissions» (líneas 217–218); nota a de la tabla: se excluyeron 209 lesiones de un paciente incluido en los dos estudios -->
+*Interpretación, no medición:* un mismo enfoque da cifras distintas según en
+qué datos se evalúe.
+
+Los organizadores publicaron también su análisis del reto (Kurtansky et al.,
+2025). Con un estudio de ablación sobre la solución ganadora encontraron que
+el contexto de paciente tuvo un efecto *"substantial"* y que *"Tiles were less
+informative than the pre-extracted WB360 measurements"*.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, líneas 61 y 248, citas literales -->
+Este trabajo reproduce sobre sus propias particiones la parte tabular de esa
+solución (Novoselskiy, 2024), y es esa parte, sin dos sesgos conocidos a su
+favor, la que recomienda.
+<!-- F: «Método», «Qué se compara» (M3 y M3 limpio); «Recomendación», «Qué se recomienda» -->
+En el contexto de paciente, los resultados coinciden en dirección: aquí
+también mejora las métricas de triaje. Las magnitudes no se comparan, porque
+se midieron en otros datos y con otras particiones. Con la imagen la
+comparación no procede: el ganador ajustó sus propias redes, y aquí se probó
+un extractor congelado.
+<!-- F: «Resultados», «La métrica principal no agota lo que pidió el cliente»; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera) y «El extractor de imagen» -->
+
+### Cómo se evalúa un sistema de triaje
+
+McClish (1989) propuso calcular el área bajo una porción de la curva ROC:
+*"Numerical integration is suggested for evaluating the area under a portion
+of the ROC curve"*.
+<!-- F: referencias/_texto-completo/mcclish-1989-pauc-original.md, línea 49, cita literal (LOCAL; solo resumen) -->
+Walter (2005), en el contexto del metaanálisis, concluye que *"on balance the
+use of the full AUC is preferred"*.
+<!-- F: referencias/_texto-completo/walter-2005-pauc-sroc-en-metaanalisis.md, línea 48, cita literal (LOCAL; solo resumen) -->
+Yang et al. (2019) proponen restringir los dos ejes de la curva: la
+sensibilidad y la tasa de falsos positivos.
+<!-- F: referencias/_texto-completo/yang-arxiv-1508.00298v3.txt, líneas 73–74 (LOCAL) -->
+El reto restringe solo la sensibilidad, y lo justifica en términos clínicos.
+<!-- F: «Método», «Qué se mide»; referencias/_texto-completo/kaggle-evaluation.md, líneas 17–20 (LOCAL) -->
+Y los organizadores añaden dos métricas para escenarios de triaje: *"To gauge
+performance in theoretical triaging scenarios, two additional metrics were
+defined: SEtop-15 and NNTx% SE"*.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 307, cita literal -->
+
+Este trabajo no elige entre ellas. Toma la métrica que eligió el cliente y lee
+a su lado el AUC y las dos métricas de triaje, porque sobre las mismas
+predicciones pueden discrepar. En la partición de la semilla 42, el gradient
+boosting sin balancear tiene un AUC de 0,582, por encima del azar de su
+escala, y una pAUC por debajo del azar de la suya.
+<!-- F: «Método», «Qué se mide»; «Resultados», «Una decisión por defecto cambia el veredicto»; outputs/modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media -->
+
+### Validación cuando las observaciones no son independientes
+
+Saeb et al. (2017) se propusieron demostrar el sesgo que produce validar sin
+respetar al sujeto, y prescriben: *"If the use-case is diagnosis, i.e., we
+want to develop global models that can be used for new subjects, CV must be
+subject-wise"*.
+<!-- F: referencias/saeb-2017-validacion-por-sujeto.md, línea 146 (el objetivo) y línea 134, cita literal -->
+Una revisión en tres partes, nacida de la revisión por pares de ese artículo,
+matiza la regla. Little sostiene que la validación por sujeto *"does not
+always work"* y sugiere, como solución pragmática, probar las dos
+particiones. Varoquaux, en la misma revisión, sostiene que el uso previsto
+decide: *"the intended usage should dictate the cross-validation setting"*.
+<!-- F: referencias/little-2017-perspectivas-sobre-saeb.md, línea 171 (la revisión) y líneas 211, 231 y 263, citas literales -->
+Kapoor y Narayanan (2023) clasifican la no independencia entre entrenamiento
+y prueba como una forma de fuga. En su caso de estudio, al corregir la fuga,
+los modelos complejos dejan de superar a la regresión logística, salvo en un
+artículo, donde la diferencia de AUC baja de 0,14 a 0,01.
+<!-- F: referencias/kapoor-2023-fuga-y-reproducibilidad.md, línea 218 (L3.2) y línea 304 («Each paper suffered from different forms of leakage»; «complex ML models perform no better than baseline LR models in each case except Wang»; «drops from 0.14 to 0.01») -->
+Dentro de los conjuntos de ISIC, Cassidy et al. (2022) encontraron imágenes
+duplicadas repartidas entre entrenamiento y prueba, y sugieren, como paso de
+limpieza, quedarse con imágenes de pacientes únicos.
+<!-- F: referencias/cassidy-2022-duplicados-isic.md, líneas 154–155 y 850–853 -->
+
+Este trabajo sigue el criterio del uso. El reto se evalúa con pacientes
+distintos de los de entrenamiento, así que la validación agrupa por paciente.
+<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 («albeit different patients than the training dataset»); «Datos y validación», «La partición: por paciente» -->
+Y se midió qué evita esa agrupación: una partición por filas habría dejado al
+98,92% de los pacientes a los dos lados.
+<!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga -->
+
+Como sugiere Little, se probaron también las dos particiones. Con la
+logística y el gradient boosting balanceados, partir por filas no cambia de
+forma distinguible la pAUC, el AUC ni el NNT80% SE, ni el veredicto entre los
+dos modelos.
+<!-- F: «Resultados», «Partir por filas no cambia el veredicto»; outputs/efecto-particion.json; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->
+La agrupación por paciente se sostiene, entonces, por el uso y no porque aquí
+cambie el resultado.
+<!-- F: interpretación de este proyecto, sobre las dos frases anteriores -->
+
+### Qué se ha investigado en Colombia
+
+La producción colombiana cercana a este trabajo responde a tres preguntas
+distintas: cómo llevar al paciente hasta el especialista, cómo clasificar una
+lesión a partir de su imagen y qué lesiones debe mirar primero el
+especialista.
+<!-- F: interpretación de este proyecto, que ordena los trabajos de abajo; PLAN.md, Fase 0, «Pendiente del estado del arte» (el contraste acceso frente a selección) -->
+
+La primera es la del acceso. Sáenz et al. (2018) probaron, en una brigada de
+salud rural sin dermatólogo, una aplicación de apoyo al diagnóstico remoto.
+Barrera-Valencia y Perea-Flórez (2024) compararon un servicio de
+teledermatología para población rural dispersa con computador y cámara frente
+a teléfono inteligente.
+<!-- F: referencias/saenz-2018-app-teledermatologia-colombia.md, línea 234; referencias/barrera-valencia-2024-costos-teledermatologia.md, líneas 60–64 -->
+
+La segunda es la del diagnóstico. Rios-Duarte et al. (2024), Jojoa Acosta et
+al. (2021) y Jojoa et al. (2022) entrenan redes que clasifican melanoma a
+partir de imágenes clínicas o dermatoscópicas de conjuntos públicos.
+<!-- F: referencias/rios-duarte-2024-cnn-melanoma-uniandes.md, líneas 250 y 252; referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md, líneas 145 y 177; referencias/jojoa-2022-redes-complejas-melanoma.md, líneas 135 y 247 -->
+
+La tercera es la de la selección, y es la de este trabajo. Mejía Posada et
+al. (2024) estudiaron retrospectivamente a 368 pacientes en seguimiento con
+mapeo corporal digital en una clínica de Medellín, y encontraron qué rasgos
+dermatoscópicos se asocian a un menor tiempo hasta el melanoma.
+<!-- F: referencias/mejia-posada-2024-mapeo-corporal-medellin.md, líneas 189 («retrospective follow-up study»), 190, 219 y 230 -->
+Este trabajo aborda la misma pregunta con otros datos: las mediciones
+automáticas de todas las lesiones de cada paciente, ordenadas para que el
+especialista mire primero las más sospechosas.
+<!-- F: «Datos y validación», «Los datos»; «Recomendación», «Qué no se puede afirmar» («Los modelos ordenan lesiones por sospecha») -->
+Los tres trabajos de aprendizaje automático entrenan y evalúan con
+conjuntos públicos ya publicados, y Rios-Duarte et al. advierten que esas
+fuentes no dan la ascendencia de los pacientes. Los datos de este trabajo no
+son colombianos: ninguno de los centros de SLICE-3D está en América Latina.
+<!-- F: referencias/rios-duarte-2024-cnn-melanoma-uniandes.md, líneas 252, 256 («These sources did not provide details regarding the ancestry of patients») y 662; referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md, líneas 145, 237 y 724; referencias/jojoa-2022-redes-complejas-melanoma.md, líneas 247, 251 y 261; referencias/kurtansky-2024-slice3d-descriptor.md, línea 134 (los siete centros); informe/anteproyecto.md, 5.1, punto 5 -->
+
+Este proyecto no propone una arquitectura nueva. Frente a los trabajos de
+diagnóstico, lo que cambia es cómo se elige y se compara un modelo.
+Rios-Duarte et al. eligen el mejor modelo por su AUC de validación; Jojoa
+Acosta et al. comparan cinco modelos sobre un mismo conjunto de prueba y
+reentrenan el mejor; Jojoa et al. comparan las medias de diez pliegues con
+una prueba t.
+<!-- F: referencias/rios-duarte-2024-cnn-melanoma-uniandes.md, línea 175; referencias/jojoa-acosta-2021-aprendizaje-profundo-melanoma.md, líneas 285 y 335; referencias/jojoa-2022-redes-complejas-melanoma.md, líneas 468 y 472 -->
+Aquí la regla de recomendación se fijó antes de correr la comparación, el
+conjunto reservado se abre una sola vez, y el intervalo se corrige porque los
+pliegues comparten datos de entrenamiento.
+<!-- F: «Método», «Qué se fijó antes de medir» y «Cómo se compara» -->
+
+### Qué suma este proyecto
+
+Lo que este trabajo añade a esas cuatro líneas es medir, sobre un mismo
+conjunto, cuánto cambia el veredicto según las decisiones que se aceptan por
+defecto:
+<!-- F: informe/anteproyecto.md, 3, objetivo general; CLAUDE.md, «Tesis del proyecto» -->
+
+- **La métrica.** El AUC y la pAUC discrepan sobre si el gradient boosting
+  sin balancear supera al azar, y la pAUC no distingue ventajas que el AUC o
+  las métricas de triaje sí distinguen.
+  <!-- F: «Resultados», «Una decisión por defecto cambia el veredicto», «Una ventaja que la pAUC no ve» y «La métrica principal no agota lo que pidió el cliente» -->
+- **El desbalance.** El mismo modelo pasa de una pAUC de 0,0018 a 0,1375 con
+  solo ponderar las clases.
+  <!-- F: «Resultados», «Una decisión por defecto cambia el veredicto»; outputs/validacion-repetida.json > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global y nivel_2b_gradient_boosting_balanceado.pauc_media_global -->
+- **La comparación.** Dos veces, un resultado de una sola partición no
+  sobrevivió a la validación repetida.
+  <!-- F: «Método», «Cómo se compara»; CLAUDE.md, «Hallazgos vivos», hallazgo 3 -->
+- **La partición.** Una partición por filas dejaría al 98,92% de los
+  pacientes a los dos lados, pero con los dos modelos probados no cambia el
+  veredicto. Aquí la decisión por defecto se midió y no pesó.
+  <!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga; «Resultados», «Partir por filas no cambia el veredicto» -->
+
+Y lee entera la función de utilidad del cliente: con la pAUC sola, el
+contexto de paciente no aporta; con la sensibilidad top-15 y el NNT80% SE, sí.
+<!-- F: «Resultados», «La métrica principal no agota lo que pidió el cliente» -->
+Por último, lleva la auditoría de fugas al preentrenamiento: PanDerm quedó
+fuera porque su artículo declara datos de ISIC 2024 entre los suyos.
+<!-- F: «Método», «El extractor de imagen» -->
+
 ## Método
 
 <!-- Borrador de una sección de informe/borrador-v2.md. Cada comentario «F:»
