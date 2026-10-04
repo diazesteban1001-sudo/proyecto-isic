@@ -152,6 +152,17 @@ NIVELES_VR = [
 # comprueba cada vez, y su cifra no se teclea.
 CITA_PANDERM = ("referencias/panderm-reduccion-examenes.md",
                 re.compile(r"(We selected a subset containing )([\d,]+)( tile images, stratified by institutions)"))
+# borrador-v2.md, «La imagen sola, sin el sistema de fotografía corporal total» y
+# «Recomendación»: las citas literales que la página muestra se leen de aquí y se
+# comprueban contra su archivo; si una deja de estar, no se escribe la página.
+KURTANSKY_2025 = "referencias/kurtansky-2025-triaje-automatizado-tbp.md"
+KURTANSKY_2024 = "referencias/kurtansky-2024-slice3d-descriptor.md"
+CITAS_IMAGEN_SOLA = {
+    "costo_tbp": (KURTANSKY_2025, "less accessible and more expensive than standard clinical and dermoscopic imaging methods"),
+    "lesiones_sueltas": (KURTANSKY_2025, "cannot be directly applied to analyze single lesions at a time"),
+    "telefono": (KURTANSKY_2024, "clinical photos resembling the resolution of smartphone images"),
+    "luz_y_campo": (KURTANSKY_2024, "vary greatly in lighting and FOV"),
+}
 
 
 def leer(path):
@@ -205,6 +216,67 @@ def extraer(patron, texto, que):
     if not m:
         raise SystemExit(f"No se encontró {que} en «{texto}». No se escribe la página.")
     return m
+
+
+def auc_solo_recortes():
+    """El AUC de la variante del ganador que solo usa los recortes, en la tarea de
+    cáncer de piel: la única fila de la Tabla 3 de Kurtansky 2025 con solo la
+    columna Tiles marcada, entre «Malignancy classification» y «Melanoma
+    classification». Se lee del archivo, no se teclea."""
+    lineas = leer(os.path.join(RAIZ, KURTANSKY_2025)).split("\n")
+    ini = next(i for i, l in enumerate(lineas) if l.startswith("Malignancy classification\t"))
+    fin = next(i for i, l in enumerate(lineas) if l.startswith("Melanoma classification\t"))
+    cabecera = [i for i in range(ini, fin) if "\tMeta-basic\tMeta-WB360\tTiles\tPatient context" in lineas[i]]
+    filas = [(i, re.fullmatch(r"\t\t\t\tx\t\t(\d\.\d+)\t(\d\.\d+)\t.*", lineas[i])) for i in range(ini, fin)]
+    filas = [(i, m) for i, m in filas if m]
+    if len(cabecera) != 1 or len(filas) != 1:
+        raise SystemExit(f"La fila de solo recortes de la Tabla 3 no está una sola vez en {KURTANSKY_2025}. "
+                         f"No se escribe la página.")
+    i, m = filas[0]
+    return {"auc": float(m.group(2)), "fuente": f"{KURTANSKY_2025}, Tabla 3, línea {i + 1} (solo la columna Tiles)"}
+
+
+def datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion):
+    """Cifras de «La imagen sola, sin el sistema de fotografía corporal total» y
+    las frases que dependen de ellas. Control positivo: test_generar_demo.py,
+    caso L, con un imagen-sola.json que rompe cada frase."""
+    m, c = imagen_sola["metricas"], imagen_sola["comparaciones_nuevo_menos_base"]
+    clave_ic = "intervalo_t_95_nadeau_bengio"
+    ctrl = imagen_sola["control_m1_contra_referencia"]
+    afirmar(ctrl["m1_reproduce_fold_a_fold"] and ctrl["huellas_de_pliegues_iguales"], "en los mismos pliegues de M1")
+    m3_brutas = fase4["fase4-m3-vs-m2"]["m3"]["variables"]["entran"]["numericas_brutas"]
+    afirmar(all(any(v.startswith("tbp_lv_") for v in lista) for lista in
+                (modelado["features_usadas"], fase4["fase4-m2-vs-m1"]["variables_de_contexto"], m3_brutas)),
+            "Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software de la fotografía corporal total")
+    pliegues = [v for s in imagen_sola["esquema"]["semillas"] for v in m["Imagen"]["pauc"]["por_semilla_y_fold"][str(s)]]
+    afirmar(all(v > escala["azar"] for v in pliegues), "La imagen sola distingue lesiones malignas muy por encima del azar")
+    im1 = c["imagen_menos_m1"]
+    for k, frase in (("pauc", "la pAUC"), ("auc", "el AUC"), ("setop15", "la sensibilidad top-15")):
+        afirmar(im1[k]["media"] < 0 and im1[k][clave_ic][1] < 0,
+                f"queda por debajo de M1 en las cuatro métricas, y las cuatro diferencias están establecidas ({frase})")
+    afirmar(im1["nnt80"]["media"] > 0 and im1["nnt80"][clave_ic][0] > 0,
+            "queda por debajo de M1 en las cuatro métricas, y las cuatro diferencias están establecidas (el NNT80% SE)")
+    ib = c["imagen_basicos_menos_imagen"]
+    afirmar(ib["auc"]["media"] > 0 and ib["auc"][clave_ic][0] > 0,
+            "Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible")
+    afirmar(contiene_cero(ib["pauc"][clave_ic]), "En la pAUC, con la precisión guardada, el intervalo no excluye el cero")
+    afirmar(contiene_cero(ib["setop15"][clave_ic]) and contiene_cero(ib["nnt80"][clave_ic]),
+            "en la sensibilidad top-15 y en el NNT80% SE, el intervalo contiene el cero")
+    citas = {}
+    for clave, (ruta, texto) in CITAS_IMAGEN_SOLA.items():
+        if texto not in leer(os.path.join(RAIZ, ruta)):
+            raise SystemExit(f"La cita «{texto}» no está en {ruta}. No se escribe la página.")
+        citas[clave] = texto
+    return {
+        "n_variables": int(extraer(r"(\d+) dimensiones", extraccion["caracteristica"],
+                                   "las dimensiones de la característica").group(1)),
+        "medias": {mod: {k: m[mod][k]["media_global"] for k in METRICAS} for mod in ("M1", "Imagen", "Imagen + básicos")},
+        "comp": {n: {k: {"media": c[n][k]["media"], "ic": c[n][k][clave_ic]} for k in METRICAS}
+                 for n in ("imagen_menos_m1", "imagen_basicos_menos_imagen")},
+        "clave_ic": clave_ic,
+        "auc_recortes": auc_solo_recortes(),
+        "citas": citas,
+    }
 
 
 def datos_mecanismo(mecanismo, metrica):
@@ -303,6 +375,7 @@ def construir_datos(outputs_dir, leidos):
     fase4 = {archivo: cargar(archivo) for _, archivo in COMPARACIONES}
     mecanismo = cargar("mecanismo-2a")
     particion = cargar("efecto-particion")
+    imagen_sola = cargar("imagen-sola")
 
     escala = modelado["escala_de_referencia_pauc"]
 
@@ -393,9 +466,9 @@ def construir_datos(outputs_dir, leidos):
     afirmar(all(contiene_cero(m42[k]["ic"]) for k in METRICAS)
             and all(m42[k]["media"] < 0 for k in ("pauc", "auc", "setop15")) and m42["nnt80"]["media"] > 0,
             "Ningún intervalo excluye el cero, y la estimación puntual es peor en las cuatro métricas")
-    afirmar(all(contiene_cero(m4b[k]["ic"]) for k in METRICAS),
-            "Las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma "
-            "distinguible ninguna de las métricas")
+    afirmar(all(contiene_cero(m42[k]["ic"]) and contiene_cero(m4b[k]["ic"]) for k in METRICAS),
+            "Añadidas al modelo con contexto de paciente, las variables de imagen de DINOv2, como variables "
+            "sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas")
     afirmar(2 * m42["pauc"]["semillas"] < m42["pauc"]["de_semillas"] < 2 * m4b["pauc"]["semillas"],
             "la forma de incorporar la imagen invierte la dirección de la pAUC")
     afirmar(m32["pauc"]["ic"][0] > 0, "esa ventaja no se puede separar de los dos sesgos conocidos a favor de M3")
@@ -501,6 +574,7 @@ def construir_datos(outputs_dir, leidos):
         "tabla": tabla,
         "mecanismo": datos_mecanismo(mecanismo, metrica),
         "particion": datos_particion(particion),
+        "imagen_sola": datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion),
         "verificacion": {
             "total": verificacion["numeros_en_borrador"],
             "con": verificacion["numeros_con_respaldo_en_outputs"],
@@ -719,6 +793,8 @@ __AVISO_EXPLORATORIO__
     <div class="paneles" id="paneles"></div>
     <p class="pie-grafico" id="pie-paneles"></p>
     <div class="texto" id="lectura-4"></div>
+    <h3>La imagen sola, sin el sistema de fotograf&iacute;a corporal total</h3>
+    <div class="texto" id="texto-4b"></div>
   </div>
 </section>
 
@@ -1232,7 +1308,7 @@ const paneles = document.getElementById("paneles");
 });
 document.getElementById("pie-paneles").innerHTML = esc(D.nota_nnt);
 // borrador-v2.md, «Resultados», «La métrica principal no agota lo que pidió el cliente»,
-// «La imagen no justifica su costo» y «El modelo recomendado».
+// «Añadida al modelo con contexto de paciente, la imagen no justifica su costo» y «El modelo recomendado».
 document.getElementById("lectura-4").innerHTML = L([
   `<b>M2 − M1.</b> Quien solo lea la pAUC concluye que el contexto de paciente no aporta; la sensibilidad top-15, que el cliente premió aparte, y el NNT80% SE dicen lo contrario. ` +
   `Son cuatro métricas sobre una misma comparación, y el intervalo del NNT queda al límite del cero. ` +
@@ -1247,6 +1323,47 @@ document.getElementById("lectura-4").innerHTML = L([
   `<b>M3 limpio − M2.</b> El intervalo de la pAUC queda entero por encima de cero, así que, por la regla fijada antes de correr, el modelo recomendado es ${reco}. ` +
   `Quitar los sesgos casi no movió la diferencia media: ${mediaC("M3 − M2", "pauc")} con ellos, ${mediaC("M3 limpio − M2", "pauc")} sin ellos. ` +
   `Esa comparación es descriptiva, entre dos corridas, sin intervalo propio y sin fijar antes.`]);
+
+// borrador-v2.md, «Resultados», «La imagen sola, sin el sistema de fotografía corporal total».
+const IS = D.imagen_sola, fIS = c => "imagen-sola.json > " + c;
+const fISc = (n, k, campo) => fIS(`comparaciones_nuevo_menos_base.${n}.${k}.${campo}`);
+// Un 0.0 del JSON llega a JavaScript como 0: se escribe con el decimal guardado, como en el informe.
+const decG = v => Number.isInteger(v) ? fijo(v, 1) : dec(v);
+const mediaIS = (n, k) => cifra(firmado(IS.comp[n][k].media, k === "nnt80" ? 2 : undefined), fISc(n, k, "media"));
+const icIS = (n, k) => k === "nnt80"
+  ? ic(IS.comp[n][k].ic[0], IS.comp[n][k].ic[1], fISc(n, k, IS.clave_ic), 2)
+  : cifra("[" + decG(IS.comp[n][k].ic[0]) + "; " + decG(IS.comp[n][k].ic[1]) + "]", fISc(n, k, IS.clave_ic));
+const auc922 = cifra(dec(IS.auc_recortes.auc), IS.auc_recortes.fuente);
+const citaIS = k => `<i>"${esc(IS.citas[k])}"</i>`;
+document.getElementById("texto-4b").innerHTML = P([
+  `Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software de la fotografía corporal total; ` +
+  `sin ese sistema, esos modelos no se pueden aplicar tal cual. ` +
+  `Los organizadores del reto describen ese sistema como ${citaIS("costo_tbp")}. ` +
+  `M2 y M3 limpio, además, comparan cada lesión con las demás del mismo paciente. Del modelo ganador, que hace lo mismo, ` +
+  `los organizadores advierten que por eso ${citaIS("lesiones_sueltas")}.`,
+  `Para ese escenario se midió qué da la imagen sola, con una especificación fijada antes de correr: una regresión ` +
+  `logística balanceada sobre las ${cifra(IS.n_variables, fExt("caracteristica"))} variables de DINOv2, sola y con edad, ` +
+  `sexo y zona del cuerpo, en los mismos pliegues de M1. Las dos versiones analizan cada lesión por separado.`,
+  `La imagen sola distingue lesiones malignas muy por encima del azar: su pAUC es de ` +
+  `${cifra(dec(IS.medias.Imagen.pauc), fIS("metricas.Imagen.pauc.media_global"))}, frente a ${azar} del azar, y su AUC, de ` +
+  `${cifra(dec(IS.medias.Imagen.auc), fIS("metricas.Imagen.auc.media_global"))}. Pero queda por debajo de M1 en las cuatro ` +
+  `métricas, y las cuatro diferencias están establecidas:`]) + L([
+  `pAUC: ${mediaIS("imagen_menos_m1", "pauc")}, ${icIS("imagen_menos_m1", "pauc")};`,
+  `AUC: ${mediaIS("imagen_menos_m1", "auc")}, ${icIS("imagen_menos_m1", "auc")};`,
+  `sensibilidad top-15: ${mediaIS("imagen_menos_m1", "setop15")}, ${icIS("imagen_menos_m1", "setop15")};`,
+  `NNT80% SE: ${mediaIS("imagen_menos_m1", "nnt80")} lesiones por cada maligna, ${icIS("imagen_menos_m1", "nnt80")}.`]) + P([
+  `Para capturar el ${cifra(D.metrica.tpr + "%", fMod("metrica"))} de las malignas, la imagen sola marca ` +
+  `${cifra(fijo(IS.medias.Imagen.nnt80, 2), fIS("metricas.Imagen.nnt80.media_global"))} lesiones por cada una, frente a ` +
+  `${cifra(fijo(IS.medias.M1.nnt80, 2), fIS("metricas.M1.nnt80.media_global"))} de M1.`,
+  `Añadir edad, sexo y zona del cuerpo mejora el AUC de forma distinguible: ` +
+  `${mediaIS("imagen_basicos_menos_imagen", "auc")}, ${icIS("imagen_basicos_menos_imagen", "auc")}. ` +
+  `En la pAUC, con la precisión guardada, el intervalo no excluye el cero, ${icIS("imagen_basicos_menos_imagen", "pauc")}, ` +
+  `así que esa mejora no se da por establecida; en la sensibilidad top-15 y en el NNT80% SE, el intervalo contiene el cero.`,
+  `<i>Interpretación, no medición:</i> sin el sistema de fotografía corporal total, la imagen sí sirve para ordenar lesiones ` +
+  `por sospecha, pero con este extractor congelado rinde bastante menos que las mediciones. Edad, sexo y zona del cuerpo son ` +
+  `datos que cualquiera puede dar sin aparatos. El ganador ajustó sus propias redes de imagen, y su variante con solo los ` +
+  `recortes llega a un AUC de ${auc922}, pero en otros datos y con otra evaluación, así que las cifras no se comparan. ` +
+  `Y todo esto se midió sobre los recortes del sistema de fotografía corporal total, no sobre fotos de teléfono.`]);
 
 /* ---------- 5. la pregunta del cliente, entera ---------- */
 // borrador-v2.md, «Resultados», «La pregunta del cliente, entera»: la cabecera y las filas, con las cifras de outputs/.
@@ -1271,14 +1388,23 @@ document.getElementById("rot-reco").innerHTML = reco;
 document.getElementById("texto-6").innerHTML = P([
   `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
   `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`,
-  `<b>No se recomienda añadir las variables de imagen</b> tal como se probaron. No mejoraron ninguna métrica de forma distinguible, ` +
-  `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio.`,
+  `<b>Donde se toma la fotografía corporal total, no se recomienda añadir las variables de imagen</b> tal como se probaron. ` +
+  `Añadidas al modelo con contexto de paciente no mejoraron ninguna métrica de forma distinguible, ` +
+  `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio. ` +
+  `Eso no dice que la imagen no sirva para detectar cáncer: en la ablación de los organizadores, la variante del modelo ganador ` +
+  `que solo usa los recortes llega a un AUC de ${auc922}, y la presentan como una base sólida para cuando no se pueden recoger ` +
+  `los metadatos, como al usar la cámara de un teléfono.`,
+  `<b>Donde no hay ese sistema, M3 limpio no se puede aplicar tal cual, y la imagen es el insumo disponible.</b> ` +
+  `Es el escenario que el artículo del conjunto de datos pone como objetivo: algoritmos que decidan a partir de ${citaIS("telefono")}. ` +
+  `Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que mejora el AUC de la imagen sola; antes de usarla ` +
+  `habría que medirla con fotos de teléfono. Cómo mejorarla, por ejemplo ajustando redes propias, no se ha medido.`,
   `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
 // borrador-v2.md, «Recomendación», «Qué se puede afirmar».
 document.getElementById("se-puede").innerHTML = L([
   `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
   `El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80% SE.`,
-  `Las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas.`,
+  `Añadidas al modelo con contexto de paciente, las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas.`,
+  `Sin el sistema de fotografía corporal total, la imagen sola distingue lesiones malignas muy por encima del azar, pero con este extractor queda por debajo de M1 en las cuatro métricas.`,
   `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`]);
 // borrador-v2.md, «Recomendación», «Qué no se puede afirmar».
 document.getElementById("no-se-puede").innerHTML = L([
@@ -1286,7 +1412,9 @@ document.getElementById("no-se-puede").innerHTML = L([
   `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
   `<b>Cuánto rinde M3 limpio fuera del conjunto de desarrollo.</b> El conjunto reservado no se ha abierto. Cuando se abra, la estimación principal ` +
   `seguirá siendo la validación cruzada repetida, y la recomendación no cambiará por su resultado.`,
-  `<b>Nada sobre otras formas de usar la imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron fuera.`,
+  `<b>Nada sobre otros extractores de imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron fuera.`,
+  `<b>Cuánto rinde un modelo con fotos de teléfono.</b> La imagen sola se midió sobre los recortes estandarizados del sistema de fotografía corporal total. ` +
+  `El artículo del conjunto de datos advierte que las fotos que toman los pacientes ${citaIS("luz_y_campo")}.`,
   `<b>Que este trabajo supere o no a la solución ganadora.</b> Su evaluación usó otros datos y otras particiones.`,
   `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 

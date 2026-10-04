@@ -34,6 +34,17 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      número de numeros_en_comentarios en sintesis-verificacion.json. La ficha
      de síntesis los enumera como si cubrieran todo, así que no se escribe, y
      el motivo tiene que ser la suma, no la correspondencia con el borrador.
+  L. Cada frase de «La imagen sola, sin el sistema de fotografía corporal
+     total» que depende de los datos, y la viñeta de DINOv2, con un archivo
+     alterado para que deje de ser cierta. No se escribe, y el motivo tiene
+     que ser esa frase. Las diferencias que la página da por establecidas se
+     invierten (media e intervalo cambian de signo); las que da por no
+     establecidas no se rompen invirtiéndolas, así que se les mueve el
+     intervalo para que excluya el cero.
+  M. Las dos lecturas de referencias/ que hace la subsección: con la fila de
+     solo recortes de la Tabla 3 duplicada, el 0,922 no se lee; con una cita
+     quitada de su archivo, la página no se escribe. Sobre copias en una raíz
+     temporal; con las copias sin tocar, las dos lecturas pasan.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -116,6 +127,52 @@ def caso_f():
     return False, "sin declararla como salida de la Fase 5, la aceptó"
 
 
+def caso_m():
+    """M: auc_solo_recortes y las citas de datos_imagen_sola, sobre copias de las
+    dos fuentes en una raíz temporal."""
+    sys.path.insert(0, SCRIPTS)
+    import generar_demo as g
+    salidas = {n: json.load(open(os.path.join(OUTPUTS, f"{n}.json"), encoding="utf-8"))
+               for n in ("imagen-sola", "modelado-baseline", "fase4-m2-vs-m1", "fase4-m3-vs-m2", "extraccion-imagen")}
+
+    def correr(fn):
+        try:
+            return fn(), None
+        except SystemExit as e:
+            return None, str(e)
+
+    def datos():
+        return g.datos_imagen_sola(salidas["imagen-sola"], salidas["modelado-baseline"]["escala_de_referencia_pauc"],
+                                   salidas["modelado-baseline"],
+                                   {n: salidas[n] for n in ("fase4-m2-vs-m1", "fase4-m3-vs-m2")},
+                                   salidas["extraccion-imagen"])
+    raiz_real = g.RAIZ
+    resultado = {}
+    with tempfile.TemporaryDirectory() as tmp:
+        os.makedirs(os.path.join(tmp, "referencias"))
+        for ruta in (g.KURTANSKY_2025, g.KURTANSKY_2024):
+            shutil.copy(os.path.join(raiz_real, ruta), os.path.join(tmp, ruta))
+        try:
+            g.RAIZ = tmp
+            base, err = correr(datos)
+            resultado["base"] = (base is not None and base["auc_recortes"]["auc"] == 0.922, err or "lee 0,922 y las citas")
+            ruta25 = os.path.join(tmp, g.KURTANSKY_2025)
+            texto = open(ruta25, encoding="utf-8").read()
+            fila = next(l for l in texto.split("\n") if l.startswith("\t\t\t\tx\t\t0.142\t0.922"))
+            open(ruta25, "w", encoding="utf-8").write(texto.replace(fila, fila + "\n" + fila, 1))
+            _, err = correr(g.auc_solo_recortes)
+            resultado["tabla"] = (err is not None and "una sola vez" in err, err or "no falló")
+            open(ruta25, "w", encoding="utf-8").write(texto)
+            ruta24 = os.path.join(tmp, g.KURTANSKY_2024)
+            texto = open(ruta24, encoding="utf-8").read()
+            open(ruta24, "w", encoding="utf-8").write(texto.replace("vary greatly in lighting and FOV", "vary in lighting"))
+            _, err = correr(datos)
+            resultado["cita"] = (err is not None and "vary greatly in lighting and FOV" in err, err or "no falló")
+        finally:
+            g.RAIZ = raiz_real
+    return resultado
+
+
 def main():
     def intervalo_que_cruza(o):
         o["comparaciones_nuevo_menos_base"]["pauc"]["intervalo_t_95_nadeau_bengio"] = [-0.001, 0.0341]
@@ -135,6 +192,48 @@ def main():
     def grupos_que_no_suman(o):
         o["numeros_en_comentarios"].pop()
 
+    def invertir(o, n, k):
+        d = o["comparaciones_nuevo_menos_base"][n][k]
+        d["media"] = -d["media"]
+        lo, hi = d["intervalo_t_95_nadeau_bengio"]
+        d["intervalo_t_95_nadeau_bengio"] = [-hi, -lo]
+
+    def excluir_cero(o, n, k):
+        o["comparaciones_nuevo_menos_base"][n][k]["intervalo_t_95_nadeau_bengio"][0] = 0.001
+
+    def sin_control(o):
+        o["control_m1_contra_referencia"]["m1_reproduce_fold_a_fold"] = False
+
+    def un_pliegue_bajo_el_azar(o):
+        o["metricas"]["Imagen"]["pauc"]["por_semilla_y_fold"]["0"][0] = 0.019
+
+    def sin_tbp_lv(o):
+        o["features_usadas"] = [v for v in o["features_usadas"] if not v.startswith("tbp_lv_")]
+
+    def m4b_establecida(o):
+        o["comparaciones_nuevo_menos_base"]["pauc"]["intervalo_t_95_nadeau_bengio"] = [0.001, 0.0202]
+
+    IS, IM1, IB = "imagen-sola", "imagen_menos_m1", "imagen_basicos_menos_imagen"
+    casos_l = [
+        ("control de M1 en falso", IS, sin_control, "en los mismos pliegues de M1"),
+        ("M1 sin variables tbp_lv_", "modelado-baseline", sin_tbp_lv,
+         "Las mediciones de las que dependen M1, M2 y M3 limpio"),
+        ("un pliegue de la imagen sola bajo el azar", IS, un_pliegue_bajo_el_azar, "muy por encima del azar"),
+        ("Imagen − M1 invertida en la pAUC", IS, lambda o: invertir(o, IM1, "pauc"), "establecidas (la pAUC)"),
+        ("Imagen − M1 invertida en el AUC", IS, lambda o: invertir(o, IM1, "auc"), "establecidas (el AUC)"),
+        ("Imagen − M1 invertida en la sensibilidad top-15", IS, lambda o: invertir(o, IM1, "setop15"),
+         "establecidas (la sensibilidad top-15)"),
+        ("Imagen − M1 invertida en el NNT80% SE", IS, lambda o: invertir(o, IM1, "nnt80"), "establecidas (el NNT80% SE)"),
+        ("(Imagen + básicos) − Imagen invertida en el AUC", IS, lambda o: invertir(o, IB, "auc"),
+         "mejora el AUC de forma distinguible"),
+        ("(Imagen + básicos) − Imagen, la pAUC excluye el cero", IS, lambda o: excluir_cero(o, IB, "pauc"),
+         "En la pAUC, con la precisión guardada"),
+        ("(Imagen + básicos) − Imagen, la sensibilidad top-15 excluye el cero", IS,
+         lambda o: excluir_cero(o, IB, "setop15"), "en la sensibilidad top-15 y en el NNT80% SE"),
+        ("M4b − M2 establecida en la pAUC (viñeta de DINOv2)", "fase4-m4b-vs-m2", m4b_establecida,
+         "Añadidas al modelo con contexto de paciente, las variables de imagen de DINOv2"),
+    ]
+
     corridas = {
         "A": generar("A"),
         "B": generar("B", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", intervalo_que_cruza)),
@@ -147,7 +246,10 @@ def main():
         "J": generar("J", lambda d: cambiar(d, "holdout-pacientes", sin_sellado)),
         "K": generar("K", lambda d: cambiar(d, "sintesis-verificacion", grupos_que_no_suman)),
     }
+    for i, (_, archivo, cambio, _) in enumerate(casos_l):
+        corridas[f"L{i}"] = generar(f"L{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
     f_ok, f_detalle = caso_f()
+    m = caso_m()
 
     def escrita(c, con_aviso):
         ok, html, err = corridas[c]
@@ -170,6 +272,14 @@ def main():
         ("J. holdout-pacientes.json sin fecha_sellado: escribe con aviso", *escrita("J", True)),
         ("K. los cinco grupos de la verificación no suman el total: no escribe, por la suma",
          not corridas["K"][0] and "suman" in corridas["K"][2], f"escrita: {corridas['K'][0]}; {corridas['K'][2]}"),
+    ] + [
+        (f"L. {titulo}: no escribe, por esa frase",
+         not corridas[f"L{i}"][0] and frase in corridas[f"L{i}"][2], f"escrita: {corridas[f'L{i}'][0]}; {corridas[f'L{i}'][2]}")
+        for i, (titulo, _, _, frase) in enumerate(casos_l)
+    ] + [
+        ("M. copias sin tocar: se leen el 0,922 y las citas", *m["base"]),
+        ("M. fila de solo recortes duplicada en la Tabla 3: no se lee", *m["tabla"]),
+        ("M. cita quitada de su archivo: no se escribe", *m["cita"]),
     ]
     fallos = 0
     for titulo, ok, detalle in casos:
