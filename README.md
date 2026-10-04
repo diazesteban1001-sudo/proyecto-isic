@@ -57,6 +57,10 @@ Nadeau y Bengio.)*
   de los pacientes habría quedado repartido entre entrenamiento y
   validación
   (`diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga`).
+  Pero, medido, partir por filas no cambia de forma distinguible la pAUC, el
+  AUC ni el NNT80% SE de la logística y el boosting balanceados, ni el
+  veredicto entre ellos (`efecto-particion.json > filas_menos_paciente` y
+  `particiones.*.comparacion_2b_menos_1.pauc`).
 - **15 columnas quedan fuera de los modelos**, por cuatro motivos
   (`modelado-baseline.json > columnas_excluidas`). 11 no existen al
   predecir: el conjunto de prueba no las trae, y entre ellas va la propia
@@ -73,12 +77,16 @@ Nadeau y Bengio.)*
   (`validacion-repetida.json > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global`
   y `nivel_2b_gradient_boosting_balanceado.pauc_media_global`; el piso, en
   `modelado-baseline.json > escala_de_referencia_pauc.azar`).
-- **Mejor media no es mejor modelo, y una conclusión propia se retiró.** El
+- **La pAUC no ve una ventaja que las otras métricas sí, y una conclusión
+  propia se retiró.** El
   boosting balanceado supera a la regresión logística balanceada por 0,005
   en promedio, pero el intervalo corregido va de −0,0145 a 0,0245
   (`validacion-repetida.json > comparacion_pareada_2b_menos_1.media` y
-  `comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio`). En una
-  sola partición de los datos completos parecía, además, más estable. Con
+  `comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio`). En el
+  AUC, la sensibilidad top-15 y el NNT80% SE la ventaja del boosting sí está
+  establecida
+  (`efecto-particion.json > particiones.paciente.comparacion_2b_menos_1`). En
+  una sola partición de los datos completos parecía, además, más estable. Con
   las 10 semillas su dispersión entre pliegues es mayor: 0,0165 frente a
   0,0138
   (`validacion-repetida.json > nivel_2b_gradient_boosting_balanceado.pauc_std_entre_folds`
