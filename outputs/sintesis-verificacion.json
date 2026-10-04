@@ -1,126 +1,201 @@
 {
-  "numeros_en_borrador": 402,
-  "numeros_con_respaldo_en_outputs": 201,
+  "numeros_en_borrador": 553,
+  "numeros_con_respaldo_en_outputs": 252,
   "numeros_sin_respaldo": [
+    {
+      "valor": "2023",
+      "contexto": "-->  Antes del reto, Marchetti et al. (2023) estudiar",
+      "linea_aprox": 26
+    },
+    {
+      "valor": "23.538",
+      "contexto": "a de un solo centro, con 35 pacientes y 23.538 lesiones,",
+      "linea_aprox": 29
+    },
+    {
+      "valor": "2025",
+      "contexto": "su análisis del reto (Kurtansky et al., 2025). Con un",
+      "linea_aprox": 39
+    },
+    {
+      "valor": "1989",
+      "contexto": "e evalúa un sistema de triaje  McClish (1989) propuso",
+      "linea_aprox": 56
+    },
+    {
+      "valor": "2005",
+      "contexto": "teral (LOCAL; solo resumen) --> Walter (2005), en el c",
+      "linea_aprox": 60
+    },
+    {
+      "valor": "2019",
+      "contexto": "(LOCAL; solo resumen) --> Yang et al. (2019) proponen",
+      "linea_aprox": 63
+    },
+    {
+      "valor": "2017",
+      "contexto": "nes no son independientes  Saeb et al. (2017) se propu",
+      "linea_aprox": 82
+    },
+    {
+      "valor": "2023",
+      "contexto": "citas literales --> Kapoor y Narayanan (2023) clasific",
+      "linea_aprox": 93
+    },
+    {
+      "valor": "2022",
+      "contexto": "los conjuntos de ISIC, Cassidy et al. (2022) encontra",
+      "linea_aprox": 98
+    },
+    {
+      "valor": "2018",
+      "contexto": "primera es la del acceso. Sáenz et al. (2018) probaron",
+      "linea_aprox": 127
+    },
+    {
+      "valor": "2022",
+      "contexto": "oa Acosta et al. (2021) y Jojoa et al. (2022) entrenan",
+      "linea_aprox": 135
+    },
     {
       "valor": "7,500",
       "contexto": "emio propio:** *\"Two Secondary Prizes: $7,500 each for",
-      "linea_aprox": 32
+      "linea_aprox": 226
     },
     {
       "valor": "2025",
       "contexto": ", como la describen   Kurtansky et al. (2025): *\"weigh",
-      "linea_aprox": 45
+      "linea_aprox": 239
     },
     {
       "valor": "2025",
       "contexto": "- **NNT80% SE**, de Kurtansky et al. (2025): *\"the a",
-      "linea_aprox": 57
+      "linea_aprox": 251
     },
     {
       "valor": "2003",
       "contexto": ", con la corrección de Nadeau y Bengio (2003): la vari",
-      "linea_aprox": 81
+      "linea_aprox": 275
     },
     {
       "valor": "24",
       "contexto": "e descartan las 22 columnas de la celda 24 del noteb",
-      "linea_aprox": 111
+      "linea_aprox": 305
     },
     {
       "valor": "384",
       "contexto": "da 24 del notebook. | | M4 | M2 más las 384 variables",
-      "linea_aprox": 112
+      "linea_aprox": 306
     },
     {
       "valor": "384,",
       "contexto": "egresión logística balanceada sobre las 384, y esa pun",
-      "linea_aprox": 113
+      "linea_aprox": 307
     },
     {
       "valor": "352,034",
       "contexto": "ento: *\"We selected a subset containing 352,034 tile imag",
-      "linea_aprox": 149
+      "linea_aprox": 343
     },
     {
       "valor": "2025,",
       "contexto": "la cumple: su artículo es de agosto de 2025, y la secc",
-      "linea_aprox": 163
+      "linea_aprox": 357
     },
     {
       "valor": "2023,",
       "contexto": "án descritos en un artículo de abril de 2023, y sus aut",
-      "linea_aprox": 169
+      "linea_aprox": 363
+    },
+    {
+      "valor": "36,28%",
+      "contexto": "positivos al fondo del ordenamiento: el 36,28% queda en",
+      "linea_aprox": 593
+    },
+    {
+      "valor": "94,82",
+      "contexto": "5 +0,1633, [0,0874; 0,2393]; NNT80% SE −94,82 lesiones",
+      "linea_aprox": 612
+    },
+    {
+      "valor": "152,31",
+      "contexto": "SE −94,82 lesiones por cada maligna, [−152,31; −37,33].",
+      "linea_aprox": 613
+    },
+    {
+      "valor": "37,33",
+      "contexto": "2 lesiones por cada maligna, [−152,31; −37,33]. <!-- F:",
+      "linea_aprox": 613
     },
     {
       "valor": "30,55",
       "contexto": "73] (46 de 50; 10 de 10); - NNT80% SE: −30,55 lesiones",
-      "linea_aprox": 424
+      "linea_aprox": 679
     },
     {
       "valor": "60,89",
       "contexto": "SE: −30,55 lesiones por cada maligna, [−60,89; −0,20] (",
-      "linea_aprox": 424
+      "linea_aprox": 679
     },
     {
       "valor": "384",
       "contexto": "## La imagen no justifica su costo  Las 384 variables",
-      "linea_aprox": 440
+      "linea_aprox": 695
     },
     {
       "valor": "0,0263",
       "contexto": "caracteristica -->  - pAUC: −0,0065, [−0,0263; 0,0133]",
-      "linea_aprox": 444
+      "linea_aprox": 699
     },
     {
       "valor": "19,90",
       "contexto": "de 50; 0 de 10); - NNT80% SE: +11,24, [−19,90; 42,37].",
-      "linea_aprox": 446
+      "linea_aprox": 701
     },
     {
       "valor": "384",
       "contexto": "cia» --> *Interpretación, no medición:* 384 variables",
-      "linea_aprox": 455
+      "linea_aprox": 710
     },
     {
       "valor": "3,87,",
       "contexto": "032] (22 de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10;",
-      "linea_aprox": 465
+      "linea_aprox": 720
     },
     {
       "valor": "25,10",
       "contexto": "de 50; 3 de 10); - NNT80% SE: −3,87, [−25,10; 17,35].",
-      "linea_aprox": 465
+      "linea_aprox": 720
     },
     {
       "valor": "0,0365",
       "contexto": "stingue: sensibilidad top-15 +0,0181, [−0,0365; 0,0726],",
-      "linea_aprox": 477
+      "linea_aprox": 732
     },
     {
       "valor": "12,62,",
       "contexto": "0,0181, [−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29;",
-      "linea_aprox": 478
+      "linea_aprox": 733
     },
     {
       "valor": "49,29",
       "contexto": "−0,0365; 0,0726], y NNT80% SE −12,62, [−49,29; 24,05].",
-      "linea_aprox": 478
+      "linea_aprox": 733
     },
     {
       "valor": "0,695",
       "contexto": "r sin recortes de imagen obtuvo 0,164 y 0,695 en la eva",
-      "linea_aprox": 485
+      "linea_aprox": 740
     },
     {
       "valor": "20,06,",
       "contexto": "0,0227, [−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74;",
-      "linea_aprox": 494
+      "linea_aprox": 749
     },
     {
       "valor": "49,74",
       "contexto": "−0,0291; 0,0746], y NNT80% SE −20,06, [−49,74; 9,61]. <",
-      "linea_aprox": 494
+      "linea_aprox": 749
     }
   ],
   "porcentajes_de_metodo_excluidos": [
@@ -128,894 +203,1321 @@
       "valor": "80%",
       "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
       "contexto": "arcial bajo la curva ROC por encima del 80% de sensib",
-      "linea_aprox": 12
+      "linea_aprox": 206
     },
     {
       "valor": "80%",
       "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
       "contexto": "o con el que la sensibilidad llega   al 80%, y el NNT",
-      "linea_aprox": 63
+      "linea_aprox": 257
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": "ecida solo si su intervalo corregido al 95% no contie",
-      "linea_aprox": 96
+      "linea_aprox": 290
     },
     {
       "valor": "95%",
       "motivo": "nivel de confianza de los intervalos (convención, no medición)",
       "contexto": "ase», y su intervalo es el corregido al 95%. Los plie",
-      "linea_aprox": 370
+      "linea_aprox": 569
+    },
+    {
+      "valor": "80%",
+      "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
+      "contexto": "una pAUC bajo el azar: para capturar el 80% de los po",
+      "linea_aprox": 597
+    },
+    {
+      "valor": "80%",
+      "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
+      "contexto": "nes, cuando al azar quedaría marcado el 80%. <!-- F:",
+      "linea_aprox": 600
     }
   ],
   "numeros_en_contextos_omitidos": [
     {
       "valor": "2024",
+      "contexto": "e tabular de esa solución (Novoselskiy, 2024), y es es",
+      "linea_aprox": 44
+    },
+    {
+      "valor": "2024",
+      "contexto": "emoto. Barrera-Valencia y Perea-Flórez (2024) comparar",
+      "linea_aprox": 129
+    },
+    {
+      "valor": "2024",
+      "contexto": "la del diagnóstico. Rios-Duarte et al. (2024), Jojoa A",
+      "linea_aprox": 134
+    },
+    {
+      "valor": "2021",
+      "contexto": "rte et al. (2024), Jojoa Acosta et al. (2021) y Jojoa",
+      "linea_aprox": 135
+    },
+    {
+      "valor": "2024",
+      "contexto": "a de este trabajo. Mejía Posada et al. (2024) estudiar",
+      "linea_aprox": 140
+    },
+    {
+      "valor": "368",
+      "contexto": "(2024) estudiaron retrospectivamente a 368 pacientes",
+      "linea_aprox": 140
+    },
+    {
+      "valor": "2024",
+      "contexto": "orque su artículo declara datos de ISIC 2024 entre los",
+      "linea_aprox": 192
+    },
+    {
+      "valor": "2024",
       "contexto": "artículo declara un subconjunto de ISIC 2024 entre sus",
-      "linea_aprox": 148
+      "linea_aprox": 342
     },
     {
       "valor": "2026,",
       "contexto": "l menos una lesión maligna, con semilla 2026, y se sell",
-      "linea_aprox": 263
+      "linea_aprox": 457
     }
   ],
   "numeros_en_comentarios": [
     {
+      "valor": "2",
+      "contexto": "rador-v2.md, antes de «Método». Versión 2:      inc",
+      "linea_aprox": 3
+    },
+    {
+      "valor": "109,",
+      "contexto": "ansky-2024-slice3d-descriptor.md, línea 109, cita lite",
+      "linea_aprox": 21
+    },
+    {
+      "valor": "111",
+      "contexto": "ansky-2024-slice3d-descriptor.md, línea 111 («every l",
+      "linea_aprox": 24
+    },
+    {
+      "valor": "1,000",
+      "contexto": "nea 111 («every lesion from a sample of 1,000+ patients",
+      "linea_aprox": 24
+    },
+    {
+      "valor": "7,",
+      "contexto": "rchetti-2023-resumen-pubmed.txt, líneas 7, 9 y 11 (L",
+      "linea_aprox": 30
+    },
+    {
+      "valor": "9",
+      "contexto": "etti-2023-resumen-pubmed.txt, líneas 7, 9 y 11 (LOC",
+      "linea_aprox": 30
+    },
+    {
+      "valor": "11",
+      "contexto": "-2023-resumen-pubmed.txt, líneas 7, 9 y 11 (LOCAL; s",
+      "linea_aprox": 30
+    },
+    {
+      "valor": "3,",
+      "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3, «Melanoma",
+      "linea_aprox": 34
+    },
+    {
+      "valor": "24",
+      "contexto": "rchetti et al.» y «Best across all ISIC'24 submissio",
+      "linea_aprox": 34
+    },
+    {
+      "valor": "217",
+      "contexto": "across all ISIC'24 submissions» (líneas 217–218); not",
+      "linea_aprox": 34
+    },
+    {
+      "valor": "218",
+      "contexto": "ss all ISIC'24 submissions» (líneas 217–218); nota a",
+      "linea_aprox": 34
+    },
+    {
+      "valor": "209",
+      "contexto": "218); nota a de la tabla: se excluyeron 209 lesiones",
+      "linea_aprox": 34
+    },
+    {
+      "valor": "61",
+      "contexto": "2025-triaje-automatizado-tbp.md, líneas 61 y 248, ci",
+      "linea_aprox": 42
+    },
+    {
+      "valor": "248,",
+      "contexto": "triaje-automatizado-tbp.md, líneas 61 y 248, citas lit",
+      "linea_aprox": 42
+    },
+    {
+      "valor": "4,",
+      "contexto": "lo que pidió el cliente»; PLAN.md, Fase 4, «Orden de",
+      "linea_aprox": 52
+    },
+    {
+      "valor": "49,",
+      "contexto": "to/mcclish-1989-pauc-original.md, línea 49, cita lite",
+      "linea_aprox": 59
+    },
+    {
+      "valor": "48,",
+      "contexto": "005-pauc-sroc-en-metaanalisis.md, línea 48, cita lite",
+      "linea_aprox": 62
+    },
+    {
+      "valor": "73",
+      "contexto": "eto/yang-arxiv-1508.00298v3.txt, líneas 73–74 (LOCAL",
+      "linea_aprox": 65
+    },
+    {
+      "valor": "74",
+      "contexto": "/yang-arxiv-1508.00298v3.txt, líneas 73–74 (LOCAL) -",
+      "linea_aprox": 65
+    },
+    {
+      "valor": "17",
+      "contexto": "o-completo/kaggle-evaluation.md, líneas 17–20 (LOCAL",
+      "linea_aprox": 67
+    },
+    {
+      "valor": "20",
+      "contexto": "ompleto/kaggle-evaluation.md, líneas 17–20 (LOCAL) -",
+      "linea_aprox": 67
+    },
+    {
+      "valor": "307,",
+      "contexto": "-2025-triaje-automatizado-tbp.md, línea 307, cita lite",
+      "linea_aprox": 71
+    },
+    {
+      "valor": "146",
+      "contexto": "eb-2017-validacion-por-sujeto.md, línea 146 (el objet",
+      "linea_aprox": 86
+    },
+    {
+      "valor": "134,",
+      "contexto": "eto.md, línea 146 (el objetivo) y línea 134, cita lite",
+      "linea_aprox": 86
+    },
+    {
+      "valor": "171",
+      "contexto": "-2017-perspectivas-sobre-saeb.md, línea 171 (la revis",
+      "linea_aprox": 92
+    },
+    {
+      "valor": "211,",
+      "contexto": "eb.md, línea 171 (la revisión) y líneas 211, 231 y 263",
+      "linea_aprox": 92
+    },
+    {
+      "valor": "231",
+      "contexto": ", línea 171 (la revisión) y líneas 211, 231 y 263, ci",
+      "linea_aprox": 92
+    },
+    {
+      "valor": "263,",
+      "contexto": "a 171 (la revisión) y líneas 211, 231 y 263, citas lit",
+      "linea_aprox": 92
+    },
+    {
+      "valor": "218",
+      "contexto": "-2023-fuga-y-reproducibilidad.md, línea 218 (L3.2) y",
+      "linea_aprox": 97
+    },
+    {
+      "valor": "304",
+      "contexto": "ucibilidad.md, línea 218 (L3.2) y línea 304 («Each pa",
+      "linea_aprox": 97
+    },
+    {
+      "valor": "0.14",
+      "contexto": "in each case except Wang»; «drops from 0.14 to 0.01»)",
+      "linea_aprox": 97
+    },
+    {
+      "valor": "0.01",
+      "contexto": "case except Wang»; «drops from 0.14 to 0.01») --> Den",
+      "linea_aprox": 97
+    },
+    {
+      "valor": "154",
+      "contexto": "cassidy-2022-duplicados-isic.md, líneas 154–155 y 850",
+      "linea_aprox": 101
+    },
+    {
+      "valor": "155",
+      "contexto": "idy-2022-duplicados-isic.md, líneas 154–155 y 850–853",
+      "linea_aprox": 101
+    },
+    {
+      "valor": "850",
+      "contexto": "22-duplicados-isic.md, líneas 154–155 y 850–853 -->",
+      "linea_aprox": 101
+    },
+    {
+      "valor": "853",
+      "contexto": "uplicados-isic.md, líneas 154–155 y 850–853 -->  Este",
+      "linea_aprox": 101
+    },
+    {
+      "valor": "299",
+      "contexto": "-2025-triaje-automatizado-tbp.md, línea 299 («albeit",
+      "linea_aprox": 105
+    },
+    {
+      "valor": "6,",
+      "contexto": "ts/efecto-particion.json; PLAN.md, Fase 6, «El efect",
+      "linea_aprox": 114
+    },
+    {
+      "valor": "0,",
+      "contexto": "na los trabajos de abajo; PLAN.md, Fase 0, «Pendient",
+      "linea_aprox": 125
+    },
+    {
+      "valor": "234",
+      "contexto": "app-teledermatologia-colombia.md, línea 234; referenc",
+      "linea_aprox": 132
+    },
+    {
+      "valor": "60",
+      "contexto": "2024-costos-teledermatologia.md, líneas 60–64 -->  L",
+      "linea_aprox": 132
+    },
+    {
+      "valor": "64",
+      "contexto": "4-costos-teledermatologia.md, líneas 60–64 -->  La s",
+      "linea_aprox": 132
+    },
+    {
+      "valor": "250",
+      "contexto": "e-2024-cnn-melanoma-uniandes.md, líneas 250 y 252; re",
+      "linea_aprox": 137
+    },
+    {
+      "valor": "252",
+      "contexto": "-cnn-melanoma-uniandes.md, líneas 250 y 252; referenc",
+      "linea_aprox": 137
+    },
+    {
+      "valor": "145",
+      "contexto": "prendizaje-profundo-melanoma.md, líneas 145 y 177; re",
+      "linea_aprox": 137
+    },
+    {
+      "valor": "177",
+      "contexto": "zaje-profundo-melanoma.md, líneas 145 y 177; referenc",
+      "linea_aprox": 137
+    },
+    {
+      "valor": "135",
+      "contexto": "022-redes-complejas-melanoma.md, líneas 135 y 247 -->",
+      "linea_aprox": 137
+    },
+    {
+      "valor": "247",
+      "contexto": "des-complejas-melanoma.md, líneas 135 y 247 -->  La t",
+      "linea_aprox": 137
+    },
+    {
+      "valor": "189",
+      "contexto": "2024-mapeo-corporal-medellin.md, líneas 189 («retrosp",
+      "linea_aprox": 143
+    },
+    {
+      "valor": "190,",
+      "contexto": "189 («retrospective follow-up study»), 190, 219 y 230",
+      "linea_aprox": 143
+    },
+    {
+      "valor": "219",
+      "contexto": "(«retrospective follow-up study»), 190, 219 y 230 -->",
+      "linea_aprox": 143
+    },
+    {
+      "valor": "230",
+      "contexto": "ospective follow-up study»), 190, 219 y 230 --> Este",
+      "linea_aprox": 143
+    },
+    {
+      "valor": "252,",
+      "contexto": "e-2024-cnn-melanoma-uniandes.md, líneas 252, 256 («The",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "256",
+      "contexto": "4-cnn-melanoma-uniandes.md, líneas 252, 256 («These s",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "662",
+      "contexto": "regarding the ancestry of patients») y 662; referenc",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "145,",
+      "contexto": "prendizaje-profundo-melanoma.md, líneas 145, 237 y 724",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "237",
+      "contexto": "izaje-profundo-melanoma.md, líneas 145, 237 y 724; re",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "724",
+      "contexto": "profundo-melanoma.md, líneas 145, 237 y 724; referenc",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "247,",
+      "contexto": "022-redes-complejas-melanoma.md, líneas 247, 251 y 261",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "251",
+      "contexto": "edes-complejas-melanoma.md, líneas 247, 251 y 261; re",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "261",
+      "contexto": "omplejas-melanoma.md, líneas 247, 251 y 261; referenc",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "134",
+      "contexto": "ansky-2024-slice3d-descriptor.md, línea 134 (los siet",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "5.1,",
+      "contexto": "iete centros); informe/anteproyecto.md, 5.1, punto 5 -",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "5",
+      "contexto": "s); informe/anteproyecto.md, 5.1, punto 5 -->  Este",
+      "linea_aprox": 152
+    },
+    {
+      "valor": "175",
+      "contexto": "te-2024-cnn-melanoma-uniandes.md, línea 175; referenc",
+      "linea_aprox": 160
+    },
+    {
+      "valor": "285",
+      "contexto": "prendizaje-profundo-melanoma.md, líneas 285 y 335; re",
+      "linea_aprox": 160
+    },
+    {
+      "valor": "335",
+      "contexto": "zaje-profundo-melanoma.md, líneas 285 y 335; referenc",
+      "linea_aprox": 160
+    },
+    {
+      "valor": "468",
+      "contexto": "022-redes-complejas-melanoma.md, líneas 468 y 472 -->",
+      "linea_aprox": 160
+    },
+    {
+      "valor": "472",
+      "contexto": "des-complejas-melanoma.md, líneas 468 y 472 --> Aquí",
+      "linea_aprox": 160
+    },
+    {
+      "valor": "3,",
+      "contexto": "fecto: <!-- F: informe/anteproyecto.md, 3, objetivo",
+      "linea_aprox": 171
+    },
+    {
+      "valor": "3",
+      "contexto": "CLAUDE.md, «Hallazgos vivos», hallazgo 3 --> - **L",
+      "linea_aprox": 182
+    },
+    {
       "valor": "1",
       "contexto": "luation.md, «Citas literales», párrafos 1 y 2 (LOCA",
-      "linea_aprox": 13
+      "linea_aprox": 207
     },
     {
       "valor": "2",
       "contexto": "ion.md, «Citas literales», párrafos 1 y 2 (LOCAL) -",
-      "linea_aprox": 13
+      "linea_aprox": 207
     },
     {
       "valor": "2,",
       "contexto": "ferencias/kaggle-evaluation.md, párrafo 2, cita lite",
-      "linea_aprox": 18
+      "linea_aprox": 212
     },
     {
       "valor": "2026",
       "contexto": "KILL.md, «Sobre la métrica: VERIFICADA (2026-08-11)»;",
-      "linea_aprox": 29
+      "linea_aprox": 223
     },
     {
       "valor": "-08",
       "contexto": ".md, «Sobre la métrica: VERIFICADA (2026-08-11)»; out",
-      "linea_aprox": 29
+      "linea_aprox": 223
     },
     {
       "valor": "-11",
       "contexto": ", «Sobre la métrica: VERIFICADA (2026-08-11)»; output",
-      "linea_aprox": 29
+      "linea_aprox": 223
     },
     {
       "valor": "4,",
       "contexto": "o del proyecto.   <!-- F: PLAN.md, Fase 4, «Qué se h",
-      "linea_aprox": 68
+      "linea_aprox": 262
     },
     {
       "valor": "242",
       "contexto": "que el artículo deriva la fórmula», p. 242 (LOCAL) -",
-      "linea_aprox": 89
+      "linea_aprox": 283
     },
     {
       "valor": "4,",
       "contexto": "gido lo contenía. <!-- F: PLAN.md, Fase 4, «Qué se h",
-      "linea_aprox": 93
+      "linea_aprox": 287
     },
     {
       "valor": "4,",
       "contexto": "rvalo contiene el cero»); PLAN.md, Fase 4, «Continge",
-      "linea_aprox": 98
+      "linea_aprox": 292
     },
     {
       "valor": "3",
       "contexto": "CLAUDE.md, «Hallazgos vivos», hallazgo 3 -->  ###",
-      "linea_aprox": 102
+      "linea_aprox": 296
     },
     {
       "valor": "4",
       "contexto": "del paciente. |  <!-- F: PLAN.md, Fase 4: decisión",
-      "linea_aprox": 115
+      "linea_aprox": 309
     },
     {
       "valor": "2026",
       "contexto": "<!-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1",
-      "linea_aprox": 115
+      "linea_aprox": 309
     },
     {
       "valor": "-09",
       "contexto": "-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M",
-      "linea_aprox": 115
+      "linea_aprox": 309
     },
     {
       "valor": "-25",
       "contexto": "F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M2,",
-      "linea_aprox": 115
+      "linea_aprox": 309
     },
     {
       "valor": "34",
       "contexto": "de paciente, las variables de M2» (las 34 variables",
-      "linea_aprox": 115
+      "linea_aprox": 309
     },
     {
       "valor": "4,",
       "contexto": "ros del nivel 2b. <!-- F: PLAN.md, Fase 4, «Sin ajus",
-      "linea_aprox": 118
+      "linea_aprox": 312
     },
     {
       "valor": "4,",
       "contexto": "o está declarado. <!-- F: PLAN.md, Fase 4, «Comparad",
-      "linea_aprox": 124
+      "linea_aprox": 318
     },
     {
       "valor": "4,",
       "contexto": "pios frente a M3. <!-- F: PLAN.md, Fase 4, decisión",
-      "linea_aprox": 128
+      "linea_aprox": 322
     },
     {
       "valor": "2026",
       "contexto": ". <!-- F: PLAN.md, Fase 4, decisión del 2026-09-25, «C",
-      "linea_aprox": 128
+      "linea_aprox": 322
     },
     {
       "valor": "-09",
       "contexto": "-- F: PLAN.md, Fase 4, decisión del 2026-09-25, «Comp",
-      "linea_aprox": 128
+      "linea_aprox": 322
     },
     {
       "valor": "-25,",
       "contexto": "F: PLAN.md, Fase 4, decisión del 2026-09-25, «Comparac",
-      "linea_aprox": 128
+      "linea_aprox": 322
     },
     {
       "valor": "4,",
       "contexto": "iante secundaria. <!-- F: PLAN.md, Fase 4, «Comparad",
-      "linea_aprox": 131
+      "linea_aprox": 325
     },
     {
       "valor": "4,",
       "contexto": "de recomendación. <!-- F: PLAN.md, Fase 4, «Variante",
-      "linea_aprox": 134
+      "linea_aprox": 328
     },
     {
       "valor": "2,",
       "contexto": "e quitar después. <!-- F: PLAN.md, Fase 2, «No se ex",
-      "linea_aprox": 141
+      "linea_aprox": 335
     },
     {
       "valor": "2,",
       "contexto": "a sobre SLICE-3D. <!-- F: PLAN.md, Fase 2, «No se ex",
-      "linea_aprox": 145
+      "linea_aprox": 339
     },
     {
       "valor": "2026",
       "contexto": "iesgo bloqueante», «Criterio, fijado el 2026-08-18, an",
-      "linea_aprox": 145
+      "linea_aprox": 339
     },
     {
       "valor": "-08",
       "contexto": "o bloqueante», «Criterio, fijado el 2026-08-18, antes",
-      "linea_aprox": 145
+      "linea_aprox": 339
     },
     {
       "valor": "-18,",
       "contexto": "loqueante», «Criterio, fijado el 2026-08-18, antes del",
-      "linea_aprox": 145
+      "linea_aprox": 339
     },
     {
       "valor": "244",
       "contexto": "as/panderm-reduccion-examenes.md, línea 244 («a multi",
-      "linea_aprox": 150
+      "linea_aprox": 344
     },
     {
       "valor": "396,",
       "contexto": "dermatology foundation model») y línea 396, cita lite",
-      "linea_aprox": 150
+      "linea_aprox": 344
     },
     {
       "valor": "2,",
       "contexto": "línea 396, cita literal; PLAN.md, Fase 2, «Decisión",
-      "linea_aprox": 150
+      "linea_aprox": 344
     },
     {
       "valor": "2026",
       "contexto": "ta literal; PLAN.md, Fase 2, «Decisión (2026-09-24, de",
-      "linea_aprox": 150
+      "linea_aprox": 344
     },
     {
       "valor": "-09",
       "contexto": "iteral; PLAN.md, Fase 2, «Decisión (2026-09-24, de la",
-      "linea_aprox": 150
+      "linea_aprox": 344
     },
     {
       "valor": "-24,",
       "contexto": "ral; PLAN.md, Fase 2, «Decisión (2026-09-24, de la per",
-      "linea_aprox": 150
+      "linea_aprox": 344
     },
     {
       "valor": "2026",
       "contexto": "iesgo bloqueante», «Criterio, fijado el 2026-08-18, an",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "-08",
       "contexto": "o bloqueante», «Criterio, fijado el 2026-08-18, antes",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "-18,",
       "contexto": "loqueante», «Criterio, fijado el 2026-08-18, antes del",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "2,",
       "contexto": "-18, antes del hallazgo»; PLAN.md, Fase 2, «Decisión",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "2026",
       "contexto": "hallazgo»; PLAN.md, Fase 2, «Decisión (2026-09-24, de",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "-09",
       "contexto": "lazgo»; PLAN.md, Fase 2, «Decisión (2026-09-24, de la",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "-24,",
       "contexto": "go»; PLAN.md, Fase 2, «Decisión (2026-09-24, de la per",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "364",
       "contexto": "as/panderm-reduccion-examenes.md, línea 364 («unlabel",
-      "linea_aprox": 154
+      "linea_aprox": 348
     },
     {
       "valor": "2,",
       "contexto": "xcluyen SLICE-3D. <!-- F: PLAN.md, Fase 2, «Decisión",
-      "linea_aprox": 162
+      "linea_aprox": 356
     },
     {
       "valor": "2026",
       "contexto": "3D. <!-- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de",
-      "linea_aprox": 162
+      "linea_aprox": 356
     },
     {
       "valor": "-09",
       "contexto": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de la",
-      "linea_aprox": 162
+      "linea_aprox": 356
     },
     {
       "valor": "-24,",
       "contexto": "- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de la per",
-      "linea_aprox": 162
+      "linea_aprox": 356
     },
     {
       "valor": "2,",
       "contexto": "na de sus partes. <!-- F: PLAN.md, Fase 2, «Decisión",
-      "linea_aprox": 167
+      "linea_aprox": 361
     },
     {
       "valor": "2026",
       "contexto": "es. <!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de",
-      "linea_aprox": 167
+      "linea_aprox": 361
     },
     {
       "valor": "-09",
       "contexto": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la",
-      "linea_aprox": 167
+      "linea_aprox": 361
     },
     {
       "valor": "-25,",
       "contexto": "- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la per",
-      "linea_aprox": 167
+      "linea_aprox": 361
     },
     {
       "valor": "2,",
       "contexto": "de entrenamiento. <!-- F: PLAN.md, Fase 2, «Decisión",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "2026",
       "contexto": "to. <!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "-09",
       "contexto": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "-25,",
       "contexto": "- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la per",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "10",
       "contexto": "referencias/oquab-2023-dinov2.md, línea 10; PLAN.md,",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "3,",
       "contexto": "2023-dinov2.md, línea 10; PLAN.md, Fase 3, «Preparac",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "2026",
       "contexto": "ínea 10; PLAN.md, Fase 3, «Preparación (2026-09-25)»;",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "-09",
       "contexto": "10; PLAN.md, Fase 3, «Preparación (2026-09-25)»; ref",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "-25",
       "contexto": "; PLAN.md, Fase 3, «Preparación (2026-09-25)»; refere",
-      "linea_aprox": 172
+      "linea_aprox": 366
     },
     {
       "valor": "2,",
       "contexto": "ena de evidencia. <!-- F: PLAN.md, Fase 2, «Salvedad",
-      "linea_aprox": 175
+      "linea_aprox": 369
     },
     {
       "valor": "2026",
       "contexto": "E.md, «Riesgo bloqueante», criterio del 2026-08-18; PL",
-      "linea_aprox": 180
+      "linea_aprox": 374
     },
     {
       "valor": "-08",
       "contexto": ", «Riesgo bloqueante», criterio del 2026-08-18; PLAN.",
-      "linea_aprox": 180
+      "linea_aprox": 374
     },
     {
       "valor": "-18",
       "contexto": "Riesgo bloqueante», criterio del 2026-08-18; PLAN.md,",
-      "linea_aprox": 180
+      "linea_aprox": 374
     },
     {
       "valor": "2,",
       "contexto": "criterio del 2026-08-18; PLAN.md, Fase 2, «No se ex",
-      "linea_aprox": 180
+      "linea_aprox": 374
     },
     {
       "valor": "4,",
       "contexto": "sí se distinga.   <!-- F: PLAN.md, Fase 4, «Continge",
-      "linea_aprox": 188
+      "linea_aprox": 382
     },
     {
       "valor": "4,",
       "contexto": "ó una sola vez.   <!-- F: PLAN.md, Fase 4, «M3 limpi",
-      "linea_aprox": 193
+      "linea_aprox": 387
     },
     {
       "valor": "4,",
       "contexto": "sesgos pesaba.   <!-- F: PLAN.md, Fase 4, «Lectura,",
-      "linea_aprox": 196
+      "linea_aprox": 390
     },
     {
       "valor": "5,",
       "contexto": "sea cual   sea.   <!-- F: PLAN.md, Fase 5, «Especifi",
-      "linea_aprox": 200
+      "linea_aprox": 394
     },
     {
       "valor": "4,",
       "contexto": "json > que_se_cronometra; PLAN.md, Fase 4, «Tiempo d",
-      "linea_aprox": 208
+      "linea_aprox": 402
     },
     {
       "valor": "4,",
       "contexto": "imagen y DINOv2. <!-- F: PLAN.md, Fase 4, «Tiempo d",
-      "linea_aprox": 212
+      "linea_aprox": 406
     },
     {
       "valor": "6,",
       "contexto": "ntuar cualquiera. <!-- F: PLAN.md, Fase 6, «Definici",
-      "linea_aprox": 219
+      "linea_aprox": 413
     },
     {
       "valor": "6",
       "contexto": "ncia.json > repeticiones; PLAN.md, Fase 6 -->  Ante",
-      "linea_aprox": 225
+      "linea_aprox": 419
     },
     {
       "valor": "4,",
       "contexto": "aciones_distintas false); PLAN.md, Fase 4, «Enmienda",
-      "linea_aprox": 231
+      "linea_aprox": 425
     },
     {
       "valor": "9,",
       "contexto": "dinov2.dispositivo; CLAUDE.md, hallazgo 9, «Salvedad",
-      "linea_aprox": 235
+      "linea_aprox": 429
     },
     {
       "valor": "6,",
       "contexto": "to y otro equipo. <!-- F: PLAN.md, Fase 6, «Qué no s",
-      "linea_aprox": 239
+      "linea_aprox": 433
     },
     {
       "valor": "9",
       "contexto": "«Qué no se afirma»; CLAUDE.md, hallazgo 9 -->  ## D",
-      "linea_aprox": 239
+      "linea_aprox": 433
     },
     {
       "valor": "1,",
       "contexto": "2026, y se selló. <!-- F: PLAN.md, Fase 1, «Qué se h",
-      "linea_aprox": 264
+      "linea_aprox": 458
     },
     {
       "valor": "2026",
       "contexto": "la persona sobre el conjunto reservado (2026-09-25)» -",
-      "linea_aprox": 264
+      "linea_aprox": 458
     },
     {
       "valor": "-09",
       "contexto": "ersona sobre el conjunto reservado (2026-09-25)» -->",
-      "linea_aprox": 264
+      "linea_aprox": 458
     },
     {
       "valor": "-25",
       "contexto": "ona sobre el conjunto reservado (2026-09-25)» --> Nin",
-      "linea_aprox": 264
+      "linea_aprox": 458
     },
     {
       "valor": "1,",
       "contexto": "igna a cada lado. <!-- F: PLAN.md, Fase 1, «Sellado",
-      "linea_aprox": 267
+      "linea_aprox": 461
     },
     {
       "valor": "2026",
       "contexto": "ado. <!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -",
-      "linea_aprox": 267
+      "linea_aprox": 461
     },
     {
       "valor": "-09",
       "contexto": "<!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -->",
-      "linea_aprox": 267
+      "linea_aprox": 461
     },
     {
       "valor": "-25",
       "contexto": "-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» --> Des",
-      "linea_aprox": 267
+      "linea_aprox": 461
     },
     {
       "valor": "1,",
       "contexto": "bre el reservado. <!-- F: PLAN.md, Fase 1, «Estado»;",
-      "linea_aprox": 270
+      "linea_aprox": 464
     },
     {
       "valor": "1,",
       "contexto": "proyecto.md, sección 4.2; PLAN.md, Fase 1, «Sellado",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "2026",
       "contexto": "sección 4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-09",
       "contexto": "ión 4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y «D",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-25",
       "contexto": "4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y «Deci",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "2026",
       "contexto": "sona sobre las columnas de procedencia (2026-09-25)»;",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-09",
       "contexto": "sobre las columnas de procedencia (2026-09-25)»; com",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-25",
       "contexto": "bre las columnas de procedencia (2026-09-25)»; commit",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "1",
       "contexto": "rocedencia (2026-09-25)»; commits «Fase 1: sellar e",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "2026",
       "contexto": "«Fase 1: sellar el conjunto reservado» (2026-09-25 18:",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-09",
       "contexto": "e 1: sellar el conjunto reservado» (2026-09-25 18:07)",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-25",
       "contexto": ": sellar el conjunto reservado» (2026-09-25 18:07) y",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "18",
       "contexto": "llar el conjunto reservado» (2026-09-25 18:07) y «au",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "07",
       "contexto": "r el conjunto reservado» (2026-09-25 18:07) y «audit",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "2026",
       "contexto": "ria-de-fugas: columnas de procedencia» (2026-09-25 18:",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-09",
       "contexto": "de-fugas: columnas de procedencia» (2026-09-25 18:35)",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "-25",
       "contexto": "fugas: columnas de procedencia» (2026-09-25 18:35) --",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "18",
       "contexto": "s: columnas de procedencia» (2026-09-25 18:35) --> T",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "35",
       "contexto": "columnas de procedencia» (2026-09-25 18:35) --> Tamp",
-      "linea_aprox": 276
+      "linea_aprox": 470
     },
     {
       "valor": "8,",
       "contexto": "reservado. <!-- F: CLAUDE.md, hallazgo 8, «Salvedad",
-      "linea_aprox": 279
+      "linea_aprox": 473
     },
     {
       "valor": "5",
       "contexto": ".md, hallazgo 8, «Salvedad para la Fase 5»; PLAN.md",
-      "linea_aprox": 279
+      "linea_aprox": 473
     },
     {
       "valor": "5,",
       "contexto": "Salvedad para la Fase 5»; PLAN.md, Fase 5, «Salvedad",
-      "linea_aprox": 279
+      "linea_aprox": 473
+    },
+    {
+      "valor": "6,",
+      "contexto": "ts/efecto-particion.json; PLAN.md, Fase 6, «El efect",
+      "linea_aprox": 508
+    },
+    {
+      "valor": "299",
+      "contexto": "-2025-triaje-automatizado-tbp.md, línea 299 («albeit",
+      "linea_aprox": 511
     },
     {
       "valor": "3",
       "contexto": "inguible.   <!-- F: CLAUDE.md, hallazgo 3; PLAN.md,",
-      "linea_aprox": 337
+      "linea_aprox": 535
     },
     {
       "valor": "6,",
       "contexto": "F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión",
-      "linea_aprox": 337
+      "linea_aprox": 535
     },
     {
       "valor": "2026",
       "contexto": "llazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
-      "linea_aprox": 337
+      "linea_aprox": 535
     },
     {
       "valor": "-10",
       "contexto": "go 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  L",
-      "linea_aprox": 337
+      "linea_aprox": 535
     },
     {
       "valor": "-02",
       "contexto": "3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  La a",
-      "linea_aprox": 337
+      "linea_aprox": 535
     },
     {
       "valor": "41",
       "contexto": "s/auditoria-de-fugas.json > univariado (41 entradas,",
-      "linea_aprox": 344
+      "linea_aprox": 542
     },
     {
       "valor": "0",
       "contexto": "osa), umbral_auc_sospechoso, univariado[0]; .claude",
-      "linea_aprox": 344
+      "linea_aprox": 542
     },
     {
       "valor": "0",
       "contexto": "oria-de-fugas.json > preguntas_abiertas[0]; CLAUDE.",
-      "linea_aprox": 349
+      "linea_aprox": 547
     },
     {
       "valor": "1,",
       "contexto": "ncias/slice3d-metadata-tbp-lv.md, Tabla 1, cita lite",
-      "linea_aprox": 354
+      "linea_aprox": 552
     },
     {
       "valor": "1",
       "contexto": "ncias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2",
-      "linea_aprox": 357
+      "linea_aprox": 555
     },
     {
       "valor": "2",
       "contexto": "ce3d-metadata-tbp-lv.md, Tabla 1 y nota 2 -->  ## R",
-      "linea_aprox": 357
+      "linea_aprox": 555
     },
     {
       "valor": "50",
       "contexto": "_global y .pauc_por_semilla_y_fold (los 50 valores b",
-      "linea_aprox": 380
+      "linea_aprox": 579
     },
     {
       "valor": "0,02",
       "contexto": "por_semilla_y_fold (los 50 valores bajo 0,02); VR > ni",
-      "linea_aprox": 380
+      "linea_aprox": 579
     },
     {
       "valor": "0.5",
       "contexto": "ferencia_univariada.nota («el AUC va de 0.5 (azar) a",
-      "linea_aprox": 386
+      "linea_aprox": 585
     },
     {
       "valor": "1",
       "contexto": "ariada.nota («el AUC va de 0.5 (azar) a 1»); CLAUDE",
-      "linea_aprox": 386
+      "linea_aprox": 585
     },
     {
       "valor": "1",
-      "contexto": "e 0.5 (azar) a 1»); CLAUDE.md, hallazgo 1 -->  ###",
-      "linea_aprox": 386
+      "contexto": "e 0.5 (azar) a 1»); CLAUDE.md, hallazgo 1 -->  Se m",
+      "linea_aprox": 585
+    },
+    {
+      "valor": "1",
+      "contexto": "g_sin_balancear.total.deciles_rango_pos[1]; definic",
+      "linea_aprox": 601
     },
     {
       "valor": "2",
       "contexto": "se retiró. <!-- F: CLAUDE.md, hallazgo 2 (la parti",
-      "linea_aprox": 398
+      "linea_aprox": 622
     },
     {
       "valor": "3",
       "contexto": "n repetida. <!-- F: CLAUDE.md, hallazgo 3; PLAN.md,",
-      "linea_aprox": 414
+      "linea_aprox": 638
     },
     {
       "valor": "6,",
       "contexto": "F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión",
-      "linea_aprox": 414
+      "linea_aprox": 638
     },
     {
       "valor": "2026",
       "contexto": "llazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
-      "linea_aprox": 414
+      "linea_aprox": 638
     },
     {
       "valor": "-10",
       "contexto": "go 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  #",
-      "linea_aprox": 414
+      "linea_aprox": 638
     },
     {
       "valor": "-02",
       "contexto": "3; PLAN.md, Fase 6, decisión del 2026-10-02 -->  ###",
-      "linea_aprox": 414
+      "linea_aprox": 638
+    },
+    {
+      "valor": "6,",
+      "contexto": "y no en la otra. <!-- F: PLAN.md, Fase 6, «El efect",
+      "linea_aprox": 647
+    },
+    {
+      "valor": "6,",
+      "contexto": "nte.*.setop15; EP > nota; PLAN.md, Fase 6, regla (a)",
+      "linea_aprox": 663
     },
     {
       "valor": "4",
       "contexto": "e del cero. <!-- F: CLAUDE.md, hallazgo 4; «Método»",
-      "linea_aprox": 432
+      "linea_aprox": 687
     },
     {
       "valor": "31",
       "contexto": "azgo 4; «Método», «Qué se mide», líneas 31–33 --> *I",
-      "linea_aprox": 432
+      "linea_aprox": 687
     },
     {
       "valor": "33",
       "contexto": "o 4; «Método», «Qué se mide», líneas 31–33 --> *Inte",
-      "linea_aprox": 432
+      "linea_aprox": 687
     },
     {
       "valor": "4,",
       "contexto": "nes juntas. <!-- F: CLAUDE.md, hallazgo 4, «Interpre",
-      "linea_aprox": 436
+      "linea_aprox": 691
     },
     {
       "valor": "0,0085",
       "contexto": "as. <!-- F: F42 > C.*.media e IC (auc: −0,0085) --> Por",
-      "linea_aprox": 451
+      "linea_aprox": 706
     },
     {
       "valor": "4,",
       "contexto": "stifica su costo. <!-- F: PLAN.md, Fase 4, «Continge",
-      "linea_aprox": 454
+      "linea_aprox": 709
     },
     {
       "valor": "5",
       "contexto": "n la señal. <!-- F: CLAUDE.md, hallazgo 5; outputs/",
-      "linea_aprox": 457
+      "linea_aprox": 712
     },
     {
       "valor": "1",
       "contexto": "ostico.json > desbalance_target.conteos.1 -->  La v",
-      "linea_aprox": 457
+      "linea_aprox": 712
     },
     {
       "valor": "4,",
       "contexto": "ia la conclusión: <!-- F: PLAN.md, Fase 4, «Variante",
-      "linea_aprox": 461
+      "linea_aprox": 716
     },
     {
       "valor": "6",
       "contexto": "_mejor_en_semillas; CLAUDE.md, hallazgo 6 -->  ###",
-      "linea_aprox": 471
+      "linea_aprox": 726
     },
     {
       "valor": "4,",
       "contexto": "os a favor de M3. <!-- F: PLAN.md, Fase 4, «Nota de",
-      "linea_aprox": 482
+      "linea_aprox": 737
     },
     {
       "valor": "3",
       "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3 (Meta-bas",
-      "linea_aprox": 488
+      "linea_aprox": 743
     },
     {
       "valor": "4,",
       "contexto": "WB360 y Patient context); PLAN.md, Fase 4, «Orden de",
-      "linea_aprox": 488
+      "linea_aprox": 743
     },
     {
       "valor": "4,",
       "contexto": "ado es M3 limpio. <!-- F: PLAN.md, Fase 4, «Regla de",
-      "linea_aprox": 498
+      "linea_aprox": 753
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 498
+      "linea_aprox": 753
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> Q",
-      "linea_aprox": 498
+      "linea_aprox": 753
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Quit",
-      "linea_aprox": 498
+      "linea_aprox": 753
     },
     {
       "valor": "8",
       "contexto": "F3L > C.pauc.media; CLAUDE.md, hallazgo 8 -->  ###",
-      "linea_aprox": 502
+      "linea_aprox": 757
     },
     {
       "valor": "9",
       "contexto": "cia.json > tiempos; CLAUDE.md, hallazgo 9 -->  ###",
-      "linea_aprox": 513
+      "linea_aprox": 768
     },
     {
       "valor": "50",
       "contexto": "1,74 | 14,6321 |  <!-- F: medias de los 50 pliegues:",
-      "linea_aprox": 525
+      "linea_aprox": 780
     },
     {
       "valor": "4,",
       "contexto": "dicción no se cronometró (PLAN.md, Fase 4, «Tiempo d",
-      "linea_aprox": 525
+      "linea_aprox": 780
     },
     {
       "valor": "6",
       "contexto": "guno de los tres. <!-- F: PLAN.md, Fase 6 («La tabl",
-      "linea_aprox": 534
+      "linea_aprox": 789
     },
     {
       "valor": "55",
       "contexto": "C.*.IC; «Método», «Qué se mide», líneas 55–59 (NNT80",
-      "linea_aprox": 534
+      "linea_aprox": 789
     },
     {
       "valor": "59",
       "contexto": ".IC; «Método», «Qué se mide», líneas 55–59 (NNT80% S",
-      "linea_aprox": 534
+      "linea_aprox": 789
     },
     {
       "valor": "495",
       "contexto": "80% SE); informe/anteproyecto.md, línea 495 (la top-1",
-      "linea_aprox": 534
+      "linea_aprox": 789
     },
     {
       "valor": "4,",
       "contexto": "«El modelo recomendado»; PLAN.md, Fase 4, «Modelo r",
-      "linea_aprox": 545
+      "linea_aprox": 800
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 545
+      "linea_aprox": 800
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> S",
-      "linea_aprox": 545
+      "linea_aprox": 800
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Se e",
-      "linea_aprox": 545
+      "linea_aprox": 800
     },
     {
       "valor": "4,",
       "contexto": "r encima de cero. <!-- F: PLAN.md, Fase 4, «Regla de",
-      "linea_aprox": 548
+      "linea_aprox": 803
     },
     {
       "valor": "4,",
       "contexto": "cosas a la vez.   <!-- F: PLAN.md, Fase 4, «Lectura,",
-      "linea_aprox": 580
+      "linea_aprox": 835
     },
     {
       "valor": "5,",
       "contexto": "su   resultado.   <!-- F: PLAN.md, Fase 5, «Especifi",
-      "linea_aprox": 585
+      "linea_aprox": 840
     },
     {
       "valor": "4,",
       "contexto": "étodo», «Qué se compara»; PLAN.md, Fase 4, «Quedan f",
-      "linea_aprox": 589
+      "linea_aprox": 844
     },
     {
       "valor": "4,",
       "contexto": "as particiones.   <!-- F: PLAN.md, Fase 4, «Orden de",
-      "linea_aprox": 592
+      "linea_aprox": 847
     },
     {
       "valor": "4",
       "contexto": "CLAUDE.md, «Guardarraíles del agente», 4 -->  ## L",
-      "linea_aprox": 596
+      "linea_aprox": 851
     },
     {
       "valor": "306,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 306, cita lite",
-      "linea_aprox": 604
+      "linea_aprox": 859
     },
     {
       "valor": "4",
       "contexto": "6, cita literal; CLAUDE.md, guardarraíl 4 --> - **L",
-      "linea_aprox": 604
+      "linea_aprox": 859
     },
     {
       "valor": "99,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 99, cita lite",
-      "linea_aprox": 609
+      "linea_aprox": 864
     },
     {
       "valor": "4",
       "contexto": "del cero.   <!-- F: CLAUDE.md, hallazgo 4 («son cua",
-      "linea_aprox": 614
+      "linea_aprox": 869
     },
     {
       "valor": "5,",
       "contexto": "«El conjunto reservado»; PLAN.md, Fase 5, «Salvedad",
-      "linea_aprox": 625
+      "linea_aprox": 880
     },
     {
       "valor": "9",
       "contexto": "mpo de inferencia»; CLAUDE.md, hallazgo 9 --> - **D",
-      "linea_aprox": 628
+      "linea_aprox": 883
     },
     {
       "valor": "2",
       "contexto": "encias/slice3d-metadata-tbp-lv.md, nota 2; .claude/",
-      "linea_aprox": 632
+      "linea_aprox": 887
     }
   ],
   "modo_tolerancia": "decimales_escritos",
