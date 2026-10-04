@@ -1156,6 +1156,20 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       pliegue a pliegue.
       *Cumplido el 2026-10-04 (mismo commit): la subsección se llama ahora
       «Una ventaja que la pAUC no ve» y da las otras tres métricas.*
+- [ ] **El anteproyecto afirma sobre los datos de los trabajos colombianos
+      algo que sus fuentes no sostienen** (2026-10-04).
+      - **Qué afirma:** el anteproyecto (§2.4, documento entregado) dice que
+        ninguno de los tres trabajos de aprendizaje automático usa datos de
+        pacientes colombianos.
+      - **Por qué no se sostiene:** Rios-Duarte et al. dicen que sus fuentes no
+        dan la ascendencia de los pacientes
+        (`referencias/rios-duarte-2024-cnn-melanoma-uniandes.md`, línea 256), y
+        su referencia 22, la que acompaña a ISIC, es la colección «Hospital
+        Italiano de Buenos Aires Skin Lesions» (línea 800). Los dos trabajos de
+        Jojoa no dicen de dónde son los pacientes.
+      - **Qué se hace:** el entregado no se corrige; el informe nuevo sí
+        (`informe/borrador-v2.md`, «Estado del arte»), y también `PLAN.md`,
+        Fase 0. Si se pregunta en la sustentación, se reconoce.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
