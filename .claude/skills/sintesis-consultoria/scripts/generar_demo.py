@@ -702,14 +702,14 @@ const milLesiones = cifra(mil(1000), "tiempo-inferencia.json > tiempos.*.mediana
 const reco = cifra(esc(D.recomendado), "RECOMENDADO, comprobado contra la regla de recomendación sobre fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.pauc." + D.clave_ic);
 
 /* ---------- 0. cabecera ---------- */
-// huecos-demo.md, Parte B, B2; borrador-v2.md, l. 557-559.
+// huecos-demo.md, Parte B, B2; borrador-v2.md, «Limitaciones», la viñeta de la resolución.
 document.getElementById("ctx-problema").innerHTML =
   `El reto ISIC 2024 usa el conjunto SLICE-3D: recortes de lesiones de piel extraídos de fotografías corporales totales en 3D, para detectar cáncer de piel. ` +
   `La clase maligna está confirmada por patología: melanoma, carcinoma basocelular o carcinoma escamocelular. ` +
   `Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente. ` +
   `Así las describe el artículo del conjunto de datos: <i>"comparable in optical resolution to smartphone images"</i>.`;
 
-// borrador-v2.md, l. 237, 239-240, 242, 215-217; Parte B, B3.
+// borrador-v2.md, «Datos y validación», «El conjunto de desarrollo» y «El conjunto reservado»; Parte B, B3.
 document.getElementById("ctx-datos").innerHTML =
   `El conjunto de desarrollo tiene ${cifra(mil(E.n_filas), fEda("estructura_grupos.n_filas"))} lesiones de ` +
   `${cifra(mil(E.n_pacientes), fEda("estructura_grupos.n_grupos"))} pacientes. ` +
@@ -725,7 +725,7 @@ document.getElementById("ctx-datos").innerHTML =
   `El conjunto reservado tiene ${cifra(mil(R.pacientes), fExt("conjuntos.reservado.cobertura.pacientes"))} pacientes y ` +
   `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} imágenes, y ningún modelo se ha evaluado sobre él.`;
 
-// borrador-v2.md, l. 11-12, 14-17, 19-20, 22.
+// borrador-v2.md, «Método», «Qué se mide».
 document.getElementById("ctx-metrica").innerHTML =
   `<b>La métrica principal es la del reto:</b> el área parcial bajo la curva ROC por encima del ` +
   `${cifra(D.metrica.tpr + "%", fMod("metrica"))} de sensibilidad, o pAUC, que va de ` +
@@ -756,14 +756,14 @@ const MIDE = {
     `No se leyó ninguna etiqueta ni se calculó ninguna métrica.`
 };
 const HALLAZGOS = {
-  // borrador-v2.md, l. 203-206 y 277-279.
+  // borrador-v2.md, «Datos y validación», «Los datos» y «La auditoría de columnas».
   "eda-diagnostico": () => P([
     `Los datos son la metadata del reto: una fila por lesión y ${cifra(E.n_columnas, fEda("fuente.n_columnas"))} columnas, ` +
     `con las mediciones que el software de la fotografía corporal total calcula sobre cada lesión, datos del paciente y, ` +
     `solo en el conjunto de entrenamiento, el diagnóstico.`,
     `<b>${cifra(A.n_solo_train, "auditoria-de-fugas.json > columnas_solo_en_train")} no existen al predecir.</b> ` +
     `El conjunto de prueba no las trae. Entre ellas están la propia etiqueta, la taxonomía diagnóstica y dos medidas que solo existen tras la biopsia.`]),
-  // borrador-v2.md, l. 254-255, 257-258 y 261-263.
+  // borrador-v2.md, «Datos y validación», «La partición: por paciente».
   "diseno-validacion": () => P([
     `La validación cruzada agrupa por paciente: cada paciente queda entero de un lado de cada pliegue. ` +
     `En la partición de la semilla ${cifra(String(DI.seed), fDis("esquema.seed"))}, cada pliegue de validación tiene entre ` +
@@ -772,7 +772,7 @@ const HALLAZGOS = {
     `Lo que evita esa agrupación se midió. Una partición aleatoria por filas, con la misma semilla, habría dejado a ` +
     `${cifra(mil(DI.naive_n), fDis("comparacion_particion_naive.n_grupos_con_fuga"))} pacientes, el ` +
     `${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))}, con lesiones a los dos lados.`]),
-  // borrador-v2.md, l. 274, 277, 281, 283, 285-286, 300-302 y 304-307.
+  // borrador-v2.md, «Datos y validación», «La auditoría de columnas».
   "auditoria-de-fugas": () =>
     P([`Quedan fuera de los modelos ${cifra(A.n_excluidas, fMod("columnas_excluidas"))} columnas, por cuatro motivos:`]) +
     L([`<b>${cifra(A.n_solo_train, "auditoria-de-fugas.json > columnas_solo_en_train")} no existen al predecir.</b>`,
@@ -791,7 +791,7 @@ const HALLAZGOS = {
     `<i>"${esc(D.panderm.antes)}${cifra(esc(D.panderm.numero), D.panderm.fuente)}${esc(D.panderm.despues)}"</i>.`,
     `<i>Interpretación, no medición:</i> es el razonamiento de la auditoría de fugas, un nivel más arriba. ` +
     `Con modelos fundacionales, la fuga puede venir del preentrenamiento de un tercero y no del conjunto de datos.`]),
-  // borrador-v2.md, l. 330-333.
+  // borrador-v2.md, «Resultados», «Una decisión por defecto cambia el veredicto».
   "modelado-baseline": () => P([
     `El mismo gradient boosting da resultados opuestos según una sola opción. Sin balancear, su pAUC media es ${mediaN("Nivel 2a")}, ` +
     `por debajo del piso aleatorio de ${azar} en los ${cifra(VR.n_folds_2a, fVR("nivel_2a_gradient_boosting_sin_balancear.pauc_por_semilla_y_fold (todos)"))} pliegues. ` +
@@ -837,7 +837,7 @@ D.cadena.forEach((s, i) => {
 });
 
 /* ---------- 2. una decision por defecto ---------- */
-// borrador-v2.md, l. 322-325.
+// borrador-v2.md, «Resultados», párrafo inicial.
 document.getElementById("sub-resultados").innerHTML =
   `Salvo donde se indica, las métricas de desempeño son del conjunto de desarrollo, con ${semillasVR} semillas y ` +
   `${cifra(VR.n_splits, fVR("n_splits"))} pliegues. Cada diferencia es «nuevo − base», y su intervalo es el corregido al ${nivelIC}. ` +
@@ -846,7 +846,7 @@ document.getElementById("tit-2a").innerHTML = mediaN("Nivel 2a");
 document.getElementById("rot-2a").textContent = "Nivel 2a — " + NIV["Nivel 2a"].descripcion;
 document.getElementById("tit-2b").innerHTML = mediaN("Nivel 2b");
 document.getElementById("rot-2b").textContent = "Nivel 2b — " + NIV["Nivel 2b"].descripcion;
-// borrador-v2.md, l. 330-333 y 336-339.
+// borrador-v2.md, «Resultados», «Una decisión por defecto cambia el veredicto».
 document.getElementById("texto-2").innerHTML = HALLAZGOS["modelado-baseline"]() + P([
   `La métrica por defecto no es ciega a ese fallo, pero lo lee distinto. En la partición de la semilla ` +
   `${cifra(String(D.seed42.seed), fMod("esquema_cv.seed"))}, el AUC estándar del modelo sin balancear es ` +
@@ -942,7 +942,7 @@ new Chart(document.getElementById("gr-niveles"), {
 
 /* ---------- 3. mejor media no es mejor modelo ---------- */
 const PA = VR.pareada;
-// borrador-v2.md, l. 344-346 y 349-351.
+// borrador-v2.md, «Resultados», «Mejor media no es mejor modelo».
 document.getElementById("texto-3").innerHTML = P([
   `El gradient boosting balanceado supera a la regresión logística balanceada por ` +
   `${cifra(dec(PA.media), fVR("comparacion_pareada_2b_menos_1.media"))} en promedio, con intervalo ` +
@@ -952,7 +952,7 @@ document.getElementById("texto-3").innerHTML = P([
   `Sobre una sola partición de los datos completos, el boosting parecía además más estable que la logística. ` +
   `Con las ${semillasVR} semillas el orden se invierte: su desviación entre pliegues es ${stdN("Nivel 2b")}, frente a ${stdN("Nivel 1")}. ` +
   `Ese argumento se retiró.`]);
-// borrador-v2.md, l. 356-357, 359-360, 362-363 y 365-367.
+// borrador-v2.md, «Resultados», «Las columnas de procedencia no explican la ventaja».
 document.getElementById("texto-3b").innerHTML = P([
   `Con las columnas de centro y licencia, la diferencia entre el boosting y la logística es ` +
   `${cifra(dec(PR.a_con), fPro("a_2b_menos_1_con_procedencia.media"))}; sin ellas, ${cifra(dec(PR.a_sin), fPro("a_2b_menos_1_sin_procedencia.media"))}. ` +
@@ -1010,7 +1010,7 @@ new Chart(document.getElementById("gr-pareada"), {
 });
 
 /* ---------- 4. la metrica principal no agota lo que pidio el cliente ---------- */
-// borrador-v2.md, l. 95-97.
+// borrador-v2.md, «Método», «Cómo se compara».
 document.getElementById("texto-4").innerHTML = P([
   `<b>El criterio:</b> una diferencia se da por establecida solo si su intervalo corregido al ${nivelIC} no contiene el cero. ` +
   `Junto al intervalo se reportan los pliegues y las semillas en que gana cada modelo.`]);
@@ -1070,7 +1070,8 @@ const paneles = document.getElementById("paneles");
   });
 });
 document.getElementById("pie-paneles").innerHTML = esc(D.nota_nnt);
-// borrador-v2.md, l. 382-384, 386-388, 402-403, 405-406, 421-423, 433-434, 449-450 y 452-454.
+// borrador-v2.md, «Resultados», «La métrica principal no agota lo que pidió el cliente»,
+// «La imagen no justifica su costo» y «El modelo recomendado».
 document.getElementById("lectura-4").innerHTML = L([
   `<b>M2 − M1.</b> Quien solo lea la pAUC concluye que el contexto de paciente no aporta; la sensibilidad top-15, que el cliente premió aparte, y el NNT80% SE dicen lo contrario. ` +
   `Son cuatro métricas sobre una misma comparación, y el intervalo del NNT queda al límite del cero. ` +
@@ -1087,14 +1088,14 @@ document.getElementById("lectura-4").innerHTML = L([
   `Esa comparación es descriptiva, entre dos corridas, sin intervalo propio y sin fijar antes.`]);
 
 /* ---------- 5. la pregunta del cliente, entera ---------- */
-// borrador-v2.md, l. 470-476: la cabecera y las filas, con las cifras de outputs/.
+// borrador-v2.md, «Resultados», «La pregunta del cliente, entera»: la cabecera y las filas, con las cifras de outputs/.
 const fMet = (f, k) => `${f.archivo} > metricas.${f.clave}.${k}.media_global`;
 document.getElementById("tabla-ejes").innerHTML =
   `<thead><tr><th>Modelo</th><th>pAUC</th><th>Sensibilidad top-15</th><th>NNT80% SE</th><th>Segundos por ${milLesiones} lesiones</th></tr></thead><tbody>` +
   D.tabla.map(f => `<tr><td>${esc(f.modelo)}</td><td>${cifra(fijo(f.pauc, 4), fMet(f, "pauc"))}</td>` +
     `<td>${cifra(fijo(f.setop15, 4), fMet(f, "setop15"))}</td><td>${cifra(fijo(f.nnt80, 2), fMet(f, "nnt80"))}</td>` +
     `<td>${tiempoT(f.modelo)}</td></tr>`).join("") + `</tbody>`;
-// borrador-v2.md, l. 480-485 y 463-465.
+// borrador-v2.md, «Resultados», «La pregunta del cliente, entera» y «El costo de inferencia».
 document.getElementById("texto-5").innerHTML = P([
   `La tabla responde la pregunta con sus tres ejes —la métrica principal, la sensibilidad por paciente y el costo— y añade el NNT80% SE, la segunda métrica de triaje. ` +
   `Son medias y medianas; las diferencias, con sus intervalos, están arriba. M2 se distingue de M1 en las dos métricas de triaje, no en la pAUC. ` +
@@ -1105,20 +1106,20 @@ document.getElementById("texto-5").innerHTML = P([
 /* ---------- 6. recomendacion ---------- */
 document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
 document.getElementById("rot-reco").innerHTML = reco;
-// borrador-v2.md, l. 495-496, 498-499, 502-504 y 507-508.
+// borrador-v2.md, «Recomendación», «Qué se recomienda».
 document.getElementById("texto-6").innerHTML = P([
   `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
   `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`,
   `<b>No se recomienda añadir las variables de imagen</b> tal como se probaron. No mejoraron ninguna métrica de forma distinguible, ` +
   `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio.`,
   `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
-// borrador-v2.md, l. 513-524.
+// borrador-v2.md, «Recomendación», «Qué se puede afirmar».
 document.getElementById("se-puede").innerHTML = L([
   `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
   `El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80% SE.`,
   `Las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas.`,
   `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`]);
-// borrador-v2.md, l. 528-547.
+// borrador-v2.md, «Recomendación», «Qué no se puede afirmar».
 document.getElementById("no-se-puede").innerHTML = L([
   `<b>Que M3 limpio sea mejor en las métricas de triaje.</b> En la sensibilidad top-15 y en el NNT80% SE no se distingue de M2.`,
   `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
@@ -1129,7 +1130,7 @@ document.getElementById("no-se-puede").innerHTML = L([
   `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 
 /* ---------- 7. limitaciones ---------- */
-// borrador-v2.md, l. 208-210 y 552-587.
+// borrador-v2.md, «Datos y validación», «Los datos» (la frase del archivo de prueba), y «Limitaciones».
 document.getElementById("limitaciones").innerHTML = P([
   `El archivo de prueba que publica el reto es un marcador de posición, sin casos reales, así que no hay contra qué medir un resultado final ` +
   `independiente fuera de lo que este proyecto aparte.`]) + L([
