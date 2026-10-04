@@ -1,7 +1,7 @@
 # Verificación de trazabilidad — informe/borrador-v2.md
-Números encontrados en el borrador: 600
-Con respaldo en outputs/ (tolerancia: media unidad del último dígito escrito; exacta sin decimales): 273
-SIN respaldo — revisar uno por uno: 43
+Números encontrados en el borrador: 640
+Con respaldo en outputs/ (tolerancia: media unidad del último dígito escrito; exacta sin decimales): 311
+SIN respaldo — revisar uno por uno: 45
   - línea ~26: "2023" en «...-->  Antes del reto, Marchetti et al. (2023) estudiar...»
   - línea ~29: "23.538" en «...a de un solo centro, con 35 pacientes y 23.538 lesiones,...»
   - línea ~39: "2025" en «...su análisis del reto (Kurtansky et al., 2025). Con un...»
@@ -12,7 +12,7 @@ SIN respaldo — revisar uno por uno: 43
   - línea ~93: "2023" en «...citas literales --> Kapoor y Narayanan (2023) clasific...»
   - línea ~98: "2022" en «...los conjuntos de ISIC, Cassidy et al. (2022) encontra...»
   - línea ~127: "2018" en «...primera es la del acceso. Sáenz et al. (2018) probaron...»
-  ... y 33 más — detalle en el .json
+  ... y 35 más — detalle en el .json
 Porcentajes que son parámetros del método, excluidos por lista declarada (no se les busca respaldo): 7
 Omitidos por su contexto (IGNORAR_CONTEXTOS: 2024, 2026, Nivel 0, Nivel 1, Nivel 2), sin buscarles respaldo: 9
   - línea ~44: "2024" en «...e tabular de esa solución (Novoselskiy, 2024), y es es...»
