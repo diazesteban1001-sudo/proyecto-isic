@@ -1243,6 +1243,39 @@ medido».
 - **Salida:** `outputs/efecto-particion.json` y `.md` (máximo 15 líneas, sin
   interpretación). El cargador se niega a leer el reservado.
 
+**La imagen sola: especificación y regla de lectura (2026-10-04, de la
+persona).** Fijadas antes de correr nada.
+
+- **Qué se corre.** Dos modelos con la configuración de la validación repetida
+  (5 pliegues agrupados por paciente, semillas de la 0 a la 9, los mismos
+  pliegues de M1), sobre el conjunto de desarrollo:
+  - «Imagen»: regresión logística balanceada sobre las 384 variables de
+    DINOv2, estandarizadas dentro del pliegue. Es la misma pieza que M4b usa
+    como primera etapa.
+  - «Imagen + básicos»: lo mismo, más `age_approx`, `sex` y
+    `anatom_site_general`, codificadas como en M1.
+- **Qué se reporta:** las cuatro métricas de cada modelo; las diferencias
+  Imagen − M1 e (Imagen + básicos) − Imagen, con su intervalo corregido de
+  Nadeau y Bengio. No se mide tiempo nuevo: el costo de la imagen ya está
+  medido en M4.
+- **Control.** M1 tiene que reproducir sus métricas de
+  `outputs/fase4-m2-vs-m1.json` pliegue a pliegue. Si no, se para.
+- **Regla de lectura, fijada antes:** es descriptivo. No cambia la
+  recomendación, que vale para donde se toma la fotografía corporal total.
+  Una diferencia se da por establecida solo si su intervalo corregido excluye
+  el cero. Los resultados describen el escenario sin mediciones del equipo 3D
+  sobre recortes de SLICE-3D, no sobre fotos de teléfono.
+- **Salida:** `outputs/imagen-sola.json` y `.md` (máximo 15 líneas, sin
+  interpretación). El cargador se niega a leer el reservado. Antes, una prueba
+  sintética. No se toca el informe.
+- *Precisiones del agente, el mismo día y antes de correr:* la pieza es
+  `modelo_imagen()` de `apilado_imagen.py` (estandarizado y logística
+  balanceada con `max_iter=2000`), ajustada con el pliegue de entrenamiento y
+  puntuando la validación; en «Imagen + básicos» las tres variables pasan por
+  `codificar_fold` y después por el mismo estandarizado. El control compara
+  también la huella de los pliegues de cada semilla con la de
+  `fase4-m2-vs-m1.json`.
+
 ---
 
 ## Decisiones
