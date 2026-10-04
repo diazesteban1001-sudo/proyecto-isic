@@ -1296,8 +1296,9 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
 (`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
-verificación de trazabilidad con la zona del cuerpo», del 2026-10-04, sobre
-`informe/borrador-v2.md`): **648 números, 311 con respaldo, 45 señalados**,
+verificación de trazabilidad con la zona del cuerpo en la recomendación», del
+2026-10-04, sobre `informe/borrador-v2.md`): **652 números, 311 con respaldo,
+45 señalados**,
 para revisar uno por uno en el anexo. *La subsección de la imagen sola trae
 negativos de `outputs/imagen-sola.json` que el verificador lee sin signo
 (defecto (b) del registro de incidentes, duodécima fila): cinco quedan
@@ -1309,13 +1310,14 @@ señalado a respaldado por coincidencia: lo respalda un recuento de
 `outputs/mecanismo-2a.json`, no la lista de `auditoria-de-fugas.json`.* De los
 demás, 7 son porcentajes del método, excluidos por lista declarada; 9 caen en
 contextos que el verificador omite (años y etiquetas de nivel), listados en
-`numeros_en_contextos_omitidos`; y 276 están dentro de comentarios HTML,
+`numeros_en_contextos_omitidos`; y 280 están dentro de comentarios HTML,
 listados en `numeros_en_comentarios`. Los cinco grupos suman el total, y el
 verificador se detiene si no. *Las corridas anteriores, del mismo día: sobre
 el borrador sin la imagen sola, 553 números (252, 39, 6, 9 y 247); con la
 imagen sola, 600 (273, 43, 7, 9 y 268), y con sus ajustes, 640 (311, 45, 7, 9
-y 268). Esta frase se quedó en la de 600 durante la corrida de 640: no se
-actualizó al regenerarla.* *Hasta el 2026-10-04 los números de los
+y 268); con la zona del cuerpo, 648 (311, 45, 7, 9 y 276). Esta frase se
+quedó en la de 600 durante la corrida de 640: no se actualizó al
+regenerarla.* *Hasta el 2026-10-04 los números de los
 comentarios se buscaban como los demás: la corrida anterior, del 2026-10-03,
 daba 290 con respaldo, 31 señalados y 77 omitidos.* *Hasta el 2026-10-02 esta frase citaba la
 corrida sobre `informe/borrador.md`, del 2026-09-21: 344 números, 298 con
