@@ -18,7 +18,7 @@ Esteban Díaz.
   criterios.
 - **Diseño y desviaciones:**
   - `protocolo-experimento-v1.md`, el protocolo fijado antes de correr;
-  - `desviaciones.md`, sus ocho desviaciones declaradas.
+  - `desviaciones.md`, sus nueve desviaciones declaradas.
 - **Respuestas de los tres tratamientos:** `respuestas/`.
   - A, el chat sin fuentes: `respuesta-A.md` y `.json`. La corrida descartada
     está en `respuesta-A-descartada.md`.

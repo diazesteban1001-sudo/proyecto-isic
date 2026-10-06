@@ -274,3 +274,57 @@ comprobarlos.
   clasificación, no cuánto coincide consigo misma.
 - En la 126, la persona coincidió con las dos pasadas, que no coinciden entre
   sí. La clasificación final sigue siendo la de la tercera lectura (sección 7).
+
+## 9. Auditoría manual: hallazgos (2026-10-06)
+
+**Qué se auditó.** Cinco referencias, fijadas en `auditoria-sorteo.md` antes de
+abrir ninguna:
+- 485, 603, 405 y 742, por sorteo;
+- 126, por ser la única en que las dos pasadas no coinciden.
+
+La auditoría la hizo la persona. Sus respuestas están en `auditoria.csv`,
+pasadas tal cual desde su hoja.
+
+**No fue ciega.** La hoja mostraba, para cada referencia, la categoría de las
+dos pasadas y la ubicación y la nota de la pasada 1.
+
+**Coincidencias**, contra `pasada-1.csv`, `pasada-2.csv` y
+`tercera-lectura.csv`:
+- con la pasada 1: 4 de 5; no coincide la 405;
+- con la pasada 2: 3 de 5; no coinciden la 405 y la 126;
+- con la clasificación final: 4 de 5; no coincide la 405.
+
+**Hallazgo 1: la 405, Kapoor y Narayanan (2023), del tratamiento C.**
+- Las dos pasadas la ponen en «utilizable»; la auditoría, en «existe pero no
+  dice eso».
+- Las notas de las dos pasadas ya registran que «una de las causas
+  principales» no está en la fuente, y aun así la dejan en «utilizable».
+- La auditoría parte de esa misma falta y añade la excepción que la propia L3.2
+  hace para las distribuciones con la misma estructura de dependencia. Su
+  conclusión: *«La afirmación elimina esos matices»*.
+- La diferencia está sobre todo en si esas omisiones bastan para cambiar la
+  categoría.
+- Si se aceptara, que no se hace aquí, C pasaría de 2 a 1 referencia
+  utilizable de 5. Cambiarían las cifras de C en:
+  - `resultados.md`;
+  - `entregables/experimento-decision.md`;
+  - `tabla-decision.md`;
+  - la memoria, en su tabla y en «3 de 5 referencias que no decían lo
+    atribuido».
+
+**Hallazgo 2: la 126, Jamaludin y Kim (2026).**
+- La auditoría la pone en «existe pero no dice eso», como la pasada 1 y la
+  tercera lectura (sección 7). Discrepa de la pasada 2, que la puso en
+  «utilizable».
+- Es el desacuerdo que ya resolvió la tercera lectura, y la auditoría llega al
+  mismo resultado.
+- No es una confirmación independiente: la hoja mostraba la nota de la pasada
+  1, que da el mismo motivo.
+
+**Frente a la sección 8.** Esa sección registra que la persona, al revisar las
+pasadas el 3 y el 5 de octubre, coincidió con cada clasificación. Eso incluye
+la 405 como «utilizable» en las dos pasadas y la 126 como «utilizable» en la
+pasada 2. La auditoría clasifica las dos de otro modo.
+
+**Qué no cambia.** Las pasadas, la tercera lectura, `resultados.md` y los
+entregables. Los hallazgos quedan anotados; no se aplican.
