@@ -6,7 +6,7 @@ Qué es: la evaluación de las 20 preguntas de `banco.csv` en dos tratamientos:
 - **Sistema:** NotebookLM con `protocolo-consulta-v1.md` y los 22 archivos de
   `corpus-c.md`, un chat limpio por pregunta (`banco-sistema.csv`).
 
-Evaluó Claude Code el 2026-09-29, con autorización del docente.
+Evaluó Claude Code el 2026-09-29.
 
 ## Criterio de «sostenida»
 

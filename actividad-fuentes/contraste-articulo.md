@@ -1,8 +1,8 @@
 # Contraste con un artículo publicado: Kurtansky et al. (2025)
 
 Qué es: el contraste del proyecto ISIC con el artículo de los organizadores del
-reto, para decidir si el proyecto está bien orientado y fundamentado. El docente
-lo pidió en lugar de la auditoría cruzada. 2026-09-29.
+reto, para decidir si el proyecto está bien orientado y fundamentado. Va en
+lugar de la auditoría cruzada. 2026-09-29.
 
 **Fuentes:**
 - **El artículo.** Kurtansky et al. (2025), *npj Digital Medicine* 8:708, en

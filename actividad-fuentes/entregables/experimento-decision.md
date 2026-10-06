@@ -52,8 +52,10 @@ descartó porque tenía la búsqueda web activa. (2) A pasó a un modelo local: 
 control es más estricto, pero el modelo es más pequeño y de otra familia que
 Claude. (3) Las reglas de extracción se fijaron antes de clasificar. (4) La
 hoja de la pasada 1 se regeneró, porque el formato delataba el tratamiento.
-(5) Las pasadas las hizo Claude, con autorización del docente. (6) La pasada 2
-no esperó 48 horas. (7) La tercera lectura no fue ciega.
+(5) Las pasadas las hizo Claude. (6) La pasada 2
+no esperó 48 horas. (7) La tercera lectura no fue ciega. (8) Revisé las dos
+pasadas, el 3 y el 5 de octubre, sobre las hojas ya clasificadas, y confirmé
+sus resultados: ninguna hoja cambió.
 
 ### Decisión
 

@@ -18,7 +18,7 @@ Esteban Díaz.
   criterios.
 - **Diseño y desviaciones:**
   - `protocolo-experimento-v1.md`, el protocolo fijado antes de correr;
-  - `desviaciones.md`, sus siete desviaciones declaradas.
+  - `desviaciones.md`, sus ocho desviaciones declaradas.
 - **Respuestas de los tres tratamientos:** `respuestas/`.
   - A, el chat sin fuentes: `respuesta-A.md` y `.json`. La corrida descartada
     está en `respuesta-A-descartada.md`.
@@ -82,8 +82,8 @@ memoria, en su apartado 3.
 **b. El caso de fallo.** `caso-de-fallo.md`: Little et al. (2017) en el
 tratamiento C, con su causa y dos casos menores del banco.
 
-**c. El contraste con un artículo publicado.** `contraste-articulo.md`, que por
-decisión del docente reemplaza al acta de auditoría cruzada. Contrasta el
+**c. El contraste con un artículo publicado.** `contraste-articulo.md`, que
+reemplaza al acta de auditoría cruzada. Contrasta el
 proyecto ISIC con Kurtansky et al. (2025) y termina con un veredicto.
 
 ## 5. Memoria

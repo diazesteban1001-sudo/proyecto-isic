@@ -95,5 +95,5 @@ verificar.** Lo que hace bien son comprobaciones mecánicas con guiones:
 
 Sus afirmaciones en prosa sobre lo que dice un archivo fallaron más de una vez
 cuando no se comprobaron (registro de incidentes de `CLAUDE.md`, y
-`entregables/inventario-fallos.md`). Se usa para verificar, con autorización
-del docente, no como fuente de respuestas.
+`entregables/inventario-fallos.md`). Se usa para verificar, no como fuente de
+respuestas.

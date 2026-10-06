@@ -243,3 +243,34 @@ clasificación final, así que se declara.
 
 **Qué no cambia.** Las pasadas 1 y 2. La tercera lectura solo fija la
 clasificación final de la referencia discrepante.
+
+## 8. Las dos pasadas, revisadas por la persona (2026-10-03 y 2026-10-05)
+
+**Qué pasó, según la persona.** La persona revisó las dos pasadas de Claude Code
+sobre las hojas ya clasificadas, comprobó cada referencia contra su fuente y
+confirmó sus resultados:
+- la pasada 1, el 2026-10-03 a las 13:00 (-0500);
+- la pasada 2, el 2026-10-05 a las 15:00 (-0500).
+
+**Qué encontró.** Coincidió con cada clasificación de las dos pasadas, también
+en Jamaludin y Kim (id 126), que la pasada 1 pone en «existe pero no dice eso»
+y la pasada 2 en «utilizable». Ninguna hoja cambió.
+
+**Qué no hay.** Ningún commit ni registro de las revisiones. Las fechas, las
+horas y el resultado los declara la persona, y el repositorio no permite
+comprobarlos.
+
+**Qué fueron y qué no.** No son pasadas independientes:
+- se hicieron con las categorías y las notas de Claude a la vista;
+- los resultados del experimento estaban escritos desde el 2026-09-29
+  (`resultados.md`);
+- entre una revisión y otra pasaron 50 horas, pero sobre hojas ya clasificadas
+  ese intervalo no cumple la función que le da el protocolo.
+
+**Efecto.**
+- Las hojas, la tercera lectura y los resultados no cambian.
+- La consistencia de `resultados.md` sigue midiendo dos sesiones de Claude Code
+  (sección 6). La revisión dice que la persona está de acuerdo con cada
+  clasificación, no cuánto coincide consigo misma.
+- En la 126, la persona coincidió con las dos pasadas, que no coinciden entre
+  sí. La clasificación final sigue siendo la de la tercera lectura (sección 7).

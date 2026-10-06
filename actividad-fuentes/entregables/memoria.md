@@ -146,6 +146,9 @@ es el gestor de referencias, no una herramienta de IA.
   lista de DOI.
 - **Código del sistema:** Claude Code escribió `preparar_hojas.py`,
   `analizar.py` y `extraer_corpus_c.py`, con sus pruebas.
+- **Clasificación de referencias:** Claude Code: las dos pasadas, la tercera
+  lectura y la evaluación del banco. Revisé yo las dos pasadas, el 3 y el 5 de
+  octubre, y confirmé sus resultados.
 - **Redacción de la memoria:** Claude Code, a mi pedido.
 
 **Herramienta de gestión elegida:** NotebookLM, para anclaje, comparada con las
