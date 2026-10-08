@@ -54,8 +54,10 @@ Claude. (3) Las reglas de extracción se fijaron antes de clasificar. (4) La
 hoja de la pasada 1 se regeneró, porque el formato delataba el tratamiento.
 (5) Las pasadas las hizo Claude. (6) La pasada 2
 no esperó 48 horas. (7) La tercera lectura no fue ciega. (8) Revisé las dos
-pasadas, el 3 y el 5 de octubre, sobre las hojas ya clasificadas, y confirmé
-sus resultados: ninguna hoja cambió.
+pasadas, el 3 y el 5 de octubre, sobre las hojas ya clasificadas, sin cambiar
+ninguna hoja. (9) En la auditoría manual de 5 referencias, discrepé de las dos
+pasadas en Kapoor y Narayanan (2023), que puse en «no dice eso»; el hallazgo
+no se aplicó.
 
 ### Decisión
 

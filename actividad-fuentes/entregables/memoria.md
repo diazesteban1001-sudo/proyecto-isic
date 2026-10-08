@@ -148,7 +148,8 @@ es el gestor de referencias, no una herramienta de IA.
   `analizar.py` y `extraer_corpus_c.py`, con sus pruebas.
 - **Clasificación de referencias:** Claude Code: las dos pasadas, la tercera
   lectura y la evaluación del banco. Revisé yo las dos pasadas, el 3 y el 5 de
-  octubre, y confirmé sus resultados.
+  octubre, sin cambiar ninguna clasificación, y mi auditoría del 6 de octubre
+  discrepa de las dos en una referencia (`desviaciones.md`, sección 9).
 - **Redacción de la memoria:** Claude Code, a mi pedido.
 
 **Herramienta de gestión elegida:** NotebookLM, para anclaje, comparada con las

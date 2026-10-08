@@ -1,4 +1,4 @@
-# Actividad «Nada sin fuente»: índice para el docente
+# Actividad «Nada sin fuente»: índice
 
 Qué es: dónde está cada entregable del enunciado, en su orden. Las rutas son
 relativas a esta carpeta, `actividad-fuentes/`. El equipo es de un integrante,
