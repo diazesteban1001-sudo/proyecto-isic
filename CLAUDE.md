@@ -3,7 +3,7 @@
 ## Contexto
 
 Trabajo final de la materia **Consultoría e Investigación**, último semestre de
-Estadística. El profesor pide desarrollar *skills* y resolver un problema real
+Estadística. La materia pide desarrollar *skills* y resolver un problema real
 con ayuda de un agente que las utilice.
 
 **Entregable esperado:** las skills en sí + el problema resuelto + informe escrito.
@@ -67,8 +67,7 @@ prioridades con premios reales (`referencias/kaggle-evaluation.md`,
 `referencias/kaggle-rules.md`). La función de utilidad del cliente está escrita
 por el cliente, no inferida por nosotros.
 
-Autorizado explícitamente por el profesor el 2026-08-20 (ver tabla de
-decisiones).
+Decidido el 2026-08-20 (ver tabla de decisiones).
 
 ### Línea base: cuántos exámenes innecesarios genera la práctica actual
 
@@ -750,7 +749,7 @@ sí se contestan con la Tercera nota.
 | Se descartan RSNA rodilla y RSNA columna lumbar | Imágenes médicas 3D: exigen GPU seria y aportan poco desde lo estadístico. |
 | Un agente, no varios | Las skills son instrumentos que el agente interpreta, no actores independientes. |
 | Claude Code sobre claude.ai | Las skills son mecanismo nativo, ejecución de Python sobre datos reales, `outputs/` persistente, todo versionado en Git. |
-| **ISIC/MSKCC cuenta como contraparte válida, y la línea base se construye con fuentes investigadas** (2026-08-20) | Respuesta del profesor, consultado sobre el criterio 1: autorizó usar lo que los organizadores declararon que necesitaban como contraparte real, y fuentes confiables investigadas —no una entrevista obligatoria— para la línea base. Cierra la tensión que estaba abierta sobre si un cliente que publica sus requisitos pero no se sienta con nosotros califica bajo ese criterio. Consecuencia operativa: la sección "La contraparte y su línea base" queda como respuesta al criterio 1, y la exigencia de rigor se traslada de *con quién se habló* a *qué tan trazable es la fuente* — que es la regla 3, ya vigente. |
+| **ISIC/MSKCC cuenta como contraparte válida, y la línea base se construye con fuentes investigadas** (2026-08-20) | Criterio 1: se usa como contraparte real lo que los organizadores declararon que necesitaban, y como línea base fuentes confiables investigadas —no una entrevista obligatoria—. Cierra la tensión que estaba abierta sobre si un cliente que publica sus requisitos pero no se sienta con nosotros califica bajo ese criterio. Consecuencia operativa: la sección "La contraparte y su línea base" queda como respuesta al criterio 1, y la exigencia de rigor se traslada de *con quién se habló* a *qué tan trazable es la fuente* — que es la regla 3, ya vigente. |
 
 ---
 
@@ -1040,7 +1039,7 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
 - [ ] Reemplazar por asunto y fecha los once hashes de commit que aún cita la
       tabla de "Estado actual", por la regla derivada en el registro de
       incidentes: un hash sobrevive solo hasta el siguiente rebase
-- [ ] Empaquetar las skills como archivos `.skill` instalables (extra para el profe)
+- [ ] Empaquetar las skills como archivos `.skill` instalables (extra)
 - [x] Preparar demo en vivo: `informe/demo.html`, generada solo por
       `generar_demo.py`, abre por doble clic sin servidor y muestra cada cifra
       con su archivo y campo de origen al pasar el cursor
@@ -1233,7 +1232,7 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
 
 ---
 
-## Presentación al profesor
+## Presentación
 
 1. **El repositorio** — el historial de commits es la narrativa de las decisiones.
 2. **El informe escrito** — producido por `sintesis-consultoria` desde `outputs/`,
