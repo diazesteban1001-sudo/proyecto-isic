@@ -1,7 +1,9 @@
 # Proyecto de consultoría ISIC 2024 — Detección de melanoma
 
 **Estado: proyecto en curso.** Las cifras de este README se confirmaron
-contra `outputs/` el 2026-10-02.
+contra `outputs/` el 2026-10-15. El avance frente a los objetivos del
+anteproyecto está en
+[Avance respecto a los objetivos del anteproyecto](#avance-respecto-a-los-objetivos-del-anteproyecto).
 
 ## El problema y la contraparte
 
@@ -19,6 +21,45 @@ sospechosas por paciente ("Top-15 Retrieval Sensitivity") y la
 eficiencia computacional del modelo. Esas tres señales, declaradas con
 premios reales, son la línea base de lo que la contraparte necesita —
 no solo lo que pidió en el leaderboard.
+
+## Avance respecto a los objetivos del anteproyecto
+
+Los objetivos y sus criterios de cumplimiento son los de
+`informe/anteproyecto.md`, sección 3; la columna del criterio los resume, y
+el texto literal está allí. De las siete fases de `PLAN.md` (0 a 6), las
+cinco primeras están cerradas. La Fase 5, abrir el conjunto reservado, se
+hace una sola vez y espera la retroalimentación de este avance: si se pide
+un cambio de modelado, se hace antes de abrirlo. De la Fase 6, el informe y
+la demo, hay trabajo hecho mientras la 5 espera.
+
+| Objetivo específico | Su criterio, en resumen | Estado | Dónde se comprueba |
+|---|---|---|---|
+| 1. Esquema de evaluación libre de fuga | La proporción de pacientes presentes a ambos lados de cada partición; las variables excluidas, con su motivo; el conjunto reservado, sellado antes de cualquier decisión nueva de modelado | Cumplido | `diseno-validacion.json > fuga_de_grupo_detectada` y `comparacion_particion_naive`; `modelado-baseline.json > columnas_excluidas` y `auditoria-de-fugas.json`; `holdout-pacientes.json`, sellado en la Fase 1 de `PLAN.md` |
+| 2. Cuatro niveles de referencia bajo la pAUC y el AUC, en los mismos pliegues | Las medias y las series por pliegue de las dos métricas; los casos en que discrepan en el veredicto | Cumplido | `modelado-baseline.json > nivel_*.pauc_por_fold` y `auc_estandar_por_fold`; las discrepancias, en `informe/borrador-v2.md`, «Una decisión por defecto cambia el veredicto» y «Una ventaja que la pAUC no ve» |
+| 3. Comparación pareada de los niveles y de la solución ganadora reproducida | El intervalo de cada diferencia, ingenuo y corregido; los componentes del ganador que no se pudieron reproducir, con su motivo | Cumplido. Entre niveles, la comparación es 2b − 1; el ganador se compara con M2. Lo que falta del ganador quedó fuera por decisión, cada cosa con su motivo | `validacion-repetida.json` y `fase4-*.json`, campos `intervalo_t_95` e `intervalo_t_95_nadeau_bengio`; lo que queda fuera del ganador, en `informe/borrador-v2.md`, «Qué se compara» |
+| 4. Ejes de triaje y tiempo de inferencia | La tabla por nivel de la métrica principal, los dos ejes de triaje y el tiempo; la implementación de los ejes, contrastada contra el orden de magnitud publicado | Cumplido en parte: la tabla, sobre los modelos de la Fase 4; el contraste, solo de la sensibilidad top-15. Ver la nota | `informe/borrador-v2.md`, «La pregunta del cliente, entera» y, para el contraste, «El modelo recomendado»; `tiempo-inferencia.json` |
+| 5. Características de imagen, con verificación previa del preentrenamiento, y evaluación del modelo recomendado en el reservado | El resultado de la verificación; las métricas del reservado, con su intervalo | Parcial: hechas la verificación, la extracción y la evaluación de la imagen en desarrollo. Falta evaluar en el reservado el modelo recomendado, M3 limpio, que no usa imagen | `informe/borrador-v2.md`, «El extractor de imagen»; `extraccion-imagen.json`; `fase4-m4-vs-m2.json`, `fase4-m4b-vs-m2.json` e `imagen-sola.json` |
+
+**Nota sobre el objetivo 4.** La tabla no va por nivel, como dice el
+criterio, sino por modelo de la Fase 4: M1, que es el nivel 2b; M2, M4 y
+M4b, que lo extienden; y M3 limpio, la parte tabular del ganador. Los
+niveles 1 y 2b tienen los dos ejes de triaje en `efecto-particion.json`; los
+niveles 0 y 2a no los tienen, y ninguno de los niveles 0, 1 y 2a tiene
+tiempo de inferencia. El contraste con el orden de magnitud publicado cubre
+la sensibilidad top-15, no el NNT80% SE: el NNT depende de la prevalencia
+del conjunto evaluado, y el publicado no es comparable (`PLAN.md`, Fase 4,
+«Especificación de M3», nota «Orden de magnitud, no comparación»).
+
+**El objetivo general** pide establecer un procedimiento de evaluación que
+priorice la función de utilidad del organizador y determinar en qué medida
+las decisiones por defecto alteran el veredicto sobre un modelo. El
+procedimiento se cierra con la evaluación en el reservado, la que le falta
+al objetivo 5. De las tres decisiones que nombra, en el conjunto de
+desarrollo, el tratamiento del desbalance y la métrica cambian el
+veredicto; el esquema de partición no lo cambia de forma distinguible para
+la logística y el boosting balanceados (`informe/borrador-v2.md`, «Una
+decisión por defecto cambia el veredicto», «Una ventaja que la pAUC no ve»
+y «Partir por filas no cambia el veredicto»).
 
 ## Método
 
