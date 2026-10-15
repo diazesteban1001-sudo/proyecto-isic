@@ -1236,6 +1236,24 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         2026-10-04): la metadata y las imágenes del reto, las características
         de DINOv2 extraídas de ellas y el código de DINOv2, con las figuras de
         su documentación.
+- [ ] **`md_a_pdf.py` no quita los comentarios HTML** (2026-10-15).
+      - **Qué pasa:** escapa los `<!-- … -->` y salen como texto visible en
+        el PDF, también los de varias líneas. Comprobado con un `.md`
+        sintético.
+      - **Por qué hoy no afecta a nada:** ningún archivo que se pasa por él
+        tiene comentarios: `informe/anteproyecto.md` y los tres `.md` de
+        `actividad-fuentes/entregables/`.
+      - **Qué hacer:** si alguna vez se convierte a PDF un borrador con
+        comentarios, aplicar el mismo filtro y la misma prueba de
+        `md_a_docx.py`: `quitar_comentarios_html()` y
+        `test_md_a_docx_comentarios.py`.
+- [ ] **`generar_demo.py` y `test_generar_demo.py` llevan fija la ruta del
+      borrador** (2026-10-15).
+      - **Dónde:** la constante `BORRADOR_VIGENTE` de `generar_demo.py`, y
+        los casos de `test_generar_demo.py`, que la escriben también.
+      - **Por qué importa:** el `SKILL.md` de `sintesis-consultoria` ya no fija
+        ningún borrador. Para que la skill sirva en otro proyecto, esa ruta
+        tendría que pasar a ser un argumento.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
