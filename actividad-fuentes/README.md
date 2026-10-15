@@ -4,6 +4,9 @@ Qué es: dónde está cada entregable del enunciado, en su orden. Las rutas son
 relativas a esta carpeta, `actividad-fuentes/`. El equipo es de un integrante,
 Esteban Díaz.
 
+Herramientas y versiones: [`HERRAMIENTAS.md`](../HERRAMIENTAS.md), en la raíz
+del repositorio.
+
 ## 1. Inventario de fallos
 
 - `entregables/inventario-fallos.md`: cuatro fallos con la plantilla del

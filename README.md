@@ -200,6 +200,8 @@ lo ejecutan en un intérprete aparte: se indica con la variable de entorno
 compara con el guion del organizador necesita además una copia local que
 no se versiona, así que en un clon nuevo esa comparación no corre.
 
+Herramientas y versiones: [`HERRAMIENTAS.md`](HERRAMIENTAS.md).
+
 ## Qué falta
 
 La ruta —qué fase sigue y qué condición la cierra— está en `PLAN.md`. Lo
