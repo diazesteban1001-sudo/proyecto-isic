@@ -210,7 +210,7 @@ Solo después de que la trazabilidad esté limpia:
 
    ```bash
    .venv/bin/python .claude/skills/sintesis-consultoria/scripts/md_a_docx.py \
-     --entrada informe/borrador.md \
+     --entrada informe/borrador-v2.md \
      --salida informe/informe-final.docx
    ```
 
