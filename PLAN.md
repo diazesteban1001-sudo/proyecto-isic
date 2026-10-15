@@ -8,8 +8,10 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-09-27): Fase 4, completa; la siguiente es la Fase
-5.** Las fases 0 a 3 están cerradas. La Fase 4 tiene fijados sus modelos y sus
+**Dónde está la ruta (2026-10-15): fases 0 a 4, cerradas; la Fase 5 espera la
+retroalimentación del avance del segundo corte; de la Fase 6 hay trabajo
+hecho.** De la Fase 6: `informe/borrador-v2.md` y las decisiones sobre la demo
+del 2026-10-02. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
 Hechas:
 - las métricas de triaje y el contexto de paciente;
@@ -22,8 +24,12 @@ Hechas:
 - el tiempo de inferencia, que cierra la fase (`outputs/tiempo-inferencia.json`).
 
 La Fase 5 está fijada, y su apertura va en un commit propio. La Fase 5 no se
-abre hasta conocer la rúbrica del avance y su retroalimentación:
+abre hasta conocer la retroalimentación del avance del segundo corte:
 si piden cambios de modelado, se hacen antes de abrir el reservado.
+*Decisión (2026-10-15, de la persona): el avance no tuvo rúbrica. La
+instrucción del docente fue entregar el link al repositorio público, con al
+menos un 75 % de avance frente a los objetivos del primer corte. La condición
+deja de esperar una rúbrica.*
 
 ## Cómo leer una puerta
 
