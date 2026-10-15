@@ -33,3 +33,8 @@ referencias/_texto-completo/
 # autoriza redistribuirse (regla 3 de CLAUDE.md). Se versiona su ficha, en
 # actividad-fuentes/respuestas/; el texto completo va aquí, solo en local.
 actividad-fuentes/respuestas/_texto-completo/
+
+# PDF de los entregables de la actividad «Nada sin fuente»: se versiona solo el
+# .md, que es la fuente (retroalimentación del docente tras la sustentación).
+# Si hace falta un PDF, se regenera en local con informe/md_a_pdf.py.
+actividad-fuentes/entregables/*.pdf

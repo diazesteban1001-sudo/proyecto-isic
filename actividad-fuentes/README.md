@@ -6,14 +6,14 @@ Esteban Díaz.
 
 ## 1. Inventario de fallos
 
-- `entregables/inventario-fallos.md` y su PDF: cuatro fallos con la plantilla
-  del enunciado.
+- `entregables/inventario-fallos.md`: cuatro fallos con la plantilla del
+  enunciado.
 - La fuente de cada fallo está en el registro de incidentes de `CLAUDE.md`
   (regla 6) o en el historial de git.
 
 ## 2. Experimento y decisión
 
-- **El documento:** `entregables/experimento-decision.md` y su PDF.
+- **El documento:** `entregables/experimento-decision.md`.
 - **La tabla de decisión completa:** `tabla-decision.md`, con los seis
   criterios.
 - **Diseño y desviaciones:**
@@ -88,8 +88,8 @@ proyecto ISIC con Kurtansky et al. (2025) y termina con un veredicto.
 
 ## 5. Memoria
 
-`entregables/memoria.md` y su PDF, con los seis apartados. El último es la
-declaración de uso de IA.
+`entregables/memoria.md`, con los seis apartados. El último es la declaración
+de uso de IA.
 
 ## Qué no está en el repositorio, y por qué
 
@@ -116,3 +116,16 @@ ficha y el texto queda en local, en carpetas que excluye `.gitignore`.
     contra los SHA-256 de `corpus-c.md`.
   - Para rehacer las copias locales, primero hay que volver a obtener cada
     texto desde su origen, que da `README-procedencia.md`.
+
+**Los PDF de `entregables/`.** No se versionan, por otra razón: la fuente es
+el `.md`, y basta con él. La regla está en `.gitignore`. Si hace falta el
+PDF, se regenera en local con el conversor del anteproyecto, desde la raíz del
+repositorio; para la memoria:
+
+```bash
+python3 informe/md_a_pdf.py --entrada actividad-fuentes/entregables/memoria.md --salida actividad-fuentes/entregables/memoria.pdf
+```
+
+Con el `memoria.md` de hoy, esa orden da un PDF con el mismo texto, página a
+página, que el que estuvo versionado hasta su retirada (comprobado el
+2026-10-15 con `pypdf`).
