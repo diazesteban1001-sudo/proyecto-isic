@@ -6,8 +6,11 @@ Etapa 3 de la skill sintesis-consultoria. Se corre SOLO después de que
 verificar_trazabilidad.py esté limpio: convertir antes es invertir
 tiempo en formato sobre un texto que todavía puede cambiar.
 
-Uso:
-    python md_a_docx.py --entrada informe/borrador.md \
+Antes de convertir quita los comentarios HTML (<!-- … -->): son trazabilidad,
+no texto del informe.
+
+Uso, con BORRADOR la ruta del borrador vigente, que fija cada proyecto:
+    python md_a_docx.py --entrada "$BORRADOR" \
                         --salida informe/informe-final.docx
 
 El .docx se genera a pedido y no se versiona (`informe/*.docx` está en

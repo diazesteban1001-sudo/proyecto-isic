@@ -782,8 +782,13 @@ tenían al menos uno. El detalle de
 cada corrección está en el historial de commits, que es parte del entregable.
 
 `sintesis-consultoria` produjo `informe/borrador.md`, `informe/informe-final.pdf`
-y `informe/demo.html`. `informe/informe-final.docx` se genera a pedido con
-`md_a_docx.py` y no se versiona. *Hasta el 2026-10-15 estaba versionado; su
+y `informe/demo.html`. **El borrador vigente es `informe/borrador-v2.md`;**
+`informe/borrador.md` es la versión anterior. Es la ruta que se pasa como
+argumento a las órdenes del `SKILL.md` de `sintesis-consultoria`, que no la
+fija, y la que llevan escrita la constante `BORRADOR_VIGENTE` de
+`generar_demo.py` y su prueba, `test_generar_demo.py`.
+`informe/informe-final.docx` se genera a pedido con `md_a_docx.py`, desde el
+borrador vigente, y no se versiona. *Hasta el 2026-10-15 estaba versionado; su
 texto era, bloque a bloque, el que `md_a_docx.py` genera desde `borrador.md`, no
 desde `borrador-v2.md`.* Su salida en `outputs/` no son
 mediciones sino el resultado del verificador de trazabilidad (regla 2): cuántas

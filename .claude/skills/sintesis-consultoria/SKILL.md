@@ -58,9 +58,13 @@ Si `.venv/` no existe, se recrea con
 
 ### Etapa 1 — Borrador en Markdown
 
-Redacta primero `informe/borrador.md`, no el `.docx` directamente. Es
+Redacta primero el borrador en Markdown, no el `.docx` directamente. Es
 más fácil de revisar, corregir y iterar contigo antes de invertir tiempo
-en formato. Estructura sugerida:
+en formato. Cuál es el borrador vigente lo fija cada proyecto, y su ruta se
+pasa como argumento a las órdenes de las etapas 2 y 3. La llevan escrita
+`generar_demo.py`, en su constante `BORRADOR_VIGENTE`, porque el texto fijo de
+la demo sale de ese borrador (Etapa 4), y su prueba, `test_generar_demo.py`.
+Estructura sugerida:
 
 1. **Resumen ejecutivo** — la tesis del proyecto en un párrafo: el
    agente como consultor, no como competidor de Kaggle.
@@ -94,12 +98,14 @@ sueltos sin fuente.
 ### Etapa 2 — Verificación de trazabilidad (obligatoria antes de Word)
 
 Corre el script de verificación sobre el borrador vigente, desde la raíz del
-repositorio y con esta ruta exacta: el generador de la demo lo vuelve a correr
-y exige que coincida, incluida la cabecera del `.md`.
+repositorio. La ruta tiene que ser la misma que fija la constante
+`BORRADOR_VIGENTE` de `generar_demo.py`: el generador vuelve a correr el
+verificador y exige que coincida, incluida la cabecera del `.md`.
 
 ```bash
+# BORRADOR: la ruta del borrador vigente, que fija el proyecto
 .venv/bin/python .claude/skills/sintesis-consultoria/scripts/verificar_trazabilidad.py \
-  --borrador informe/borrador-v2.md \
+  --borrador "$BORRADOR" \
   --outputs-dir outputs/ \
   --out outputs/sintesis-verificacion
 ```
@@ -129,8 +135,9 @@ dígito: «[−0,084; −0,0319]» son dos negativos; en «M2 − M1» y «2b �
 «−» separado por un espacio, no lo es; «60−64» se lee 60 y 64. El guion ASCII
 se lee como antes, también entre dígitos: «2015-2024» da −2024. *Hasta el
 2026-10-04 solo se reconocía el guion ASCII, y «−0,0579» se leía como 0,0579:
-al corregirlo, 19 negativos de `informe/borrador-v2.md` pasaron de señalados a
-respaldados por su propio campo, y ninguno quedó sin respaldo.* Control:
+al corregirlo, 19 negativos del borrador vigente pasaron de señalados a
+respaldados por su propio campo, y ninguno quedó sin respaldo (`CLAUDE.md`,
+registro de incidentes, duodécima fila).* Control:
 `scripts/test_signo_menos.py`.
 
 **Límite que queda, medido.** El verificador busca cada cifra en todo el
@@ -206,11 +213,15 @@ Solo después de que la trazabilidad esté limpia:
    — tiene gotchas específicas del entorno que conviene respetar.
 2. Si no existe, corre el script del proyecto, que usa `python-docx` y
    produce los estilos de encabezado, la tabla de contenido y la tabla de
-   trazabilidad como anexo con formato de tabla real, no texto plano:
+   trazabilidad como anexo con formato de tabla real, no texto plano. Antes
+   de convertir quita los comentarios HTML (`<!-- … -->`), que son
+   trazabilidad y no texto del informe; dentro de un bloque de código
+   cercado los deja. Control: `scripts/test_md_a_docx_comentarios.py`.
 
    ```bash
+   # BORRADOR: la ruta del borrador vigente, que fija el proyecto
    .venv/bin/python .claude/skills/sintesis-consultoria/scripts/md_a_docx.py \
-     --entrada informe/borrador-v2.md \
+     --entrada "$BORRADOR" \
      --salida informe/informe-final.docx
    ```
 
@@ -308,7 +319,7 @@ Reglas, idénticas a las del informe escrito:
   con `fecha_sellado`; de este último la página lee solo la semilla y la
   fracción.
 - **Las frases que dicen algo de los datos se comprueban al generar.** El
-  texto fijo sale de frases verificadas de `informe/borrador-v2.md`; las que
+  texto fijo sale de frases verificadas del borrador vigente; las que
   afirman algo que depende de `outputs/` —que un intervalo contiene el cero,
   que un orden se invierte— pasan por `afirmar()`, y si una deja de ser
   cierta, el script no escribe la página.
@@ -318,8 +329,8 @@ Reglas, idénticas a las del informe escrito:
     `outputs/fase4-m3limpio-vs-m2.json`, tiene que dar el modelo de la
     constante `RECOMENDADO`;
   - `outputs/sintesis-verificacion.json` y su `.md` tienen que coincidir
-    con recalcular la verificación sobre `informe/borrador-v2.md` con el
-    verificador actual;
+    con recalcular la verificación sobre el borrador vigente, el de
+    `BORRADOR_VIGENTE`, con el verificador actual;
   - los cinco grupos de la verificación tienen que sumar el total, porque la
     ficha de síntesis los enumera como si lo cubrieran (caso K).
 - **Mismo alcance de interpretación.** La demo puede ordenar, resaltar
@@ -344,7 +355,8 @@ Reglas, idénticas a las del informe escrito:
 
 ## Contrato de salida
 
-- `informe/borrador.md` — el borrador revisable.
+- El borrador vigente, en Markdown — el borrador revisable. Su ruta la fija
+  el proyecto y se pasa como argumento.
 - `informe/informe-final.docx` — el entregable escrito. Se genera a pedido
   con `md_a_docx.py` y no se versiona.
 - `informe/demo.html` — el entregable para la presentación en vivo:
