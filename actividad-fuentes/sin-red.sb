@@ -1,0 +1,23 @@
+; Perfil de sandbox-exec del servidor de Ollama en la actividad «Nada sin
+; fuente»: el del tratamiento A y el del control del banco de evaluación.
+;
+; ES UNA RECONSTRUCCIÓN, no el archivo original. Sale de la transcripción
+; local de la sesión de Claude Code eb2f8069-246a-4ba3-9cc3-a96098f83644
+; (~/.claude/projects/-Users-ediaz07-proyecto-isic/eb2f8069-246a-4ba3-9cc3-a96098f83644.jsonl,
+; no versionada), donde el contenido aparece dos veces, idéntico carácter a
+; carácter:
+; - escrito el 2026-09-27 a las 20:28:24 (-0500), en la orden que creó el
+;   archivo (línea 830 de la transcripción);
+; - leído el 2026-09-29 a las 16:18:52 (-0500), con cat, antes de levantar el
+;   servidor del banco (línea 2020).
+;
+; El original estaba en el scratchpad de esa sesión,
+; /private/tmp/claude-501/-Users-ediaz07-proyecto-isic/eb2f8069-246a-4ba3-9cc3-a96098f83644/scratchpad/sin-red.sb,
+; y no se conservó. Por eso esta copia no tiene fecha de modificación propia.
+; Reconstruida el 2026-10-15. Debajo de esta cabecera va el cuerpo, tal cual.
+
+(version 1)
+(allow default)
+(deny network-outbound)
+(allow network-outbound (remote ip "localhost:*"))
+(allow network-outbound (remote unix-socket))

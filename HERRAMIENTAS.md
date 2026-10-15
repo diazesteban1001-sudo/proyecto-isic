@@ -200,16 +200,27 @@ de reproducibilidad»).
     las 16:22:02 (−0500) (`banco-control-crudo.jsonl`).
 - **Configuración.** En A, un solo mensaje de usuario, sin instrucción de
   sistema, sin herramientas y sin opciones; el muestreo por defecto, sin
-  semilla fija; y el servidor en un perfil de `sandbox-exec` que prohíbe toda
-  conexión saliente salvo a localhost (`respuesta-A.md`). En el banco, cada
-  petición está cruda en `banco-control-crudo.jsonl`: el modelo, un mensaje de
-  usuario y `"stream": false`.
+  semilla fija (`respuesta-A.md`). En el banco, cada petición está cruda en
+  `banco-control-crudo.jsonl`: el modelo, un mensaje de usuario y
+  `"stream": false`.
+- **El perfil de `sandbox-exec`: una reconstrucción.**
+  [`actividad-fuentes/sin-red.sb`](actividad-fuentes/sin-red.sb) solo permite
+  conexiones salientes a localhost y a sockets Unix locales. Lo usó el
+  servidor en A y en el control del banco (mensaje del commit «Actividad «Nada
+  sin fuente»: banco de evaluación corrido en el control»).
+  - Sale de la transcripción local de la sesión del 2026-09-27, donde aparece
+    dos veces, idéntico carácter a carácter. El original no se conservó, así
+    que no tiene fecha de modificación propia. Su cabecera da los detalles.
+  - Comprobado el 2026-10-15: con él, `curl` no llega a ollama.com (código 7);
+    sin él, responde 200.
+  - La cabecera de `respuesta-A.md` decía solo «salvo a localhost»; una nota
+    del 2026-10-15, debajo, lo precisa.
 - **Qué se puede rehacer.** El modelo exacto, fijado por su ID y no por la
   etiqueta, y las peticiones, que están en el protocolo y en el `.jsonl`.
 - **Qué no.** El texto de las respuestas: sin semilla fija, nada garantiza
   que una corrida nueva dé el mismo, y para A el protocolo no permite repetir
-  la consulta. **No registrado:** el perfil de `sandbox-exec`, que no está en
-  el repositorio.
+  la consulta. El perfil de `sandbox-exec` no es el original, sino su
+  reconstrucción.
 
 ## NotebookLM
 
@@ -386,7 +397,6 @@ de reproducibilidad»).
 | Las invocaciones de cuatro scripts | `CLAUDE.md`, Pendientes, «Deuda de reproducibilidad» |
 | Versión de Python y ubicación del intérprete de 2024 | El archivo de requisitos no la da, y el entorno no aparece en el equipo |
 | Commit del código de DINOv2 y determinismo de la extracción | Nada los comprueba |
-| Perfil de `sandbox-exec` del tratamiento A | No está en el repositorio |
 | Versión de NotebookLM y de Consensus | No hay versión visible registrada; el proveedor las controla |
 | Hora de cada consulta de NotebookLM al banco | Solo consta la hora del commit |
 | Versión de Zotero en la exportación | El RTF no la graba; 10.0.4 es una inferencia del historial |

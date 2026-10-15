@@ -11,6 +11,8 @@ Tratamiento A. Respuesta de la única corrida, guardada sin tocar debajo de la l
 - Consulta: el texto exacto del protocolo, comprobado carácter a carácter. Se corrió una sola vez. Parámetros de muestreo: los de Ollama por defecto, sin semilla fija.
 - Respuesta cruda de la API, byte a byte: respuesta-A.json.
 
+*Nota del 2026-10-15, añadida después; la cabecera de arriba no se cambió.* El perfil de sandbox-exec, reconstruido en `../sin-red.sb`, permitía conexiones salientes solo a localhost y a sockets Unix locales, que son comunicación dentro del mismo equipo. La cabecera decía solo «salvo a localhost».
+
 ---
 
 Lo siento, pero no puedo encontrar las referencias exactas solicitadas para la sobreestimación del desempeño de los clasificadores de lesiones de piel cuando se dividen los datos por imagen o por lesión en lugar de por paciente. Sin embargo, puedo proporcionarte un ejemplo de investigación sobre el tema y cómo se puede abordar la sobreestimación en la evaluación del desempeño de los clasificadores. 
