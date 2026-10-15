@@ -29,6 +29,35 @@ from docx.shared import Inches, Pt
 # texto literal con asteriscos.
 INLINE = re.compile(r"(\*\*.+?\*\*|`[^`]+?`|\*[^*]+?\*)")
 
+# Los comentarios HTML del borrador (<!-- F: … -->) son trazabilidad, no texto
+# del informe: se quitan antes de convertir, también los de varias líneas. El
+# que ocupa sus propias líneas se va con ellas, porque el borrador los pone
+# entre dos frases de un mismo párrafo y una línea en blanco lo partiría en
+# dos. Dentro de un bloque de código cercado, un «<!--» es texto y se queda.
+# El patrón es el de verificar_trazabilidad.py; el del comentario en sus
+# propias líneas no cruza un «-->», para no tragarse el texto entre dos
+# comentarios. Control: test_md_a_docx_comentarios.py.
+COMENTARIO_HTML = re.compile(r"<!--.*?-->", re.DOTALL)
+COMENTARIO_EN_SUS_LINEAS = re.compile(
+    r"^[ \t]*<!--(?:(?!-->).)*-->[ \t]*(?:\n|\Z)", re.DOTALL | re.MULTILINE)
+BLOQUE_CERCADO = re.compile(
+    r"^[ \t]*(`{3,}|~{3,}).*?(?:^[ \t]*\1[ \t]*$|\Z)", re.DOTALL | re.MULTILINE)
+
+
+def quitar_comentarios_html(texto):
+    """Quita los comentarios HTML fuera de los bloques de código cercados."""
+    partes, previo = [], 0
+    for bloque in BLOQUE_CERCADO.finditer(texto):
+        partes.append(_sin_comentarios(texto[previo:bloque.start()]))
+        partes.append(bloque.group(0))
+        previo = bloque.end()
+    partes.append(_sin_comentarios(texto[previo:]))
+    return "".join(partes)
+
+
+def _sin_comentarios(trozo):
+    return COMENTARIO_HTML.sub("", COMENTARIO_EN_SUS_LINEAS.sub("", trozo))
+
 
 def escribir_runs(parrafo, texto, negrita=False, cursiva=False, codigo=False):
     """Escribe el texto aplicando el formato inline como formato de run.
@@ -263,13 +292,9 @@ def bloques(lineas):
         yield ("p", 0, " ".join(partes))
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--entrada", required=True)
-    ap.add_argument("--salida", required=True)
-    args = ap.parse_args()
-
-    lineas = open(args.entrada, encoding="utf-8").read().split("\n")
+def convertir(entrada, salida):
+    texto = quitar_comentarios_html(open(entrada, encoding="utf-8").read())
+    lineas = texto.split("\n")
     doc = Document()
 
     for seccion in doc.sections:
@@ -326,7 +351,17 @@ def main():
         parrafo.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         escribir_runs(parrafo, contenido)
 
-    doc.save(args.salida)
+    doc.save(salida)
+    return n_tablas
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--entrada", required=True)
+    ap.add_argument("--salida", required=True)
+    args = ap.parse_args()
+
+    n_tablas = convertir(args.entrada, args.salida)
     print(f"Escrito: {args.salida} — {n_tablas} tablas")
 
 
