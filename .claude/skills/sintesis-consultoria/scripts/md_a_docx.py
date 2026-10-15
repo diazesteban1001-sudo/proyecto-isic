@@ -9,6 +9,9 @@ tiempo en formato sobre un texto que todavía puede cambiar.
 Uso:
     python md_a_docx.py --entrada informe/borrador.md \
                         --salida informe/informe-final.docx
+
+El .docx se genera a pedido y no se versiona (`informe/*.docx` está en
+.gitignore): se regenera con esta orden cuando haga falta.
 """
 
 import argparse

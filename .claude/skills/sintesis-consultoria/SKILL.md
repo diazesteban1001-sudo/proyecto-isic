@@ -214,6 +214,9 @@ Solo después de que la trazabilidad esté limpia:
      --salida informe/informe-final.docx
    ```
 
+   El `.docx` se genera a pedido con esta orden y no se versiona:
+   `informe/*.docx` está en `.gitignore`.
+
 3. Verifica el resultado abriendo el documento generado antes de darlo por
    terminado — no asumas que el formato salió bien sin mirarlo.
 
@@ -342,7 +345,8 @@ Reglas, idénticas a las del informe escrito:
 ## Contrato de salida
 
 - `informe/borrador.md` — el borrador revisable.
-- `informe/informe-final.docx` — el entregable escrito.
+- `informe/informe-final.docx` — el entregable escrito. Se genera a pedido
+  con `md_a_docx.py` y no se versiona.
 - `informe/demo.html` — el entregable para la presentación en vivo:
   la misma síntesis, generada desde el mismo `outputs/*.json`.
 - `outputs/sintesis-verificacion.json` y `.md` — resultado de la

@@ -21,6 +21,10 @@ venv/
 # PDF de verificacion visual del entregable: se regenera desde el .docx
 informe/*.pdf
 
+# Word del informe: se genera a pedido desde el borrador con
+# .claude/skills/sintesis-consultoria/scripts/md_a_docx.py y no se versiona.
+informe/*.docx
+
 # Salida derivada de graphify: grafo regenerable, no entra al repo por ahora
 graphify-out/
 

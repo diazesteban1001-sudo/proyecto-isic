@@ -230,7 +230,7 @@ parte, y todavía no tienen lugar en la ruta:
 - `data/` — no versionado
 - `outputs/` — salidas verificables: de aquí debe salir cada cifra del informe
 - `referencias/` — fuentes citadas (texto, extracto o ficha, con su procedencia) y registros de búsqueda
-- `informe/` — anteproyecto y su conversor a PDF, borrador del informe y su versión Word, casos de fallo y demo
+- `informe/` — anteproyecto y su conversor a PDF, borrador del informe, casos de fallo y demo. La versión Word del borrador se genera a pedido y no se versiona
 - `docs/` — copia de la demo publicada por GitHub Pages
 - `actividad-fuentes/` — actividad «Nada sin fuente» del curso, con su propio índice
 
