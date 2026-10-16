@@ -1137,8 +1137,12 @@ El costo de inferencia se mide como tiempo:
   que usó otro subconjunto y otro equipo; solo comparan los modelos de este
   trabajo entre sí.
 
-**Puerta.** `informe/informe-final.pdf` y `informe/demo.html` regenerados desde
-el estado final de `outputs/`.
+**Puerta.** El informe en Markdown, `informe/borrador-v2.md`, e
+`informe/demo.html` regenerada, los dos al día con el estado final de
+`outputs/`. *Decisión (2026-10-15, de la persona): el docente indicó ese día
+que bastan los `.md` y que no se suban PDF. Hasta entonces la puerta era
+`informe/informe-final.pdf` y `informe/demo.html` regenerados desde el estado
+final de `outputs/`.*
 
 **Riesgo.** Que el informe quede desfasado de `outputs/` — la cuarta clase de
 fallo del registro de incidentes (`CLAUDE.md`, regla 6), que ya ocurrió una vez
