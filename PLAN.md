@@ -10,8 +10,9 @@ salida, y qué hacer cuando algo no se pueda cerrar.
 
 **Dónde está la ruta (2026-10-15): fases 0 a 4, cerradas; la Fase 5 espera la
 retroalimentación del avance del segundo corte; de la Fase 6 hay trabajo
-hecho.** De la Fase 6: `informe/borrador-v2.md` y las decisiones sobre la demo
-del 2026-10-02. La Fase 4 tiene fijados sus modelos y sus
+hecho.** De la Fase 6: `informe/borrador-v2.md`, las decisiones sobre la demo
+del 2026-10-02 y las dos mediciones del 2026-10-04, el efecto de la partición y
+la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
 Hechas:
 - las métricas de triaje y el contexto de paciente;
