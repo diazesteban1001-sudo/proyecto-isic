@@ -781,8 +781,13 @@ Ninguna de las cinco del alcance original se dio por buena sin correrla contra
 tenían al menos uno. El detalle de
 cada corrección está en el historial de commits, que es parte del entregable.
 
-`sintesis-consultoria` produjo `informe/borrador.md`, `informe/informe-final.pdf`
-y `informe/demo.html`. **El borrador vigente es `informe/borrador-v2.md`;**
+De `sintesis-consultoria` quedan en el repositorio dos borradores del informe y
+la demo, `informe/demo.html`, con su copia publicada en `docs/index.html`.
+Desde la decisión del 2026-10-15, la puerta de la Fase 6 es el informe en
+Markdown más la demo regenerada, sin PDF (`PLAN.md`, Fase 6, «Puerta»).
+*Hasta ese día esta frase decía que `sintesis-consultoria` produjo también
+`informe/informe-final.pdf`, que nunca se versionó.* **El borrador vigente es
+`informe/borrador-v2.md`;**
 `informe/borrador.md` es la versión anterior. Es la ruta que se pasa como
 argumento a las órdenes del `SKILL.md` de `sintesis-consultoria`, que no la
 fija, y la que llevan escrita la constante `BORRADOR_VIGENTE` de
