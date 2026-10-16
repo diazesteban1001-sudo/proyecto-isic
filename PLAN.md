@@ -1249,6 +1249,15 @@ medido».
 - **Salida:** `outputs/efecto-particion.json` y `.md` (máximo 15 líneas, sin
   interpretación). El cargador se niega a leer el reservado.
 
+**El efecto de la partición: la corrida.**
+- **Cuándo:** el 2026-10-04, en el commit «modelado-baseline: medir el efecto
+  de la partición sobre el resultado», a las 12:05 (−0500).
+- **Salida:** `outputs/efecto-particion.json` y su `.md`.
+- **Lectura, según la regla fijada arriba:** en `informe/borrador-v2.md`,
+  «Partir por filas no cambia el veredicto».
+
+*Registro añadido el 2026-10-15: la corrida no se había anotado aquí.*
+
 **La imagen sola: especificación y regla de lectura (2026-10-04, de la
 persona).** Fijadas antes de correr nada.
 
