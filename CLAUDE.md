@@ -1254,6 +1254,19 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Por qué importa:** el `SKILL.md` de `sintesis-consultoria` ya no fija
         ningún borrador. Para que la skill sirva en otro proyecto, esa ruta
         tendría que pasar a ser un argumento.
+- [ ] **Pendiente del informe: qué referencia de sensibilidad top-15 se usa
+      para el contraste de orden de magnitud** (2026-10-15). Sin resolver.
+      - **Qué fija `PLAN.md`:** Marchetti et al., objetivo melanoma,
+        SEtop-15 = 0,541, como referencia de orden de magnitud para detectar
+        una implementación rota (Decisiones, «Flecos que abre esa decisión»,
+        1 y 2). La Fase 4 lo repite: *«La referencia de SEtop-15 para
+        nuestros modelos sigue siendo Marchetti et al.»*
+      - **Qué hace el informe:** `informe/borrador-v2.md`, «El modelo
+        recomendado», contrasta M3 con la variante publicada del ganador sin
+        recortes de imagen, no con Marchetti et al.
+      - **Dónde repercute:** la nota del objetivo 4 del README, «Avance
+        respecto a los objetivos del anteproyecto», da ese contraste como el
+        de la sensibilidad top-15.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
