@@ -1295,12 +1295,19 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         caso que debe fallar. Regenerada, la verificación da 669 números, 340
         con respaldo y 25 señalados, frente a 652, 330 y 26.*
 - [ ] **El «4» de «Fase 4» tiene respaldo solo por coincidencia** (2026-10-22).
-      - **Dónde:** `informe/borrador-v2.md`, líneas 422 y 840. La 840 es del
-        párrafo de la Fase 4b.
+      - **Dónde:** `informe/borrador-v2.md`, líneas 431, 864 y 882. La 864 es
+        del párrafo de la Fase 4b, y la 882, del de la Fase 4c («las fases 4 y
+        4b»). *Hasta el 2026-10-23 decía «líneas 422 y 840»: el texto de la Fase
+        4c corrió las dos.*
       - **Por qué:** es el número de una fase de `PLAN.md`, no una cifra, y hay
         un 4 en `outputs/`.
-      - **Qué lo cerraría:** añadir «fases?» a `REFERENCIA_A_SECCION`, con su
-        caso en `test_referencias_a_celdas.py`. No se ha decidido.
+      - **Del mismo tipo (2026-10-23):** el «0» de «la semilla 0», línea 879,
+        en el control del atajo. Es una etiqueta, y lo respalda cualquier 0 de
+        `outputs/`; entre ellos está `fase4c-control-atajo.json >
+        semillas_corridas`, que sí es su semilla.
+      - **Qué lo cerraría:** añadir «fases?» (y, para el «0», «semillas?») a
+        `REFERENCIA_A_SECCION`, con su caso en `test_referencias_a_celdas.py`.
+        No se ha decidido.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
@@ -1367,13 +1374,18 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 *Hasta el 2026-10-02 aquí decía «con tolerancia de redondeo 0,01»: era el
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
-(`outputs/sintesis-verificacion.json`, regenerado por el commit «Verificador:
-"la celda 24" es una referencia; verificación regenerada», del 2026-10-22,
-sobre `informe/borrador-v2.md` con la Fase 4b): **669 números, 340 con
-respaldo, 25 señalados**, para revisar uno por uno en el anexo. *La anterior,
-del 2026-10-04, daba 652, 330 y 26. Desde ese día, la nueva tiene en el
-borrador la Fase 4b, en el corpus los tres `fase4b-*.json`, y fuera del
-conteo las referencias a celdas de un notebook, como «la celda 24».* *Desde
+(`outputs/sintesis-verificacion.json`, regenerado por el commit «Verificación
+de trazabilidad regenerada con la Fase 4c», del 2026-10-23, sobre
+`informe/borrador-v2.md` con la Fase 4c): **720 números, 364 con respaldo, 25
+señalados**, para revisar uno por uno en el anexo. *La anterior, del
+2026-10-22, daba 669, 340 y 25. La nueva tiene en el borrador la Fase 4c, y en
+el corpus los tres `fase4c-*.json` y `prueba-tiempo-red-imagen.json`. Sus 24
+respaldos nuevos son cifras de la Fase 4c, cada una con el campo que cita su
+comentario, salvo dos números que no son cifras: el «4» de «las fases 4 y 4b»
+y el «0» de «la semilla 0» (Pendientes).* *La de antes, del 2026-10-04, daba
+652, 330 y 26; la del 2026-10-22 tenía ya en el borrador la Fase 4b, en el
+corpus los tres `fase4b-*.json`, y fuera del conteo las referencias a celdas
+de un notebook, como «la celda 24».* *Desde
 el commit «Regenerar la verificación de trazabilidad con el signo menos», del
 2026-10-04, el verificador lee el signo menos tipográfico (defecto (b) del registro de incidentes, duodécima
 fila, cerrado): 19 negativos pasaron de señalados a respaldados, por su propio
@@ -1387,7 +1399,7 @@ señalado a respaldado por coincidencia: lo respalda un recuento de
 `outputs/mecanismo-2a.json`, no la lista de `auditoria-de-fugas.json`.* De los
 demás, 7 son porcentajes del método, excluidos por lista declarada; 9 caen en
 contextos que el verificador omite (años y etiquetas de nivel), listados en
-`numeros_en_contextos_omitidos`; y 288 están dentro de comentarios HTML,
+`numeros_en_contextos_omitidos`; y 315 están dentro de comentarios HTML,
 listados en `numeros_en_comentarios`. Los cinco grupos suman el total, y el
 verificador se detiene si no. *Las corridas anteriores, del mismo día: sobre
 el borrador sin la imagen sola, 553 números (252, 39, 6, 9 y 247); con la
