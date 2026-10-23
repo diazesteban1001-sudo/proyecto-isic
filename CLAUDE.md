@@ -1272,6 +1272,20 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Dónde repercute:** la nota del objetivo 4 del README, «Avance
         respecto a los objetivos del anteproyecto», da ese contraste como el
         de la sensibilidad top-15.
+- [ ] **El «24» de `informe/borrador-v2.md` tendrá respaldo solo por
+      coincidencia** (2026-10-22).
+      - **Dónde:** línea 305, la fila de M3 limpio de «Qué se compara»: «no se
+        descartan las 22 columnas de la celda 24 del notebook». Es un número de
+        celda, no una medición.
+      - **Por qué:** los `fase4b-*.json` entraron al corpus del verificador, y
+        `outputs/fase4b-c3-vs-m3limpio.json` tiene un 24 en cinco pliegues de
+        `c3.por_semilla_y_fold.*.iteraciones_del_nivel_2b`, las iteraciones del
+        nivel 2b de C3. Recalculada con el corpus del 2026-10-22, la
+        verificación pasa de 330 números con respaldo y 26 señalados a 331 y
+        25, y la única diferencia es ese 24.
+      - **Qué hacer:** `outputs/sintesis-verificacion.json` no se regeneró. Al
+        regenerarlo en la Fase 6, el 24 aparecerá respaldado: hay que
+        revisarlo a mano y tratarlo como señalado.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
