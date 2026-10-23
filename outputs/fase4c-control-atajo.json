@@ -1,0 +1,287 @@
+{
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "semillas_corridas": [
+    0
+  ],
+  "n_splits": 5,
+  "folds": {
+    "sha256_por_semilla": {
+      "0": "e544a6b29a7637e86bc6e2e5ab88e9ff2eb3edf5612353c2adc554311c9d00df"
+    },
+    "iguales_a": "outputs/fase4-m2-vs-m1.json"
+  },
+  "puntuaciones_de_la_red": {
+    "archivo": "data/fase4c-puntuaciones-red.csv.gz",
+    "sha256": "8788f58ed78cf9acea67dabb52156983ce091d620b5dd96ad233657d0d0f59df",
+    "huella_de_las_puntuaciones": "8dbfb7b158e1d3c81efdd52e8c87b2b832f7a3babea2ac5c72cfcfd0f64042fc",
+    "controles": {
+      "archivo": "data/fase4c-controles.json",
+      "sha256": "0aa2f6c45143fbaa8e203ab57ae1ddf9556de4ec6a0795172019e0f5ac3d13a9",
+      "casos": 23,
+      "fallos": 0
+    },
+    "segundos_por_red": {
+      "mediana": 270.1,
+      "minimo": 262.6,
+      "maximo": 403.7
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4c_comparar.py",
+      "--atajo",
+      "--out",
+      "outputs/fase4c-control-atajo"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "este proceso"
+    }
+  },
+  "que_es": "Control del atajo de la Fase 4c (PLAN.md), descriptivo: no cambia la regla. Semilla 0: C4 con las puntuaciones de la validación interna de M4b en las filas de entrenamiento, frente a C4 con el atajo; en validación, las dos con la red externa.",
+  "puntuaciones_internas": {
+    "archivo": "data/fase4c-puntuaciones-red-internas.csv.gz",
+    "sha256": "7b14912b521a2a0e4af6d2dedd14518c785fd423c2088939b5d9b68e1a2d4645",
+    "huella_de_las_puntuaciones": "a47d001fa4258fee7382362d6408002eb5c07f3b447cd70d3cf98eaec3533371",
+    "segundos_por_red": {
+      "mediana": 211.6,
+      "minimo": 209.5,
+      "maximo": 215.7
+    }
+  },
+  "c4_con_el_atajo_reproduce": "outputs/fase4c-c4-vs-m3limpio.json",
+  "por_pliegue": [
+    {
+      "pliegue": 0,
+      "pauc_atajo": 0.1778,
+      "pauc_validacion_interna": 0.179,
+      "diferencia_interna_menos_atajo": 0.0012,
+      "metricas_atajo": {
+        "pauc": 0.1778,
+        "auc": 0.9744,
+        "setop15": 0.7809,
+        "nnt80": 40.902
+      },
+      "metricas_validacion_interna": {
+        "pauc": 0.179,
+        "auc": 0.9762,
+        "setop15": 0.7605,
+        "nnt80": 35.5882
+      },
+      "ajuste_atajo": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 2.05,
+        "arboles": 32,
+        "iteraciones_corridas": 132
+      },
+      "ajuste_validacion_interna": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 4.08,
+        "arboles": 268,
+        "iteraciones_corridas": 368
+      }
+    },
+    {
+      "pliegue": 1,
+      "pauc_atajo": 0.1646,
+      "pauc_validacion_interna": 0.1667,
+      "diferencia_interna_menos_atajo": 0.0021,
+      "metricas_atajo": {
+        "pauc": 0.1646,
+        "auc": 0.9565,
+        "setop15": 0.7065,
+        "nnt80": 59.7885
+      },
+      "metricas_validacion_interna": {
+        "pauc": 0.1667,
+        "auc": 0.9591,
+        "setop15": 0.75,
+        "nnt80": 51.7115
+      },
+      "ajuste_atajo": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 1.89,
+        "arboles": 32,
+        "iteraciones_corridas": 132
+      },
+      "ajuste_validacion_interna": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 2.29,
+        "arboles": 72,
+        "iteraciones_corridas": 172
+      }
+    },
+    {
+      "pliegue": 2,
+      "pauc_atajo": 0.1694,
+      "pauc_validacion_interna": 0.1756,
+      "diferencia_interna_menos_atajo": 0.0062,
+      "metricas_atajo": {
+        "pauc": 0.1694,
+        "auc": 0.9653,
+        "setop15": 0.7778,
+        "nnt80": 47.0769
+      },
+      "metricas_validacion_interna": {
+        "pauc": 0.1756,
+        "auc": 0.9725,
+        "setop15": 0.7569,
+        "nnt80": 38.9423
+      },
+      "ajuste_atajo": {
+        "n_variables": 240,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 3.45,
+        "arboles": 197,
+        "iteraciones_corridas": 297
+      },
+      "ajuste_validacion_interna": {
+        "n_variables": 240,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 2.31,
+        "arboles": 63,
+        "iteraciones_corridas": 163
+      }
+    },
+    {
+      "pliegue": 3,
+      "pauc_atajo": 0.1737,
+      "pauc_validacion_interna": 0.1761,
+      "diferencia_interna_menos_atajo": 0.0024,
+      "metricas_atajo": {
+        "pauc": 0.1737,
+        "auc": 0.9683,
+        "setop15": 0.6905,
+        "nnt80": 40.6471
+      },
+      "metricas_validacion_interna": {
+        "pauc": 0.1761,
+        "auc": 0.9703,
+        "setop15": 0.6918,
+        "nnt80": 47.8039
+      },
+      "ajuste_atajo": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 3.08,
+        "arboles": 158,
+        "iteraciones_corridas": 258
+      },
+      "ajuste_validacion_interna": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 3.57,
+        "arboles": 206,
+        "iteraciones_corridas": 306
+      }
+    },
+    {
+      "pliegue": 4,
+      "pauc_atajo": 0.1413,
+      "pauc_validacion_interna": 0.1476,
+      "diferencia_interna_menos_atajo": 0.0063,
+      "metricas_atajo": {
+        "pauc": 0.1413,
+        "auc": 0.9304,
+        "setop15": 0.6812,
+        "nnt80": 87.4706
+      },
+      "metricas_validacion_interna": {
+        "pauc": 0.1476,
+        "auc": 0.9363,
+        "setop15": 0.7507,
+        "nnt80": 104.6275
+      },
+      "ajuste_atajo": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 2.06,
+        "arboles": 36,
+        "iteraciones_corridas": 136
+      },
+      "ajuste_validacion_interna": {
+        "n_variables": 241,
+        "alineacion": {
+          "antes": true,
+          "razon": true,
+          "despues": true,
+          "filas_remuestreadas": 61610
+        },
+        "segundos_ajuste": 2.27,
+        "arboles": 68,
+        "iteraciones_corridas": 168
+      }
+    }
+  ],
+  "diferencia_de_pauc_interna_menos_atajo": {
+    "por_pliegue": [
+      0.0012,
+      0.0021,
+      0.0062,
+      0.0024,
+      0.0063
+    ],
+    "media": 0.0037,
+    "minima": 0.0012,
+    "maxima": 0.0063
+  },
+  "segundos": {
+    "total": 183.8
+  },
+  "nota": "Descriptivo, sin intervalo: cinco pliegues de una semilla. No aplica la regla ni interpreta."
+}
