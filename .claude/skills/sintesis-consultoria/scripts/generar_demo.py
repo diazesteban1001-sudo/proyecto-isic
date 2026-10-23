@@ -817,6 +817,9 @@ PLANTILLA = r"""<!DOCTYPE html>
   .barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
   .lienzo { position: relative; height: 340px; }
   .paneles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  /* Sin esto, el panel —un elemento de la rejilla— no baja del ancho que
+     Chart.js le dio al lienzo, y a 375 px la página desbordaba a lo ancho. */
+  .panel { min-width: 0; }
   .panel h3 { margin: 0 0 6px; font-size: 14px; }
   .panel .lienzo { height: 230px; }
   .pie-grafico { font-size: 13px; color: var(--suave); margin-top: 14px; }
