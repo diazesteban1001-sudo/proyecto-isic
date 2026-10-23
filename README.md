@@ -1,7 +1,7 @@
 # Proyecto de consultoría ISIC 2024 — Detección de melanoma
 
 **Estado: proyecto en curso.** Las cifras de este README se confirmaron
-contra `outputs/` el 2026-10-15. El avance frente a los objetivos del
+contra `outputs/` el 2026-10-22. El avance frente a los objetivos del
 anteproyecto está en
 [Avance respecto a los objetivos del anteproyecto](#avance-respecto-a-los-objetivos-del-anteproyecto).
 
@@ -26,8 +26,9 @@ no solo lo que pidió en el leaderboard.
 
 Los objetivos y sus criterios de cumplimiento son los de
 `informe/anteproyecto.md`, sección 3; la columna del criterio los resume, y
-el texto literal está allí. De las siete fases de `PLAN.md` (0 a 6), las
-cinco primeras están cerradas. La Fase 5, abrir el conjunto reservado, se
+el texto literal está allí. En `PLAN.md` están cerradas las fases 0 a 4 y
+la 4b, un intento de mejorar al modelo recomendado que se añadió después de la
+Fase 4. La Fase 5, abrir el conjunto reservado, se
 hace una sola vez y espera la retroalimentación de este avance: si se pide
 un cambio de modelado, se hace antes de abrirlo. De la Fase 6, el informe y
 la demo, hay trabajo hecho mientras la 5 espera.
@@ -36,7 +37,7 @@ la demo, hay trabajo hecho mientras la 5 espera.
 |---|---|---|---|
 | 1. Esquema de evaluación libre de fuga | La proporción de pacientes presentes a ambos lados de cada partición; las variables excluidas, con su motivo; el conjunto reservado, sellado antes de cualquier decisión nueva de modelado | Cumplido | `diseno-validacion.json > fuga_de_grupo_detectada` y `comparacion_particion_naive`; `modelado-baseline.json > columnas_excluidas` y `auditoria-de-fugas.json`; `holdout-pacientes.json`, sellado en la Fase 1 de `PLAN.md` |
 | 2. Cuatro niveles de referencia bajo la pAUC y el AUC, en los mismos pliegues | Las medias y las series por pliegue de las dos métricas; los casos en que discrepan en el veredicto | Cumplido | `modelado-baseline.json > nivel_*.pauc_por_fold` y `auc_estandar_por_fold`; las discrepancias, en `informe/borrador-v2.md`, «Una decisión por defecto cambia el veredicto» y «Una ventaja que la pAUC no ve» |
-| 3. Comparación pareada de los niveles y de la solución ganadora reproducida | El intervalo de cada diferencia, ingenuo y corregido; los componentes del ganador que no se pudieron reproducir, con su motivo | Cumplido. Entre niveles, la comparación es 2b − 1; el ganador se compara con M2. Lo que falta del ganador quedó fuera por decisión, cada cosa con su motivo | `validacion-repetida.json` y `fase4-*.json`, campos `intervalo_t_95` e `intervalo_t_95_nadeau_bengio`; lo que queda fuera del ganador, en `informe/borrador-v2.md`, «Qué se compara» |
+| 3. Comparación pareada de los niveles y de la solución ganadora reproducida | El intervalo de cada diferencia, ingenuo y corregido; los componentes del ganador que no se pudieron reproducir, con su motivo | Cumplido. Entre niveles, la comparación es 2b − 1; el ganador se compara con M2. Lo que falta del ganador quedó fuera por decisión, cada cosa con su motivo. La Fase 4b comparó además tres combinaciones contra M3 limpio, con corrección por multiplicidad. | `validacion-repetida.json` y `fase4-*.json`, campos `intervalo_t_95` e `intervalo_t_95_nadeau_bengio`; lo que queda fuera del ganador, en `informe/borrador-v2.md`, «Qué se compara»; las combinaciones, en `fase4b-*.json` |
 | 4. Ejes de triaje y tiempo de inferencia | La tabla por nivel de la métrica principal, los dos ejes de triaje y el tiempo; la implementación de los ejes, contrastada contra el orden de magnitud publicado | Cumplido en parte: la tabla, sobre los modelos de la Fase 4; el contraste, solo de la sensibilidad top-15. Ver la nota | `informe/borrador-v2.md`, «La pregunta del cliente, entera» y, para el contraste, «El modelo recomendado»; `tiempo-inferencia.json` |
 | 5. Características de imagen, con verificación previa del preentrenamiento, y evaluación del modelo recomendado en el reservado | El resultado de la verificación; las métricas del reservado, con su intervalo | Parcial: hechas la verificación, la extracción y la evaluación de la imagen en desarrollo. Falta evaluar en el reservado el modelo recomendado, M3 limpio, que no usa imagen | `informe/borrador-v2.md`, «El extractor de imagen»; `extraccion-imagen.json`; `fase4-m4-vs-m2.json`, `fase4-m4b-vs-m2.json` e `imagen-sola.json` |
 
@@ -178,6 +179,19 @@ Nadeau y Bengio.)*
   se fijó antes de correr la comparación. Entre lo que esa limpieza no
   quita está el diseño de sus variables, que su autor fijó sin ningún
   conjunto reservado: el reservado de este proyecto no le es ajeno.
+- **Tres intentos de mejorar al modelo recomendado no lo superan.** Los
+  candidatos y la regla se fijaron antes de correr, y el intervalo se corrigió
+  además por haber probado tres (Bonferroni). Ninguna combinación supera a M3
+  limpio en la pAUC: mezclarlo con el modelo con contexto de paciente,
+  −0,0025 [−0,0129; 0,008]; añadirle las dos variables de imagen de M4b,
+  +0,0011 [−0,012; 0,0142]; y mezclarlo con un segundo boosting sobre sus
+  mismas variables, −0,0009 [−0,012; 0,0101]
+  (`fase4b-c1-vs-m3limpio.json`, `fase4b-c2-vs-m3limpio.json` y
+  `fase4b-c3-vs-m3limpio.json > comparaciones_nuevo_menos_base.pauc.media` y
+  `comparaciones_nuevo_menos_base.pauc.intervalo_bonferroni_nadeau_bengio`).
+  M3 limpio sigue siendo el modelo recomendado. Las combinaciones se eligieron
+  después de conocer los resultados de la Fase 4, y así está declarado en
+  `PLAN.md`.
 - **La implementación de la métrica se verificó contra el script oficial
   del organizador** —no contra una reimplementación propia ni de memoria—
   antes de confiar en ningún resultado de modelado
