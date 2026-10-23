@@ -26,7 +26,8 @@ ninguna red de la fase ni responde ninguna pregunta.
                    comprobó para los suyos.
   c4               La alineación de C2 (fase4b_comparar.comprobar_alineacion)
                    con las variables de la red (fase4c.variables_red), antes y
-                   después del remuestreo; y la puntuación es una probabilidad.
+                   después del remuestreo; la puntuación es una probabilidad, y
+                   una puntuación 0 dentro de un paciente da razón 0.
 
 Cada control tiene un caso que debe fallar, por el corolario de la regla 6 de
 CLAUDE.md:
@@ -39,7 +40,8 @@ CLAUDE.md:
               un isic_id ajeno;
   referencias: el archivo de predicciones con un byte más, y los pliegues de la
                semilla 0 frente a la huella de la semilla 1;
-  c4: las columnas corridas una fila, y una puntuación que no es positiva.
+  c4: las columnas corridas una fila; una puntuación negativa, una faltante y
+      un paciente con todas sus puntuaciones en 0.
 
 Con --rapido, las tres redes (barajadas y las dos de reproducibilidad) entrenan
 una época y puntúan solo los positivos de la validación y 4.000 de sus
@@ -314,8 +316,19 @@ def control_c4(d):
     registrar("c4", "las columnas corridas una fila", not alin_r["antes"], f"{alin_r}", debe_fallar=True)
     cero = p.copy()
     cero[tr[0]] = 0.0
-    ok, m = se_detiene(lambda: fase4c.variables_red(cero, tr, va, d["grupos"]))
-    registrar("c4", "una puntuación que no es positiva", ok, m[:90], debe_fallar=True)
+    a_cero = fase4c.variables_red(cero, tr, va, d["grupos"])
+    registrar("c4", "una puntuación 0 dentro de un paciente con otras positivas: razón 0",
+              a_cero["tr"]["razon"][0] == 0.0 and np.all(np.isfinite(a_cero["tr"]["razon"])),
+              f"razón de esa fila: {a_cero['tr']['razon'][0]}")
+    for nombre, valor in (("una puntuación negativa", -0.1), ("una puntuación faltante", np.nan)):
+        malo = p.copy()
+        malo[tr[0]] = valor
+        ok, m = se_detiene(lambda: fase4c.variables_red(malo, tr, va, d["grupos"]))
+        registrar("c4", nombre, ok, m[:90], debe_fallar=True)
+    todo_cero = p.copy()
+    todo_cero[tr[d["grupos"][tr] == d["grupos"][tr[0]]]] = 0.0
+    ok, m = se_detiene(lambda: fase4c.variables_red(todo_cero, tr, va, d["grupos"]))
+    registrar("c4", "un paciente con todas sus puntuaciones en 0", ok, m[:90], debe_fallar=True)
 
 
 def main():

@@ -150,13 +150,23 @@ def probabilidad(logit):
 def variables_red(p, tr, va, grupos):
     """Las dos variables de C4 en un pliegue, con la forma que recibe
     fase4b.con_imagen: la puntuación de la red y su razón contra la media del
-    paciente, a cada lado con sus propias filas, como en M4b y C2."""
+    paciente, a cada lado con sus propias filas, como en M4b y C2. Una puntuación
+    puede ser 0 —la sigmoide en float64 de un logit muy negativo da 0 exacto—, y
+    entonces su razón es 0. Se detiene si hay puntuaciones negativas o faltantes, o
+    si un paciente tiene todas las suyas en 0: su razón no está definida.
+    *Hasta el 2026-10-23 exigía que todas fueran positivas, más de lo que la razón
+    necesita; la pregunta 2 se detuvo con un 0 en la semilla 2 (PLAN.md, Fase 4c).*"""
     p = np.asarray(p, dtype=np.float64)
-    if not np.all(p[np.concatenate([tr, va])] > 0):
-        raise SystemExit("ERROR: hay puntuaciones de la red que no son positivas; la razón por paciente no se puede "
-                         "calcular.")
-    return {"tr": {"puntuacion": p[tr], "razon": razon_paciente(p[tr], grupos[tr])},
-            "va": {"puntuacion": p[va], "razon": razon_paciente(p[va], grupos[va])}}
+    usadas = p[np.concatenate([tr, va])]
+    if not np.all(np.isfinite(usadas)) or np.any(usadas < 0):
+        raise SystemExit("ERROR: hay puntuaciones de la red negativas o faltantes.")
+    a = {"tr": {"puntuacion": p[tr], "razon": razon_paciente(p[tr], grupos[tr])},
+         "va": {"puntuacion": p[va], "razon": razon_paciente(p[va], grupos[va])}}
+    for lado in ("tr", "va"):
+        if not np.all(np.isfinite(a[lado]["razon"])):
+            raise SystemExit(f"ERROR: un paciente de {lado} tiene todas sus puntuaciones en 0; su razón no está "
+                             "definida.")
+    return a
 
 
 def ensamblar(partes, isic, asignacion):
