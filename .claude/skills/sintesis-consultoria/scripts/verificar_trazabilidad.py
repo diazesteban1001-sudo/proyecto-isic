@@ -236,17 +236,23 @@ def es_parte_de_identificador(texto, ini, fin):
 # "numeración de secciones"— pero nunca lo implementó: pasaban porque la
 # regla de reescalado le encontraba respaldo a cualquier cosa. Al endurecer
 # esa regla quedaron a la vista, así que aquí se excluyen por mecanismo
-# explícito en vez de por accidente.
-REFERENCIA_A_SECCION = re.compile(r"(secci[oó]n(es)?|§)\s*$", re.IGNORECASE)
+# explícito en vez de por accidente. *Desde el 2026-10-22, también «celda N»:
+# la celda de un notebook citado es numeración de otro documento, no una cifra.
+# El «24» de «la celda 24 del notebook» pasaba por coincidencia con las
+# iteraciones de C3 (outputs/fase4b-c3-vs-m3limpio.json). Mira solo lo que va
+# justo antes del número, así que «las 22 columnas de la celda 24» sigue
+# buscando respaldo para el 22. Control: test_referencias_a_celdas.py.*
+REFERENCIA_A_SECCION = re.compile(r"(secci[oó]n(es)?|§|celdas?)\s*$", re.IGNORECASE)
 
 
 def es_numeracion_de_seccion(texto, ini, linea_texto, col):
-    """True si el token es numeración del propio documento."""
+    """True si el token es numeración de un documento: del propio (encabezados,
+    secciones) o de un notebook citado (celdas)."""
     # a) Encabezado Markdown: "### 7.3 Lectura de los resultados"
     encabezado = re.match(r"^\s*#{1,6}\s+", linea_texto)
     if encabezado and col == encabezado.end():
         return True
-    # b) Referencia cruzada: "(sección 7.4)", "§10.1"
+    # b) Referencia cruzada: "(sección 7.4)", "§10.1", "la celda 24"
     if REFERENCIA_A_SECCION.search(texto[max(0, ini - 12):ini]):
         return True
     return False

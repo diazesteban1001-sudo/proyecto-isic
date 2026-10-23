@@ -1272,7 +1272,7 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Dónde repercute:** la nota del objetivo 4 del README, «Avance
         respecto a los objetivos del anteproyecto», da ese contraste como el
         de la sensibilidad top-15.
-- [ ] **El «24» de `informe/borrador-v2.md` tendrá respaldo solo por
+- [x] **El «24» de `informe/borrador-v2.md` tendrá respaldo solo por
       coincidencia** (2026-10-22).
       - **Dónde:** línea 305, la fila de M3 limpio de «Qué se compara»: «no se
         descartan las 22 columnas de la celda 24 del notebook». Es un número de
@@ -1286,6 +1286,21 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Qué hacer:** `outputs/sintesis-verificacion.json` no se regeneró. Al
         regenerarlo en la Fase 6, el 24 aparecerá respaldado: hay que
         revisarlo a mano y tratarlo como señalado.
+      - *Cumplido el 2026-10-22, antes de la Fase 6, porque la demo no se podía
+        regenerar con la verificación desfasada. «Celda N» se trata ahora como
+        referencia, como «sección N»: es `REFERENCIA_A_SECCION`, que mira solo
+        lo que va justo antes del número. El 24 ya no se cuenta, y el 22 de
+        «las 22 columnas» sigue buscando respaldo. Control:
+        `test_referencias_a_celdas.py`, 7 de 7, con la expresión anterior como
+        caso que debe fallar. Regenerada, la verificación da 669 números, 340
+        con respaldo y 25 señalados, frente a 652, 330 y 26.*
+- [ ] **El «4» de «Fase 4» tiene respaldo solo por coincidencia** (2026-10-22).
+      - **Dónde:** `informe/borrador-v2.md`, líneas 422 y 840. La 840 es del
+        párrafo de la Fase 4b.
+      - **Por qué:** es el número de una fase de `PLAN.md`, no una cifra, y hay
+        un 4 en `outputs/`.
+      - **Qué lo cerraría:** añadir «fases?» a `REFERENCIA_A_SECCION`, con su
+        caso en `test_referencias_a_celdas.py`. No se ha decidido.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
@@ -1352,11 +1367,15 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 *Hasta el 2026-10-02 aquí decía «con tolerancia de redondeo 0,01»: era el
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
-(`outputs/sintesis-verificacion.json`, regenerado por el commit «Regenerar la
-verificación de trazabilidad con el signo menos», del 2026-10-04, sobre
-`informe/borrador-v2.md`): **652 números, 330 con respaldo, 26 señalados**,
-para revisar uno por uno en el anexo. *Desde ese commit el verificador lee el
-signo menos tipográfico (defecto (b) del registro de incidentes, duodécima
+(`outputs/sintesis-verificacion.json`, regenerado por el commit «Verificador:
+"la celda 24" es una referencia; verificación regenerada», del 2026-10-22,
+sobre `informe/borrador-v2.md` con la Fase 4b): **669 números, 340 con
+respaldo, 25 señalados**, para revisar uno por uno en el anexo. *La anterior,
+del 2026-10-04, daba 652, 330 y 26. Desde ese día, la nueva tiene en el
+borrador la Fase 4b, en el corpus los tres `fase4b-*.json`, y fuera del
+conteo las referencias a celdas de un notebook, como «la celda 24».* *Desde
+el commit «Regenerar la verificación de trazabilidad con el signo menos», del
+2026-10-04, el verificador lee el signo menos tipográfico (defecto (b) del registro de incidentes, duodécima
 fila, cerrado): 19 negativos pasaron de señalados a respaldados, por su propio
 campo, y ningún negativo quedó sin respaldo. Hasta entonces, los de la
 subsección de la imagen sola se leían sin signo: cinco quedaban señalados
@@ -1368,7 +1387,7 @@ señalado a respaldado por coincidencia: lo respalda un recuento de
 `outputs/mecanismo-2a.json`, no la lista de `auditoria-de-fugas.json`.* De los
 demás, 7 son porcentajes del método, excluidos por lista declarada; 9 caen en
 contextos que el verificador omite (años y etiquetas de nivel), listados en
-`numeros_en_contextos_omitidos`; y 280 están dentro de comentarios HTML,
+`numeros_en_contextos_omitidos`; y 288 están dentro de comentarios HTML,
 listados en `numeros_en_comentarios`. Los cinco grupos suman el total, y el
 verificador se detiene si no. *Las corridas anteriores, del mismo día: sobre
 el borrador sin la imagen sola, 553 números (252, 39, 6, 9 y 247); con la
