@@ -829,6 +829,18 @@ Quitar los sesgos casi no movió la diferencia media: +0,0185 con ellos,
 intervalo propio y sin fijar antes.
 <!-- F: F32 > C.pauc.media; F3L > C.pauc.media; CLAUDE.md, hallazgo 8 -->
 
+Antes de abrir el conjunto reservado se probaron tres combinaciones contra M3
+limpio, fijadas antes de correr: mezclarlo con M2, añadirle las dos variables
+de imagen de M4b y mezclarlo con un segundo boosting sobre sus mismas
+variables. Como fueron tres intentos, el intervalo se corrige además por
+multiplicidad, con la confianza de Bonferroni. Ninguna lo supera en la pAUC:
+−0,0025, [−0,0129; 0,008]; +0,0011, [−0,012; 0,0142], y −0,0009,
+[−0,012; 0,0101]. M3 limpio sigue siendo el modelo recomendado.
+<!-- F: outputs/fase4b-c1-vs-m3limpio.json, outputs/fase4b-c2-vs-m3limpio.json y outputs/fase4b-c3-vs-m3limpio.json > C.pauc.media y C.pauc.intervalo_bonferroni_nadeau_bengio (confianza 1 − 0,05/3, con la corrección de Nadeau y Bengio); PLAN.md, Fase 4b, «Qué se compara», «Regla, fijada antes de correr» y «Resultado de la regla (2026-10-22)» -->
+Las combinaciones se eligieron conociendo los resultados de la Fase 4, y la
+corrección cubre solo esos tres intentos.
+<!-- F: PLAN.md, Fase 4b, «Levanta la regla "Solo esta corrida" de la Fase 4» -->
+
 ### El costo de inferencia
 
 La mediana del tiempo de inferencia, en segundos por cada 1.000 lesiones, es
@@ -944,6 +956,10 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   El artículo del conjunto de datos advierte que las fotos que toman los
   pacientes *"vary greatly in lighting and FOV"*.
   <!-- F: IS > datos; referencias/kurtansky-2024-slice3d-descriptor.md, línea 115, cita literal -->
+- **Que no exista una forma de mejorar a M3 limpio.** Solo se probaron tres
+  combinaciones: sin ajustar hiperparámetros, y sin entrenar redes de imagen
+  sobre los recortes, como hizo el ganador.
+  <!-- F: PLAN.md, Fase 4b, «Qué no entra, con su motivo»; «Método», «Qué se compara» (las redes de imagen del ganador, fuera de la reproducción); PLAN.md, Fase 4, especificación de M3 (del ajuste de hiperparámetros del ganador solo consta un estudio de Optuna comentado, celda 23) -->
 - **Que este trabajo supere o no a la solución ganadora.** Su evaluación usó
   otros datos y otras particiones.
   <!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
