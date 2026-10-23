@@ -424,6 +424,50 @@ caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/prueba_t
   --lado 128 --epocas 3 --out outputs/prueba-tiempo-red-imagen
 ```
 
+## La red de imagen entrenada, Fase 4c (2026-10-22)
+
+La especificación, la regla y los controles son de la persona, fijados antes de
+correr (`PLAN.md`, Fase 4c). Cuatro scripts:
+- `scripts/fase4c.py`: las piezas. EfficientNet-B0 con los ajustes de la prueba
+  de tiempo, que comprueba contra su JSON. Entrena de punta a punta, con una
+  submuestra nueva de negativos en cada época y volteos al azar, y devuelve el
+  logit. La puntuación es su sigmoide en float64. También construye las dos
+  variables de C4 y une las puntuaciones por `isic_id`.
+- `scripts/test_fase4c_controles.py`: los controles, cada uno con su caso que
+  debe fallar. Son seis: los ajustes, las etiquetas barajadas, la
+  reproducibilidad, la alineación, las referencias y C4. La corrida completa
+  escribe `data/fase4c-controles.json`.
+- `scripts/fase4c_redes.py`: las 50 redes, una por semilla y pliegue, o con
+  `--internos` las de la validación interna de la semilla 0. No calcula
+  métricas. Se niega a correr sin los controles completos con 0 fallos. Guarda
+  cada red como una parte con el SHA-256 de su código, y así se puede reanudar.
+  Las puntuaciones van a `data/` con su procedencia, que incluye el tiempo de
+  cada entrenamiento.
+- `scripts/fase4c_comparar.py`: la pregunta 1 (red sola − «Imagen»), la
+  pregunta 2 (C4 − M3 limpio) y el control del atajo. Usa el intervalo de
+  Nadeau y Bengio a 1 − 0,05/2. No aplica la regla.
+
+Las salidas son `outputs/fase4c-red-sola-vs-imagen.*`,
+`outputs/fase4c-c4-vs-m3limpio.*` y `outputs/fase4c-control-atajo.*`.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4c_controles.py --rapido --out RUTA.json
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4c_controles.py \
+  --out data/fase4c-controles.json
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4c_redes.py \
+  --controles data/fase4c-controles.json --partes-dir data/fase4c-redes \
+  --out data/fase4c-puntuaciones-red.csv.gz
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4c_comparar.py \
+  --pregunta 1 --out outputs/fase4c-red-sola-vs-imagen
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4c_comparar.py \
+  --pregunta 2 --out outputs/fase4c-c4-vs-m3limpio
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4c_redes.py --internos \
+  --semillas 0 --controles data/fase4c-controles.json --partes-dir data/fase4c-redes-internas \
+  --out data/fase4c-puntuaciones-red-internas.csv.gz
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4c_comparar.py \
+  --atajo --out outputs/fase4c-control-atajo
+```
+
 ## Cómo correrlo
 
 ```bash
