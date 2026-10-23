@@ -8,10 +8,10 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-10-22): fases 0 a 4, cerradas; la Fase 4b, abierta:
-primero sus controles y después sus tres candidatos; la Fase 5 espera a la
-Fase 4b, que reabre su especificación, y a la retroalimentación del avance del
-segundo corte; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+**Dónde está la ruta (2026-10-22): fases 0 a 4, cerradas; de la Fase 4b, los
+controles y los tres candidatos corridos, y la regla aplicada: ninguno mejora a
+M3 limpio; la Fase 5 espera a la retroalimentación del avance del segundo corte;
+de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -1158,6 +1158,25 @@ fijada antes de abrirlo y no cambia por su resultado.
 
 **Puerta.** Los tres `outputs/fase4b-*.json` y la decisión que sale de la regla,
 escrita en este archivo.
+
+**Controles, corridos el 2026-10-22 antes de los candidatos.**
+`test_fase4b_controles.py`, 10 semillas × 5 pliegues: 24 de 24 casos como se
+esperaba, incluidos los que debían fallar. `test_fase4b_comparar.py`, con datos
+sintéticos: 15 de 15. En las tres corridas, M3 limpio reproduce pliegue a pliegue
+las cuatro métricas de `outputs/fase4-m3limpio-vs-m2.json`. En C2 la alineación
+se cumplió en los 50 pliegues, y en C3 ninguna variable entró como categórica.
+
+**Resultado de la regla (2026-10-22).** El intervalo corregido por Nadeau y
+Bengio con la confianza de Bonferroni, 1 − 0,05/3, de candidato − M3 limpio en
+la pAUC
+(`comparaciones_nuevo_menos_base.pauc.intervalo_bonferroni_nadeau_bengio`):
+- C1: [−0,0129; 0,008] (`outputs/fase4b-c1-vs-m3limpio.json`);
+- C2: [−0,012; 0,0142] (`outputs/fase4b-c2-vs-m3limpio.json`);
+- C3: [−0,012; 0,0101] (`outputs/fase4b-c3-vs-m3limpio.json`).
+
+Ninguno queda entero por encima de cero, así que ningún candidato mejora a M3
+limpio. M3 limpio sigue siendo el modelo recomendado, y la especificación de la
+Fase 5 no cambia. C2 no se elige, así que no se mide su tiempo de inferencia.
 
 ---
 
