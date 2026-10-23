@@ -8,11 +8,12 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-10-15): fases 0 a 4, cerradas; la Fase 5 espera la
-retroalimentación del avance del segundo corte; de la Fase 6 hay trabajo
-hecho.** De la Fase 6: `informe/borrador-v2.md`, las decisiones sobre la demo
-del 2026-10-02 y las dos mediciones del 2026-10-04, el efecto de la partición y
-la imagen sola. La Fase 4 tiene fijados sus modelos y sus
+**Dónde está la ruta (2026-10-22): fases 0 a 4, cerradas; la Fase 4b, abierta:
+primero sus controles y después sus tres candidatos; la Fase 5 espera a la
+Fase 4b, que reabre su especificación, y a la retroalimentación del avance del
+segundo corte; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+`informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
+mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
 Hechas:
 - las métricas de triaje y el contexto de paciente;
@@ -1035,6 +1036,128 @@ para declararlo está fijado *antes* de medir: si el intervalo corregido contien
 el cero, la recomendación al cliente es que la imagen no aporta lo suficiente
 para justificar su costo, y eso se escribe con esa claridad. Lo que no se hace
 es buscar la semilla, el pliegue o la métrica en que sí se distinga.
+
+---
+
+## Fase 4b — Intentar mejorar al modelo recomendado
+
+**Decisión de la persona (2026-10-22).** Antes de abrir el conjunto reservado se
+intenta mejorar a M3 limpio, la parte tabular reproducida de la solución
+ganadora. Motivo de la persona: la Fase 4 comparó los modelos por separado y
+sin ajustarlos, a propósito, para que las comparaciones fueran limpias, y no
+probó combinarlos. Esta fase usa las reglas de la Fase 4, salvo la que levanta
+abajo, y corrige por multiplicidad. El conjunto reservado sigue cerrado durante
+toda la fase.
+
+**Levanta la regla «Solo esta corrida» de la Fase 4.** Esa regla («M3 limpio y
+regla de recomendación») decía que no se probarían otras variantes. Esta fase
+la levanta, por decisión de la persona, y lo declara. Los tres candidatos se
+eligieron conociendo los resultados de la Fase 4, incluida la pista de M4b
+frente a M2 (por encima en 8 de 10 semillas, sin diferencia establecida). Por
+eso los candidatos se fijan aquí antes de correr, la regla corrige por
+multiplicidad y no se añaden candidatos después de ver resultados. La
+corrección cubre los tres candidatos de esta fase, no las corridas de la
+Fase 4; esa limitación también se declara. Se reabren además el modelo
+recomendado que fijó la decisión del 2026-09-26 («Modelo recomendado», Fase 4)
+y la especificación de la Fase 5, que pasan a depender de esta fase.
+
+**Lectura declarada (2026-10-22).** Al verificar este borrador se leyeron cinco
+columnas categóricas de `data/train-metadata.csv` completo, con las filas del
+reservado incluidas, para contar sus categorías. No se leyó la etiqueta ni se
+evaluó nada, y ese recuento ya estaba en el inventario de M3. Ninguna decisión
+de esta fase depende de él.
+
+**Qué se compara.** Tres candidatos, fijados aquí antes de correr ninguno, cada
+uno contra M3 limpio:
+
+- **C1 · Mezcla de M3 limpio y M2.** En cada pliegue de validación, la
+  puntuación de C1 es el promedio simple de los rangos de las puntuaciones de
+  M3 limpio y de M2, con pesos 1/2 y 1/2 fijos. No se ajusta ningún peso. El
+  rango se calcula sobre las puntuaciones, sin etiquetas, y los empates
+  reciben el rango promedio (`rankdata(method="average")`).
+- **C2 · M3 limpio con la imagen apilada.** M3 limpio más las dos variables de
+  imagen de M4b, construidas con el mismo código de M4b (Fase 4, «Variante
+  secundaria M4b» y «Detalles de M4b»): la puntuación de la logística
+  balanceada sobre las 384 variables de DINOv2, fuera de pliegue en
+  entrenamiento con la validación interna de 5 pliegues agrupada por paciente,
+  y esa puntuación dividida por su media dentro del paciente. Las dos variables
+  se calculan sobre todas las filas del pliegue de entrenamiento antes del
+  remuestreo de M3 limpio, y el remuestreo las arrastra como dos columnas más.
+  En validación, la puntuación sale de la logística ajustada sobre todo el
+  pliegue de entrenamiento, y la media del paciente se calcula sobre sus
+  lesiones de validación. Todo lo demás de M3 limpio, igual.
+- **C3 · Dos boostings sobre las variables de M3 limpio.** El promedio simple de
+  los rangos de M3 limpio (CatBoost) y de un segundo modelo, ajustados en el
+  mismo pliegue, con pesos 1/2 y 1/2 fijos y los empates como en C1. El segundo
+  modelo es el del nivel 2b, sin cambios:
+  `HistGradientBoostingClassifier(class_weight="balanced", random_state=semilla)`,
+  con todo lo demás por defecto. Su parada temprana aparta al azar un 10 % del
+  pliegue de entrenamiento, sin agrupar por paciente, como en M1 y M2. Cambian
+  solo sus variables:
+  - **Variables:** las de M3 limpio en cada pliegue, con las mismas
+    transformaciones ajustadas en el pliegue de entrenamiento. Como el one-hot
+    se ajusta en cada pliegue, son 239 en 40 de los 50 pliegues, 238 en 9 y 237
+    en 1. Las columnas one-hot, que M3 limpio pasa a CatBoost como
+    categóricas, entran aquí como números (0 y 1): son binarias, así que un
+    corte da lo mismo.
+  - **Desbalance:** solo los pesos de clase del nivel 2b. No se le aplica el
+    remuestreo de M3 limpio, para no corregir el desbalance dos veces.
+  No se instala ninguna librería nueva.
+
+**Datos y pliegues.** El conjunto de desarrollo, con los pliegues de la Fase 4:
+`construir_folds`, 5 pliegues, semillas 0 a 9. Las mismas cuatro métricas:
+pAUC como principal; AUC estándar, sensibilidad top-15 y NNT80% SE como
+secundarias.
+
+**Regla, fijada antes de correr.** Hay tres candidatos, así que el intervalo se
+corrige por multiplicidad con Bonferroni: confianza de 1 − 0,05/3, alrededor del
+98,3 %, con la corrección de Nadeau y Bengio.
+- Un candidato **mejora a M3 limpio** si el intervalo de su diferencia en la
+  pAUC (candidato − M3 limpio) queda entero por encima de cero.
+- Si mejora más de uno, se elige el de mayor diferencia media en la pAUC.
+- Si ninguno mejora, M3 limpio sigue siendo el modelo recomendado.
+- Las tres métricas secundarias se reportan con su intervalo, y no deciden.
+- Si el elegido es C2, se reporta su tiempo de inferencia con el procedimiento
+  de `tiempo-inferencia`, y la recomendación lo pone al lado de la mejora.
+  Como referencia, M4b, que apila la imagen igual, tarda 14,6321 segundos por
+  cada 1.000 lesiones (`tiempo-inferencia.json > tiempos.M4b`).
+
+**Controles, antes de leer cualquier resultado.**
+- M3 limpio y M2 reproducen pliegue a pliegue sus cifras de
+  `outputs/fase4-m3limpio-vs-m2.json`.
+- C2, de punta a punta: no hay predicciones guardadas de M4b, así que el mismo
+  código que construye las variables de imagen de C2, aplicado sobre M2,
+  reproduce pliegue a pliegue las cuatro métricas de M4b en
+  `outputs/fase4-m4b-vs-m2.json`.
+- C2, alineación: dentro de C2, en un pliegue, las dos columnas de imagen
+  coinciden fila a fila con lo que devuelve `puntuaciones_imagen` para ese
+  pliegue, antes y después del remuestreo.
+- C3: el nivel 2b, con el mismo código de ajuste de C3 y sus 39 variables con
+  la codificación de M1 (`codificar_fold`), reproduce pliegue a pliegue las
+  cuatro métricas de M1 en `outputs/fase4-m2-vs-m1.json`.
+- El promedio de rangos tiene control positivo: un modelo mezclado consigo
+  mismo da su misma pAUC, y mezclado con ruido aleatorio da una pAUC menor.
+
+**Salida.** `outputs/fase4b-c1-vs-m3limpio.json`,
+`outputs/fase4b-c2-vs-m3limpio.json` y `outputs/fase4b-c3-vs-m3limpio.json`, con
+su `.md`, con la misma estructura de los `fase4-*.json`, más el intervalo con la
+corrección de Bonferroni.
+
+**Qué no entra, con su motivo.**
+- **Ajuste de hiperparámetros.** Exige una validación cruzada anidada; queda
+  para otra fase si esta no basta.
+- **Redes de imagen entrenadas sobre los recortes,** como las del ganador.
+  Exigen un cómputo que no se ha estimado, y son el camino del escenario sin
+  sistema de fotografía corporal total, no de este.
+- **Candidatos nuevos después de ver resultados.** Si se quiere probar otro, va
+  en una fase nueva, declarada, con su propia corrección.
+
+**Consecuencia para la Fase 5.** La Fase 5 evalúa en el reservado el modelo que
+deje esta fase, con M3 limpio y M2 como referencia. La recomendación queda
+fijada antes de abrirlo y no cambia por su resultado.
+
+**Puerta.** Los tres `outputs/fase4b-*.json` y la decisión que sale de la regla,
+escrita en este archivo.
 
 ---
 
