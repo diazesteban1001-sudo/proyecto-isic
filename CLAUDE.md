@@ -1345,7 +1345,7 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         `test_referencias_a_celdas.py`, 7 de 7, con la expresión anterior como
         caso que debe fallar. Regenerada, la verificación da 669 números, 340
         con respaldo y 25 señalados, frente a 652, 330 y 26.*
-- [ ] **El «4» de «Fase 4» tiene respaldo solo por coincidencia** (2026-10-22).
+- [x] **El «4» de «Fase 4» tiene respaldo solo por coincidencia** (2026-10-22).
       - **Dónde:** `informe/borrador-v2.md`, líneas 431, 864 y 882. La 864 es
         del párrafo de la Fase 4b, y la 882, del de la Fase 4c («las fases 4 y
         4b»). *Hasta el 2026-10-23 decía «líneas 422 y 840»: el texto de la Fase
@@ -1359,6 +1359,16 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Qué lo cerraría:** añadir «fases?» (y, para el «0», «semillas?») a
         `REFERENCIA_A_SECCION`, con su caso en `test_referencias_a_celdas.py`.
         No se ha decidido.
+      - *Cumplido el 2026-10-23, por decisión de la persona (commit
+        «Verificador: las fases y las semillas son etiquetas»).
+        `REFERENCIA_A_SECCION` incluye «fases?» y «semillas?», con límite de
+        palabra, y mira solo lo que va justo antes del número: «la Fase 4» y
+        «la semilla 0» ya no se cuentan, y «las 10 semillas» o «7 fases» siguen
+        buscando respaldo. Las cuatro coincidencias (hoy en las líneas 429,
+        862, 880 y 877, corridas dos por el texto sin «PLAN.md») salen del
+        conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
+        con la expresión anterior como caso que debe fallar; la prueba de las
+        celdas, al día, 7 de 7.*
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
@@ -1425,18 +1435,22 @@ cita: el límite está medido en el `SKILL.md` de `sintesis-consultoria`.
 *Hasta el 2026-10-02 aquí decía «con tolerancia de redondeo 0,01»: era el
 margen por defecto, el 5 % de la escala del pAUC (registro de incidentes,
 duodécima fila).* Última corrida
-(`outputs/sintesis-verificacion.json`, regenerado por el commit «Verificación
-de trazabilidad regenerada con la Fase 4c», del 2026-10-23, sobre
-`informe/borrador-v2.md` con la Fase 4c): **720 números, 364 con respaldo, 25
-señalados**, para revisar uno por uno en el anexo. *La anterior, del
-2026-10-22, daba 669, 340 y 25. La nueva tiene en el borrador la Fase 4c, y en
-el corpus los tres `fase4c-*.json` y `prueba-tiempo-red-imagen.json`. Sus 24
-respaldos nuevos son cifras de la Fase 4c, cada una con el campo que cita su
-comentario, salvo dos números que no son cifras: el «4» de «las fases 4 y 4b»
-y el «0» de «la semilla 0» (Pendientes).* *La de antes, del 2026-10-04, daba
-652, 330 y 26; la del 2026-10-22 tenía ya en el borrador la Fase 4b, en el
-corpus los tres `fase4b-*.json`, y fuera del conteo las referencias a celdas
-de un notebook, como «la celda 24».* *Desde
+(`outputs/sintesis-verificacion.json`, regenerado por el commit «Verificador:
+las fases y las semillas son etiquetas», del 2026-10-23, sobre
+`informe/borrador-v2.md`): **646 números, 356 con respaldo, 25 señalados**,
+para revisar uno por uno en el anexo. *Desde ese commit, «fase N» y «semilla
+N» no se cuentan, como «sección N» y «celda N». Salen 74 números, 65 de ellos
+en comentarios. De los 9 del cuerpo, cuatro pasaban por coincidencia (el «4»
+de «la Fase 4», dos veces, y de «las fases 4 y 4b», y el «0» de «la semilla
+0»), cuatro son «la semilla 42», que tenía respaldo en su propio campo, y uno
+es «semilla 2026», que estaba entre los omitidos. Los señalados no cambian.*
+*La anterior, del mismo día, daba 720, 364 y 25: tenía en el borrador la Fase
+4c, y en el corpus los tres `fase4c-*.json` y `prueba-tiempo-red-imagen.json`;
+sus 24 respaldos nuevos eran 22 cifras de la Fase 4c, cada una con el campo
+que cita su comentario, y las dos coincidencias que la regla nueva quita.* *La
+del 2026-10-22 daba 669, 340 y 25, con la Fase 4b en el borrador, los tres
+`fase4b-*.json` en el corpus y fuera del conteo las referencias a celdas de un
+notebook, como «la celda 24»; la del 2026-10-04, 652, 330 y 26.* *Desde
 el commit «Regenerar la verificación de trazabilidad con el signo menos», del
 2026-10-04, el verificador lee el signo menos tipográfico (defecto (b) del registro de incidentes, duodécima
 fila, cerrado): 19 negativos pasaron de señalados a respaldados, por su propio
@@ -1448,9 +1462,9 @@ valor sin signo aparecía en otro archivo.* *Y el 0,922, que sale de Kurtansky 2
 auditoría de columnas», las columnas que solo trae el entrenamiento, pasó de
 señalado a respaldado por coincidencia: lo respalda un recuento de
 `outputs/mecanismo-2a.json`, no la lista de `auditoria-de-fugas.json`.* De los
-demás, 7 son porcentajes del método, excluidos por lista declarada; 9 caen en
+demás, 7 son porcentajes del método, excluidos por lista declarada; 8 caen en
 contextos que el verificador omite (años y etiquetas de nivel), listados en
-`numeros_en_contextos_omitidos`; y 315 están dentro de comentarios HTML,
+`numeros_en_contextos_omitidos`; y 250 están dentro de comentarios HTML,
 listados en `numeros_en_comentarios`. Los cinco grupos suman el total, y el
 verificador se detiene si no. *Las corridas anteriores, del mismo día: sobre
 el borrador sin la imagen sola, 553 números (252, 39, 6, 9 y 247); con la

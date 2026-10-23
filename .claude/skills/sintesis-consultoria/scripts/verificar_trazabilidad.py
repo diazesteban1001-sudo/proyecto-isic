@@ -242,17 +242,24 @@ def es_parte_de_identificador(texto, ini, fin):
 # iteraciones de C3 (outputs/fase4b-c3-vs-m3limpio.json). Mira solo lo que va
 # justo antes del número, así que «las 22 columnas de la celda 24» sigue
 # buscando respaldo para el 22. Control: test_referencias_a_celdas.py.*
-REFERENCIA_A_SECCION = re.compile(r"(secci[oó]n(es)?|§|celdas?)\s*$", re.IGNORECASE)
+# *Desde el 2026-10-23, también «fase N» y «semilla N»: el número de una fase de
+# PLAN.md o de una semilla es una etiqueta. El «4» de «las fases 4 y 4b» y el «0»
+# de «la semilla 0» pasaban por coincidencia con cualquier 4 y cualquier 0 de
+# outputs/. Las dos palabras llevan límite de palabra, para que «interfase 3»
+# siga contando, y un número antes de ellas, como «las 10 semillas», sigue
+# buscando respaldo. Control: test_referencias_a_fases_y_semillas.py.*
+REFERENCIA_A_SECCION = re.compile(r"(secci[oó]n(es)?|§|celdas?|\bfases?|\bsemillas?)\s*$", re.IGNORECASE)
 
 
 def es_numeracion_de_seccion(texto, ini, linea_texto, col):
     """True si el token es numeración de un documento: del propio (encabezados,
-    secciones) o de un notebook citado (celdas)."""
+    secciones), de un notebook citado (celdas) o del plan y de la validación
+    (fases y semillas)."""
     # a) Encabezado Markdown: "### 7.3 Lectura de los resultados"
     encabezado = re.match(r"^\s*#{1,6}\s+", linea_texto)
     if encabezado and col == encabezado.end():
         return True
-    # b) Referencia cruzada: "(sección 7.4)", "§10.1", "la celda 24"
+    # b) Referencia cruzada: "(sección 7.4)", "§10.1", "la celda 24", "la Fase 4"
     if REFERENCIA_A_SECCION.search(texto[max(0, ini - 12):ini]):
         return True
     return False

@@ -41,8 +41,11 @@ BORRADOR = (
     "Una cifra real sin respaldo: 24 lesiones.\n\n"
     "Lo dice la sección 4.2 del anteproyecto.\n"
 )
-REGLA_NUEVA = 'r"(secci[oó]n(es)?|§|celdas?)\\s*$"'
-REGLA_ANTERIOR = 'r"(secci[oó]n(es)?|§)\\s*$"'
+# Desde el 2026-10-23 la expresión incluye también «fases?» y «semillas?»
+# (test_referencias_a_fases_y_semillas.py); el mutante de este control sigue
+# siendo la misma expresión sin «celdas?».
+REGLA_NUEVA = 'r"(secci[oó]n(es)?|§|celdas?|\\bfases?|\\bsemillas?)\\s*$"'
+REGLA_ANTERIOR = 'r"(secci[oó]n(es)?|§|\\bfases?|\\bsemillas?)\\s*$"'
 
 
 def verificar(script, tmp):
