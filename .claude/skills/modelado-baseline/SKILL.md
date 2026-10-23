@@ -402,6 +402,28 @@ no se volvió a correr (`PLAN.md`, Fase 6).*
   --referencia outputs/fase4-m2-vs-m1.json --out outputs/imagen-sola
 ```
 
+## Prueba de tiempo de una red de imagen (2026-10-22)
+
+`scripts/prueba_tiempo_red_imagen.py` cronometra una red de imagen entrenada
+sobre los recortes, EfficientNet-B0 de torchvision con los pesos de ImageNet,
+antes de decidir si cabe una fase así. El preentrenamiento se comprobó contra la
+regla de la Fase 2 (`referencias/efficientnet-b0-preentrenamiento.md`). Mide el
+lado de los recortes de desarrollo, entrena en la semilla 0, pliegue 0, con
+todos los positivos del pliegue de entrenamiento y 20 negativos por positivo,
+cronometra cada época y la pasada hacia adelante sobre el pliegue de validación,
+y extrapola tres escenarios con los tamaños reales de los pliegues. **No calcula
+ninguna métrica:** las puntuaciones de validación se descartan en cuanto salen y
+sus etiquetas no se leen. Los parámetros de entrenamiento son de la prueba, no
+de una fase. Salida: `outputs/prueba-tiempo-red-imagen.json` y `.md`. El JSON
+guarda el intérprete y los argumentos reales, y si corrió bajo caffeinate, que
+se lee de la aserción de energía que caffeinate deja a nombre del proceso.
+
+```bash
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/prueba_tiempo_red_imagen.py \
+  --hdf5 data/train-image.hdf5 --data data/train-metadata.csv \
+  --lado 128 --epocas 3 --out outputs/prueba-tiempo-red-imagen
+```
+
 ## Cómo correrlo
 
 ```bash
