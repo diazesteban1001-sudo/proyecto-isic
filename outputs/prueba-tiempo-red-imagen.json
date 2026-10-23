@@ -1,0 +1,588 @@
+{
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "que_es": "Prueba de tiempo de una red de imagen entrenada sobre los recortes. No calcula ninguna métrica: las puntuaciones de validación se descartan en cuanto salen y sus etiquetas no se leen.",
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/prueba_tiempo_red_imagen.py",
+      "--hdf5",
+      "data/train-image.hdf5",
+      "--data",
+      "data/train-metadata.csv",
+      "--lado",
+      "128",
+      "--epocas",
+      "3",
+      "--out",
+      "outputs/prueba-tiempo-red-imagen"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep"
+    }
+  },
+  "red": {
+    "nombre": "EfficientNet-B0 (torchvision)",
+    "pesos": {
+      "url": "https://download.pytorch.org/models/efficientnet_b0_rwightman-7f5810bc.pth",
+      "archivo": "efficientnet_b0_rwightman-7f5810bc.pth",
+      "bytes": 21444401,
+      "sha256": "7f5810bc96def8f7552d5b7e68d53c4786f81167d28291b21c0d90e1fca14934",
+      "comprobacion": "SHA-256 del archivo en la caché, empieza por 7f5810bc"
+    },
+    "parametros": 4008829,
+    "salida": "la última capa lineal cambiada por una salida, con BCEWithLogitsLoss",
+    "verificacion_del_preentrenamiento": "referencias/efficientnet-b0-preentrenamiento.md"
+  },
+  "tamanos_de_los_recortes_desarrollo": {
+    "n_imagenes": 318229,
+    "todas_cuadradas": true,
+    "lado_px": {
+      "minimo": 41,
+      "p5": 107.0,
+      "p25": 121.0,
+      "mediana": 131.0,
+      "p75": 143.0,
+      "p95": 163.0,
+      "maximo": 269,
+      "media": 132.9
+    },
+    "fraccion_con_lado_mayor_o_igual_al_de_entrada": 0.5921
+  },
+  "entrada": {
+    "lado_px": 128,
+    "preprocesado": "RGB, redimensión bicúbica a 128x128, normalización de ImageNet",
+    "aumento_de_datos": "ninguno"
+  },
+  "entrenamiento": {
+    "semilla": 0,
+    "pliegue": 0,
+    "n_splits": 5,
+    "pliegues": "construir_folds de train_and_evaluate.py, los mismos de validacion-repetida",
+    "positivos": 254,
+    "negativos_por_positivo": 20,
+    "imagenes_por_epoca": 5334,
+    "epocas": 3,
+    "lote": 64,
+    "optimizador": "AdamW, tasa 0.0001, el resto por defecto",
+    "precision": "float32",
+    "segundos_lectura_y_decodificacion": 1.123,
+    "segundos_por_epoca": [
+      63.246,
+      62.37,
+      61.917
+    ],
+    "segundos_por_epoca_mediana": 62.37
+  },
+  "prediccion": {
+    "imagenes": 63646,
+    "lote": 256,
+    "bloque_de_decodificacion": 4096,
+    "segundos_solo_modelo": 139.909,
+    "segundos_lectura_y_decodificacion": 18.316,
+    "segundos_por_1000_imagenes_solo_modelo": 2.198,
+    "segundos_por_1000_imagenes_con_lectura_y_decodificacion": 2.486,
+    "calentamiento": "una tanda de un lote, fuera del reloj"
+  },
+  "memoria": {
+    "mps_pico_entrenamiento_gb": 4.09,
+    "mps_pico_prediccion_gb": 4.42,
+    "mps_recomendada_maxima_gb": 11.84,
+    "proceso_rss_pico_gb": 1.8,
+    "como_se_mide": "MPS: torch.mps.driver_allocated_memory, el máximo de las lecturas tras cada paso de entrenamiento y cada bloque de predicción. Proceso: ru_maxrss de getrusage."
+  },
+  "equipo": {
+    "chip": "Apple M4",
+    "memoria_gb": 16.0,
+    "macos": "27.0",
+    "dispositivo": "mps"
+  },
+  "software": {
+    "python": "3.11.9",
+    "torch": "2.14.0",
+    "torchvision": "0.29.0",
+    "h5py": "3.16.0",
+    "numpy": "2.4.6",
+    "pillow": "12.3.0"
+  },
+  "segundos_medida_de_tamanos": 14.838,
+  "extrapolacion": {
+    "ritmos_de_esta_corrida": {
+      "segundos_por_imagen_y_epoca_entrenando": 0.01169287764811176,
+      "segundos_por_imagen_prediciendo_solo_modelo": 0.0021982413080348525,
+      "segundos_por_imagen_lectura_y_decodificacion": 0.00028777510305299196
+    },
+    "a_1_semilla_x_5_pliegues": {
+      "entrenamientos": 5,
+      "imagenes_por_epoca_sumadas": 26628,
+      "imagenes_predichas": 318229,
+      "horas_solo_modelo": 0.45,
+      "horas_con_lectura_y_decodificacion": 0.48
+    },
+    "b_1_semilla_x_5_pliegues_con_validacion_interna": {
+      "entrenamientos": 30,
+      "imagenes_por_epoca_sumadas": 133140,
+      "imagenes_predichas": 1591145,
+      "horas_solo_modelo": 2.27,
+      "horas_con_lectura_y_decodificacion": 2.41
+    },
+    "c_10_semillas_x_5_pliegues": {
+      "entrenamientos": 50,
+      "imagenes_por_epoca_sumadas": 266280,
+      "imagenes_predichas": 3182290,
+      "horas_solo_modelo": 4.54,
+      "horas_con_lectura_y_decodificacion": 4.81
+    },
+    "como_se_calcula": "Cada entrenamiento usa todos los positivos de su conjunto de entrenamiento y 20 negativos por positivo, 3 épocas, al ritmo de la mediana de las épocas medidas; cada predicción, al ritmo de la de validación. La lectura y decodificación se cuenta una vez por imagen de cada entrenamiento y de cada predicción, al ritmo de la de validación. (a) y (c): por pliegue, un entrenamiento sobre el pliegue de entrenamiento y una predicción sobre el de validación. (b): además, la validación interna de apilado_imagen.py (5 pliegues StratifiedGroupKFold por paciente, con la semilla externa): por pliegue interno, un entrenamiento y una predicción sobre su parte de validación, que juntas cubren el pliegue de entrenamiento externo.",
+    "tamanos_de_pliegues_a_y_b": [
+      {
+        "semilla": 0,
+        "pliegue": 0,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646,
+        "internos": [
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 204,
+            "filas_validacion": 50916
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50916
+          }
+        ]
+      },
+      {
+        "semilla": 0,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646,
+        "internos": [
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50916
+          },
+          {
+            "positivos_entrenamiento": 202,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50916
+          },
+          {
+            "positivos_entrenamiento": 202,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 202,
+            "filas_validacion": 50917
+          }
+        ]
+      },
+      {
+        "semilla": 0,
+        "pliegue": 2,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646,
+        "internos": [
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50916
+          },
+          {
+            "positivos_entrenamiento": 202,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 202,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 202,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50916
+          }
+        ]
+      },
+      {
+        "semilla": 0,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646,
+        "internos": [
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 204,
+            "filas_validacion": 50916
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50916
+          }
+        ]
+      },
+      {
+        "semilla": 0,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645,
+        "internos": [
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 204,
+            "filas_validacion": 50916
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          },
+          {
+            "positivos_entrenamiento": 203,
+            "filas_validacion": 50917
+          }
+        ]
+      }
+    ],
+    "tamanos_de_pliegues_c": [
+      {
+        "semilla": 0,
+        "pliegue": 0,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 0,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 0,
+        "pliegue": 2,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 0,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 0,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 1,
+        "pliegue": 0,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 1,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 1,
+        "pliegue": 2,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 1,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 1,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 2,
+        "pliegue": 0,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 2,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 2,
+        "pliegue": 2,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 2,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 2,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 3,
+        "pliegue": 0,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 3,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 3,
+        "pliegue": 2,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 3,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 3,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 4,
+        "pliegue": 0,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 4,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 4,
+        "pliegue": 2,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 4,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 4,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 5,
+        "pliegue": 0,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 5,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 5,
+        "pliegue": 2,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 5,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 5,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 6,
+        "pliegue": 0,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 6,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 6,
+        "pliegue": 2,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 6,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 6,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 7,
+        "pliegue": 0,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 7,
+        "pliegue": 1,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 7,
+        "pliegue": 2,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 7,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 7,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 8,
+        "pliegue": 0,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 8,
+        "pliegue": 1,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 8,
+        "pliegue": 2,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 8,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 8,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      },
+      {
+        "semilla": 9,
+        "pliegue": 0,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 9,
+        "pliegue": 1,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 9,
+        "pliegue": 2,
+        "positivos_entrenamiento": 253,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 9,
+        "pliegue": 3,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63646
+      },
+      {
+        "semilla": 9,
+        "pliegue": 4,
+        "positivos_entrenamiento": 254,
+        "filas_validacion": 63645
+      }
+    ],
+    "que_no_incluye": "El ajuste de M3 limpio y de cualquier modelo tabular, el aumento de datos, la elección de hiperparámetros y el efecto de solapar decodificación y modelo. Supone el mismo ritmo por imagen sea cual sea el tamaño del conjunto."
+  },
+  "segundos_corrida_total": 369.7
+}
