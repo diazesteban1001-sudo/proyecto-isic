@@ -9,9 +9,10 @@ medido—. Este archivo describe **la ruta**: en qué orden, con qué condición
 salida, y qué hacer cuando algo no se pueda cerrar.
 
 **Dónde está la ruta (2026-10-22): fases 0 a 4 y 4b, cerradas; la Fase 4b no
-cambió el modelo recomendado, M3 limpio; la Fase 5 espera a la
-retroalimentación del avance del segundo corte; de la Fase 6 hay trabajo
-hecho.** De la Fase 6:
+cambió el modelo recomendado, M3 limpio; la Fase 4c, una red de imagen
+entrenada sobre los recortes, está en curso, y la Fase 5 depende de ella; la
+Fase 5 espera además a la retroalimentación del avance del segundo corte; de la
+Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -1182,6 +1183,136 @@ la pAUC
 Ninguno queda entero por encima de cero, así que ningún candidato mejora a M3
 limpio. M3 limpio sigue siendo el modelo recomendado, y la especificación de la
 Fase 5 no cambia. C2 no se elige, así que no se mide su tiempo de inferencia.
+
+---
+
+## Fase 4c — Una red de imagen entrenada sobre los recortes
+
+**Decisión de la persona (2026-10-22).** En la Fase 4b, ninguna de las tres
+combinaciones probadas mejoró a M3 limpio según su regla. De la solución
+ganadora quedaron fuera sus redes de imagen entrenadas sobre los recortes
+(Fase 4, «Quedan fuera, con su motivo»), y la Fase 4b las dejó fuera también
+porque su costo no estaba estimado. Ahora está estimado el de una red pequeña,
+EfficientNet-B0 a 128 × 128 (`outputs/prueba-tiempo-red-imagen.json`); el de
+las redes del ganador, no. Esta fase entrena una red propia y responde dos
+preguntas, fijadas antes de correr. El conjunto reservado sigue cerrado durante
+toda la fase.
+
+**Segunda ronda, declarada.** Es la segunda vez que se reabre la regla «Solo
+esta corrida» de la Fase 4, después de la Fase 4b. Las preguntas se eligieron
+conociendo los resultados de la Fase 4 y de la Fase 4b. Por eso se fijan aquí
+antes de correr, se corrige por multiplicidad dentro de la fase y no se añaden
+preguntas después de ver resultados. La fase reabre además dos condiciones, y
+lo declara:
+- la de la Fase 4, que dejó las redes para reconsiderarlas *«si esta fase
+  muestra que la imagen aporta de forma distinguible»*, y eso no ocurrió
+  (`CLAUDE.md`, hallazgos 5 y 6);
+- la de la Fase 4b, que dio un segundo motivo: *«son el camino del escenario sin
+  sistema de fotografía corporal total, no de este»*, y la pregunta 2 las prueba
+  justo en ese escenario.
+
+**La red.** EfficientNet-B0 de torchvision con sus pesos de ImageNet, que
+cumplen el criterio de la Fase 2 (`referencias/efficientnet-b0-preentrenamiento.md`).
+Se entrena de punta a punta, sin congelar capas.
+
+**Cómo se entrena, fijado antes de correr y sin ajuste.**
+- **Pliegues:** los de la Fase 4: `construir_folds`, 5 pliegues, semillas 0 a 9.
+  Una red por semilla y pliegue: 50 entrenamientos.
+- **Filas de entrenamiento:** todos los positivos del pliegue de entrenamiento
+  y 20 negativos por cada positivo. En cada época se sortea una submuestra
+  nueva de negativos, con la semilla externa, para que la red vea más
+  negativos sin aumentar el número de imágenes por época.
+- **Entrada, optimización y número de épocas:** los de la prueba de tiempo
+  (`outputs/prueba-tiempo-red-imagen.json`): 128 × 128 píxeles, la
+  normalización de ImageNet, el mismo optimizador, la misma tasa de
+  aprendizaje, el mismo lote y 3 épocas.
+- **Aumento de datos:** volteos horizontales y verticales al azar, solo en
+  entrenamiento.
+- **Puntuación:** la probabilidad de la red, la sigmoide de su salida, calculada
+  en float64, para cada lesión del pliegue de validación. Cada lesión recibe, en
+  cada semilla, la puntuación de la red del pliegue en que está en validación.
+- **Registro:** las puntuaciones se guardan en `data/`, que no se versiona, con
+  su procedencia, como las predicciones de la Fase 4b. Se registra el tiempo de
+  cada entrenamiento, para ver si el equipo bajó su velocidad por temperatura.
+
+**Pregunta 1 · ¿Entrenar una red mejora a la imagen sola?** Es el escenario sin
+sistema de fotografía corporal total. Se compara «Red sola», la puntuación de
+la red, con «Imagen» de `outputs/imagen-sola.json`, la logística sobre DINOv2,
+en los mismos pliegues y en las cuatro métricas.
+
+**Pregunta 2 · ¿La red apilada mejora a M3 limpio?** C4 es M3 limpio más dos
+variables de la red: su puntuación y esa puntuación dividida por su media
+dentro del paciente, como en M4b y en C2. Todo lo demás de M3 limpio, igual,
+y las variables se calculan antes de su remuestreo, como en C2.
+- **El atajo, declarado.** En las filas de entrenamiento de un pliegue, la
+  puntuación de la red sale de redes que se entrenaron con ese pliegue de
+  validación entre sus datos. Es apilar predicciones fuera de pliegue sin
+  validación interna, como hizo el ganador, aunque él las sacó de una partición
+  distinta de la de su CatBoost (semillas 42 y 1997 frente a 1 a 9); aquí se
+  usan los mismos pliegues. Las semillas del ganador están en
+  `NN-competition-train.ipynb`, celdas 5 y 10, en la copia local del
+  repositorio (`referencias/_texto-completo/novoselskiy-2024-isic2024-repo/`),
+  y en `top-model.ipynb`, celda 22, con `n_rounds=10`. Es menos estricto que la
+  validación interna de M4b. Hacerlo con esa validación interna en las 10
+  semillas costaría unas 24 horas: diez veces las 2,41 h del escenario (b), que
+  es de una semilla (`outputs/prueba-tiempo-red-imagen.json >
+  extrapolacion.b_1_semilla_x_5_pliegues_con_validacion_interna`).
+- **Control del atajo, si hay tiempo.** En la semilla 0 se repite C4 con la
+  validación interna de 5 pliegues de M4b, y se reporta cuánto cambia la pAUC
+  por pliegue frente al atajo. Es descriptivo: no cambia la regla.
+
+**Regla, fijada antes de correr.** Dos preguntas, así que el intervalo se
+corrige con Bonferroni a una confianza de 1 − 0,05/2, con la corrección de
+Nadeau y Bengio.
+- La red sola mejora a la imagen sola si el intervalo de su diferencia en la
+  pAUC queda entero por encima de cero.
+- C4 mejora a M3 limpio si el intervalo de su diferencia en la pAUC queda
+  entero por encima de cero.
+- Las tres métricas secundarias se reportan con su intervalo, y no deciden.
+- Si C4 mejora, se mide su tiempo de inferencia con el procedimiento de
+  `tiempo-inferencia`, red incluida, y la recomendación lo pone al lado.
+
+**Controles, antes de leer cualquier resultado.**
+- **La red puede fallar:** en la semilla 0, pliegue 0, se barajan las etiquetas
+  de todo el pliegue de entrenamiento, con la semilla 0, antes de elegir los
+  positivos y los negativos, y se entrena la red. Pasa si su pAUC en validación
+  cae dentro del 99 % central de la pAUC de 1.000 puntuaciones aleatorias sobre
+  ese mismo pliegue de validación. Caso que debe fallar: una puntuación
+  sintética hecha de las etiquetas más un poco de ruido queda fuera de ese
+  rango.
+- **Alineación:** en cada semilla, cada lesión del conjunto de desarrollo
+  recibe exactamente una puntuación, la de su pliegue de validación, y las
+  puntuaciones se unen por `isic_id`.
+- **Reproducibilidad:** se entrena dos veces la misma red, semilla 0,
+  pliegue 0, y se reporta si las puntuaciones coinciden. Si en MPS no son
+  idénticas, se declara, y las puntuaciones guardadas son el registro.
+- **Referencias:** M3 limpio sale de las predicciones guardadas en la Fase 4b,
+  comprobadas contra su huella. La imagen sola se toma de las métricas por
+  pliegue de `outputs/imagen-sola.json`, guardadas a 4 decimales; antes se
+  comprueba la huella de los pliegues contra
+  `fase4-m2-vs-m1.json > folds.sha256_por_semilla`, como hizo `imagen_sola.py`.
+- **C4:** los controles de alineación de C2, antes y después del remuestreo.
+
+**Salida.** `outputs/fase4c-red-sola-vs-imagen.json` y
+`outputs/fase4c-c4-vs-m3limpio.json`, con su `.md`, con la estructura de los
+`fase4b-*.json` y el intervalo de Bonferroni a 1 − 0,05/2.
+
+**Qué no entra, con su motivo.**
+- **Otras redes, más épocas o el ajuste de hiperparámetros.** No hay tiempo de
+  cómputo para compararlos con honestidad, y cada uno sería otra pregunta.
+- **Fotos de teléfono.** El proyecto no tiene esos datos; la red se mide sobre
+  los recortes del sistema de fotografía corporal total.
+- **Preguntas nuevas después de ver resultados.** Irían en otra fase, declarada.
+
+**Consecuencia para la Fase 5.** Si C4 mejora a M3 limpio, la Fase 5 evalúa C4
+en el reservado, con la red entrenada sobre todo el conjunto de desarrollo, y
+con M3 limpio y M2 como referencia. De dónde salen las variables de red de las
+filas de entrenamiento de C4 se fija antes de abrir el reservado. Si no, la
+Fase 5 no cambia. La pregunta 1 no cambia el modelo recomendado: informa la
+recomendación para el escenario sin sistema de fotografía corporal total.
+
+**Puerta.** Los dos `outputs/fase4c-*.json` y la decisión que sale de la regla,
+escrita en este archivo.
 
 ---
 
