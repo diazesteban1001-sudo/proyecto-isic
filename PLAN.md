@@ -8,10 +8,10 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-10-22): fases 0 a 4, cerradas; de la Fase 4b, los
-controles y los tres candidatos corridos, y la regla aplicada: ninguno mejora a
-M3 limpio; la Fase 5 espera a la retroalimentación del avance del segundo corte;
-de la Fase 6 hay trabajo hecho.** De la Fase 6:
+**Dónde está la ruta (2026-10-22): fases 0 a 4 y 4b, cerradas; la Fase 4b no
+cambió el modelo recomendado, M3 limpio; la Fase 5 espera a la
+retroalimentación del avance del segundo corte; de la Fase 6 hay trabajo
+hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -1039,7 +1039,12 @@ es buscar la semilla, el pliegue o la métrica en que sí se distinga.
 
 ---
 
-## Fase 4b — Intentar mejorar al modelo recomendado
+## Fase 4b — Intentar mejorar al modelo recomendado — CERRADA
+
+**Estado: CERRADA (2026-10-22), decisión de la persona.** Su puerta se cumplió:
+los tres `outputs/fase4b-*.json` y el resultado de la regla, escrito al final
+de esta fase. Ningún candidato mejora a M3 limpio, que sigue siendo el modelo
+recomendado.
 
 **Decisión de la persona (2026-10-22).** Antes de abrir el conjunto reservado se
 intenta mejorar a M3 limpio, la parte tabular reproducida de la solución
