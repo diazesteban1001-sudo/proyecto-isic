@@ -93,8 +93,9 @@ CADENA = [
         "nombre": "modelado-baseline",
         "etapa": "Modelos de referencia",
         "tipo": "medición",
-        "funcion": "Se entrenaron y evaluaron los niveles de referencia y los modelos M1 a M4b "
-                   "sobre pliegues agrupados por paciente",
+        "funcion": "Se entrenaron y evaluaron los niveles de referencia, los modelos M1 a M4b, los "
+                   "intentos de mejorar al recomendado de la Fase 4b y la red de imagen entrenada de la "
+                   "Fase 4c, sobre pliegues agrupados por paciente",
         "md": "modelado-baseline",
         "mide": "Primero, los niveles de referencia con la métrica oficial. Después, los modelos "
                 "M1 a M4b en validación cruzada repetida, en cuatro métricas —la pAUC, el AUC "
@@ -151,6 +152,13 @@ FASE4B = [
     ("M3 limpio mezclado con un segundo boosting", "fase4b-c3-vs-m3limpio"),
 ]
 CLAVE_BONFERRONI = "intervalo_bonferroni_nadeau_bengio"
+# Las dos preguntas de la Fase 4c (PLAN.md, Fase 4c), en su orden: su etiqueta en
+# la tabla, su archivo y los nombres de modelo que trae. La regla usa también el
+# intervalo de Bonferroni, aquí a 1 − 0,05/2.
+FASE4C = {
+    "red_sola": ("La red sola frente a la imagen sola con DINOv2", "fase4c-red-sola-vs-imagen", "Red", "Imagen"),
+    "c4": ("M3 limpio con la red frente a M3 limpio", "fase4c-c4-vs-m3limpio", "C4", "M3limpio"),
+}
 NIVELES_VR = [
     ("Nivel 1", "Regresión logística", "nivel_1_regresion_logistica"),
     ("Nivel 2a", "Gradient boosting sin balancear", "nivel_2a_gradient_boosting_sin_balancear"),
@@ -480,6 +488,41 @@ def construir_datos(outputs_dir, leidos):
     afirmar(len(intentos) == 3 and all(not i["bonferroni"][0] > 0 for i in intentos),
             "ninguna de las tres combinaciones supera a M3 limpio en la pAUC")
 
+    # --- Fase 4c: la red de imagen entrenada, sola y apilada sobre M3 limpio ---
+    preguntas_4c = []
+    for clave, (etiqueta, archivo, nuevo, base) in FASE4C.items():
+        o = cargar(archivo)
+        if (o["comparacion"]["nuevo"], o["comparacion"]["base"]) != (nuevo, base):
+            raise SystemExit(f"{archivo}.json no compara {nuevo} con {base}. No se escribe la página.")
+        c = o["comparaciones_nuevo_menos_base"]
+        preguntas_4c.append({
+            "clave": clave, "etiqueta": etiqueta, "archivo": f"{archivo}.json", "nuevo": nuevo, "base": base,
+            "media_nuevo": o["metricas"][nuevo]["pauc"]["media_global"],
+            "media_base": o["metricas"][base]["pauc"]["media_global"],
+            "metricas": {k: {"media": c[k]["media"], "bonferroni": c[k][CLAVE_BONFERRONI],
+                             "folds": c[k]["nuevo_mejor_en_folds"], "de_folds": c[k]["de_folds"],
+                             "semillas": c[k]["nuevo_mejor_en_semillas"], "de_semillas": c[k]["de_semillas"]}
+                         for k in METRICAS},
+        })
+    Q4C = {q["clave"]: q for q in preguntas_4c}
+    rs = Q4C["red_sola"]["metricas"]
+    # borrador-v2.md, «El modelo recomendado» y «La imagen sola»: ninguna de las dos preguntas
+    # llega a la regla. Si un intervalo de Bonferroni de la pAUC quedara entero por encima de
+    # cero, la página diría algo falso: no se escribe.
+    afirmar(all(not q["metricas"]["pauc"]["bonferroni"][0] > 0 for q in preguntas_4c),
+            "ninguna de las dos preguntas de la Fase 4c llega a la regla")
+    afirmar(all(q["metricas"]["pauc"]["semillas"] == q["metricas"]["pauc"]["de_semillas"] for q in preguntas_4c),
+            "en las dos el modelo con la red queda por encima en las 10 semillas")
+    afirmar(rs["auc"]["bonferroni"][0] > 0, "En el AUC estándar, que no decide, sí queda entero por encima de cero")
+    afirmar(contiene_cero(rs["setop15"]["bonferroni"]) and contiene_cero(rs["nnt80"]["bonferroni"]),
+            "en la sensibilidad top-15 y el NNT80% SE, el intervalo contiene el cero")
+    afirmar(2 * rs["pauc"]["folds"] > rs["pauc"]["de_folds"],
+            "Una red entrenada sobre los recortes supera a la imagen sola en la mayoría de los pliegues")
+    afirmar(Q4C["red_sola"]["media_base"] == imagen_sola["metricas"]["Imagen"]["pauc"]["media_global"],
+            "la imagen sola con DINOv2 de la Fase 4c es la de imagen-sola.json")
+    afirmar(Q4C["c4"]["media_base"] == fase4["fase4-m3limpio-vs-m2"]["metricas"]["M3limpio"]["pauc"]["media_global"],
+            "M3 limpio, en la Fase 4c, es el de la Fase 4")
+
     # --- comparaciones de la Fase 4 ---
     comparaciones = []
     for etiqueta, archivo in COMPARACIONES:
@@ -642,6 +685,7 @@ def construir_datos(outputs_dir, leidos):
         },
         "comparaciones": comparaciones,
         "fase4b": intentos,
+        "fase4c": preguntas_4c,
         "tabla": tabla,
         "mecanismo": datos_mecanismo(mecanismo, metrica),
         "particion": datos_particion(particion),
@@ -1412,6 +1456,12 @@ const IM1 = "imagen_menos_m1", IB = "imagen_basicos_menos_imagen";
 const vicIS = (n, k) => `${cifra(IS.comp[n][k].folds, fISc(n, k, "nuevo_mejor_en_folds"))} de ` +
   `${cifra(IS.comp[n][k].de_folds, fISc(n, k, "de_folds"))}; ${cifra(IS.comp[n][k].semillas, fISc(n, k, "nuevo_mejor_en_semillas"))} de ` +
   `${cifra(IS.comp[n][k].de_semillas, fISc(n, k, "de_semillas"))}`;
+// borrador-v2.md, «Resultados»: el párrafo de la Fase 4c en «La imagen sola» y la tabla de «El modelo recomendado».
+const F4C = Object.fromEntries(D.fase4c.map(q => [q.clave, q]));
+const fF4c = (q, k, campo) => `${F4C[q].archivo} > comparaciones_nuevo_menos_base.${k}.${campo}`;
+const fF4cM = (q, modelo) => `${F4C[q].archivo} > metricas.${modelo}.pauc.media_global`;
+const RS = F4C.red_sola.metricas, C4 = F4C.c4.metricas;
+const bonfF4c = (q, k) => fF4c(q, k, "intervalo_bonferroni_nadeau_bengio");
 document.getElementById("texto-4b").innerHTML = P([
   `Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software de la fotografía corporal total; ` +
   `sin ese sistema, esos modelos no se pueden aplicar tal cual. ` +
@@ -1441,8 +1491,19 @@ document.getElementById("texto-4b").innerHTML = P([
   `NNT80% SE: ${mediaIS(IB, "nnt80")} lesiones por cada maligna, ${icIS(IB, "nnt80")} (${vicIS(IB, "nnt80")}).`]) + P([
   `Sobre la zona del cuerpo, las fuentes no coinciden. La tabla de variables del artículo del conjunto de datos la marca como ` +
   `una métrica del software del sistema; el artículo de los organizadores la cuenta entre los datos básicos, que ${citaIS("datos_basicos")}.`,
+  `Después se entrenó una red de imagen sobre los recortes, EfficientNet-B0, en cada pliegue. ` +
+  `Su pAUC media es de ${cifra(dec(F4C.red_sola.media_nuevo), fF4cM("red_sola", "Red"))}, frente a ` +
+  `${cifra(dec(F4C.red_sola.media_base), fF4cM("red_sola", "Imagen"))} de la imagen sola con DINOv2, y queda por encima en ` +
+  `${cifra(RS.pauc.folds, fF4c("red_sola", "pauc", "nuevo_mejor_en_folds"))} de ${cifra(RS.pauc.de_folds, fF4c("red_sola", "pauc", "de_folds"))} ` +
+  `pliegues y en las ${cifra(RS.pauc.semillas, fF4c("red_sola", "pauc", "nuevo_mejor_en_semillas"))} semillas. ` +
+  `Con la corrección por haber hecho dos preguntas, el intervalo de la diferencia, ` +
+  `${cifra(firmado(RS.pauc.media), fF4c("red_sola", "pauc", "media"))}, va de ` +
+  `${cifra(dec(RS.pauc.bonferroni[0]), bonfF4c("red_sola", "pauc"))} a ${cifra(dec(RS.pauc.bonferroni[1]), bonfF4c("red_sola", "pauc"))}, ` +
+  `así que la regla fijada antes no la da por establecida. En el AUC estándar, que no decide, sí queda entero por encima de cero: ` +
+  `${cifra(firmado(RS.auc.media), fF4c("red_sola", "auc", "media"))}, ${ic(RS.auc.bonferroni[0], RS.auc.bonferroni[1], bonfF4c("red_sola", "auc"))}; ` +
+  `en la sensibilidad top-15 y el NNT80% SE, el intervalo contiene el cero.`,
   `<i>Interpretación, no medición:</i> sin el sistema de fotografía corporal total, la imagen sí sirve para ordenar lesiones ` +
-  `por sospecha, aunque con este extractor congelado queda lejos de M1. Edad, sexo y zona del cuerpo son ` +
+  `por sospecha, aunque con el extractor congelado, DINOv2, queda lejos de M1. Edad, sexo y zona del cuerpo son ` +
   `datos que una persona puede informar sin aparatos, aunque en estos datos la zona del cuerpo pudo venir del software del sistema. El ganador ajustó sus propias redes de imagen, y su variante con solo los ` +
   `recortes llega a un AUC de ${auc922}, pero en otros datos y con otra evaluación, así que las cifras no se comparan. ` +
   `Y todo esto se midió sobre los recortes del sistema de fotografía corporal total, no sobre fotos de teléfono.`]);
@@ -1466,7 +1527,7 @@ document.getElementById("texto-5").innerHTML = P([
 /* ---------- 6. recomendacion ---------- */
 document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
 document.getElementById("rot-reco").innerHTML = reco;
-// borrador-v2.md, «Resultados», «El modelo recomendado», el párrafo de la Fase 4b: el texto y las cifras de la tabla.
+// borrador-v2.md, «Resultados», «El modelo recomendado», los párrafos de las fases 4b y 4c: el texto y las cifras de las tablas.
 const fIntento = (i, campo) => `${i.archivo} > comparaciones_nuevo_menos_base.pauc.${campo}`;
 const intentos = P([
   `<b>Tres intentos de mejorarlo.</b> Antes de abrir el conjunto reservado se probaron tres combinaciones, fijadas antes de correr, contra M3 limpio. ` +
@@ -1476,11 +1537,23 @@ const intentos = P([
   D.fase4b.map(i => `<tr><td>${esc(i.etiqueta)}</td><td>${cifra(firmado(i.media), fIntento(i, "media"))}</td>` +
     `<td>${ic(i.bonferroni[0], i.bonferroni[1], fIntento(i, "intervalo_bonferroni_nadeau_bengio"))}</td></tr>`).join("") +
   `</tbody></table></div>`;
+const red4c = P([
+  `<b>Una red de imagen entrenada.</b> Después se entrenó una red de imagen sobre los recortes y se hicieron dos preguntas, ` +
+  `fijadas antes de correr, con el intervalo corregido por haber hecho dos (Bonferroni). Ninguna llega a la regla, aunque en las dos ` +
+  `el modelo con la red queda por encima en las ` +
+  `${cifra(C4.pauc.semillas, "fase4c-red-sola-vs-imagen.json y fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas")} semillas.`]) +
+  `<div class="tabla-envoltura"><table class="tabla-intentos"><thead><tr><th>Pregunta</th><th>Diferencia en la pAUC</th>` +
+  `<th>Intervalo corregido (Bonferroni)</th><th>Semillas en que gana</th></tr></thead><tbody>` +
+  D.fase4c.map(q => `<tr><td>${esc(q.etiqueta)}</td><td>${cifra(firmado(q.metricas.pauc.media), fF4c(q.clave, "pauc", "media"))}</td>` +
+    `<td>${ic(q.metricas.pauc.bonferroni[0], q.metricas.pauc.bonferroni[1], bonfF4c(q.clave, "pauc"))}</td>` +
+    `<td>${cifra(q.metricas.pauc.semillas, fF4c(q.clave, "pauc", "nuevo_mejor_en_semillas"))} de ` +
+    `${cifra(q.metricas.pauc.de_semillas, fF4c(q.clave, "pauc", "de_semillas"))}</td></tr>`).join("") +
+  `</tbody></table></div>`;
 // borrador-v2.md, «Recomendación», «Qué se recomienda».
 document.getElementById("texto-6").innerHTML = P([
   `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
   `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`]) +
-  intentos + P([
+  intentos + red4c + P([
   `<b>Donde se toma la fotografía corporal total, no se recomienda añadir las variables de imagen</b> tal como se probaron. ` +
   `Añadidas al modelo con contexto de paciente no mejoraron ninguna métrica de forma distinguible, ` +
   `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio. ` +
@@ -1491,14 +1564,15 @@ document.getElementById("texto-6").innerHTML = P([
   `Es el escenario que el artículo del conjunto de datos pone como objetivo: algoritmos que decidan a partir de ${citaIS("telefono")}. ` +
   `Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que mejora el AUC de la imagen sola. Esa mejora se ` +
   `midió con una zona del cuerpo que pudo venir del software del sistema, así que antes de usarla habría que medirla con fotos ` +
-  `de teléfono y con la zona que informe la persona. Cómo mejorarla, por ejemplo ajustando redes propias, no se ha medido.`,
+  `de teléfono y con la zona que informe la persona. Una red entrenada sobre los recortes supera a la imagen sola, sin edad, sexo ` +
+  `ni zona del cuerpo, en la mayoría de los pliegues, sin que la diferencia en la pAUC quede establecida; la red con esos datos no se probó.`,
   `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
 // borrador-v2.md, «Recomendación», «Qué se puede afirmar».
 document.getElementById("se-puede").innerHTML = L([
   `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
   `El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80% SE.`,
   `Añadidas al modelo con contexto de paciente, las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas.`,
-  `Sin el sistema de fotografía corporal total, la imagen sola distingue lesiones malignas muy por encima del azar, pero con este extractor queda por debajo de M1 en las cuatro métricas.`,
+  `Sin el sistema de fotografía corporal total, la imagen sola distingue lesiones malignas muy por encima del azar, pero con el extractor congelado, DINOv2, queda por debajo de M1 en las cuatro métricas.`,
   `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`]);
 // borrador-v2.md, «Recomendación», «Qué no se puede afirmar».
 document.getElementById("no-se-puede").innerHTML = L([
@@ -1506,11 +1580,13 @@ document.getElementById("no-se-puede").innerHTML = L([
   `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
   `<b>Cuánto rinde M3 limpio fuera del conjunto de desarrollo.</b> El conjunto reservado no se ha abierto. Cuando se abra, la estimación principal ` +
   `seguirá siendo la validación cruzada repetida, y la recomendación no cambiará por su resultado.`,
-  `<b>Nada sobre otros extractores de imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron fuera.`,
+  `<b>Nada sobre otras redes de imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo y una red pequeña, EfficientNet-B0, ` +
+  `entrenada sobre los recortes con ajustes fijos; las redes del ganador quedaron fuera.`,
   `<b>Cuánto rinde un modelo con fotos de teléfono.</b> La imagen sola se midió sobre los recortes estandarizados del sistema de fotografía corporal total. ` +
   `El artículo del conjunto de datos advierte que las fotos que toman los pacientes ${citaIS("luz_y_campo")}.`,
-  `<b>Que no exista una forma de mejorar a M3 limpio.</b> Solo se probaron tres combinaciones: sin ajustar hiperparámetros, ` +
-  `y sin entrenar redes de imagen sobre los recortes, como hizo el ganador.`,
+  `<b>Que no exista una forma de mejorar a M3 limpio.</b> Solo se probaron tres combinaciones y una red de imagen pequeña con ajustes fijos, ` +
+  `sin ajustar hiperparámetros. M3 limpio con la red apilada queda por encima de M3 limpio en las ` +
+  `${cifra(C4.pauc.semillas, fF4c("c4", "pauc", "nuevo_mejor_en_semillas"))} semillas, pero sin diferencia establecida.`,
   `<b>Que este trabajo supere o no a la solución ganadora.</b> Su evaluación usó otros datos y otras particiones.`,
   `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 
@@ -1522,11 +1598,13 @@ document.getElementById("limitaciones").innerHTML = P([
   `<b>La clase negativa no está confirmada.</b> Las lesiones malignas tienen patología; de las benignas, <i>"most never underwent a skin biopsy"</i>. ` +
   `La mayoría de los negativos son lesiones que un dermatólogo no consideró preocupantes, no lesiones confirmadas como sanas.`,
   `<b>Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente.</b> Así las describe el artículo del conjunto de datos: ` +
-  `<i>"comparable in optical resolution to smartphone images"</i>. El resultado de la imagen se limita a estas imágenes y a este extractor.`,
+  `<i>"comparable in optical resolution to smartphone images"</i>. El resultado de la imagen se limita a estas imágenes y a estos dos ` +
+  `modelos de imagen: DINOv2 congelado y EfficientNet-B0 entrenada.`,
   `<b>Muchas comparaciones a la vez.</b> Cada comparación (M2 − M1, M4 − M2, M4b − M2, M3 − M2, M3 limpio − M2, 2b − 1 en las dos particiones, ` +
-  `Imagen − M1 e (Imagen + básicos) − Imagen) se lee en cuatro métricas, y las dos de las columnas de procedencia —con y sin ellas, ` +
-  `en el boosting y en la logística—, solo en la pAUC. Ninguna se corrige por multiplicidad, y el intervalo del NNT80% SE de M2 − M1 ` +
-  `queda al límite del cero.`,
+  `Imagen − M1, (Imagen + básicos) − Imagen, las tres de la Fase 4b contra M3 limpio, red sola − Imagen y C4 − M3 limpio) se lee en ` +
+  `cuatro métricas, y las dos de las columnas de procedencia —con y sin ellas, en el boosting y en la logística—, solo en la pAUC. ` +
+  `Las de las fases 4b y 4c se corrigen por multiplicidad dentro de cada fase, con Bonferroni; las demás no, y el intervalo del ` +
+  `NNT80% SE de M2 − M1 queda al límite del cero.`,
   `<b>La corrección de la varianza es aproximada.</b> Nadeau y Bengio la derivan para divisiones aleatorias independientes, y aquí se aplica a una validación por pliegues.`,
   `<b>El NNT80% SE se calcula con una lectura propia</b>, porque el organizador no publica script para él.`,
   `<b>El conjunto reservado no es del todo independiente.</b> No es ajeno a las decisiones tomadas antes de sellarlo ni al diseño de las variables de la ` +

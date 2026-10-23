@@ -51,6 +51,15 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      lo supera en la pAUC» deja de ser cierta y no se escribe la página, por
      esa frase. Con un candidato que no compara contra M3 limpio, tampoco. En
      la copia sin cambios, los datos de la página traen los tres intentos.
+  O. Las dos preguntas de la Fase 4c (2026-10-23). Con el intervalo de
+     Bonferroni de la pAUC entero por encima de cero, en la red sola o en C4,
+     la frase «Ninguna llega a la regla» deja de ser cierta y no se escribe la
+     página, por esa frase. Tampoco con C4 comparado contra otra base, ni con
+     cada una de las demás frases de la Fase 4c rota: una semilla perdida, el
+     AUC sin excluir el cero, la sensibilidad top-15 excluyéndolo, la red
+     sola por encima en menos de la mitad de los pliegues, y las bases que no
+     son las de imagen-sola.json y de la Fase 4. En la copia sin cambios, los
+     datos de la página traen las dos preguntas.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -251,7 +260,35 @@ def main():
     def m4_barato(o):
         o["tiempos"]["M4"]["mediana_segundos_por_1000_lesiones"] = 0.001
 
+    def en_4c(k, campo, valor):
+        def cambio(o):
+            o["comparaciones_nuevo_menos_base"][k][campo] = valor(o["comparaciones_nuevo_menos_base"][k][campo])
+        return cambio
+
+    def media_base(modelo):
+        def cambio(o):
+            o["metricas"][modelo]["pauc"]["media_global"] = round(o["metricas"][modelo]["pauc"]["media_global"] + 0.0001, 4)
+        return cambio
+
     IS, IM1, IB = "imagen-sola", "imagen_menos_m1", "imagen_basicos_menos_imagen"
+    RS4C, C44C = "fase4c-red-sola-vs-imagen", "fase4c-c4-vs-m3limpio"
+    REGLA_4C = "ninguna de las dos preguntas de la Fase 4c llega a la regla"
+    casos_o = [
+        ("el intervalo de Bonferroni de la red sola queda entero por encima de cero", RS4C, bonferroni_por_encima, REGLA_4C),
+        ("el intervalo de Bonferroni de C4 queda entero por encima de cero", C44C, bonferroni_por_encima, REGLA_4C),
+        ("C4 comparado contra M2", C44C, otra_base, "no compara C4 con M3limpio"),
+        ("C4 por encima en una semilla menos", C44C, en_4c("pauc", "nuevo_mejor_en_semillas", lambda v: v - 1),
+         "en las dos el modelo con la red queda por encima en las 10 semillas"),
+        ("el AUC de la red sola sin excluir el cero", RS4C, en_4c("auc", "intervalo_bonferroni_nadeau_bengio", lambda v: [-0.001, v[1]]),
+         "En el AUC estándar, que no decide, sí queda entero por encima de cero"),
+        ("la sensibilidad top-15 de la red sola excluyendo el cero", RS4C,
+         en_4c("setop15", "intervalo_bonferroni_nadeau_bengio", lambda v: [0.001, v[1]]),
+         "en la sensibilidad top-15 y el NNT80% SE, el intervalo contiene el cero"),
+        ("la red sola por encima en 20 de 50 pliegues", RS4C, en_4c("pauc", "nuevo_mejor_en_folds", lambda v: 20),
+         "supera a la imagen sola en la mayoría de los pliegues"),
+        ("una imagen sola que no es la de imagen-sola.json", RS4C, media_base("Imagen"), "es la de imagen-sola.json"),
+        ("un M3 limpio que no es el de la Fase 4", C44C, media_base("M3limpio"), "es el de la Fase 4"),
+    ]
     casos_l = [
         ("control de M1 en falso", IS, sin_control, "en los mismos pliegues de M1"),
         ("M1 sin variables tbp_lv_", "modelado-baseline", sin_tbp_lv,
@@ -305,6 +342,8 @@ def main():
     }
     for i, (_, archivo, cambio, _) in enumerate(casos_l):
         corridas[f"L{i}"] = generar(f"L{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
+    for i, (_, archivo, cambio, _) in enumerate(casos_o):
+        corridas[f"O{i}"] = generar(f"O{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
     f_ok, f_detalle = caso_f()
     m = caso_m()
 
@@ -347,6 +386,13 @@ def main():
         ("N. un candidato que no compara contra M3 limpio: no escribe",
          not corridas["N2"][0] and "no compara contra M3 limpio" in corridas["N2"][2],
          f"escrita: {corridas['N2'][0]}; {corridas['N2'][2]}"),
+        ("O. en la página base, los datos traen las dos preguntas de la Fase 4c",
+         corridas["A"][1] is not None and all(f"{a}.json" in corridas["A"][1] for a in (RS4C, C44C)),
+         f"escrita: {corridas['A'][0]}"),
+    ] + [
+        (f"O. {titulo}: no escribe, por esa frase",
+         not corridas[f"O{i}"][0] and frase in corridas[f"O{i}"][2], f"escrita: {corridas[f'O{i}'][0]}; {corridas[f'O{i}'][2]}")
+        for i, (titulo, _, _, frase) in enumerate(casos_o)
     ]
     fallos = 0
     for titulo, ok, detalle in casos:
