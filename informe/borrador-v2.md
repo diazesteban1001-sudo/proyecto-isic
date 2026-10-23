@@ -47,9 +47,9 @@ favor, la que recomienda.
 En el contexto de paciente, los resultados coinciden en dirección: aquí
 también mejora las métricas de triaje. Las magnitudes no se comparan, porque
 se midieron en otros datos y con otras particiones. Con la imagen la
-comparación no procede: el ganador ajustó sus propias redes, y aquí se probó
-un extractor congelado.
-<!-- F: «Resultados», «La métrica principal no agota lo que pidió el cliente»; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera) y «El extractor de imagen» -->
+comparación no procede: el ganador ajustó sus propias redes; aquí se probó un
+extractor congelado y, después, una red pequeña entrenada sobre los recortes.
+<!-- F: «Resultados», «La métrica principal no agota lo que pidió el cliente»; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera) y «El extractor de imagen»; PLAN.md, Fase 4c, «La red» (la red pequeña, EfficientNet-B0, entrenada de punta a punta) -->
 
 ### Cómo se evalúa un sistema de triaje
 
@@ -308,8 +308,14 @@ repetida.
 
 <!-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M2, M3, M4), «Variante secundaria M4b», «M3 limpio y regla de recomendación»; outputs/fase4-m3limpio-vs-m2.json > hiperparametros; .claude/skills/modelado-baseline/SKILL.md, «Contexto de paciente, las variables de M2» (las 34 variables) -->
 
-Los modelos propios no se ajustan: usan los hiperparámetros del nivel 2b.
-<!-- F: PLAN.md, Fase 4, «Sin ajuste de hiperparámetros»; outputs/fase4-m3limpio-vs-m2.json > hiperparametros -->
+La Fase 4b probó tres combinaciones de M3 limpio, y la Fase 4c una red de
+imagen entrenada, EfficientNet-B0, sola y apilada sobre M3 limpio (C4); se
+describen en PLAN.md.
+<!-- F: PLAN.md, Fase 4b, «Qué se compara» (C1, C2 y C3); PLAN.md, Fase 4c, «La red», «Pregunta 1» y «Pregunta 2» (C4) -->
+
+Los modelos propios no se ajustan: usan los hiperparámetros del nivel 2b; la
+red de la Fase 4c usa los ajustes fijos de su prueba de tiempo.
+<!-- F: PLAN.md, Fase 4, «Sin ajuste de hiperparámetros»; outputs/fase4-m3limpio-vs-m2.json > hiperparametros; PLAN.md, Fase 4c, «Cómo se entrena, fijado antes de correr y sin ajuste»; outputs/prueba-tiempo-red-imagen.json > entrada y entrenamiento -->
 De la solución ganadora quedan fuera, cada cosa con su motivo, las dos redes
 de imagen, por un costo que no se estimó; el modelo entrenado con el ISIC
 Archive, por riesgo de fuga, y la razón de cada predicción a la media del
@@ -388,6 +394,9 @@ preentrenamiento de un tercero y no del conjunto de datos.
   M3 limpio difiere de M3 en tres cosas a la vez, así que su resultado no dice
   cuál de los dos sesgos pesaba.
   <!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->
+- **Las reglas de las fases 4b y 4c se fijaron antes de correr**; están en
+  PLAN.md.
+  <!-- F: PLAN.md, Fase 4b, «Regla, fijada antes de correr»; PLAN.md, Fase 4c, «Regla, fijada antes de correr» -->
 - **El conjunto reservado se abre una sola vez**, al final, con el modelo
   recomendado fijado en un commit anterior, y su resultado se reporta sea cual
   sea.
@@ -787,9 +796,24 @@ sistema; el artículo de los organizadores la cuenta entre los datos básicos,
 que *"are not directly attained from images"*.
 <!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, líneas 194 y 226 (el asterisco: «Canfield Scientific, Inc. Lesion Visualizer metric»); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299, cita literal -->
 
+Después se entrenó una red de imagen sobre los recortes, EfficientNet-B0, en
+cada pliegue.
+<!-- F: PLAN.md, Fase 4c, «La red» y «Cómo se entrena, fijado antes de correr y sin ajuste»; referencias/efficientnet-b0-preentrenamiento.md (el criterio de la Fase 2, comprobado antes de descargar los pesos) -->
+Su pAUC media es de 0,1083, frente a 0,0796 de la imagen sola con DINOv2, y
+queda por encima en 44 de 50 pliegues y en las 10 semillas.
+<!-- F: outputs/fase4c-red-sola-vs-imagen.json > metricas.Red.pauc.media_global, metricas.Imagen.pauc.media_global y comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas; «Imagen» es la de IS, a 4 decimales -->
+Con la corrección por haber hecho dos preguntas, el intervalo de la
+diferencia, +0,0287, va de −0,0037 a 0,0611, así que la regla fijada antes no
+la da por establecida.
+<!-- F: outputs/fase4c-red-sola-vs-imagen.json > comparaciones_nuevo_menos_base.pauc.media y .intervalo_bonferroni_nadeau_bengio (confianza 1 − 0,05/2, con la corrección de Nadeau y Bengio); PLAN.md, Fase 4c, «Regla, fijada antes de correr» y «Resultado de la regla (2026-10-23)» -->
+En el AUC estándar, que no decide, sí queda entero por encima de cero:
++0,0529, [0,0018; 0,1039]; en la sensibilidad top-15 y el NNT80% SE, el
+intervalo contiene el cero.
+<!-- F: outputs/fase4c-red-sola-vs-imagen.json > comparaciones_nuevo_menos_base.auc.media y .auc.intervalo_bonferroni_nadeau_bengio; .setop15.intervalo_bonferroni_nadeau_bengio y .nnt80.intervalo_bonferroni_nadeau_bengio; PLAN.md, Fase 4c, «Regla, fijada antes de correr» (las secundarias no deciden) -->
+
 *Interpretación, no medición:* sin el sistema de fotografía corporal total, la
-imagen sí sirve para ordenar lesiones por sospecha, aunque con este extractor
-congelado queda lejos de M1. Edad, sexo y zona del
+imagen sí sirve para ordenar lesiones por sospecha, aunque con el extractor
+congelado, DINOv2, queda lejos de M1. Edad, sexo y zona del
 cuerpo son datos que una persona puede informar sin aparatos, aunque en estos
 datos la zona del cuerpo pudo venir del software del sistema. El ganador ajustó sus
 propias redes de imagen, y su variante con solo los recortes llega a un AUC de
@@ -840,6 +864,24 @@ multiplicidad, con la confianza de Bonferroni. Ninguna lo supera en la pAUC:
 Las combinaciones se eligieron conociendo los resultados de la Fase 4, y la
 corrección cubre solo esos tres intentos.
 <!-- F: PLAN.md, Fase 4b, «Levanta la regla "Solo esta corrida" de la Fase 4» -->
+
+Después se probó la red de imagen entrenada apilada sobre M3 limpio, con su
+puntuación y su razón a la media del paciente.
+<!-- F: PLAN.md, Fase 4c, «Pregunta 2» (C4: la puntuación de la red y esa puntuación dividida por su media dentro del paciente, como en M4b y C2) -->
+Su pAUC media es de 0,1687, frente a 0,1621 de M3 limpio, y queda por encima
+en 39 de 50 pliegues y en las 10 semillas.
+<!-- F: outputs/fase4c-c4-vs-m3limpio.json > metricas.C4.pauc.media_global, metricas.M3limpio.pauc.media_global y comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas -->
+Con la corrección de Bonferroni para dos preguntas, el intervalo de la
+diferencia, +0,0067, va de −0,003 a 0,0164: la regla no la da por
+establecida, y M3 limpio sigue siendo el modelo recomendado.
+<!-- F: outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.pauc.media y .intervalo_bonferroni_nadeau_bengio (confianza 1 − 0,05/2, con la corrección de Nadeau y Bengio); PLAN.md, Fase 4c, «Regla, fijada antes de correr» y «Resultado de la regla (2026-10-23)» -->
+Las puntuaciones se apilaron con los mismos pliegues, un atajo menos estricto
+que la validación interna de M4b. En la semilla 0, la versión estricta dio más
+pAUC que el atajo en los cinco pliegues, de +0,0012 a +0,0063.
+<!-- F: PLAN.md, Fase 4c, «El atajo, declarado» y «Control del atajo, descriptivo»; outputs/fase4c-control-atajo.json > diferencia_de_pauc_interna_menos_atajo.por_pliegue, .minima y .maxima (la versión estricta: C4 con la validación interna de M4b en las filas de entrenamiento) -->
+Las dos preguntas se eligieron conociendo los resultados de las fases 4 y 4b,
+y la corrección cubre solo esas dos.
+<!-- F: PLAN.md, Fase 4c, «Segunda ronda, declarada» -->
 
 ### El costo de inferencia
 
@@ -907,9 +949,11 @@ photos resembling the resolution of smartphone images"*.
 Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que
 mejora el AUC de la imagen sola. Esa mejora se midió con una zona del cuerpo
 que pudo venir del software del sistema, así que antes de usarla habría que
-medirla con fotos de teléfono y con la zona que informe la persona. Cómo
-mejorarla, por ejemplo ajustando redes propias, no se ha medido.
-<!-- F: IS > C.imagen_basicos_menos_imagen.auc.IC; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera); «Resultados», «La imagen sola, sin el sistema de fotografía corporal total» (las fuentes sobre la zona del cuerpo) -->
+medirla con fotos de teléfono y con la zona que informe la persona. Una red
+entrenada sobre los recortes supera a la imagen sola, sin edad, sexo ni zona
+del cuerpo, en la mayoría de los pliegues, sin que la diferencia en la pAUC
+quede establecida; la red con esos datos no se probó.
+<!-- F: IS > C.imagen_basicos_menos_imagen.auc.IC; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono»; «Resultados», «La imagen sola, sin el sistema de fotografía corporal total» (las fuentes sobre la zona del cuerpo y la red entrenada); outputs/fase4c-red-sola-vs-imagen.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds y .intervalo_bonferroni_nadeau_bengio; PLAN.md, Fase 4c, «Pregunta 1» (la red frente a «Imagen», sin los datos básicos) -->
 
 **Y se recomienda no leer solo la pAUC.** El contexto de paciente no se nota
 en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.
@@ -928,8 +972,8 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   ninguna de las métricas.
   <!-- F: F42 y F4b > C.*.IC -->
 - Sin el sistema de fotografía corporal total, la imagen sola distingue
-  lesiones malignas muy por encima del azar, pero con este extractor queda por
-  debajo de M1 en las cuatro métricas.
+  lesiones malignas muy por encima del azar, pero con el extractor congelado,
+  DINOv2, queda por debajo de M1 en las cuatro métricas.
   <!-- F: «Resultados», «La imagen sola, sin el sistema de fotografía corporal total»; IS > metricas.Imagen.pauc.por_semilla_y_fold; IS > C.imagen_menos_m1.*.IC -->
 - Una partición por filas habría dejado al 98,92% de los pacientes a los dos
   lados de la validación.
@@ -947,19 +991,20 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   siendo la validación cruzada repetida, y la recomendación no cambiará por su
   resultado.
   <!-- F: PLAN.md, Fase 5, «Especificación» -->
-- **Nada sobre otros extractores de imagen.** Solo se probaron las
-  variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron
-  fuera.
-  <!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada) -->
+- **Nada sobre otras redes de imagen.** Solo se probaron las variables de
+  DINOv2 sin reentrenarlo y una red pequeña, EfficientNet-B0, entrenada sobre
+  los recortes con ajustes fijos; las redes del ganador quedaron fuera.
+  <!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada); PLAN.md, Fase 4c, «La red», «Cómo se entrena, fijado antes de correr y sin ajuste» y «Qué no entra, con su motivo» -->
 - **Cuánto rinde un modelo con fotos de teléfono.** La imagen sola se midió
   sobre los recortes estandarizados del sistema de fotografía corporal total.
   El artículo del conjunto de datos advierte que las fotos que toman los
   pacientes *"vary greatly in lighting and FOV"*.
   <!-- F: IS > datos; referencias/kurtansky-2024-slice3d-descriptor.md, línea 115, cita literal -->
 - **Que no exista una forma de mejorar a M3 limpio.** Solo se probaron tres
-  combinaciones: sin ajustar hiperparámetros, y sin entrenar redes de imagen
-  sobre los recortes, como hizo el ganador.
-  <!-- F: PLAN.md, Fase 4b, «Qué no entra, con su motivo»; «Método», «Qué se compara» (las redes de imagen del ganador, fuera de la reproducción); PLAN.md, Fase 4, especificación de M3 (del ajuste de hiperparámetros del ganador solo consta un estudio de Optuna comentado, celda 23) -->
+  combinaciones y una red de imagen pequeña con ajustes fijos, sin ajustar
+  hiperparámetros. M3 limpio con la red apilada queda por encima de M3 limpio
+  en las 10 semillas, pero sin diferencia establecida.
+  <!-- F: PLAN.md, Fase 4b, «Qué no entra, con su motivo»; PLAN.md, Fase 4c, «Qué no entra, con su motivo» y «Resultado de la regla (2026-10-23)»; outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas y .intervalo_bonferroni_nadeau_bengio; PLAN.md, Fase 4, especificación de M3 (del ajuste de hiperparámetros del ganador solo consta un estudio de Optuna comentado, celda 23) -->
 - **Que este trabajo supere o no a la solución ganadora.** Su evaluación usó
   otros datos y otras particiones.
   <!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
@@ -978,15 +1023,18 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
 - **Las imágenes tienen una resolución óptica comparable a la de un teléfono
   inteligente.** Así las describe el artículo del conjunto de datos:
   *"comparable in optical resolution to smartphone images"*. El resultado
-  de la imagen se limita a estas imágenes y a este extractor.
-  <!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, línea 99, cita literal; la última frase acota el alcance (interpretación) -->
+  de la imagen se limita a estas imágenes y a estos dos modelos de imagen:
+  DINOv2 congelado y EfficientNet-B0 entrenada.
+  <!-- F: referencias/kurtansky-2024-slice3d-descriptor.md, línea 99, cita literal; la última frase acota el alcance (interpretación); PLAN.md, Fase 4c, «La red» -->
 - **Muchas comparaciones a la vez.** Cada comparación (M2 − M1, M4 − M2,
-  M4b − M2, M3 − M2, M3 limpio − M2, 2b − 1 en las dos particiones, Imagen − M1
-  e (Imagen + básicos) − Imagen) se lee en cuatro métricas, y las dos de las
-  columnas de procedencia —con y sin ellas, en el boosting y en la logística—,
-  solo en la pAUC. Ninguna se corrige por multiplicidad, y el intervalo del
-  NNT80% SE de M2 − M1 queda al límite del cero.
-  <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC; EP > particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; IS > C.imagen_menos_m1 y C.imagen_basicos_menos_imagen; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (solo la pAUC) -->
+  M4b − M2, M3 − M2, M3 limpio − M2, 2b − 1 en las dos particiones,
+  Imagen − M1, (Imagen + básicos) − Imagen, las tres de la Fase 4b contra M3
+  limpio, red sola − Imagen y C4 − M3 limpio) se lee en cuatro métricas, y las
+  dos de las columnas de procedencia —con y sin ellas, en el boosting y en la
+  logística—, solo en la pAUC. Las de las fases 4b y 4c se corrigen por
+  multiplicidad dentro de cada fase, con Bonferroni; las demás no, y el
+  intervalo del NNT80% SE de M2 − M1 queda al límite del cero.
+  <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC; EP > particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; IS > C.imagen_menos_m1 y C.imagen_basicos_menos_imagen; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (solo la pAUC); outputs/fase4b-*.json y outputs/fase4c-red-sola-vs-imagen.json y outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.*.intervalo_bonferroni_nadeau_bengio (fase4b_comparar.py, confianza 1 − 0,05/3; fase4c_comparar.py, 1 − 0,05/2) -->
 - **La corrección de la varianza es aproximada.** Nadeau y Bengio la derivan
   para divisiones aleatorias independientes, y aquí se aplica a una validación
   por pliegues.
