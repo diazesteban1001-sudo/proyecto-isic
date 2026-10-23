@@ -46,6 +46,11 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      quitada de su archivo —la de las fotos de los pacientes o la de los datos
      básicos—, la página no se escribe. Sobre copias en una raíz
      temporal; con las copias sin tocar, las dos lecturas pasan.
+  N. Los tres intentos de la Fase 4b (2026-10-22). Con el intervalo de
+     Bonferroni de la pAUC de C2 entero por encima de cero, la frase «Ninguna
+     lo supera en la pAUC» deja de ser cierta y no se escribe la página, por
+     esa frase. Con un candidato que no compara contra M3 limpio, tampoco. En
+     la copia sin cambios, los datos de la página traen los tres intentos.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -210,6 +215,12 @@ def main():
     def excluir_cero(o, n, k):
         o["comparaciones_nuevo_menos_base"][n][k]["intervalo_t_95_nadeau_bengio"][0] = 0.001
 
+    def bonferroni_por_encima(o):
+        o["comparaciones_nuevo_menos_base"]["pauc"]["intervalo_bonferroni_nadeau_bengio"] = [0.0001, 0.0142]
+
+    def otra_base(o):
+        o["comparacion"]["base"] = "M2"
+
     def sin_control(o):
         o["control_m1_contra_referencia"]["m1_reproduce_fold_a_fold"] = False
 
@@ -289,6 +300,8 @@ def main():
         "I": generar("I", lambda d: cambiar(d, "extraccion-imagen", sin_reparto)),
         "J": generar("J", lambda d: cambiar(d, "holdout-pacientes", sin_sellado)),
         "K": generar("K", lambda d: cambiar(d, "sintesis-verificacion", grupos_que_no_suman)),
+        "N1": generar("N1", lambda d: cambiar(d, "fase4b-c2-vs-m3limpio", bonferroni_por_encima)),
+        "N2": generar("N2", lambda d: cambiar(d, "fase4b-c1-vs-m3limpio", otra_base)),
     }
     for i, (_, archivo, cambio, _) in enumerate(casos_l):
         corridas[f"L{i}"] = generar(f"L{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
@@ -325,6 +338,15 @@ def main():
         ("M. fila de solo recortes duplicada en la Tabla 3: no se lee", *m["tabla"]),
         ("M. cita quitada de su archivo: no se escribe", *m["cita"]),
         ("M. cita de los datos básicos quitada de Kurtansky 2025: no se escribe", *m["cita_basicos"]),
+        ("N. en la página base, los datos traen los tres intentos de la Fase 4b",
+         corridas["A"][1] is not None and all(f"fase4b-c{i}-vs-m3limpio.json" in corridas["A"][1] for i in (1, 2, 3)),
+         f"escrita: {corridas['A'][0]}"),
+        ("N. el intervalo de Bonferroni de C2 queda entero por encima de cero: no escribe, por esa frase",
+         not corridas["N1"][0] and "ninguna de las tres combinaciones supera a M3 limpio" in corridas["N1"][2],
+         f"escrita: {corridas['N1'][0]}; {corridas['N1'][2]}"),
+        ("N. un candidato que no compara contra M3 limpio: no escribe",
+         not corridas["N2"][0] and "no compara contra M3 limpio" in corridas["N2"][2],
+         f"escrita: {corridas['N2'][0]}; {corridas['N2'][2]}"),
     ]
     fallos = 0
     for titulo, ok, detalle in casos:

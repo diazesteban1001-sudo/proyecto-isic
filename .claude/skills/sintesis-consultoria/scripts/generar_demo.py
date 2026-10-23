@@ -143,6 +143,14 @@ TABLA = [
     ("M4", "fase4-m4-vs-m2", "M4"),
     ("M4b", "fase4-m4b-vs-m2", "M4b"),
 ]
+# Los tres candidatos de la Fase 4b contra M3 limpio (PLAN.md, Fase 4b), en su
+# orden. La regla de la fase usa el intervalo con la confianza de Bonferroni.
+FASE4B = [
+    ("M3 limpio mezclado con M2", "fase4b-c1-vs-m3limpio"),
+    ("M3 limpio con las dos variables de imagen de M4b", "fase4b-c2-vs-m3limpio"),
+    ("M3 limpio mezclado con un segundo boosting", "fase4b-c3-vs-m3limpio"),
+]
+CLAVE_BONFERRONI = "intervalo_bonferroni_nadeau_bengio"
 NIVELES_VR = [
     ("Nivel 1", "Regresión logística", "nivel_1_regresion_logistica"),
     ("Nivel 2a", "Gradient boosting sin balancear", "nivel_2a_gradient_boosting_sin_balancear"),
@@ -421,6 +429,7 @@ def construir_datos(outputs_dir, leidos):
                 for s in verificacion["numeros_sin_respaldo"]),
             "un número señalado puede ser legítimo, como el año de una fuente")
     fase4 = {archivo: cargar(archivo) for _, archivo in COMPARACIONES}
+    fase4b = {archivo: cargar(archivo) for _, archivo in FASE4B}
     mecanismo = cargar("mecanismo-2a")
     particion = cargar("efecto-particion")
     imagen_sola = cargar("imagen-sola")
@@ -458,6 +467,18 @@ def construir_datos(outputs_dir, leidos):
     n1, n2a, n2b = niveles
     pareada = vr["comparacion_pareada_2b_menos_1"]
     etiquetas_pareadas = [f"semilla {s}, pliegue {f}" for s in vr["semillas_corridas"] for f in range(vr["n_splits"])]
+
+    # --- Fase 4b: tres intentos de mejorar a M3 limpio ---
+    intentos = []
+    for etiqueta, archivo in FASE4B:
+        if fase4b[archivo]["comparacion"]["base"] != "M3limpio":
+            raise SystemExit(f"{archivo}.json no compara contra M3 limpio. No se escribe la página.")
+        p = fase4b[archivo]["comparaciones_nuevo_menos_base"]["pauc"]
+        intentos.append({"etiqueta": etiqueta, "archivo": f"{archivo}.json", "media": p["media"],
+                         "bonferroni": p[CLAVE_BONFERRONI]})
+    # borrador-v2.md, «Resultados», «El modelo recomendado»: «Ninguna lo supera en la pAUC».
+    afirmar(len(intentos) == 3 and all(not i["bonferroni"][0] > 0 for i in intentos),
+            "ninguna de las tres combinaciones supera a M3 limpio en la pAUC")
 
     # --- comparaciones de la Fase 4 ---
     comparaciones = []
@@ -620,6 +641,7 @@ def construir_datos(outputs_dir, leidos):
                   "de_folds": c_proc["c_1_con_menos_1_sin"]["de_folds"]},
         },
         "comparaciones": comparaciones,
+        "fase4b": intentos,
         "tabla": tabla,
         "mecanismo": datos_mecanismo(mecanismo, metrica),
         "particion": datos_particion(particion),
@@ -737,6 +759,8 @@ PLANTILLA = r"""<!DOCTYPE html>
   th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; }
   th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--suave); white-space: normal; }
+  .tabla-intentos { margin-bottom: 16px; }
+  .tabla-intentos td:first-child { white-space: normal; }
   .aviso {
     font-size: 12.5px; color: var(--suave); background: #fbfcfd;
     border-left: 3px solid var(--linea); padding: 8px 12px; margin: 14px 0 0;
@@ -1442,10 +1466,21 @@ document.getElementById("texto-5").innerHTML = P([
 /* ---------- 6. recomendacion ---------- */
 document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
 document.getElementById("rot-reco").innerHTML = reco;
+// borrador-v2.md, «Resultados», «El modelo recomendado», el párrafo de la Fase 4b: el texto y las cifras de la tabla.
+const fIntento = (i, campo) => `${i.archivo} > comparaciones_nuevo_menos_base.pauc.${campo}`;
+const intentos = P([
+  `<b>Tres intentos de mejorarlo.</b> Antes de abrir el conjunto reservado se probaron tres combinaciones, fijadas antes de correr, contra M3 limpio. ` +
+  `Como fueron tres intentos, el intervalo se corrige además por multiplicidad (Bonferroni). Ninguna lo supera en la pAUC.`]) +
+  `<div class="tabla-envoltura"><table class="tabla-intentos"><thead><tr><th>Combinación</th>` +
+  `<th>Diferencia con M3 limpio en la pAUC</th><th>Intervalo corregido (Bonferroni)</th></tr></thead><tbody>` +
+  D.fase4b.map(i => `<tr><td>${esc(i.etiqueta)}</td><td>${cifra(firmado(i.media), fIntento(i, "media"))}</td>` +
+    `<td>${ic(i.bonferroni[0], i.bonferroni[1], fIntento(i, "intervalo_bonferroni_nadeau_bengio"))}</td></tr>`).join("") +
+  `</tbody></table></div>`;
 // borrador-v2.md, «Recomendación», «Qué se recomienda».
 document.getElementById("texto-6").innerHTML = P([
   `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
-  `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`,
+  `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`]) +
+  intentos + P([
   `<b>Donde se toma la fotografía corporal total, no se recomienda añadir las variables de imagen</b> tal como se probaron. ` +
   `Añadidas al modelo con contexto de paciente no mejoraron ninguna métrica de forma distinguible, ` +
   `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio. ` +
@@ -1474,6 +1509,8 @@ document.getElementById("no-se-puede").innerHTML = L([
   `<b>Nada sobre otros extractores de imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo; las redes de imagen del ganador quedaron fuera.`,
   `<b>Cuánto rinde un modelo con fotos de teléfono.</b> La imagen sola se midió sobre los recortes estandarizados del sistema de fotografía corporal total. ` +
   `El artículo del conjunto de datos advierte que las fotos que toman los pacientes ${citaIS("luz_y_campo")}.`,
+  `<b>Que no exista una forma de mejorar a M3 limpio.</b> Solo se probaron tres combinaciones: sin ajustar hiperparámetros, ` +
+  `y sin entrenar redes de imagen sobre los recortes, como hizo el ganador.`,
   `<b>Que este trabajo supere o no a la solución ganadora.</b> Su evaluación usó otros datos y otras particiones.`,
   `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 
