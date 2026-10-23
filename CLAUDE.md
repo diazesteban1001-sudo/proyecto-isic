@@ -802,12 +802,14 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman diez del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman doce del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
 `outputs/fase4-m3-vs-m2.json`, `outputs/fase4-m3limpio-vs-m2.json`,
-`outputs/tiempo-inferencia.json` y `outputs/imagen-sola.json`. Desde el 2026-09-25 sus
+`outputs/tiempo-inferencia.json`, `outputs/imagen-sola.json`, los tres
+`outputs/fase4b-*.json`, `outputs/fase4c-red-sola-vs-imagen.json`,
+`outputs/fase4c-c4-vs-m3limpio.json` y `outputs/fase4c-control-atajo.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -1007,6 +1009,55 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
     *Salvedad de la salida:* su campo `comando` registra `python` y no el
     intérprete con que se corrió; el script ya está corregido y la salida no se
     rehízo (`PLAN.md`, Fase 6).
+
+11. **Tres combinaciones de lo que ya tenía el proyecto no mejoran a M3 limpio
+    según la regla de la Fase 4b** (conjunto de desarrollo, 10 semillas × 5
+    pliegues; `outputs/fase4b-c1-vs-m3limpio.json`,
+    `outputs/fase4b-c2-vs-m3limpio.json` y `outputs/fase4b-c3-vs-m3limpio.json`).
+    Candidato − M3 limpio en la pAUC, con el intervalo de Nadeau y Bengio a la
+    confianza de Bonferroni, 1 − 0,05/3 (`comparaciones_nuevo_menos_base.pauc.media`
+    e `.intervalo_bonferroni_nadeau_bengio`):
+    - C1, el promedio de rangos de M3 limpio y M2: −0,0025 [−0,0129; 0,008];
+    - C2, M3 limpio con las dos variables de imagen de M4b: +0,0011
+      [−0,012; 0,0142];
+    - C3, el promedio de rangos de M3 limpio y del nivel 2b sobre sus mismas
+      variables: −0,0009 [−0,012; 0,0101].
+
+    Ninguno queda entero por encima de cero, así que, por la regla fijada antes
+    de correr, M3 limpio sigue siendo el modelo recomendado (`PLAN.md`, Fase 4b,
+    «Resultado de la regla (2026-10-22)»). Los candidatos se eligieron
+    conociendo los resultados de la Fase 4, y la corrección cubre solo esos
+    tres.
+
+12. **Una red de imagen entrenada sobre los recortes, EfficientNet-B0, no llega
+    a la regla de la Fase 4c, ni sola ni apilada sobre M3 limpio** (conjunto de
+    desarrollo, 10 semillas × 5 pliegues;
+    `outputs/fase4c-red-sola-vs-imagen.json` y
+    `outputs/fase4c-c4-vs-m3limpio.json`). Con el intervalo de Nadeau y Bengio
+    a la confianza de Bonferroni, 1 − 0,05/2:
+    - Red sola − «Imagen», la logística sobre DINOv2: pAUC +0,0287
+      [−0,0037; 0,0611], 0,1083 frente a 0,0796, mejor en 44 de 50 pliegues y
+      10 de 10 semillas. En el AUC, +0,0529 [0,0018; 0,1039], el intervalo sí
+      excluye el cero; en la sensibilidad top-15 y el NNT80% SE, no.
+    - C4 − M3 limpio, M3 limpio con la puntuación de la red y su razón a la
+      media del paciente: pAUC +0,0067 [−0,003; 0,0164], 0,1687 frente a
+      0,1621, mejor en 39 de 50 pliegues y 10 de 10 semillas; en las tres
+      métricas secundarias el intervalo contiene el cero.
+
+    Por la regla fijada antes de correr, ni la red sola mejora a la imagen sola
+    ni C4 a M3 limpio, que sigue siendo el modelo recomendado (`PLAN.md`, Fase
+    4c, «Resultado de la regla (2026-10-23)»). C4 no mejora, así que no se midió
+    su tiempo de inferencia.
+    *Salvedades:* la red usa los ajustes fijos de su prueba de tiempo
+    (`outputs/prueba-tiempo-red-imagen.json`), sin ajuste, y su
+    preentrenamiento cumple el criterio de la Fase 2
+    (`referencias/efficientnet-b0-preentrenamiento.md`). Las puntuaciones de C4
+    se apilaron con los mismos pliegues, un atajo declarado; en la semilla 0, C4
+    con la validación interna de M4b dio más pAUC que con el atajo en los cinco
+    pliegues, de +0,0012 a +0,0063 (`outputs/fase4c-control-atajo.json`,
+    descriptivo). Las dos preguntas se eligieron conociendo las fases 4 y 4b, y
+    la corrección cubre solo esas dos. Se midió sobre los recortes de SLICE-3D,
+    no sobre fotos de teléfono (Pendientes).
 
 ### Dónde se lee la fase vigente
 
