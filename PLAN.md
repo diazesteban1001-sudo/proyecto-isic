@@ -8,11 +8,10 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-10-22): fases 0 a 4 y 4b, cerradas; la Fase 4b no
-cambió el modelo recomendado, M3 limpio; la Fase 4c, una red de imagen
-entrenada sobre los recortes, está en curso, y la Fase 5 depende de ella; la
-Fase 5 espera además a la retroalimentación del avance del segundo corte; de la
-Fase 6 hay trabajo hecho.** De la Fase 6:
+**Dónde está la ruta (2026-10-23): fases 0 a 4, 4b y 4c, cerradas; ni la Fase
+4b ni la 4c cambiaron el modelo recomendado, M3 limpio; la Fase 5 espera a la
+retroalimentación del avance del segundo corte; de la Fase 6 hay trabajo
+hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -1186,7 +1185,12 @@ Fase 5 no cambia. C2 no se elige, así que no se mide su tiempo de inferencia.
 
 ---
 
-## Fase 4c — Una red de imagen entrenada sobre los recortes
+## Fase 4c — Una red de imagen entrenada sobre los recortes — CERRADA
+
+**Estado: CERRADA (2026-10-23), por su puerta:** los dos `outputs/fase4c-*.json`
+y el resultado de la regla, escrito al final de esta fase. Por la regla, ni la
+red sola mejora a la imagen sola ni C4 mejora a M3 limpio, que sigue siendo el
+modelo recomendado.
 
 **Decisión de la persona (2026-10-22).** En la Fase 4b, ninguna de las tres
 combinaciones probadas mejoró a M3 limpio según su regla. De la solución
@@ -1279,7 +1283,13 @@ Nadeau y Bengio.
   cae dentro del 99 % central de la pAUC de 1.000 puntuaciones aleatorias sobre
   ese mismo pliegue de validación. Caso que debe fallar: una puntuación
   sintética hecha de las etiquetas más un poco de ruido queda fuera de ese
-  rango.
+  rango. *Añadido por decisión de la persona (2026-10-22), antes de la corrida
+  completa:* el control solo vale si la red con las etiquetas reales, la de
+  reproducibilidad, queda claramente por encima de 0,02 con puntuaciones que
+  varían; si da puntuaciones constantes, no se lanza la corrida. «Claramente
+  por encima» se operó como por encima del límite superior de ese mismo rango,
+  con más de un logit distinto y desviación mayor que cero; una puntuación
+  constante es el caso que debe fallar.
 - **Alineación:** en cada semilla, cada lesión del conjunto de desarrollo
   recibe exactamente una puntuación, la de su pliegue de validación, y las
   puntuaciones se unen por `isic_id`.
@@ -1313,6 +1323,63 @@ recomendación para el escenario sin sistema de fotografía corporal total.
 
 **Puerta.** Los dos `outputs/fase4c-*.json` y la decisión que sale de la regla,
 escrita en este archivo.
+
+**Controles, corridos antes de las preguntas.** `test_fase4c_controles.py`
+completo, el 2026-10-22, antes de las 50 redes: 23 de 23 casos como se
+esperaba, incluidos los que debían fallar (`data/fase4c-controles.json`, que no
+se versiona). En la semilla 0, pliegue 0, sobre toda la validación:
+- la red con las etiquetas barajadas dio una pAUC de 0,0224, dentro del rango
+  del azar [0,0092; 0,0387], con 63.445 logits distintos;
+- la red con las etiquetas reales dio 0,12, por encima del rango, con 63.440
+  logits distintos;
+- sus dos entrenamientos dieron logits idénticos en MPS.
+
+La red principal de ese pliegue da la misma pAUC, 0,12
+(`outputs/fase4c-red-sola-vs-imagen.json`). Tras la corrección de abajo, el
+2026-10-23: 26 de 26 (`data/fase4c-controles-2.json`), con los que se
+entrenaron las redes internas. En la pregunta 2, M3 limpio reprodujo pliegue a
+pliegue `outputs/fase4-m3limpio-vs-m2.json`, y la alineación de C4 se cumplió en
+los 50 pliegues.
+
+**Una corrección durante la corrida (2026-10-23).** La primera corrida de la
+pregunta 2 se detuvo en la semilla 2, en el guardián de `fase4c.variables_red`.
+Una lesión recibe de la red de su pliegue un logit de −2674,47, cuya sigmoide
+en float64 es 0 exacto; en las otras nueve semillas su logit va de −10,81 a
+−0,53. El guardián exigía que todas las puntuaciones fueran positivas, más de
+lo que la razón por paciente necesita: con la especificación de arriba, la
+razón de esa lesión es 0. Ahora se detiene solo si hay puntuaciones negativas o
+faltantes, o si un paciente tiene todas las suyas en 0 (commit «Fase 4c: la
+razón por paciente admite una puntuación 0»). La corrección no depende de
+ningún resultado de desempeño, y las 50 redes no se volvieron a entrenar:
+`entrenar_y_puntuar` y `probabilidad` no cambiaron, aunque su procedencia
+registra el SHA-256 anterior de `fase4c.py`. Las dos preguntas, las redes
+internas y el atajo se corrieron con el código corregido.
+
+**Tiempo de cada entrenamiento.** Por red, con su predicción: mediana 270,1 s,
+de 262,6 a 403,7 s (`puntuaciones_de_la_red.segundos_por_red` en los dos
+`outputs/fase4c-*.json`). Las cinco primeras tardaron de 335,8 a 378,1 s, y las
+cinco últimas, de 263,8 a 266,9 s (`data/fase4c-puntuaciones-red.json >
+redes`). Las 50 redes, 14.891 s en total.
+
+**Resultado de la regla (2026-10-23).** El intervalo corregido por Nadeau y
+Bengio con la confianza de Bonferroni, 1 − 0,05/2, de la diferencia en la pAUC
+(`comparaciones_nuevo_menos_base.pauc.intervalo_bonferroni_nadeau_bengio`):
+- pregunta 1, red sola − imagen sola: [−0,0037; 0,0611]
+  (`outputs/fase4c-red-sola-vs-imagen.json`);
+- pregunta 2, C4 − M3 limpio: [−0,003; 0,0164]
+  (`outputs/fase4c-c4-vs-m3limpio.json`).
+
+Ninguno queda entero por encima de cero, así que, por la regla, la red sola no
+mejora a la imagen sola y C4 no mejora a M3 limpio. M3 limpio sigue siendo el
+modelo recomendado, y la especificación de la Fase 5 no cambia. C4 no mejora,
+así que no se mide su tiempo de inferencia. Las tres métricas secundarias están
+en los dos archivos, con su intervalo, y no deciden.
+
+**Control del atajo, descriptivo.** En la semilla 0, la pAUC de C4 con la
+validación interna de M4b menos la de C4 con el atajo, por pliegue: 0,0012,
+0,0021, 0,0062, 0,0024 y 0,0063; media 0,0037 (`outputs/fase4c-control-atajo.json`).
+No cambia la regla. Su salida, `outputs/fase4c-control-atajo.json` y `.md`, se
+añade a las dos de «Salida».
 
 ---
 
