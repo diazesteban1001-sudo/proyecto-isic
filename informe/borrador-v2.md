@@ -309,9 +309,8 @@ repetida.
 <!-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M2, M3, M4), «Variante secundaria M4b», «M3 limpio y regla de recomendación»; outputs/fase4-m3limpio-vs-m2.json > hiperparametros; .claude/skills/modelado-baseline/SKILL.md, «Contexto de paciente, las variables de M2» (las 34 variables) -->
 
 La Fase 4b probó tres combinaciones de M3 limpio, y la Fase 4c una red de
-imagen entrenada, EfficientNet-B0, sola y apilada sobre M3 limpio (C4); se
-describen en PLAN.md.
-<!-- F: PLAN.md, Fase 4b, «Qué se compara» (C1, C2 y C3); PLAN.md, Fase 4c, «La red», «Pregunta 1» y «Pregunta 2» (C4) -->
+imagen entrenada, EfficientNet-B0, sola y apilada sobre M3 limpio (C4).
+<!-- F: PLAN.md, Fase 4b, «Qué se compara» (C1, C2 y C3, descritos ahí); PLAN.md, Fase 4c, «La red», «Pregunta 1» y «Pregunta 2» (C4, descrito ahí) -->
 
 Los modelos propios no se ajustan: usan los hiperparámetros del nivel 2b; la
 red de la Fase 4c usa los ajustes fijos de su prueba de tiempo.
@@ -394,9 +393,8 @@ preentrenamiento de un tercero y no del conjunto de datos.
   M3 limpio difiere de M3 en tres cosas a la vez, así que su resultado no dice
   cuál de los dos sesgos pesaba.
   <!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->
-- **Las reglas de las fases 4b y 4c se fijaron antes de correr**; están en
-  PLAN.md.
-  <!-- F: PLAN.md, Fase 4b, «Regla, fijada antes de correr»; PLAN.md, Fase 4c, «Regla, fijada antes de correr» -->
+- **Las reglas de las fases 4b y 4c se fijaron antes de correr.**
+  <!-- F: PLAN.md, Fase 4b, «Regla, fijada antes de correr»; PLAN.md, Fase 4c, «Regla, fijada antes de correr» (las dos reglas, escritas ahí) -->
 - **El conjunto reservado se abre una sola vez**, al final, con el modelo
   recomendado fijado en un commit anterior, y su resultado se reporta sea cual
   sea.
