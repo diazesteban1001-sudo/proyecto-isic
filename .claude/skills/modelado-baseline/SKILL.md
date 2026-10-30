@@ -468,6 +468,60 @@ caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4c_c
   --atajo --out outputs/fase4c-control-atajo
 ```
 
+## Acercarse al ganador, Fase 4d (2026-10-30)
+
+La especificación, la regla y los controles son de la persona, fijados antes de
+correr (`PLAN.md`, Fase 4d, con las seis decisiones de su verificación). Seis
+scripts:
+- `scripts/fase4d.py`: las piezas.
+  - El valor p bilateral de Nadeau y Bengio y Holm.
+  - Las seis variables de la red de C5 y C6: la puntuación y su razón, como C4;
+    la estandarizada por `tbp_lv_location` × `age_approx` (celda 17 del ganador
+    sin el hospital), con ruido de desviación 0,1 solo en el entrenamiento; y
+    las tres estandarizadas por conglomerado (celda 19), todo ajustado con el
+    entrenamiento del pliegue.
+  - La red mejorada: la de la 4c con 15 épocas y los negativos en bloques, uno
+    distinto en cada época.
+- `scripts/test_fase4d_comparacion.py`: los controles de la comparación. Son la
+  equivalencia pAUC/0,2 con la especificidad media, el control negativo
+  sintético, el positivo sobre M3 limpio, Holm y la coherencia del valor p con
+  los intervalos. La corrida completa escribe
+  `outputs/fase4d-controles-comparacion.*`.
+- `scripts/test_fase4d_controles.py`: los controles de la red mejorada y de C5,
+  cada uno con su caso que debe fallar. No calcula la métrica de C5. La corrida
+  completa escribe `data/fase4d-controles.json`.
+- `scripts/fase4d_redes.py`: las 25 redes mejoradas, semillas 0 a 4. No calcula
+  métricas. Se niega a correr sin los controles completos con 0 fallos y se
+  detiene si una época repite negativos. Se reanuda como `fase4c_redes.py`.
+- `scripts/fase4d_comparar.py`: las preguntas 1 (C5 − M3 limpio, semillas 0 a
+  9, con C4 recalculado y comprobado), 2 (la red mejorada − la red de la 4c,
+  semillas 0 a 4) y 3 (C6 − M3 limpio, semillas 0 a 4). Da el valor p de cada
+  métrica y la pAUC también dividida por 0,2. No aplica la regla.
+- `scripts/fase4d_holm.py`: aplica la regla de Holm sobre las tres salidas.
+
+Las salidas son `outputs/fase4d-c5-vs-m3limpio.*`,
+`outputs/fase4d-red-mejorada-vs-red.*`, `outputs/fase4d-c6-vs-m3limpio.*`,
+`outputs/fase4d-holm.*` y `outputs/fase4d-controles-comparacion.*`.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4d_comparacion.py --rapido --out RUTA
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4d_controles.py --rapido --out RUTA.json
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4d_comparacion.py \
+  --out outputs/fase4d-controles-comparacion
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4d_controles.py \
+  --out data/fase4d-controles.json
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4d_comparar.py \
+  --pregunta 1 --out outputs/fase4d-c5-vs-m3limpio
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4d_redes.py \
+  --controles data/fase4d-controles.json --partes-dir data/fase4d-redes \
+  --out data/fase4d-puntuaciones-red-mejorada.csv.gz
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4d_comparar.py \
+  --pregunta 2 --out outputs/fase4d-red-mejorada-vs-red
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4d_comparar.py \
+  --pregunta 3 --out outputs/fase4d-c6-vs-m3limpio
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase4d_holm.py --out outputs/fase4d-holm
+```
+
 ## Cómo correrlo
 
 ```bash
