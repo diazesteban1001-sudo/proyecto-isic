@@ -8,10 +8,10 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-10-23): fases 0 a 4, 4b y 4c, cerradas; ni la Fase
-4b ni la 4c cambiaron el modelo recomendado, M3 limpio; la Fase 5 espera a la
-retroalimentación del avance del segundo corte; de la Fase 6 hay trabajo
-hecho.** De la Fase 6:
+**Dónde está la ruta (2026-10-30): fases 0 a 4, 4b y 4c, cerradas; ni la Fase
+4b ni la 4c cambiaron el modelo recomendado, M3 limpio; la Fase 4d, que sale de
+la retroalimentación del avance, está en curso, y la Fase 5 espera a que cierre;
+de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -31,7 +31,8 @@ si piden cambios de modelado, se hacen antes de abrir el reservado.
 *Decisión (2026-10-15, de la persona): el avance no tuvo rúbrica. La
 instrucción del docente fue entregar el link al repositorio público, con al
 menos un 75 % de avance frente a los objetivos del primer corte. La condición
-deja de esperar una rúbrica.*
+deja de esperar una rúbrica.* *2026-10-30: la retroalimentación pidió acercarse
+al ganador antes de alquilar cómputo; es la Fase 4d.*
 
 ## Cómo leer una puerta
 
@@ -1380,6 +1381,308 @@ validación interna de M4b menos la de C4 con el atajo, por pliegue: 0,0012,
 0,0021, 0,0062, 0,0024 y 0,0063; media 0,0037 (`outputs/fase4c-control-atajo.json`).
 No cambia la regla. Su salida, `outputs/fase4c-control-atajo.json` y `.md`, se
 añade a las dos de «Salida».
+
+---
+
+## Fase 4d — Acercarse al ganador con estadística y con el equipo propio — EN CURSO
+
+**Estado: EN CURSO (2026-10-30).** Su puerta, al final de la fase.
+
+**Decisión de la persona (2026-10-30).** El docente, en la retroalimentación
+del avance, planteó el reto: acercarse al ganador, o mejorarlo, con
+estadística y con el cómputo disponible, antes de alquilar cómputo. Esta fase
+sale de una investigación hecha el 2026-10-29, que se versiona como nota de
+trabajo y no como fuente, en
+`informe/insumos/investigacion-acercarse-al-ganador.md`. Sus citas valen solo
+después de cotejarlas con el texto original en `referencias/`, y su cabecera
+dice qué se cotejó y qué no se sostuvo. El conjunto reservado sigue cerrado
+durante toda la fase. Como en las fases 4b y 4c, el modelo recomendado y la
+especificación de la Fase 5 pasan a depender de esta fase.
+
+**Tercera ronda, declarada.** Es la tercera vez que se reabre la regla «Solo
+esta corrida» de la Fase 4, después de las fases 4b y 4c. Las preguntas se
+eligieron conociendo los resultados de las fases 4, 4b y 4c, incluido que C4
+quedó por encima de M3 limpio en las 10 semillas sin diferencia establecida.
+Por eso se fijan aquí antes de correr, se corrige por multiplicidad dentro de la
+fase y no se añaden preguntas después de ver resultados.
+
+**Lectura declarada (2026-10-30).** Al verificar el borrador de esta fase se
+calcularon, sobre las 50 diferencias guardadas de C4 − M3 limpio
+(`outputs/fase4c-c4-vs-m3limpio.json`), su valor p de Nadeau y Bengio y el
+control negativo que proponía el borrador (decisión 1, abajo). Los dos se
+registran en `outputs/fase4d-controles-comparacion.json` al correr los
+controles. No se calculó nada de C5, de la red mejorada ni de C6.
+
+**Bitácora de intentos.** Todos los modelos comparados por la pAUC desde la
+Fase 4, con su comparación y el resultado de su regla. Una afirmación del tipo
+«el mejor de» cuenta todos los intentos, no solo los de la última ronda: hasta
+esta fase son 13 comparaciones, y esta añade 3. «NB 95 %» es el intervalo
+corregido por Nadeau y Bengio al 95 % (`intervalo_t_95_nadeau_bengio`); el de
+la regla, cuando es otro, va en su columna.
+
+| Modelo | Fase | Comparación | Diferencia de pAUC | NB 95 % | Intervalo de la regla | Resultado | Archivo |
+|---|---|---|---|---|---|---|---|
+| M1 | 4 | referencia de M2 | — | — | — | — | `fase4-m2-vs-m1.json` |
+| M2 | 4 | M2 − M1 | +0,0065 | [−0,0147; 0,0276] | el mismo | no distinguible | `fase4-m2-vs-m1.json` |
+| M4 | 4 | M4 − M2 | −0,0065 | [−0,0263; 0,0133] | el mismo | no distinguible | `fase4-m4-vs-m2.json` |
+| M4b | 4 | M4b − M2 | +0,0056 | [−0,0091; 0,0202] | el mismo | no distinguible | `fase4-m4b-vs-m2.json` |
+| M3 | 4 | M3 − M2 | +0,0185 | [0,0007; 0,0364] | el mismo | por encima, con sus dos sesgos | `fase4-m3-vs-m2.json` |
+| M3 limpio | 4 | M3 limpio − M2 | +0,0181 | [0,0021; 0,0341] | el mismo | por encima: modelo recomendado | `fase4-m3limpio-vs-m2.json` |
+| Imagen | 6, descriptiva | Imagen − M1 | −0,0579 | [−0,084; −0,0319] | el mismo | por debajo; no decide | `imagen-sola.json` |
+| Imagen + básicos | 6, descriptiva | (Imagen + básicos) − Imagen | +0,0045 | [0,0; 0,0089] | el mismo | no se da por establecida | `imagen-sola.json` |
+| C1 | 4b | C1 − M3 limpio | −0,0025 | [−0,0109; 0,006] | [−0,0129; 0,008] | no mejora | `fase4b-c1-vs-m3limpio.json` |
+| C2 | 4b | C2 − M3 limpio | +0,0011 | [−0,0095; 0,0117] | [−0,012; 0,0142] | no mejora | `fase4b-c2-vs-m3limpio.json` |
+| C3 | 4b | C3 − M3 limpio | −0,0009 | [−0,0099; 0,008] | [−0,012; 0,0101] | no mejora | `fase4b-c3-vs-m3limpio.json` |
+| Red sola | 4c | Red − Imagen | +0,0287 | [0,0006; 0,0569] | [−0,0037; 0,0611] | no mejora | `fase4c-red-sola-vs-imagen.json` |
+| C4 | 4c | C4 − M3 limpio | +0,0067 | [−0,0018; 0,0151] | [−0,003; 0,0164] | no mejora | `fase4c-c4-vs-m3limpio.json` |
+| C4 con validación interna | 4c, descriptiva | C4 interna − C4 con el atajo, semilla 0 | +0,0037 de media en 5 pliegues | — | — | sin intervalo; no decide | `fase4c-control-atajo.json` |
+| C5 | 4d | C5 − M3 limpio | por correr | | | | `fase4d-c5-vs-m3limpio.json` |
+| Red mejorada | 4d | Red mejorada − Red de la 4c | por correr | | | | `fase4d-red-mejorada-vs-red.json` |
+| C6 | 4d | C6 − M3 limpio | por correr | | | | `fase4d-c6-vs-m3limpio.json` |
+
+Los archivos están en `outputs/`. Las 13 comparaciones son las 14 filas
+anteriores a esta fase menos M1, que es una referencia. El intervalo de la regla
+es el de Bonferroni a 1 − 0,05/3 en la Fase 4b y a 1 − 0,05/2 en la 4c. En la
+Fase 4, la regla de recomendación era la de M3 limpio − M2; las demás
+comparaciones de esa fase seguían su propio criterio, fijado antes de medir.
+
+**Lo que cambia en la forma de comparar.**
+- **Holm en vez de Bonferroni** dentro de la fase. Cada pregunta da un valor p
+  bilateral de la prueba t corregida de Nadeau y Bengio, la misma con que se
+  calcularon los intervalos de las fases anteriores: la varianza de las
+  diferencias multiplicada por (1/n + 1/(k − 1)), con k = 5 pliegues, y n − 1
+  grados de libertad. Los tres valores p, ordenados de menor a mayor, se
+  comparan con 0,05/3, 0,05/2 y 0,05; Holm acepta una pregunta solo si pasan
+  también todas las anteriores en ese orden. **Una pregunta da su resultado a
+  favor si Holm la acepta y además su diferencia media en la pAUC es
+  positiva** (decisión 3). Se reportan además los intervalos al 95 %.
+- **Unidad de lectura.** Cada pAUC se reporta también dividida por 0,2, como la
+  especificidad media cuando la sensibilidad recorre de 0,8 a 1. Se verificó
+  contra el código oficial de la métrica
+  (`referencias/isic-primary-metric-pauc.py.md`): el script invierte las
+  etiquetas (líneas 42 y 43), así que el área que integra es la de la
+  especificidad sobre la sensibilidad entre 0,8 y 1, con la curva ROC
+  interpolada linealmente entre sus puntos. En 40 casos sintéticos, con
+  empates, el script oficial y `pauc_above_tpr` dieron lo mismo, y 0,2 veces la
+  especificidad media difirió en 3,2e-7 como máximo, el error de la integración
+  numérica; un clasificador perfecto da 0,2, y uno al azar, en teoría, 0,02. La
+  comprobación numérica la repite `test_fase4d_comparacion.py`.
+- **Control negativo de la comparación (decisión 1).** 1.000 juegos sintéticos
+  de diferencias con media 0, con la correlación entre ellas que la corrección
+  supone, 0,2. Se generan juegos de 50 diferencias, como la pregunta 1, y de
+  25, como las preguntas 2 y 3. La prueba corregida tiene que rechazar al 5 %
+  **a lo sumo el 5 % de las veces**, con el error de Monte Carlo: 62 de 1.000
+  como máximo. Caso que debe fallar: la t sin corregir.
+- **Control positivo de la comparación (decisión 2).** Sobre las predicciones
+  guardadas de M3 limpio, se suben en la escala del logit las puntuaciones de
+  los positivos de cada pliegue de validación, con el mismo desplazamiento en
+  todos, hasta que la diferencia media de la pAUC con M3 limpio sea de +0,02
+  (±0,002). La comparación completa tiene que dar un valor p por debajo de
+  0,05/3, el umbral más estricto de Holm, en las 10 semillas y en las semillas
+  0 a 4. Caso que debe fallar: el mismo desplazamiento con el signo contrario
+  no puede dar un resultado a favor.
+
+**Pregunta 1 · C5 frente a M3 limpio.** C5 es C4 con las variables que el
+código del ganador construye sobre cada puntuación de imagen, sin el hospital,
+y con ruido en el apilado. Las variables vienen del código del ganador; el
+ruido, de un resumen secundario.
+- **Contexto por zona y edad** (celda 17 de `top-model.ipynb`, decisión 6). El
+  ganador estandariza cada puntuación de imagen dentro de los grupos
+  `attribution` × `tbp_lv_location` × `age_approx`. Sin el hospital,
+  `attribution`, porque las columnas de procedencia se excluyeron en la Fase 1,
+  quedan `tbp_lv_location` × `age_approx`. Se ajusta con las filas de
+  entrenamiento de cada pliegue y se aplica a su validación.
+- **Contexto por conglomerado** (celda 19, decisión 5). El ganador estandariza
+  también, dentro de cada uno de los 29 conglomerados de k-means, la
+  puntuación, su razón a la media del paciente y la puntuación estandarizada
+  por grupo. C5 lo hace con el k-means que M3 limpio ya ajusta en el pliegue de
+  entrenamiento.
+- **Ruido en el apilado** (decisión 4). En las filas de entrenamiento, a la
+  puntuación estandarizada por zona y edad se le suma ruido normal de media 0 y
+  desviación 0,1, con la semilla externa; en validación, sin ruido. Viene de un
+  resumen secundario de la solución ganadora
+  (`referencias/zenn-2g-2024-isic2024-resumen-soluciones.md`), que dice que
+  las predicciones del modelo de imagen se usan estandarizadas y que se les
+  suma un ruido de desviación 0,1 para no sobreajustar. No está en el código
+  público del ganador, y la versión de esta fase es nuestra: se declara así.
+- Todo lo demás, igual a C4: las mismas puntuaciones de la red guardadas en la
+  Fase 4c, la misma razón a la media del paciente y el mismo atajo declarado.
+  C5 tiene seis variables de la red: la puntuación y la razón de C4, la
+  puntuación estandarizada por zona y edad, y las tres estandarizadas por
+  conglomerado.
+- 10 semillas × 5 pliegues. Solo usa el procesador.
+
+**Pregunta 2 · La red mejorada frente a la red de la Fase 4c.** La misma
+EfficientNet-B0 a 128 × 128, con el mismo optimizador, la misma tasa, el mismo
+lote y los mismos volteos. Cambian solo dos cosas:
+- **15 épocas** en vez de 3, fijas, sin mirar la validación entre épocas.
+- **Negativos en bloques.** La red de la Fase 4c sorteaba en cada época una
+  submuestra nueva de 20 negativos por positivo, y dos épocas podían repetir
+  negativos. Ahora los negativos del pliegue de entrenamiento se reparten al
+  azar, con la semilla externa, en bloques de 20 por cada positivo, y cada
+  época usa un bloque distinto, sin repetir mientras queden bloques nuevos. Con
+  unos 254 positivos y unos 254.000 negativos por pliegue de entrenamiento
+  salen unos 50 bloques, así que las 15 épocas no repiten ninguno. Los
+  negativos que no llenan un bloque no se usan.
+- **De dónde sale.** El 10.º puesto
+  (`referencias/tomo20180402-2024-isic2024-10mo-puesto.md`), con una
+  EfficientNet-B0 a 128 píxeles como única red de imagen, escribe *"In the 1st
+  stage, divide into 20 datasets and switch for each epoch (n_epoch=20)"* y
+  *"Avoid early stopping"*. Esta fase toma las dos ideas, cambiar de bloque en
+  cada época y fijar las épocas, pero no sus números: sus bloques son la
+  vigésima parte de los negativos y aquí son de 20 por positivo, entrena 20
+  épocas y aquí 15, y usa aumentos que aquí no se usan.
+- **Semillas 0 a 4:** 25 redes. Se compara con la red de la Fase 4c en los
+  mismos 25 pliegues, en las cuatro métricas.
+- **Costo estimado.** Con los tiempos de la Fase 4c, una mediana de 35,4 s por
+  época y unos 158 s de predicción por red (`data/fase4c-puntuaciones-red.json
+  > redes`), una red de 15 épocas tarda unos 710 s. Las 25 redes, unas 5
+  horas, y las tres redes de control, unos 36 minutos más.
+
+**Pregunta 3 · C6 frente a M3 limpio.** C6 es C5 con la red mejorada en lugar
+de la red de la Fase 4c: las mismas variables, el mismo ruido y el mismo atajo.
+Se calcula cuando termina la pregunta 2, en las semillas 0 a 4.
+
+**Regla, fijada antes de correr.** Una pregunta da su resultado a favor si Holm
+la acepta en la pAUC y su diferencia media es positiva, como se describe arriba.
+Las tres métricas secundarias se reportan con su intervalo y no deciden. Si C5
+o C6 dan su resultado a favor, se mide su tiempo de inferencia con el
+procedimiento de `tiempo-inferencia`, red incluida. La pregunta 2, por sí sola,
+no cambia el modelo recomendado: informa la recomendación para el escenario sin
+sistema de fotografía corporal total.
+
+**Controles, antes de leer cualquier resultado.**
+- Los de la comparación, arriba, y los casos de Holm: con valores p
+  sintéticos, que se detiene en la primera pregunta que no pasa y que una
+  diferencia negativa no da resultado a favor.
+- **C5:**
+  - la referencia C4 se reproduce pliegue a pliegue desde
+    `outputs/fase4c-c4-vs-m3limpio.json`, en las cuatro métricas;
+  - los controles de alineación de C2 y C4, extendidos a las seis variables de
+    la red, antes y después del remuestreo;
+  - la estandarización por zona y edad coincide con la de la celda 17 sin el
+    hospital, calculada con pandas sobre las filas de entrenamiento; caso que
+    debe fallar: calcularla con el entrenamiento y la validación juntos, como el
+    ganador, cambia las filas de validación;
+  - la asignación a conglomerados reproduce las variables por conglomerado que
+    M3 limpio ya calcula; caso que debe fallar: con las etiquetas de
+    conglomerado barajadas, no las reproduce;
+  - el ruido va solo a las filas de entrenamiento, con desviación cercana a 0,1,
+    y se repite con la misma semilla; caso que debe fallar: con ruido también en
+    validación, se detecta.
+- **Red mejorada:** los de la Fase 4c, con 15 épocas (etiquetas barajadas, red
+  real por encima del azar, reproducibilidad y alineación), y además:
+  - cada época usó un bloque de negativos distinto, sin ningún negativo en dos
+    épocas; caso que debe fallar: los sorteos de la Fase 4c repiten negativos
+    entre épocas;
+  - fuera de la elección de los negativos, el entrenamiento es el de la Fase 4c:
+    con los sorteos de la Fase 4c, una época da los mismos logits que
+    `fase4c.entrenar_y_puntuar`; caso que debe fallar: con los bloques, no.
+
+**Salida.**
+- `outputs/fase4d-c5-vs-m3limpio.json`, `outputs/fase4d-red-mejorada-vs-red.json`
+  y `outputs/fase4d-c6-vs-m3limpio.json`, con su `.md` y la estructura de los
+  `fase4c-*.json`, más el valor p de Nadeau y Bengio de cada métrica y la pAUC
+  dividida por 0,2.
+- La decisión de Holm, en `outputs/fase4d-holm.json` y `.md`, que lee los tres.
+- Los controles de la comparación, en `outputs/fase4d-controles-comparacion.json`
+  y `.md`.
+- Los controles de las redes y de C5, en `data/fase4d-controles.json`, y las
+  puntuaciones de la red mejorada, en `data/fase4d-puntuaciones-red-mejorada.csv.gz`,
+  con su procedencia; `data/` no se versiona.
+
+**Qué no entra, con su motivo.**
+- **El hospital** en la estandarización, por la exclusión de la Fase 1.
+- **Objetivos auxiliares con `iddx`** para la red: son columnas que solo existen
+  en entrenamiento; usarlos sería otra pregunta.
+- **Los aumentos del 10.º puesto** y el **ensamble por rangos** del resumen
+  secundario: cada uno sería otra pregunta.
+- **Ajuste de hiperparámetros:** solo con validación anidada, en otra fase. La
+  nota de trabajo propone también BBC-CV; su fuente no está en `referencias/`.
+- **El margen de no inferioridad frente al ganador:** se fija antes de abrir el
+  reservado, en la especificación de la Fase 5.
+
+**Consecuencia para la Fase 5.** Si C5 o C6 dan su resultado a favor, la Fase 5
+evalúa el que lo dio, con M3 limpio y M2 como referencia. Si lo dan los dos, se
+elige el de mayor diferencia media en la pAUC en las semillas 0 a 4, las que
+tienen los dos. De dónde salen las variables de la red de sus filas de
+entrenamiento se fija antes de abrir el reservado. Si ninguno lo da, la Fase 5
+no cambia.
+
+**Puerta.** Los tres `outputs/fase4d-*.json` de las preguntas, la decisión de
+Holm, el archivo de controles de la comparación, la bitácora de intentos al día
+y la decisión que sale de la regla, escritos en este archivo.
+
+**Cómo quedaron las seis decisiones de la verificación (2026-10-30).** El
+borrador de esta fase se verificó frase por frase contra este archivo, el
+código, `outputs/` y el código del ganador. Seis cosas no se sostenían o
+quedaban sin fijar. La persona aprobó las seis correcciones, con tres criterios
+suyos, y así quedaron:
+1. **Control negativo.** El borrador intercambiaba al azar, dentro de cada
+   pliegue, las puntuaciones de los dos modelos, y esperaba alrededor del 5 % de
+   rechazos. Intercambiarlas solo invierte el signo de la diferencia de ese
+   pliegue y quita la correlación entre pliegues que la corrección supone:
+   sobre las 50 diferencias de C4 − M3 limpio, la prueba corregida no rechazaba
+   nunca, y la t sin corregir rechazaba cerca del 5 %. Ninguna de las dos podía
+   fallar. Queda el control sintético de arriba. *Criterio de la persona:* «a lo
+   sumo 5 %» de rechazos; el control positivo es el que demuestra que la prueba
+   detecta diferencias reales, y el «alrededor del 5 %» del borrador era un
+   error. «A lo sumo 5 %» se lee con el error de Monte Carlo: con una tasa real
+   del 5 %, pasar de 62 rechazos en 1.000 tiene una probabilidad del 3,8 %.
+2. **Control positivo.** El borrador no fijaba el tamaño de la diferencia ni qué
+   contaba como detectarla. Queda el de arriba: +0,02 en la pAUC, valor p por
+   debajo de 0,05/3, y el signo contrario como caso que debe fallar.
+3. **Dirección de Holm.** Con valores p bilaterales, una diferencia negativa
+   también pasa Holm. *Criterio de la persona:* valores p bilaterales, como los
+   intervalos de las fases anteriores, y una pregunta pasa solo si Holm la
+   acepta y además su diferencia media es positiva.
+4. **El ruido.** El borrador no fijaba a qué variable iba. *Criterio de la
+   persona:* copiar exactamente lo que hace el código del ganador, quitando
+   solo el hospital, y como el ruido no está en su código, fijar la versión más
+   simple y declararla. Queda así: ruido normal de media 0 y desviación 0,1,
+   sumado a la puntuación estandarizada por zona y edad; solo en las filas de
+   entrenamiento; con `numpy.random.default_rng` y la semilla externa, sorteado
+   en el orden de esas filas. Se suma después de calcular las seis variables,
+   así que la estandarizada por conglomerado sale de la puntuación sin ruido, y
+   antes del remuestreo de M3 limpio, que lo arrastra. La puntuación y su razón
+   quedan sin ruido, como en C4.
+5. **Contexto por conglomerado.** La celda 19 del ganador estandariza también,
+   dentro de los conglomerados, la puntuación, su razón y la estandarizada por
+   grupo, y el borrador ni lo incluía ni lo excluía. *Criterio de la persona:*
+   copiar el código del ganador. Entra, como en la celda 19: la media y la
+   desviación de cada conglomerado se calculan con las filas de entrenamiento,
+   con las etiquetas del k-means que M3 limpio ajusta en el pliegue, y con la
+   misma regla de NaN que la decisión 6.
+6. **Contexto por zona y edad.** El borrador decía «zona del cuerpo», que en
+   este proyecto es `anatom_site_general` («Imagen + básicos»). El ganador usa
+   `tbp_lv_location`. *Criterio de la persona:* copiar la celda 17, quitando
+   solo el hospital. Queda así:
+   - los grupos son `tbp_lv_location` × `age_approx`;
+   - la edad es la imputada como en M3 limpio, con la mediana del pliegue de
+     entrenamiento;
+   - la media y la desviación son las de pandas, con ddof = 1;
+   - la variable es la puntuación menos la media de su grupo, dividida por la
+     desviación;
+   - queda en NaN si el grupo no tiene filas de entrenamiento, si tiene una sola
+     o si su desviación es 0. Con pandas, el ganador obtiene NaN en los dos
+     últimos casos; el primero no le ocurre, porque calcula sobre todas las
+     filas.
+
+   Esa es la otra diferencia con el ganador, ya prevista en el borrador: él
+   calcula los grupos y los conglomerados con todas las filas, entrenamiento y
+   validación juntas, y aquí se ajustan con el entrenamiento del pliegue, como
+   todo lo que M3 limpio ajusta. La razón a la media del paciente es la de C4,
+   que coincide con la del ganador (celda 15) porque los pliegues agrupan por
+   paciente.
+
+Además se aplicaron estas precisiones de la verificación:
+- la frase sobre el origen de las variables, que decía «tomados del código del
+  ganador» también para el ruido;
+- la cita del 10.º puesto en la pregunta 2;
+- las fichas del 10.º puesto y del resumen secundario en `referencias/`;
+- la bitácora completa, con M1, la imagen sola y el control del atajo;
+- la elección entre C5 y C6 en las semillas comunes;
+- y el costo estimado.
 
 ---
 
