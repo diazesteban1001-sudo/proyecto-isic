@@ -1,0 +1,207 @@
+{
+  "rapido": false,
+  "que_es": "Controles de la comparación de la Fase 4d (PLAN.md): la unidad de lectura, el control negativo, el positivo, Holm y la coherencia del valor p con los intervalos. No responde ninguna pregunta.",
+  "casos": [
+    {
+      "control": "equivalencia",
+      "caso": "el script oficial y pauc_above_tpr",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "40 casos; máxima diferencia 0"
+    },
+    {
+      "control": "equivalencia",
+      "caso": "pAUC = 0,2 × especificidad media con sensibilidad de 0,8 a 1",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "máxima diferencia 3.23e-07, el error de la integración numérica"
+    },
+    {
+      "control": "equivalencia",
+      "caso": "un clasificador perfecto da 0,2",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "0.19999999999999996"
+    },
+    {
+      "control": "equivalencia",
+      "caso": "la especificidad media sobre toda la curva como pAUC/0,2",
+      "ok": true,
+      "debe_fallar": true,
+      "detalle": "máxima diferencia 0.466"
+    },
+    {
+      "control": "negativo",
+      "caso": "50 diferencias: la prueba corregida rechaza a lo sumo el 5 %",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "49 de 1000; límite 62"
+    },
+    {
+      "control": "negativo",
+      "caso": "50 diferencias: la t sin corregir",
+      "ok": true,
+      "debe_fallar": true,
+      "detalle": "591 de 1000"
+    },
+    {
+      "control": "negativo",
+      "caso": "25 diferencias: la prueba corregida rechaza a lo sumo el 5 %",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "56 de 1000; límite 62"
+    },
+    {
+      "control": "negativo",
+      "caso": "25 diferencias: la t sin corregir",
+      "ok": true,
+      "debe_fallar": true,
+      "detalle": "432 de 1000"
+    },
+    {
+      "control": "holm",
+      "caso": "a. 0,001, 0,02 y 0,04: las tres",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "umbrales [0.05, 0.0167, 0.025]"
+    },
+    {
+      "control": "holm",
+      "caso": "b. 0,001, 0,03 y 0,04: solo la primera",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "[True, False, False]"
+    },
+    {
+      "control": "holm",
+      "caso": "b sin detenerse en la primera que no pasa",
+      "ok": true,
+      "debe_fallar": true,
+      "detalle": "aceptaría [True, False, True]"
+    },
+    {
+      "control": "holm",
+      "caso": "c. una diferencia negativa con valor p 0,001: aceptada, pero no a favor",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "{'pregunta': 'q1', 'valor_p': 0.001, 'media': -0.01, 'orden_holm': 1, 'umbral_holm': 0.016666666666666666, 'aceptada_por_holm': True, 'media_positiva': False, 'a_favor': False}"
+    },
+    {
+      "control": "holm",
+      "caso": "d. 0,01, 0,02 y 0,2: Holm acepta dos, Bonferroni una",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "Holm [True, True, False]; Bonferroni [True, False, False]"
+    },
+    {
+      "control": "coherencia",
+      "caso": "a la confianza 1 − p, un extremo del intervalo corregido es 0",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "extremo más cercano a 0: 0, con los 4 decimales del intervalo"
+    },
+    {
+      "control": "coherencia",
+      "caso": "con el valor p sin corregir",
+      "ok": true,
+      "debe_fallar": true,
+      "detalle": "extremo más cercano a 0: 0.0178"
+    },
+    {
+      "control": "positivo",
+      "caso": "10 semillas: +0.02 en la pAUC, valor p por debajo de 0,05/3 y a favor",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "desplazamiento 0.8125 en el logit; diferencia media 0.0197 en 50 pliegues; valor p 5.73e-08"
+    },
+    {
+      "control": "positivo",
+      "caso": "10 semillas: el mismo desplazamiento con el signo contrario da resultado a favor",
+      "ok": true,
+      "debe_fallar": true,
+      "detalle": "diferencia media -0.0353; valor p 2.59e-05; aceptada por Holm True, a favor False"
+    },
+    {
+      "control": "positivo",
+      "caso": "semillas 0 a 4: +0.02 en la pAUC, valor p por debajo de 0,05/3 y a favor",
+      "ok": true,
+      "debe_fallar": false,
+      "detalle": "desplazamiento 0.7500 en el logit; diferencia media 0.0199 en 25 pliegues; valor p 3.57e-06"
+    },
+    {
+      "control": "positivo",
+      "caso": "semillas 0 a 4: el mismo desplazamiento con el signo contrario da resultado a favor",
+      "ok": true,
+      "debe_fallar": true,
+      "detalle": "diferencia media -0.0341; valor p 0.000237; aceptada por Holm True, a favor False"
+    }
+  ],
+  "fallos": 0,
+  "equivalencia": {
+    "casos": 40,
+    "maxima_diferencia_oficial_vs_proyecto": 0.0,
+    "maxima_diferencia_oficial_vs_0_2_por_especificidad_media": 3.2326229207346735e-07,
+    "perfecto": 0.19999999999999996,
+    "maxima_diferencia_con_toda_la_curva": 0.4663771394706411
+  },
+  "negativo": {
+    "juegos": 1000,
+    "correlacion": 0.2,
+    "limite_de_rechazos": 62,
+    "probabilidad_de_pasar_el_limite_con_tasa_real_del_5": 0.03839323556451055,
+    "50_diferencias": {
+      "rechazos_corregida": 49,
+      "rechazos_sin_corregir": 591
+    },
+    "25_diferencias": {
+      "rechazos_corregida": 56,
+      "rechazos_sin_corregir": 432
+    }
+  },
+  "positivo": {
+    "predicciones": "data/fase4b-predicciones-m3limpio-m2.csv.gz",
+    "sha256": "21a9ec5452ce7400a65ee1d1b58a0f9347fccdd19f51c0829783394bf4071328",
+    "reproduce": "outputs/fase4-m3limpio-vs-m2.json",
+    "objetivo": 0.02,
+    "margen": 0.002,
+    "10 semillas": {
+      "desplazamiento_en_el_logit": 0.8125,
+      "pliegues": 50,
+      "diferencia_media": 0.0197,
+      "valor_p": 5.730228384691083e-08,
+      "signo_contrario": {
+        "diferencia_media": -0.0353,
+        "valor_p": 2.591645560387821e-05,
+        "a_favor": false
+      }
+    },
+    "semillas 0 a 4": {
+      "desplazamiento_en_el_logit": 0.75,
+      "pliegues": 25,
+      "diferencia_media": 0.0199,
+      "valor_p": 3.5748586234002296e-06,
+      "signo_contrario": {
+        "diferencia_media": -0.0341,
+        "valor_p": 0.0002369628261306078,
+        "a_favor": false
+      }
+    }
+  },
+  "descartado_del_borrador": {
+    "que_es": "El control negativo del borrador: intercambiar al azar, dentro de cada pliegue, las puntuaciones de C4 y de M3 limpio, que invierte el signo de la diferencia de ese pliegue. Descartado por la decisión 1: ninguna de las dos pruebas puede fallarlo.",
+    "diferencias": "outputs/fase4c-c4-vs-m3limpio.json > metricas.*.pauc.por_semilla_y_fold, a 4 decimales",
+    "juegos": 1000,
+    "rechazos_corregida": 0,
+    "rechazos_sin_corregir": 46,
+    "valor_p_c4_menos_m3limpio": 0.1185
+  },
+  "segundos": 12.5,
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/test_fase4d_comparacion.py",
+      "--out",
+      "outputs/fase4d-controles-comparacion"
+    ]
+  }
+}
