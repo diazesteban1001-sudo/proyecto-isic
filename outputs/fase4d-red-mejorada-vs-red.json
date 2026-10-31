@@ -1,0 +1,654 @@
+{
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "semillas_corridas": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "n_splits": 5,
+  "folds": {
+    "sha256_por_semilla": {
+      "0": "e544a6b29a7637e86bc6e2e5ab88e9ff2eb3edf5612353c2adc554311c9d00df",
+      "1": "504babb9150df17f36f1d324d63b7163312b2286f269fd0663e9a5e005f1d52c",
+      "2": "3e3cc849c5cb377c01f70589c8e1e9cc47e1bd4db1167299f9c0f94b3afeb28a",
+      "3": "1f32b590c9f8d4d41f32739eed04b9ca2e0b90740de0f4b9a2b9e3dcbe707df7",
+      "4": "e31443cfef8cdd09cb3fd82d3189864e8b77a6d67979e88c0c47ee23a51999be"
+    },
+    "iguales_a": "outputs/fase4-m2-vs-m1.json"
+  },
+  "puntuaciones_de_las_redes": {
+    "Fase 4c": {
+      "archivo": "data/fase4c-puntuaciones-red.csv.gz",
+      "sha256": "8788f58ed78cf9acea67dabb52156983ce091d620b5dd96ad233657d0d0f59df",
+      "huella_de_las_puntuaciones": "8dbfb7b158e1d3c81efdd52e8c87b2b832f7a3babea2ac5c72cfcfd0f64042fc",
+      "controles": {
+        "archivo": "data/fase4c-controles.json",
+        "sha256": "0aa2f6c45143fbaa8e203ab57ae1ddf9556de4ec6a0795172019e0f5ac3d13a9",
+        "casos": 23,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 270.1,
+        "minimo": 262.6,
+        "maximo": 403.7
+      }
+    },
+    "Fase 4d": {
+      "archivo": "data/fase4d-puntuaciones-red-mejorada.csv.gz",
+      "sha256": "60b84dfef5e4465ff7c292e43e3d76fb7c3ae33970bfcef9d9f44e6d4852da03",
+      "huella_de_las_puntuaciones": "b492d97bf36f8af0817dd7fd9a7344c9e6cbbc20cccb404332c41f49ff9ce146",
+      "controles": {
+        "archivo": "data/fase4d-controles.json",
+        "sha256": "cdb925d90ed6d54b4c539b2ab5ab3e9d805f83ccd1c607dd995f5cce5407fa61",
+        "casos": 34,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 697.7,
+        "minimo": 682.3,
+        "maximo": 802.2
+      }
+    }
+  },
+  "controles": {
+    "comparacion": {
+      "archivo": "outputs/fase4d-controles-comparacion.json",
+      "sha256": "18fda916d5a82ef2abf1ebb1389be9c502dd9e79a902a60b1917ba7d4f6a4ec5",
+      "casos": 19,
+      "fallos": 0
+    },
+    "redes_y_c5": {
+      "archivo": "data/fase4d-controles.json",
+      "sha256": "cdb925d90ed6d54b4c539b2ab5ab3e9d805f83ccd1c607dd995f5cce5407fa61",
+      "casos": 34,
+      "fallos": 0
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4d_comparar.py",
+      "--pregunta",
+      "2",
+      "--out",
+      "outputs/fase4d-red-mejorada-vs-red"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "un proceso padre"
+    }
+  },
+  "comparacion": {
+    "nuevo": "RedMejorada",
+    "base": "Red"
+  },
+  "modelos": {
+    "RedMejorada": {
+      "descripcion": "la misma red con 15 épocas y los negativos en bloques de 20 por positivo, uno distinto en cada época (fase4d.entrenar_y_puntuar); su probabilidad, la sigmoide del logit en float64"
+    },
+    "Red": {
+      "descripcion": "EfficientNet-B0 de torchvision con los pesos de ImageNet, entrenada de punta a punta en el pliegue de entrenamiento (fase4c.entrenar_y_puntuar); su probabilidad, la sigmoide del logit en float64 (Fase 4c: 3 épocas, una submuestra nueva de negativos en cada época)"
+    }
+  },
+  "reproduccion_del_base": {
+    "referencia": "outputs/fase4c-red-sola-vs-imagen.json",
+    "que_se_compara": "las cuatro métricas de la red de la Fase 4c, pliegue a pliegue",
+    "reproduce_fold_a_fold": true
+  },
+  "metricas": {
+    "Red": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.12,
+            0.1225,
+            0.0999,
+            0.1177,
+            0.0731
+          ],
+          "1": [
+            0.1035,
+            0.1037,
+            0.1009,
+            0.1003,
+            0.1319
+          ],
+          "2": [
+            0.1102,
+            0.1198,
+            0.1321,
+            0.1157,
+            0.0952
+          ],
+          "3": [
+            0.1138,
+            0.0736,
+            0.1247,
+            0.0992,
+            0.0854
+          ],
+          "4": [
+            0.1129,
+            0.0927,
+            0.1073,
+            0.1202,
+            0.1216
+          ]
+        },
+        "media_global": 0.1079,
+        "std_entre_folds": 0.0156,
+        "std_entre_semillas": 0.0051,
+        "media_global_sobre_0_2": 0.5396
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.88,
+            0.8941,
+            0.8686,
+            0.8923,
+            0.8202
+          ],
+          "1": [
+            0.8535,
+            0.8698,
+            0.8709,
+            0.8618,
+            0.9131
+          ],
+          "2": [
+            0.8756,
+            0.8949,
+            0.9045,
+            0.8715,
+            0.8779
+          ],
+          "3": [
+            0.892,
+            0.8219,
+            0.8961,
+            0.8643,
+            0.8493
+          ],
+          "4": [
+            0.8813,
+            0.852,
+            0.8681,
+            0.9006,
+            0.8859
+          ]
+        },
+        "media_global": 0.8744,
+        "std_entre_folds": 0.0227,
+        "std_entre_semillas": 0.0067
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.4198,
+            0.4275,
+            0.5451,
+            0.4816,
+            0.4417
+          ],
+          "1": [
+            0.3987,
+            0.4778,
+            0.379,
+            0.4225,
+            0.6541
+          ],
+          "2": [
+            0.4288,
+            0.4962,
+            0.3824,
+            0.4195,
+            0.6728
+          ],
+          "3": [
+            0.4792,
+            0.4685,
+            0.4477,
+            0.4156,
+            0.4509
+          ],
+          "4": [
+            0.4569,
+            0.4417,
+            0.467,
+            0.4841,
+            0.5273
+          ]
+        },
+        "media_global": 0.4675,
+        "std_entre_folds": 0.07,
+        "std_entre_semillas": 0.0097
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            342.7843,
+            208.3269,
+            281.5385,
+            171.5294,
+            482.549
+          ],
+          "1": [
+            362.8654,
+            282.4231,
+            247.3529,
+            269.1765,
+            169.3137
+          ],
+          "2": [
+            239.0385,
+            176.5192,
+            216.7059,
+            243.1765,
+            217.8824
+          ],
+          "3": [
+            174.8269,
+            504.5769,
+            224.6863,
+            292.5882,
+            311.7451
+          ],
+          "4": [
+            275.8431,
+            321.1923,
+            281.6154,
+            211.6667,
+            274.3922
+          ]
+        },
+        "media_global": 271.3726,
+        "std_entre_folds": 83.4424,
+        "std_entre_semillas": 29.6665
+      }
+    },
+    "RedMejorada": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.092,
+            0.0886,
+            0.116,
+            0.0979,
+            0.0751
+          ],
+          "1": [
+            0.0651,
+            0.0854,
+            0.0906,
+            0.0682,
+            0.1257
+          ],
+          "2": [
+            0.0756,
+            0.1158,
+            0.1104,
+            0.0923,
+            0.0658
+          ],
+          "3": [
+            0.116,
+            0.053,
+            0.108,
+            0.1084,
+            0.0863
+          ],
+          "4": [
+            0.0927,
+            0.0651,
+            0.1014,
+            0.0991,
+            0.1122
+          ]
+        },
+        "media_global": 0.0923,
+        "std_entre_folds": 0.0191,
+        "std_entre_semillas": 0.0028,
+        "media_global_sobre_0_2": 0.4614
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.8555,
+            0.8571,
+            0.8871,
+            0.8538,
+            0.8255
+          ],
+          "1": [
+            0.7988,
+            0.8376,
+            0.8481,
+            0.8069,
+            0.8994
+          ],
+          "2": [
+            0.8138,
+            0.8916,
+            0.8776,
+            0.8427,
+            0.8012
+          ],
+          "3": [
+            0.8928,
+            0.7755,
+            0.8672,
+            0.8636,
+            0.8305
+          ],
+          "4": [
+            0.8471,
+            0.816,
+            0.8538,
+            0.8592,
+            0.8821
+          ]
+        },
+        "media_global": 0.8474,
+        "std_entre_folds": 0.0321,
+        "std_entre_semillas": 0.006
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.5456,
+            0.4801,
+            0.4861,
+            0.2946,
+            0.5958
+          ],
+          "1": [
+            0.4118,
+            0.437,
+            0.4969,
+            0.4025,
+            0.6302
+          ],
+          "2": [
+            0.3212,
+            0.5663,
+            0.4616,
+            0.4393,
+            0.6233
+          ],
+          "3": [
+            0.4274,
+            0.4204,
+            0.367,
+            0.45,
+            0.4704
+          ],
+          "4": [
+            0.4436,
+            0.5094,
+            0.4427,
+            0.3773,
+            0.569
+          ]
+        },
+        "media_global": 0.4668,
+        "std_entre_folds": 0.085,
+        "std_entre_semillas": 0.0205
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            321.0588,
+            351.0,
+            233.6538,
+            318.8824,
+            366.8235
+          ],
+          "1": [
+            457.0,
+            382.6154,
+            427.7255,
+            479.7647,
+            183.2941
+          ],
+          "2": [
+            436.75,
+            218.6154,
+            304.3725,
+            377.1765,
+            528.7059
+          ],
+          "3": [
+            160.8462,
+            511.0385,
+            317.1569,
+            320.8627,
+            374.3725
+          ],
+          "4": [
+            322.0588,
+            467.9231,
+            341.5577,
+            283.9216,
+            196.3137
+          ]
+        },
+        "media_global": 347.3396,
+        "std_entre_folds": 99.0262,
+        "std_entre_semillas": 27.3644
+      }
+    }
+  },
+  "comparaciones_nuevo_menos_base": {
+    "pauc": {
+      "diferencias_nuevo_menos_base": [
+        -0.028,
+        -0.0339,
+        0.0161,
+        -0.0198,
+        0.002,
+        -0.0384,
+        -0.0183,
+        -0.0103,
+        -0.0321,
+        -0.0062,
+        -0.0346,
+        -0.0039,
+        -0.0217,
+        -0.0234,
+        -0.0294,
+        0.0022,
+        -0.0206,
+        -0.0168,
+        0.0092,
+        0.0008,
+        -0.0202,
+        -0.0276,
+        -0.0058,
+        -0.0211,
+        -0.0095
+      ],
+      "n_diferencias": 25,
+      "media": -0.0156,
+      "desviacion": 0.0146,
+      "intervalo_t_95": [
+        -0.0216,
+        -0.0096
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0318,
+        0.0005
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 5,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 0,
+      "de_semillas": 5,
+      "media_sin_redondear": -0.015640182865985387,
+      "valor_p_nadeau_bengio": 0.05741210001599424,
+      "en_especificidad_media": {
+        "media": -0.0782,
+        "intervalo_t_95_nadeau_bengio": [
+          -0.1591,
+          0.0027
+        ]
+      },
+      "papel": "principal"
+    },
+    "auc": {
+      "diferencias_nuevo_menos_base": [
+        -0.0245,
+        -0.037,
+        0.0185,
+        -0.0385,
+        0.0052,
+        -0.0547,
+        -0.0322,
+        -0.0228,
+        -0.0549,
+        -0.0137,
+        -0.0618,
+        -0.0033,
+        -0.0268,
+        -0.0288,
+        -0.0767,
+        0.0008,
+        -0.0464,
+        -0.0289,
+        -0.0007,
+        -0.0188,
+        -0.0342,
+        -0.036,
+        -0.0143,
+        -0.0413,
+        -0.0038
+      ],
+      "n_diferencias": 25,
+      "media": -0.027,
+      "desviacion": 0.0226,
+      "intervalo_t_95": [
+        -0.0364,
+        -0.0177
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0522,
+        -0.0019
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 3,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 0,
+      "de_semillas": 5,
+      "media_sin_redondear": -0.027020166245600087,
+      "valor_p_nadeau_bengio": 0.03640339851512647,
+      "papel": "secundaria"
+    },
+    "setop15": {
+      "diferencias_nuevo_menos_base": [
+        0.1259,
+        0.0525,
+        -0.059,
+        -0.1871,
+        0.1542,
+        0.0131,
+        -0.0407,
+        0.1179,
+        -0.0199,
+        -0.0239,
+        -0.1076,
+        0.0701,
+        0.0792,
+        0.0198,
+        -0.0495,
+        -0.0518,
+        -0.0481,
+        -0.0807,
+        0.0344,
+        0.0194,
+        -0.0133,
+        0.0677,
+        -0.0243,
+        -0.1068,
+        0.0417
+      ],
+      "n_diferencias": 25,
+      "media": -0.0007,
+      "desviacion": 0.0803,
+      "intervalo_t_95": [
+        -0.0338,
+        0.0325
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0899,
+        0.0886
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 12,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 3,
+      "de_semillas": 5,
+      "media_sin_redondear": -0.000677013798934043,
+      "valor_p_nadeau_bengio": 0.9876356386206753,
+      "papel": "secundaria"
+    },
+    "nnt80": {
+      "diferencias_nuevo_menos_base": [
+        -21.7255,
+        142.6731,
+        -47.8846,
+        147.3529,
+        -115.7255,
+        94.1346,
+        100.1923,
+        180.3725,
+        210.5882,
+        13.9804,
+        197.7115,
+        42.0962,
+        87.6667,
+        134.0,
+        310.8235,
+        -13.9808,
+        6.4615,
+        92.4706,
+        28.2745,
+        62.6275,
+        46.2157,
+        146.7308,
+        59.9423,
+        72.2549,
+        -78.0784
+      ],
+      "n_diferencias": 25,
+      "media": 75.967,
+      "desviacion": 96.8522,
+      "intervalo_t_95": [
+        35.9884,
+        115.9456
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -31.6787,
+        183.6127
+      ],
+      "mayor_es_mejor": false,
+      "nuevo_mejor_en_folds": 5,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 0,
+      "de_semillas": 5,
+      "media_sin_redondear": 75.96699849170437,
+      "valor_p_nadeau_bengio": 0.1582081858032701,
+      "papel": "secundaria"
+    }
+  },
+  "segundos": {
+    "total": 8.5
+  },
+  "nota": "Red mejorada − red de la Fase 4c, pareado pliegue a pliegue. valor_p_nadeau_bengio: bilateral, el que usa la regla de Holm de PLAN.md, Fase 4d. En el NNT80% SE menos es mejor. No aplica la regla ni interpreta."
+}
