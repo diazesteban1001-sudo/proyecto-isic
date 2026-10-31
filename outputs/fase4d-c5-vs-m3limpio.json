@@ -1,0 +1,4245 @@
+{
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "semillas_corridas": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "n_splits": 5,
+  "folds": {
+    "sha256_por_semilla": {
+      "0": "e544a6b29a7637e86bc6e2e5ab88e9ff2eb3edf5612353c2adc554311c9d00df",
+      "1": "504babb9150df17f36f1d324d63b7163312b2286f269fd0663e9a5e005f1d52c",
+      "2": "3e3cc849c5cb377c01f70589c8e1e9cc47e1bd4db1167299f9c0f94b3afeb28a",
+      "3": "1f32b590c9f8d4d41f32739eed04b9ca2e0b90740de0f4b9a2b9e3dcbe707df7",
+      "4": "e31443cfef8cdd09cb3fd82d3189864e8b77a6d67979e88c0c47ee23a51999be",
+      "5": "652abbfb8857b047e7095ba47e67446e626e079af5891586b0034c156217da27",
+      "6": "7e5b8b3eaaebdc35f3b1b88d5f90d5c6e3a34379ee4c1738ba8cb1e61861b325",
+      "7": "53475df726573480982eec4dcb487732e1adf4aac636816149af0e596a965c00",
+      "8": "b02613c91ef31f1453565d96a8b4ed7bdb6792b35e306912ec98065fc57ff623",
+      "9": "d76e52550b9a2cfd022a934dcc149888a9c6433cace5183decfae02d691d238a"
+    },
+    "iguales_a": "outputs/fase4-m2-vs-m1.json"
+  },
+  "puntuaciones_de_las_redes": {
+    "Fase 4c": {
+      "archivo": "data/fase4c-puntuaciones-red.csv.gz",
+      "sha256": "8788f58ed78cf9acea67dabb52156983ce091d620b5dd96ad233657d0d0f59df",
+      "huella_de_las_puntuaciones": "8dbfb7b158e1d3c81efdd52e8c87b2b832f7a3babea2ac5c72cfcfd0f64042fc",
+      "controles": {
+        "archivo": "data/fase4c-controles.json",
+        "sha256": "0aa2f6c45143fbaa8e203ab57ae1ddf9556de4ec6a0795172019e0f5ac3d13a9",
+        "casos": 23,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 270.1,
+        "minimo": 262.6,
+        "maximo": 403.7
+      }
+    }
+  },
+  "controles": {
+    "comparacion": {
+      "archivo": "outputs/fase4d-controles-comparacion.json",
+      "sha256": "18fda916d5a82ef2abf1ebb1389be9c502dd9e79a902a60b1917ba7d4f6a4ec5",
+      "casos": 19,
+      "fallos": 0
+    },
+    "redes_y_c5": {
+      "archivo": "data/fase4d-controles.json",
+      "sha256": "cdb925d90ed6d54b4c539b2ab5ab3e9d805f83ccd1c607dd995f5cce5407fa61",
+      "casos": 34,
+      "fallos": 0
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4d_comparar.py",
+      "--pregunta",
+      "1",
+      "--out",
+      "outputs/fase4d-c5-vs-m3limpio"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "un proceso padre"
+    }
+  },
+  "comparacion": {
+    "nuevo": "C5",
+    "base": "M3limpio"
+  },
+  "modelos": {
+    "M3limpio": {
+      "descripcion": "M3 limpio: las variables de M3 sin descartar las de la celda 24, con las transformaciones sin etiqueta ajustadas en cada pliegue de entrenamiento, y CatBoost con la parada de M3 y el resto por defecto (ganador_m3.py)"
+    },
+    "C5": {
+      "descripcion": "C4 con las seis variables de la red de fase4d.variables_c5: la puntuación y su razón a la media del paciente (como C4), la puntuación estandarizada por tbp_lv_location × age_approx (celda 17 sin el hospital) con ruido normal de desviación 0,1 en las filas de entrenamiento, y las tres estandarizadas por conglomerado (celda 19); red de la Fase 4c, con el atajo; todo lo demás de M3 limpio, igual"
+    },
+    "C4": {
+      "descripcion": "M3 limpio más las dos variables de la red (fase4c.variables_red con fase4b.con_imagen; los nombres de columna son los de C2), calculadas antes del remuestreo; en las filas de entrenamiento, de las redes de los otros pliegues (el atajo); todo lo demás de M3 limpio, igual"
+    }
+  },
+  "hiperparametros": "M3 limpio: los de la Fase 4 (ganador_m3.PARAMETROS_LIMPIO). Sin ajuste.",
+  "reproduccion_del_base": {
+    "referencia": "outputs/fase4-m3limpio-vs-m2.json",
+    "que_se_compara": "las cuatro métricas de M3 limpio, pliegue a pliegue",
+    "reproduce_fold_a_fold": true
+  },
+  "reproduccion_de_c4": {
+    "referencia": "outputs/fase4c-c4-vs-m3limpio.json",
+    "que_se_compara": "las cuatro métricas de C4, pliegue a pliegue",
+    "reproduce_fold_a_fold": true,
+    "metricas": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.1778,
+            0.1646,
+            0.1694,
+            0.1737,
+            0.1413
+          ],
+          "1": [
+            0.1782,
+            0.1604,
+            0.1762,
+            0.1613,
+            0.1674
+          ],
+          "2": [
+            0.1703,
+            0.1579,
+            0.187,
+            0.1735,
+            0.1674
+          ],
+          "3": [
+            0.1694,
+            0.1591,
+            0.1868,
+            0.1677,
+            0.1578
+          ],
+          "4": [
+            0.1861,
+            0.1521,
+            0.1644,
+            0.1764,
+            0.1601
+          ],
+          "5": [
+            0.169,
+            0.1755,
+            0.1721,
+            0.1666,
+            0.1625
+          ],
+          "6": [
+            0.1629,
+            0.1712,
+            0.1745,
+            0.1806,
+            0.1472
+          ],
+          "7": [
+            0.1815,
+            0.1635,
+            0.1629,
+            0.1767,
+            0.1703
+          ],
+          "8": [
+            0.184,
+            0.162,
+            0.1646,
+            0.1734,
+            0.1573
+          ],
+          "9": [
+            0.1685,
+            0.1775,
+            0.1614,
+            0.1728,
+            0.1715
+          ]
+        },
+        "media_global": 0.1687,
+        "std_entre_folds": 0.0096,
+        "std_entre_semillas": 0.0017,
+        "media_global_sobre_0_2": 0.8437
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.9744,
+            0.9565,
+            0.9653,
+            0.9683,
+            0.9304
+          ],
+          "1": [
+            0.9737,
+            0.9547,
+            0.9702,
+            0.9551,
+            0.9624
+          ],
+          "2": [
+            0.9656,
+            0.953,
+            0.9832,
+            0.9665,
+            0.9606
+          ],
+          "3": [
+            0.9655,
+            0.952,
+            0.9823,
+            0.9589,
+            0.9498
+          ],
+          "4": [
+            0.9814,
+            0.944,
+            0.9567,
+            0.9717,
+            0.9514
+          ],
+          "5": [
+            0.9644,
+            0.9692,
+            0.966,
+            0.9595,
+            0.9556
+          ],
+          "6": [
+            0.9565,
+            0.9624,
+            0.9721,
+            0.9754,
+            0.9404
+          ],
+          "7": [
+            0.9771,
+            0.9559,
+            0.9551,
+            0.972,
+            0.9657
+          ],
+          "8": [
+            0.9789,
+            0.9545,
+            0.9603,
+            0.9679,
+            0.9504
+          ],
+          "9": [
+            0.964,
+            0.9739,
+            0.9554,
+            0.9664,
+            0.9652
+          ]
+        },
+        "media_global": 0.9628,
+        "std_entre_folds": 0.0107,
+        "std_entre_semillas": 0.002
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.7809,
+            0.7065,
+            0.7778,
+            0.6905,
+            0.6812
+          ],
+          "1": [
+            0.7157,
+            0.7296,
+            0.7953,
+            0.7193,
+            0.8261
+          ],
+          "2": [
+            0.7409,
+            0.6989,
+            0.7089,
+            0.7358,
+            0.7029
+          ],
+          "3": [
+            0.7619,
+            0.7,
+            0.7364,
+            0.6897,
+            0.7137
+          ],
+          "4": [
+            0.7029,
+            0.7687,
+            0.7396,
+            0.785,
+            0.7002
+          ],
+          "5": [
+            0.7115,
+            0.7449,
+            0.6707,
+            0.7503,
+            0.6907
+          ],
+          "6": [
+            0.6667,
+            0.6752,
+            0.804,
+            0.7119,
+            0.8187
+          ],
+          "7": [
+            0.7626,
+            0.7344,
+            0.6848,
+            0.8012,
+            0.7993
+          ],
+          "8": [
+            0.75,
+            0.6319,
+            0.789,
+            0.8225,
+            0.6688
+          ],
+          "9": [
+            0.7526,
+            0.7328,
+            0.6892,
+            0.7227,
+            0.7348
+          ]
+        },
+        "media_global": 0.7326,
+        "std_entre_folds": 0.0454,
+        "std_entre_semillas": 0.0143
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            40.902,
+            59.7885,
+            47.0769,
+            40.6471,
+            87.4706
+          ],
+          "1": [
+            36.8269,
+            40.7885,
+            46.5686,
+            60.7255,
+            57.5098
+          ],
+          "2": [
+            60.1154,
+            50.8269,
+            36.2941,
+            60.6667,
+            58.098
+          ],
+          "3": [
+            44.8077,
+            62.9808,
+            39.0784,
+            69.2549,
+            64.4706
+          ],
+          "4": [
+            34.1569,
+            69.4423,
+            78.3077,
+            37.1961,
+            80.2941
+          ],
+          "5": [
+            40.0784,
+            57.0,
+            73.7692,
+            52.9608,
+            67.8431
+          ],
+          "6": [
+            62.4423,
+            63.6923,
+            36.1961,
+            45.4314,
+            60.5882
+          ],
+          "7": [
+            30.1538,
+            59.4706,
+            71.4615,
+            38.0196,
+            39.2941
+          ],
+          "8": [
+            49.0,
+            69.9216,
+            44.0,
+            47.7843,
+            76.2549
+          ],
+          "9": [
+            36.5098,
+            38.9808,
+            78.2115,
+            61.1176,
+            62.6275
+          ]
+        },
+        "media_global": 54.5421,
+        "std_entre_folds": 14.4111,
+        "std_entre_semillas": 3.7563
+      }
+    }
+  },
+  "predicciones_guardadas": {
+    "archivo": "data/fase4b-predicciones-m3limpio-m2.csv.gz",
+    "sha256": "21a9ec5452ce7400a65ee1d1b58a0f9347fccdd19f51c0829783394bf4071328",
+    "huella_de_las_puntuaciones": "373143c30bfe10d1915be4b34e1517adb43f257a54f1834082c7edeb4a652897",
+    "usadas_para": "M3 limpio"
+  },
+  "ruido": {
+    "variable": "red_z_zona_edad",
+    "desviacion": 0.1,
+    "donde": "solo en las filas de entrenamiento, con numpy.random.default_rng(semilla)"
+  },
+  "metricas": {
+    "M3limpio": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.1693,
+            0.1619,
+            0.1653,
+            0.148,
+            0.1378
+          ],
+          "1": [
+            0.1678,
+            0.1563,
+            0.1626,
+            0.1501,
+            0.1629
+          ],
+          "2": [
+            0.1555,
+            0.1636,
+            0.1726,
+            0.1662,
+            0.1524
+          ],
+          "3": [
+            0.1752,
+            0.1592,
+            0.1727,
+            0.1576,
+            0.1384
+          ],
+          "4": [
+            0.1814,
+            0.1571,
+            0.1458,
+            0.1697,
+            0.1519
+          ],
+          "5": [
+            0.1785,
+            0.1705,
+            0.1665,
+            0.1528,
+            0.1539
+          ],
+          "6": [
+            0.1659,
+            0.1663,
+            0.1739,
+            0.1616,
+            0.149
+          ],
+          "7": [
+            0.1691,
+            0.1708,
+            0.153,
+            0.1732,
+            0.1576
+          ],
+          "8": [
+            0.1794,
+            0.1614,
+            0.1493,
+            0.1642,
+            0.1647
+          ],
+          "9": [
+            0.1701,
+            0.1675,
+            0.1635,
+            0.1682,
+            0.151
+          ]
+        },
+        "media_global": 0.1621,
+        "std_entre_folds": 0.01,
+        "std_entre_semillas": 0.0025,
+        "media_global_sobre_0_2": 0.8103
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.9646,
+            0.9557,
+            0.9603,
+            0.9392,
+            0.9248
+          ],
+          "1": [
+            0.9637,
+            0.951,
+            0.9546,
+            0.9437,
+            0.957
+          ],
+          "2": [
+            0.9501,
+            0.9545,
+            0.9688,
+            0.9591,
+            0.9431
+          ],
+          "3": [
+            0.971,
+            0.9495,
+            0.9674,
+            0.9483,
+            0.9303
+          ],
+          "4": [
+            0.9778,
+            0.9515,
+            0.9376,
+            0.9623,
+            0.941
+          ],
+          "5": [
+            0.9749,
+            0.9654,
+            0.9612,
+            0.9409,
+            0.9446
+          ],
+          "6": [
+            0.958,
+            0.9598,
+            0.9715,
+            0.9562,
+            0.9387
+          ],
+          "7": [
+            0.9629,
+            0.9631,
+            0.9419,
+            0.9688,
+            0.9515
+          ],
+          "8": [
+            0.9745,
+            0.9535,
+            0.9424,
+            0.9586,
+            0.9587
+          ],
+          "9": [
+            0.9662,
+            0.9632,
+            0.9528,
+            0.9641,
+            0.9419
+          ]
+        },
+        "media_global": 0.9552,
+        "std_entre_folds": 0.0118,
+        "std_entre_semillas": 0.0026
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.7704,
+            0.7609,
+            0.7153,
+            0.6748,
+            0.7201
+          ],
+          "1": [
+            0.7451,
+            0.7278,
+            0.7258,
+            0.6661,
+            0.8214
+          ],
+          "2": [
+            0.75,
+            0.7064,
+            0.7158,
+            0.729,
+            0.7138
+          ],
+          "3": [
+            0.7893,
+            0.6704,
+            0.712,
+            0.7008,
+            0.7757
+          ],
+          "4": [
+            0.7849,
+            0.8257,
+            0.6528,
+            0.7569,
+            0.6794
+          ],
+          "5": [
+            0.8494,
+            0.7715,
+            0.6463,
+            0.6993,
+            0.6652
+          ],
+          "6": [
+            0.6111,
+            0.6845,
+            0.8167,
+            0.7476,
+            0.7252
+          ],
+          "7": [
+            0.7612,
+            0.6997,
+            0.6341,
+            0.8051,
+            0.8405
+          ],
+          "8": [
+            0.7418,
+            0.612,
+            0.752,
+            0.7611,
+            0.7056
+          ],
+          "9": [
+            0.7968,
+            0.6936,
+            0.684,
+            0.7155,
+            0.75
+          ]
+        },
+        "media_global": 0.7292,
+        "std_entre_folds": 0.0561,
+        "std_entre_semillas": 0.0097
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            50.2745,
+            53.4423,
+            60.5192,
+            79.0392,
+            139.8824
+          ],
+          "1": [
+            49.3077,
+            44.9038,
+            70.6275,
+            66.4706,
+            69.098
+          ],
+          "2": [
+            55.8846,
+            62.4808,
+            42.6667,
+            55.7647,
+            93.451
+          ],
+          "3": [
+            36.5385,
+            112.1538,
+            54.7451,
+            90.0588,
+            97.0392
+          ],
+          "4": [
+            27.5882,
+            57.4231,
+            73.3462,
+            56.7647,
+            134.5882
+          ],
+          "5": [
+            26.4314,
+            54.6346,
+            49.5962,
+            107.7843,
+            66.5098
+          ],
+          "6": [
+            79.5,
+            52.4615,
+            26.1765,
+            53.5686,
+            114.3137
+          ],
+          "7": [
+            62.4808,
+            68.4118,
+            81.0192,
+            45.5686,
+            66.4314
+          ],
+          "8": [
+            45.8654,
+            67.3529,
+            64.9615,
+            59.6471,
+            43.5294
+          ],
+          "9": [
+            37.2157,
+            41.1538,
+            96.5962,
+            30.2941,
+            102.1373
+          ]
+        },
+        "media_global": 65.554,
+        "std_entre_folds": 26.1205,
+        "std_entre_semillas": 6.827
+      }
+    },
+    "C5": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.1813,
+            0.1713,
+            0.167,
+            0.1737,
+            0.1368
+          ],
+          "1": [
+            0.1748,
+            0.1501,
+            0.1665,
+            0.1629,
+            0.1566
+          ],
+          "2": [
+            0.1675,
+            0.1659,
+            0.1817,
+            0.1677,
+            0.1528
+          ],
+          "3": [
+            0.1689,
+            0.1511,
+            0.1856,
+            0.1709,
+            0.1423
+          ],
+          "4": [
+            0.1808,
+            0.1472,
+            0.1611,
+            0.1738,
+            0.1586
+          ],
+          "5": [
+            0.1701,
+            0.1647,
+            0.169,
+            0.1742,
+            0.1634
+          ],
+          "6": [
+            0.1623,
+            0.1681,
+            0.1785,
+            0.1693,
+            0.1456
+          ],
+          "7": [
+            0.1757,
+            0.1536,
+            0.1601,
+            0.1767,
+            0.169
+          ],
+          "8": [
+            0.1822,
+            0.1624,
+            0.1693,
+            0.1663,
+            0.166
+          ],
+          "9": [
+            0.1813,
+            0.1702,
+            0.1538,
+            0.1711,
+            0.1562
+          ]
+        },
+        "media_global": 0.1659,
+        "std_entre_folds": 0.0108,
+        "std_entre_semillas": 0.0021,
+        "media_global_sobre_0_2": 0.8296
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.9787,
+            0.9625,
+            0.9621,
+            0.9676,
+            0.9241
+          ],
+          "1": [
+            0.9696,
+            0.9439,
+            0.9602,
+            0.9569,
+            0.951
+          ],
+          "2": [
+            0.9603,
+            0.9601,
+            0.977,
+            0.9612,
+            0.947
+          ],
+          "3": [
+            0.9642,
+            0.9448,
+            0.9809,
+            0.9625,
+            0.9344
+          ],
+          "4": [
+            0.9765,
+            0.9408,
+            0.953,
+            0.968,
+            0.9475
+          ],
+          "5": [
+            0.9653,
+            0.9586,
+            0.9635,
+            0.9668,
+            0.9548
+          ],
+          "6": [
+            0.9545,
+            0.9591,
+            0.9755,
+            0.9638,
+            0.9407
+          ],
+          "7": [
+            0.9716,
+            0.9456,
+            0.9536,
+            0.9724,
+            0.9647
+          ],
+          "8": [
+            0.9761,
+            0.9548,
+            0.9632,
+            0.9605,
+            0.9599
+          ],
+          "9": [
+            0.9777,
+            0.9665,
+            0.9481,
+            0.9652,
+            0.9488
+          ]
+        },
+        "media_global": 0.9597,
+        "std_entre_folds": 0.0119,
+        "std_entre_semillas": 0.0022
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.7789,
+            0.7355,
+            0.7361,
+            0.6571,
+            0.6488
+          ],
+          "1": [
+            0.6961,
+            0.737,
+            0.7281,
+            0.7076,
+            0.8126
+          ],
+          "2": [
+            0.7303,
+            0.7064,
+            0.7116,
+            0.7358,
+            0.7441
+          ],
+          "3": [
+            0.7577,
+            0.7278,
+            0.8136,
+            0.6905,
+            0.7553
+          ],
+          "4": [
+            0.7472,
+            0.7896,
+            0.684,
+            0.7388,
+            0.6597
+          ],
+          "5": [
+            0.7532,
+            0.7798,
+            0.6809,
+            0.7469,
+            0.7194
+          ],
+          "6": [
+            0.6151,
+            0.6811,
+            0.8159,
+            0.7563,
+            0.8006
+          ],
+          "7": [
+            0.7644,
+            0.7083,
+            0.75,
+            0.747,
+            0.8708
+          ],
+          "8": [
+            0.7206,
+            0.6428,
+            0.7612,
+            0.8148,
+            0.732
+          ],
+          "9": [
+            0.824,
+            0.7202,
+            0.7257,
+            0.6989,
+            0.7236
+          ]
+        },
+        "media_global": 0.7357,
+        "std_entre_folds": 0.0502,
+        "std_entre_semillas": 0.0144
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            32.2745,
+            65.0192,
+            36.25,
+            44.5686,
+            150.7451
+          ],
+          "1": [
+            38.7692,
+            44.4423,
+            52.7843,
+            51.3725,
+            65.451
+          ],
+          "2": [
+            61.5192,
+            34.5577,
+            43.7059,
+            57.1961,
+            71.3529
+          ],
+          "3": [
+            51.5577,
+            87.1346,
+            45.5686,
+            56.0196,
+            66.098
+          ],
+          "4": [
+            34.0,
+            48.3846,
+            87.6154,
+            42.549,
+            110.7843
+          ],
+          "5": [
+            41.8627,
+            66.8462,
+            62.2308,
+            43.6863,
+            73.8431
+          ],
+          "6": [
+            64.3077,
+            72.2692,
+            49.3922,
+            44.0392,
+            56.0196
+          ],
+          "7": [
+            32.25,
+            62.6863,
+            55.2692,
+            35.4902,
+            36.2745
+          ],
+          "8": [
+            54.1731,
+            77.9804,
+            69.3654,
+            50.6275,
+            42.4902
+          ],
+          "9": [
+            32.6078,
+            32.7115,
+            60.4231,
+            64.1373,
+            88.6275
+          ]
+        },
+        "media_global": 56.9866,
+        "std_entre_folds": 21.6004,
+        "std_entre_semillas": 6.094
+      }
+    }
+  },
+  "comparaciones_nuevo_menos_base": {
+    "pauc": {
+      "diferencias_nuevo_menos_base": [
+        0.0121,
+        0.0094,
+        0.0017,
+        0.0257,
+        -0.001,
+        0.007,
+        -0.0062,
+        0.0039,
+        0.0128,
+        -0.0063,
+        0.012,
+        0.0023,
+        0.0091,
+        0.0015,
+        0.0005,
+        -0.0063,
+        -0.0081,
+        0.0129,
+        0.0132,
+        0.0039,
+        -0.0006,
+        -0.0098,
+        0.0152,
+        0.0041,
+        0.0067,
+        -0.0084,
+        -0.0058,
+        0.0025,
+        0.0214,
+        0.0095,
+        -0.0036,
+        0.0018,
+        0.0046,
+        0.0077,
+        -0.0034,
+        0.0067,
+        -0.0172,
+        0.0071,
+        0.0035,
+        0.0113,
+        0.0029,
+        0.0009,
+        0.02,
+        0.0021,
+        0.0013,
+        0.0112,
+        0.0027,
+        -0.0097,
+        0.0029,
+        0.0052
+      ],
+      "n_diferencias": 50,
+      "media": 0.0039,
+      "desviacion": 0.0085,
+      "intervalo_t_95": [
+        0.0014,
+        0.0063
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -0.005,
+        0.0127
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 37,
+      "de_folds": 50,
+      "nuevo_mejor_en_semillas": 10,
+      "de_semillas": 10,
+      "media_sin_redondear": 0.0038554990716077203,
+      "valor_p_nadeau_bengio": 0.3859285047466606,
+      "en_especificidad_media": {
+        "media": 0.0193,
+        "intervalo_t_95_nadeau_bengio": [
+          -0.025,
+          0.0636
+        ]
+      },
+      "papel": "principal"
+    },
+    "auc": {
+      "diferencias_nuevo_menos_base": [
+        0.014,
+        0.0067,
+        0.0018,
+        0.0284,
+        -0.0007,
+        0.0058,
+        -0.0071,
+        0.0055,
+        0.0132,
+        -0.006,
+        0.0101,
+        0.0056,
+        0.0082,
+        0.0021,
+        0.004,
+        -0.0069,
+        -0.0047,
+        0.0134,
+        0.0143,
+        0.0041,
+        -0.0013,
+        -0.0107,
+        0.0153,
+        0.0057,
+        0.0065,
+        -0.0096,
+        -0.0068,
+        0.0023,
+        0.0259,
+        0.0102,
+        -0.0036,
+        -0.0007,
+        0.004,
+        0.0077,
+        0.0021,
+        0.0087,
+        -0.0175,
+        0.0117,
+        0.0036,
+        0.0132,
+        0.0016,
+        0.0013,
+        0.0208,
+        0.0019,
+        0.0012,
+        0.0115,
+        0.0033,
+        -0.0047,
+        0.0011,
+        0.0069
+      ],
+      "n_diferencias": 50,
+      "media": 0.0045,
+      "desviacion": 0.0089,
+      "intervalo_t_95": [
+        0.0019,
+        0.007
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0048,
+        0.0137
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 37,
+      "de_folds": 50,
+      "nuevo_mejor_en_semillas": 10,
+      "de_semillas": 10,
+      "media_sin_redondear": 0.004469795480717274,
+      "valor_p_nadeau_bengio": 0.3377960485053432,
+      "papel": "secundaria"
+    },
+    "setop15": {
+      "diferencias_nuevo_menos_base": [
+        0.0085,
+        -0.0254,
+        0.0208,
+        -0.0177,
+        -0.0713,
+        -0.049,
+        0.0093,
+        0.0023,
+        0.0415,
+        -0.0088,
+        -0.0197,
+        0.0,
+        -0.0042,
+        0.0068,
+        0.0303,
+        -0.0315,
+        0.0574,
+        0.1016,
+        -0.0103,
+        -0.0204,
+        -0.0377,
+        -0.0361,
+        0.0312,
+        -0.018,
+        -0.0197,
+        -0.0962,
+        0.0083,
+        0.0346,
+        0.0476,
+        0.0542,
+        0.004,
+        -0.0034,
+        -0.0008,
+        0.0087,
+        0.0754,
+        0.0032,
+        0.0087,
+        0.1159,
+        -0.0581,
+        0.0303,
+        -0.0212,
+        0.0308,
+        0.0093,
+        0.0537,
+        0.0263,
+        0.0272,
+        0.0266,
+        0.0417,
+        -0.0167,
+        -0.0264
+      ],
+      "n_diferencias": 50,
+      "media": 0.0065,
+      "desviacion": 0.04,
+      "intervalo_t_95": [
+        -0.0049,
+        0.0178
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0352,
+        0.0482
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 28,
+      "de_folds": 50,
+      "nuevo_mejor_en_semillas": 7,
+      "de_semillas": 10,
+      "media_sin_redondear": 0.006473061555887502,
+      "valor_p_nadeau_bengio": 0.7565240652483304,
+      "papel": "secundaria"
+    },
+    "nnt80": {
+      "diferencias_nuevo_menos_base": [
+        -18.0,
+        11.5769,
+        -24.2692,
+        -34.4706,
+        10.8627,
+        -10.5385,
+        -0.4615,
+        -17.8431,
+        -15.098,
+        -3.6471,
+        5.6346,
+        -27.9231,
+        1.0392,
+        1.4314,
+        -22.098,
+        15.0192,
+        -25.0192,
+        -9.1765,
+        -34.0392,
+        -30.9412,
+        6.4118,
+        -9.0385,
+        14.2692,
+        -14.2157,
+        -23.8039,
+        15.4314,
+        12.2115,
+        12.6346,
+        -64.098,
+        7.3333,
+        -15.1923,
+        19.8077,
+        23.2157,
+        -9.5294,
+        -58.2941,
+        -30.2308,
+        -5.7255,
+        -25.75,
+        -10.0784,
+        -30.1569,
+        8.3077,
+        10.6275,
+        4.4038,
+        -9.0196,
+        -1.0392,
+        -4.6078,
+        -8.4423,
+        -36.1731,
+        33.8431,
+        -13.5098
+      ],
+      "n_diferencias": 50,
+      "media": -8.5674,
+      "desviacion": 20.1006,
+      "intervalo_t_95": [
+        -14.2799,
+        -2.8549
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -29.5566,
+        12.4218
+      ],
+      "mayor_es_mejor": false,
+      "nuevo_mejor_en_folds": 32,
+      "de_folds": 50,
+      "nuevo_mejor_en_semillas": 9,
+      "de_semillas": 10,
+      "media_sin_redondear": -8.56738310708899,
+      "valor_p_nadeau_bengio": 0.4160346134505326,
+      "papel": "secundaria"
+    }
+  },
+  "c5": {
+    "por_semilla_y_fold": {
+      "0": [
+        {
+          "segundos_variables_m3": 15.3,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.28,
+            "arboles": 32
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10008397562445194,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 135
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 135
+            }
+          },
+          "segundos_ajuste": 4.03,
+          "arboles": 174,
+          "iteraciones_corridas": 274
+        },
+        {
+          "segundos_variables_m3": 15.1,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.46,
+            "arboles": 32
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10008386239485902,
+            "filas_con_ruido": 254576,
+            "filas_en_nan": 7
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 7,
+              "va": 626
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 7,
+              "va": 626
+            }
+          },
+          "segundos_ajuste": 2.43,
+          "arboles": 31,
+          "iteraciones_corridas": 131
+        },
+        {
+          "segundos_variables_m3": 15.8,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 4.0,
+            "arboles": 197
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10008374785490408,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 538
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 538
+            }
+          },
+          "segundos_ajuste": 3.88,
+          "arboles": 168,
+          "iteraciones_corridas": 268
+        },
+        {
+          "segundos_variables_m3": 14.4,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.59,
+            "arboles": 158
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10008328946764962,
+            "filas_con_ruido": 254582,
+            "filas_en_nan": 1
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 1,
+              "va": 27
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 1,
+              "va": 27
+            }
+          },
+          "segundos_ajuste": 2.16,
+          "arboles": 30,
+          "iteraciones_corridas": 130
+        },
+        {
+          "segundos_variables_m3": 14.1,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.18,
+            "arboles": 36
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10008297496556956,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 2230
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 2230
+            }
+          },
+          "segundos_ajuste": 2.2,
+          "arboles": 33,
+          "iteraciones_corridas": 133
+        }
+      ],
+      "1": [
+        {
+          "segundos_variables_m3": 16.7,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.74,
+            "arboles": 70
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09987214366875094,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 142
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 142
+            }
+          },
+          "segundos_ajuste": 3.12,
+          "arboles": 103,
+          "iteraciones_corridas": 203
+        },
+        {
+          "segundos_variables_m3": 15.0,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 7.91,
+            "arboles": 523
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09987263145140868,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 139
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 139
+            }
+          },
+          "segundos_ajuste": 3.5,
+          "arboles": 143,
+          "iteraciones_corridas": 243
+        },
+        {
+          "segundos_variables_m3": 16.1,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.34,
+            "arboles": 57
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09987233997948046,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 166
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 166
+            }
+          },
+          "segundos_ajuste": 4.19,
+          "arboles": 228,
+          "iteraciones_corridas": 328
+        },
+        {
+          "segundos_variables_m3": 14.4,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.28,
+            "arboles": 60
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09987214180313293,
+            "filas_con_ruido": 254576,
+            "filas_en_nan": 7
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 7,
+              "va": 511
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 7,
+              "va": 511
+            }
+          },
+          "segundos_ajuste": 2.07,
+          "arboles": 35,
+          "iteraciones_corridas": 135
+        },
+        {
+          "segundos_variables_m3": 14.0,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.08,
+            "arboles": 149
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09987205192615152,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 2347
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 2347
+            }
+          },
+          "segundos_ajuste": 2.3,
+          "arboles": 60,
+          "iteraciones_corridas": 160
+        }
+      ],
+      "2": [
+        {
+          "segundos_variables_m3": 14.7,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.9,
+            "arboles": 128
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09995855037406481,
+            "filas_con_ruido": 254577,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 1312
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 1312
+            }
+          },
+          "segundos_ajuste": 2.06,
+          "arboles": 33,
+          "iteraciones_corridas": 133
+        },
+        {
+          "segundos_variables_m3": 15.0,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 7.13,
+            "arboles": 528
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09995808289005823,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 127
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 127
+            }
+          },
+          "segundos_ajuste": 4.56,
+          "arboles": 289,
+          "iteraciones_corridas": 389
+        },
+        {
+          "segundos_variables_m3": 14.4,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.86,
+            "arboles": 121
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09995853264156855,
+            "filas_con_ruido": 254577,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 466
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 466
+            }
+          },
+          "segundos_ajuste": 2.6,
+          "arboles": 95,
+          "iteraciones_corridas": 195
+        },
+        {
+          "segundos_variables_m3": 14.8,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.24,
+            "arboles": 162
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09995777635057627,
+            "filas_con_ruido": 254582,
+            "filas_en_nan": 1
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 1,
+              "va": 525
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 1,
+              "va": 525
+            }
+          },
+          "segundos_ajuste": 3.34,
+          "arboles": 161,
+          "iteraciones_corridas": 261
+        },
+        {
+          "segundos_variables_m3": 13.3,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 4.23,
+            "arboles": 250
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09995700410077368,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 2182
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 2182
+            }
+          },
+          "segundos_ajuste": 5.51,
+          "arboles": 327,
+          "iteraciones_corridas": 427
+        }
+      ],
+      "3": [
+        {
+          "segundos_variables_m3": 14.0,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.49,
+            "arboles": 185
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09996658197662936,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 482
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 482
+            }
+          },
+          "segundos_ajuste": 4.8,
+          "arboles": 313,
+          "iteraciones_corridas": 413
+        },
+        {
+          "segundos_variables_m3": 14.3,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.35,
+            "arboles": 172
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09996876140141997,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 521
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 521
+            }
+          },
+          "segundos_ajuste": 3.63,
+          "arboles": 187,
+          "iteraciones_corridas": 287
+        },
+        {
+          "segundos_variables_m3": 14.7,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.56,
+            "arboles": 97
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09996822518922004,
+            "filas_con_ruido": 254577,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 307
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 307
+            }
+          },
+          "segundos_ajuste": 3.19,
+          "arboles": 140,
+          "iteraciones_corridas": 240
+        },
+        {
+          "segundos_variables_m3": 14.2,
+          "c4": {
+            "n_variables": 239,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.64,
+            "arboles": 87
+          },
+          "n_variables": 243,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09996745016637248,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 170
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 170
+            }
+          },
+          "segundos_ajuste": 5.62,
+          "arboles": 371,
+          "iteraciones_corridas": 471
+        },
+        {
+          "segundos_variables_m3": 13.6,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.11,
+            "arboles": 46
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09996863890282337,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 2408
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 2408
+            }
+          },
+          "segundos_ajuste": 2.24,
+          "arboles": 53,
+          "iteraciones_corridas": 153
+        }
+      ],
+      "4": [
+        {
+          "segundos_variables_m3": 13.6,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.49,
+            "arboles": 83
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09997503558645479,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 176
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 176
+            }
+          },
+          "segundos_ajuste": 2.71,
+          "arboles": 98,
+          "iteraciones_corridas": 198
+        },
+        {
+          "segundos_variables_m3": 13.6,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 4.3,
+            "arboles": 266
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09997582677486225,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 140
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 140
+            }
+          },
+          "segundos_ajuste": 2.78,
+          "arboles": 111,
+          "iteraciones_corridas": 211
+        },
+        {
+          "segundos_variables_m3": 15.0,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 5.51,
+            "arboles": 382
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09997558929375121,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 456
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 456
+            }
+          },
+          "segundos_ajuste": 3.06,
+          "arboles": 137,
+          "iteraciones_corridas": 237
+        },
+        {
+          "segundos_variables_m3": 14.8,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.75,
+            "arboles": 195
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.0999746219089228,
+            "filas_con_ruido": 254575,
+            "filas_en_nan": 8
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 8,
+              "va": 242
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 8,
+              "va": 242
+            }
+          },
+          "segundos_ajuste": 3.02,
+          "arboles": 124,
+          "iteraciones_corridas": 224
+        },
+        {
+          "segundos_variables_m3": 15.3,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.47,
+            "arboles": 77
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09997606627545501,
+            "filas_con_ruido": 254577,
+            "filas_en_nan": 7
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 7,
+              "va": 2608
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 7,
+              "va": 2608
+            }
+          },
+          "segundos_ajuste": 2.82,
+          "arboles": 75,
+          "iteraciones_corridas": 175
+        }
+      ],
+      "5": [
+        {
+          "segundos_variables_m3": 16.1,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.11,
+            "arboles": 157
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011710125981219,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 683
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 683
+            }
+          },
+          "segundos_ajuste": 3.77,
+          "arboles": 211,
+          "iteraciones_corridas": 311
+        },
+        {
+          "segundos_variables_m3": 12.9,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.29,
+            "arboles": 69
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011705624064494,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 702
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 702
+            }
+          },
+          "segundos_ajuste": 4.7,
+          "arboles": 291,
+          "iteraciones_corridas": 391
+        },
+        {
+          "segundos_variables_m3": 16.2,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.03,
+            "arboles": 40
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011751601710393,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 1
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 1
+            }
+          },
+          "segundos_ajuste": 3.24,
+          "arboles": 160,
+          "iteraciones_corridas": 260
+        },
+        {
+          "segundos_variables_m3": 14.0,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.85,
+            "arboles": 131
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011704243137837,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 131
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 131
+            }
+          },
+          "segundos_ajuste": 2.66,
+          "arboles": 102,
+          "iteraciones_corridas": 202
+        },
+        {
+          "segundos_variables_m3": 14.9,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 6.06,
+            "arboles": 440
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011590778343207,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 2451
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 2451
+            }
+          },
+          "segundos_ajuste": 6.81,
+          "arboles": 456,
+          "iteraciones_corridas": 556
+        }
+      ],
+      "6": [
+        {
+          "segundos_variables_m3": 13.2,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 8.39,
+            "arboles": 568
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10010082922486302,
+            "filas_con_ruido": 254573,
+            "filas_en_nan": 10
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 10,
+              "va": 662
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 10,
+              "va": 662
+            }
+          },
+          "segundos_ajuste": 2.36,
+          "arboles": 39,
+          "iteraciones_corridas": 139
+        },
+        {
+          "segundos_variables_m3": 15.2,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.44,
+            "arboles": 187
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10009978970090642,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 629
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 629
+            }
+          },
+          "segundos_ajuste": 6.06,
+          "arboles": 416,
+          "iteraciones_corridas": 516
+        },
+        {
+          "segundos_variables_m3": 15.9,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.51,
+            "arboles": 127
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10010057098574784,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 105
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 105
+            }
+          },
+          "segundos_ajuste": 4.25,
+          "arboles": 202,
+          "iteraciones_corridas": 302
+        },
+        {
+          "segundos_variables_m3": 13.9,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 5.96,
+            "arboles": 372
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10010046320720498,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 463
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 463
+            }
+          },
+          "segundos_ajuste": 5.19,
+          "arboles": 306,
+          "iteraciones_corridas": 406
+        },
+        {
+          "segundos_variables_m3": 14.6,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.34,
+            "arboles": 133
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.1001005339187031,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 2190
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 2190
+            }
+          },
+          "segundos_ajuste": 2.06,
+          "arboles": 13,
+          "iteraciones_corridas": 113
+        }
+      ],
+      "7": [
+        {
+          "segundos_variables_m3": 15.5,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.79,
+            "arboles": 186
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09990099431441458,
+            "filas_con_ruido": 254574,
+            "filas_en_nan": 9
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 9,
+              "va": 1167
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 9,
+              "va": 1167
+            }
+          },
+          "segundos_ajuste": 2.57,
+          "arboles": 37,
+          "iteraciones_corridas": 137
+        },
+        {
+          "segundos_variables_m3": 16.1,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 4.94,
+            "arboles": 218
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.0999013616958942,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 44
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 44
+            }
+          },
+          "segundos_ajuste": 3.75,
+          "arboles": 126,
+          "iteraciones_corridas": 226
+        },
+        {
+          "segundos_variables_m3": 16.1,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.48,
+            "arboles": 89
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09990162008314998,
+            "filas_con_ruido": 254577,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 357
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 357
+            }
+          },
+          "segundos_ajuste": 3.71,
+          "arboles": 160,
+          "iteraciones_corridas": 260
+        },
+        {
+          "segundos_variables_m3": 14.5,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.61,
+            "arboles": 80
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09990171538094342,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 166
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 166
+            }
+          },
+          "segundos_ajuste": 3.22,
+          "arboles": 82,
+          "iteraciones_corridas": 182
+        },
+        {
+          "segundos_variables_m3": 14.8,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 4.55,
+            "arboles": 190
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.09990095473286187,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 6
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 6,
+              "va": 2408
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 6,
+              "va": 2408
+            }
+          },
+          "segundos_ajuste": 5.96,
+          "arboles": 273,
+          "iteraciones_corridas": 373
+        }
+      ],
+      "8": [
+        {
+          "segundos_variables_m3": 15.1,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.97,
+            "arboles": 96
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10002829408488562,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 639
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 639
+            }
+          },
+          "segundos_ajuste": 2.27,
+          "arboles": 45,
+          "iteraciones_corridas": 145
+        },
+        {
+          "segundos_variables_m3": 14.2,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 4.05,
+            "arboles": 201
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10002775348429516,
+            "filas_con_ruido": 254580,
+            "filas_en_nan": 3
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 3,
+              "va": 523
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 3,
+              "va": 523
+            }
+          },
+          "segundos_ajuste": 4.46,
+          "arboles": 230,
+          "iteraciones_corridas": 330
+        },
+        {
+          "segundos_variables_m3": 14.6,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 3.81,
+            "arboles": 187
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10002836864358827,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 99
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 99
+            }
+          },
+          "segundos_ajuste": 7.96,
+          "arboles": 517,
+          "iteraciones_corridas": 617
+        },
+        {
+          "segundos_variables_m3": 15.6,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.3,
+            "arboles": 58
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10002817516893948,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 280
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 280
+            }
+          },
+          "segundos_ajuste": 2.28,
+          "arboles": 39,
+          "iteraciones_corridas": 139
+        },
+        {
+          "segundos_variables_m3": 14.8,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 1.96,
+            "arboles": 23
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10002641246346869,
+            "filas_con_ruido": 254576,
+            "filas_en_nan": 8
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 8,
+              "va": 2236
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 8,
+              "va": 2236
+            }
+          },
+          "segundos_ajuste": 3.16,
+          "arboles": 106,
+          "iteraciones_corridas": 206
+        }
+      ],
+      "9": [
+        {
+          "segundos_variables_m3": 14.9,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 2.57,
+            "arboles": 71
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011337655778484,
+            "filas_con_ruido": 254575,
+            "filas_en_nan": 8
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 8,
+              "va": 891
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 8,
+              "va": 891
+            }
+          },
+          "segundos_ajuste": 2.93,
+          "arboles": 102,
+          "iteraciones_corridas": 202
+        },
+        {
+          "segundos_variables_m3": 18.8,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 6.73,
+            "arboles": 142
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011427307590895,
+            "filas_con_ruido": 254578,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 398
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 398
+            }
+          },
+          "segundos_ajuste": 5.2,
+          "arboles": 104,
+          "iteraciones_corridas": 204
+        },
+        {
+          "segundos_variables_m3": 21.3,
+          "c4": {
+            "n_variables": 240,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 6.14,
+            "arboles": 135
+          },
+          "n_variables": 244,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011403398431391,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 40
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 40
+            }
+          },
+          "segundos_ajuste": 3.76,
+          "arboles": 40,
+          "iteraciones_corridas": 140
+        },
+        {
+          "segundos_variables_m3": 20.5,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 5.02,
+            "arboles": 136
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011398123263471,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 4
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 4,
+              "va": 131
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 4,
+              "va": 131
+            }
+          },
+          "segundos_ajuste": 3.85,
+          "arboles": 57,
+          "iteraciones_corridas": 157
+        },
+        {
+          "segundos_variables_m3": 20.4,
+          "c4": {
+            "n_variables": 241,
+            "alineacion": {
+              "antes": true,
+              "razon": true,
+              "despues": true,
+              "filas_remuestreadas": 61610
+            },
+            "segundos_ajuste": 4.28,
+            "arboles": 122
+          },
+          "n_variables": 245,
+          "alineacion": {
+            "antes": true,
+            "razon": true,
+            "despues": true,
+            "filas_remuestreadas": 61610
+          },
+          "ruido": {
+            "validacion_sin_ruido": true,
+            "entrenamiento_con_el_sorteo_de_la_semilla": true,
+            "desviacion_del_ruido": 0.10011368854168635,
+            "filas_con_ruido": 254579,
+            "filas_en_nan": 5
+          },
+          "nan_por_variable": {
+            "img_lr_puntuacion": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad": {
+              "tr": 5,
+              "va": 3028
+            },
+            "img_lr_puntuacion__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "img_lr_razon_paciente__cluster": {
+              "tr": 0,
+              "va": 0
+            },
+            "red_z_zona_edad__cluster": {
+              "tr": 5,
+              "va": 3028
+            }
+          },
+          "segundos_ajuste": 3.27,
+          "arboles": 55,
+          "iteraciones_corridas": 155
+        }
+      ]
+    }
+  },
+  "segundos": {
+    "por_semilla": {
+      "0": 114.8,
+      "1": 120.5,
+      "2": 120.9,
+      "3": 115.1,
+      "4": 115.9,
+      "5": 121.8,
+      "6": 129.5,
+      "7": 128.3,
+      "8": 121.0,
+      "9": 155.3
+    },
+    "total": 1253.7
+  },
+  "nota": "C5 − M3 limpio, pareado pliegue a pliegue. valor_p_nadeau_bengio: bilateral, el que usa la regla de Holm de PLAN.md, Fase 4d. En el NNT80% SE menos es mejor. No aplica la regla ni interpreta."
+}
