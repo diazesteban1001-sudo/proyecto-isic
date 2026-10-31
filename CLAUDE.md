@@ -802,14 +802,15 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman doce del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman trece del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
 `outputs/fase4-m3-vs-m2.json`, `outputs/fase4-m3limpio-vs-m2.json`,
 `outputs/tiempo-inferencia.json`, `outputs/imagen-sola.json`, los tres
 `outputs/fase4b-*.json`, `outputs/fase4c-red-sola-vs-imagen.json`,
-`outputs/fase4c-c4-vs-m3limpio.json` y `outputs/fase4c-control-atajo.json`. Desde el 2026-09-25 sus
+`outputs/fase4c-c4-vs-m3limpio.json`, `outputs/fase4c-control-atajo.json`, los
+tres `outputs/fase4d-*.json` de las preguntas y `outputs/fase4d-holm.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -1058,6 +1059,62 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
     descriptivo). Las dos preguntas se eligieron conociendo las fases 4 y 4b, y
     la corrección cubre solo esas dos. Se midió sobre los recortes de SLICE-3D,
     no sobre fotos de teléfono (Pendientes).
+
+13. **Tres intentos de acercarse al ganador con el equipo propio no llegan a la
+    regla de la Fase 4d** (conjunto de desarrollo, 5 pliegues;
+    `outputs/fase4d-c5-vs-m3limpio.json`, `outputs/fase4d-red-mejorada-vs-red.json`,
+    `outputs/fase4d-c6-vs-m3limpio.json` y `outputs/fase4d-holm.json`).
+    Diferencia en la pAUC con el intervalo de Nadeau y Bengio al 95 % y el valor
+    p bilateral de la misma prueba (`comparaciones_nuevo_menos_base.pauc.media`,
+    `.intervalo_t_95_nadeau_bengio` y `.valor_p_nadeau_bengio`):
+    - C5 − M3 limpio, 10 semillas. C5 es C4 más la puntuación de la red
+      estandarizada por zona y edad, con ruido solo en el entrenamiento, y las
+      tres estandarizadas por conglomerado. pAUC +0,0039 [−0,005; 0,0127],
+      0,1659 frente a 0,1621, valor p 0,3859, mejor en 37 de 50 pliegues y 10
+      de 10 semillas.
+    - Red mejorada − red de la Fase 4c, 5 semillas: pAUC −0,0156
+      [−0,0318; 0,0005], 0,0923 frente a 0,1079, valor p 0,05741, mejor en 5
+      de 25 pliegues y 0 de 5 semillas. En el AUC, −0,027 [−0,0522; −0,0019],
+      el intervalo excluye el cero; en la sensibilidad top-15 y el NNT80% SE,
+      no.
+    - C6 − M3 limpio, 5 semillas. C6 es C5 con la red mejorada. pAUC +0,005
+      [−0,0031; 0,0131], 0,165 frente a 0,1601, valor p 0,2172, mejor en 19 de
+      25 pliegues y 5 de 5 semillas.
+
+    Holm compara los valores p, de menor a mayor, con 0,05/3, 0,05/2 y 0,05
+    (`fase4d-holm.json > preguntas`). El primero, el de la red mejorada, queda
+    por encima de 0,01667, así que Holm no acepta ninguna y ninguna da su
+    resultado a favor. Por la regla fijada antes de correr, ni C5 ni C6 mejoran a
+    M3 limpio, que sigue siendo el modelo recomendado, y la red mejorada no
+    mejora a la de la Fase 4c (`PLAN.md`, Fase 4d, «Resultado de la regla
+    (2026-10-31)»). Como ni C5 ni C6 dan su resultado a favor, no se midió su
+    tiempo de inferencia. En las tres métricas secundarias de C5 y de C6, el
+    intervalo contiene el cero.
+
+    *Salvedades:*
+    - **La red mejorada cambia dos cosas a la vez** frente a la de la Fase 4c:
+      15 épocas en lugar de 3, y los negativos en bloques, uno distinto en cada
+      época, en lugar de un sorteo nuevo de 20 por positivo en cada época
+      (`fase4c.py`, `EPOCAS` y `entrenar_y_puntuar`). Los dos cambios no se
+      separaron, así que su resultado no se atribuye a las épocas solas ni a
+      los bloques solos. Tarda una mediana de 697,7 s por red, frente a 270,1 s
+      (`fase4d-red-mejorada-vs-red.json > puntuaciones_de_las_redes`).
+      *Hipótesis, sin medir:* que con 15 épocas la red se sobreajuste. Ninguna
+      salida mide su desempeño época a época.
+    - **Las variables que C5 añade a C4** copian las celdas 17 y 19 del ganador
+      sin el hospital, ajustadas en el pliegue. El ruido no está en su código:
+      es la versión más simple, declarada (`PLAN.md`, Fase 4d, decisiones 4 a
+      6).
+      Las puntuaciones de la red se apilaron con los mismos pliegues, el atajo
+      de la Fase 4c.
+    - **Las semillas:** C5 usa 10, y la red mejorada y C6, 5. Por eso M3 limpio
+      da 0,1621 en una comparación y 0,1601 en la otra.
+    - **Cómo se eligieron:** las tres preguntas se eligieron conociendo las fases
+      4, 4b y 4c, y Holm corrige solo esas tres. Con ellas, la bitácora de
+      `PLAN.md` cuenta 16 comparaciones por la pAUC desde la Fase 4: 13
+      anteriores y estas 3 (Fase 4d, «Bitácora de intentos»).
+    - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
+      (Pendientes).
 
 ### Dónde se lee la fase vigente
 
@@ -1369,6 +1426,16 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
+- [ ] **La Fase 4d no está todavía en el informe, el README ni la demo**
+      (2026-10-31).
+      - **Dónde está:** el hallazgo 13 y `PLAN.md`, Fase 4d, con sus cifras de
+        `outputs/fase4d-*.json`.
+      - **Dónde falta:** `informe/borrador-v2.md`, el README e
+        `informe/demo.html`, con su copia `docs/index.html`. Se dejan para
+        después por decisión de la persona.
+      - **Qué hacer al añadirla:** regenerar `outputs/sintesis-verificacion.json`
+        y revisar, uno por uno, los números nuevos que pasen por coincidencia,
+        como al añadir las fases 4b y 4c.
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
@@ -1486,6 +1553,12 @@ números omitidos por su contexto»).*
 Antes, esas cifras habían estado desactualizadas —decían 331/291/13—, un
 caso de la cuarta clase del registro de incidentes (regla 6): una cifra
 derivada de `outputs/` que se quedó atrás sin que nada lo advirtiera.
+
+*Comprobado el 2026-10-31, al cerrar la Fase 4d:* recalculada sobre el mismo
+borrador, con los cinco `outputs/fase4d-*.json` en el corpus, la verificación
+da una salida idéntica a la versionada, en el `.json` y en el `.md`. La última
+corrida sigue al día, y no se regeneró: el borrador no tiene todavía la Fase 4d
+(Pendientes).
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
