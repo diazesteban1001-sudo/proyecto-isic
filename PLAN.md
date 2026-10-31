@@ -8,9 +8,9 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-10-30): fases 0 a 4, 4b y 4c, cerradas; ni la Fase
-4b ni la 4c cambiaron el modelo recomendado, M3 limpio; la Fase 4d, que sale de
-la retroalimentación del avance, está en curso, y la Fase 5 espera a que cierre;
+**Dónde está la ruta (2026-10-31): fases 0 a 4, 4b, 4c y 4d, cerradas; ni la
+Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
+cambiaron el modelo recomendado, M3 limpio, ni la especificación de la Fase 5;
 de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
@@ -32,7 +32,9 @@ si piden cambios de modelado, se hacen antes de abrir el reservado.
 instrucción del docente fue entregar el link al repositorio público, con al
 menos un 75 % de avance frente a los objetivos del primer corte. La condición
 deja de esperar una rúbrica.* *2026-10-30: la retroalimentación pidió acercarse
-al ganador antes de alquilar cómputo; es la Fase 4d.*
+al ganador antes de alquilar cómputo; es la Fase 4d.* *2026-10-31: la Fase 4d
+cerró por su regla sin que ninguna de sus tres preguntas diera su resultado a
+favor.*
 
 ## Cómo leer una puerta
 
@@ -1384,11 +1386,14 @@ añade a las dos de «Salida».
 
 ---
 
-## Fase 4d — Acercarse al ganador con estadística y con el equipo propio — EN CURSO
+## Fase 4d — Acercarse al ganador con estadística y con el equipo propio — CERRADA
 
-**Estado: EN CURSO (2026-10-30).** Su puerta, al final de la fase. La corrida
-está interrumpida a mitad de la pregunta 2: qué quedó hecho y cómo se reanuda,
-en «Estado de la corrida», justo antes de la puerta.
+**Estado: CERRADA (2026-10-31), por su puerta:** los tres `outputs/fase4d-*.json`
+de las preguntas, la decisión de Holm, los controles de la comparación, la
+bitácora al día y el resultado de la regla, escrito al final de esta fase. Holm
+no acepta ninguna de las tres preguntas: ni C5 ni C6 mejoran a M3 limpio, que
+sigue siendo el modelo recomendado, y la red mejorada no mejora a la de la Fase
+4c.
 
 **Decisión de la persona (2026-10-30).** El docente, en la retroalimentación
 del avance, planteó el reto: acercarse al ganador, o mejorarlo, con
@@ -1438,13 +1443,15 @@ la regla, cuando es otro, va en su columna.
 | Red sola | 4c | Red − Imagen | +0,0287 | [0,0006; 0,0569] | [−0,0037; 0,0611] | no mejora | `fase4c-red-sola-vs-imagen.json` |
 | C4 | 4c | C4 − M3 limpio | +0,0067 | [−0,0018; 0,0151] | [−0,003; 0,0164] | no mejora | `fase4c-c4-vs-m3limpio.json` |
 | C4 con validación interna | 4c, descriptiva | C4 interna − C4 con el atajo, semilla 0 | +0,0037 de media en 5 pliegues | — | — | sin intervalo; no decide | `fase4c-control-atajo.json` |
-| C5 | 4d | C5 − M3 limpio | +0,0039 | [−0,005; 0,0127] | valor p 0,3859, para Holm | espera a las preguntas 2 y 3 | `fase4d-c5-vs-m3limpio.json` |
-| Red mejorada | 4d | Red mejorada − Red de la 4c | por correr | | | | `fase4d-red-mejorada-vs-red.json` |
-| C6 | 4d | C6 − M3 limpio | por correr | | | | `fase4d-c6-vs-m3limpio.json` |
+| C5 | 4d | C5 − M3 limpio | +0,0039 | [−0,005; 0,0127] | Holm: valor p 0,3859 frente a 0,05 | no mejora | `fase4d-c5-vs-m3limpio.json` |
+| Red mejorada | 4d | Red mejorada − Red de la 4c | −0,0156 | [−0,0318; 0,0005] | Holm: valor p 0,05741 frente a 0,01667 | no mejora | `fase4d-red-mejorada-vs-red.json` |
+| C6 | 4d | C6 − M3 limpio | +0,005 | [−0,0031; 0,0131] | Holm: valor p 0,2172 frente a 0,025 | no mejora | `fase4d-c6-vs-m3limpio.json` |
 
 Los archivos están en `outputs/`. Las 13 comparaciones son las 14 filas
 anteriores a esta fase menos M1, que es una referencia. El intervalo de la regla
 es el de Bonferroni a 1 − 0,05/3 en la Fase 4b y a 1 − 0,05/2 en la 4c. En la
+4d la regla no usa un intervalo: la columna da el valor p de cada pregunta y su
+umbral de Holm (`outputs/fase4d-holm.json`). En la
 Fase 4, la regla de recomendación era la de M3 limpio − M2; las demás
 comparaciones de esa fase seguían su propio criterio, fijado antes de medir.
 
@@ -1611,31 +1618,6 @@ tienen los dos. De dónde salen las variables de la red de sus filas de
 entrenamiento se fija antes de abrir el reservado. Si ninguno lo da, la Fase 5
 no cambia.
 
-**Estado de la corrida (2026-10-30).** La persona la detuvo a las 21:09.
-- **Terminados y guardados:**
-  - los controles completos de las redes y de C5, 34 de 34, en
-    `data/fase4d-controles.json`, que no se versiona; su SHA-256 queda en cada
-    salida;
-  - la pregunta 1, en `outputs/fase4d-c5-vs-m3limpio.json`, que reproduce
-    pliegue a pliegue M3 limpio y C4. Su resultado se lee con la regla de Holm,
-    cuando estén las tres preguntas.
-- **La pregunta 2, a medias:** 11 de las 25 redes, en `data/fase4d-redes/`.
-  Son las semillas 0 y 1 completas y la semilla 2, pliegue 0, todas con el
-  SHA-256 del código commiteado y sin negativos repetidos entre épocas. La
-  semilla 2, pliegue 1, se estaba entrenando y se perdió sin escribir nada.
-- **Faltan:** 14 redes, unas 2 h 40 min a la mediana de 695 s por red; después,
-  las preguntas 2 y 3 y la regla de Holm.
-- **Cómo se reanuda:** `fase4d_redes.py` lee las partes hechas y entrena solo
-  las que faltan. Si cambió alguno de sus cinco archivos de código, se detiene
-  en vez de mezclar versiones. Los controles no se vuelven a correr: reescribirían
-  `data/fase4d-controles.json` con otro SHA-256, y `fase4d_holm.py` se
-  detendría porque las tres salidas no usaron los mismos controles. Desde la
-  raíz del repositorio:
-
-  ```bash
-  caffeinate -i bash -c 'set -o pipefail; S=.claude/skills/modelado-baseline/scripts; P=.venv/bin/python; echo "== redes, reanudación $(date)" && $P $S/fase4d_redes.py --controles data/fase4d-controles.json --partes-dir data/fase4d-redes --out data/fase4d-puntuaciones-red-mejorada.csv.gz && echo "== pregunta 2 $(date)" && $P $S/fase4d_comparar.py --pregunta 2 --out outputs/fase4d-red-mejorada-vs-red && echo "== pregunta 3 $(date)" && $P $S/fase4d_comparar.py --pregunta 3 --out outputs/fase4d-c6-vs-m3limpio && echo "== holm $(date)" && $P $S/fase4d_holm.py --out outputs/fase4d-holm; echo "== fin, salida $? $(date)"' >> data/fase4d-corrida.log 2>&1
-  ```
-
 **Puerta.** Los tres `outputs/fase4d-*.json` de las preguntas, la decisión de
 Holm, el archivo de controles de la comparación, la bitácora de intentos al día
 y la decisión que sale de la regla, escritos en este archivo.
@@ -1710,6 +1692,72 @@ Además se aplicaron estas precisiones de la verificación:
 - la bitácora completa, con M1, la imagen sola y el control del atajo;
 - la elección entre C5 y C6 en las semillas comunes;
 - y el costo estimado.
+
+**Controles, corridos antes de las preguntas.**
+- **Los de la comparación:** `test_fase4d_comparacion.py` completo, el
+  2026-10-30, con 19 de 19 casos como se esperaba
+  (`outputs/fase4d-controles-comparacion.json`).
+- **Los de las redes y de C5:** `test_fase4d_controles.py` completo, el mismo
+  día, antes de la pregunta 1 y de las redes. Dio 34 de 34 casos como se
+  esperaba, incluidos los que debían fallar, en 2.420,5 s
+  (`data/fase4d-controles.json`, que no se versiona). En la semilla 0, pliegue
+  0, sobre toda la validación:
+  - con las etiquetas barajadas, la red mejorada dio una pAUC de 0,0141,
+    dentro del rango del azar [0,0092; 0,0387];
+  - con las etiquetas reales dio 0,092, sin ningún negativo en dos épocas;
+  - sus dos entrenamientos dieron logits idénticos.
+
+  La red principal de ese pliegue da la misma pAUC, 0,092
+  (`outputs/fase4d-red-mejorada-vs-red.json`).
+- **Las reproducciones:** M3 limpio reprodujo pliegue a pliegue
+  `outputs/fase4-m3limpio-vs-m2.json` en las preguntas 1 y 3, C4 reprodujo
+  `outputs/fase4c-c4-vs-m3limpio.json` en la 1, y la red de la Fase 4c
+  reprodujo `outputs/fase4c-red-sola-vs-imagen.json` en la 2.
+- **Los mismos controles en todo:** las tres salidas registran los mismos dos
+  archivos de controles, con su SHA-256.
+
+**La corrida, en dos tandas.** La persona la detuvo el 2026-10-30 a las 21:09.
+Estaban terminadas la pregunta 1 y 11 de las 25 redes, guardadas en
+`data/fase4d-redes/`: las semillas 0 y 1 completas y la semilla 2, pliegue 0.
+La red que se entrenaba, semilla 2, pliegue 1, no había escrito nada. El 2026-10-31 se
+reanudó con el mismo código commiteado:
+- las 11 redes se leyeron sin volver a entrenarlas, después de comprobar el
+  SHA-256 de su código y de sus puntuaciones;
+- se entrenaron las 14 restantes;
+- los controles no se volvieron a correr.
+
+La procedencia de las puntuaciones registra el comando de la segunda tanda, y
+su `segundos_total`, 9.805,6 s, es solo el de esa tanda.
+
+**Tiempo de cada entrenamiento.** Por red, con su predicción: mediana 697,7 s,
+de 682,3 a 802,2 s (`data/fase4d-puntuaciones-red-mejorada.json >
+segundos_por_red`), frente a los 710 s estimados. Las 25 redes, 17.581,9 s en
+total.
+
+**Resultado de la regla (2026-10-31).** Holm sobre los valores p bilaterales de
+Nadeau y Bengio de la pAUC (`outputs/fase4d-holm.json`), de menor a mayor:
+- pregunta 2, red mejorada − red de la Fase 4c: −0,0156 [−0,0318; 0,0005];
+  valor p 0,05741 frente a 0,05/3 = 0,01667
+  (`outputs/fase4d-red-mejorada-vs-red.json`);
+- pregunta 3, C6 − M3 limpio: +0,005 [−0,0031; 0,0131]; valor p 0,2172 frente
+  a 0,025 (`outputs/fase4d-c6-vs-m3limpio.json`);
+- pregunta 1, C5 − M3 limpio: +0,0039 [−0,005; 0,0127]; valor p 0,3859 frente
+  a 0,05 (`outputs/fase4d-c5-vs-m3limpio.json`).
+
+La primera no pasa su umbral, así que Holm se detiene ahí y no acepta ninguna;
+las otras dos también quedan por encima del suyo. Ninguna da su resultado a
+favor. Por la regla:
+- ni C5 ni C6 mejoran a M3 limpio, que sigue siendo el modelo recomendado;
+- la especificación de la Fase 5 no cambia;
+- no se mide el tiempo de inferencia de C5 ni de C6;
+- la red mejorada no mejora a la red de la Fase 4c.
+
+En especificidad media, la pAUC dividida por 0,2, las diferencias de las
+preguntas 2, 3 y 1 son −0,0782, +0,025 y +0,0193
+(`comparaciones_nuevo_menos_base.pauc.en_especificidad_media`).
+Las tres métricas secundarias están en los tres archivos, con su intervalo y su
+valor p, y no deciden. Solo una tiene un intervalo que excluye el cero: el AUC
+de la pregunta 2, −0,027 [−0,0522; −0,0019].
 
 ---
 
