@@ -1,0 +1,145 @@
+{
+  "que_es": "La regla de la Fase 4d de PLAN.md: Holm sobre los valores p bilaterales de Nadeau y Bengio de la pAUC de las tres preguntas; a favor si Holm la acepta y la diferencia media es positiva.",
+  "alfa": 0.05,
+  "preguntas": [
+    {
+      "pregunta": 1,
+      "valor_p": 0.3859285047466606,
+      "media": 0.0038554990716077203,
+      "orden_holm": 3,
+      "umbral_holm": 0.05,
+      "aceptada_por_holm": false,
+      "media_positiva": true,
+      "a_favor": false,
+      "archivo": "outputs/fase4d-c5-vs-m3limpio.json",
+      "sha256": "562269e65fd3325bb820c493fa511ec7b5cf00bd477486eab2466d92f62371fc",
+      "comparacion": {
+        "nuevo": "C5",
+        "base": "M3limpio"
+      },
+      "semillas": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "media_redondeada": 0.0039,
+      "intervalo_t_95_nadeau_bengio": [
+        -0.005,
+        0.0127
+      ],
+      "en_especificidad_media": {
+        "media": 0.0193,
+        "intervalo_t_95_nadeau_bengio": [
+          -0.025,
+          0.0636
+        ]
+      }
+    },
+    {
+      "pregunta": 2,
+      "valor_p": 0.05741210001599424,
+      "media": -0.015640182865985387,
+      "orden_holm": 1,
+      "umbral_holm": 0.016666666666666666,
+      "aceptada_por_holm": false,
+      "media_positiva": false,
+      "a_favor": false,
+      "archivo": "outputs/fase4d-red-mejorada-vs-red.json",
+      "sha256": "deda8f8ec0ae7b5d15202826affba503453e36281bd088a9dc290887f9dfe6cb",
+      "comparacion": {
+        "nuevo": "RedMejorada",
+        "base": "Red"
+      },
+      "semillas": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "media_redondeada": -0.0156,
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0318,
+        0.0005
+      ],
+      "en_especificidad_media": {
+        "media": -0.0782,
+        "intervalo_t_95_nadeau_bengio": [
+          -0.1591,
+          0.0027
+        ]
+      }
+    },
+    {
+      "pregunta": 3,
+      "valor_p": 0.21719648529316662,
+      "media": 0.004996487687103696,
+      "orden_holm": 2,
+      "umbral_holm": 0.025,
+      "aceptada_por_holm": false,
+      "media_positiva": true,
+      "a_favor": false,
+      "archivo": "outputs/fase4d-c6-vs-m3limpio.json",
+      "sha256": "f594a1c0aa9aac34e27d484a54efcd2543ce159dab37e372d609c57ae6cfaf36",
+      "comparacion": {
+        "nuevo": "C6",
+        "base": "M3limpio"
+      },
+      "semillas": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "media_redondeada": 0.005,
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0031,
+        0.0131
+      ],
+      "en_especificidad_media": {
+        "media": 0.025,
+        "intervalo_t_95_nadeau_bengio": [
+          -0.0157,
+          0.0657
+        ]
+      }
+    }
+  ],
+  "a_favor": {
+    "1": false,
+    "2": false,
+    "3": false
+  },
+  "si_c5_y_c6_dan_su_resultado_a_favor": null,
+  "controles": {
+    "comparacion": {
+      "archivo": "outputs/fase4d-controles-comparacion.json",
+      "casos": 19,
+      "fallos": 0,
+      "sha256": "18fda916d5a82ef2abf1ebb1389be9c502dd9e79a902a60b1917ba7d4f6a4ec5"
+    },
+    "redes_y_c5": {
+      "archivo": "data/fase4d-controles.json",
+      "casos": 34,
+      "fallos": 0,
+      "sha256": "cdb925d90ed6d54b4c539b2ab5ab3e9d805f83ccd1c607dd995f5cce5407fa61"
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4d_holm.py",
+      "--out",
+      "outputs/fase4d-holm"
+    ]
+  },
+  "nota": "Aplica la regla tal como la fija PLAN.md. No interpreta."
+}
