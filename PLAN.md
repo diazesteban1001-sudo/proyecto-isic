@@ -1386,7 +1386,9 @@ añade a las dos de «Salida».
 
 ## Fase 4d — Acercarse al ganador con estadística y con el equipo propio — EN CURSO
 
-**Estado: EN CURSO (2026-10-30).** Su puerta, al final de la fase.
+**Estado: EN CURSO (2026-10-30).** Su puerta, al final de la fase. La corrida
+está interrumpida a mitad de la pregunta 2: qué quedó hecho y cómo se reanuda,
+en «Estado de la corrida», justo antes de la puerta.
 
 **Decisión de la persona (2026-10-30).** El docente, en la retroalimentación
 del avance, planteó el reto: acercarse al ganador, o mejorarlo, con
@@ -1436,7 +1438,7 @@ la regla, cuando es otro, va en su columna.
 | Red sola | 4c | Red − Imagen | +0,0287 | [0,0006; 0,0569] | [−0,0037; 0,0611] | no mejora | `fase4c-red-sola-vs-imagen.json` |
 | C4 | 4c | C4 − M3 limpio | +0,0067 | [−0,0018; 0,0151] | [−0,003; 0,0164] | no mejora | `fase4c-c4-vs-m3limpio.json` |
 | C4 con validación interna | 4c, descriptiva | C4 interna − C4 con el atajo, semilla 0 | +0,0037 de media en 5 pliegues | — | — | sin intervalo; no decide | `fase4c-control-atajo.json` |
-| C5 | 4d | C5 − M3 limpio | por correr | | | | `fase4d-c5-vs-m3limpio.json` |
+| C5 | 4d | C5 − M3 limpio | +0,0039 | [−0,005; 0,0127] | valor p 0,3859, para Holm | espera a las preguntas 2 y 3 | `fase4d-c5-vs-m3limpio.json` |
 | Red mejorada | 4d | Red mejorada − Red de la 4c | por correr | | | | `fase4d-red-mejorada-vs-red.json` |
 | C6 | 4d | C6 − M3 limpio | por correr | | | | `fase4d-c6-vs-m3limpio.json` |
 
@@ -1608,6 +1610,31 @@ elige el de mayor diferencia media en la pAUC en las semillas 0 a 4, las que
 tienen los dos. De dónde salen las variables de la red de sus filas de
 entrenamiento se fija antes de abrir el reservado. Si ninguno lo da, la Fase 5
 no cambia.
+
+**Estado de la corrida (2026-10-30).** La persona la detuvo a las 21:09.
+- **Terminados y guardados:**
+  - los controles completos de las redes y de C5, 34 de 34, en
+    `data/fase4d-controles.json`, que no se versiona; su SHA-256 queda en cada
+    salida;
+  - la pregunta 1, en `outputs/fase4d-c5-vs-m3limpio.json`, que reproduce
+    pliegue a pliegue M3 limpio y C4. Su resultado se lee con la regla de Holm,
+    cuando estén las tres preguntas.
+- **La pregunta 2, a medias:** 11 de las 25 redes, en `data/fase4d-redes/`.
+  Son las semillas 0 y 1 completas y la semilla 2, pliegue 0, todas con el
+  SHA-256 del código commiteado y sin negativos repetidos entre épocas. La
+  semilla 2, pliegue 1, se estaba entrenando y se perdió sin escribir nada.
+- **Faltan:** 14 redes, unas 2 h 40 min a la mediana de 695 s por red; después,
+  las preguntas 2 y 3 y la regla de Holm.
+- **Cómo se reanuda:** `fase4d_redes.py` lee las partes hechas y entrena solo
+  las que faltan. Si cambió alguno de sus cinco archivos de código, se detiene
+  en vez de mezclar versiones. Los controles no se vuelven a correr: reescribirían
+  `data/fase4d-controles.json` con otro SHA-256, y `fase4d_holm.py` se
+  detendría porque las tres salidas no usaron los mismos controles. Desde la
+  raíz del repositorio:
+
+  ```bash
+  caffeinate -i bash -c 'set -o pipefail; S=.claude/skills/modelado-baseline/scripts; P=.venv/bin/python; echo "== redes, reanudación $(date)" && $P $S/fase4d_redes.py --controles data/fase4d-controles.json --partes-dir data/fase4d-redes --out data/fase4d-puntuaciones-red-mejorada.csv.gz && echo "== pregunta 2 $(date)" && $P $S/fase4d_comparar.py --pregunta 2 --out outputs/fase4d-red-mejorada-vs-red && echo "== pregunta 3 $(date)" && $P $S/fase4d_comparar.py --pregunta 3 --out outputs/fase4d-c6-vs-m3limpio && echo "== holm $(date)" && $P $S/fase4d_holm.py --out outputs/fase4d-holm; echo "== fin, salida $? $(date)"' >> data/fase4d-corrida.log 2>&1
+  ```
 
 **Puerta.** Los tres `outputs/fase4d-*.json` de las preguntas, la decisión de
 Holm, el archivo de controles de la comparación, la bitácora de intentos al día
