@@ -1,0 +1,300 @@
+{
+  "que_es": "Prueba de tiempo de la red de la Fase 4e de PLAN.md, en la semilla 0, pliegue 0, y proyección del total de la fase. No calcula ninguna métrica: los logits de validación se descartan y sus etiquetas no se leen.",
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "pliegues": {
+    "semilla": 0,
+    "pliegue": 0,
+    "huella_de": "outputs/fase4-m2-vs-m1.json",
+    "filas_entrenamiento": 254583,
+    "filas_validacion": 63646
+  },
+  "receta": {
+    "epocas": 20,
+    "conjuntos_de_negativos": 20,
+    "lote": 64,
+    "tasa": 0.0005,
+    "decaimiento": 0.0005,
+    "pct_inicio": 0.1,
+    "lado_px": 128,
+    "lado_previo_px": 144,
+    "aumentos": [
+      {
+        "nombre": "Resize",
+        "size": [
+          144,
+          144
+        ],
+        "max_size": null,
+        "interpolation": "InterpolationMode.BILINEAR",
+        "antialias": true
+      },
+      {
+        "nombre": "RandomResizedCrop",
+        "size": [
+          128,
+          128
+        ],
+        "interpolation": "InterpolationMode.BILINEAR",
+        "antialias": true,
+        "scale": [
+          0.8,
+          1.2
+        ],
+        "ratio": [
+          0.75,
+          1.3333
+        ]
+      },
+      {
+        "nombre": "RandomHorizontalFlip",
+        "p": 0.5
+      },
+      {
+        "nombre": "RandomVerticalFlip",
+        "p": 0.5
+      },
+      {
+        "nombre": "RandomApply",
+        "p": 0.5,
+        "dentro": [
+          {
+            "nombre": "RandomRotation",
+            "degrees": [
+              -45.0,
+              45.0
+            ],
+            "center": null,
+            "interpolation": "InterpolationMode.NEAREST",
+            "expand": false,
+            "fill": 0
+          }
+        ]
+      },
+      {
+        "nombre": "RandomApply",
+        "p": 0.5,
+        "dentro": [
+          {
+            "nombre": "ColorJitter",
+            "brightness": [
+              0.5,
+              1.5
+            ],
+            "contrast": [
+              0.5,
+              1.5
+            ],
+            "saturation": null,
+            "hue": null
+          }
+        ]
+      },
+      {
+        "nombre": "RandomApply",
+        "p": 0.3,
+        "dentro": [
+          {
+            "nombre": "GaussianBlur",
+            "kernel_size": [
+              3,
+              3
+            ],
+            "sigma": [
+              0.1,
+              2.0
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "ToTensor"
+      },
+      {
+        "nombre": "Normalize",
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "inplace": false
+      }
+    ],
+    "prediccion": [
+      {
+        "nombre": "Resize",
+        "size": [
+          128,
+          128
+        ],
+        "max_size": null,
+        "interpolation": "InterpolationMode.BILINEAR",
+        "antialias": true
+      },
+      {
+        "nombre": "ToTensor"
+      },
+      {
+        "nombre": "Normalize",
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "inplace": false
+      }
+    ],
+    "trabajadores": 6,
+    "precision": "float32"
+  },
+  "entrenamiento": {
+    "semilla": 0,
+    "positivos": 254,
+    "negativos": "conjuntos",
+    "conjuntos": 20,
+    "tamano_de_los_conjuntos": {
+      "minimo": 12716,
+      "maximo": 12717
+    },
+    "negativos_del_pliegue": 254329,
+    "negativos_en_mas_de_una_epoca": 0,
+    "imagenes_por_epoca": [
+      12971,
+      12971,
+      12971,
+      12971,
+      12971,
+      12971,
+      12971,
+      12971,
+      12971,
+      12970,
+      12970,
+      12970,
+      12970,
+      12970,
+      12970,
+      12970,
+      12970,
+      12970,
+      12970,
+      12970
+    ],
+    "epocas": 20,
+    "epocas_corridas": 2,
+    "pasos_del_calendario": 4060,
+    "trabajadores": 6,
+    "filas_puntuadas": 0,
+    "segundos_por_epoca": [
+      90.643,
+      77.435
+    ],
+    "segundos_esperando_datos_por_epoca": [
+      11.168,
+      0.144
+    ],
+    "segundos_prediccion": 0.0,
+    "segundos_total": 198.704,
+    "sha256_pesos_imagenet": "7f5810bc96def8f7552d5b7e68d53c4786f81167d28291b21c0d90e1fca14934",
+    "pesos_guardados": null,
+    "sha256_pesos_guardados": null
+  },
+  "prediccion": {
+    "filas": 63646,
+    "segundos": 152.653,
+    "segundos_por_1000": 2.398,
+    "lote": 256
+  },
+  "memoria_mps_bytes": {
+    "entrenando": 1192968192,
+    "prediciendo": 3343663104
+  },
+  "proyeccion": {
+    "supuestos": [
+      "cada época de las 20 tarda la mediana de las medidas sin la primera, 77.435 s; la primera incluye el arranque de los procesos, 13.208 s, que se suma una vez por red",
+      "los pliegues de las otras semillas tienen el tamaño de este; la predicción de cada red, la medida aquí",
+      "el ajuste fino son 2 épocas del tamaño de una de entrenamiento y una predicción, por red, en la exploración y, si se elige, en la confirmación: es el caso más caro",
+      "controles de la red: 2 redes completas, 2 de 2 épocas y 2 predicciones más",
+      "C7 y las comparaciones, la mediana por semilla de C6 en outputs/fase4d-c6-vs-m3limpio.json, 91.1 s"
+    ],
+    "segundos_por_red": 1714.6,
+    "segundos_por_ajuste_fino": 307.5,
+    "con_5_semillas": {
+      "horas": 18.19,
+      "partes_en_horas": {
+        "controles_de_la_red": 1.22,
+        "exploracion_5_redes": 2.38,
+        "ajuste_fino_de_la_exploracion": 0.43,
+        "confirmacion_25_redes": 11.91,
+        "ajuste_fino_de_la_confirmacion_25_redes": 2.14,
+        "c7_y_comparaciones": 0.13
+      }
+    },
+    "con_3_semillas": {
+      "horas": 12.53,
+      "partes_en_horas": {
+        "controles_de_la_red": 1.22,
+        "exploracion_5_redes": 2.38,
+        "ajuste_fino_de_la_exploracion": 0.43,
+        "confirmacion_15_redes": 7.14,
+        "ajuste_fino_de_la_confirmacion_15_redes": 1.28,
+        "c7_y_comparaciones": 0.08
+      }
+    },
+    "limite_horas": 45
+  },
+  "regla_de_las_semillas": {
+    "semillas_de_confirmacion": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "arranca": true,
+    "motivo": "PLAN.md, Fase 4e, «Regla de las semillas de confirmación»: 5 si la proyección cabe en 45 horas, 3 si no; si tampoco con 3, la fase no arranca y decide la persona."
+  },
+  "equipo": {
+    "chip": "Apple M4",
+    "memoria_bytes": 17179869184,
+    "nucleos": 10,
+    "dispositivo": "mps"
+  },
+  "software": {
+    "python": "3.11.9",
+    "torch": "2.14.0",
+    "torchvision": "0.29.0",
+    "numpy": "2.4.6",
+    "pillow": "12.3.0"
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/prueba_tiempo_red_4e.py",
+      "--epocas-medidas",
+      "2",
+      "--out",
+      "outputs/prueba-tiempo-red-4e"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "este proceso"
+    }
+  },
+  "fecha": "2026-11-01T04:18:54.068012+00:00",
+  "segundos_corrida_total": 354.4
+}
