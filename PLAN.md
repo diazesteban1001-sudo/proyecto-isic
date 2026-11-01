@@ -11,7 +11,8 @@ salida, y qué hacer cuando algo no se pueda cerrar.
 **Dónde está la ruta (2026-10-31): fases 0 a 4, 4b, 4c y 4d, cerradas; ni la
 Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
 cambiaron el modelo recomendado, M3 limpio, ni la especificación de la Fase 5;
-de la Fase 6 hay trabajo hecho.** De la Fase 6:
+la Fase 4e, la receta de imagen del 10.º puesto, está en curso y sin correr, y
+la Fase 5 espera a que cierre; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -34,7 +35,8 @@ menos un 75 % de avance frente a los objetivos del primer corte. La condición
 deja de esperar una rúbrica.* *2026-10-30: la retroalimentación pidió acercarse
 al ganador antes de alquilar cómputo; es la Fase 4d.* *2026-10-31: la Fase 4d
 cerró por su regla sin que ninguna de sus tres preguntas diera su resultado a
-favor.*
+favor.* *2026-10-31: la persona abrió la Fase 4e, diez días de trabajo con el
+equipo propio sobre la red de imagen.*
 
 ## Cómo leer una puerta
 
@@ -1758,6 +1760,318 @@ preguntas 2, 3 y 1 son −0,0782, +0,025 y +0,0193
 Las tres métricas secundarias están en los tres archivos, con su intervalo y su
 valor p, y no deciden. Solo una tiene un intervalo que excluye el cero: el AUC
 de la pregunta 2, −0,027 [−0,0522; −0,0019].
+
+---
+
+## Fase 4e — La receta de imagen del 10.º puesto, con el equipo propio — EN CURSO
+
+**Estado: EN CURSO (2026-10-31), sin correr.** Su puerta, al final de la fase.
+Antes de la exploración van la prueba de tiempo, la comprobación de LibAUC y los
+controles, y la persona da la orden de arrancar.
+
+**Decisión de la persona (2026-10-31).** Al cerrar la Fase 4d, la persona
+decidió dedicar diez días de trabajo a buscar, con su propio equipo, una mejora
+de la red de imagen. Al terminar se decide si se usa cómputo aparte. El
+conjunto reservado sigue cerrado durante toda la fase. Como en las fases 4b, 4c
+y 4d, el modelo recomendado y la especificación de la Fase 5 pasan a depender
+de esta fase. La fase sale de un borrador escrito en la conversación, verificado
+frase por frase contra este archivo, `outputs/`, `referencias/` y el código del
+10.º puesto antes de entrar aquí; lo que no se sostuvo está corregido abajo, en
+«Cómo quedó la verificación».
+
+**Cuarta ronda, declarada.** Es la cuarta vez que se reabre la regla «Solo esta
+corrida» de la Fase 4. Las preguntas se eligieron conociendo los resultados de
+las fases 4 a 4d, incluido que la red mejorada de la 4d, con 15 épocas y los
+negativos en bloques, quedó por debajo de la red de la 4c en la media de la
+pAUC, 0,0923 frente a 0,1079, sin que Holm aceptara la diferencia
+(`outputs/fase4d-red-mejorada-vs-red.json`). Hasta esta fase la bitácora suma 16
+comparaciones. Las preguntas se fijan aquí antes de correr, se corrige por
+multiplicidad dentro de la fase y no se añaden preguntas después de ver
+resultados.
+
+**Por qué esta receta.**
+- **La distancia.** El 10.º puesto, con la misma EfficientNet-B0 y la misma
+  entrada de 128 píxeles, reporta para su red de imagen *"CV=0.152"* con el
+  patrón 1 de aumentos y *"CV=0.156"* con el patrón 2
+  (`referencias/tomo20180402-2024-isic2024-10mo-puesto.md`). La red de la Fase
+  4c da 0,1083 en las 10 semillas (`outputs/fase4c-red-sola-vs-imagen.json`).
+  La comparación es indicativa, no una prueba: el autor valida sobre todo el
+  conjunto de entrenamiento del reto, que incluye a los pacientes que este
+  proyecto reservó, y con sus propias particiones. Sí agrupa por paciente
+  (`scripts/common_training.py`, `StratifiedGroupKFold` por `patient_id`). Su
+  código calcula dos pAUC: una en cada época, sobre una submuestra de
+  validación de hasta 50 negativos por paciente, con la que elige la «mejor
+  época», y otra al final sobre todo el pliegue (`scripts/image_training.py`,
+  `all_pauc`). El README no dice cuál de las dos es su `CV=`.
+- **Lo que la 4d copió y lo que no.** La pregunta 2 de la Fase 4d tomó del
+  README dos ideas, cambiar de negativos en cada época y fijar las épocas, y
+  dejó fuera el resto. El código del autor, en el mismo commit que la ficha,
+  muestra qué más cambia frente a la red de la 4c:
+  - aumentos fuertes en el entrenamiento, no solo volteos
+    (`scripts/image_dataset.py`, `generate_train_transforms`);
+  - tasa 0,0005 con decaimiento de pesos 0,0005 y calendario OneCycle, con un
+    10 % de calentamiento y descenso en coseno (`scripts/image_training.py`,
+    líneas 120 y 121), frente a la tasa fija de 0,0001 de la 4c;
+  - 20 épocas (`scripts/config.py`, `N_EPOCH = 20`).
+
+  El decaimiento de pesos del autor, 0,0005, es menor que el 0,01 que la red de
+  la 4c recibe por defecto de AdamW: lo que regulariza su receta son los
+  aumentos, no el decaimiento. *Lectura nuestra, no medida:* la 4d cambió las
+  épocas y los negativos sin los aumentos del autor; esta fase prueba la receta
+  completa.
+- **El README y el código no dicen lo mismo sobre los negativos.** El README
+  dice *"divide into 20 datasets and switch for each epoch (n_epoch=20)"*. El
+  código de ese commit no reparte los negativos en conjuntos: en cada época
+  baraja los del pliegue de entrenamiento y toma hasta 50 por paciente
+  (`.groupby('patient_id').head(50)`). Ese tope es la estrategia 6 del README,
+  *"Train up to 50 negative samples per patient"*, que el autor da como la
+  variante que empeoró: *"cv=0.182"* frente a *"CV=0.183"*. Su commit «fix:
+  remove data cut» quitó ese mismo tope en la segunda etapa y no en la de
+  imagen. *Lectura nuestra:* el código de imagen publicado sería la variante de
+  la estrategia 6. **Esta fase sigue el README**, con una implementación nuestra,
+  porque el esquema de 20 conjuntos no está en el código (decisión de la
+  persona, 2026-10-31). La ficha registra la discrepancia, con las citas.
+  *La pregunta 2 de la Fase 4d citó la frase del README como origen de sus
+  bloques; eso no cambia.*
+
+**Qué se entrena: la red de la 4e.** Lo que no se nombra aquí es igual a la red
+de la Fase 4c (`fase4c.py`): EfficientNet-B0 con los pesos de ImageNet ya
+verificados para la Fase 2 (`referencias/efficientnet-b0-preentrenamiento.md`),
+entrada de 128 × 128, lote de 64, precisión float32 y la predicción sobre todo
+el pliegue de validación. El lote y la precisión coinciden con los del autor
+(`scripts/config.py`, `BS = 64`; su código no usa precisión mixta).
+- **Negativos por época: como el README.** Los negativos del pliegue de
+  entrenamiento se reparten al azar, con la semilla externa, en 20 conjuntos de
+  tamaño casi igual, y cada época usa uno, durante 20 épocas: al terminar, la
+  red vio cada negativo una vez. En cada época entran también todos los
+  positivos del pliegue de entrenamiento, como en el código del autor (*"train
+  all pos"*). La implementación es nuestra; el código del autor hace
+  `head(50)` por paciente, y su README da esa variante como la que empeoró.
+- **Aumentos: el patrón 2 del autor** (`scripts/image_dataset.py`,
+  `train_transform_p2`): redimensionar a 144 × 144, recorte aleatorio a 128 con
+  `scale=(0.8, 1.2)` y `ratio=(0.75, 1.3333)`, volteo horizontal y vertical con
+  probabilidad 0,5 cada uno, rotación de hasta 45° con probabilidad 0,5, brillo
+  y contraste de 0,5 con probabilidad 0,5, desenfoque gaussiano de núcleo 3 con
+  probabilidad 0,3, y la normalización de ImageNet. Se elige el patrón 2 y no
+  el 1 porque su CV reportada es la mayor de las dos y porque usa torchvision,
+  que ya está en el `.venv/`; el patrón 1 necesita albumentations, que no está.
+- **Interpolación bilineal, al entrenar y al predecir, como el autor.** Sus
+  redimensiones son las de torchvision por defecto, bilineales; al predecir,
+  redimensionar a 128 y normalizar (`valid_transform_p2`). La red de la 4c
+  redimensiona con bicúbica: es una diferencia con ella, declarada.
+- **Optimizador y calendario:** AdamW con tasa 0,0005 y decaimiento de pesos
+  0,0005; OneCycle con `max_lr=0.0005`, `pct_start=0.1` y
+  `anneal_strategy='cos'`, y los demás argumentos por defecto, como en el
+  código del autor. Por defecto, OneCycle empieza en la tasa máxima dividida por
+  25, termina en esa tasa inicial dividida por 10⁴ y hace ciclar el β1 de
+  AdamW entre 0,85 y 0,95. El calendario avanza en cada lote, y su número total de pasos es el de
+  los lotes de las 20 épocas.
+- **Épocas:** 20, fijas, sin mirar la validación entre épocas. La red que
+  puntúa es la de la última época, no la mejor: el autor reporta también la de
+  la mejor época (*"selecting the best epoch yields CV=0.159"*), que se elige
+  con las etiquetas de validación, y esta fase no la usa (regla de la décima
+  clase del registro de incidentes).
+- **Diferencias con el autor, declaradas:**
+  - los pesos de ImageNet son los de torchvision ya verificados, no los de
+    timm;
+  - la EfficientNet-B0 de torchvision lleva dropout de 0,2 antes de la capa de
+    salida y profundidad estocástica creciente hasta 0,1875 (comprobado en el
+    `.venv/`); el autor usa la de timm, con la capa de salida cambiada por una
+    lineal, y si timm añade dropout o profundidad estocástica por defecto no se
+    comprobó, porque timm no está instalado;
+  - la salida es un logit con `BCEWithLogitsLoss`, no dos clases con entropía
+    cruzada: es la misma pérdida en función de la diferencia de los dos logits,
+    salvo en cómo actúa el decaimiento de pesos sobre la capa de salida;
+  - los aumentos que se aplican con una probabilidad usan `RandomApply` de
+    torchvision, con el generador de torch, y no la clase del autor, que usa el
+    módulo `random` de Python: hacen lo mismo con otro generador;
+  - las particiones son las de este proyecto.
+- **Los pesos de cada red** se guardan en `data/`, que no se versiona: los
+  necesita el ajuste fino de abajo.
+
+**Exploración, semilla 0 (descriptiva).** La red de la 4e se entrena en los 5
+pliegues de la semilla 0, los de `construir_folds`, y se compara pliegue a
+pliegue con la red de la 4c en esa misma semilla, que ya está guardada. La
+exploración no da un resultado a favor por sí sola: solo decide si se gasta la
+confirmación. Sus filas entran a la bitácora como descriptivas.
+- **Paso 1 · La receta.** ¿Supera la red de la 4e a la de la 4c en al menos 4
+  de los 5 pliegues de la semilla 0, en la pAUC? Si no, la fase se detiene
+  aquí, no se confirma nada y se registra que la receta del 10.º no reprodujo
+  su ventaja en estos datos y con este equipo.
+- **Paso 2 · Ajuste fino con la métrica del reto (condicional).** Si el paso 1
+  pasa y LibAUC instala y corre en MPS (abajo), cada red de la semilla 0 se
+  ajusta 2 épocas más con una pérdida de pAUC unilateral, `pAUC_CVaR_Loss` de
+  LibAUC con β = 0,2, sobre las clases invertidas: lo benigno pasa a ser la
+  clase positiva y la puntuación se niega. Con esa inversión, la región que la
+  pérdida optimiza tendría que ser la de la métrica del reto, porque el script
+  oficial también invierte las etiquetas (registro de incidentes, séptima
+  fila). *Esto se comprueba ejecutando, no razonando* (controles). El
+  protocolo de preentrenar con entropía cruzada y después ajustar con la
+  pérdida de pAUC se atribuye a Zhu et al. (ICML 2022); se comprueba contra su
+  texto y se versiona antes de citarlo, solo si corre el paso 2. Sus ajustes
+  —optimizador, tasa, muestreo de los lotes y margen— se fijan antes de la
+  exploración. Si el ajuste fino supera a la red sin ajustar en al menos 4 de
+  los 5 pliegues, la confirmación usa la red ajustada; si no, la red sin
+  ajustar. Si la librería no instala, no corre en MPS o el control de la región
+  falla, el paso 2 se cae, y se registra por qué.
+
+**Confirmación, semillas 5 a 9 o 5 a 7.** Solo si el paso 1 pasa. La receta
+elegida se entrena en los pliegues de las semillas de confirmación, 25 con 5
+semillas o 15 con 3 (regla de abajo). La red de la 4c y M3 limpio ya están
+calculados en ellas. **Las semillas de confirmación no son datos nuevos.**
+Ninguna red de la Fase 4d ni la exploración usan esas particiones, pero sí las
+usaron las fases 4, 4b y 4c y la pregunta 1 de la 4d, que corrieron las
+semillas 0 a 9. Además, todas las semillas reparten a los mismos pacientes: la
+confirmación y la exploración comparten lesiones y etiquetas, así que las
+elecciones de los pasos 1 y 2 no son independientes de la confirmación. Se
+declara como sesgo del resultado.
+- **Pregunta 1 · La red de la 4e frente a la red de la 4c**, sola, en los
+  mismos pliegues, en las cuatro métricas. Informa la recomendación para el
+  escenario sin sistema de fotografía corporal total, pero no la cambia, como en
+  las fases 4c y 4d: hoy esa recomendación es la imagen con edad, sexo y zona
+  del cuerpo (`informe/borrador-v2.md`, «Qué se recomienda»), y la pregunta 1 no
+  se compara con ella.
+- **Pregunta 2 · C7 frente a M3 limpio.** C7 es C4 con la red de la 4e en lugar
+  de la red de la 4c: las mismas dos variables, la puntuación y su razón a la
+  media del paciente, y el mismo atajo declarado de apilar con los mismos
+  pliegues. Se elige la forma de C4 y no la de C5 porque es la más simple, y
+  porque C5 quedó por debajo de C4 en la media de la pAUC, 0,1659 frente a
+  0,1687 (`outputs/fase4d-c5-vs-m3limpio.json` y
+  `outputs/fase4c-c4-vs-m3limpio.json`), sin comparación directa entre las dos.
+  La elección se hizo conociendo los resultados de la 4d, y se declara.
+
+**Regla de las semillas de confirmación, fijada antes de correr y solo por
+costo (decisión de la persona, 2026-10-31).** Si la prueba de tiempo proyecta
+que la fase cabe en 45 horas de equipo con 5 semillas de confirmación, de la 5
+a la 9, se confirma con 5. Si no, con 3, de la 5 a la 7. Motivo: más semillas
+dan más potencia a la confirmación, y el único motivo para usar menos es el
+costo; la regla depende solo de la proyección de horas, que se calcula antes de
+ver ningún resultado. Si tampoco con 3 cabe en 45 horas, la fase no arranca y
+la persona decide (abajo).
+
+**Regla, fijada antes de correr.** La misma de la Fase 4d con dos preguntas: el
+valor p bilateral de Nadeau y Bengio de la pAUC de cada pregunta, Holm a 0,05/2
+y 0,05, y una pregunta da su resultado a favor si Holm la acepta y su
+diferencia media es positiva. Las tres métricas secundarias se reportan con su
+intervalo y no deciden.
+- Si la pregunta 2 da a favor: C7 pasa a ser el modelo recomendado, se mide su
+  tiempo de inferencia con el procedimiento de `tiempo-inferencia`, red
+  incluida, y la especificación de la Fase 5 se reescribe para C7, con M3
+  limpio como referencia, antes de abrir el reservado.
+- Si solo la pregunta 1 da a favor: M3 limpio sigue siendo el recomendado, y el
+  resultado informa la recomendación para el escenario sin fotografía corporal
+  total, sin cambiarla.
+- Si ninguna da a favor: nada cambia, y la fase se cierra con su resultado.
+
+**Lectura declarada de antemano.** La nota de trabajo de la investigación
+(`informe/insumos/investigacion-acercarse-al-ganador.md`) estima que, aun con
+una red de imagen mucho mejor, el apilado ganaría poco, por debajo de lo que
+el diseño de 10 semillas distingue. Es una inferencia de esa nota, marcada [I],
+no una medición. Se escribe aquí para que un resultado nulo en la pregunta 2 no
+se lea después como sorpresa, ni uno a favor en la pregunta 1 como una mejora
+del modelo recomendado.
+
+**Presupuesto de cómputo.** Antes de correr, una prueba de tiempo de la red de
+la 4e en la semilla 0, pliegue 0, como la de la Fase 4c, con su salida en
+`outputs/`. No calcula ninguna métrica. Con ella se proyecta el total de la
+fase: las redes de control, las 5 de exploración, el ajuste fino y las de
+confirmación, con 5 semillas y con 3. La regla de las semillas sale de esa
+proyección. **Si con 3 semillas pasa de 45 horas de equipo, la fase no arranca
+y la persona decide** qué se recorta. No se recorta nada de la receta por
+cuenta propia, porque cualquier recorte sería una receta distinta de la del
+autor.
+
+**Controles, antes de leer cualquier resultado.** Los de la red se corren sobre
+la semilla 1, pliegue 0, que no usan ni la exploración ni la confirmación, para
+que ningún control calcule la pAUC de un pliegue que después decide.
+- **Los de la comparación:** los de la Fase 4d, rehechos para juegos de 25 y de
+  15 diferencias y para Holm con dos preguntas, con sus casos que deben fallar.
+- **Los de la red:** los de la Fase 4c con la receta nueva (etiquetas
+  barajadas, red real por encima del azar, reproducibilidad y alineación), y
+  además:
+  - los 20 conjuntos reparten todos los negativos del pliegue de entrenamiento,
+    sin repetir ninguno, y cada época usa uno distinto con todos los positivos;
+    caso que debe fallar: el sorteo de la 4c, que repite negativos entre
+    épocas;
+  - la tasa registrada en cada paso sigue el calendario OneCycle, con su
+    máximo en el 10 % de los pasos; caso que debe fallar: una tasa fija;
+  - los aumentos solo se aplican al entrenar: predecir dos veces la misma
+    imagen da el mismo logit; caso que debe fallar: con los aumentos activos
+    al predecir, cambia;
+  - la lista de aumentos y sus parámetros coincide con `train_transform_p2`
+    del autor, tal como lo cita la ficha; caso que debe fallar: quitando uno,
+    se detecta.
+- **Los del ajuste fino (si corre):**
+  - con datos sintéticos, la métrica oficial
+    (`referencias/isic-primary-metric-pauc.py.md`) y la pAUC unilateral con
+    FPR ≤ 0,2 de las clases invertidas dan el mismo valor; caso que debe
+    fallar: sin invertir las clases, no coinciden;
+  - la pérdida responde a subir los positivos de menor puntuación y no a subir
+    los de mayor puntuación; caso que debe fallar: sin invertir, responde al
+    revés.
+- **Los de C7:** los de alineación de C4, con la red de la 4e.
+
+**Fuentes, antes de correr.**
+- La ficha del 10.º puesto, ampliada con las citas literales del código que usa
+  esta fase y con la discrepancia entre el README y el código: hecho el
+  2026-10-31 (commit «Referencias: el código del 10.º puesto, con la
+  discrepancia sobre los negativos»).
+- Zhu et al. 2022 y la documentación de LibAUC, solo si corre el paso 2.
+- Las versiones de las librerías nuevas, con su licencia, en la procedencia de
+  las salidas.
+
+**Salida.**
+- La prueba de tiempo, en `outputs/`.
+- La exploración, en `outputs/fase4e-exploracion.json` y `.md`, descriptiva.
+- Las dos preguntas, en `outputs/fase4e-red-vs-red4c.json` y
+  `outputs/fase4e-c7-vs-m3limpio.json`, con su `.md` y la estructura de los
+  `fase4d-*.json`.
+- La decisión de Holm, en `outputs/fase4e-holm.json` y `.md`.
+- Los controles de la comparación, en `outputs/fase4e-controles-comparacion.json`
+  y `.md`; los de la red, en `data/`.
+
+**Puerta.** Las salidas de arriba —o, si la fase se detiene en el paso 1, la
+exploración y el registro de por qué se detuvo—, la bitácora al día con las
+filas de la exploración y de la confirmación, y el resultado de la regla,
+escrito al final de esta fase.
+
+**Lo que esta fase no hace.**
+- No abre el reservado ni cambia la especificación de la Fase 5, salvo por la
+  regla de arriba.
+- No elige épocas, tasa ni aumentos con los datos de este proyecto: toma los del
+  autor.
+- No prueba el patrón 1, el promedio de los dos patrones, la variante de 50
+  negativos por paciente, redes más grandes ni más resolución. Lo más grande es
+  lo que quedaría para el cómputo aparte.
+
+**Cómo quedó la verificación (2026-10-31).** El borrador se verificó contra
+este archivo, `outputs/`, `referencias/` y el código del 10.º puesto, leído con
+`git clone` en el commit de la ficha. Dos puntos los decidió la persona y siete
+se corrigieron:
+- **Decisión A, los negativos:** el borrador seguía el código del autor; sigue
+  el README, por la discrepancia de arriba.
+- **Decisión B, la pregunta 1:** el borrador decía que, si daba a favor, la
+  recomendación sin fotografía corporal total pasaba a la red de la 4e; la red
+  de la 4c no superó a la imagen sola según su regla, y la recomendación actual
+  es otra, así que la pregunta 1 informa sin cambiarla.
+- **Correcciones:**
+  1. el borrador decía que ninguna decisión de las fases 4d y 4e miró las
+     semillas de confirmación; la pregunta 1 de la 4d y las fases 4 a 4c las
+     usaron, y las semillas comparten pacientes;
+  2. la lectura «la 4d entrenó más tiempo sin regularizar más, y la red
+     empeoró» se retiró: la 4d cambió dos cosas, Holm no aceptó la
+     diferencia, y el decaimiento de pesos del autor es menor que el de la 4c;
+  3. «quedó por debajo» pasó a «quedó por debajo en la media de la pAUC, sin
+     que Holm aceptara la diferencia»;
+  4. el borrador daba la pAUC sobre todo el pliegue como la del autor; su
+     código calcula dos, y el README no dice cuál es su CV;
+  5. el borrador decía que la 4e predice como la 4c; el autor redimensiona con
+     bilineal y la 4c con bicúbica, y la 4e sigue al autor;
+  6. se añadieron como diferencias declaradas el dropout y la profundidad
+     estocástica de torchvision, los argumentos por defecto de OneCycle, el
+     decaimiento de pesos sobre la capa de salida y `RandomApply`;
+  7. el protocolo de Zhu et al. pasó a «se atribuye a», pendiente de
+     comprobar.
 
 ---
 
