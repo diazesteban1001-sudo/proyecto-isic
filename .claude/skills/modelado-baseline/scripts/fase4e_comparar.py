@@ -150,6 +150,7 @@ def paso(por, nuevo, base, semilla):
     return {"nuevo": nuevo, "base": base, "semilla": semilla,
             "pauc_por_pliegue": {nuevo: [round(v, 4) for v in nuevos], base: [round(v, 4) for v in bases]},
             "diferencia_por_pliegue": [round(a - b, 4) for a, b in zip(nuevos, bases)],
+            "diferencia_media": round(float(np.mean([a - b for a, b in zip(nuevos, bases)])), 4),
             "nuevo_mejor_en_pliegue": gana, "nuevo_mejor_en_pliegues": int(sum(gana)), "de_pliegues": len(gana),
             "umbral_de_la_regla": UMBRAL_EXPLORACION, "llega_al_umbral": bool(sum(gana) >= UMBRAL_EXPLORACION),
             "otras_metricas": {k: {nuevo: [round(v, 4) for v in por[nuevo][k][str(semilla)]],
