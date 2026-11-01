@@ -559,6 +559,40 @@ caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/test_fas
   --out data/fase4e-controles.json
 ```
 
+Desde la exploración (2026-11-01), cinco más. Los ajustes del ajuste fino son
+los de `PLAN.md`, Fase 4e, «Los ajustes del paso 2», con sus fuentes en
+`referencias/zhu-2022-sopa-pauc-dro.md` y `referencias/libauc-2.0.1.md`.
+- `scripts/fase4e_redes.py`: una red por semilla y pliegue, con sus pesos y sus
+  puntuaciones de validación en `data/`. No calcula métricas. Comprueba que la
+  receta es la cronometrada y que los controles de la red están completos.
+- `scripts/fase4e_ajuste.py`: el ajuste fino del paso 2 de cada una de esas
+  redes, con `pAUC_CVaR_Loss` y `SOPA` sobre las clases invertidas. Tampoco
+  calcula métricas.
+- `scripts/fase4e_comparar.py`: la exploración de la semilla 0 (pasos 1 y 2,
+  con el umbral de 4 de 5 pliegues) y las dos preguntas, con las medidas de la
+  Fase 4d.
+- `scripts/fase4e_holm.py`: Holm sobre las dos preguntas.
+- `scripts/test_fase4e_ajuste.py` y `scripts/test_fase4e_comparar.py`: los
+  controles de los dos anteriores, cada uno con su caso que debe fallar; el de
+  la comparación disfraza la red de la 4c de red de la 4e, así que no lee
+  ninguna puntuación de la 4e.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4e_ajuste.py \
+  --out data/fase4e-controles-ajuste.json
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4e_comparar.py \
+  --dir data/fase4e-test-comparar --out data/fase4e-controles-comparar.json
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4e_redes.py --semillas 0 \
+  --controles data/fase4e-controles.json --partes-dir data/fase4e-redes \
+  --out data/fase4e-puntuaciones-red-exploracion.csv.gz
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4e_ajuste.py --semillas 0 \
+  --controles data/fase4e-controles.json --redes-dir data/fase4e-redes --partes-dir data/fase4e-ajuste \
+  --out data/fase4e-puntuaciones-red-ajustada-exploracion.csv.gz
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase4e_comparar.py --exploracion \
+  --red-4e data/fase4e-puntuaciones-red-exploracion.csv.gz \
+  --red-ajustada data/fase4e-puntuaciones-red-ajustada-exploracion.csv.gz --out outputs/fase4e-exploracion
+```
+
 ## Cómo correrlo
 
 ```bash
