@@ -1909,10 +1909,12 @@ confirmación. Sus filas entran a la bitácora como descriptivas.
   oficial también invierte las etiquetas (registro de incidentes, séptima
   fila). *Esto se comprueba ejecutando, no razonando* (controles). El
   protocolo de preentrenar con entropía cruzada y después ajustar con la
-  pérdida de pAUC se atribuye a Zhu et al. (ICML 2022); se comprueba contra su
-  texto y se versiona antes de citarlo, solo si corre el paso 2. Sus ajustes
-  —optimizador, tasa, muestreo de los lotes y margen— se fijan antes de la
-  exploración. Si el ajuste fino supera a la red sin ajustar en al menos 4 de
+  pérdida de pAUC es el de Zhu et al. (ICML 2022): preentrenan con entropía
+  cruzada y Adam, reinicializan la capa de clasificación y ajustan todas las
+  capas (`referencias/zhu-2022-sopa-pauc-dro.md`, página 8). Sus ajustes se
+  fijaron antes de leer la exploración (al final de la fase, «Los ajustes del
+  paso 2»). *Hasta el 2026-11-01 decía que el protocolo «se atribuye a» Zhu et
+  al., pendiente de comprobar y versionar.* Si el ajuste fino supera a la red sin ajustar en al menos 4 de
   los 5 pliegues, la confirmación usa la red ajustada; si no, la red sin
   ajustar. Si la librería no instala, no corre en MPS o el control de la región
   falla, el paso 2 se cae, y se registra por qué.
@@ -2018,7 +2020,9 @@ que ningún control calcule la pAUC de un pliegue que después decide.
   esta fase y con la discrepancia entre el README y el código: hecho el
   2026-10-31 (commit «Referencias: el código del 10.º puesto, con la
   discrepancia sobre los negativos»).
-- Zhu et al. 2022 y la documentación de LibAUC, solo si corre el paso 2.
+- Zhu et al. 2022 y la documentación de LibAUC: hecho el 2026-11-01
+  (`referencias/zhu-2022-sopa-pauc-dro.md` y `referencias/libauc-2.0.1.md`,
+  commit «Referencias: Zhu et al. 2022 y la documentación de LibAUC 2.0.1»).
 - Las versiones de las librerías nuevas, con su licencia, en la procedencia de
   las salidas.
 
@@ -2116,21 +2120,82 @@ se corrigieron:
   El fallo era del criterio, no de la red. Se cambió por la comparación paso a
   paso con la fórmula de OneCycle, antes del commit de los controles, y su caso
   que debe fallar, la tasa fija, sigue fallando.
-- **Lo que falta para el paso 2.** Sus ajustes se fijan antes de la
-  exploración, y no están fijados:
-  - el optimizador, `SOPA` de LibAUC o el AdamW del entrenamiento; en `SOPA`,
-    la documentación y la firma de `libauc/optimizers/sopa.py` no coinciden en
-    los valores por defecto: `mode` 'sgd', `lr` 0,1 y `weight_decay` 1e-5 en la
-    documentación, y 'adam', 1e-3 y 0 en la firma;
-  - la tasa y su calendario;
-  - el muestreo de los lotes: la pérdida se detiene si un lote no trae las dos
-    clases, y con las clases invertidas la escasa, la maligna, lleva la
-    etiqueta 0, mientras que `DualSampler` fija la cuota de la etiqueta 1;
-  - qué entra en cada una de las dos épocas del ajuste;
-  - el margen, 1,0 por defecto, y la tasa de la variable dual, `eta`, 0,1 por
-    defecto; la documentación de la pérdida sugiere ajustar los dos, y esta
-    fase no elige nada con sus datos;
-  - Zhu et al. 2022, sin versionar.
+- **Lo que faltaba para el paso 2,** sus ajustes y Zhu et al. 2022: fijados y
+  versionado el 2026-11-01, abajo. *Hasta ese día este punto listaba lo que
+  faltaba fijar.*
+
+**Los ajustes del paso 2 (2026-11-01), fijados antes de leer la exploración.**
+La persona fijó la regla: primero lo que Zhu et al. 2022 fija para su
+experimento de Melanoma (`referencias/zhu-2022-sopa-pauc-dro.md`); lo que no
+fije, la documentación de SOPA en LibAUC 2.0.1 (`referencias/libauc-2.0.1.md`),
+que manda sobre la firma; y lo que ninguno fije, el agente, con el criterio más
+simple, declarado. También ordenó arrancar la exploración mientras tanto y no
+leer sus salidas hasta el commit de estos ajustes: las cinco redes del paso 1
+no dependen de ellos. El artículo da sus ajustes una sola vez para todos sus
+experimentos de imagen, Melanoma incluido.
+- **Del artículo:**
+  - la pérdida, la bisagra cuadrada con margen 1: `pAUC_CVaR_Loss` con
+    `margin` 1,0 y `surr_loss` 'squared_hinge', que es también lo que da su
+    documentación;
+  - la actualización «Adam-style»: `SOPA` con `mode` 'adam'; su documentación
+    da 'sgd', y manda el artículo;
+  - el decaimiento de pesos, 2e-4; la documentación da 1e-5;
+  - el lote, 64;
+  - el calendario, que baja la tasa diez veces cada 20 épocas: en las 2 del
+    ajuste, la tasa es constante;
+  - la capa de clasificación se reinicializa antes de ajustar, y se ajustan
+    todas las capas.
+- **De la documentación:**
+  - el muestreo, `DualSampler` con `sampling_rate` 0,5: 32 casos de cada clase
+    en cada lote, barajados, con su `random_seed` por defecto, 2023. Con 0,5
+    da igual qué clase lleve la etiqueta 1. Su consejo de usar una proporción
+    algo mayor que la de positivos no fija un valor, y supone que la clase
+    positiva es la escasa;
+  - el paso de las variables duales, `eta` 0,1;
+  - en `SOPA`, `betas` (0,9; 0,999), `eps` 1e-8, `amsgrad` falso y
+    `epoch_decay` 0.
+- **Lo que ninguno fija, con el criterio más simple:**
+  - **la tasa, 1e-3.** El artículo la eligió con la validación dentro de
+    {1e-3, 1e-4, 1e-5} y no dice cuál quedó. La documentación da 0,1, fuera
+    de esa rejilla, como valor del modo 'sgd'. Manda el artículo, que la deja
+    en la rejilla. Dentro de ella se toma el primer valor, que es también la
+    tasa por defecto de Adam, porque elegirla con los datos sería una elección
+    con etiquetas que esta fase no hace;
+  - **qué entra en cada época:** como en el entrenamiento, todos los positivos
+    y un conjunto de negativos. Las dos épocas usan el primero y el segundo
+    conjuntos del mismo reparto, que la red ya vio en sus dos primeras épocas.
+    Con `DualSampler`, cada época tiene los lotes de 32 benignos que caben en
+    su conjunto: 397 lotes de 64, unas 25.400 imágenes, y cada maligno se
+    repite unas 50 veces;
+  - una sola pérdida para las dos épocas, con una variable dual por imagen;
+  - lo que entra en la pérdida es el logit negado, sin sigmoide, como en el
+    ejemplo de la documentación, que usa `torch.randn`;
+  - la capa nueva se reinicializa con su inicialización por defecto de
+    PyTorch, `reset_parameters()`, tras fijar la semilla de la red;
+  - `clip_value`, que no está en la documentación, queda en lo que hace la
+    librería si no se pasa: recortar el gradiente a 1,0;
+  - los aumentos, los procesos de datos y la predicción son los del
+    entrenamiento de la 4e.
+- **β = 0,2**, fijado arriba por la métrica del reto; el artículo lo elige en
+  {0,1; 0,3; 0,5}.
+- **Diferencias con el artículo, declaradas:** 2 épocas y no 60; una tasa fija
+  y no elegida con la validación; EfficientNet-B0 y no ResNet18; el
+  preentrenamiento de la receta del 10.º puesto, AdamW con OneCycle, y no Adam;
+  y las clases invertidas.
+- **Lectura declarada de antemano.** Con las clases invertidas, la pérdida
+  tiene una variable dual por cada benigno, y cada benigno entra en el ajuste
+  una vez como mucho. Su variable se actualiza, por tanto, una sola vez, desde
+  0 y con paso 0,1, mientras que en el control de la respuesta de la pérdida
+  se llevó al equilibrio con 3.000 iteraciones. Lejos de ese equilibrio, la pérdida puede
+  comportarse más como una de AUC sobre todos los pares que como la de la
+  pAUC por encima del 80 %. El registro de cada red guarda cuántas veces se
+  actualizó cada variable dual. Si el paso 2 no mejora, esta es una
+  explicación posible, sin medir.
+- **Costo, estimado sin medir:** cada ajuste recorre unas 50.800 imágenes,
+  casi el doble de lo que suponía la prueba de tiempo. Si la confirmación usa
+  la red ajustada, la fase sube unas 1,2 horas y sigue lejos de las 45.
+- La regla del paso 2 no cambia: la red ajustada tiene que superar a la sin
+  ajustar en al menos 4 de los 5 pliegues de la semilla 0, en la pAUC.
 
 ---
 
