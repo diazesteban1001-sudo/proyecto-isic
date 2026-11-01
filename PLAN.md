@@ -11,9 +11,9 @@ salida, y qué hacer cuando algo no se pueda cerrar.
 **Dónde está la ruta (2026-11-01): fases 0 a 4, 4b, 4c y 4d, cerradas; ni la
 Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
 cambiaron el modelo recomendado, M3 limpio, ni la especificación de la Fase 5;
-la Fase 4e, la receta de imagen del 10.º puesto, está en curso, con la prueba
-de tiempo y los controles hechos y la exploración sin arrancar, y la Fase 5
-espera a que cierre; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+la Fase 4e, la receta de imagen del 10.º puesto, está en curso: la
+exploración pasó sus dos pasos y la confirmación corre; la Fase 5 espera a que
+cierre; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -1766,10 +1766,11 @@ de la pregunta 2, −0,027 [−0,0522; −0,0019].
 
 ## Fase 4e — La receta de imagen del 10.º puesto, con el equipo propio — EN CURSO
 
-**Estado: EN CURSO (2026-11-01), sin la exploración.** Su puerta, al final de
-la fase. La prueba de tiempo, la comprobación de LibAUC y los controles están
-hechos (al final de la fase, «Antes de la exploración»). La exploración espera
-la orden de la persona, y el paso 2, que se fijen sus ajustes.
+**Estado: EN CURSO (2026-11-01), en la confirmación.** Su puerta, al final de
+la fase. La exploración pasó los pasos 1 y 2, y la confirmación corre con la
+red ajustada en las semillas 5 a 9 (al final de la fase, «Resultado de la
+exploración»). *Hasta ese día decía que la exploración esperaba la orden de la
+persona, que la dio el 2026-11-01.*
 
 **Decisión de la persona (2026-10-31).** Al cerrar la Fase 4d, la persona
 decidió dedicar diez días de trabajo a buscar, con su propio equipo, una mejora
@@ -2196,6 +2197,46 @@ experimentos de imagen, Melanoma incluido.
   la red ajustada, la fase sube unas 1,2 horas y sigue lejos de las 45.
 - La regla del paso 2 no cambia: la red ajustada tiene que superar a la sin
   ajustar en al menos 4 de los 5 pliegues de la semilla 0, en la pAUC.
+
+**Resultado de la exploración (2026-11-01), descriptivo.** Semilla 0, los 5
+pliegues de `construir_folds` (`outputs/fase4e-exploracion.json`). La red de la
+4c reproduce sus métricas de `outputs/fase4c-red-sola-vs-imagen.json` pliegue a
+pliegue. Una red gana un pliegue si su pAUC, sin redondear, es estrictamente
+mayor.
+- **Paso 1, la red de la 4e frente a la de la 4c:** gana en los 5 pliegues.
+  pAUC 0,1443, 0,1521, 0,1157, 0,1335 y 0,1212, frente a 0,12, 0,1225,
+  0,0999, 0,1177 y 0,0731; diferencia media +0,0267 (`paso_1`). **Llega al
+  umbral, 4 de 5, y se corre el paso 2.**
+- **Paso 2, la red ajustada frente a la de la 4e sin ajustar:** gana en 4 de los
+  5 pliegues; pierde en el cuarto, 0,1174 frente a 0,1335. Diferencia media
+  +0,0093 (`paso_2`). **Llega al umbral, y la confirmación usa la red
+  ajustada.**
+- Las tres métricas secundarias de las tres redes están en el mismo archivo, y
+  no deciden.
+- **Las variables duales,** como se declaró antes de correr: en cada una de las
+  cinco redes, 25.408 benignos entraron una vez y 26 ninguna, y sus variables
+  quedaron entre −0,1 y 0,4 (`data/fase4e-puntuaciones-red-ajustada-exploracion.json`,
+  que no se versiona, campo `redes`).
+- **Lo que no dice la exploración:** es una sola semilla, y elige; la
+  confirmación es la que decide.
+- **El tiempo medido:** una mediana de 1.738,7 s por red y de 536,7 s por
+  ajuste (`data/fase4e-puntuaciones-red-exploracion.json` y
+  `data/fase4e-puntuaciones-red-ajustada-exploracion.json`). La prueba de
+  tiempo daba 1.714,6 s y 307,5 s. Con esos tiempos, la confirmación de 25
+  redes con su ajuste son unas 15,8 horas, y la fase sigue por debajo de las
+  45.
+
+**La confirmación, arrancada el 2026-11-01** con las semillas 5 a 9, la regla
+de las semillas, y la red ajustada, la del paso 2: `fase4e_redes.py` y después
+`fase4e_ajuste.py`, con caffeinate.
+
+**Bitácora, filas de la exploración.** Descriptivas: no cuentan como
+comparaciones de la regla.
+
+| Modelo | Fase | Comparación | Diferencia de pAUC | NB 95 % | Intervalo de la regla | Resultado | Archivo |
+|---|---|---|---|---|---|---|---|
+| Red de la 4e | 4e, exploración, descriptiva | Red de la 4e − red de la 4c, semilla 0 | +0,0267 de media en 5 pliegues | — | — | gana en 5 de 5; pasa el paso 1 | `fase4e-exploracion.json` |
+| Red de la 4e ajustada | 4e, exploración, descriptiva | Ajustada − sin ajustar, semilla 0 | +0,0093 de media en 5 pliegues | — | — | gana en 4 de 5; pasa el paso 2 | `fase4e-exploracion.json` |
 
 ---
 
