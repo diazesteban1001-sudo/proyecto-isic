@@ -1,0 +1,309 @@
+{
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "semillas_corridas": [
+    0
+  ],
+  "n_splits": 5,
+  "folds": {
+    "sha256_por_semilla": {
+      "0": "e544a6b29a7637e86bc6e2e5ab88e9ff2eb3edf5612353c2adc554311c9d00df"
+    },
+    "iguales_a": "outputs/fase4-m2-vs-m1.json"
+  },
+  "puntuaciones_de_las_redes": {
+    "Fase 4c": {
+      "archivo": "data/fase4c-puntuaciones-red.csv.gz",
+      "sha256": "8788f58ed78cf9acea67dabb52156983ce091d620b5dd96ad233657d0d0f59df",
+      "huella_de_las_puntuaciones": "8dbfb7b158e1d3c81efdd52e8c87b2b832f7a3babea2ac5c72cfcfd0f64042fc",
+      "controles": {
+        "archivo": "data/fase4c-controles.json",
+        "sha256": "0aa2f6c45143fbaa8e203ab57ae1ddf9556de4ec6a0795172019e0f5ac3d13a9",
+        "casos": 23,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 270.1,
+        "minimo": 262.6,
+        "maximo": 403.7
+      }
+    },
+    "Red4e": {
+      "archivo": "data/fase4e-puntuaciones-red-exploracion.csv.gz",
+      "sha256": "08e737a12d47e610a4f1692a2f9908a7ae4be4f15ee0070b1d941b041c48959f",
+      "huella_de_las_puntuaciones": "96f92b7c5c0a3984d2f2ef185446e95f1195870ef43ef40b31a5a471c6a994bb",
+      "controles": {
+        "archivo": "data/fase4e-controles.json",
+        "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+        "casos": 34,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 1738.7,
+        "minimo": 1736.3,
+        "maximo": 1781.8
+      }
+    }
+  },
+  "controles": {
+    "comparacion": {
+      "archivo": "outputs/fase4e-controles-comparacion.json",
+      "sha256": "c839b40455b4327f0cc28bb21ffbf1f54c57e8d611eadee33c13112bd4f6c317",
+      "casos": 19,
+      "fallos": 0
+    },
+    "redes": {
+      "archivo": "data/fase4e-controles.json",
+      "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+      "casos": 34,
+      "fallos": 0
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4e_comparar.py",
+      "--exploracion",
+      "--red-4e",
+      "data/fase4e-puntuaciones-red-exploracion.csv.gz",
+      "--out",
+      "outputs/fase4e-exploracion"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "este proceso"
+    }
+  },
+  "que_es": "La exploración de la Fase 4e de PLAN.md, semilla 0. Descriptiva.",
+  "modelos": {
+    "Red": {
+      "descripcion": "EfficientNet-B0 de torchvision con los pesos de ImageNet, entrenada de punta a punta en el pliegue de entrenamiento (fase4c.entrenar_y_puntuar); su probabilidad, la sigmoide del logit en float64 (Fase 4c: 3 épocas, una submuestra nueva de negativos en cada época)"
+    },
+    "Red4e": {
+      "descripcion": "EfficientNet-B0 con la receta de imagen del 10.º puesto (fase4e.entrenar_y_puntuar): 20 épocas, cada una con todos los positivos y un conjunto distinto de los 20 en que se reparten los negativos, los aumentos del patrón 2, AdamW y OneCycle; su probabilidad, la sigmoide del logit en float64"
+    }
+  },
+  "reproduccion_del_base": {
+    "referencia": "outputs/fase4c-red-sola-vs-imagen.json",
+    "que_se_compara": "las cuatro métricas de la red de la Fase 4c, pliegue a pliegue",
+    "reproduce_fold_a_fold": true
+  },
+  "metricas": {
+    "Red": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.12,
+            0.1225,
+            0.0999,
+            0.1177,
+            0.0731
+          ]
+        },
+        "media_global": 0.1066,
+        "std_entre_folds": 0.0186,
+        "std_entre_semillas": 0.0,
+        "media_global_sobre_0_2": 0.5331
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.88,
+            0.8941,
+            0.8686,
+            0.8923,
+            0.8202
+          ]
+        },
+        "media_global": 0.8711,
+        "std_entre_folds": 0.027,
+        "std_entre_semillas": 0.0
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.4198,
+            0.4275,
+            0.5451,
+            0.4816,
+            0.4417
+          ]
+        },
+        "media_global": 0.4632,
+        "std_entre_folds": 0.0462,
+        "std_entre_semillas": 0.0
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            342.7843,
+            208.3269,
+            281.5385,
+            171.5294,
+            482.549
+          ]
+        },
+        "media_global": 297.3456,
+        "std_entre_folds": 109.8807,
+        "std_entre_semillas": 0.0
+      }
+    },
+    "Red4e": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.1443,
+            0.1521,
+            0.1157,
+            0.1335,
+            0.1212
+          ]
+        },
+        "media_global": 0.1334,
+        "std_entre_folds": 0.0136,
+        "std_entre_semillas": 0.0,
+        "media_global_sobre_0_2": 0.6668
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.926,
+            0.9389,
+            0.9029,
+            0.9131,
+            0.8997
+          ]
+        },
+        "media_global": 0.9161,
+        "std_entre_folds": 0.0146,
+        "std_entre_semillas": 0.0
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.5448,
+            0.6033,
+            0.6736,
+            0.5088,
+            0.6579
+          ]
+        },
+        "media_global": 0.5977,
+        "std_entre_folds": 0.0634,
+        "std_entre_semillas": 0.0
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            126.3137,
+            108.6538,
+            168.4231,
+            168.7843,
+            178.8824
+          ]
+        },
+        "media_global": 150.2115,
+        "std_entre_folds": 27.5564,
+        "std_entre_semillas": 0.0
+      }
+    }
+  },
+  "paso_1": {
+    "nuevo": "Red4e",
+    "base": "Red",
+    "semilla": 0,
+    "pauc_por_pliegue": {
+      "Red4e": [
+        0.1443,
+        0.1521,
+        0.1157,
+        0.1335,
+        0.1212
+      ],
+      "Red": [
+        0.12,
+        0.1225,
+        0.0999,
+        0.1177,
+        0.0731
+      ]
+    },
+    "diferencia_por_pliegue": [
+      0.0243,
+      0.0296,
+      0.0159,
+      0.0158,
+      0.0481
+    ],
+    "nuevo_mejor_en_pliegue": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "nuevo_mejor_en_pliegues": 5,
+    "de_pliegues": 5,
+    "umbral_de_la_regla": 4,
+    "llega_al_umbral": true,
+    "otras_metricas": {
+      "auc": {
+        "Red4e": [
+          0.926,
+          0.9389,
+          0.9029,
+          0.9131,
+          0.8997
+        ],
+        "Red": [
+          0.88,
+          0.8941,
+          0.8686,
+          0.8923,
+          0.8202
+        ]
+      },
+      "setop15": {
+        "Red4e": [
+          0.5448,
+          0.6033,
+          0.6736,
+          0.5088,
+          0.6579
+        ],
+        "Red": [
+          0.4198,
+          0.4275,
+          0.5451,
+          0.4816,
+          0.4417
+        ]
+      },
+      "nnt80": {
+        "Red4e": [
+          126.3137,
+          108.6538,
+          168.4231,
+          168.7843,
+          178.8824
+        ],
+        "Red": [
+          342.7843,
+          208.3269,
+          281.5385,
+          171.5294,
+          482.549
+        ]
+      }
+    }
+  },
+  "paso_2": null,
+  "segundos": {
+    "total": 5.3
+  },
+  "nota": "Gana la nueva en un pliegue si su pAUC, sin redondear, es estrictamente mayor. El umbral es el de PLAN.md, Fase 4e: 4 de los 5 pliegues. Descriptiva: sus filas entran a la bitácora como descriptivas."
+}
