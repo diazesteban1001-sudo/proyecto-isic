@@ -8,11 +8,12 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-10-31): fases 0 a 4, 4b, 4c y 4d, cerradas; ni la
+**Dónde está la ruta (2026-11-01): fases 0 a 4, 4b, 4c y 4d, cerradas; ni la
 Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
 cambiaron el modelo recomendado, M3 limpio, ni la especificación de la Fase 5;
-la Fase 4e, la receta de imagen del 10.º puesto, está en curso y sin correr, y
-la Fase 5 espera a que cierre; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+la Fase 4e, la receta de imagen del 10.º puesto, está en curso, con la prueba
+de tiempo y los controles hechos y la exploración sin arrancar, y la Fase 5
+espera a que cierre; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -1765,9 +1766,10 @@ de la pregunta 2, −0,027 [−0,0522; −0,0019].
 
 ## Fase 4e — La receta de imagen del 10.º puesto, con el equipo propio — EN CURSO
 
-**Estado: EN CURSO (2026-10-31), sin correr.** Su puerta, al final de la fase.
-Antes de la exploración van la prueba de tiempo, la comprobación de LibAUC y los
-controles, y la persona da la orden de arrancar.
+**Estado: EN CURSO (2026-11-01), sin la exploración.** Su puerta, al final de
+la fase. La prueba de tiempo, la comprobación de LibAUC y los controles están
+hechos (al final de la fase, «Antes de la exploración»). La exploración espera
+la orden de la persona, y el paso 2, que se fijen sus ajustes.
 
 **Decisión de la persona (2026-10-31).** Al cerrar la Fase 4d, la persona
 decidió dedicar diez días de trabajo a buscar, con su propio equipo, una mejora
@@ -2072,6 +2074,63 @@ se corrigieron:
      decaimiento de pesos sobre la capa de salida y `RandomApply`;
   7. el protocolo de Zhu et al. pasó a «se atribuye a», pendiente de
      comprobar.
+
+**Antes de la exploración (2026-11-01).**
+- **La prueba de tiempo** (`outputs/prueba-tiempo-red-4e.json`): 1.714,6 s por
+  red, con sus 20 épocas y su predicción, y 307,5 s por ajuste fino. La fase
+  proyecta 18,19 horas con 5 semillas de confirmación y 12,53 con 3. Por la
+  regla de las semillas, **la confirmación usa las semillas 5 a 9.** Se corrió
+  con `fase4e.py` antes de que `autor_p2()` leyera también
+  `valid_transform_p2`; ese cambio no toca el entrenamiento ni la predicción.
+- **LibAUC 2.0.1**, instalada sin sus dependencias (`SKILL.md` de
+  `modelado-baseline`), con licencia MIT. `pAUC_CVaR_Loss` corre en MPS como
+  en CPU: la misma pérdida y, en el gradiente, una diferencia máxima de
+  1,79e-07 (`data/fase4e-controles.json`, `ajuste_fino`).
+  **El paso 2 sigue en pie en lo técnico.**
+- **Los controles de la comparación:** `test_fase4e_comparacion.py` completo,
+  19 de 19 casos como se esperaba
+  (`outputs/fase4e-controles-comparacion.json`). En el caso negativo, con un
+  límite de 62 rechazos en 1.000 juegos, la versión corregida rechaza 56 veces
+  con 25 diferencias y 62 con 15: justo en el límite. Con la regla de las
+  semillas, la confirmación no usa el juego de 15.
+- **Los controles de la red:** `test_fase4e_controles.py` completo, 34 de 34
+  casos como se esperaba, incluidos los que debían fallar, en 4.708,8 s
+  (`data/fase4e-controles.json`, que no se versiona). Las dos redes completas
+  tardaron 1.731,9 s y 1.746,1 s, algo más que la prueba de tiempo. En la
+  semilla 1, pliegue 0, sobre toda la validación:
+  - con las etiquetas barajadas, la pAUC es 0,0272, dentro del rango del azar
+    [0,009; 0,0396];
+  - con las reales, 0,1467, con 63.283 logits distintos y ningún negativo en
+    dos épocas;
+  - la tasa de los 4.060 pasos coincide con OneCycle, con el máximo en el paso
+    405;
+  - dos redes de 2 épocas dan logits idénticos, y predecir dos veces sin
+    aumentos también; con los aumentos activos, el logit cambia.
+
+  La pAUC de la red real de ese pliegue no se comparó con la de la red de la 4c
+  en el mismo pliegue: adelantaría, fuera de la regla, la comparación del paso
+  1.
+- **Un criterio cambiado antes de la corrida completa.** En el modo rápido, el
+  control del calendario falló: pedía que el máximo de la tasa fuera 5e-4 con
+  un margen de 1e-12, y en 406 pasos el máximo de OneCycle cae entre dos pasos.
+  El fallo era del criterio, no de la red. Se cambió por la comparación paso a
+  paso con la fórmula de OneCycle, antes del commit de los controles, y su caso
+  que debe fallar, la tasa fija, sigue fallando.
+- **Lo que falta para el paso 2.** Sus ajustes se fijan antes de la
+  exploración, y no están fijados:
+  - el optimizador, `SOPA` de LibAUC o el AdamW del entrenamiento; en `SOPA`,
+    la documentación y la firma de `libauc/optimizers/sopa.py` no coinciden en
+    los valores por defecto: `mode` 'sgd', `lr` 0,1 y `weight_decay` 1e-5 en la
+    documentación, y 'adam', 1e-3 y 0 en la firma;
+  - la tasa y su calendario;
+  - el muestreo de los lotes: la pérdida se detiene si un lote no trae las dos
+    clases, y con las clases invertidas la escasa, la maligna, lleva la
+    etiqueta 0, mientras que `DualSampler` fija la cuota de la etiqueta 1;
+  - qué entra en cada una de las dos épocas del ajuste;
+  - el margen, 1,0 por defecto, y la tasa de la variable dual, `eta`, 0,1 por
+    defecto; la documentación de la pérdida sugiere ajustar los dos, y esta
+    fase no elige nada con sus datos;
+  - Zhu et al. 2022, sin versionar.
 
 ---
 
