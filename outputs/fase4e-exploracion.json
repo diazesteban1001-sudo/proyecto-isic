@@ -46,6 +46,22 @@
         "minimo": 1736.3,
         "maximo": 1781.8
       }
+    },
+    "Red4eAjustada": {
+      "archivo": "data/fase4e-puntuaciones-red-ajustada-exploracion.csv.gz",
+      "sha256": "ce0547246d04865d00859169b3f78d46afc1c6c04d20112bb43fa2c8fef0a2d1",
+      "huella_de_las_puntuaciones": "e373575249db3069577ce901411aa8d0e059100364b1bf2f88e0321a0703f12b",
+      "controles": {
+        "archivo": "data/fase4e-controles.json",
+        "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+        "casos": 34,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 536.7,
+        "minimo": 535.0,
+        "maximo": 536.8
+      }
     }
   },
   "controles": {
@@ -60,6 +76,12 @@
       "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
       "casos": 34,
       "fallos": 0
+    },
+    "ajuste": {
+      "archivo": "data/fase4e-controles-ajuste.json",
+      "sha256": "aca51239d0b33804cf239a3102abb430113a54f8c86738a299613a68c322b471",
+      "casos": 7,
+      "fallos": 0
     }
   },
   "comando": {
@@ -69,6 +91,8 @@
       "--exploracion",
       "--red-4e",
       "data/fase4e-puntuaciones-red-exploracion.csv.gz",
+      "--red-ajustada",
+      "data/fase4e-puntuaciones-red-ajustada-exploracion.csv.gz",
       "--out",
       "outputs/fase4e-exploracion"
     ],
@@ -85,6 +109,9 @@
     },
     "Red4e": {
       "descripcion": "EfficientNet-B0 con la receta de imagen del 10.º puesto (fase4e.entrenar_y_puntuar): 20 épocas, cada una con todos los positivos y un conjunto distinto de los 20 en que se reparten los negativos, los aumentos del patrón 2, AdamW y OneCycle; su probabilidad, la sigmoide del logit en float64"
+    },
+    "Red4eAjustada": {
+      "descripcion": "la red de la 4e tras el ajuste fino del paso 2 (fase4e_ajuste.ajustar_y_puntuar): 2 épocas con pAUC_CVaR_Loss y SOPA sobre las clases invertidas, con la capa de salida reinicializada"
     }
   },
   "reproduccion_del_base": {
@@ -210,6 +237,65 @@
         "std_entre_folds": 27.5564,
         "std_entre_semillas": 0.0
       }
+    },
+    "Red4eAjustada": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.1472,
+            0.1574,
+            0.136,
+            0.1174,
+            0.1552
+          ]
+        },
+        "media_global": 0.1426,
+        "std_entre_folds": 0.0147,
+        "std_entre_semillas": 0.0,
+        "media_global_sobre_0_2": 0.7131
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.932,
+            0.9405,
+            0.9235,
+            0.8994,
+            0.9399
+          ]
+        },
+        "media_global": 0.9271,
+        "std_entre_folds": 0.0151,
+        "std_entre_semillas": 0.0
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "0": [
+            0.638,
+            0.5525,
+            0.6476,
+            0.5129,
+            0.666
+          ]
+        },
+        "media_global": 0.6034,
+        "std_entre_folds": 0.0597,
+        "std_entre_semillas": 0.0
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "0": [
+            108.5686,
+            88.9038,
+            78.0577,
+            164.7451,
+            99.1961
+          ]
+        },
+        "media_global": 107.8943,
+        "std_entre_folds": 30.196,
+        "std_entre_semillas": 0.0
+      }
     }
   },
   "paso_1": {
@@ -239,6 +325,7 @@
       0.0158,
       0.0481
     ],
+    "diferencia_media": 0.0267,
     "nuevo_mejor_en_pliegue": [
       true,
       true,
@@ -301,9 +388,98 @@
       }
     }
   },
-  "paso_2": null,
+  "paso_2": {
+    "nuevo": "Red4eAjustada",
+    "base": "Red4e",
+    "semilla": 0,
+    "pauc_por_pliegue": {
+      "Red4eAjustada": [
+        0.1472,
+        0.1574,
+        0.136,
+        0.1174,
+        0.1552
+      ],
+      "Red4e": [
+        0.1443,
+        0.1521,
+        0.1157,
+        0.1335,
+        0.1212
+      ]
+    },
+    "diferencia_por_pliegue": [
+      0.0029,
+      0.0052,
+      0.0202,
+      -0.0161,
+      0.034
+    ],
+    "diferencia_media": 0.0093,
+    "nuevo_mejor_en_pliegue": [
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "nuevo_mejor_en_pliegues": 4,
+    "de_pliegues": 5,
+    "umbral_de_la_regla": 4,
+    "llega_al_umbral": true,
+    "otras_metricas": {
+      "auc": {
+        "Red4eAjustada": [
+          0.932,
+          0.9405,
+          0.9235,
+          0.8994,
+          0.9399
+        ],
+        "Red4e": [
+          0.926,
+          0.9389,
+          0.9029,
+          0.9131,
+          0.8997
+        ]
+      },
+      "setop15": {
+        "Red4eAjustada": [
+          0.638,
+          0.5525,
+          0.6476,
+          0.5129,
+          0.666
+        ],
+        "Red4e": [
+          0.5448,
+          0.6033,
+          0.6736,
+          0.5088,
+          0.6579
+        ]
+      },
+      "nnt80": {
+        "Red4eAjustada": [
+          108.5686,
+          88.9038,
+          78.0577,
+          164.7451,
+          99.1961
+        ],
+        "Red4e": [
+          126.3137,
+          108.6538,
+          168.4231,
+          168.7843,
+          178.8824
+        ]
+      }
+    }
+  },
   "segundos": {
-    "total": 5.3
+    "total": 5.6
   },
   "nota": "Gana la nueva en un pliegue si su pAUC, sin redondear, es estrictamente mayor. El umbral es el de PLAN.md, Fase 4e: 4 de los 5 pliegues. Descriptiva: sus filas entran a la bitácora como descriptivas."
 }
