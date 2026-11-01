@@ -522,6 +522,43 @@ caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4d_c
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4d_holm.py --out outputs/fase4d-holm
 ```
 
+## La receta de imagen del 10.º puesto, Fase 4e (2026-10-31)
+
+La especificación, la regla y los controles son de la persona, fijados antes de
+correr (`PLAN.md`, Fase 4e). Hasta la exploración, cuatro scripts:
+- `scripts/fase4e.py`: las piezas de la red.
+  - Los negativos del pliegue de entrenamiento en 20 conjuntos, uno por época,
+    con todos los positivos, como el README del autor.
+  - Los aumentos del patrón 2 del autor y su predicción, con la interpolación
+    bilineal de torchvision.
+  - AdamW con tasa y decaimiento 0,0005, y OneCycle por lote, durante 20 épocas.
+  - `autor_p2()` reconstruye las transformaciones del autor desde la cita de su
+    código en la ficha, leyéndola con `ast`, sin ejecutarlo.
+- `scripts/prueba_tiempo_red_4e.py`: la prueba de tiempo en la semilla 0,
+  pliegue 0, sin métricas, y la proyección de horas de la fase con la regla de las
+  semillas de confirmación. Escribe `outputs/prueba-tiempo-red-4e.*`.
+- `scripts/test_fase4e_controles.py`: los controles de la red, del ajuste fino
+  con LibAUC y de C7, sobre la semilla 1, pliegue 0, cada uno con su caso que
+  debe fallar. La corrida completa escribe `data/fase4e-controles.json`.
+- `scripts/test_fase4e_comparacion.py`: los controles de la comparación, con 25
+  y 15 diferencias y Holm con dos preguntas. La corrida completa escribe
+  `outputs/fase4e-controles-comparacion.*`.
+
+LibAUC 2.0.1 está instalado en el `.venv/` sin sus dependencias
+(`pip install --no-deps`, con el SHA-256 de la rueda): `pAUC_CVaR_Loss` solo
+necesita torch.
+
+```bash
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/prueba_tiempo_red_4e.py \
+  --epocas-medidas 2 --out outputs/prueba-tiempo-red-4e
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4e_comparacion.py --rapido --out RUTA
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4e_controles.py --rapido --out RUTA.json
+.venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4e_comparacion.py \
+  --out outputs/fase4e-controles-comparacion
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/test_fase4e_controles.py \
+  --out data/fase4e-controles.json
+```
+
 ## Cómo correrlo
 
 ```bash
