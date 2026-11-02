@@ -8,12 +8,12 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-11-01): fases 0 a 4, 4b, 4c y 4d, cerradas; ni la
-Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
-cambiaron el modelo recomendado, M3 limpio, ni la especificación de la Fase 5;
-la Fase 4e, la receta de imagen del 10.º puesto, está en curso: la
-exploración pasó sus dos pasos y la confirmación corre; la Fase 5 espera a que
-cierre; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+**Dónde está la ruta (2026-11-01): fases 0 a 4, 4b, 4c, 4d y 4e, cerradas; ni
+la Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
+ni la 4e, la receta de imagen del 10.º puesto, cambiaron el modelo
+recomendado, M3 limpio, ni la especificación de la Fase 5; al cerrar la 4e, la
+persona decide si se usa cómputo aparte, y la Fase 5 espera a esa decisión; de
+la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -37,7 +37,8 @@ deja de esperar una rúbrica.* *2026-10-30: la retroalimentación pidió acercar
 al ganador antes de alquilar cómputo; es la Fase 4d.* *2026-10-31: la Fase 4d
 cerró por su regla sin que ninguna de sus tres preguntas diera su resultado a
 favor.* *2026-10-31: la persona abrió la Fase 4e, diez días de trabajo con el
-equipo propio sobre la red de imagen.*
+equipo propio sobre la red de imagen.* *2026-11-01: la Fase 4e cerró por su
+regla sin que ninguna de sus dos preguntas diera su resultado a favor.*
 
 ## Cómo leer una puerta
 
@@ -1764,13 +1765,16 @@ de la pregunta 2, −0,027 [−0,0522; −0,0019].
 
 ---
 
-## Fase 4e — La receta de imagen del 10.º puesto, con el equipo propio — EN CURSO
+## Fase 4e — La receta de imagen del 10.º puesto, con el equipo propio — CERRADA
 
-**Estado: EN CURSO (2026-11-01), en la confirmación.** Su puerta, al final de
-la fase. La exploración pasó los pasos 1 y 2, y la confirmación corre con la
-red ajustada en las semillas 5 a 9 (al final de la fase, «Resultado de la
-exploración»). *Hasta ese día decía que la exploración esperaba la orden de la
-persona, que la dio el 2026-11-01.*
+**Estado: CERRADA (2026-11-01), por su regla, sin que ninguna de sus dos
+preguntas diera su resultado a favor.** La exploración pasó los pasos 1 y 2, y
+la confirmación, con la red ajustada en las semillas 5 a 9, no pasó la regla de
+Holm (al final de la fase, «Resultado de la regla»). M3 limpio sigue siendo el
+modelo recomendado, y la especificación de la Fase 5 no cambia. Queda la
+decisión de la persona sobre el cómputo aparte. *Hasta ese día decía que la
+fase estaba en curso, primero esperando la orden de la persona para la
+exploración y después en la confirmación.*
 
 **Decisión de la persona (2026-10-31).** Al cerrar la Fase 4d, la persona
 decidió dedicar diez días de trabajo a buscar, con su propio equipo, una mejora
@@ -2240,13 +2244,54 @@ versionan). Mediana de 1.780,2 s por red y de 536,4 s por ajuste; en total,
 exploración, 25.408 benignos entraron una vez y 26 ninguna, con las variables
 duales entre −0,1 y 0,4, y cada época corrió sus 397 lotes.
 
-**Bitácora, filas de la exploración.** Descriptivas: no cuentan como
-comparaciones de la regla.
+**Resultado de la regla (2026-11-01).** Semillas 5 a 9 × 5 pliegues, con la red
+ajustada como red de la 4e. Holm sobre los valores p bilaterales de Nadeau y
+Bengio de la pAUC (`outputs/fase4e-holm.json`), de menor a mayor:
+- pregunta 1, red de la 4e − red de la Fase 4c: +0,029 [0,002; 0,056], 0,1376
+  frente a 0,1086; valor p 0,03646 frente a 0,05/2 = 0,025; mejor en 23 de 25
+  pliegues y 5 de 5 semillas (`outputs/fase4e-red-vs-red4c.json`);
+- pregunta 2, C7 − M3 limpio: +0,0029 [−0,0084; 0,0141], 0,1669 frente a
+  0,1641; valor p 0,6028 frente a 0,05; mejor en 14 de 25 pliegues y 4 de 5
+  semillas (`outputs/fase4e-c7-vs-m3limpio.json`).
+
+La primera no pasa su umbral, así que Holm se detiene ahí y no acepta ninguna;
+la segunda queda también por encima del suyo. Ninguna da su resultado a favor.
+Por la regla:
+- C7 no mejora a M3 limpio, que sigue siendo el modelo recomendado;
+- la especificación de la Fase 5 no cambia;
+- no se mide el tiempo de inferencia de C7;
+- la red de la 4e no mejora a la red de la Fase 4c, y la recomendación para el
+  escenario sin fotografía corporal total no cambia.
+
+El intervalo al 95 % de la pregunta 1 excluye el cero, pero la regla es Holm con
+dos preguntas, no ese intervalo, y su valor p no llega a 0,025. En especificidad
+media, la pAUC dividida por 0,2, las diferencias de las preguntas 1 y 2 son
++0,145 y +0,0143 (`comparaciones_nuevo_menos_base.pauc.en_especificidad_media`).
+Las tres métricas secundarias están en los dos archivos, con su intervalo y su
+valor p, y no deciden. En la pregunta 1, dos tienen un intervalo que excluye el
+cero: el AUC, +0,044 [0,0062; 0,0818], y la sensibilidad top-15, +0,1232
+[0,043; 0,2035]; el NNT80% SE, −123,87 [−269,37; 21,63], no. En la pregunta 2,
+las tres contienen el cero. La red de la 4c reproduce
+`outputs/fase4c-red-sola-vs-imagen.json`, y M3 limpio
+`outputs/fase4-m3limpio-vs-m2.json`, pliegue a pliegue en las cuatro métricas
+(`reproduccion_del_base`). En estas cinco semillas M3 limpio da 0,1641, frente a
+0,1621 en las semillas 0 a 9 (`outputs/fase4d-c5-vs-m3limpio.json`) y 0,1601 en
+las 0 a 4 (`outputs/fase4d-c6-vs-m3limpio.json`).
+
+**Bitácora, filas de la Fase 4e.** Las de la exploración son descriptivas y no
+cuentan como comparaciones de la regla. Con las dos de la confirmación, la
+bitácora suma 18 comparaciones por la pAUC desde la Fase 4: las 16 anteriores
+(Fase 4d, «Bitácora de intentos») y estas 2. En la confirmación, la columna de
+la regla da el valor p de cada pregunta y su umbral de Holm.
+*Hasta el 2026-11-01 este bloque se llamaba «Bitácora, filas de la exploración»
+y solo tenía las dos primeras.*
 
 | Modelo | Fase | Comparación | Diferencia de pAUC | NB 95 % | Intervalo de la regla | Resultado | Archivo |
 |---|---|---|---|---|---|---|---|
 | Red de la 4e | 4e, exploración, descriptiva | Red de la 4e − red de la 4c, semilla 0 | +0,0267 de media en 5 pliegues | — | — | gana en 5 de 5; pasa el paso 1 | `fase4e-exploracion.json` |
 | Red de la 4e ajustada | 4e, exploración, descriptiva | Ajustada − sin ajustar, semilla 0 | +0,0093 de media en 5 pliegues | — | — | gana en 4 de 5; pasa el paso 2 | `fase4e-exploracion.json` |
+| Red de la 4e ajustada | 4e | Red de la 4e − red de la 4c, semillas 5 a 9 | +0,029 | [0,002; 0,056] | Holm: valor p 0,03646 frente a 0,025 | no mejora | `fase4e-red-vs-red4c.json` |
+| C7 | 4e | C7 − M3 limpio, semillas 5 a 9 | +0,0029 | [−0,0084; 0,0141] | Holm: valor p 0,6028 frente a 0,05 | no mejora | `fase4e-c7-vs-m3limpio.json` |
 
 ---
 
