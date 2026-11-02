@@ -2230,6 +2230,16 @@ mayor.
 de las semillas, y la red ajustada, la del paso 2: `fase4e_redes.py` y después
 `fase4e_ajuste.py`, con caffeinate.
 
+**La confirmación, terminada el 2026-11-01, antes de leer ninguna
+comparación.** Las 25 redes y sus 25 ajustes corrieron sin errores, con los
+controles de la red en 34 de 34 y una puntuación por fila en cada semilla
+(`data/fase4e-puntuaciones-red-confirmacion.json` y
+`data/fase4e-puntuaciones-red-ajustada-confirmacion.json`, que no se
+versionan). Mediana de 1.780,2 s por red y de 536,4 s por ajuste; en total,
+44.842,2 s y 13.409,3 s, unas 16,2 horas. En los 25 ajustes, como en la
+exploración, 25.408 benignos entraron una vez y 26 ninguna, con las variables
+duales entre −0,1 y 0,4, y cada época corrió sus 397 lotes.
+
 **Bitácora, filas de la exploración.** Descriptivas: no cuentan como
 comparaciones de la regla.
 
