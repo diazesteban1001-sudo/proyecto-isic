@@ -802,7 +802,7 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman trece del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman catorce del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
@@ -810,7 +810,9 @@ train, `tbp_lv_nevi_confidence`). Se suman trece del modelado, trazables a
 `outputs/tiempo-inferencia.json`, `outputs/imagen-sola.json`, los tres
 `outputs/fase4b-*.json`, `outputs/fase4c-red-sola-vs-imagen.json`,
 `outputs/fase4c-c4-vs-m3limpio.json`, `outputs/fase4c-control-atajo.json`, los
-tres `outputs/fase4d-*.json` de las preguntas y `outputs/fase4d-holm.json`. Desde el 2026-09-25 sus
+tres `outputs/fase4d-*.json` de las preguntas, `outputs/fase4d-holm.json`,
+`outputs/fase4e-exploracion.json`, los dos `outputs/fase4e-*.json` de las
+preguntas y `outputs/fase4e-holm.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -1113,6 +1115,86 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
       4, 4b y 4c, y Holm corrige solo esas tres. Con ellas, la bitácora de
       `PLAN.md` cuenta 16 comparaciones por la pAUC desde la Fase 4: 13
       anteriores y estas 3 (Fase 4d, «Bitácora de intentos»).
+    - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
+      (Pendientes).
+
+14. **La receta de imagen del 10.º puesto, con un ajuste fino por la pAUC, no
+    llega a la regla de la Fase 4e en ninguna de sus dos preguntas** (conjunto
+    de desarrollo, 5 pliegues; `outputs/fase4e-exploracion.json`,
+    `outputs/fase4e-red-vs-red4c.json`, `outputs/fase4e-c7-vs-m3limpio.json` y
+    `outputs/fase4e-holm.json`). La red de la 4e es la EfficientNet-B0 de la
+    Fase 4c con la receta del 10.º puesto: los negativos repartidos en
+    conjuntos, uno por época, como dice su README, sus aumentos del patrón 2 y
+    su calendario. El ajuste fino la sigue entrenando con la pérdida de pAUC de
+    LibAUC sobre las clases invertidas. C7 es C4 con esa red en lugar de la de
+    la Fase 4c (`PLAN.md`, Fase 4e).
+    - **Exploración, descriptiva, en la semilla 0** (`fase4e-exploracion.json`).
+      La red de la 4e supera a la de la 4c en 5 de 5 pliegues, con +0,0267 de
+      media en la pAUC (`paso_1`), y la red ajustada a la sin ajustar en 4 de
+      5, con +0,0093 (`paso_2`). Los dos pasos llegan a su umbral, 4 de 5
+      (`umbral_de_la_regla`), así que la confirmación usa la red ajustada. La
+      exploración elige qué se confirma; no da ningún resultado a favor.
+
+    Confirmación, semillas 5 a 9. Diferencia en la pAUC con el intervalo de
+    Nadeau y Bengio al 95 % y el valor p bilateral de la misma prueba
+    (`comparaciones_nuevo_menos_base.pauc.media`,
+    `.intervalo_t_95_nadeau_bengio` y `.valor_p_nadeau_bengio`):
+    - Red de la 4e, ajustada, − red de la Fase 4c: pAUC +0,029 [0,002; 0,056],
+      0,1376 frente a 0,1086, valor p 0,03646, mejor en 23 de 25 pliegues y 5
+      de 5 semillas. En el AUC, +0,044 [0,0062; 0,0818], y en la sensibilidad
+      top-15, +0,1232 [0,043; 0,2035], el intervalo excluye el cero; en el
+      NNT80% SE, −123,87 [−269,37; 21,63], no.
+    - C7 − M3 limpio: pAUC +0,0029 [−0,0084; 0,0141], 0,1669 frente a 0,1641,
+      valor p 0,6028, mejor en 14 de 25 pliegues y 4 de 5 semillas. En las
+      tres métricas secundarias, el intervalo contiene el cero.
+
+    Holm compara los valores p, de menor a mayor, con 0,05/2 y 0,05
+    (`fase4e-holm.json > preguntas`). El primero, el de la red, queda por
+    encima de 0,025, así que Holm no acepta ninguna y ninguna da su resultado a
+    favor. **La pregunta 1 no se da por establecida.** Su intervalo al 95 %
+    excluye el cero, pero su valor p, 0,03646, no llega al umbral de Holm,
+    0,025. Con una sola pregunta, el umbral habría sido 0,05
+    (`fase4e-holm.json > alfa`): lo que decide es la corrección por
+    multiplicidad, fijada antes de correr. Por la regla, C7 no mejora a M3
+    limpio, que sigue siendo el modelo recomendado, y la recomendación para el
+    escenario sin fotografía corporal total no cambia (`PLAN.md`, Fase 4e,
+    «Resultado de la regla (2026-11-01)»). Como C7 no da su resultado a favor,
+    no se midió su tiempo de inferencia.
+
+    *Salvedades:*
+    - **La lectura declarada de antemano.** *Lectura, no medición:* lo
+      observado coincide con la «Lectura declarada de antemano» de la fase
+      (`PLAN.md`, Fase 4e). Según la nota de trabajo de la investigación, aun
+      con una red de imagen mucho mejor el apilado ganaría poco, y la nota lo
+      marca como inferencia, [I]. La diferencia de la red con la de la 4c es
+      +0,029; la de C7 con M3 limpio, +0,0029. La nota hablaba del diseño de 10
+      semillas, y la confirmación usa 5.
+    - **El CV del 10.º puesto, solo indicativo.** El autor reporta para su red,
+      con el patrón 2, *"CV=0.156"*
+      (`referencias/tomo20180402-2024-isic2024-10mo-puesto.md`; línea 80 del
+      README); la red de la 4e da 0,1376 en la pregunta 1, ya con el ajuste
+      fino, que el autor no hace. Es una cita, no una medición del proyecto.
+      Por la salvedad de la ficha, sus cifras de validación son de su propia
+      validación cruzada, con sus particiones, sobre todo el conjunto de
+      entrenamiento del reto, que incluye a los pacientes que este proyecto
+      reservó (`PLAN.md`, Fase 4e); y su código calcula dos pAUC, la de cada
+      época sobre una submuestra y la final sobre todo el pliegue, sin que el
+      README diga cuál es su `CV=`.
+    - **La receta no es la del autor, entera:** sigue su README y no su código
+      en los negativos, usa los pesos de ImageNet de torchvision, y el ajuste
+      fino es nuestro: sus ajustes salen de Zhu et al. 2022, de la
+      documentación de LibAUC y, donde ninguno los fija, del criterio más
+      simple, declarado (`PLAN.md`, Fase 4e, las diferencias declaradas y «Los
+      ajustes del paso 2»).
+    - **Las semillas:** la confirmación usa las semillas 5 a 9 por la regla de
+      las semillas, que solo dependía del costo. Todas las semillas reparten a
+      los mismos pacientes, así que las elecciones de la exploración no son
+      independientes de la confirmación; se declara como sesgo del resultado
+      (`PLAN.md`, Fase 4e).
+    - **Cómo se eligieron:** las dos preguntas se eligieron conociendo las
+      fases 4 a 4d, y Holm corrige solo esas dos. Con ellas, la bitácora de
+      `PLAN.md` cuenta 18 comparaciones por la pAUC desde la Fase 4: 16
+      anteriores y estas 2 (Fase 4e, «Bitácora, filas de la Fase 4e»).
     - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
       (Pendientes).
 
@@ -1426,16 +1508,17 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
-- [ ] **La Fase 4d no está todavía en el informe, el README ni la demo**
-      (2026-10-31).
-      - **Dónde está:** el hallazgo 13 y `PLAN.md`, Fase 4d, con sus cifras de
-        `outputs/fase4d-*.json`.
-      - **Dónde falta:** `informe/borrador-v2.md`, el README e
+- [ ] **Las fases 4d y 4e no están todavía en el informe, el README ni la
+      demo** (2026-10-31; la 4e, desde el 2026-11-01).
+      - **Dónde están:** los hallazgos 13 y 14 y `PLAN.md`, fases 4d y 4e, con
+        sus cifras de `outputs/fase4d-*.json` y `outputs/fase4e-*.json`.
+      - **Dónde faltan:** `informe/borrador-v2.md`, el README e
         `informe/demo.html`, con su copia `docs/index.html`. Se dejan para
         después por decisión de la persona.
-      - **Qué hacer al añadirla:** regenerar `outputs/sintesis-verificacion.json`
+      - **Qué hacer al añadirlas:** regenerar `outputs/sintesis-verificacion.json`
         y revisar, uno por uno, los números nuevos que pasen por coincidencia,
         como al añadir las fases 4b y 4c.
+      - *Hasta el 2026-11-01 este punto era solo de la Fase 4d.*
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
