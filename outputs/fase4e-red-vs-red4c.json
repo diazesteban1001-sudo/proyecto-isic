@@ -1,0 +1,669 @@
+{
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "semillas_corridas": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "n_splits": 5,
+  "folds": {
+    "sha256_por_semilla": {
+      "5": "652abbfb8857b047e7095ba47e67446e626e079af5891586b0034c156217da27",
+      "6": "7e5b8b3eaaebdc35f3b1b88d5f90d5c6e3a34379ee4c1738ba8cb1e61861b325",
+      "7": "53475df726573480982eec4dcb487732e1adf4aac636816149af0e596a965c00",
+      "8": "b02613c91ef31f1453565d96a8b4ed7bdb6792b35e306912ec98065fc57ff623",
+      "9": "d76e52550b9a2cfd022a934dcc149888a9c6433cace5183decfae02d691d238a"
+    },
+    "iguales_a": "outputs/fase4-m2-vs-m1.json"
+  },
+  "puntuaciones_de_las_redes": {
+    "Fase 4c": {
+      "archivo": "data/fase4c-puntuaciones-red.csv.gz",
+      "sha256": "8788f58ed78cf9acea67dabb52156983ce091d620b5dd96ad233657d0d0f59df",
+      "huella_de_las_puntuaciones": "8dbfb7b158e1d3c81efdd52e8c87b2b832f7a3babea2ac5c72cfcfd0f64042fc",
+      "controles": {
+        "archivo": "data/fase4c-controles.json",
+        "sha256": "0aa2f6c45143fbaa8e203ab57ae1ddf9556de4ec6a0795172019e0f5ac3d13a9",
+        "casos": 23,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 270.1,
+        "minimo": 262.6,
+        "maximo": 403.7
+      }
+    },
+    "Red4eAjustada": {
+      "archivo": "data/fase4e-puntuaciones-red-ajustada-confirmacion.csv.gz",
+      "sha256": "69d8a5474d86f1972dd66c4806eead072b81a6786c27f6bf04221b4f4de8e6fe",
+      "huella_de_las_puntuaciones": "a2956a3ecdf99892f5b43a9e6bc789ea9221a9e25bbecbe3b591a7f1d6686b15",
+      "controles": {
+        "archivo": "data/fase4e-controles.json",
+        "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+        "casos": 34,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 536.4,
+        "minimo": 532.2,
+        "maximo": 537.0
+      }
+    }
+  },
+  "controles": {
+    "comparacion": {
+      "archivo": "outputs/fase4e-controles-comparacion.json",
+      "sha256": "c839b40455b4327f0cc28bb21ffbf1f54c57e8d611eadee33c13112bd4f6c317",
+      "casos": 19,
+      "fallos": 0
+    },
+    "redes": {
+      "archivo": "data/fase4e-controles.json",
+      "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+      "casos": 34,
+      "fallos": 0
+    },
+    "ajuste": {
+      "archivo": "data/fase4e-controles-ajuste.json",
+      "sha256": "aca51239d0b33804cf239a3102abb430113a54f8c86738a299613a68c322b471",
+      "casos": 7,
+      "fallos": 0
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4e_comparar.py",
+      "--pregunta",
+      "1",
+      "--semillas",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "--red-4e",
+      "data/fase4e-puntuaciones-red-ajustada-confirmacion.csv.gz",
+      "--ajustada",
+      "--out",
+      "outputs/fase4e-red-vs-red4c"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "este proceso"
+    }
+  },
+  "comparacion": {
+    "nuevo": "Red4eAjustada",
+    "base": "Red"
+  },
+  "modelos": {
+    "Red4eAjustada": {
+      "descripcion": "la red de la 4e tras el ajuste fino del paso 2 (fase4e_ajuste.ajustar_y_puntuar): 2 épocas con pAUC_CVaR_Loss y SOPA sobre las clases invertidas, con la capa de salida reinicializada"
+    },
+    "Red": {
+      "descripcion": "EfficientNet-B0 de torchvision con los pesos de ImageNet, entrenada de punta a punta en el pliegue de entrenamiento (fase4c.entrenar_y_puntuar); su probabilidad, la sigmoide del logit en float64 (Fase 4c: 3 épocas, una submuestra nueva de negativos en cada época)"
+    }
+  },
+  "reproduccion_del_base": {
+    "referencia": "outputs/fase4c-red-sola-vs-imagen.json",
+    "que_se_compara": "las cuatro métricas de la red de la Fase 4c, pliegue a pliegue",
+    "reproduce_fold_a_fold": true
+  },
+  "metricas": {
+    "Red": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.1255,
+            0.1071,
+            0.0909,
+            0.1153,
+            0.1309
+          ],
+          "6": [
+            0.1058,
+            0.1098,
+            0.1114,
+            0.1495,
+            0.0798
+          ],
+          "7": [
+            0.1344,
+            0.089,
+            0.0894,
+            0.0745,
+            0.1027
+          ],
+          "8": [
+            0.1148,
+            0.103,
+            0.1093,
+            0.1089,
+            0.1255
+          ],
+          "9": [
+            0.0954,
+            0.145,
+            0.1107,
+            0.0612,
+            0.1264
+          ]
+        },
+        "media_global": 0.1086,
+        "std_entre_folds": 0.0207,
+        "std_entre_semillas": 0.0057,
+        "media_global_sobre_0_2": 0.5432
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.8872,
+            0.8783,
+            0.8516,
+            0.889,
+            0.914
+          ],
+          "6": [
+            0.8759,
+            0.8673,
+            0.8891,
+            0.9216,
+            0.8232
+          ],
+          "7": [
+            0.9186,
+            0.8343,
+            0.8518,
+            0.8185,
+            0.8577
+          ],
+          "8": [
+            0.8873,
+            0.8667,
+            0.8887,
+            0.8681,
+            0.8943
+          ],
+          "9": [
+            0.8609,
+            0.9255,
+            0.8699,
+            0.8155,
+            0.8917
+          ]
+        },
+        "media_global": 0.8739,
+        "std_entre_folds": 0.03,
+        "std_entre_semillas": 0.0097
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.4327,
+            0.4263,
+            0.4472,
+            0.5014,
+            0.6405
+          ],
+          "6": [
+            0.3975,
+            0.4172,
+            0.481,
+            0.4823,
+            0.5472
+          ],
+          "7": [
+            0.5063,
+            0.3767,
+            0.5,
+            0.4064,
+            0.4289
+          ],
+          "8": [
+            0.4461,
+            0.4373,
+            0.5804,
+            0.4795,
+            0.4424
+          ],
+          "9": [
+            0.3359,
+            0.4387,
+            0.474,
+            0.4753,
+            0.4644
+          ]
+        },
+        "media_global": 0.4626,
+        "std_entre_folds": 0.0623,
+        "std_entre_semillas": 0.0196
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "5": [
+            250.7255,
+            215.0,
+            293.5769,
+            164.9412,
+            101.1961
+          ],
+          "6": [
+            269.1154,
+            276.8269,
+            184.1176,
+            148.9804,
+            523.1765
+          ],
+          "7": [
+            153.5962,
+            385.7255,
+            329.4231,
+            514.2549,
+            356.8235
+          ],
+          "8": [
+            246.0385,
+            290.451,
+            168.25,
+            298.8039,
+            222.8039
+          ],
+          "9": [
+            349.5882,
+            129.25,
+            240.4231,
+            535.9412,
+            306.2353
+          ]
+        },
+        "media_global": 278.2106,
+        "std_entre_folds": 116.4643,
+        "std_entre_semillas": 49.9277
+      }
+    },
+    "Red4eAjustada": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.1548,
+            0.141,
+            0.1202,
+            0.1439,
+            0.1433
+          ],
+          "6": [
+            0.1224,
+            0.1272,
+            0.1646,
+            0.1144,
+            0.1159
+          ],
+          "7": [
+            0.1397,
+            0.1654,
+            0.1355,
+            0.1471,
+            0.11
+          ],
+          "8": [
+            0.1405,
+            0.158,
+            0.1243,
+            0.1477,
+            0.1436
+          ],
+          "9": [
+            0.12,
+            0.1409,
+            0.1381,
+            0.1242,
+            0.1584
+          ]
+        },
+        "media_global": 0.1376,
+        "std_entre_folds": 0.0156,
+        "std_entre_semillas": 0.0048,
+        "media_global_sobre_0_2": 0.6882
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.9315,
+            0.9289,
+            0.9012,
+            0.9263,
+            0.919
+          ],
+          "6": [
+            0.8934,
+            0.9095,
+            0.9519,
+            0.8973,
+            0.8907
+          ],
+          "7": [
+            0.9208,
+            0.9457,
+            0.9181,
+            0.9346,
+            0.8865
+          ],
+          "8": [
+            0.9286,
+            0.9421,
+            0.9042,
+            0.931,
+            0.9113
+          ],
+          "9": [
+            0.8843,
+            0.9249,
+            0.9196,
+            0.9075,
+            0.9383
+          ]
+        },
+        "media_global": 0.9179,
+        "std_entre_folds": 0.0184,
+        "std_entre_semillas": 0.0055
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.4808,
+            0.6015,
+            0.6199,
+            0.604,
+            0.6454
+          ],
+          "6": [
+            0.3942,
+            0.6281,
+            0.6286,
+            0.6212,
+            0.6165
+          ],
+          "7": [
+            0.5476,
+            0.5521,
+            0.6449,
+            0.6927,
+            0.4588
+          ],
+          "8": [
+            0.5572,
+            0.5558,
+            0.6366,
+            0.6539,
+            0.5736
+          ],
+          "9": [
+            0.4972,
+            0.5669,
+            0.6111,
+            0.5464,
+            0.712
+          ]
+        },
+        "media_global": 0.5859,
+        "std_entre_folds": 0.0715,
+        "std_entre_semillas": 0.0067
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "5": [
+            137.3137,
+            113.8846,
+            190.4615,
+            127.6471,
+            171.6471
+          ],
+          "6": [
+            209.5,
+            209.0,
+            86.4706,
+            158.7451,
+            210.1569
+          ],
+          "7": [
+            167.7308,
+            103.0588,
+            177.7692,
+            70.7843,
+            205.9216
+          ],
+          "8": [
+            96.1154,
+            98.098,
+            189.0769,
+            95.0588,
+            245.4902
+          ],
+          "9": [
+            269.3922,
+            125.4423,
+            153.5,
+            130.7059,
+            115.5882
+          ]
+        },
+        "media_global": 154.3424,
+        "std_entre_folds": 51.6646,
+        "std_entre_semillas": 11.4393
+      }
+    }
+  },
+  "comparaciones_nuevo_menos_base": {
+    "pauc": {
+      "diferencias_nuevo_menos_base": [
+        0.0293,
+        0.0338,
+        0.0293,
+        0.0286,
+        0.0124,
+        0.0166,
+        0.0174,
+        0.0532,
+        -0.0351,
+        0.0361,
+        0.0053,
+        0.0764,
+        0.0461,
+        0.0726,
+        0.0074,
+        0.0257,
+        0.055,
+        0.015,
+        0.0388,
+        0.0182,
+        0.0246,
+        -0.0041,
+        0.0273,
+        0.0631,
+        0.032
+      ],
+      "n_diferencias": 25,
+      "media": 0.029,
+      "desviacion": 0.0243,
+      "intervalo_t_95": [
+        0.019,
+        0.039
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        0.002,
+        0.056
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 23,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": 0.028996701127384922,
+      "valor_p_nadeau_bengio": 0.03645836414802431,
+      "en_especificidad_media": {
+        "media": 0.145,
+        "intervalo_t_95_nadeau_bengio": [
+          0.0099,
+          0.28
+        ]
+      },
+      "papel": "principal"
+    },
+    "auc": {
+      "diferencias_nuevo_menos_base": [
+        0.0443,
+        0.0506,
+        0.0496,
+        0.0372,
+        0.005,
+        0.0175,
+        0.0422,
+        0.0628,
+        -0.0243,
+        0.0675,
+        0.0021,
+        0.1113,
+        0.0662,
+        0.1161,
+        0.0288,
+        0.0413,
+        0.0753,
+        0.0156,
+        0.0629,
+        0.017,
+        0.0233,
+        -0.0006,
+        0.0497,
+        0.092,
+        0.0466
+      ],
+      "n_diferencias": 25,
+      "media": 0.044,
+      "desviacion": 0.034,
+      "intervalo_t_95": [
+        0.03,
+        0.058
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        0.0062,
+        0.0818
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 23,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": 0.04399836284867652,
+      "valor_p_nadeau_bengio": 0.024418758751393446,
+      "papel": "secundaria"
+    },
+    "setop15": {
+      "diferencias_nuevo_menos_base": [
+        0.0481,
+        0.1752,
+        0.1728,
+        0.1026,
+        0.0048,
+        -0.0033,
+        0.2109,
+        0.1476,
+        0.1389,
+        0.0692,
+        0.0413,
+        0.1753,
+        0.1449,
+        0.2863,
+        0.0299,
+        0.1111,
+        0.1185,
+        0.0562,
+        0.1744,
+        0.1312,
+        0.1613,
+        0.1282,
+        0.1372,
+        0.0711,
+        0.2476
+      ],
+      "n_diferencias": 25,
+      "media": 0.1232,
+      "desviacion": 0.0722,
+      "intervalo_t_95": [
+        0.0934,
+        0.153
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        0.043,
+        0.2035
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 24,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": 0.12324723331496781,
+      "valor_p_nadeau_bengio": 0.004126645805311074,
+      "papel": "secundaria"
+    },
+    "nnt80": {
+      "diferencias_nuevo_menos_base": [
+        -113.4118,
+        -101.1154,
+        -103.1154,
+        -37.2941,
+        70.451,
+        -59.6154,
+        -67.8269,
+        -97.6471,
+        9.7647,
+        -313.0196,
+        14.1346,
+        -282.6667,
+        -151.6538,
+        -443.4706,
+        -150.902,
+        -149.9231,
+        -192.3529,
+        20.8269,
+        -203.7451,
+        22.6863,
+        -80.1961,
+        -3.8077,
+        -86.9231,
+        -405.2353,
+        -190.6471
+      ],
+      "n_diferencias": 25,
+      "media": -123.8682,
+      "desviacion": 130.9092,
+      "intervalo_t_95": [
+        -177.9049,
+        -69.8315
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -269.3664,
+        21.63
+      ],
+      "mayor_es_mejor": false,
+      "nuevo_mejor_en_folds": 20,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": -123.8682202111614,
+      "valor_p_nadeau_bengio": 0.09165690399822353,
+      "papel": "secundaria"
+    }
+  },
+  "segundos": {
+    "total": 8.4
+  },
+  "nota": "La red de la 4e elegida − la red de la Fase 4c, pareado pliegue a pliegue. valor_p_nadeau_bengio: bilateral, el que usa la regla de Holm de PLAN.md, Fase 4e. En el NNT80% SE menos es mejor. No aplica la regla ni interpreta."
+}
