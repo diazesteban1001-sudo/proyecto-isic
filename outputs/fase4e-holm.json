@@ -1,0 +1,126 @@
+{
+  "que_es": "La regla de la Fase 4e de PLAN.md: Holm sobre los valores p bilaterales de Nadeau y Bengio de la pAUC de las dos preguntas; a favor si Holm la acepta y la diferencia media es positiva.",
+  "alfa": 0.05,
+  "semillas": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "red_de_la_4e": {
+    "modelo": "Red4eAjustada",
+    "sha256": "69d8a5474d86f1972dd66c4806eead072b81a6786c27f6bf04221b4f4de8e6fe"
+  },
+  "preguntas": [
+    {
+      "pregunta": 1,
+      "valor_p": 0.03645836414802431,
+      "media": 0.028996701127384922,
+      "orden_holm": 1,
+      "umbral_holm": 0.025,
+      "aceptada_por_holm": false,
+      "media_positiva": true,
+      "a_favor": false,
+      "archivo": "outputs/fase4e-red-vs-red4c.json",
+      "sha256": "7ecd7f319058ea02cd4d00ef8e6e4c1942224546d8242637b5cd0cf9f3b4113a",
+      "comparacion": {
+        "nuevo": "Red4eAjustada",
+        "base": "Red"
+      },
+      "semillas": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "media_redondeada": 0.029,
+      "intervalo_t_95_nadeau_bengio": [
+        0.002,
+        0.056
+      ],
+      "en_especificidad_media": {
+        "media": 0.145,
+        "intervalo_t_95_nadeau_bengio": [
+          0.0099,
+          0.28
+        ]
+      }
+    },
+    {
+      "pregunta": 2,
+      "valor_p": 0.6027879182470679,
+      "media": 0.0028667398931432175,
+      "orden_holm": 2,
+      "umbral_holm": 0.05,
+      "aceptada_por_holm": false,
+      "media_positiva": true,
+      "a_favor": false,
+      "archivo": "outputs/fase4e-c7-vs-m3limpio.json",
+      "sha256": "591f53034692861ceb27d901a76c3e488d883f8a4915c749dfb437a4a3bbe65b",
+      "comparacion": {
+        "nuevo": "C7",
+        "base": "M3limpio"
+      },
+      "semillas": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "media_redondeada": 0.0029,
+      "intervalo_t_95_nadeau_bengio": [
+        -0.0084,
+        0.0141
+      ],
+      "en_especificidad_media": {
+        "media": 0.0143,
+        "intervalo_t_95_nadeau_bengio": [
+          -0.0418,
+          0.0704
+        ]
+      }
+    }
+  ],
+  "a_favor": {
+    "1": false,
+    "2": false
+  },
+  "controles": {
+    "ajuste": {
+      "archivo": "data/fase4e-controles-ajuste.json",
+      "casos": 7,
+      "fallos": 0,
+      "sha256": "aca51239d0b33804cf239a3102abb430113a54f8c86738a299613a68c322b471"
+    },
+    "comparacion": {
+      "archivo": "outputs/fase4e-controles-comparacion.json",
+      "casos": 19,
+      "fallos": 0,
+      "sha256": "c839b40455b4327f0cc28bb21ffbf1f54c57e8d611eadee33c13112bd4f6c317"
+    },
+    "redes": {
+      "archivo": "data/fase4e-controles.json",
+      "casos": 34,
+      "fallos": 0,
+      "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633"
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4e_holm.py",
+      "--semillas",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "--out",
+      "outputs/fase4e-holm"
+    ]
+  },
+  "nota": "Aplica la regla tal como la fija PLAN.md. No interpreta."
+}
