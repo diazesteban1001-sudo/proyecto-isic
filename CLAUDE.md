@@ -802,7 +802,7 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman catorce del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman quince del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
@@ -812,7 +812,8 @@ train, `tbp_lv_nevi_confidence`). Se suman catorce del modelado, trazables a
 `outputs/fase4c-c4-vs-m3limpio.json`, `outputs/fase4c-control-atajo.json`, los
 tres `outputs/fase4d-*.json` de las preguntas, `outputs/fase4d-holm.json`,
 `outputs/fase4e-exploracion.json`, los dos `outputs/fase4e-*.json` de las
-preguntas y `outputs/fase4e-holm.json`. Desde el 2026-09-25 sus
+preguntas, `outputs/fase4e-holm.json` y
+`outputs/fase4f-red4e-vs-imagen-basicos.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -1158,7 +1159,8 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
     multiplicidad, fijada antes de correr. Por la regla, C7 no mejora a M3
     limpio, que sigue siendo el modelo recomendado, y la recomendación para el
     escenario sin fotografía corporal total no cambia (`PLAN.md`, Fase 4e,
-    «Resultado de la regla (2026-11-01)»). Como C7 no da su resultado a favor,
+    «Resultado de la regla (2026-11-01)»). *Cambió el 2026-11-02, por la regla
+    de la Fase 4f (hallazgo 15).* Como C7 no da su resultado a favor,
     no se midió su tiempo de inferencia.
 
     *Salvedades:*
@@ -1197,6 +1199,64 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
       anteriores y estas 2 (Fase 4e, «Bitácora, filas de la Fase 4e»).
     - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
       (Pendientes).
+
+15. **La red de la 4e supera a «Imagen + básicos» según la regla de la Fase 4f,
+    y pasa a ser la recomendación donde no hay fotografía corporal total**
+    (conjunto de desarrollo, semillas 5 a 9 × 5 pliegues;
+    `outputs/fase4f-red4e-vs-imagen-basicos.json`). La red de la 4e es la
+    ajustada, la de la confirmación de la Fase 4e (hallazgo 14), y usa solo la
+    imagen. «Imagen + básicos» es la logística sobre las 384 variables de
+    DINOv2 más edad, sexo y zona del cuerpo (hallazgo 10), recalculada en los
+    mismos pliegues. Diferencia con el intervalo de Nadeau y Bengio al 95 % y
+    el valor p bilateral de la misma prueba
+    (`comparaciones_nuevo_menos_base.*.media`, `.intervalo_t_95_nadeau_bengio`
+    y `.valor_p_nadeau_bengio`):
+    - pAUC +0,0493 [0,0218; 0,0767], 0,1376 frente a 0,0884, valor p
+      0,001105, mejor en 25 de 25 pliegues y 5 de 5 semillas;
+    - AUC +0,0829 [0,0465; 0,1193];
+    - SEtop-15 +0,1938 [0,1062; 0,2813];
+    - NNT80% SE −212,6526 lesiones por maligna [−337,8064; −87,4988].
+
+    Las tres métricas secundarias no deciden; también son mejores en 25 de 25
+    pliegues. La regla, fijada antes de correr, da la pregunta a favor si el
+    valor p es menor que 0,05 y la diferencia media es positiva (`regla`). Es
+    una sola pregunta, sin corrección por multiplicidad dentro de la fase. Las
+    dos condiciones se cumplen, así que da su resultado a favor
+    (`regla.a_favor`). Los controles pasaron antes de comparar: «Imagen +
+    básicos» reproduce `outputs/imagen-sola.json` pliegue a pliegue en las
+    cuatro métricas, y frente a la semilla siguiente no coincide en ninguna
+    (`reproduccion_del_base`); la red reproduce
+    `outputs/fase4e-red-vs-red4c.json` (`reproduccion_de_la_red`).
+
+    **Qué cambia y qué no** (`PLAN.md`, Fase 4f, «Resultado de la regla
+    (2026-11-02)»):
+    - la recomendación para el escenario sin fotografía corporal total pasa de
+      «Imagen + básicos», el punto de partida que da hoy el informe, a la red
+      de la 4e;
+    - M3 limpio sigue siendo el modelo recomendado donde se toma la fotografía
+      corporal total;
+    - la especificación de la Fase 5 no cambia por esta regla. La red y «Imagen
+      + básicos» ya entraban en ella como resultado descriptivo, por una
+      decisión de la persona del mismo día, escrita antes de leer el resultado.
+
+    *Salvedades:*
+    - **Cómo se eligió:** la persona eligió la pregunta después de ver la Fase
+      4e, en los 25 pliegues de su confirmación. Las métricas por pliegue de
+      los dos modelos ya estaban en `outputs/`, así que la diferencia de medias
+      se conocía antes de fijar la regla; el valor p, no. Con ella, la
+      bitácora de `PLAN.md` cuenta 19 comparaciones por la pAUC desde la Fase
+      4: 18 anteriores y esta (Fase 4f, «Bitácora, fila de la Fase 4f»).
+    - **Lo que usa cada modelo:** la red, solo la imagen; «Imagen + básicos»,
+      además edad, sexo y zona del cuerpo. *Lectura, no medición:* la
+      recomendación pasa a un modelo con menos datos de entrada, y por eso la
+      salvedad del hallazgo 10 sobre la zona del cuerpo no se le aplica. La
+      red con edad, sexo y zona del cuerpo no se probó.
+    - **El costo:** el tiempo de inferencia de la red no se midió; la regla de
+      la fase no lo pedía.
+    - **Las semillas:** las de la confirmación de la 4e, que comparten
+      pacientes con su exploración (hallazgo 14).
+    - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
+      (Pendientes, «El rendimiento con fotos de teléfono no está medido»).
 
 ### Dónde se lee la fase vigente
 
@@ -1422,7 +1482,9 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         (`informe/borrador-v2.md`, «Qué se recomienda»; y «Qué no se puede
         afirmar», «Cuánto rinde un modelo con fotos de teléfono»).
       - **Qué hay medido:** solo la imagen sobre los recortes estandarizados de
-        SLICE-3D (`outputs/imagen-sola.json`, hallazgo 10). El artículo del
+        SLICE-3D (`outputs/imagen-sola.json`, hallazgo 10). *Desde el
+        2026-11-02, la recomendación para ese escenario es la red de la 4e
+        (hallazgo 15), medida también solo sobre los recortes.* El artículo del
         conjunto de datos dice que las fotos que toman los pacientes *"vary
         greatly in lighting and FOV"*
         (`referencias/kurtansky-2024-slice3d-descriptor.md`, línea 115).
@@ -1508,17 +1570,29 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
-- [ ] **Las fases 4d y 4e no están todavía en el informe, el README ni la
-      demo** (2026-10-31; la 4e, desde el 2026-11-01).
-      - **Dónde están:** los hallazgos 13 y 14 y `PLAN.md`, fases 4d y 4e, con
-        sus cifras de `outputs/fase4d-*.json` y `outputs/fase4e-*.json`.
+- [ ] **Las fases 4d, 4e y 4f no están todavía en el informe, el README ni la
+      demo** (2026-10-31; la 4e, desde el 2026-11-01; la 4f, desde el
+      2026-11-02).
+      - **Dónde están:** los hallazgos 13, 14 y 15 y `PLAN.md`, fases 4d, 4e y
+        4f, con sus cifras de `outputs/fase4d-*.json`, `outputs/fase4e-*.json`
+        y `outputs/fase4f-*.json`.
       - **Dónde faltan:** `informe/borrador-v2.md`, el README e
         `informe/demo.html`, con su copia `docs/index.html`. Se dejan para
         después por decisión de la persona.
+      - **Lo que la 4f deja desfasado:** «Qué se recomienda» de
+        `informe/borrador-v2.md` dice que donde no hay sistema de fotografía
+        corporal total el punto de partida es la imagen con edad, sexo y zona
+        del cuerpo. Por la regla de la Fase 4f, la recomendación para ese
+        escenario es ahora la red de la 4e (hallazgo 15), así que ese párrafo
+        cambia. La demo lo repite: el texto de «Qué se recomienda» en
+        `generar_demo.py`, y con él `informe/demo.html` y `docs/index.html`. El
+        README no da una recomendación para ese escenario: le falta la 4f, no
+        la contradice.
       - **Qué hacer al añadirlas:** regenerar `outputs/sintesis-verificacion.json`
         y revisar, uno por uno, los números nuevos que pasen por coincidencia,
         como al añadir las fases 4b y 4c.
-      - *Hasta el 2026-11-01 este punto era solo de la Fase 4d.*
+      - *Hasta el 2026-11-02 este punto era de las fases 4d y 4e; hasta el
+        2026-11-01, solo de la 4d.*
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
