@@ -41,7 +41,9 @@ favor.* *2026-10-31: la persona abrió la Fase 4e, diez días de trabajo con el
 equipo propio sobre la red de imagen.* *2026-11-01: la Fase 4e cerró por su
 regla sin que ninguna de sus dos preguntas diera su resultado a favor.*
 *2026-11-02: la persona abrió la Fase 4f, una sola pregunta: la red de la 4e
-frente a «Imagen + básicos».*
+frente a «Imagen + básicos».* *2026-11-02: la persona añadió a la
+especificación de la Fase 5 la red de la 4e y «Imagen + básicos», como
+resultado descriptivo que no cambia ninguna recomendación.*
 
 ## Cómo leer una puerta
 
@@ -2441,6 +2443,32 @@ Según `outputs/holdout-pacientes.json`:
   (`CLAUDE.md`, hallazgo 8). Además, M2 hereda de M1 el nivel 2b, que se eligió
   como nivel de referencia con todos los datos, antes del sellado
   (`informe/anteproyecto.md`, sección 4.2).
+- *Añadido el 2026-11-02, por decisión de la persona, después de la Fase 4e y
+  antes de abrir el reservado.* Además de M3 limpio y M2, se puntúan en el
+  reservado, en la misma corrida y como resultado descriptivo del escenario sin
+  fotografía corporal total:
+  - **la red de la 4e,** entrenada una sola vez sobre todos los pacientes de
+    desarrollo con la receta y el ajuste fino de la Fase 4e, semilla 0
+    (`fase4e.entrenar_y_puntuar` y `fase4e_ajuste.ajustar_y_puntuar`), y
+    puntuando los recortes del reservado;
+  - **«Imagen + básicos»** (Fase 6, «La imagen sola»), ajustado sobre el
+    desarrollo y puntuando el reservado con sus características de DINOv2, ya
+    extraídas: `data/dinov2-vits14-reservado.h5`, 82.830 imágenes de 209
+    pacientes, ninguna fallida (`outputs/extraccion-imagen.json`,
+    `conjuntos.reservado.cobertura`).
+
+  No cambian ninguna recomendación. Se reportan con las mismas métricas y los
+  mismos intervalos de bootstrap que M3 limpio, porque la puerta de esta fase
+  pide punto e intervalo juntos, y sin ninguna diferencia con otro modelo. No
+  estaban en el anteproyecto ni en la especificación del 2026-09-26, y se
+  declaran. *Salvedades:*
+  - los dos se midieron en recortes de SLICE-3D, no en fotos de teléfono;
+  - la receta de la red la fijó el 10.º puesto validando sobre todo el conjunto
+    de entrenamiento del reto, que incluye a los pacientes reservados (Fase 4e,
+    «Por qué esta receta»): el reservado tampoco le es ajeno, como no lo es al
+    diseño de las variables de M2 y de M3 limpio;
+  - la zona del cuerpo de «Imagen + básicos» pudo venir del software del
+    sistema de fotografía corporal total (`CLAUDE.md`, hallazgo 10).
 - Los pacientes reservados se puntúan en una sola corrida. M3 limpio es el
   resultado principal.
 - Métricas: pAUC (principal), AUC, SEtop-15 y NNT80% SE.
