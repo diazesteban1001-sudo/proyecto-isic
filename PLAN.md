@@ -8,12 +8,13 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-11-01): fases 0 a 4, 4b, 4c, 4d y 4e, cerradas; ni
+**Dónde está la ruta (2026-11-02): fases 0 a 4, 4b, 4c, 4d y 4e, cerradas; ni
 la Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
 ni la 4e, la receta de imagen del 10.º puesto, cambiaron el modelo
-recomendado, M3 limpio, ni la especificación de la Fase 5; al cerrar la 4e, la
-persona decide si se usa cómputo aparte, y la Fase 5 espera a esa decisión; de
-la Fase 6 hay trabajo hecho.** De la Fase 6:
+recomendado, M3 limpio, ni la especificación de la Fase 5; la Fase 4f, una sola
+pregunta sobre el escenario sin fotografía corporal total, está en curso; al
+cerrar la 4e, la persona decide si se usa cómputo aparte, y la Fase 5 espera a
+esa decisión; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -39,6 +40,8 @@ cerró por su regla sin que ninguna de sus tres preguntas diera su resultado a
 favor.* *2026-10-31: la persona abrió la Fase 4e, diez días de trabajo con el
 equipo propio sobre la red de imagen.* *2026-11-01: la Fase 4e cerró por su
 regla sin que ninguna de sus dos preguntas diera su resultado a favor.*
+*2026-11-02: la persona abrió la Fase 4f, una sola pregunta: la red de la 4e
+frente a «Imagen + básicos».*
 
 ## Cómo leer una puerta
 
@@ -2292,6 +2295,108 @@ y solo tenía las dos primeras.*
 | Red de la 4e ajustada | 4e, exploración, descriptiva | Ajustada − sin ajustar, semilla 0 | +0,0093 de media en 5 pliegues | — | — | gana en 4 de 5; pasa el paso 2 | `fase4e-exploracion.json` |
 | Red de la 4e ajustada | 4e | Red de la 4e − red de la 4c, semillas 5 a 9 | +0,029 | [0,002; 0,056] | Holm: valor p 0,03646 frente a 0,025 | no mejora | `fase4e-red-vs-red4c.json` |
 | C7 | 4e | C7 − M3 limpio, semillas 5 a 9 | +0,0029 | [−0,0084; 0,0141] | Holm: valor p 0,6028 frente a 0,05 | no mejora | `fase4e-c7-vs-m3limpio.json` |
+
+---
+
+## Fase 4f — La red de la 4e frente a «Imagen + básicos» — EN CURSO
+
+**Estado: EN CURSO (2026-11-02).** La pregunta, la regla y los controles se
+fijan abajo antes de correr. El resultado irá al final de la fase.
+
+**Decisión de la persona (2026-11-02), tomada después de ver la Fase 4e.** Una
+sola pregunta, sobre el escenario sin sistema de fotografía corporal total:
+¿supera la red de la 4e a «Imagen + básicos», que hoy es el punto de partida
+para ese escenario (`informe/borrador-v2.md`, «Qué se recomienda»)? La pregunta
+1 de la 4e comparaba la red con la de la Fase 4c, no con ese punto de partida, y
+por eso informaba sin cambiar nada (Fase 4e, «Pregunta 1»). El conjunto
+reservado sigue cerrado.
+
+**Elegida después de ver la 4e, y se declara.**
+- **Lo que se sabía:** la red ajustada superó a la de la 4c en 23 de 25
+  pliegues y en las 5 semillas, con un valor p de 0,03646 que no llegó al
+  umbral de Holm, 0,025 (`outputs/fase4e-red-vs-red4c.json` y
+  `outputs/fase4e-holm.json`).
+- **Lo que ya estaba en `outputs/`:** las métricas por pliegue de los dos
+  modelos, las de la red en `fase4e-red-vs-red4c.json` y las de «Imagen +
+  básicos» en `imagen-sola.json`. Al verificar esta fase, el agente calculó la
+  media de la pAUC de «Imagen + básicos» en las semillas 5 a 9 desde esos
+  valores guardados. La diferencia de medias se conocía, por tanto, antes de
+  fijar la regla; el valor p no se calculó.
+- **Los pliegues:** son los 25 de la confirmación de la 4e, y comparten
+  pacientes con la exploración en que se eligió la receta (Fase 4e,
+  «Confirmación»).
+
+**La pregunta.**
+- **La red de la 4e:** la ajustada, la de la confirmación, `Red4eAjustada`
+  (`data/fase4e-puntuaciones-red-ajustada-confirmacion.csv.gz`, que no se
+  versiona). No se entrena nada: en cada pliegue, la puntuación de la red de ese
+  pliegue sobre su validación.
+- **«Imagen + básicos»:** la de la Fase 6, «La imagen sola». Es la logística
+  balanceada de `modelo_imagen()` sobre las 384 variables de DINOv2 más
+  `age_approx`, `sex` y `anatom_site_general`, codificadas con
+  `codificar_fold` y estandarizadas con las de imagen, ajustada con el pliegue
+  de entrenamiento. Se recalcula en estos pliegues con el código de
+  `imagen_sola.py` (controles, abajo).
+- **Los pliegues:** semillas 5 a 9 × 5 pliegues, los de `construir_folds`, con
+  la huella de `outputs/fase4-m2-vs-m1.json`, la misma con que `imagen_sola.py`
+  comprobó los suyos. Comprobado al escribir esta fase: en las cinco semillas
+  coinciden la huella de `outputs/fase4-m2-vs-m1.json`, la de
+  `outputs/fase4e-red-vs-red4c.json` y la de la procedencia de las
+  puntuaciones de la red.
+- **Las métricas:** la pAUC decide. El AUC, la sensibilidad top-15 y el NNT80%
+  SE se reportan con su intervalo y su valor p, y no deciden.
+
+**Regla, fijada antes de correr.** La diferencia pareada pliegue a pliegue, red
+de la 4e − «Imagen + básicos», en la pAUC. Da su resultado a favor si el valor p
+bilateral de Nadeau y Bengio, el de las fases 4d y 4e, es menor que 0,05 y la
+diferencia media es positiva. Es una sola pregunta: dentro de la fase no hay
+corrección por multiplicidad.
+- **Si da a favor:** la recomendación para el escenario sin fotografía corporal
+  total pasa a la red de la 4e, con la salvedad de que se midió en los recortes
+  de SLICE-3D y no en fotos de teléfono. M3 limpio sigue siendo el modelo
+  recomendado donde se toma la fotografía corporal total.
+- **Si no:** nada cambia, y la fase se cierra con su resultado.
+
+*Lectura nuestra, no una condición de la regla:* la red usa solo la imagen. Si
+da a favor, la recomendación para ese escenario pasa a un modelo sin edad, sexo
+ni zona del cuerpo, y la red con esos datos sigue sin probarse
+(`informe/borrador-v2.md`, «Qué se recomienda»).
+
+**Controles, antes de leer la comparación.** Si alguno falla, el script se
+detiene sin escribir la salida.
+- **«Imagen + básicos»:** el recálculo reproduce sus cuatro métricas de
+  `outputs/imagen-sola.json` pliegue a pliegue, a 4 decimales, en las semillas
+  5 a 9. Caso que debe fallar: el recálculo de cada semilla, frente a lo
+  guardado para la semilla siguiente (la 9, frente a la 5), no coincide.
+- **La red:** reproduce sus cuatro métricas de
+  `outputs/fase4e-red-vs-red4c.json` pliegue a pliegue. Sus puntuaciones pasan
+  las comprobaciones de `cargar_red_4e`: el SHA-256, la huella en float64, la
+  sigmoide del logit, la alineación por semilla y los controles de la red con 0
+  fallos.
+- **La comparación:** los controles de la 4e para juegos de 25 diferencias, que
+  incluyen el valor p (`outputs/fase4e-controles-comparacion.json`, 19 de 19).
+- **Los valores:** la diferencia usa los recalculados, sin redondear, como las
+  bases de las fases 4d y 4e. La decisión 1 de «La imagen sola» (Fase 6) dice
+  que no se vuelve a correr y que no se cita un recálculo sin redondear. Se
+  refiere a otra comparación, (Imagen + básicos) − Imagen, que esta fase no
+  calcula.
+
+**Salida.** `outputs/fase4f-red4e-vs-imagen-basicos.json` y `.md`, con la
+estructura de los `fase4e-*.json` de las preguntas y la regla aplicada en el
+mismo archivo, en el campo `regla`.
+
+**Bitácora.** Con esta pregunta, la bitácora suma 19 comparaciones por la pAUC
+desde la Fase 4: las 18 anteriores (Fase 4e, «Bitácora, filas de la Fase 4e»)
+y esta. La fila va al final de la fase, con el resultado.
+
+**Puerta.** La salida, la fila de la bitácora y el resultado de la regla,
+escrito al final de esta fase.
+
+**Lo que esta fase no hace.**
+- No entrena ninguna red ni prueba la red con edad, sexo y zona del cuerpo.
+- No abre el reservado.
+- No cambia el modelo recomendado ni, por su regla, la especificación de la
+  Fase 5.
 
 ---
 
