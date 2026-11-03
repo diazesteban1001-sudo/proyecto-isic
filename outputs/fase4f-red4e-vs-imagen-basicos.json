@@ -1,0 +1,692 @@
+{
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "semillas_corridas": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "n_splits": 5,
+  "folds": {
+    "sha256_por_semilla": {
+      "5": "652abbfb8857b047e7095ba47e67446e626e079af5891586b0034c156217da27",
+      "6": "7e5b8b3eaaebdc35f3b1b88d5f90d5c6e3a34379ee4c1738ba8cb1e61861b325",
+      "7": "53475df726573480982eec4dcb487732e1adf4aac636816149af0e596a965c00",
+      "8": "b02613c91ef31f1453565d96a8b4ed7bdb6792b35e306912ec98065fc57ff623",
+      "9": "d76e52550b9a2cfd022a934dcc149888a9c6433cace5183decfae02d691d238a"
+    },
+    "iguales_a": "outputs/fase4-m2-vs-m1.json"
+  },
+  "puntuaciones_de_las_redes": {
+    "Red4eAjustada": {
+      "archivo": "data/fase4e-puntuaciones-red-ajustada-confirmacion.csv.gz",
+      "sha256": "69d8a5474d86f1972dd66c4806eead072b81a6786c27f6bf04221b4f4de8e6fe",
+      "huella_de_las_puntuaciones": "a2956a3ecdf99892f5b43a9e6bc789ea9221a9e25bbecbe3b591a7f1d6686b15",
+      "controles": {
+        "archivo": "data/fase4e-controles.json",
+        "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+        "casos": 34,
+        "fallos": 0
+      },
+      "segundos_por_red": {
+        "mediana": 536.4,
+        "minimo": 532.2,
+        "maximo": 537.0
+      }
+    }
+  },
+  "controles": {
+    "comparacion": {
+      "archivo": "outputs/fase4e-controles-comparacion.json",
+      "sha256": "c839b40455b4327f0cc28bb21ffbf1f54c57e8d611eadee33c13112bd4f6c317",
+      "casos": 19,
+      "fallos": 0
+    },
+    "redes": {
+      "archivo": "data/fase4e-controles.json",
+      "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+      "casos": 34,
+      "fallos": 0
+    },
+    "ajuste": {
+      "archivo": "data/fase4e-controles-ajuste.json",
+      "sha256": "aca51239d0b33804cf239a3102abb430113a54f8c86738a299613a68c322b471",
+      "casos": 7,
+      "fallos": 0
+    }
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase4f_comparar.py",
+      "--semillas",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "--out",
+      "outputs/fase4f-red4e-vs-imagen-basicos"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "este proceso"
+    }
+  },
+  "comparacion": {
+    "nuevo": "Red4eAjustada",
+    "base": "ImagenBasicos"
+  },
+  "modelos": {
+    "Red4eAjustada": {
+      "descripcion": "la red de la 4e tras el ajuste fino del paso 2 (fase4e_ajuste.ajustar_y_puntuar): 2 épocas con pAUC_CVaR_Loss y SOPA sobre las clases invertidas, con la capa de salida reinicializada; las puntuaciones de la confirmación de la Fase 4e"
+    },
+    "ImagenBasicos": {
+      "descripcion": "«Imagen + básicos» de outputs/imagen-sola.json, recalculado: modelo_imagen() de apilado_imagen.py sobre las 384 variables de DINOv2 más age_approx, sex y anatom_site_general (codificar_fold), estandarizadas juntas, ajustado con el pliegue de entrenamiento"
+    }
+  },
+  "comprobacion_imagen": {
+    "archivo": "data/dinov2-vits14-desarrollo.h5",
+    "sha256": "52a7fd12855ae7548df2a21b46d513f51ab056c817acc468ab0e1c70576f3cfd",
+    "isic_id_en_datos": 318229,
+    "isic_id_en_archivo": 318229,
+    "en_datos_sin_caracteristicas": 0,
+    "en_archivo_sin_fila_en_datos": 0,
+    "imagenes_no_decodificadas": 0,
+    "nan_tras_alinear": 0,
+    "mismo_orden_que_los_datos": true,
+    "filas_comprobadas_al_azar": 1000,
+    "filas_comprobadas_identicas": true,
+    "sha256_igual_al_de_la_extraccion": true
+  },
+  "reproduccion_de_la_red": {
+    "referencia": "outputs/fase4e-red-vs-red4c.json",
+    "que_se_compara": "las cuatro métricas de la red ajustada, pliegue a pliegue",
+    "reproduce_fold_a_fold": true
+  },
+  "reproduccion_del_base": {
+    "referencia": "outputs/imagen-sola.json",
+    "modelo_en_la_referencia": "Imagen + básicos",
+    "que_se_compara": "las cuatro métricas, pliegue a pliegue, a 4 decimales",
+    "reproduce_fold_a_fold": true,
+    "caso_que_debe_fallar": {
+      "que_es": "cada semilla recalculada frente a lo guardado para la siguiente; la última, frente a la primera",
+      "semillas_que_coinciden": [],
+      "falla_como_se_esperaba": true
+    }
+  },
+  "avisos_no_convergencia": {
+    "ImagenBasicos": 0
+  },
+  "metricas": {
+    "Red4eAjustada": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.1548,
+            0.141,
+            0.1202,
+            0.1439,
+            0.1433
+          ],
+          "6": [
+            0.1224,
+            0.1272,
+            0.1646,
+            0.1144,
+            0.1159
+          ],
+          "7": [
+            0.1397,
+            0.1654,
+            0.1355,
+            0.1471,
+            0.11
+          ],
+          "8": [
+            0.1405,
+            0.158,
+            0.1243,
+            0.1477,
+            0.1436
+          ],
+          "9": [
+            0.12,
+            0.1409,
+            0.1381,
+            0.1242,
+            0.1584
+          ]
+        },
+        "media_global": 0.1376,
+        "std_entre_folds": 0.0156,
+        "std_entre_semillas": 0.0048,
+        "media_global_sobre_0_2": 0.6882
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.9315,
+            0.9289,
+            0.9012,
+            0.9263,
+            0.919
+          ],
+          "6": [
+            0.8934,
+            0.9095,
+            0.9519,
+            0.8973,
+            0.8907
+          ],
+          "7": [
+            0.9208,
+            0.9457,
+            0.9181,
+            0.9346,
+            0.8865
+          ],
+          "8": [
+            0.9286,
+            0.9421,
+            0.9042,
+            0.931,
+            0.9113
+          ],
+          "9": [
+            0.8843,
+            0.9249,
+            0.9196,
+            0.9075,
+            0.9383
+          ]
+        },
+        "media_global": 0.9179,
+        "std_entre_folds": 0.0184,
+        "std_entre_semillas": 0.0055
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.4808,
+            0.6015,
+            0.6199,
+            0.604,
+            0.6454
+          ],
+          "6": [
+            0.3942,
+            0.6281,
+            0.6286,
+            0.6212,
+            0.6165
+          ],
+          "7": [
+            0.5476,
+            0.5521,
+            0.6449,
+            0.6927,
+            0.4588
+          ],
+          "8": [
+            0.5572,
+            0.5558,
+            0.6366,
+            0.6539,
+            0.5736
+          ],
+          "9": [
+            0.4972,
+            0.5669,
+            0.6111,
+            0.5464,
+            0.712
+          ]
+        },
+        "media_global": 0.5859,
+        "std_entre_folds": 0.0715,
+        "std_entre_semillas": 0.0067
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "5": [
+            137.3137,
+            113.8846,
+            190.4615,
+            127.6471,
+            171.6471
+          ],
+          "6": [
+            209.5,
+            209.0,
+            86.4706,
+            158.7451,
+            210.1569
+          ],
+          "7": [
+            167.7308,
+            103.0588,
+            177.7692,
+            70.7843,
+            205.9216
+          ],
+          "8": [
+            96.1154,
+            98.098,
+            189.0769,
+            95.0588,
+            245.4902
+          ],
+          "9": [
+            269.3922,
+            125.4423,
+            153.5,
+            130.7059,
+            115.5882
+          ]
+        },
+        "media_global": 154.3424,
+        "std_entre_folds": 51.6646,
+        "std_entre_semillas": 11.4393
+      }
+    },
+    "ImagenBasicos": {
+      "pauc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.0707,
+            0.1258,
+            0.0901,
+            0.0915,
+            0.0714
+          ],
+          "6": [
+            0.0909,
+            0.1066,
+            0.0552,
+            0.0942,
+            0.0951
+          ],
+          "7": [
+            0.0939,
+            0.0978,
+            0.0858,
+            0.1125,
+            0.0698
+          ],
+          "8": [
+            0.1241,
+            0.0802,
+            0.0691,
+            0.0897,
+            0.0675
+          ],
+          "9": [
+            0.0768,
+            0.0823,
+            0.0809,
+            0.1031,
+            0.0843
+          ]
+        },
+        "media_global": 0.0884,
+        "std_entre_folds": 0.017,
+        "std_entre_semillas": 0.0024,
+        "media_global_sobre_0_2": 0.4418
+      },
+      "auc": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.7922,
+            0.8948,
+            0.8323,
+            0.8506,
+            0.7998
+          ],
+          "6": [
+            0.8495,
+            0.8573,
+            0.8041,
+            0.8433,
+            0.842
+          ],
+          "7": [
+            0.8551,
+            0.8405,
+            0.8365,
+            0.8699,
+            0.7845
+          ],
+          "8": [
+            0.889,
+            0.8365,
+            0.8221,
+            0.8293,
+            0.7791
+          ],
+          "9": [
+            0.8252,
+            0.8233,
+            0.8252,
+            0.8631,
+            0.8282
+          ]
+        },
+        "media_global": 0.8349,
+        "std_entre_folds": 0.0285,
+        "std_entre_semillas": 0.0029
+      },
+      "setop15": {
+        "por_semilla_y_fold": {
+          "5": [
+            0.2404,
+            0.4683,
+            0.4512,
+            0.4096,
+            0.4132
+          ],
+          "6": [
+            0.3175,
+            0.2715,
+            0.4492,
+            0.3712,
+            0.5268
+          ],
+          "7": [
+            0.4461,
+            0.2882,
+            0.5109,
+            0.4388,
+            0.3859
+          ],
+          "8": [
+            0.3856,
+            0.3975,
+            0.4385,
+            0.3115,
+            0.3773
+          ],
+          "9": [
+            0.3067,
+            0.2955,
+            0.4896,
+            0.4084,
+            0.4035
+          ]
+        },
+        "media_global": 0.3921,
+        "std_entre_folds": 0.075,
+        "std_entre_semillas": 0.0123
+      },
+      "nnt80": {
+        "por_semilla_y_fold": {
+          "5": [
+            538.6471,
+            229.0962,
+            400.6154,
+            272.6863,
+            441.451
+          ],
+          "6": [
+            241.5192,
+            241.3269,
+            600.9608,
+            313.3137,
+            335.6275
+          ],
+          "7": [
+            346.9231,
+            361.3529,
+            380.1731,
+            273.5882,
+            507.4706
+          ],
+          "8": [
+            187.3462,
+            326.7843,
+            476.9423,
+            379.2549,
+            566.2745
+          ],
+          "9": [
+            382.2941,
+            429.0,
+            388.4808,
+            214.7255,
+            339.0196
+          ]
+        },
+        "media_global": 366.995,
+        "std_entre_folds": 109.1069,
+        "std_entre_semillas": 15.7135
+      }
+    }
+  },
+  "comparaciones_nuevo_menos_base": {
+    "pauc": {
+      "diferencias_nuevo_menos_base": [
+        0.0841,
+        0.0151,
+        0.0301,
+        0.0524,
+        0.0718,
+        0.0315,
+        0.0206,
+        0.1094,
+        0.0203,
+        0.0208,
+        0.0458,
+        0.0675,
+        0.0498,
+        0.0346,
+        0.0402,
+        0.0165,
+        0.0779,
+        0.0552,
+        0.058,
+        0.0762,
+        0.0432,
+        0.0586,
+        0.0572,
+        0.0211,
+        0.074
+      ],
+      "n_diferencias": 25,
+      "media": 0.0493,
+      "desviacion": 0.0247,
+      "intervalo_t_95": [
+        0.0391,
+        0.0595
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        0.0218,
+        0.0767
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 25,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": 0.04927392359414132,
+      "valor_p_nadeau_bengio": 0.0011047021994926593,
+      "en_especificidad_media": {
+        "media": 0.2464,
+        "intervalo_t_95_nadeau_bengio": [
+          0.1092,
+          0.3836
+        ]
+      },
+      "papel": "principal"
+    },
+    "auc": {
+      "diferencias_nuevo_menos_base": [
+        0.1394,
+        0.0341,
+        0.0689,
+        0.0756,
+        0.1192,
+        0.044,
+        0.0522,
+        0.1478,
+        0.054,
+        0.0487,
+        0.0656,
+        0.1052,
+        0.0816,
+        0.0647,
+        0.102,
+        0.0396,
+        0.1056,
+        0.0822,
+        0.1018,
+        0.1322,
+        0.0591,
+        0.1015,
+        0.0943,
+        0.0444,
+        0.11
+      ],
+      "n_diferencias": 25,
+      "media": 0.0829,
+      "desviacion": 0.0328,
+      "intervalo_t_95": [
+        0.0694,
+        0.0965
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        0.0465,
+        0.1193
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 25,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": 0.08294069040055159,
+      "valor_p_nadeau_bengio": 8.851103614882666e-05,
+      "papel": "secundaria"
+    },
+    "setop15": {
+      "diferencias_nuevo_menos_base": [
+        0.2404,
+        0.1332,
+        0.1687,
+        0.1944,
+        0.2322,
+        0.0767,
+        0.3566,
+        0.1794,
+        0.25,
+        0.0897,
+        0.1015,
+        0.2639,
+        0.1341,
+        0.2539,
+        0.0729,
+        0.1716,
+        0.1583,
+        0.1981,
+        0.3425,
+        0.1963,
+        0.1905,
+        0.2714,
+        0.1215,
+        0.138,
+        0.3085
+      ],
+      "n_diferencias": 25,
+      "media": 0.1938,
+      "desviacion": 0.0788,
+      "intervalo_t_95": [
+        0.1612,
+        0.2263
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        0.1062,
+        0.2813
+      ],
+      "mayor_es_mejor": true,
+      "nuevo_mejor_en_folds": 25,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": 0.19376448327630583,
+      "valor_p_nadeau_bengio": 0.00012497004764062687,
+      "papel": "secundaria"
+    },
+    "nnt80": {
+      "diferencias_nuevo_menos_base": [
+        -401.3333,
+        -115.2115,
+        -210.1538,
+        -145.0392,
+        -269.8039,
+        -32.0192,
+        -32.3269,
+        -514.4902,
+        -154.5686,
+        -125.4706,
+        -179.1923,
+        -258.2941,
+        -202.4038,
+        -202.8039,
+        -301.549,
+        -91.2308,
+        -228.6863,
+        -287.8654,
+        -284.1961,
+        -320.7843,
+        -112.902,
+        -303.5577,
+        -234.9808,
+        -84.0196,
+        -223.4314
+      ],
+      "n_diferencias": 25,
+      "media": -212.6526,
+      "desviacion": 112.6048,
+      "intervalo_t_95": [
+        -259.1336,
+        -166.1716
+      ],
+      "intervalo_t_95_nadeau_bengio": [
+        -337.8064,
+        -87.4988
+      ],
+      "mayor_es_mejor": false,
+      "nuevo_mejor_en_folds": 25,
+      "de_folds": 25,
+      "nuevo_mejor_en_semillas": 5,
+      "de_semillas": 5,
+      "media_sin_redondear": -212.6525942684766,
+      "valor_p_nadeau_bengio": 0.0018114886093877323,
+      "papel": "secundaria"
+    }
+  },
+  "regla": {
+    "que_es": "La regla de PLAN.md, Fase 4f: a favor si el valor p bilateral de Nadeau y Bengio de la pAUC es menor que alfa y la diferencia media es positiva. Una sola pregunta, sin corrección por multiplicidad.",
+    "alfa": 0.05,
+    "valor_p": 0.0011047021994926593,
+    "media_sin_redondear": 0.04927392359414132,
+    "valor_p_menor_que_alfa": true,
+    "media_positiva": true,
+    "a_favor": true
+  },
+  "segundos": {
+    "imagen_basicos_por_semilla": {
+      "5": 31.1,
+      "6": 32.7,
+      "7": 32.5,
+      "8": 30.3,
+      "9": 30.0
+    },
+    "total": 164.1
+  },
+  "nota": "La red de la 4e ajustada − «Imagen + básicos», pareado pliegue a pliegue, con los valores sin redondear. En el NNT80% SE menos es mejor. Las métricas secundarias no deciden. Aplica la regla tal como la fija PLAN.md; no interpreta."
+}
