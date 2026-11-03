@@ -12,9 +12,10 @@ salida, y qué hacer cuando algo no se pueda cerrar.
 la Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
 ni la 4e, la receta de imagen del 10.º puesto, cambiaron el modelo
 recomendado, M3 limpio, ni la especificación de la Fase 5; la Fase 4f, una sola
-pregunta sobre el escenario sin fotografía corporal total, está en curso; al
-cerrar la 4e, la persona decide si se usa cómputo aparte, y la Fase 5 espera a
-esa decisión; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+pregunta sobre el escenario sin fotografía corporal total, también cerrada, dio
+su resultado a favor, y la recomendación para ese escenario pasa a la red de la
+4e; al cerrar la 4e, la persona decide si se usa cómputo aparte, y la Fase 5
+espera a esa decisión; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
@@ -43,7 +44,8 @@ regla sin que ninguna de sus dos preguntas diera su resultado a favor.*
 *2026-11-02: la persona abrió la Fase 4f, una sola pregunta: la red de la 4e
 frente a «Imagen + básicos».* *2026-11-02: la persona añadió a la
 especificación de la Fase 5 la red de la 4e y «Imagen + básicos», como
-resultado descriptivo que no cambia ninguna recomendación.*
+resultado descriptivo que no cambia ninguna recomendación.* *2026-11-02: la
+Fase 4f cerró por su regla con su pregunta a favor.*
 
 ## Cómo leer una puerta
 
@@ -2266,7 +2268,8 @@ Por la regla:
 - la especificación de la Fase 5 no cambia;
 - no se mide el tiempo de inferencia de C7;
 - la red de la 4e no mejora a la red de la Fase 4c, y la recomendación para el
-  escenario sin fotografía corporal total no cambia.
+  escenario sin fotografía corporal total no cambia. *Cambió el 2026-11-02, por
+  la regla de la Fase 4f.*
 
 El intervalo al 95 % de la pregunta 1 excluye el cero, pero la regla es Holm con
 dos preguntas, no ese intervalo, y su valor p no llega a 0,025. En especificidad
@@ -2300,10 +2303,14 @@ y solo tenía las dos primeras.*
 
 ---
 
-## Fase 4f — La red de la 4e frente a «Imagen + básicos» — EN CURSO
+## Fase 4f — La red de la 4e frente a «Imagen + básicos» — CERRADA
 
-**Estado: EN CURSO (2026-11-02).** La pregunta, la regla y los controles se
-fijan abajo antes de correr. El resultado irá al final de la fase.
+**Estado: CERRADA (2026-11-02), por su regla, con su pregunta a favor.** La
+recomendación para el escenario sin fotografía corporal total pasa a la red de
+la 4e; M3 limpio sigue siendo el modelo recomendado donde se toma esa
+fotografía (al final de la fase, «Resultado de la regla»). *Hasta ese día decía
+que la fase estaba en curso, con la pregunta, la regla y los controles fijados
+antes de correr.*
 
 **Decisión de la persona (2026-11-02), tomada después de ver la Fase 4e.** Una
 sola pregunta, sobre el escenario sin sistema de fotografía corporal total:
@@ -2399,6 +2406,59 @@ escrito al final de esta fase.
 - No abre el reservado.
 - No cambia el modelo recomendado ni, por su regla, la especificación de la
   Fase 5.
+
+**Resultado de la regla (2026-11-02).** Semillas 5 a 9 × 5 pliegues
+(`outputs/fase4f-red4e-vs-imagen-basicos.json`). Red de la 4e − «Imagen +
+básicos», en la pAUC: +0,0493 [0,0218; 0,0767], 0,1376 frente a 0,0884; valor
+p 0,001105 frente a 0,05; mejor en 25 de 25 pliegues y 5 de 5 semillas. **Da
+su resultado a favor** (`regla.a_favor`). Por la regla:
+- la recomendación para el escenario sin fotografía corporal total pasa a la
+  red de la 4e, con la salvedad de que se midió en los recortes de SLICE-3D y
+  no en fotos de teléfono;
+- M3 limpio sigue siendo el modelo recomendado donde se toma la fotografía
+  corporal total;
+- la especificación de la Fase 5 no cambia por esta regla. La red y «Imagen +
+  básicos» entraron en ella como resultado descriptivo por una decisión de la
+  persona del mismo día, escrita antes de leer este resultado (Fase 5).
+
+Las tres métricas secundarias no deciden. Las tres tienen un intervalo al 95 %
+que excluye el cero, a favor de la red, en 25 de 25 pliegues y 5 de 5
+semillas:
+- el AUC, +0,0829 [0,0465; 0,1193];
+- la sensibilidad top-15, +0,1938 [0,1062; 0,2813];
+- el NNT80% SE, −212,6526 [−337,8064; −87,4988].
+
+En especificidad media, la pAUC dividida por 0,2, la diferencia es +0,2464
+[0,1092; 0,3836] (`comparaciones_nuevo_menos_base.pauc.en_especificidad_media`).
+
+**Los controles pasaron antes de la comparación.** «Imagen + básicos»
+recalculado reproduce `outputs/imagen-sola.json` pliegue a pliegue en las
+cuatro métricas, y frente a la semilla siguiente no coincide en ninguna
+(`reproduccion_del_base`). La red reproduce `outputs/fase4e-red-vs-red4c.json`
+(`reproduccion_de_la_red`). La logística no dio ningún aviso de no
+convergencia, y la corrida tardó 164,1 s.
+
+**Lo que el resultado no dice.**
+- **Que la pregunta se eligiera a ciegas.** Se eligió después de ver la 4e, en
+  los mismos pliegues de su confirmación, y con la diferencia de medias ya
+  calculable desde `outputs/` (arriba).
+- **Cuánto cuesta la red al predecir.** Su tiempo de inferencia no se midió con
+  el procedimiento de `tiempo-inferencia`: la regla de esta fase no lo pedía.
+- **Cómo rinde con fotos de teléfono.** Sigue sin medirse.
+
+*Lectura nuestra, no medición:* la red no usa edad, sexo ni zona del cuerpo,
+así que la salvedad de la zona del cuerpo de «Imagen + básicos», que pudo venir
+del software del sistema (`CLAUDE.md`, hallazgo 10), no se aplica a la
+recomendación nueva. La red con esos datos sigue sin probarse.
+
+**Bitácora, fila de la Fase 4f.** Con ella, la bitácora suma 19 comparaciones
+por la pAUC desde la Fase 4: las 18 anteriores (Fase 4e, «Bitácora, filas de la
+Fase 4e») y esta. La columna de la regla da el valor p y su umbral; es una sola
+pregunta, sin corrección por multiplicidad dentro de la fase.
+
+| Modelo | Fase | Comparación | Diferencia de pAUC | NB 95 % | Intervalo de la regla | Resultado | Archivo |
+|---|---|---|---|---|---|---|---|
+| Red de la 4e ajustada | 4f | Red de la 4e − «Imagen + básicos», semillas 5 a 9 | +0,0493 | [0,0218; 0,0767] | valor p 0,001105 frente a 0,05 | a favor: recomendación sin fotografía corporal total | `fase4f-red4e-vs-imagen-basicos.json` |
 
 ---
 
