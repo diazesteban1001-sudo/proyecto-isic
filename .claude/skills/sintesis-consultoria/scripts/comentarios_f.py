@@ -58,7 +58,6 @@ SEP = r"(?:\s*,\s*|\s+(?:y|e)\s+)"
 LISTA_DE_RUTAS = re.compile(rf"^{RUTA}(?:{SEP}{RUTA})*$")
 FUENTE_OUTPUTS = re.compile(r"^outputs/[\w.-]+\.json$")
 ARCHIVO_REFERENCIAS = re.compile(r"referencias/[^\s,;()«»]+")
-LINEAS = re.compile(r"l[ií]neas?\s+\d")
 
 
 # ---- lectura del comentario ---------------------------------------------------------------------
@@ -223,21 +222,45 @@ def parte_de_outputs(parte, abreviaturas, cargar, relativas=True):
     return motivos, resueltas
 
 
-def parte_de_referencias(parte):
-    """(motivos, archivo, local_ausente)."""
+def lineas_citadas(parte):
+    """Los números de línea que cita una parte: «línea N», «líneas N, M y K»,
+    «líneas N–M», también entre paréntesis, como en «Tabla 3 (línea 216)». Lo que
+    va entre «…» se quita antes, para que una cita intercalada no corte la lista."""
+    s = re.sub(r"\(\s*\)", "", re.sub(r"«[^»]*»", "", parte))
+    lineas = set()
+    for m in re.finditer(r"l[ií]neas?\s+", s):
+        pos = m.end()
+        while True:
+            n = re.match(r"(\d+)(?:\s*[–-]\s*(\d+))?", s[pos:])
+            if not n:
+                break
+            a, b = int(n.group(1)), int(n.group(2) or n.group(1))
+            lineas.update(range(a, b + 1))
+            pos += n.end()
+            sep = re.match(r"\s*(?:,|y)\s*(?=\d)", s[pos:])
+            if not sep:
+                break
+            pos += sep.end()
+    return lineas
+
+
+def parte_de_referencias(parte, raiz=RAIZ):
+    """(motivos, {archivo, lineas, local, ausente})."""
     m = ARCHIVO_REFERENCIAS.search(parte)
     archivo = m.group(0).rstrip(".,:")
     local = "_texto-completo/" in archivo or "LOCAL" in parte
-    existe = os.path.exists(os.path.join(RAIZ, archivo))
+    existe = os.path.exists(os.path.join(raiz, archivo))
+    lineas = lineas_citadas(parte)
     motivos = []
-    if not LINEAS.search(parte):
+    if not lineas:
         motivos.append(f"referencia sin líneas: {archivo}")
     if not existe and not local:
         motivos.append(f"no existe {archivo}")
-    return motivos, archivo, (local and not existe)
+    return motivos, {"archivo": archivo, "lineas": sorted(lineas), "local": local,
+                     "ausente": not existe}
 
 
-def analizar_comentario(texto, abreviaturas, cargar, relativas=True):
+def analizar_comentario(texto, abreviaturas, cargar, relativas=True, raiz=RAIZ):
     partes = partir(" ".join(texto.split()))
     salida = {"motivos": [], "documentos": [], "rutas": [], "referencias": [], "local_ausente": [],
               "sin_fuente": None, "fuentes": 0}
@@ -246,11 +269,11 @@ def analizar_comentario(texto, abreviaturas, cargar, relativas=True):
             salida["sin_fuente"] = p.split(":", 1)[1].strip()
         elif "referencias/" in p:
             salida["fuentes"] += 1
-            motivos, archivo, ausente = parte_de_referencias(p)
+            motivos, ref = parte_de_referencias(p, raiz)
             salida["motivos"] += motivos
-            salida["referencias"].append(archivo)
-            if ausente:
-                salida["local_ausente"].append(archivo)
+            salida["referencias"].append(ref)
+            if ref["local"] and ref["ausente"]:
+                salida["local_ausente"].append(ref["archivo"])
         elif " > " in p or "outputs/" in p:
             salida["fuentes"] += 1
             motivos, rutas = parte_de_outputs(p, abreviaturas, cargar, relativas)
@@ -315,7 +338,7 @@ def segun_el_verificador(texto):
 
 # ---- el informe ----------------------------------------------------------------------------------
 
-def analizar(texto, outputs_dir, relativas=True):
+def analizar(texto, outputs_dir, relativas=True, raiz=RAIZ):
     cache = {}
 
     def cargar(archivo):
@@ -332,7 +355,7 @@ def analizar(texto, outputs_dir, relativas=True):
     encabezados = [m.start() for m in ENCABEZADO.finditer(texto)]
     comentarios = []
     for m in COMENTARIO_F.finditer(texto):
-        a = analizar_comentario(m.group(1), abreviaturas_en(bloques, m.start()), cargar, relativas)
+        a = analizar_comentario(m.group(1), abreviaturas_en(bloques, m.start()), cargar, relativas, raiz)
         a.update({"inicio": m.start(), "linea": texto[: m.start()].count("\n") + 1,
                   "texto": " ".join(m.group(0).split()), "numeros": []})
         comentarios.append(a)

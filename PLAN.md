@@ -3238,6 +3238,54 @@ que se revisaron uno por uno: 21 fichas, 14 de texto completo y 5 más.
   entra en la gramática, no solo si una ruta no existe. Las secciones nuevas
   se escriben ya en la gramática, y el analizador da hoy 0 fuera de ella.
 
+**La verificación por campo: el paso 4, la clasificación (2026-11-04).**
+- **Qué es:** `por_campo.py`, en los scripts de `sintesis-consultoria`, con su
+  prueba, `test_por_campo.py`, que da 33 de 33. El analizador guarda ahora las
+  líneas que cita cada referencia, también entre paréntesis, como en «Tabla 3
+  (línea 216)».
+- **Las regresiones,** con la clase fijada antes de escribir el código, caen
+  donde se esperaba:
+  - el «0,922» de las líneas 818 y 938 y el «0,695» de la 835, respaldados por
+    su referencia;
+  - el «20 %» de la 462, por su campo, de un archivo fuera del corpus;
+  - el «11» de la 528, que no está en sus campos.
+- **Sobre `informe/borrador-v2.md`, de los 381 números del cuerpo:**
+  - respaldados: 299 por su campo y 19 por su referencia;
+  - **señalados, 63:**
+    - 42 no están en sus campos;
+    - 13 están fuera de las líneas citadas. Los 13 son años de citas
+      bibliográficas, como «Marchetti et al. (2023)»: no son cifras medidas,
+      y qué hacer con ellos lo decide la persona;
+    - 8 citan un documento del proyecto;
+  - ninguno queda sin comentario, sin poder comprobarse o declarado sin
+    fuente.
+- **Las citas de `referencias/` que apuntan a líneas nuestras:** de 66 citas,
+  57 apuntan solo a líneas originales, 8 solo a líneas nuestras y 1 a una
+  mezcla. Las 8:
+  - las tres que vio la persona;
+  - y otras cinco: `nadeau-bengio-2003-t-corregido.md`, líneas 60–74 y 95
+    (la fórmula transcrita y la tabla de correspondencia) y 34–56 (la
+    paráfrasis del escenario); `simeoni-2025-dinov3.md`, 9–10 y 64–74;
+    `oquab-2023-dinov2.md`, 10; y `slice3d-fechas-de-publicacion.md`, 11–13 y
+    96–99.
+
+  La mezcla es `slice3d-metadata-tbp-lv.md`, línea 47, que es original, y
+  81–82, que son nuestras. Salvo la de `oquab-2023-dinov2.md`, que ya estaba en
+  el borrador, esas líneas las eligió el agente en el paso 3, leyendo la
+  sección que nombraba cada comentario.
+- **La tasa de coincidencias por azar dentro del ámbito de cada comentario**
+  (`por_campo.py --medir-azar`), con media ponderada por los números que cubre
+  cada uno: 1,8 % de los enteros del 1 al 200, 4,6 % y 1,2 % en los dos rangos
+  de cuatro decimales y 2,9 % en el de tres. En todo el corpus son 88,0 %,
+  89,4 %, 60,7 % y 92,6 %. Está en el `SKILL.md` de `sintesis-consultoria`.
+- **Sin conectar al verificador: es decisión de la persona.** Al conectarla
+  dejan de pasar dos casos de `test_generar_demo.py`, C y D, que quitan datos
+  de `outputs/diseno-validacion.json` y de
+  `outputs/fase4-m3limpio-vs-m2.json` y esperan que la demo se escriba con un
+  aviso. Con la especificación, una ruta citada que no existe detiene el
+  verificador, y la demo no se escribe. La conexión no se versionó; sin ella,
+  las pruebas del verificador pasan todas, 47 de 47 la de la demo.
+
 ---
 
 ## Decisiones

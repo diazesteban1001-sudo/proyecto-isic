@@ -246,6 +246,43 @@ sintéticos, cada caso con el que debe fallar. Salida:
   --borrador "$BORRADOR" --outputs-dir outputs/ --out outputs/sintesis-comentarios-f
 ```
 
+**La verificación por campo (2026-11-04).** Es el paso 4 de la misma
+especificación, y **todavía no está conectada al verificador**: chocaba con dos
+casos de `test_generar_demo.py`, y esa decisión es de la persona (`PLAN.md`,
+Fase 6). `scripts/por_campo.py` busca cada número del cuerpo en lo que cita su
+comentario `F:`:
+- **en los campos citados**, aunque su archivo esté en `FUERA_DEL_CORPUS`;
+- **en las líneas citadas de `referencias/`**, pero solo en las del texto
+  original. Son originales todas las líneas de `_texto-completo/` y de las
+  carpetas con los originales intactos, y en cualquier otro `.md`, las de cita
+  («>») y las que van tras «## Texto original». En un `.md` que se declara
+  «obra del proyecto», ninguna.
+
+Cada número cae en una de ocho clases, y la suma tiene que dar el total. Si
+algún comentario no entra en la gramática, se detiene. Control:
+`scripts/test_por_campo.py`, con casos sintéticos y reales, cada uno con su caso
+que debe fallar.
+
+Con `--medir-azar`, mide la tasa de coincidencias por azar dentro del ámbito de
+cada comentario, con los rangos del límite de arriba. Sobre el `outputs/` y el
+borrador del 2026-11-04, con 148 comentarios con fuente, la media ponderada por
+los números que cubre cada comentario es:
+
+| Rango | Media ponderada | Mediana | Máximo |
+|---|---|---|---|
+| Enteros del 1 al 200 | 1,8 % | 0,5 % | 11 % |
+| 4 decimales, 0,0001 a 0,0499 | 4,6 % | 0 % | 44,7 % |
+| 4 decimales, 0,0500 a 0,2000 | 1,2 % | 0 % | 14,6 % |
+| 3 decimales, 0,500 a 1,000 | 2,9 % | 0 % | 50,1 % |
+
+Será el límite nuevo cuando la verificación por campo se conecte al
+verificador. El de arriba es el de la búsqueda en todo el corpus.
+
+```bash
+.venv/bin/python .claude/skills/sintesis-consultoria/scripts/por_campo.py \
+  --borrador "$BORRADOR" --outputs-dir outputs/ --medir-azar
+```
+
 Si el script señala números sin respaldo, corrige el borrador o
 justifica por qué esa cifra no necesita estar en `outputs/` (ej. es un
 conteo estructural obvio, no un resultado medido) antes de continuar.
