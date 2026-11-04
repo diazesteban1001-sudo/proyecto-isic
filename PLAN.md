@@ -2930,6 +2930,102 @@ ninguna recomendación, no suma a la bitácora y no toca el reservado.
     día, por decisión de la persona, con esta medición y el valor anterior a
     la vista.*
 
+**La verificación por campo: especificación (2026-11-04, de la persona).**
+Fijada antes de escribir código.
+
+- **El motivo.** Con el corpus de hoy, que una cifra quede «respaldada» casi no
+  prueba nada. Pasan por azar el 88,0 % de los enteros del 1 al 200 y el
+  60,7 % de los valores de cuatro decimales entre 0,05 y 0,2 (`SKILL.md` de
+  `sintesis-consultoria`, «Límite que queda, medido»). Cada cifra del borrador
+  se verificará contra lo que cita su comentario `F:`, no contra todo el
+  corpus.
+- **La regla de asociación.** Un comentario `F:` cubre los números del cuerpo
+  que hay entre el comentario `F:` anterior, o el encabezado anterior, y él
+  mismo. Es una regla generosa, porque un comentario al final de un párrafo
+  largo lo cubre entero, y se declara así.
+- **La gramática de la parte de `outputs/`:**
+  - **La forma** es `FUENTE > ruta[, ruta][ y ruta]`.
+  - **`FUENTE`** es `outputs/x.json` o una abreviatura declarada en un
+    comentario «Abreviaturas» del mismo archivo, válida desde ahí. Una
+    abreviatura puede nombrar un archivo (`F3L`) o un tramo de ruta (`C`,
+    `IC`). Varias fuentes se unen con «y». No hay comodines en la fuente.
+  - **En las rutas** valen `[i]` para los índices y `*` como comodín de clave o
+    de índice.
+  - **Una ruta que empieza por «.»** sustituye los últimos tramos de la ruta
+    anterior, tantos como tenga ella.
+  - **El texto entre paréntesis** se ignora.
+  - **Una ruta citada designa el subárbol entero** que cuelga de ella.
+  - **Para contar elementos**, `n(ruta)` es el número de elementos de una
+    lista.
+  - **Una ruta que no existe** en su JSON detiene el verificador, como una cita
+    rota.
+- **La parte de `referencias/`** cita el archivo y sus líneas. Una cita sin
+  líneas, como «Tabla 3», no entra en la gramática. Al buscar en la fuente se
+  normaliza su notación: «0,94» frente a «0.94», «1.000» frente a «1,000» o
+  «1,000+».
+- **Las clases.** Cada número del cuerpo cae en una sola, y la suma de las
+  clases tiene que dar el total:
+  - *respaldada por su campo:* el valor está en los subárboles citados, con la
+    tolerancia de hoy;
+  - *respaldada por su referencia:* está en las líneas citadas;
+  - *no está en sus campos* y *fuera de las líneas citadas:* señaladas;
+  - *no comprobable aquí:* una cita `LOCAL` cuyo archivo no está en esta
+    máquina;
+  - *cita un documento del proyecto:* el comentario solo cita `PLAN.md`,
+    `CLAUDE.md`, secciones del informe o scripts. Queda señalada;
+  - *sin comentario:* señalada;
+  - *declarada sin fuente:* marcada a mano con
+    `<!-- F: sin fuente: <motivo> -->`. No cuenta como respaldada.
+
+  Un comentario mixto pasa si el valor está en el campo o en las líneas, y la
+  salida dice cuál de los dos.
+- **Dónde vive.** En `verificar_trazabilidad.py`, como un grupo nuevo de la
+  misma salida, `por_campo`. Cada cifra señalada va con su comentario y los
+  campos que cita. **La salida trae completa la lista de marcas «sin fuente»,**
+  cada una con su motivo. La búsqueda en todo el corpus se queda como
+  diagnóstico. La verificación y la demo se regeneran juntas.
+- **Los controles**, cada uno con su caso que debe fallar:
+  1. **El caso central.** La cifra está en el corpus pero no en su campo: la
+     búsqueda por campo la señala, y la búsqueda en el corpus, el caso que debe
+     fallar, la da por respaldada.
+  2. **Las regresiones reales.** El «0,922», que pasa por un AUC de
+     `efecto-particion.json`, y el «11» de la auditoría de columnas, que pasa
+     por un recuento de `mecanismo-2a.json`, tienen que quedar en la clase
+     esperada. También el «0,695», una vez que su comentario cite las líneas.
+  3. **Las rutas.** Las relativas y los comodines se resuelven. *Debe fallar:*
+     un resolvedor que ignore la ruta relativa. Una ruta mal escrita detiene el
+     verificador.
+  4. **Las referencias.** Un valor dentro de las líneas citadas pasa. *Debe
+     fallar:* el mismo valor fuera de ellas. Sin normalizar la notación,
+     «0,94» no se encuentra en una fuente que escribe «0.94».
+  5. **Sin comentario** queda señalada. *Debe fallar:* la misma cifra con su
+     comentario pasa.
+  6. **La suma de las clases** da el total, o el verificador se detiene.
+- **La medición que lo justifica.** La tasa de coincidencias por azar dentro
+  del ámbito de cada comentario, con los rangos del límite de hoy. Queda
+  escrita como el límite nuevo.
+- **El orden.** Va en la Fase 6, antes de regenerar el informe.
+  1. Esta especificación.
+  2. **El analizador de los comentarios, solo en modo informe.** Dice cuáles
+     entran en la gramática y cuáles no. **Agrupa por tipo los que solo citan
+     documentos del proyecto,** para decidir las marcas «sin fuente» por
+     grupo. **Aquí se detiene:** reporta cuántos comentarios no entran en la
+     gramática y una estimación de tiempo para reescribirlos, antes de tocar
+     ninguno.
+  3. Reescribir los que no entren. Es decisión de la persona, porque toca el
+     informe, aunque solo sean comentarios.
+  4. La clasificación por campo, con sus controles.
+  5. Regenerar la verificación y la demo.
+- **Las secciones nuevas del informe** se escriben desde el principio con
+  comentarios en la gramática nueva: las fases 4d a 4f, la potencia de la
+  prueba y la Fase 5.
+- **El README queda fuera del verificador.** Sus cifras se cotejan a mano, y
+  eso se declara.
+- *Precisión del agente, el mismo día y antes de escribir código:* el
+  analizador escribe `outputs/sintesis-comentarios-f.json` y su `.md`. Ese
+  archivo entra en `FUERA_DEL_CORPUS`, porque sus recuentos describen
+  comentarios del borrador, no mediciones, como `sintesis-verificacion.json`.
+
 ---
 
 ## Decisiones
