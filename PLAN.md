@@ -2762,6 +2762,110 @@ persona).** Tomadas después de correr.
    correr: conserva el `comando` de la corrida, y el commit de la corrección lo
    anota.
 
+**La potencia de la prueba: especificación (2026-11-04, de la persona).**
+Fijada antes de correr nada. Es descriptiva: no compara ningún modelo, no cambia
+ninguna recomendación, no suma a la bitácora y no toca el reservado.
+
+- **La pregunta.** Si un modelo fuera de verdad mejor que M3 limpio en la pAUC
+  por una cantidad δ, ¿con qué probabilidad daría su resultado a favor la
+  prueba de las fases 4d a 4f? Esa prueba es `fase4d.valor_p`, el valor p
+  bilateral de Nadeau y Bengio, y da su resultado a favor con p < 0,05 y media
+  positiva. Se responde con 5 y con 10 semillas × 5 pliegues, es decir, con
+  n = 25 y n = 50 diferencias.
+- **De dónde sale la variabilidad.** De las diferencias pliegue a pliegue de la
+  pAUC de las cuatro comparaciones contra M3 limpio que ya están en `outputs/`,
+  cada una por separado, sin juntarlas
+  (`comparaciones_nuevo_menos_base.pauc.diferencias_nuevo_menos_base`):
+  - C4, `fase4c-c4-vs-m3limpio.json`, semillas 0 a 9;
+  - C5, `fase4d-c5-vs-m3limpio.json`, semillas 0 a 9;
+  - C6, `fase4d-c6-vs-m3limpio.json`, semillas 0 a 4;
+  - C7, `fase4e-c7-vs-m3limpio.json`, semillas 5 a 9.
+
+  De cada una se toma s, la desviación típica de sus diferencias.
+- **La curva principal: la potencia de la prueba bajo su propio modelo de
+  varianza.**
+  - Para cada comparación y n ∈ {25, 50}, el error estándar es
+    s·√(1/n + 1/4).
+  - La probabilidad de «a favor» sale de la t no central de n − 1 grados de
+    libertad, con no centralidad δ / (s·√(1/n + 1/4)).
+  - δ va de 0,002 a 0,02 en pasos de 0,001.
+  - Se reporta, por comparación y n, el δ con el 50 % y con el 80 % de
+    potencia.
+- **El modelo de varianza no es un supuesto añadido: es el de la prueba.** La
+  prueba ya supone una correlación ρ = 1/5 entre las diferencias, la razón
+  n_prueba/(n_entrenamiento + n_prueba) con 5 pliegues. De ella sale el
+  1/4 = ρ/(1 − ρ) de su error estándar
+  (`referencias/nadeau-bengio-2003-t-corregido.md`). Sus autores la llaman
+  *"gross"* (p. 254). En esa misma página, el artículo dice que, con
+  diferencias normales y ρ igual a ρ₀, el estadístico sigue una t de J − 1
+  grados de libertad; de ahí sale la t no central de la curva (paráfrasis; es
+  su Lema 2).
+- **Lo que la curva no incluye.**
+  - La incertidumbre de s: se toma como la dispersión verdadera.
+  - La forma de las diferencias de un modelo que fuera de verdad δ mejor: se
+    supone la de C4 a C7, desplazada en δ.
+- **Control por simulación.**
+  - **El generador** es el del control negativo de la 4d,
+    `test_fase4d_comparacion.correlacionadas`, con diferencias normales de
+    correlación 0,2.
+  - **La escala.** Para cada comparación, se llevan a la desviación s (cómo,
+    en las precisiones del agente, abajo) y se les suma δ.
+  - **Cuántas veces.** 20.000 juegos por comparación, n y δ, con semilla 2026,
+    la del control de la 4d. Los juegos son los mismos para todos los δ de una
+    comparación y un n.
+  - **Los controles, cada uno con su caso que debe fallar:**
+    - (a) La tasa simulada coincide con la analítica dentro del error de
+      Monte Carlo, en cada comparación, n y δ. *Debe fallar:* el generador con
+      ρ = 0.
+    - (b) Con δ = 0, la tasa es a lo sumo el 5 %. *Debe fallar:* la t sin
+      corregir, `fase4d.valor_p_ingenuo`, como en la 4d.
+    - (c) Con δ = 0,05, la tasa a favor es al menos el 99 %. *Debe fallar:*
+      δ = −0,05.
+- **Controles previos, sobre las diferencias guardadas.**
+  - **La prueba es la nuestra.** Desde las diferencias, `fase4d.valor_p` y el
+    intervalo de `evaluar_repetido._nadeau_bengio` reproducen la `media`, la
+    `desviacion` y el `intervalo_t_95_nadeau_bengio` guardados, a 4 decimales,
+    en las cuatro. También reproducen el `valor_p_nadeau_bengio` de C5, C6 y
+    C7, con una diferencia de como mucho 0,002, porque las diferencias están
+    guardadas con 4 decimales. *Debe fallar:* la t sin corregir.
+  - **Los bloques son semillas.** La lista guardada coincide, en su orden, con
+    candidato − M3 limpio calculado desde `metricas.*.pauc.por_semilla_y_fold`,
+    semilla por semilla, con una diferencia de como mucho 0,00015, porque son
+    dos valores redondeados. *Debe fallar:* la lista desplazada una semilla.
+- **Una línea descriptiva, entre semillas.** Por comparación, el error estándar
+  de la media entre semillas frente al de la prueba, con su propio n:
+  - entre semillas, la desviación de las medias por semilla dividida por
+    √(semillas);
+  - el de la prueba, s·√(1/n + 1/4).
+
+  Va como una línea, no como curva. Mide cuánto cambia la media con los mismos
+  pacientes; la pregunta es por pacientes nuevos.
+- **Salida:** `outputs/potencia-nadeau-bengio.json` y su `.md` (máximo 15
+  líneas, sin interpretación), de `potencia_nadeau_bengio.py`, en los scripts
+  de `modelado-baseline`. El script solo lee los cuatro `.json`: ni `data/` ni
+  el reservado.
+- *Precisiones del agente, el mismo día y antes de correr:*
+  - **La escala.** El generador da a cada diferencia varianza 1 y, dentro de
+    un juego, una varianza esperada de 1 − ρ. Por eso se multiplica por
+    s/√(1 − ρ) y no por s: así la desviación esperada dentro de un juego es s,
+    la de la curva analítica.
+  - **El error de Monte Carlo** es de 4 veces √(p(1 − p)/20.000), con p la
+    tasa analítica y p(1 − p) de al menos 1/20.000. El control (a) se aplica a
+    la tasa a favor y al rechazo bilateral.
+  - **El control (b).** Con ρ = 0,2 la prueba es exacta, así que su rechazo
+    bilateral con δ = 0 es del 5 % en esperanza, y un límite del 5 % sin
+    margen fallaría por azar la mitad de las veces. El control pide que la
+    tasa a favor sea a lo sumo 0,05, y que el rechazo bilateral sea a lo sumo
+    0,05 más 4 errores de Monte Carlo. Que ese rechazo coincida con su valor
+    analítico, el 5 %, lo comprueba el control (a).
+  - **El valor p de la simulación** se calcula vectorizado, con la fórmula de
+    `fase4d.valor_p`. Antes de usarlo, tiene que coincidir con
+    `fase4d.valor_p` en los primeros 2.000 juegos de cada comparación y n, con
+    una diferencia de como mucho 1e−12. *Debe fallar:* la versión vectorizada
+    sin corregir.
+  - **Los δ al 50 % y al 80 %** se buscan sobre la curva analítica continua,
+    no en la rejilla de 0,001, y se reportan con 4 decimales.
+
 ---
 
 ## Decisiones
