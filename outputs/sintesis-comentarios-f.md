@@ -1,7 +1,7 @@
 # Comentarios F: de informe/borrador-v2.md (modo informe)
 
 Comentarios F: 212: entran 148, no entran 0 (0 de ellos cubren números del cuerpo), solo documentos del proyecto 64, sin fuente 0.
-Números del cuerpo: 381 (los mismos que cuenta el verificador); por clase de su comentario: {'entra': 381, 'solo documentos del proyecto': 0}; sin comentario: 0.
+Números del cuerpo: 368 (los mismos que cuenta el verificador); por clase de su comentario: {'entra': 368, 'solo documentos del proyecto': 0}; sin comentario: 0.
 
 Motivos de los que no entran (un comentario puede tener varios): .
 

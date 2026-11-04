@@ -26,9 +26,9 @@
       "solo documentos del proyecto": 64
     },
     "no_entran_que_cubren_numeros": 0,
-    "numeros_del_cuerpo": 381,
+    "numeros_del_cuerpo": 368,
     "numeros_por_clase_de_comentario": {
-      "entra": 381,
+      "entra": 368,
       "solo documentos del proyecto": 0
     },
     "numeros_sin_comentario": 0,
@@ -803,7 +803,7 @@
   "referencias_local_ausentes": [],
   "numeros_sin_comentario": [],
   "control": {
-    "numeros_del_cuerpo_segun_el_verificador": 381,
+    "numeros_del_cuerpo_segun_el_verificador": 368,
     "misma_lista": true
   },
   "comando": {

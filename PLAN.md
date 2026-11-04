@@ -3286,6 +3286,26 @@ que se revisaron uno por uno: 21 fichas, 14 de texto completo y 5 más.
   verificador, y la demo no se escribe. La conexión no se versionó; sin ella,
   las pruebas del verificador pasan todas, 47 de 47 la de la demo.
 
+**La verificación por campo: la conexión y el paso 5 (2026-11-04, decisiones de
+la persona).**
+- **La cita rota detiene.** Que una ruta citada no exista detiene la demo, y es
+  lo correcto. Los casos C y D de `test_generar_demo.py` esperan ahora «no
+  escribe, por la cita rota». Para seguir probando el aviso de cifras
+  exploratorias, dos casos nuevos, P y Q, ponen en `datos.conjunto` otro valor
+  que «desarrollo», y la demo se escribe con aviso.
+- **La conexión.** `verificar_trazabilidad.py` escribe el grupo `por_campo`, y
+  `generar_demo.py` no escribe la página si el verificador se detiene, con su
+  motivo. Todas las pruebas de `sintesis-consultoria` pasan; la de la demo, 49
+  de 49.
+- **Los años de las citas bibliográficas se omiten por su contexto,** listados
+  con su motivo, como los años que ya se omitían. Son los 13 que quedaban
+  fuera de sus líneas citadas. *Debe fallar:* un número de cuatro cifras que
+  no es el año de una cita sigue contando (`test_anios_de_citas.py`).
+- **El paso 5:** la verificación, la salida del analizador y la demo,
+  regeneradas. Por campo quedan 50 señaladas de 368 números del cuerpo: 42 que
+  no están en sus campos y 8 que citan un documento del proyecto
+  (`outputs/sintesis-verificacion.json > por_campo`).
+
 ---
 
 ## Decisiones

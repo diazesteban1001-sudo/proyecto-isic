@@ -1857,6 +1857,20 @@ líneas que citan ahora los comentarios reescritos son números. Los 356 con
 respaldo y los 25 señalados no cambian, porque el cuerpo no se tocó. El 646 de
 arriba es la corrida del 2026-10-23.
 
+*Y una cuarta,* en el commit «Regenerar la verificación, el analizador y la
+demo con la verificación por campo», ya con esa verificación conectada y los
+años de las citas bibliográficas omitidos, por decisión de la persona
+(`PLAN.md`, Fase 6, «La verificación por campo»):
+- **Búsqueda en todo el corpus, que queda como diagnóstico:** 688 números; 356
+  con respaldo, 12 señalados, 7 del método, 21 omitidos por su contexto (13 de
+  ellos años de citas, nuevos) y 292 en comentarios.
+- **Por campo (`por_campo`), sobre los 368 números del cuerpo:** 299
+  respaldados por su campo y 19 por su referencia; 50 señalados, 42 que no
+  están en sus campos y 8 que citan un documento del proyecto.
+
+Desde este commit, una ruta citada que no existe detiene el verificador y la
+demo.
+
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
 produjo un fallo real: este archivo atribuía al Nivel 2a una AUC estándar

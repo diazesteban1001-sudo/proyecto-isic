@@ -3,79 +3,14 @@
   "numeros_con_respaldo_en_outputs": 356,
   "numeros_sin_respaldo": [
     {
-      "valor": "2023",
-      "contexto": "-->  Antes del reto, Marchetti et al. (2023) estudiar",
-      "linea_aprox": 26
-    },
-    {
       "valor": "23.538",
       "contexto": "a de un solo centro, con 35 pacientes y 23.538 lesiones,",
       "linea_aprox": 29
     },
     {
-      "valor": "2025",
-      "contexto": "su análisis del reto (Kurtansky et al., 2025). Con un",
-      "linea_aprox": 39
-    },
-    {
-      "valor": "1989",
-      "contexto": "e evalúa un sistema de triaje  McClish (1989) propuso",
-      "linea_aprox": 56
-    },
-    {
-      "valor": "2005",
-      "contexto": "teral (LOCAL; solo resumen) --> Walter (2005), en el c",
-      "linea_aprox": 60
-    },
-    {
-      "valor": "2019",
-      "contexto": "(LOCAL; solo resumen) --> Yang et al. (2019) proponen",
-      "linea_aprox": 63
-    },
-    {
-      "valor": "2017",
-      "contexto": "nes no son independientes  Saeb et al. (2017) se propu",
-      "linea_aprox": 82
-    },
-    {
-      "valor": "2023",
-      "contexto": "citas literales --> Kapoor y Narayanan (2023) clasific",
-      "linea_aprox": 93
-    },
-    {
-      "valor": "2022",
-      "contexto": "los conjuntos de ISIC, Cassidy et al. (2022) encontra",
-      "linea_aprox": 98
-    },
-    {
-      "valor": "2018",
-      "contexto": "primera es la del acceso. Sáenz et al. (2018) probaron",
-      "linea_aprox": 127
-    },
-    {
-      "valor": "2022",
-      "contexto": "oa Acosta et al. (2021) y Jojoa et al. (2022) entrenan",
-      "linea_aprox": 135
-    },
-    {
       "valor": "7,500",
       "contexto": "emio propio:** *\"Two Secondary Prizes: $7,500 each for",
       "linea_aprox": 226
-    },
-    {
-      "valor": "2025",
-      "contexto": ", como la describen   Kurtansky et al. (2025): *\"weigh",
-      "linea_aprox": 239
-    },
-    {
-      "valor": "2025",
-      "contexto": "- **NNT80% SE**, de Kurtansky et al. (2025): *\"the a",
-      "linea_aprox": 251
-    },
-    {
-      "valor": "2003",
-      "contexto": ", con la corrección de Nadeau y Bengio (2003): la vari",
-      "linea_aprox": 275
     },
     {
       "valor": "384",
@@ -174,44 +109,130 @@
   ],
   "numeros_en_contextos_omitidos": [
     {
+      "valor": "2023",
+      "contexto": "-->  Antes del reto, Marchetti et al. (2023) estudiar",
+      "linea_aprox": 26,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2025",
+      "contexto": "su análisis del reto (Kurtansky et al., 2025). Con un",
+      "linea_aprox": 39,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
       "valor": "2024",
       "contexto": "e tabular de esa solución (Novoselskiy, 2024), y es es",
-      "linea_aprox": 44
+      "linea_aprox": 44,
+      "motivo": "contexto «2024»"
+    },
+    {
+      "valor": "1989",
+      "contexto": "e evalúa un sistema de triaje  McClish (1989) propuso",
+      "linea_aprox": 56,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2005",
+      "contexto": "teral (LOCAL; solo resumen) --> Walter (2005), en el c",
+      "linea_aprox": 60,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2019",
+      "contexto": "(LOCAL; solo resumen) --> Yang et al. (2019) proponen",
+      "linea_aprox": 63,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2017",
+      "contexto": "nes no son independientes  Saeb et al. (2017) se propu",
+      "linea_aprox": 82,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2023",
+      "contexto": "citas literales --> Kapoor y Narayanan (2023) clasific",
+      "linea_aprox": 93,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2022",
+      "contexto": "los conjuntos de ISIC, Cassidy et al. (2022) encontra",
+      "linea_aprox": 98,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2018",
+      "contexto": "primera es la del acceso. Sáenz et al. (2018) probaron",
+      "linea_aprox": 127,
+      "motivo": "año de una cita bibliográfica"
     },
     {
       "valor": "2024",
       "contexto": "emoto. Barrera-Valencia y Perea-Flórez (2024) comparar",
-      "linea_aprox": 129
+      "linea_aprox": 129,
+      "motivo": "contexto «2024»"
     },
     {
       "valor": "2024",
       "contexto": "la del diagnóstico. Rios-Duarte et al. (2024), Jojoa A",
-      "linea_aprox": 134
+      "linea_aprox": 134,
+      "motivo": "contexto «2024»"
     },
     {
       "valor": "2021",
       "contexto": "rte et al. (2024), Jojoa Acosta et al. (2021) y Jojoa",
-      "linea_aprox": 135
+      "linea_aprox": 135,
+      "motivo": "contexto «2024»"
+    },
+    {
+      "valor": "2022",
+      "contexto": "oa Acosta et al. (2021) y Jojoa et al. (2022) entrenan",
+      "linea_aprox": 135,
+      "motivo": "año de una cita bibliográfica"
     },
     {
       "valor": "2024",
       "contexto": "a de este trabajo. Mejía Posada et al. (2024) estudiar",
-      "linea_aprox": 140
+      "linea_aprox": 140,
+      "motivo": "contexto «2024»"
     },
     {
       "valor": "368",
       "contexto": "(2024) estudiaron retrospectivamente a 368 pacientes",
-      "linea_aprox": 140
+      "linea_aprox": 140,
+      "motivo": "contexto «2024»"
     },
     {
       "valor": "2024",
       "contexto": "orque su artículo declara datos de ISIC 2024 entre los",
-      "linea_aprox": 192
+      "linea_aprox": 192,
+      "motivo": "contexto «2024»"
+    },
+    {
+      "valor": "2025",
+      "contexto": ", como la describen   Kurtansky et al. (2025): *\"weigh",
+      "linea_aprox": 239,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2025",
+      "contexto": "- **NNT80% SE**, de Kurtansky et al. (2025): *\"the a",
+      "linea_aprox": 251,
+      "motivo": "año de una cita bibliográfica"
+    },
+    {
+      "valor": "2003",
+      "contexto": ", con la corrección de Nadeau y Bengio (2003): la vari",
+      "linea_aprox": 275,
+      "motivo": "año de una cita bibliográfica"
     },
     {
       "valor": "2024",
       "contexto": "artículo declara un subconjunto de ISIC 2024 entre sus",
-      "linea_aprox": 347
+      "linea_aprox": 347,
+      "motivo": "contexto «2024»"
     }
   ],
   "numeros_en_comentarios": [
@@ -1700,5 +1721,737 @@
       "motivo": "La salida de este mismo script. Sus recuentos describen una verificación anterior del borrador, no mediciones; en el corpus, el borrador quedaría respaldado por su propia verificación."
     }
   ],
-  "campos_declarados_como_porcentaje_en_outputs": 17
+  "campos_declarados_como_porcentaje_en_outputs": 17,
+  "por_campo": {
+    "que_es": "Cada número del cuerpo, buscado en lo que cita su comentario F: (PLAN.md, Fase 6, «La verificación por campo»). Las clases señaladas van con su comentario y lo que cita.",
+    "numeros_del_cuerpo": 368,
+    "por_clase": {
+      "respaldada_por_su_campo": 299,
+      "respaldada_por_su_referencia": 19,
+      "no_esta_en_sus_campos": 42,
+      "fuera_de_las_lineas_citadas": 0,
+      "no_comprobable_aqui": 0,
+      "cita_un_documento_del_proyecto": 8,
+      "sin_comentario": 0,
+      "declarada_sin_fuente": 0
+    },
+    "senaladas": 50,
+    "detalle": {
+      "no_esta_en_sus_campos": [
+        {
+          "valor": "200",
+          "linea": 220,
+          "comentario_en_linea": 223,
+          "campos": [
+            "outputs/modelado-baseline.json > metrica_fuente"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "0,2.",
+          "linea": 222,
+          "comentario_en_linea": 223,
+          "campos": [
+            "outputs/modelado-baseline.json > metrica_fuente"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "10",
+          "linea": 268,
+          "comentario_en_linea": 269,
+          "campos": [
+            "outputs/validacion-repetida.json > semillas_corridas",
+            "outputs/validacion-repetida.json > n_splits",
+            "outputs/diseno-validacion.json > esquema"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "34",
+          "linea": 303,
+          "comentario_en_linea": 309,
+          "campos": [
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "22",
+          "linea": 305,
+          "comentario_en_linea": 309,
+          "campos": [
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "384",
+          "linea": 306,
+          "comentario_en_linea": 309,
+          "campos": [
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "14,",
+          "linea": 306,
+          "comentario_en_linea": 309,
+          "campos": [
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "384,",
+          "linea": 307,
+          "comentario_en_linea": 309,
+          "campos": [
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "1.000",
+          "linea": 425,
+          "comentario_en_linea": 426,
+          "campos": [
+            "outputs/tiempo-inferencia.json > repeticiones"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "15",
+          "linea": 525,
+          "comentario_en_linea": 526,
+          "campos": [
+            "outputs/modelado-baseline.json > columnas_excluidas"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "11",
+          "linea": 528,
+          "comentario_en_linea": 531,
+          "campos": [
+            "outputs/auditoria-de-fugas.json > columnas_solo_en_train"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "41",
+          "linea": 544,
+          "comentario_en_linea": 549,
+          "campos": [
+            "outputs/auditoria-de-fugas.json > univariado",
+            "outputs/auditoria-de-fugas.json > umbral_auc_sospechoso",
+            "outputs/auditoria-de-fugas.json > univariado[0]"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "5",
+          "linea": 575,
+          "comentario_en_linea": 578,
+          "campos": [
+            "outputs/fase4-m2-vs-m1.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_folds",
+            "outputs/fase4-m2-vs-m1.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_semillas",
+            "outputs/fase4-m4-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_folds",
+            "outputs/fase4-m4-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_semillas",
+            "outputs/fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_folds",
+            "outputs/fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_semillas",
+            "outputs/fase4-m3-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_folds",
+            "outputs/fase4-m3-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_semillas",
+            "outputs/fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_folds",
+            "outputs/fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.*.nuevo_mejor_en_semillas"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "50",
+          "linea": 584,
+          "comentario_en_linea": 586,
+          "campos": [
+            "outputs/validacion-repetida.json > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global",
+            "outputs/validacion-repetida.json > nivel_2a_gradient_boosting_sin_balancear.pauc_por_semilla_y_fold",
+            "outputs/validacion-repetida.json > nivel_2b_gradient_boosting_balanceado.pauc_media_global",
+            "outputs/modelado-baseline.json > escala_de_referencia_pauc.azar",
+            "outputs/modelado-baseline.json > nivel_2b_gradient_boosting_balanceado.nota"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "0,5",
+          "linea": 590,
+          "comentario_en_linea": 592,
+          "campos": [
+            "outputs/modelado-baseline.json > esquema_cv.seed",
+            "outputs/modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media",
+            "outputs/modelado-baseline.json > nivel_2a_gradient_boosting_sin_balancear.pauc_media",
+            "outputs/modelado-baseline.json > nivel_0_referencia_univariada.nota"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "0,999",
+          "linea": 596,
+          "comentario_en_linea": 598,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_neg_ge_0999",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_pos_ge_0999",
+            "outputs/mecanismo-2a.json > esquema_cv"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "0,09%",
+          "linea": 596,
+          "comentario_en_linea": 598,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_neg_ge_0999",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_pos_ge_0999",
+            "outputs/mecanismo-2a.json > esquema_cv"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "4,42%",
+          "linea": 597,
+          "comentario_en_linea": 598,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_neg_ge_0999",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_pos_ge_0999",
+            "outputs/mecanismo-2a.json > esquema_cv"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "36,28%",
+          "linea": 600,
+          "comentario_en_linea": 603,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_pos_bajo_p20_neg",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.n_pos_en_el_minimo",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.n_neg_en_el_minimo",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.minimo_predicho",
+            "outputs/mecanismo-2a.json > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "20",
+          "linea": 600,
+          "comentario_en_linea": 603,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_pos_bajo_p20_neg",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.n_pos_en_el_minimo",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.n_neg_en_el_minimo",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.minimo_predicho",
+            "outputs/mecanismo-2a.json > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "1,58%",
+          "linea": 601,
+          "comentario_en_linea": 603,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_pos_bajo_p20_neg",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.n_pos_en_el_minimo",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.n_neg_en_el_minimo",
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.minimo_predicho",
+            "outputs/mecanismo-2a.json > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "20%",
+          "linea": 605,
+          "comentario_en_linea": 608,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.deciles_rango_pos[1]"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "20%",
+          "linea": 606,
+          "comentario_en_linea": 608,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.deciles_rango_pos[1]"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "0,75%",
+          "linea": 606,
+          "comentario_en_linea": 608,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.deciles_rango_pos[1]"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "99%",
+          "linea": 607,
+          "comentario_en_linea": 608,
+          "campos": [
+            "outputs/mecanismo-2a.json > niveles.nivel_2a_gradient_boosting_sin_balancear.total.deciles_rango_pos[1]"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "50",
+          "linea": 615,
+          "comentario_en_linea": 617,
+          "campos": [
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.media",
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio",
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.gana_2b_en",
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "10",
+          "linea": 616,
+          "comentario_en_linea": 617,
+          "campos": [
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.media",
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio",
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.gana_2b_en",
+            "outputs/validacion-repetida.json > comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "10",
+          "linea": 627,
+          "comentario_en_linea": 629,
+          "campos": [
+            "outputs/validacion-repetida.json > nivel_2b_gradient_boosting_balanceado.pauc_std_entre_folds",
+            "outputs/validacion-repetida.json > nivel_1_regresion_logistica.pauc_std_entre_folds"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "50",
+          "linea": 639,
+          "comentario_en_linea": 641,
+          "campos": [
+            "outputs/sensibilidad-procedencia-repetida.json > comparaciones.c_1_con_menos_1_sin.gana_primer_termino_en_semillas",
+            "outputs/sensibilidad-procedencia-repetida.json > comparaciones.c_1_con_menos_1_sin.gana_primer_termino_en_folds"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "10",
+          "linea": 651,
+          "comentario_en_linea": 654,
+          "campos": [
+            "outputs/efecto-particion.json > esquema"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "1",
+          "linea": 663,
+          "comentario_en_linea": 665,
+          "campos": [
+            "outputs/efecto-particion.json > particiones.paciente.comparacion_2b_menos_1.pauc.intervalo_t_95_nadeau_bengio",
+            "outputs/efecto-particion.json > particiones.filas.comparacion_2b_menos_1.pauc.intervalo_t_95_nadeau_bengio"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "384",
+          "linea": 702,
+          "comentario_en_linea": 704,
+          "campos": [
+            "outputs/extraccion-imagen.json > caracteristica"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "384",
+          "linea": 717,
+          "comentario_en_linea": 719,
+          "campos": [
+            "outputs/eda-diagnostico.json > desbalance_target.conteos.1"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "10",
+          "linea": 732,
+          "comentario_en_linea": 733,
+          "campos": [
+            "outputs/fase4-m4-vs-m2.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas",
+            "outputs/fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "10.",
+          "linea": 732,
+          "comentario_en_linea": 733,
+          "campos": [
+            "outputs/fase4-m4-vs-m2.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas",
+            "outputs/fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "384",
+          "linea": 751,
+          "comentario_en_linea": 754,
+          "campos": [
+            "outputs/imagen-sola.json > esquema",
+            "outputs/imagen-sola.json > modelos"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "50",
+          "linea": 801,
+          "comentario_en_linea": 802,
+          "campos": [
+            "outputs/fase4c-red-sola-vs-imagen.json > metricas.Red.pauc.media_global",
+            "outputs/fase4c-red-sola-vs-imagen.json > metricas.Imagen.pauc.media_global",
+            "outputs/fase4c-red-sola-vs-imagen.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds",
+            "outputs/fase4c-red-sola-vs-imagen.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "50",
+          "linea": 870,
+          "comentario_en_linea": 871,
+          "campos": [
+            "outputs/fase4c-c4-vs-m3limpio.json > metricas.C4.pauc.media_global",
+            "outputs/fase4c-c4-vs-m3limpio.json > metricas.M3limpio.pauc.media_global",
+            "outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds",
+            "outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "1.000",
+          "linea": 886,
+          "comentario_en_linea": 889,
+          "campos": [
+            "outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "1.000",
+          "linea": 891,
+          "comentario_en_linea": 893,
+          "campos": [
+            "outputs/tiempo-inferencia.json > tiempos"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "1.000",
+          "linea": 897,
+          "comentario_en_linea": 905,
+          "campos": [
+            "outputs/fase4-m2-vs-m1.json > metricas.M1",
+            "outputs/fase4-m2-vs-m1.json > metricas.M2",
+            "outputs/fase4-m3limpio-vs-m2.json > metricas.M3limpio",
+            "outputs/fase4-m4-vs-m2.json > metricas.M4",
+            "outputs/fase4-m4b-vs-m2.json > metricas.M4b",
+            "outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones"
+          ],
+          "referencias": []
+        },
+        {
+          "valor": "1.000",
+          "linea": 933,
+          "comentario_en_linea": 935,
+          "campos": [
+            "outputs/fase4-m4-vs-m2.json > comparaciones_nuevo_menos_base.*.intervalo_t_95_nadeau_bengio",
+            "outputs/fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.*.intervalo_t_95_nadeau_bengio",
+            "outputs/tiempo-inferencia.json > tiempos.M4",
+            "outputs/tiempo-inferencia.json > tiempos.M4b",
+            "outputs/tiempo-inferencia.json > tiempos.M3limpio"
+          ],
+          "referencias": []
+        }
+      ],
+      "cita_un_documento_del_proyecto": [
+        {
+          "valor": "1",
+          "linea": 276,
+          "comentario_en_linea": 278,
+          "campos": [],
+          "referencias": [
+            "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
+          ]
+        },
+        {
+          "valor": "5",
+          "linea": 277,
+          "comentario_en_linea": 278,
+          "campos": [],
+          "referencias": [
+            "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
+          ]
+        },
+        {
+          "valor": "1",
+          "linea": 277,
+          "comentario_en_linea": 278,
+          "campos": [],
+          "referencias": [
+            "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
+          ]
+        },
+        {
+          "valor": "1",
+          "linea": 277,
+          "comentario_en_linea": 278,
+          "campos": [],
+          "referencias": [
+            "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
+          ]
+        },
+        {
+          "valor": "4,",
+          "linea": 277,
+          "comentario_en_linea": 278,
+          "campos": [],
+          "referencias": [
+            "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
+          ]
+        },
+        {
+          "valor": "1",
+          "linea": 277,
+          "comentario_en_linea": 278,
+          "campos": [],
+          "referencias": [
+            "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
+          ]
+        },
+        {
+          "valor": "2025,",
+          "linea": 362,
+          "comentario_en_linea": 366,
+          "campos": [],
+          "referencias": [
+            "referencias/simeoni-2025-dinov3.md, líneas [9, 10, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74]"
+          ]
+        },
+        {
+          "valor": "2023,",
+          "linea": 368,
+          "comentario_en_linea": 371,
+          "campos": [],
+          "referencias": [
+            "referencias/oquab-2023-dinov2.md, líneas [10]",
+            "referencias/dinov2-repositorio.md, líneas [47]"
+          ]
+        }
+      ]
+    },
+    "marcas_sin_fuente": [],
+    "citas_de_referencias": {
+      "solo_lineas_originales": 57,
+      "mezcla": 1,
+      "solo_lineas_nuestras": 8,
+      "no_comprobables_aqui": 0,
+      "lista_solo_lineas_nuestras": [
+        {
+          "comentario_en_linea": 278,
+          "archivo": "referencias/nadeau-bengio-2003-t-corregido.md",
+          "lineas": [
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            95
+          ],
+          "originales": 0,
+          "nuestras": 16
+        },
+        {
+          "comentario_en_linea": 283,
+          "archivo": "referencias/nadeau-bengio-2003-t-corregido.md",
+          "lineas": [
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ],
+          "originales": 0,
+          "nuestras": 23
+        },
+        {
+          "comentario_en_linea": 366,
+          "archivo": "referencias/simeoni-2025-dinov3.md",
+          "lineas": [
+            9,
+            10,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74
+          ],
+          "originales": 0,
+          "nuestras": 13
+        },
+        {
+          "comentario_en_linea": 371,
+          "archivo": "referencias/oquab-2023-dinov2.md",
+          "lineas": [
+            10
+          ],
+          "originales": 0,
+          "nuestras": 1
+        },
+        {
+          "comentario_en_linea": 374,
+          "archivo": "referencias/slice3d-fechas-de-publicacion.md",
+          "lineas": [
+            11,
+            12,
+            13,
+            96,
+            97,
+            98,
+            99
+          ],
+          "originales": 0,
+          "nuestras": 7
+        },
+        {
+          "comentario_en_linea": 799,
+          "archivo": "referencias/efficientnet-b0-preentrenamiento.md",
+          "lineas": [
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108
+          ],
+          "originales": 0,
+          "nuestras": 32
+        },
+        {
+          "comentario_en_linea": 1039,
+          "archivo": "referencias/nadeau-bengio-2003-t-corregido.md",
+          "lineas": [
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143
+          ],
+          "originales": 0,
+          "nuestras": 10
+        },
+        {
+          "comentario_en_linea": 1053,
+          "archivo": "referencias/slice3d-metadata-tbp-lv.md",
+          "lineas": [
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87
+          ],
+          "originales": 0,
+          "nuestras": 7
+        }
+      ],
+      "lista_mezcla": [
+        {
+          "comentario_en_linea": 562,
+          "archivo": "referencias/slice3d-metadata-tbp-lv.md",
+          "lineas": [
+            47,
+            81,
+            82
+          ],
+          "originales": 1,
+          "nuestras": 2
+        }
+      ]
+    }
+  }
 }

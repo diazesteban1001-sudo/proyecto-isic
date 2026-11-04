@@ -1,10 +1,25 @@
 # Verificación de trazabilidad — informe/borrador-v2.md
 Números encontrados en el borrador: 688
 Con respaldo en outputs/ (tolerancia: media unidad del último dígito escrito; exacta sin decimales): 356
-SIN respaldo — revisar uno por uno: 25
-  - línea ~26: "2023" en «...-->  Antes del reto, Marchetti et al. (2023) estudiar...»
+SIN respaldo — revisar uno por uno: 12
   - línea ~29: "23.538" en «...a de un solo centro, con 35 pacientes y 23.538 lesiones,...»
+  - línea ~226: "7,500" en «...emio propio:** *"Two Secondary Prizes: $7,500 each for...»
+  - línea ~306: "384" en «...da 24 del notebook. | | M4 | M2 más las 384 variables...»
+  - línea ~307: "384," en «...egresión logística balanceada sobre las 384, y esa pun...»
+  - línea ~348: "352,034" en «...ento: *"We selected a subset containing 352,034 tile imag...»
+  - línea ~362: "2025," en «...la cumple: su artículo es de agosto de 2025, y la secc...»
+  - línea ~368: "2023," en «...án descritos en un artículo de abril de 2023, y sus aut...»
+  - línea ~600: "36,28%" en «...positivos al fondo del ordenamiento: el 36,28% queda en...»
+  - línea ~702: "384" en «...e, la imagen no justifica su costo  Las 384 variables...»
+  - línea ~717: "384" en «...cia» --> *Interpretación, no medición:* 384 variables...»
+  ... y 2 más — detalle en el .json
+Por campo, cada cifra en lo que cita su comentario F: (368 números del cuerpo): respaldadas por su campo 299 y por su referencia 19; señaladas 50 (no están en sus campos 42, fuera de las líneas citadas 0, citan un documento del proyecto 8, sin comentario 0); no comprobables aquí 0; declaradas sin fuente 0
+Citas de referencias/ que apuntan solo a líneas nuestras: 8; a una mezcla: 1; solo a líneas originales: 57
+Porcentajes que son parámetros del método, excluidos por lista declarada (no se les busca respaldo): 7
+Omitidos por su contexto (IGNORAR_CONTEXTOS: 2024, 2026, Nivel 0, Nivel 1, Nivel 2; y los años de citas bibliográficas, «Autor (AAAA)»), sin buscarles respaldo: 21, de ellos 13 años de citas
+  - línea ~26: "2023" en «...-->  Antes del reto, Marchetti et al. (2023) estudiar...»
   - línea ~39: "2025" en «...su análisis del reto (Kurtansky et al., 2025). Con un...»
+  - línea ~44: "2024" en «...e tabular de esa solución (Novoselskiy, 2024), y es es...»
   - línea ~56: "1989" en «...e evalúa un sistema de triaje  McClish (1989) propuso...»
   - línea ~60: "2005" en «...teral (LOCAL; solo resumen) --> Walter (2005), en el c...»
   - línea ~63: "2019" en «...(LOCAL; solo resumen) --> Yang et al. (2019) proponen...»
@@ -12,17 +27,7 @@ SIN respaldo — revisar uno por uno: 25
   - línea ~93: "2023" en «...citas literales --> Kapoor y Narayanan (2023) clasific...»
   - línea ~98: "2022" en «...los conjuntos de ISIC, Cassidy et al. (2022) encontra...»
   - línea ~127: "2018" en «...primera es la del acceso. Sáenz et al. (2018) probaron...»
-  ... y 15 más — detalle en el .json
-Porcentajes que son parámetros del método, excluidos por lista declarada (no se les busca respaldo): 7
-Omitidos por su contexto (IGNORAR_CONTEXTOS: 2024, 2026, Nivel 0, Nivel 1, Nivel 2), sin buscarles respaldo: 8
-  - línea ~44: "2024" en «...e tabular de esa solución (Novoselskiy, 2024), y es es...»
-  - línea ~129: "2024" en «...emoto. Barrera-Valencia y Perea-Flórez (2024) comparar...»
-  - línea ~134: "2024" en «...la del diagnóstico. Rios-Duarte et al. (2024), Jojoa A...»
-  - línea ~135: "2021" en «...rte et al. (2024), Jojoa Acosta et al. (2021) y Jojoa...»
-  - línea ~140: "2024" en «...a de este trabajo. Mejía Posada et al. (2024) estudiar...»
-  - línea ~140: "368" en «...(2024) estudiaron retrospectivamente a 368 pacientes...»
-  - línea ~192: "2024" en «...orque su artículo declara datos de ISIC 2024 entre los...»
-  - línea ~347: "2024" en «...artículo declara un subconjunto de ISIC 2024 entre sus...»
+  ... y 11 más — detalle en el .json
 En comentarios HTML (<!-- … -->: trazabilidad, no afirmaciones), sin buscarles respaldo: 292
   - línea ~3: "2" en «...rador-v2.md, antes de «Método». Versión 2:      inc...»
   - línea ~21: "109," en «...ansky-2024-slice3d-descriptor.md, línea 109, cita lite...»
