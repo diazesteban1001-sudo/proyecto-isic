@@ -2926,8 +2926,9 @@ ninguna recomendación, no suma a la bitácora y no toca el reservado.
       a estar entre ellos.
   - *De paso:* sin los archivos de potencia, las tasas ya están muy por encima
     de las del límite del `SKILL.md`. Ese límite se midió sobre el `outputs/`
-    del 2026-10-02, con 2.864 valores, y está desfasado. No se actualizó: lo
-    decide la persona.
+    del 2026-10-02, con 2.864 valores, y está desfasado. *Actualizado el mismo
+    día, por decisión de la persona, con esta medición y el valor anterior a
+    la vista.*
 
 ---
 

@@ -141,21 +141,39 @@ registro de incidentes, duodécima fila).* Control:
 `scripts/test_signo_menos.py`.
 
 **Límite que queda, medido.** El verificador busca cada cifra en todo el
-corpus, no en el campo que el texto cita. Sobre el `outputs/` del 2026-10-02,
-con 2.864 valores distintos en el corpus, pasarían por azar:
+corpus, no en el campo que el texto cita. Sobre el `outputs/` del 2026-11-04,
+con 7.358 valores distintos en el corpus, pasarían por azar:
 
-- de los enteros del 1 al 200, 95 de 200 (47,5 %);
-- de los valores de cuatro decimales entre 0,0001 y 0,0499, 320 de 499
-  (64,1 %);
-- de los valores de cuatro decimales entre 0,0500 y 0,2000, 432 de 1.501
-  (28,8 %).
+- de los enteros del 1 al 200, 176 de 200 (88,0 %);
+- de los valores de cuatro decimales entre 0,0001 y 0,0499, 446 de 499
+  (89,4 %);
+- de los valores de cuatro decimales entre 0,0500 y 0,2000, 911 de 1.501
+  (60,7 %);
+- de los valores de tres decimales entre 0,500 y 1,000, 464 de 501 (92,6 %).
 
-*Antes de que `sensibilidad-procedencia-repetida.json` entrara al corpus, ese
-mismo día, eran 2.767 valores y 93, 304 y 382 (46,5 %, 60,9 % y 25,4 %): más
+*Hasta el 2026-11-04, este límite daba la medición del 2026-10-02:*
+- *2.864 valores en el corpus;*
+- *95 de 200 enteros (47,5 %);*
+- *320 de 499 (64,1 %) y 432 de 1.501 (28,8 %) en los dos rangos de cuatro
+  decimales.*
+
+*Por qué cambió:*
+- *El corpus creció. Desde entonces se añadieron a `outputs/` 24 archivos, y
+  23 entraron al corpus: los de las fases 4b a 4f, el efecto de la partición,
+  la imagen sola, el mecanismo del 2a, las pruebas de tiempo de las dos redes y
+  el resumen del análisis de potencia. El que falta es su curva completa, que
+  está en `FUERA_DEL_CORPUS`.*
+- *El rango de tres decimales es nuevo. Se añadió al decidir si esa curva
+  entraba al corpus (`PLAN.md`, Fase 6, «La potencia de la prueba: la
+  corrida»).*
+
+*Antes de que `sensibilidad-procedencia-repetida.json` entrara al corpus, el
+2026-10-02, eran 2.767 valores y 93, 304 y 382 (46,5 %, 60,9 % y 25,4 %): más
 corpus, más cifras que pasan por azar.*
 
-Con el margen fijo de 0,01, los dos últimos eran el 100 %. Caso real, en el
-`README.md` de ese día: «±0,0055 frente a ±0,0173», la ventaja de
+Con el margen fijo de 0,01, los dos rangos de cuatro decimales eran el 100 %
+el 2026-10-02. Caso real, en el `README.md` de ese día: «±0,0055 frente a
+±0,0173», la ventaja de
 estabilidad de 2b que `CLAUDE.md` retiró en su hallazgo 2, sigue pasando.
 El README la atribuye a los niveles 2b y 1 de `modelado-baseline.json`, cuyo
 `pauc_std` dice hoy 0,018 y 0,009, en ese orden. Lo que la respalda son
@@ -167,7 +185,7 @@ diferencias por pliegue de otra comparación:
 - 0,0173: `fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.pauc.diferencias_nuevo_menos_base[12]`
   y `….auc.diferencias_nuevo_menos_base[28]`.
 
-Cómo rehacer las tres fracciones, desde la raíz del repositorio:
+Cómo rehacer las cuatro fracciones, desde la raíz del repositorio:
 
 ```bash
 .venv/bin/python -c "
@@ -175,13 +193,14 @@ import importlib.util as u
 s=u.spec_from_file_location('v','.claude/skills/sintesis-consultoria/scripts/verificar_trazabilidad.py');v=u.module_from_spec(s);s.loader.exec_module(v)
 P,Q=v.cargar_valores_permitidos('outputs/')
 f=lambda ts:sum(v.tiene_respaldo(v.candidatos(t),False,P,Q) for t in ts)
-print(len(P),f([str(n) for n in range(1,201)]),f([f'0,{k:04d}' for k in range(1,500)]),f([f'0,{k:04d}' for k in range(500,2001)]))
+print(len(P),f([str(n) for n in range(1,201)]),f([f'0,{k:04d}' for k in range(1,500)]),f([f'0,{k:04d}' for k in range(500,2001)]),f([f'0,{k:03d}' for k in range(500,1000)]+['1,000']))
 "
 ```
 
-Salida sobre el `outputs/` del 2026-10-02, con el corpus vigente:
-`2864 95 320 432`. Con otro `outputs/` o con otra lista `FUERA_DEL_CORPUS` da
-otros números.
+Salida sobre el `outputs/` del 2026-11-04, con el corpus vigente:
+`7358 176 446 911 464`. Con otro `outputs/` o con otra lista `FUERA_DEL_CORPUS`
+da otros números. *La del 2026-10-02, con los tres primeros rangos, era
+`2864 95 320 432`.*
 
 **El verificador señala; que una cifra pase no prueba que salga del campo
 que se cita.**
