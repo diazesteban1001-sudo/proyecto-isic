@@ -802,7 +802,7 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman quince del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman dieciséis del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
@@ -812,8 +812,9 @@ train, `tbp_lv_nevi_confidence`). Se suman quince del modelado, trazables a
 `outputs/fase4c-c4-vs-m3limpio.json`, `outputs/fase4c-control-atajo.json`, los
 tres `outputs/fase4d-*.json` de las preguntas, `outputs/fase4d-holm.json`,
 `outputs/fase4e-exploracion.json`, los dos `outputs/fase4e-*.json` de las
-preguntas, `outputs/fase4e-holm.json` y
-`outputs/fase4f-red4e-vs-imagen-basicos.json`. Desde el 2026-09-25 sus
+preguntas, `outputs/fase4e-holm.json`,
+`outputs/fase4f-red4e-vs-imagen-basicos.json` y
+`outputs/potencia-nadeau-bengio.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
 los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
 
@@ -1258,6 +1259,84 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
     - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
       (Pendientes, «El rendimiento con fotos de teléfono no está medido»).
 
+16. **Análisis descriptivo: la prueba con que se compara contra M3 limpio
+    detecta con un 80 % de probabilidad mejoras de pAUC de entre 0,0109 y
+    0,0159, y pasar de 5 a 10 semillas casi no mueve ese umbral**
+    (`outputs/potencia-nadeau-bengio.json`). La pregunta: si un modelo fuera
+    de verdad δ mejor que M3 limpio en la pAUC, ¿con qué probabilidad daría su
+    resultado a favor la prueba de las fases 4d a 4f? Esa prueba es
+    `fase4d.valor_p`: valor p bilateral de Nadeau y Bengio menor que 0,05, y
+    media positiva. Especificación de la persona, fijada antes de correr
+    (`PLAN.md`, Fase 6, «La potencia de la prueba»).
+
+    **Cómo se calcula.**
+    - La potencia sale de la t no central de n − 1 grados de libertad, con
+      error estándar s·√(1/n + 1/4).
+    - s es la desviación de las diferencias pliegue a pliegue de la pAUC de
+      cada comparación contra M3 limpio, sin juntarlas: C4, C5, C6 y C7
+      (`comparaciones.*.s`).
+    - Se calcula con n = 25 y n = 50 diferencias, es decir, 5 y 10 semillas ×
+      5 pliegues.
+    - El δ con el 50 % y con el 80 % de potencia se busca sobre la curva
+      continua (`comparaciones.*.delta_50` y `.delta_80`).
+
+    | Comparación | s | 50 %, n = 25 | 80 %, n = 25 | 50 %, n = 50 | 80 %, n = 50 |
+    |---|---|---|---|---|---|
+    | C4 (semillas 0 a 9) | 0,0081 | 0,0089 | 0,0127 | 0,0084 | 0,0120 |
+    | C5 (semillas 0 a 9) | 0,0085 | 0,0093 | 0,0133 | 0,0088 | 0,0126 |
+    | C6 (semillas 0 a 4) | 0,0073 | 0,0080 | 0,0115 | 0,0076 | 0,0109 |
+    | C7 (semillas 5 a 9) | 0,0101 | 0,0111 | 0,0159 | 0,0105 | 0,0150 |
+
+    **Entre semillas** (`comparaciones.*.entre_semillas`), cada comparación con
+    su propio n. Se compara el error estándar de la media entre semillas, que
+    es la desviación de las medias por semilla dividida por √(semillas), con el
+    de la prueba:
+
+    | Comparación | Semillas | Entre semillas | El de la prueba | Razón |
+    |---|---|---|---|---|
+    | C4 | 10 | 0,0006 | 0,0042 | 6,99 |
+    | C5 | 10 | 0,0008 | 0,0044 | 5,86 |
+    | C6 | 5 | 0,0011 | 0,0039 | 3,44 |
+    | C7 | 5 | 0,0010 | 0,0054 | 5,3 |
+
+    **Los controles** pasaron todos: 82 de 82 casos dan lo esperado, y 41 de
+    ellos son los que deben fallar (`controles`).
+    - La simulación con el generador del control negativo de la 4d coincide
+      con la curva dentro de 4 errores de Monte Carlo.
+    - Con δ = 0, la tasa queda a lo sumo en el 5 %.
+    - Con δ = 0,05, la tasa a favor es al menos del 99 %.
+
+    *Lectura, no medición:*
+    - Con la variabilidad que se observó, la prueba solo detecta con un 80 % de
+      probabilidad mejoras de entre 0,0109 y 0,0159 de pAUC.
+    - De 25 a 50 diferencias, el δ al 80 % baja de 0,0127 a 0,0120 en C4 y de
+      0,0159 a 0,0150 en C7. *Aritmética nuestra:* entre un 5 % y un 6 % en
+      las cuatro. El término 1/4 del error estándar no baja con más semillas;
+      el 1/n, sí.
+    - Las diferencias medias observadas de C4 a C7 van de +0,0029 a +0,0067
+      (`comparaciones.*.media_observada`), y en las cuatro quedan por debajo
+      del δ al 50 %. Que no dieran su resultado a favor es compatible con que
+      no haya mejora y también con una mejora de ese tamaño que la prueba no
+      alcanza a ver. La media observada no es el δ verdadero.
+    - El error estándar entre semillas es entre 3,44 y 6,99 veces menor que el
+      de la prueba. Más semillas reducen lo que cambia con los mismos
+      pacientes, no lo que la prueba descuenta por pacientes nuevos.
+
+    *Salvedades:*
+    - **Es descriptivo.** No compara ningún modelo, no cambia ninguna
+      recomendación y no suma a la bitácora (`PLAN.md`, Fase 6).
+    - **El modelo de varianza es el de la prueba.** Supone una correlación
+      ρ = 1/5 entre las diferencias, la aproximación que la prueba ya usa y que
+      sus autores llaman *"gross"* (`referencias/nadeau-bengio-2003-t-corregido.md`,
+      p. 254). No es un supuesto añadido, pero la curva no es más exacta que esa
+      aproximación.
+    - **Lo que no propaga.** s se toma como la dispersión verdadera, sin su
+      incertidumbre. Un modelo que fuera de verdad δ mejor tendría las
+      diferencias de C4 a C7 desplazadas en δ, con la misma dispersión.
+    - **La primera corrida se detuvo.** `stats.nct.cdf` daba `nan` con δ =
+      0,05, y la cola inferior se calcula ahora por simetría, con su control
+      (`PLAN.md`, Fase 6, «La potencia de la prueba: la corrida»).
+
 ### Dónde se lee la fase vigente
 
 En `PLAN.md`, no aquí. La ruta —qué fase está en curso, cuál es el siguiente
@@ -1570,12 +1649,34 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
-- [ ] **Las fases 4d, 4e y 4f no están todavía en el informe, el README ni la
-      demo** (2026-10-31; la 4e, desde el 2026-11-01; la 4f, desde el
-      2026-11-02).
-      - **Dónde están:** los hallazgos 13, 14 y 15 y `PLAN.md`, fases 4d, 4e y
-        4f, con sus cifras de `outputs/fase4d-*.json`, `outputs/fase4e-*.json`
-        y `outputs/fase4f-*.json`.
+- [ ] **Las fases 4d, 4e y 4f, y el análisis de potencia de la prueba, no
+      están todavía en el informe, el README ni la demo** (2026-10-31; la 4e,
+      desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia, desde el
+      2026-11-04).
+      - **Dónde están:** los hallazgos 13, 14, 15 y 16 y `PLAN.md`, fases 4d,
+        4e y 4f y, en la Fase 6, «La potencia de la prueba». Sus cifras están
+        en `outputs/fase4d-*.json`, `outputs/fase4e-*.json`,
+        `outputs/fase4f-*.json` y `outputs/potencia-nadeau-bengio.json`.
+      - **Lo que añade la potencia:** el borrador no la menciona. Se buscó
+        «potencia», «power» y «detectar» en `informe/borrador-v2.md` y en el
+        README; la única coincidencia, en la línea 936 del borrador, habla de
+        detectar cáncer. Al añadirla, acompaña a las lecturas de «no mejora»
+        de las fases 4b a 4e (hallazgo 16, la lectura).
+      - **Lo que cambia en la verificación** (comprobado el 2026-11-04 en el
+        scratchpad, sin regenerar la salida versionada):
+        - `outputs/potencia-nadeau-bengio.json` entra al corpus del
+          verificador, con 1.767 valores numéricos, casi todos tasas de 4
+          decimales entre 0 y 1.
+        - Recalculada sobre `informe/borrador-v2.md`, la verificación pasa de
+          356 números con respaldo y 25 señalados a 357 y 24. La única
+          diferencia es el «0,695» de la línea 835, la sensibilidad top-15 de
+          la variante del ganador sin recortes de imagen, que sale de Kurtansky
+          2025 y no de `outputs/`. Lo respalda por coincidencia
+          `comparaciones.C7.curva_analitica.25[12].a_favor`, 0,6945.
+        - Sin este archivo, la verificación da los mismos recuentos y los
+          mismos señalados que la versionada.
+        - Al regenerar, hay que tratarlo como señalado, o decidir si el
+          archivo va a `FUERA_DEL_CORPUS`. No se ha decidido.
       - **Dónde faltan:** `informe/borrador-v2.md`, el README e
         `informe/demo.html`, con su copia `docs/index.html`. Se dejan para
         después por decisión de la persona.
@@ -1591,8 +1692,8 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Qué hacer al añadirlas:** regenerar `outputs/sintesis-verificacion.json`
         y revisar, uno por uno, los números nuevos que pasen por coincidencia,
         como al añadir las fases 4b y 4c.
-      - *Hasta el 2026-11-02 este punto era de las fases 4d y 4e; hasta el
-        2026-11-01, solo de la 4d.*
+      - *Hasta el 2026-11-04 este punto era de las fases 4d a 4f; hasta el
+        2026-11-02, de la 4d y la 4e; hasta el 2026-11-01, solo de la 4d.*
 - [ ] Pendientes de la extensión de imágenes: ver la última sección
 
 ---
