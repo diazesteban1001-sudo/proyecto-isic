@@ -1,5 +1,5 @@
 {
-  "numeros_en_borrador": 646,
+  "numeros_en_borrador": 688,
   "numeros_con_respaldo_en_outputs": 356,
   "numeros_sin_respaldo": [
     {
@@ -557,17 +557,47 @@
     },
     {
       "valor": "1",
-      "contexto": "luation.md, «Citas literales», párrafos 1 y 2 (LOCA",
-      "linea_aprox": 207
-    },
-    {
-      "valor": "2",
-      "contexto": "ion.md, «Citas literales», párrafos 1 y 2 (LOCAL) -",
+      "contexto": "luation.md, «Citas literales», párrafos 1 y 2, líne",
       "linea_aprox": 207
     },
     {
       "valor": "2,",
-      "contexto": "ferencias/kaggle-evaluation.md, párrafo 2, cita lite",
+      "contexto": "ion.md, «Citas literales», párrafos 1 y 2, líneas 31",
+      "linea_aprox": 207
+    },
+    {
+      "valor": "31",
+      "contexto": "itas literales», párrafos 1 y 2, líneas 31–32 y 37–4",
+      "linea_aprox": 207
+    },
+    {
+      "valor": "32",
+      "contexto": "s literales», párrafos 1 y 2, líneas 31–32 y 37–43 (",
+      "linea_aprox": 207
+    },
+    {
+      "valor": "37",
+      "contexto": "erales», párrafos 1 y 2, líneas 31–32 y 37–43 (LOCAL",
+      "linea_aprox": 207
+    },
+    {
+      "valor": "43",
+      "contexto": "les», párrafos 1 y 2, líneas 31–32 y 37–43 (LOCAL) -",
+      "linea_aprox": 207
+    },
+    {
+      "valor": "2,",
+      "contexto": "ferencias/kaggle-evaluation.md, párrafo 2, líneas 39",
+      "linea_aprox": 212
+    },
+    {
+      "valor": "39",
+      "contexto": "kaggle-evaluation.md, párrafo 2, líneas 39–41, cita",
+      "linea_aprox": 212
+    },
+    {
+      "valor": "41,",
+      "contexto": "gle-evaluation.md, párrafo 2, líneas 39–41, cita lite",
       "linea_aprox": 212
     },
     {
@@ -586,8 +616,73 @@
       "linea_aprox": 223
     },
     {
+      "valor": "25",
+      "contexto": "rules.md, «Premios secundarios», líneas 25–26, cita",
+      "linea_aprox": 228
+    },
+    {
+      "valor": "26,",
+      "contexto": "es.md, «Premios secundarios», líneas 25–26, cita lite",
+      "linea_aprox": 228
+    },
+    {
+      "valor": "64",
+      "contexto": "«Top-15 retrieval sensitivity», líneas 64–66, cita",
+      "linea_aprox": 235
+    },
+    {
+      "valor": "66,",
+      "contexto": "op-15 retrieval sensitivity», líneas 64–66, cita lite",
+      "linea_aprox": 235
+    },
+    {
+      "valor": "307",
+      "contexto": "aje-automatizado-tbp.md, métodos, línea 307 -->   La",
+      "linea_aprox": 240
+    },
+    {
+      "valor": "71",
+      "contexto": "s-readme.md, «Model Efficiency», líneas 71–72, cita",
+      "linea_aprox": 246
+    },
+    {
+      "valor": "72,",
+      "contexto": "eadme.md, «Model Efficiency», líneas 71–72, cita lite",
+      "linea_aprox": 246
+    },
+    {
+      "valor": "307,",
+      "contexto": "aje-automatizado-tbp.md, métodos, línea 307, cita lite",
+      "linea_aprox": 254
+    },
+    {
+      "valor": "60",
+      "contexto": "-2003-t-corregido.md, sección 4, líneas 60–74 y 95 (",
+      "linea_aprox": 278
+    },
+    {
+      "valor": "74",
+      "contexto": "03-t-corregido.md, sección 4, líneas 60–74 y 95 (LOC",
+      "linea_aprox": 278
+    },
+    {
+      "valor": "95",
+      "contexto": "corregido.md, sección 4, líneas 60–74 y 95 (LOCAL) -",
+      "linea_aprox": 278
+    },
+    {
+      "valor": "34",
+      "contexto": "el artículo deriva la fórmula», líneas 34–56, p. 24",
+      "linea_aprox": 283
+    },
+    {
+      "valor": "56,",
+      "contexto": "artículo deriva la fórmula», líneas 34–56, p. 242 (L",
+      "linea_aprox": 283
+    },
+    {
       "valor": "242",
-      "contexto": "que el artículo deriva la fórmula», p. 242 (LOCAL) -",
+      "contexto": "lo deriva la fórmula», líneas 34–56, p. 242 (LOCAL) -",
       "linea_aprox": 283
     },
     {
@@ -746,6 +841,26 @@
       "linea_aprox": 366
     },
     {
+      "valor": "9",
+      "contexto": "que se buscó y no se encontró», líneas 9–10 y 64–7",
+      "linea_aprox": 366
+    },
+    {
+      "valor": "10",
+      "contexto": "ue se buscó y no se encontró», líneas 9–10 y 64–74 -",
+      "linea_aprox": 366
+    },
+    {
+      "valor": "64",
+      "contexto": "buscó y no se encontró», líneas 9–10 y 64–74 --> DI",
+      "linea_aprox": 366
+    },
+    {
+      "valor": "74",
+      "contexto": "scó y no se encontró», líneas 9–10 y 64–74 --> DINOv",
+      "linea_aprox": 366
+    },
+    {
       "valor": "2026",
       "contexto": "to. <!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de",
       "linea_aprox": 371
@@ -779,6 +894,31 @@
       "valor": "-25",
       "contexto": "; PLAN.md, Fase 3, «Preparación (2026-09-25)»; refere",
       "linea_aprox": 371
+    },
+    {
+      "valor": "47",
+      "contexto": "eferencias/dinov2-repositorio.md, línea 47 --> Queda",
+      "linea_aprox": 371
+    },
+    {
+      "valor": "11",
+      "contexto": "as-de-publicacion.md, sección 5, líneas 11–13 y 96–9",
+      "linea_aprox": 374
+    },
+    {
+      "valor": "13",
+      "contexto": "de-publicacion.md, sección 5, líneas 11–13 y 96–99 -",
+      "linea_aprox": 374
+    },
+    {
+      "valor": "96",
+      "contexto": "blicacion.md, sección 5, líneas 11–13 y 96–99 -->  *",
+      "linea_aprox": 374
+    },
+    {
+      "valor": "99",
+      "contexto": "cacion.md, sección 5, líneas 11–13 y 96–99 -->  *Int",
+      "linea_aprox": 374
     },
     {
       "valor": "2026",
@@ -854,6 +994,11 @@
       "valor": "-25",
       "contexto": "-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» --> Des",
       "linea_aprox": 468
+    },
+    {
+      "valor": "32",
+      "contexto": "ion-repetida.json > datos.conjunto (los 32 dicen «de",
+      "linea_aprox": 471
     },
     {
       "valor": "2026",
@@ -982,17 +1127,42 @@
     },
     {
       "valor": "1,",
-      "contexto": "ncias/slice3d-metadata-tbp-lv.md, Tabla 1, cita lite",
+      "contexto": "ncias/slice3d-metadata-tbp-lv.md, Tabla 1, líneas 45",
+      "linea_aprox": 559
+    },
+    {
+      "valor": "45",
+      "contexto": "e3d-metadata-tbp-lv.md, Tabla 1, líneas 45–46, cita",
+      "linea_aprox": 559
+    },
+    {
+      "valor": "46,",
+      "contexto": "-metadata-tbp-lv.md, Tabla 1, líneas 45–46, cita lite",
       "linea_aprox": 559
     },
     {
       "valor": "1",
-      "contexto": "ncias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2",
+      "contexto": "ncias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2,",
       "linea_aprox": 562
     },
     {
-      "valor": "2",
-      "contexto": "ce3d-metadata-tbp-lv.md, Tabla 1 y nota 2 -->  ## R",
+      "valor": "2,",
+      "contexto": "ce3d-metadata-tbp-lv.md, Tabla 1 y nota 2, líneas 47",
+      "linea_aprox": 562
+    },
+    {
+      "valor": "47",
+      "contexto": "ata-tbp-lv.md, Tabla 1 y nota 2, líneas 47 y 81–82 -",
+      "linea_aprox": 562
+    },
+    {
+      "valor": "81",
+      "contexto": "bp-lv.md, Tabla 1 y nota 2, líneas 47 y 81–82 -->  #",
+      "linea_aprox": 562
+    },
+    {
+      "valor": "82",
+      "contexto": "lv.md, Tabla 1 y nota 2, líneas 47 y 81–82 -->  ## R",
       "linea_aprox": 562
     },
     {
@@ -1072,7 +1242,7 @@
     },
     {
       "valor": "−0,0085",
-      "contexto": "cas. <!-- F: F42 > C.*.media e IC (auc: −0,0085) --> Por",
+      "contexto": "as. <!-- F: F42 > C.*.media y .IC (auc: −0,0085) --> Por",
       "linea_aprox": 713
     },
     {
@@ -1156,6 +1326,16 @@
       "linea_aprox": 795
     },
     {
+      "valor": "77",
+      "contexto": "cientnet-b0-preentrenamiento.md, líneas 77–108 (el c",
+      "linea_aprox": 799
+    },
+    {
+      "valor": "108",
+      "contexto": "ntnet-b0-preentrenamiento.md, líneas 77–108 (el crite",
+      "linea_aprox": 799
+    },
+    {
       "valor": "4",
       "contexto": "or_en_semillas; «Imagen» es la de IS, a 4 decimales",
       "linea_aprox": 802
@@ -1221,8 +1401,18 @@
       "linea_aprox": 821
     },
     {
-      "valor": "3",
-      "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3 (Meta-bas",
+      "valor": "3,",
+      "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3, líneas 20",
+      "linea_aprox": 838
+    },
+    {
+      "valor": "206",
+      "contexto": "je-automatizado-tbp.md, Tabla 3, líneas 206 y 209 (Me",
+      "linea_aprox": 838
+    },
+    {
+      "valor": "209",
+      "contexto": "omatizado-tbp.md, Tabla 3, líneas 206 y 209 (Meta-bas",
       "linea_aprox": 838
     },
     {
@@ -1317,7 +1507,7 @@
     },
     {
       "valor": "50",
-      "contexto": "1,74 | 14,6321 |  <!-- F: medias de los 50 pliegues:",
+      "contexto": "cas.M1 y metricas.M2 (las medias de los 50 pliegues,",
       "linea_aprox": 905
     },
     {
@@ -1456,13 +1646,33 @@
       "linea_aprox": 1035
     },
     {
+      "valor": "134",
+      "contexto": "md, «Salvedad de aplicabilidad», líneas 134–143 (LOCA",
+      "linea_aprox": 1039
+    },
+    {
+      "valor": "143",
+      "contexto": "«Salvedad de aplicabilidad», líneas 134–143 (LOCAL) -",
+      "linea_aprox": 1039
+    },
+    {
       "valor": "9",
       "contexto": "mpo de inferencia»; CLAUDE.md, hallazgo 9 --> - **D",
       "linea_aprox": 1049
     },
     {
-      "valor": "2",
-      "contexto": "encias/slice3d-metadata-tbp-lv.md, nota 2; .claude/",
+      "valor": "2,",
+      "contexto": "encias/slice3d-metadata-tbp-lv.md, nota 2, líneas 81",
+      "linea_aprox": 1053
+    },
+    {
+      "valor": "81",
+      "contexto": "ce3d-metadata-tbp-lv.md, nota 2, líneas 81–87; .clau",
+      "linea_aprox": 1053
+    },
+    {
+      "valor": "87",
+      "contexto": "d-metadata-tbp-lv.md, nota 2, líneas 81–87; .claude/",
       "linea_aprox": 1053
     }
   ],

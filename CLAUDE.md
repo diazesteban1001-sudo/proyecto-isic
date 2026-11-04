@@ -1842,6 +1842,12 @@ analizador de los comentarios F:, en modo informe». Los recuentos siguen siendo
 646, 356 y 25. `archivos_fuera_del_corpus` pasa a 5 con
 `sintesis-comentarios-f.json`.
 
+*Y una tercera,* en el commit «Borrador v2: los comentarios F: en la gramática
+de las citas». Da 688 números, 292 de ellos dentro de comentarios, porque las
+líneas que citan ahora los comentarios reescritos son números. Los 356 con
+respaldo y los 25 señalados no cambian, porque el cuerpo no se tocó. El 646 de
+arriba es la corrida del 2026-10-23.
+
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
 produjo un fallo real: este archivo atribuía al Nivel 2a una AUC estándar

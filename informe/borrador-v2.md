@@ -111,7 +111,7 @@ Como sugiere Little, se probaron también las dos particiones. Con la
 logística y el gradient boosting balanceados, partir por filas no cambia de
 forma distinguible la pAUC, el AUC ni el NNT80% SE, ni el veredicto entre los
 dos modelos.
-<!-- F: «Resultados», «Partir por filas no cambia el veredicto»; outputs/efecto-particion.json; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->
+<!-- F: «Resultados», «Partir por filas no cambia el veredicto»; outputs/efecto-particion.json > filas_menos_paciente, particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->
 La agrupación por paciente se sostiene, entonces, por el uso y no porque aquí
 cambie el resultado.
 <!-- F: interpretación de este proyecto, sobre las dos frases anteriores -->
@@ -204,12 +204,12 @@ fuera porque su artículo declara datos de ISIC 2024 entre los suyos.
 
 **La métrica principal es la del reto:** el área parcial bajo la curva ROC por
 encima del 80% de sensibilidad, o pAUC, que va de 0 a 0,2.
-<!-- F: referencias/kaggle-evaluation.md, «Citas literales», párrafos 1 y 2 (LOCAL) -->
+<!-- F: referencias/kaggle-evaluation.md, «Citas literales», párrafos 1 y 2, líneas 31–32 y 37–43 (LOCAL) -->
 El organizador la justifica en términos clínicos, no estadísticos: *"there are
 regions in the ROC space where the values of TPR are unacceptable in clinical
 practice"*, y *"Systems that aid in diagnosing cancers are required to be
 highly-sensitive"*.
-<!-- F: referencias/kaggle-evaluation.md, párrafo 2, cita literal (LOCAL) -->
+<!-- F: referencias/kaggle-evaluation.md, párrafo 2, líneas 39–41, cita literal (LOCAL) -->
 Esa es la función de utilidad del cliente, escrita en su métrica: la región
 del espacio ROC donde la sensibilidad es clínicamente inaceptable no cuenta.
 <!-- F: interpretación del proyecto; CLAUDE.md, «Tesis del proyecto» -->
@@ -225,25 +225,25 @@ coincidencia exacta, y en el caso del clasificador perfecto, que devuelve
 **El cliente declaró dos ejes más, con premio propio:** *"Two Secondary
 Prizes: $7,500 each for "Top-15 Retrieval Sensitivity" and "Model
 Efficiency""*.
-<!-- F: referencias/kaggle-rules.md, «Premios secundarios», cita literal (LOCAL) -->
+<!-- F: referencias/kaggle-rules.md, «Premios secundarios», líneas 25–26, cita literal (LOCAL) -->
 La pAUC no captura ninguno de los dos.
 <!-- F: CLAUDE.md, «Tesis del proyecto», «Corolario» -->
 
 - **Sensibilidad top-15 por paciente (SEtop-15).** El premio se otorga al
   algoritmo *"most successful in scoring malignancies within the top-15
   highest scored images per patient"*.
-  <!-- F: referencias/isic-metrics-readme.md, «Top-15 retrieval sensitivity», cita literal (LOCAL) -->
+  <!-- F: referencias/isic-metrics-readme.md, «Top-15 retrieval sensitivity», líneas 64–66, cita literal (LOCAL) -->
   Se calcula como la media, sobre los pacientes con alguna lesión maligna, de
   la fracción de sus lesiones malignas que quedan entre sus 15 de mayor
   puntuación. Así cada paciente enfermo pesa lo mismo, como la describen
   Kurtansky et al. (2025): *"weighed each diseased patient equally"*.
-  <!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring; referencias/kurtansky-2025-triaje-automatizado-tbp.md, métodos -->
+  <!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring; referencias/kurtansky-2025-triaje-automatizado-tbp.md, métodos, línea 307 -->
   La implementación coincide con el script del organizador, ejecutado sin
   modificar, en seis conjuntos sintéticos con empates.
   <!-- F: .claude/skills/modelado-baseline/SKILL.md, sección de metricas_triaje.py; test_metricas_triaje.py -->
 - **Eficiencia.** El organizador la evaluó como *"inference time on an
   undisclosed subset of test set images"*.
-  <!-- F: referencias/isic-metrics-readme.md, «Model Efficiency», cita literal (LOCAL) -->
+  <!-- F: referencias/isic-metrics-readme.md, «Model Efficiency», líneas 71–72, cita literal (LOCAL) -->
   Aquí se mide como tiempo de inferencia, con la definición de más abajo.
 
 Se reportan además otras dos métricas:
@@ -251,7 +251,7 @@ Se reportan además otras dos métricas:
 - **NNT80% SE**, de Kurtansky et al. (2025): *"the average number of lesions
   needed to triage to undergo expert evaluation to detect a single
   malignancy, using a threshold corresponding to a given sensitivity"*.
-  <!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, métodos, cita literal -->
+  <!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, métodos, línea 307, cita literal -->
   El organizador no publica script para ella, así que la lectura operativa es
   de este proyecto: el umbral es el más alto con el que la sensibilidad llega
   al 80%, y el NNT es el número de lesiones marcadas por cada maligna
@@ -269,18 +269,18 @@ etiqueta, repetida con 10 semillas (de la 0 a la 9).
 <!-- F: outputs/validacion-repetida.json > semillas_corridas y n_splits; outputs/diseno-validacion.json > esquema (StratifiedGroupKFold, group_col patient_id) -->
 Los dos modelos de cada comparación se evalúan sobre los mismos pliegues, así
 que cada comparación da 50 diferencias pareadas.
-<!-- F: outputs/fase4-*.json > comparaciones_nuevo_menos_base.*.n_diferencias -->
+<!-- F: outputs/fase4-m2-vs-m1.json, outputs/fase4-m4-vs-m2.json, outputs/fase4-m4b-vs-m2.json, outputs/fase4-m3-vs-m2.json y outputs/fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.*.n_diferencias -->
 
 El intervalo de la diferencia media se corrige por el solape entre los
 conjuntos de entrenamiento, con la corrección de Nadeau y Bengio (2003): la
 varianza de las diferencias se multiplica por 1/n + n_prueba/n_entrenamiento,
 que en 5 pliegues es 1/n + 1/4, con el mismo t de n − 1 grados de libertad.
-<!-- F: .claude/skills/modelado-baseline/scripts/evaluar_repetido.py, _nadeau_bengio; referencias/nadeau-bengio-2003-t-corregido.md, sección 4 (LOCAL) -->
+<!-- F: .claude/skills/modelado-baseline/scripts/evaluar_repetido.py, _nadeau_bengio; referencias/nadeau-bengio-2003-t-corregido.md, sección 4, líneas 60–74 y 95 (LOCAL) -->
 El artículo deriva la corrección para divisiones aleatorias independientes,
 y sus autores presentan ese estimador como cercano al de la validación
 cruzada por K pliegues. Aquí se aplica a una validación cruzada por pliegues:
 cercana, no igual.
-<!-- F: paráfrasis, no cita: referencias/nadeau-bengio-2003-t-corregido.md, «El escenario en que el artículo deriva la fórmula», p. 242 (LOCAL) -->
+<!-- F: paráfrasis, no cita: referencias/nadeau-bengio-2003-t-corregido.md, «El escenario en que el artículo deriva la fórmula», líneas 34–56, p. 242 (LOCAL) -->
 El intervalo sin corregir no se cita: supone una independencia que el solape
 no cumple, y en este proyecto ya dio una vez un intervalo que excluía el cero
 cuando el corregido lo contenía.
@@ -363,15 +363,15 @@ DINOv3 no la cumple: su artículo es de agosto de 2025, y la sección que
 describe sus datos no da la fecha en que se recogieron sus imágenes de
 Instagram ni nombra los conjuntos semilla con que se seleccionó una de
 sus partes.
-<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/simeoni-2025-dinov3.md, «Dónde» y «Lo que se buscó y no se encontró» -->
+<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/simeoni-2025-dinov3.md, «Dónde» y «Lo que se buscó y no se encontró», líneas 9–10 y 64–74 -->
 DINOv2 sí: sus datos de preentrenamiento, LVD-142M, están descritos en un
 artículo de abril de 2023, y sus autores no pertenecen a las instituciones que
 aportaron los datos. El punto de control que se usó documenta LVD-142M como
 sus datos de entrenamiento.
-<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/oquab-2023-dinov2.md, línea 10; PLAN.md, Fase 3, «Preparación (2026-09-25)»; referencias/dinov2-repositorio.md -->
+<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/oquab-2023-dinov2.md, línea 10; PLAN.md, Fase 3, «Preparación (2026-09-25)»; referencias/dinov2-repositorio.md, línea 47 -->
 Queda una salvedad: ninguna fuente fija la primera fecha en que SLICE-3D fue
 público, y el orden temporal se apoya en una cadena de evidencia.
-<!-- F: PLAN.md, Fase 2, «Salvedad declarada»; referencias/slice3d-fechas-de-publicacion.md, sección 5 -->
+<!-- F: PLAN.md, Fase 2, «Salvedad declarada»; referencias/slice3d-fechas-de-publicacion.md, sección 5, líneas 11–13 y 96–99 -->
 
 *Interpretación, no medición:* es el razonamiento de la auditoría de fugas, un
 nivel más arriba. Con modelos fundacionales, la fuga puede venir del
@@ -462,13 +462,13 @@ independiente fuera de lo que este proyecto aparte.
 Antes de volver a medir nada, se apartó el 20% de los pacientes —no de las
 filas—, estratificado por centro y por tener al menos una lesión maligna, con
 semilla 2026, y se selló.
-<!-- F: PLAN.md, Fase 1, «Qué se hace» y «Decisiones de la persona sobre el conjunto reservado (2026-09-25)» -->
+<!-- F: outputs/holdout-pacientes.json > metodo.fraccion y semilla; PLAN.md, Fase 1, «Qué se hace» y «Decisiones de la persona sobre el conjunto reservado (2026-09-25)» -->
 Ningún estrato quedó vacío: todos los centros tienen al menos un paciente con
 lesión maligna a cada lado.
 <!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -->
 Desde entonces, todas las mediciones de este informe son del conjunto de
 desarrollo, y ningún modelo se ha evaluado sobre el reservado.
-<!-- F: PLAN.md, Fase 1, «Estado»; outputs/*.json de las mediciones > datos.conjunto = "desarrollo" -->
+<!-- F: PLAN.md, Fase 1, «Estado»; outputs/auditoria-de-fugas.json, outputs/diseno-validacion.json, outputs/eda-diagnostico.json, outputs/efecto-particion.json, outputs/fase4-m2-vs-m1.json, outputs/fase4-m3-vs-m2.json, outputs/fase4-m3limpio-vs-m2.json, outputs/fase4-m4-vs-m2.json, outputs/fase4-m4b-vs-m2.json, outputs/fase4b-c1-vs-m3limpio.json, outputs/fase4b-c2-vs-m3limpio.json, outputs/fase4b-c3-vs-m3limpio.json, outputs/fase4c-c4-vs-m3limpio.json, outputs/fase4c-control-atajo.json, outputs/fase4c-red-sola-vs-imagen.json, outputs/fase4d-c5-vs-m3limpio.json, outputs/fase4d-c6-vs-m3limpio.json, outputs/fase4d-red-mejorada-vs-red.json, outputs/fase4e-c7-vs-m3limpio.json, outputs/fase4e-exploracion.json, outputs/fase4e-red-vs-red4c.json, outputs/fase4f-red4e-vs-imagen-basicos.json, outputs/imagen-sola.json, outputs/mecanismo-2a.json, outputs/modelado-baseline.json, outputs/prueba-tiempo-dinov2.json, outputs/prueba-tiempo-red-4e.json, outputs/prueba-tiempo-red-imagen.json, outputs/sensibilidad-procedencia-repetida.json, outputs/sensibilidad-procedencia.json, outputs/tiempo-inferencia.json y outputs/validacion-repetida.json > datos.conjunto (los 32 dicen «desarrollo») -->
 
 El reservado no es ajeno a lo que se decidió antes de apartarlo, con todos
 los datos: qué columnas se excluyen —salvo las dos de procedencia, decididas
@@ -512,7 +512,7 @@ los dos lados.
 Si eso cambia el resultado también se midió, y con los dos modelos probados
 no lo cambia de forma distinguible (ver «Resultados», «Partir por filas no
 cambia el veredicto»).
-<!-- F: outputs/efecto-particion.json; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->
+<!-- F: outputs/efecto-particion.json > filas_menos_paciente, particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->
 La agrupación se sostiene por el uso: el reto se evalúa con pacientes
 distintos de los de entrenamiento.
 <!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 («albeit different patients than the training dataset») -->
@@ -556,10 +556,10 @@ El artículo del conjunto de datos la define como *"a convolutional neural
 network classifier estimated probability that the lesion is a nevus"*, así
 que la calcula el software sobre la imagen y está disponible al predecir. Se
 usa. Su AUC por sí sola es 0,6422.
-<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1, cita literal; CLAUDE.md, «Cuarta nota — tbp_lv_nevi_confidence»; outputs/auditoria-de-fugas.json > univariado (tbp_lv_nevi_confidence.auc_oof) -->
+<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1, líneas 45–46, cita literal; CLAUDE.md, «Cuarta nota — tbp_lv_nevi_confidence»; outputs/auditoria-de-fugas.json > univariado (tbp_lv_nevi_confidence.auc_oof) -->
 Queda una salvedad: el clasificador se entrenó con *"approximately 57,000
 lesions"*, y el artículo no dice si se solapan con las de este conjunto.
-<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2 -->
+<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2, líneas 47 y 81–82 -->
 
 ## Resultados
 
@@ -575,7 +575,7 @@ Salvo donde se indica, las métricas de desempeño son del conjunto de
 desarrollo, con 10 semillas y 5 pliegues. Cada diferencia es «nuevo − base»,
 y su intervalo es el corregido al 95%. Los pliegues y semillas en que gana el
 nuevo se dan entre paréntesis.
-<!-- F: «Método», «Cómo se compara»; F*.json > C.*.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas -->
+<!-- F: «Método», «Cómo se compara»; F21, F42, F4b, F32 y F3L > C.*.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas -->
 
 ### Una decisión por defecto cambia el veredicto
 
@@ -583,13 +583,13 @@ El mismo gradient boosting da resultados opuestos según una sola opción. Sin
 balancear, su pAUC media es 0,0018, por debajo del piso aleatorio de 0,02 en
 los 50 pliegues. Con `class_weight="balanced"`, y nada más distinto, llega a
 0,1375.
-<!-- F: VR > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global y .pauc_por_semilla_y_fold (los 50 valores bajo 0,02); VR > nivel_2b_gradient_boosting_balanceado.pauc_media_global; outputs/modelado-baseline.json > escala_de_referencia_pauc.azar y nivel_2b_….nota («Única diferencia con 2a: class_weight») -->
+<!-- F: VR > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global y .pauc_por_semilla_y_fold (los 50 valores bajo 0,02); VR > nivel_2b_gradient_boosting_balanceado.pauc_media_global; outputs/modelado-baseline.json > escala_de_referencia_pauc.azar y nivel_2b_gradient_boosting_balanceado.nota («Única diferencia con 2a: class_weight») -->
 
 La métrica por defecto no es ciega a ese fallo, pero lo lee distinto. En la
 partición de la semilla 42, el AUC estándar del modelo sin balancear es
 0,582, por encima del azar de su escala, 0,5; su pAUC queda por debajo del
 azar de la suya. Las dos métricas discrepan sobre si el modelo supera al azar.
-<!-- F: outputs/modelado-baseline.json > esquema_cv.seed, nivel_2a_….auc_estandar_media y .pauc_media; outputs/modelado-baseline.json > nivel_0_referencia_univariada.nota («el AUC va de 0.5 (azar) a 1»); CLAUDE.md, hallazgo 1 -->
+<!-- F: outputs/modelado-baseline.json > esquema_cv.seed, nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media y .pauc_media; outputs/modelado-baseline.json > nivel_0_referencia_univariada.nota («el AUC va de 0.5 (azar) a 1»); CLAUDE.md, hallazgo 1 -->
 
 Se midió también cómo falla el modelo sin balancear, en la partición de la
 semilla 42. No es que ponga arriba a más negativos que positivos, en
@@ -600,7 +600,7 @@ Lo que hace es hundir a una parte de los positivos al fondo del ordenamiento:
 el 36,28% queda en o por debajo del percentil 20 de los negativos, frente al
 1,58% con el modelo balanceado, y 18 positivos comparten con 191 negativos la
 probabilidad mínima, 0.
-<!-- F: MEC > niveles.nivel_2a_….total.frac_pos_bajo_p20_neg, .n_pos_en_el_minimo, .n_neg_en_el_minimo y .minimo_predicho; MEC > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg -->
+<!-- F: MEC > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_pos_bajo_p20_neg, .n_pos_en_el_minimo, .n_neg_en_el_minimo y .minimo_predicho; MEC > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg -->
 Eso es coherente con una pAUC bajo el azar: para capturar el 80% de los
 positivos, el umbral tiene que bajar hasta el 20% de positivos de menor rango,
 y ese 20% está entre el 0,75% de lesiones con menor puntuación. Ahí queda
@@ -626,7 +626,7 @@ sí distinguen.
 Sobre una sola partición de los datos completos, el boosting parecía además
 más estable que la logística. Con las 10 semillas el orden se invierte: su
 desviación entre pliegues es 0,0165, frente a 0,0138. Ese argumento se retiró.
-<!-- F: CLAUDE.md, hallazgo 2 (la partición única); VR > nivel_2b_….pauc_std_entre_folds y nivel_1_regresion_logistica.pauc_std_entre_folds -->
+<!-- F: CLAUDE.md, hallazgo 2 (la partición única); VR > nivel_2b_gradient_boosting_balanceado.pauc_std_entre_folds y nivel_1_regresion_logistica.pauc_std_entre_folds -->
 
 ### Las columnas de procedencia no explican la ventaja
 
@@ -656,10 +656,10 @@ la otra.
 No se cumple ninguna de las dos. Partir por filas mueve la pAUC en +0,0005 con
 la logística y en +0,0002 con el boosting, y da mejor en 6 y en 5 de las 10
 semillas.
-<!-- F: EP > filas_menos_paciente.nivel_1_regresion_logistica.pauc y nivel_2b_gradient_boosting_balanceado.pauc (diferencia_de_medias y semillas_filas_mejor) -->
+<!-- F: EP > filas_menos_paciente.nivel_1_regresion_logistica.pauc y filas_menos_paciente.nivel_2b_gradient_boosting_balanceado.pauc (diferencia_de_medias y semillas_filas_mejor) -->
 En el AUC y el NNT80% SE de la logística da mejor en 9 de 10, no en las 10
 que pedía la regla; con el boosting, en 5 y en 7.
-<!-- F: EP > filas_menos_paciente.nivel_1_….auc y .nnt80; nivel_2b_….auc y .nnt80 (semillas_filas_mejor) -->
+<!-- F: EP > filas_menos_paciente.nivel_1_regresion_logistica.auc, .nnt80, filas_menos_paciente.nivel_2b_gradient_boosting_balanceado.auc y .nnt80 (semillas_filas_mejor) -->
 El intervalo de 2b − 1 en la pAUC contiene el cero en las dos particiones:
 [−0,0145; 0,0245] por paciente y [−0,0134; 0,0227] por filas.
 <!-- F: EP > particiones.paciente.comparacion_2b_menos_1.pauc.intervalo_t_95_nadeau_bengio y particiones.filas.comparacion_2b_menos_1.pauc.intervalo_t_95_nadeau_bengio -->
@@ -710,7 +710,7 @@ contexto de paciente:
 
 Ningún intervalo excluye el cero, y la estimación puntual es peor en las
 cuatro métricas.
-<!-- F: F42 > C.*.media e IC (auc: −0,0085) -->
+<!-- F: F42 > C.*.media y .IC (auc: −0,0085) -->
 Por el criterio fijado antes de medir, la imagen, así incorporada, no
 justifica su costo.
 <!-- F: PLAN.md, Fase 4, «Contingencia» -->
@@ -745,7 +745,7 @@ M2 y M3 limpio, además, comparan cada lesión con las demás del mismo
 paciente. Del modelo ganador, que hace lo mismo, los organizadores advierten
 que por eso *"cannot be directly applied to analyze single lesions at a
 time"*.
-<!-- F: «Método», «Qué se compara» (M2 y M3); F32 > m3.variables.entran.z_score_dentro_del_paciente y conteos_y_sumas_por_paciente; .claude/skills/modelado-baseline/scripts/ganador_m3.py, variables_m3_en_pliegue (M3 limpio); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 268, cita literal -->
+<!-- F: «Método», «Qué se compara» (M2 y M3); F32 > m3.variables.entran.z_score_dentro_del_paciente y .conteos_y_sumas_por_paciente; .claude/skills/modelado-baseline/scripts/ganador_m3.py, variables_m3_en_pliegue (M3 limpio); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 268, cita literal -->
 
 Para ese escenario se midió qué da la imagen sola, con una especificación
 fijada antes de correr: una regresión logística balanceada sobre las 384
@@ -796,7 +796,7 @@ que *"are not directly attained from images"*.
 
 Después se entrenó una red de imagen sobre los recortes, EfficientNet-B0, en
 cada pliegue.
-<!-- F: PLAN.md, Fase 4c, «La red» y «Cómo se entrena, fijado antes de correr y sin ajuste»; referencias/efficientnet-b0-preentrenamiento.md (el criterio de la Fase 2, comprobado antes de descargar los pesos) -->
+<!-- F: PLAN.md, Fase 4c, «La red» y «Cómo se entrena, fijado antes de correr y sin ajuste»; referencias/efficientnet-b0-preentrenamiento.md, líneas 77–108 (el criterio de la Fase 2, comprobado antes de descargar los pesos) -->
 Su pAUC media es de 0,1083, frente a 0,0796 de la imagen sola con DINOv2, y
 queda por encima en 44 de 50 pliegues y en las 10 semillas.
 <!-- F: outputs/fase4c-red-sola-vs-imagen.json > metricas.Red.pauc.media_global, metricas.Imagen.pauc.media_global y comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas; «Imagen» es la de IS, a 4 decimales -->
@@ -835,7 +835,7 @@ M3 obtiene una pAUC media de 0,1625 y una sensibilidad top-15 de 0,7245, y la
 variante del ganador sin recortes de imagen obtuvo 0,164 y 0,695 en la
 evaluación privada del reto, con otros datos, otras particiones y la
 etiqueta del hospital entre sus variables.
-<!-- F: F32 > metricas.M3.pauc.media_global y .setop15.media_global; referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (Meta-basic, Meta-WB360 y Patient context); PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
+<!-- F: F32 > metricas.M3.pauc.media_global y .setop15.media_global; referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3, líneas 206 y 209 (Meta-basic, Meta-WB360 y Patient context); PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
 
 Sin esos dos sesgos (M3 limpio − M2), la ventaja se mantiene: +0,0181,
 [0,0021; 0,0341] (43 de 50; 10 de 10), y en AUC estándar, +0,021,
@@ -902,7 +902,7 @@ M4 ni M4b mejoraron a M2 en la métrica principal de forma distinguible.
 | M4 | 0,1375 | 0,6732 | 96,85 | 14,5156 |
 | M4b | 0,1496 | 0,7003 | 81,74 | 14,6321 |
 
-<!-- F: medias de los 50 pliegues: F21 > metricas.M1 y metricas.M2 (*.media_global); F3L > metricas.M3limpio; F42 > metricas.M4; F4b > metricas.M4b. M2 es igual en los cuatro archivos (reproduccion_del_base.reproduce_fold_a_fold). Tiempos: outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones. M3 no está: no es candidato y su camino de predicción no se cronometró (PLAN.md, Fase 4, «Tiempo de inferencia») -->
+<!-- F: F21 > metricas.M1 y metricas.M2 (las medias de los 50 pliegues, *.media_global); F3L > metricas.M3limpio; F42 > metricas.M4; F4b > metricas.M4b; M2 es igual en los cuatro archivos (reproduccion_del_base.reproduce_fold_a_fold); outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones; M3 no está: no es candidato y su camino de predicción no se cronometró (PLAN.md, Fase 4, «Tiempo de inferencia») -->
 
 La tabla responde la pregunta con sus tres ejes —la métrica principal, la
 sensibilidad por paciente y el costo— y añade el NNT80% SE, la segunda métrica
@@ -1032,11 +1032,11 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   logística—, solo en la pAUC. Las de las fases 4b y 4c se corrigen por
   multiplicidad dentro de cada fase, con Bonferroni; las demás no, y el
   intervalo del NNT80% SE de M2 − M1 queda al límite del cero.
-  <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC; EP > particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; IS > C.imagen_menos_m1 y C.imagen_basicos_menos_imagen; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (solo la pAUC); outputs/fase4b-*.json y outputs/fase4c-red-sola-vs-imagen.json y outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.*.intervalo_bonferroni_nadeau_bengio (fase4b_comparar.py, confianza 1 − 0,05/3; fase4c_comparar.py, 1 − 0,05/2) -->
+  <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC; EP > particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; IS > C.imagen_menos_m1 y C.imagen_basicos_menos_imagen; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (solo la pAUC); outputs/fase4b-c1-vs-m3limpio.json, outputs/fase4b-c2-vs-m3limpio.json, outputs/fase4b-c3-vs-m3limpio.json, outputs/fase4c-red-sola-vs-imagen.json y outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.*.intervalo_bonferroni_nadeau_bengio (fase4b_comparar.py, confianza 1 − 0,05/3; fase4c_comparar.py, 1 − 0,05/2) -->
 - **La corrección de la varianza es aproximada.** Nadeau y Bengio la derivan
   para divisiones aleatorias independientes, y aquí se aplica a una validación
   por pliegues.
-  <!-- F: «Método», «Cómo se compara»; referencias/nadeau-bengio-2003-t-corregido.md (LOCAL) -->
+  <!-- F: «Método», «Cómo se compara»; referencias/nadeau-bengio-2003-t-corregido.md, «Salvedad de aplicabilidad», líneas 134–143 (LOCAL) -->
 - **El NNT80% SE se calcula con una lectura propia**, porque el organizador no
   publica script para él.
   <!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->
@@ -1050,7 +1050,7 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
 - **Dos supuestos sin verificar.** No se sabe si el clasificador de nevus que
   produce `tbp_lv_nevi_confidence` se entrenó con lesiones de este conjunto. Y
   nada comprueba la versión del código de DINOv2; solo sus pesos, por hash.
-  <!-- F: referencias/slice3d-metadata-tbp-lv.md, nota 2; .claude/skills/extraccion-imagen/SKILL.md, «Límites conocidos» -->
+  <!-- F: referencias/slice3d-metadata-tbp-lv.md, nota 2, líneas 81–87; .claude/skills/extraccion-imagen/SKILL.md, «Límites conocidos» -->
 - **Un mecanismo medido a medias.** Se midió cómo falla el gradient boosting
   sin balancear: hunde a una parte de los positivos al fondo del ordenamiento.
   Por qué lo hace no se midió.

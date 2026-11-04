@@ -1,5 +1,5 @@
 # Verificación de trazabilidad — informe/borrador-v2.md
-Números encontrados en el borrador: 646
+Números encontrados en el borrador: 688
 Con respaldo en outputs/ (tolerancia: media unidad del último dígito escrito; exacta sin decimales): 356
 SIN respaldo — revisar uno por uno: 25
   - línea ~26: "2023" en «...-->  Antes del reto, Marchetti et al. (2023) estudiar...»
@@ -23,7 +23,7 @@ Omitidos por su contexto (IGNORAR_CONTEXTOS: 2024, 2026, Nivel 0, Nivel 1, Nivel
   - línea ~140: "368" en «...(2024) estudiaron retrospectivamente a 368 pacientes...»
   - línea ~192: "2024" en «...orque su artículo declara datos de ISIC 2024 entre los...»
   - línea ~347: "2024" en «...artículo declara un subconjunto de ISIC 2024 entre sus...»
-En comentarios HTML (<!-- … -->: trazabilidad, no afirmaciones), sin buscarles respaldo: 250
+En comentarios HTML (<!-- … -->: trazabilidad, no afirmaciones), sin buscarles respaldo: 292
   - línea ~3: "2" en «...rador-v2.md, antes de «Método». Versión 2:      inc...»
   - línea ~21: "109," en «...ansky-2024-slice3d-descriptor.md, línea 109, cita lite...»
   - línea ~24: "111" en «...ansky-2024-slice3d-descriptor.md, línea 111 («every l...»
@@ -34,6 +34,6 @@ En comentarios HTML (<!-- … -->: trazabilidad, no afirmaciones), sin buscarles
   - línea ~34: "3," en «...-2025-triaje-automatizado-tbp.md, Tabla 3, «Melanoma...»
   - línea ~34: "24" en «...rchetti et al.» y «Best across all ISIC'24 submissio...»
   - línea ~34: "217" en «...across all ISIC'24 submissions» (líneas 217–218); not...»
-  ... y 240 más — detalle en el .json
+  ... y 282 más — detalle en el .json
 Archivos de outputs/ en los que no se busca respaldo, por lista declarada: 5 ['holdout-pacientes.json', 'potencia-nadeau-bengio-curva.json', 'sensibilidad-procedencia.json', 'sintesis-comentarios-f.json', 'sintesis-verificacion.json']
 Nota: este script señala, no decide. Un número sin respaldo puede ser legítimo (ej. un conteo estructural obvio) — revisar cada uno a mano.

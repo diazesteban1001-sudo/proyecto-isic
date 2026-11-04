@@ -3043,6 +3043,41 @@ Fijada antes de escribir código.
 - **Aquí se detiene**, como fija la especificación: no se reescribe ningún
   comentario hasta que la persona lo decida.
 
+**La verificación por campo: el paso 3, los comentarios reescritos
+(2026-11-04).**
+- **La decisión (de la persona):** se reescriben los 33, no solo los 20 que
+  cubren números. Los 8 de referencias sin líneas que no cubren números
+  sostienen afirmaciones sobre fuentes, y con las líneas se pueden comprobar,
+  así que la especificación queda sin excepciones.
+- **El «20 %» del conjunto reservado:** está en un campo,
+  `outputs/holdout-pacientes.json > metodo.fraccion`, 0,2, y se cita. No hace
+  falta la marca «sin fuente». *Para el paso 4:* ese archivo está en
+  `FUERA_DEL_CORPUS`, así que la clasificación por campo tiene que decidir si
+  el campo de un archivo excluido vale como fuente de su cifra.
+- **Qué se hizo.** Se reescribieron 34 comentarios: los 33 y el del «20 %».
+  - **Las referencias:** las 18 sin líneas citan ahora sus líneas.
+  - **Los comodines en la fuente:** se listan los archivos uno por uno; en la
+    afirmación de que todas las mediciones son del conjunto de desarrollo, los
+    32 que traen `datos.conjunto`.
+  - **Las claves abreviadas con «…»** llevan su nombre completo, y las rutas sin
+    prefijo, su ruta.
+  - **Los dos archivos sin ruta** citan sus campos, y la parte de la tabla final
+    que traía dos citas se partió.
+- **Cómo se comprobó.**
+  - El borrador sin comentarios es idéntico al de antes, y no cambian el número
+    de comentarios ni el de líneas.
+  - El diff solo cambia 34 líneas, todas de comentarios `F:`.
+  - El analizador da 0 comentarios fuera de la gramática: entran 148, y 64
+    solo citan documentos del proyecto, ninguno con números.
+  - Los 381 números del cuerpo están bajo comentarios que entran
+    (`outputs/sintesis-comentarios-f.json > resumen`).
+  - Las 9 citas literales del cuerpo que cubren estos comentarios están dentro
+    de las líneas citadas. En los demás, las líneas salen de leer la sección
+    que el comentario nombraba; que contengan la cifra lo comprobará el paso 4.
+- **La verificación de trazabilidad** se regenera: 688 números, 292 de ellos en
+  comentarios, porque las líneas citadas son números; 356 con respaldo y 25
+  señalados, como antes.
+
 ---
 
 ## Decisiones
