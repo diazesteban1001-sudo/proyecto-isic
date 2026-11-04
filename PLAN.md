@@ -15,7 +15,9 @@ recomendado, M3 limpio, ni la especificación de la Fase 5; la Fase 4f, una sola
 pregunta sobre el escenario sin fotografía corporal total, también cerrada, dio
 su resultado a favor, y la recomendación para ese escenario pasa a la red de la
 4e; al cerrar la 4e, la persona decide si se usa cómputo aparte, y la Fase 5
-espera a esa decisión; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+espera a esa decisión; la Fase 5b, el envío tardío a Kaggle, está fijada para
+después de la Fase 5, con una propuesta del agente pendiente de visto bueno; de
+la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -46,7 +48,9 @@ regla sin que ninguna de sus dos preguntas diera su resultado a favor.*
 frente a «Imagen + básicos».* *2026-11-02: la persona añadió a la
 especificación de la Fase 5 la red de la 4e y «Imagen + básicos», como
 resultado descriptivo que no cambia ninguna recomendación.* *2026-11-02: la
-Fase 4f cerró por su regla con su pregunta a favor.*
+Fase 4f cerró por su regla con su pregunta a favor.* *2026-11-04: la persona
+fijó la Fase 5b, el envío tardío a Kaggle, que va después de la Fase 5; no se
+envía nada antes.*
 
 ## Cómo leer una puerta
 
@@ -2560,6 +2564,109 @@ mano.
 **Contingencia.** Que la apertura quede registrada en un commit propio, con el
 modelo elegido fijado en el commit **anterior**. Así el orden es verificable
 desde fuera y no depende de que nadie recuerde haberse portado bien.
+
+---
+
+## Fase 5b — Envío tardío a Kaggle — FIJADA, NO ABIERTA
+
+**Estado.** Fijada el 2026-11-04 por la persona, antes de abrir la Fase 5. Va
+después de la Fase 5, y no se envía nada a Kaggle antes de cerrarla.
+
+**Por qué existe.** Kaggle acepta envíos tardíos: el panel de envío de la
+competición dice *«Te quedan 100 intentos para enviar hoy»*
+(`referencias/kaggle-envio-tardio-2026-11-04.png`, descrita en
+`referencias/kaggle-code-requirements.md`). Un envío da la única cifra medida
+sobre el mismo conjunto de evaluación que el tablero del reto.
+
+**Qué se hace (decisión de la persona, 2026-11-04):**
+- **Tres modelos.** Después de la Fase 5 se entrenan, sobre todos los datos de
+  entrenamiento, M3 limpio, C7 y la red de la 4e, cada uno con su
+  especificación fija. Esos datos son el desarrollo y el reservado: 833 y 209
+  pacientes, 1.042 en total (`outputs/holdout-pacientes.json > recuentos`).
+- **Un envío por modelo.** Cada uno se envía una sola vez, y no se envía nada
+  antes de la Fase 5.
+- **Se reporta todo.** Se reportan las puntuaciones pública y privada, sea cual
+  sea el resultado. Después de verlas no se cambia ningún modelo.
+- **La comparación es descriptiva y sin intervalo,** cada cifra con su fuente.
+  Las de Kurtansky et al. 2025 se calcularon sobre el conjunto de evaluación
+  del tablero privado (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`,
+  línea 200):
+  - **C7 frente al ganador en el tablero privado,** pAUC 0,1726 (misma
+    referencia, línea 196);
+  - **M3 limpio frente a la fila «sin imágenes» de la Tabla 3,** 0,164 (línea
+    209). Esa variante usa los datos básicos, que incluyen la etiqueta del
+    hospital (línea 315), las mediciones del sistema de fotografía corporal
+    total y el contexto de paciente;
+  - **la red de la 4e frente a la fila «solo imágenes»,** 0,142 (línea 216):
+    la variante del ganador que solo usa los recortes, sin contexto de
+    paciente.
+- **El notebook solo predice.** Los modelos se entrenan en el Mac y se suben a
+  Kaggle como conjunto de datos privado. El envío se hace con un notebook
+  (`referencias/kaggle-code-requirements.md`, línea 3). Ese notebook corre sin
+  internet y en 12 horas como máximo (líneas 5 a 7), y escribe
+  `submission.csv` (línea 9).
+- **El presupuesto.** Si el notebook no corre en tres días de trabajo, la fase
+  se cierra sin envío, y se declara.
+
+**Las puntuaciones fuera de pliegue de la red, para C7.** *Propuesta del agente
+(2026-11-04), pendiente del visto bueno de la persona; hasta entonces no está
+fijada.* C7 apila sobre M3 limpio la puntuación de la red de la 4e y su razón a
+la media del paciente (`outputs/fase4e-c7-vs-m3limpio.json > modelos.C7`). Con
+todos los datos, esas dos columnas necesitan puntuaciones de la red que no
+hayan visto su propia lesión:
+1. **Los pliegues.** Los 1.042 pacientes se parten en 5 pliegues, con
+   `construir_folds` (agrupado por paciente y estratificado por la etiqueta),
+   con semilla 0.
+2. **Cinco redes.** En cada pliegue se entrena la red de la 4e con su receta y
+   su ajuste fino, semilla 0 (`fase4e.entrenar_y_puntuar` y
+   `fase4e_ajuste.ajustar_y_puntuar`), sobre los otros cuatro, y se puntúan
+   los recortes del pliegue que queda fuera. Así cada lesión de entrenamiento
+   tiene una puntuación fuera de pliegue.
+3. **El CatBoost de C7** se entrena una vez sobre todos los datos, con esas
+   puntuaciones en sus dos columnas de imagen. Su parada temprana es la de M3
+   limpio, en la Fase 5: el 20 % interno, agrupado por paciente.
+4. **Al predecir,** la puntuación de cada recorte de prueba es la media de las
+   cinco redes de los pliegues, que se entrenaron con la misma cantidad de
+   datos que las que dieron las puntuaciones fuera de pliegue. Con esa media se
+   calcula la razón a la media del paciente.
+5. **La red que se envía sola** es otra: una red entrenada una sola vez sobre
+   los 1.042 pacientes, semilla 0, como la de la Fase 5 lo es sobre el
+   desarrollo. Así, C7 y la red sola usan redes distintas, y se declara.
+
+*Estimación, aritmética nuestra:* cada red con su ajuste tardó en la
+confirmación de la 4e una mediana de 1.780,2 s más 536,4 s, entrenando con
+cuatro quintos del desarrollo (Fase 4e, «La confirmación, terminada el
+2026-11-01, antes de leer ninguna comparación»). Si el tiempo crece con
+los datos, cada red de pliegue, con cuatro quintos de los 1.042 pacientes,
+tarda unos 48 minutos, y la red sola, con todos, alrededor de una hora: unas 5
+horas en el Mac. Al predecir son seis redes sobre unos 500.000 recortes de
+prueba (Kurtansky 2025, línea 299). Su tiempo no está medido en el equipo de
+Kaggle, y es lo primero que comprueba el notebook, dentro del presupuesto de
+tres días.
+
+**Salvedades:**
+- **El reservado deja de estar reservado.** Se usa para entrenar después de su
+  única evaluación, en la Fase 5. El resultado de la Fase 5 se queda como está.
+  Esta fase no cambia ningún modelo de aquella, porque entrena otros, con más
+  datos, para otro conjunto de evaluación.
+- **Que un envío tardío reciba puntuación** pública y privada no lo muestra
+  ninguna fuente: la captura solo muestra que el panel de envío está abierto
+  (`referencias/kaggle-code-requirements.md`, «La captura del envío tardío»).
+  Se reporta lo que Kaggle dé.
+- **Subir los modelos como conjunto de datos privado.** La página de requisitos
+  solo permite los datos externos *"Freely & publicly available"* (línea 8).
+  Que los pesos de un modelo propio no cuenten como datos externos es lectura
+  nuestra, declarada en la ficha.
+- **Los valores de la Tabla 3** son de la reproducción del ganador que los
+  organizadores hicieron en su propio entorno (Kurtansky 2025, línea 315), con
+  3 decimales. El 0,1726 es la puntuación oficial del ganador en el tablero
+  privado.
+- **Es descriptiva.** No da ningún resultado a favor ni en contra, no cambia
+  ninguna recomendación y no suma a la bitácora.
+
+**Puerta.** Las puntuaciones pública y privada de los tres envíos, en
+`outputs/`, con su comparación descriptiva. O bien la declaración de que la fase
+se cerró sin envío, y por qué.
 
 ---
 
