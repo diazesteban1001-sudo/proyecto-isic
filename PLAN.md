@@ -3185,6 +3185,59 @@ Fijada antes de escribir código.
   comentarios, porque las líneas citadas son números; 356 con respaldo y 25
   señalados, como antes.
 
+**La verificación por campo: dos reglas más, antes del paso 4 (2026-11-04, de la
+persona).** Fijadas antes de escribir el código del paso 4.
+
+1. **Un campo citado de forma explícita cuenta como fuente aunque su archivo
+   esté en `FUERA_DEL_CORPUS`.** La exclusión solo gobierna la búsqueda en todo
+   el corpus. Es el caso del «20 %», que cita
+   `outputs/holdout-pacientes.json > metodo.fraccion`.
+2. **En `referencias/`, solo cuentan como fuente las líneas del texto
+   original:** las citas literales y el texto completo versionado. Las líneas
+   de las secciones nuestras (análisis, salvedades, notas, «Lo que es nuestro»)
+   se clasifican como documento del proyecto, no como «respaldada por su
+   referencia». La persona vio tres casos al revisar el diff:
+   - `nadeau-bengio-2003-t-corregido.md`, líneas 134–143;
+   - `slice3d-metadata-tbp-lv.md`, líneas 81–87;
+   - `efficientnet-b0-preentrenamiento.md`, líneas 77–108.
+
+*Cómo se detectan las líneas originales: propuesta del agente, el mismo día y
+antes del código.* Sale de cómo están escritos los archivos de `referencias/`,
+que se revisaron uno por uno: 21 fichas, 14 de texto completo y 5 más.
+- **Todas sus líneas son originales** en los archivos de
+  `referencias/_texto-completo/`, que son copias del texto, y en las carpetas
+  con los originales intactos, como `referencias/novoselskiy-2024-isic2024/`.
+- **Ninguna lo es** en un `.md` que se declara «obra del proyecto».
+- **En cualquier otro `.md`:**
+  - son originales las líneas de cita, las que empiezan por «>»;
+  - si tiene el encabezado «## Texto original», también todas las que van
+    después.
+
+  Trece de los catorce de texto completo lo tienen, y en ninguno aparece
+  «nuestr» después de él. El que no lo tiene, `slice3d-metadata-tbp-lv.md`,
+  queda con sus líneas de cita.
+- **Lo demás es nuestro:** la cabecera, los análisis, las salvedades, las
+  notas, las tablas que transcribimos y las fórmulas en bloques de código. Por
+  ejemplo, la de Nadeau y Bengio, que la ficha transcribe en su notación. Una
+  cita entre comillas dentro de un párrafo nuestro también cuenta como nuestra:
+  la regla es por línea.
+- **Una cifra cubierta por una cita de `referencias/`:**
+  - *respaldada por su referencia*, si está en una línea original de las
+    citadas;
+  - *cita un documento del proyecto*, si solo está en líneas nuestras;
+  - *fuera de las líneas citadas*, si no está en ninguna.
+- **El control.** Los tres casos de arriba salen como nuestros. La línea 47 de
+  `slice3d-metadata-tbp-lv.md`, que es una línea de cita, y la 209 de
+  `kurtansky-2025-triaje-automatizado-tbp.md`, después de «## Texto original»,
+  salen como originales. *Deben fallar:* un clasificador que toma todas las
+  líneas por originales da los tres casos como originales, y uno que solo mira
+  «## Texto original» pierde la línea de cita de la ficha.
+- **La salida cuenta** cuántas citas de `referencias/` del borrador apuntan
+  solo a líneas nuestras y cuántas a una mezcla.
+- *Precisión del agente:* el verificador se detiene si algún comentario no
+  entra en la gramática, no solo si una ruta no existe. Las secciones nuevas
+  se escriben ya en la gramática, y el analizador da hoy 0 fuera de ella.
+
 ---
 
 ## Decisiones
