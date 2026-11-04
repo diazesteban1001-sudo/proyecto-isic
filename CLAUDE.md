@@ -1756,7 +1756,9 @@ conjunto reservado; el análisis de sensibilidad de una sola partición,
 `sensibilidad-procedencia.json`, excluido por nombre y con su motivo, porque
 lo supera la validación repetida; la salida del propio verificador; y, desde
 el 2026-11-04, `potencia-nadeau-bengio-curva.json`, la curva completa del
-análisis de potencia, cuyas tasas respaldaban cifras por coincidencia. *Hasta
+análisis de potencia, cuyas tasas respaldaban cifras por coincidencia, y
+`sintesis-comentarios-f.json`, la salida del analizador de los comentarios
+`F:`. *Hasta
 el 2026-10-02 un patrón excluía todos los análisis de sensibilidad*). La
 tolerancia de redondeo depende de cómo está escrita la
 cifra: con decimales, media unidad de su último dígito («0,1451» tiene que
@@ -1834,6 +1836,11 @@ cambian: 646, 356 y 25. Cambian dos campos:
   valor de `outputs/prueba-tiempo-red-4e.json`, de la Fase 4e. Ese archivo entró
   al corpus después de la regeneración anterior, así que la salida versionada
   ya estaba desfasada en este campo antes de excluir la curva.
+
+*Regenerada otra vez el mismo día,* en el commit «sintesis-consultoria: el
+analizador de los comentarios F:, en modo informe». Los recuentos siguen siendo
+646, 356 y 25. `archivos_fuera_del_corpus` pasa a 5 con
+`sintesis-comentarios-f.json`.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya

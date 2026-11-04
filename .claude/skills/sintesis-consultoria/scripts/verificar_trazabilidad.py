@@ -193,6 +193,11 @@ FUERA_DEL_CORPUS = {
         "Kurtansky 2025. El resumen, potencia-nadeau-bengio.json, sí es corpus. "
         "Excluida el 2026-11-04, por decisión de la persona."
     ),
+    "sintesis-comentarios-f.json": (
+        "La salida de comentarios_f.py, el analizador de los comentarios F: del "
+        "borrador. Sus recuentos y números de línea describen el borrador, no "
+        "mediciones, como los de sintesis-verificacion.json."
+    ),
 }
 
 

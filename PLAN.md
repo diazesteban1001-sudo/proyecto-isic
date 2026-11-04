@@ -3026,6 +3026,23 @@ Fijada antes de escribir código.
   archivo entra en `FUERA_DEL_CORPUS`, porque sus recuentos describen
   comentarios del borrador, no mediciones, como `sintesis-verificacion.json`.
 
+**La verificación por campo: el paso 2, el analizador (2026-11-04).**
+- **Qué es:** `comentarios_f.py`, en los scripts de `sintesis-consultoria`, con
+  su prueba, `test_comentarios_f.py`, que da 21 de 21.
+- **El resultado, sobre `informe/borrador-v2.md`**
+  (`outputs/sintesis-comentarios-f.json > resumen`):
+  - de 212 comentarios `F:`, entran 114, no entran 33 y 65 solo citan
+    documentos del proyecto; marcas «sin fuente», ninguna;
+  - de los 33 que no entran, 20 cubren números del cuerpo;
+  - de los 381 números del cuerpo, 309 están bajo comentarios que entran, 71
+    bajo comentarios que no entran y 1 bajo un comentario que solo cita
+    `PLAN.md`; ninguno queda sin comentario.
+- **Precisiones de la gramática, del agente, declaradas en el script:** «e»
+  vale como «y», como en «C.*.media e IC», y las fuentes se pueden listar con
+  comas.
+- **Aquí se detiene**, como fija la especificación: no se reescribe ningún
+  comentario hasta que la persona lo decida.
+
 ---
 
 ## Decisiones

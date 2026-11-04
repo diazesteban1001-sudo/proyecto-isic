@@ -35,5 +35,5 @@ En comentarios HTML (<!-- … -->: trazabilidad, no afirmaciones), sin buscarles
   - línea ~34: "24" en «...rchetti et al.» y «Best across all ISIC'24 submissio...»
   - línea ~34: "217" en «...across all ISIC'24 submissions» (líneas 217–218); not...»
   ... y 240 más — detalle en el .json
-Archivos de outputs/ en los que no se busca respaldo, por lista declarada: 4 ['holdout-pacientes.json', 'potencia-nadeau-bengio-curva.json', 'sensibilidad-procedencia.json', 'sintesis-verificacion.json']
+Archivos de outputs/ en los que no se busca respaldo, por lista declarada: 5 ['holdout-pacientes.json', 'potencia-nadeau-bengio-curva.json', 'sensibilidad-procedencia.json', 'sintesis-comentarios-f.json', 'sintesis-verificacion.json']
 Nota: este script señala, no decide. Un número sin respaldo puede ser legítimo (ej. un conteo estructural obvio) — revisar cada uno a mano.

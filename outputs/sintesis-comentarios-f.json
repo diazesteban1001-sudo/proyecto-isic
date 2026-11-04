@@ -1,0 +1,1417 @@
+{
+  "que_es": "Analizador de los comentarios F: del borrador, solo en modo informe (PLAN.md, Fase 6, «La verificación por campo: especificación», paso 2). No verifica cifras ni toca el borrador.",
+  "borrador": "informe/borrador-v2.md",
+  "abreviaturas": [
+    {
+      "linea": 567,
+      "tabla": {
+        "VR": "outputs/validacion-repetida.json",
+        "F21": "outputs/fase4-m2-vs-m1.json",
+        "F42": "outputs/fase4-m4-vs-m2.json",
+        "F4b": "outputs/fase4-m4b-vs-m2.json",
+        "F32": "outputs/fase4-m3-vs-m2.json",
+        "F3L": "outputs/fase4-m3limpio-vs-m2.json",
+        "C": "comparaciones_nuevo_menos_base",
+        "IC": "intervalo_t_95_nadeau_bengio",
+        "EP": "outputs/efecto-particion.json",
+        "MEC": "outputs/mecanismo-2a.json",
+        "IS": "outputs/imagen-sola.json"
+      }
+    }
+  ],
+  "resumen": {
+    "comentarios_f": 212,
+    "por_clase": {
+      "entra": 114,
+      "solo documentos del proyecto": 65,
+      "no entra": 33
+    },
+    "no_entran_que_cubren_numeros": 20,
+    "numeros_del_cuerpo": 381,
+    "numeros_por_clase_de_comentario": {
+      "entra": 309,
+      "solo documentos del proyecto": 1,
+      "no entra": 71
+    },
+    "numeros_sin_comentario": 0,
+    "marcas_sin_fuente": 0
+  },
+  "motivos_de_los_que_no_entran": {
+    "ninguna «FUENTE > ruta» en la parte": 2,
+    "referencia sin líneas": 18,
+    "comodín en la fuente": 4,
+    "rutas fuera de la gramática": 6,
+    "ruta que no existe": 3,
+    "fuente no reconocida": 1,
+    "más de una «FUENTE > ruta» en la parte": 1
+  },
+  "no_entran": [
+    {
+      "linea": 114,
+      "comentario": "<!-- F: «Resultados», «Partir por filas no cambia el veredicto»; outputs/efecto-particion.json; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->",
+      "motivos": [
+        "ninguna «FUENTE > ruta» en la parte"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 207,
+      "comentario": "<!-- F: referencias/kaggle-evaluation.md, «Citas literales», párrafos 1 y 2 (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/kaggle-evaluation.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "0",
+          "linea": 206
+        },
+        {
+          "valor": "0,2.",
+          "linea": 206
+        }
+      ]
+    },
+    {
+      "linea": 212,
+      "comentario": "<!-- F: referencias/kaggle-evaluation.md, párrafo 2, cita literal (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/kaggle-evaluation.md"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 228,
+      "comentario": "<!-- F: referencias/kaggle-rules.md, «Premios secundarios», cita literal (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/kaggle-rules.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "7,500",
+          "linea": 226
+        }
+      ]
+    },
+    {
+      "linea": 235,
+      "comentario": "<!-- F: referencias/isic-metrics-readme.md, «Top-15 retrieval sensitivity», cita literal (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/isic-metrics-readme.md"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 240,
+      "comentario": "<!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring; referencias/kurtansky-2025-triaje-automatizado-tbp.md, métodos -->",
+      "motivos": [
+        "referencia sin líneas: referencias/kurtansky-2025-triaje-automatizado-tbp.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "15",
+          "linea": 237
+        },
+        {
+          "valor": "2025",
+          "linea": 239
+        }
+      ]
+    },
+    {
+      "linea": 246,
+      "comentario": "<!-- F: referencias/isic-metrics-readme.md, «Model Efficiency», cita literal (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/isic-metrics-readme.md"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 254,
+      "comentario": "<!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, métodos, cita literal -->",
+      "motivos": [
+        "referencia sin líneas: referencias/kurtansky-2025-triaje-automatizado-tbp.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "2025",
+          "linea": 251
+        }
+      ]
+    },
+    {
+      "linea": 272,
+      "comentario": "<!-- F: outputs/fase4-*.json > comparaciones_nuevo_menos_base.*.n_diferencias -->",
+      "motivos": [
+        "comodín en la fuente: outputs/fase4-*.json"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "50",
+          "linea": 271
+        }
+      ]
+    },
+    {
+      "linea": 278,
+      "comentario": "<!-- F: .claude/skills/modelado-baseline/scripts/evaluar_repetido.py, _nadeau_bengio; referencias/nadeau-bengio-2003-t-corregido.md, sección 4 (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/nadeau-bengio-2003-t-corregido.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "2003",
+          "linea": 275
+        },
+        {
+          "valor": "1",
+          "linea": 276
+        },
+        {
+          "valor": "5",
+          "linea": 277
+        },
+        {
+          "valor": "1",
+          "linea": 277
+        },
+        {
+          "valor": "1",
+          "linea": 277
+        },
+        {
+          "valor": "4,",
+          "linea": 277
+        },
+        {
+          "valor": "1",
+          "linea": 277
+        }
+      ]
+    },
+    {
+      "linea": 283,
+      "comentario": "<!-- F: paráfrasis, no cita: referencias/nadeau-bengio-2003-t-corregido.md, «El escenario en que el artículo deriva la fórmula», p. 242 (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/nadeau-bengio-2003-t-corregido.md"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 366,
+      "comentario": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/simeoni-2025-dinov3.md, «Dónde» y «Lo que se buscó y no se encontró» -->",
+      "motivos": [
+        "referencia sin líneas: referencias/simeoni-2025-dinov3.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "2025,",
+          "linea": 362
+        }
+      ]
+    },
+    {
+      "linea": 371,
+      "comentario": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-25, de la persona)»; referencias/oquab-2023-dinov2.md, línea 10; PLAN.md, Fase 3, «Preparación (2026-09-25)»; referencias/dinov2-repositorio.md -->",
+      "motivos": [
+        "referencia sin líneas: referencias/dinov2-repositorio.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "2023,",
+          "linea": 368
+        }
+      ]
+    },
+    {
+      "linea": 374,
+      "comentario": "<!-- F: PLAN.md, Fase 2, «Salvedad declarada»; referencias/slice3d-fechas-de-publicacion.md, sección 5 -->",
+      "motivos": [
+        "referencia sin líneas: referencias/slice3d-fechas-de-publicacion.md"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 471,
+      "comentario": "<!-- F: PLAN.md, Fase 1, «Estado»; outputs/*.json de las mediciones > datos.conjunto = \"desarrollo\" -->",
+      "motivos": [
+        "comodín en la fuente: outputs/*.json de las mediciones",
+        "rutas fuera de la gramática: datos.conjunto = \"desarrollo\""
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 515,
+      "comentario": "<!-- F: outputs/efecto-particion.json; PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura» -->",
+      "motivos": [
+        "ninguna «FUENTE > ruta» en la parte"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 559,
+      "comentario": "<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1, cita literal; CLAUDE.md, «Cuarta nota — tbp_lv_nevi_confidence»; outputs/auditoria-de-fugas.json > univariado (tbp_lv_nevi_confidence.auc_oof) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/slice3d-metadata-tbp-lv.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "0,6422.",
+          "linea": 558
+        }
+      ]
+    },
+    {
+      "linea": 562,
+      "comentario": "<!-- F: referencias/slice3d-metadata-tbp-lv.md, Tabla 1 y nota 2 -->",
+      "motivos": [
+        "referencia sin líneas: referencias/slice3d-metadata-tbp-lv.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "57,000",
+          "linea": 560
+        }
+      ]
+    },
+    {
+      "linea": 578,
+      "comentario": "<!-- F: «Método», «Cómo se compara»; F*.json > C.*.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas -->",
+      "motivos": [
+        "comodín en la fuente: F*.json"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "10",
+          "linea": 575
+        },
+        {
+          "valor": "5",
+          "linea": 575
+        }
+      ]
+    },
+    {
+      "linea": 586,
+      "comentario": "<!-- F: VR > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global y .pauc_por_semilla_y_fold (los 50 valores bajo 0,02); VR > nivel_2b_gradient_boosting_balanceado.pauc_media_global; outputs/modelado-baseline.json > escala_de_referencia_pauc.azar y nivel_2b_….nota («Única diferencia con 2a: class_weight») -->",
+      "motivos": [
+        "rutas fuera de la gramática: escala_de_referencia_pauc.azar y nivel_2b_….nota"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "0,0018,",
+          "linea": 583
+        },
+        {
+          "valor": "0,02",
+          "linea": 583
+        },
+        {
+          "valor": "50",
+          "linea": 584
+        },
+        {
+          "valor": "0,1375.",
+          "linea": 585
+        }
+      ]
+    },
+    {
+      "linea": 592,
+      "comentario": "<!-- F: outputs/modelado-baseline.json > esquema_cv.seed, nivel_2a_….auc_estandar_media y .pauc_media; outputs/modelado-baseline.json > nivel_0_referencia_univariada.nota («el AUC va de 0.5 (azar) a 1»); CLAUDE.md, hallazgo 1 -->",
+      "motivos": [
+        "rutas fuera de la gramática: esquema_cv.seed, nivel_2a_….auc_estandar_media y .pauc_media"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "0,582,",
+          "linea": 590
+        },
+        {
+          "valor": "0,5",
+          "linea": 590
+        }
+      ]
+    },
+    {
+      "linea": 603,
+      "comentario": "<!-- F: MEC > niveles.nivel_2a_….total.frac_pos_bajo_p20_neg, .n_pos_en_el_minimo, .n_neg_en_el_minimo y .minimo_predicho; MEC > niveles.nivel_2b_gradient_boosting_balanceado.total.frac_pos_bajo_p20_neg -->",
+      "motivos": [
+        "rutas fuera de la gramática: niveles.nivel_2a_….total.frac_pos_bajo_p20_neg, .n_pos_en_el_minimo, .n_neg_en_el_minimo y .minimo_predicho"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "36,28%",
+          "linea": 600
+        },
+        {
+          "valor": "20",
+          "linea": 600
+        },
+        {
+          "valor": "1,58%",
+          "linea": 601
+        },
+        {
+          "valor": "18",
+          "linea": 601
+        },
+        {
+          "valor": "191",
+          "linea": 601
+        },
+        {
+          "valor": "0.",
+          "linea": 602
+        }
+      ]
+    },
+    {
+      "linea": 629,
+      "comentario": "<!-- F: CLAUDE.md, hallazgo 2 (la partición única); VR > nivel_2b_….pauc_std_entre_folds y nivel_1_regresion_logistica.pauc_std_entre_folds -->",
+      "motivos": [
+        "rutas fuera de la gramática: nivel_2b_….pauc_std_entre_folds y nivel_1_regresion_logistica.pauc_std_entre_folds"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "10",
+          "linea": 627
+        },
+        {
+          "valor": "0,0165,",
+          "linea": 628
+        },
+        {
+          "valor": "0,0138.",
+          "linea": 628
+        }
+      ]
+    },
+    {
+      "linea": 659,
+      "comentario": "<!-- F: EP > filas_menos_paciente.nivel_1_regresion_logistica.pauc y nivel_2b_gradient_boosting_balanceado.pauc (diferencia_de_medias y semillas_filas_mejor) -->",
+      "motivos": [
+        "ruta que no existe: nivel_2b_gradient_boosting_balanceado.pauc en outputs/efecto-particion.json"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "0,0005",
+          "linea": 656
+        },
+        {
+          "valor": "0,0002",
+          "linea": 657
+        },
+        {
+          "valor": "6",
+          "linea": 657
+        },
+        {
+          "valor": "5",
+          "linea": 657
+        },
+        {
+          "valor": "10",
+          "linea": 657
+        }
+      ]
+    },
+    {
+      "linea": 662,
+      "comentario": "<!-- F: EP > filas_menos_paciente.nivel_1_….auc y .nnt80; nivel_2b_….auc y .nnt80 (semillas_filas_mejor) -->",
+      "motivos": [
+        "rutas fuera de la gramática: filas_menos_paciente.nivel_1_….auc y .nnt80"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "9",
+          "linea": 660
+        },
+        {
+          "valor": "10,",
+          "linea": 660
+        },
+        {
+          "valor": "10",
+          "linea": 660
+        },
+        {
+          "valor": "5",
+          "linea": 661
+        },
+        {
+          "valor": "7.",
+          "linea": 661
+        }
+      ]
+    },
+    {
+      "linea": 713,
+      "comentario": "<!-- F: F42 > C.*.media e IC (auc: −0,0085) -->",
+      "motivos": [
+        "ruta que no existe: intervalo_t_95_nadeau_bengio en outputs/fase4-m4-vs-m2.json"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 748,
+      "comentario": "<!-- F: «Método», «Qué se compara» (M2 y M3); F32 > m3.variables.entran.z_score_dentro_del_paciente y conteos_y_sumas_por_paciente; .claude/skills/modelado-baseline/scripts/ganador_m3.py, variables_m3_en_pliegue (M3 limpio); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 268, cita literal -->",
+      "motivos": [
+        "ruta que no existe: conteos_y_sumas_por_paciente en outputs/fase4-m3-vs-m2.json"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 799,
+      "comentario": "<!-- F: PLAN.md, Fase 4c, «La red» y «Cómo se entrena, fijado antes de correr y sin ajuste»; referencias/efficientnet-b0-preentrenamiento.md (el criterio de la Fase 2, comprobado antes de descargar los pesos) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/efficientnet-b0-preentrenamiento.md"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 838,
+      "comentario": "<!-- F: F32 > metricas.M3.pauc.media_global y .setop15.media_global; referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (Meta-basic, Meta-WB360 y Patient context); PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->",
+      "motivos": [
+        "referencia sin líneas: referencias/kurtansky-2025-triaje-automatizado-tbp.md"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "0,1625",
+          "linea": 834
+        },
+        {
+          "valor": "0,7245,",
+          "linea": 834
+        },
+        {
+          "valor": "0,164",
+          "linea": 835
+        },
+        {
+          "valor": "0,695",
+          "linea": 835
+        }
+      ]
+    },
+    {
+      "linea": 905,
+      "comentario": "<!-- F: medias de los 50 pliegues: F21 > metricas.M1 y metricas.M2 (*.media_global); F3L > metricas.M3limpio; F42 > metricas.M4; F4b > metricas.M4b. M2 es igual en los cuatro archivos (reproduccion_del_base.reproduce_fold_a_fold). Tiempos: outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones. M3 no está: no es candidato y su camino de predicción no se cronometró (PLAN.md, Fase 4, «Tiempo de inferencia») -->",
+      "motivos": [
+        "fuente no reconocida: medias de los 50 pliegues: F21",
+        "más de una «FUENTE > ruta» en la parte"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "1.000",
+          "linea": 897
+        },
+        {
+          "valor": "0,1375",
+          "linea": 899
+        },
+        {
+          "valor": "0,6223",
+          "linea": 899
+        },
+        {
+          "valor": "116,16",
+          "linea": 899
+        },
+        {
+          "valor": "0,0021",
+          "linea": 899
+        },
+        {
+          "valor": "0,1440",
+          "linea": 900
+        },
+        {
+          "valor": "0,7065",
+          "linea": 900
+        },
+        {
+          "valor": "85,62",
+          "linea": 900
+        },
+        {
+          "valor": "0,0209",
+          "linea": 900
+        },
+        {
+          "valor": "0,1621",
+          "linea": 901
+        },
+        {
+          "valor": "0,7292",
+          "linea": 901
+        },
+        {
+          "valor": "65,55",
+          "linea": 901
+        },
+        {
+          "valor": "0,0435",
+          "linea": 901
+        },
+        {
+          "valor": "0,1375",
+          "linea": 902
+        },
+        {
+          "valor": "0,6732",
+          "linea": 902
+        },
+        {
+          "valor": "96,85",
+          "linea": 902
+        },
+        {
+          "valor": "14,5156",
+          "linea": 902
+        },
+        {
+          "valor": "0,1496",
+          "linea": 903
+        },
+        {
+          "valor": "0,7003",
+          "linea": 903
+        },
+        {
+          "valor": "81,74",
+          "linea": 903
+        },
+        {
+          "valor": "14,6321",
+          "linea": 903
+        }
+      ]
+    },
+    {
+      "linea": 1035,
+      "comentario": "<!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC; EP > particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; IS > C.imagen_menos_m1 y C.imagen_basicos_menos_imagen; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (solo la pAUC); outputs/fase4b-*.json y outputs/fase4c-red-sola-vs-imagen.json y outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.*.intervalo_bonferroni_nadeau_bengio (fase4b_comparar.py, confianza 1 − 0,05/3; fase4c_comparar.py, 1 − 0,05/2) -->",
+      "motivos": [
+        "comodín en la fuente: outputs/fase4b-*.json"
+      ],
+      "numeros_que_cubre": [
+        {
+          "valor": "1",
+          "linea": 1028
+        }
+      ]
+    },
+    {
+      "linea": 1039,
+      "comentario": "<!-- F: «Método», «Cómo se compara»; referencias/nadeau-bengio-2003-t-corregido.md (LOCAL) -->",
+      "motivos": [
+        "referencia sin líneas: referencias/nadeau-bengio-2003-t-corregido.md"
+      ],
+      "numeros_que_cubre": []
+    },
+    {
+      "linea": 1053,
+      "comentario": "<!-- F: referencias/slice3d-metadata-tbp-lv.md, nota 2; .claude/skills/extraccion-imagen/SKILL.md, «Límites conocidos» -->",
+      "motivos": [
+        "referencia sin líneas: referencias/slice3d-metadata-tbp-lv.md"
+      ],
+      "numeros_que_cubre": []
+    }
+  ],
+  "solo_documentos_del_proyecto_por_tipo": {
+    "PLAN.md": {
+      "comentarios": 28,
+      "numeros": 1,
+      "lineas": [
+        262,
+        287,
+        313,
+        323,
+        327,
+        330,
+        333,
+        340,
+        361,
+        387,
+        392,
+        395,
+        397,
+        401,
+        413,
+        420,
+        465,
+        468,
+        716,
+        723,
+        832,
+        848,
+        864,
+        868,
+        882,
+        986,
+        991,
+        1008
+      ]
+    },
+    "sección del informe": {
+      "comentarios": 8,
+      "numeros": 0,
+      "lineas": [
+        46,
+        147,
+        164,
+        176,
+        190,
+        193,
+        624,
+        781
+      ]
+    },
+    "CLAUDE.md + PLAN.md": {
+      "comentarios": 7,
+      "numeros": 0,
+      "lineas": [
+        292,
+        344,
+        379,
+        440,
+        480,
+        542,
+        645
+      ]
+    },
+    "CLAUDE.md": {
+      "comentarios": 5,
+      "numeros": 0,
+      "lineas": [
+        230,
+        296,
+        610,
+        698,
+        1012
+      ]
+    },
+    "PLAN.md + sección del informe": {
+      "comentarios": 3,
+      "numeros": 0,
+      "lineas": [
+        52,
+        925,
+        1046
+      ]
+    },
+    "CLAUDE.md + sección del informe": {
+      "comentarios": 3,
+      "numeros": 0,
+      "lineas": [
+        182,
+        694,
+        1049
+      ]
+    },
+    "script": {
+      "comentarios": 2,
+      "numeros": 0,
+      "lineas": [
+        259,
+        1042
+      ]
+    },
+    "texto libre": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        117
+      ]
+    },
+    "PLAN.md + texto libre": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        125
+      ]
+    },
+    "CLAUDE.md + otro documento de informe/": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        171
+      ]
+    },
+    "CLAUDE.md + texto libre": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        215
+      ]
+    },
+    "SKILL.md + script": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        243
+      ]
+    },
+    "PLAN.md + otro documento de informe/ + sección del informe": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        477
+      ]
+    },
+    "SKILL.md + otro documento de informe/": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        524
+      ]
+    },
+    "PLAN.md + SKILL.md + sección del informe": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        995
+      ]
+    },
+    "sección del informe + texto libre": {
+      "comentarios": 1,
+      "numeros": 0,
+      "lineas": [
+        1057
+      ]
+    }
+  },
+  "solo_documentos_del_proyecto": [
+    {
+      "linea": 46,
+      "comentario": "<!-- F: «Método», «Qué se compara» (M3 y M3 limpio); «Recomendación», «Qué se recomienda» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 52,
+      "comentario": "<!-- F: «Resultados», «La métrica principal no agota lo que pidió el cliente»; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Método», «Qué se compara» (las redes de imagen del ganador quedan fuera) y «El extractor de imagen»; PLAN.md, Fase 4c, «La red» (la red pequeña, EfficientNet-B0, entrenada de punta a punta) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 117,
+      "comentario": "<!-- F: interpretación de este proyecto, sobre las dos frases anteriores -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "texto libre"
+      ]
+    },
+    {
+      "linea": 125,
+      "comentario": "<!-- F: interpretación de este proyecto, que ordena los trabajos de abajo; PLAN.md, Fase 0, «Pendiente del estado del arte» (el contraste acceso frente a selección) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md",
+        "texto libre"
+      ]
+    },
+    {
+      "linea": 147,
+      "comentario": "<!-- F: «Datos y validación», «Los datos»; «Recomendación», «Qué no se puede afirmar» («Los modelos ordenan lesiones por sospecha») -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 164,
+      "comentario": "<!-- F: «Método», «Qué se fijó antes de medir» y «Cómo se compara» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 171,
+      "comentario": "<!-- F: informe/anteproyecto.md, 3, objetivo general; CLAUDE.md, «Tesis del proyecto» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "otro documento de informe/"
+      ]
+    },
+    {
+      "linea": 176,
+      "comentario": "<!-- F: «Resultados», «Una decisión por defecto cambia el veredicto», «Una ventaja que la pAUC no ve» y «La métrica principal no agota lo que pidió el cliente» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 182,
+      "comentario": "<!-- F: «Método», «Cómo se compara»; CLAUDE.md, «Hallazgos vivos», hallazgo 3 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 190,
+      "comentario": "<!-- F: «Resultados», «La métrica principal no agota lo que pidió el cliente» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 193,
+      "comentario": "<!-- F: «Método», «El extractor de imagen» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 215,
+      "comentario": "<!-- F: interpretación del proyecto; CLAUDE.md, «Tesis del proyecto» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "texto libre"
+      ]
+    },
+    {
+      "linea": 230,
+      "comentario": "<!-- F: CLAUDE.md, «Tesis del proyecto», «Corolario» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md"
+      ]
+    },
+    {
+      "linea": 243,
+      "comentario": "<!-- F: .claude/skills/modelado-baseline/SKILL.md, sección de metricas_triaje.py; test_metricas_triaje.py -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "SKILL.md",
+        "script"
+      ]
+    },
+    {
+      "linea": 259,
+      "comentario": "<!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "script"
+      ]
+    },
+    {
+      "linea": 262,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Qué se hace» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 287,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Qué se hace» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 292,
+      "comentario": "<!-- F: CLAUDE.md, extensión, E2 («la mejora no se da por establecida si ese intervalo contiene el cero»); PLAN.md, Fase 4, «Contingencia» y «Reporte» («victorias por pliegue y por semilla») -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 296,
+      "comentario": "<!-- F: CLAUDE.md, «Hallazgos vivos», hallazgo 3 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md"
+      ]
+    },
+    {
+      "linea": 313,
+      "comentario": "<!-- F: PLAN.md, Fase 4b, «Qué se compara» (C1, C2 y C3, descritos ahí); PLAN.md, Fase 4c, «La red», «Pregunta 1» y «Pregunta 2» (C4, descrito ahí) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 323,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Comparador añadido», «Quedan fuera, con su motivo» y la lista de parches -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 327,
+      "comentario": "<!-- F: PLAN.md, Fase 4, decisión del 2026-09-25, «Comparaciones principales, fijadas» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 330,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Comparador fijado: M2» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 333,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Variante secundaria M4b» y «M3 limpio y regla de recomendación» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 340,
+      "comentario": "<!-- F: PLAN.md, Fase 2, «No se extrae ni una característica antes de cerrar esto» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 344,
+      "comentario": "<!-- F: PLAN.md, Fase 2, «No se extrae ni una característica antes de cerrar esto» y regla «fijada antes de leer su fuente»; CLAUDE.md, «Riesgo bloqueante», «Criterio, fijado el 2026-08-18, antes del hallazgo» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 361,
+      "comentario": "<!-- F: PLAN.md, Fase 2, «Decisión (2026-09-24, de la persona): regla de verificación del extractor de imagen» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 379,
+      "comentario": "<!-- F: CLAUDE.md, «Riesgo bloqueante», criterio del 2026-08-18; PLAN.md, Fase 2, «No se extrae ni una característica antes de cerrar esto» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 387,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Contingencia» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 392,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «M3 limpio y regla de recomendación», «Regla de recomendación» y «Solo esta corrida» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 395,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 397,
+      "comentario": "<!-- F: PLAN.md, Fase 4b, «Regla, fijada antes de correr»; PLAN.md, Fase 4c, «Regla, fijada antes de correr» (las dos reglas, escritas ahí) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 401,
+      "comentario": "<!-- F: PLAN.md, Fase 5, «Especificación» y «Contingencia» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 413,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Tiempo de inferencia», «Qué se cronometra» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 420,
+      "comentario": "<!-- F: PLAN.md, Fase 6, «Definición operativa del tiempo de inferencia» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 440,
+      "comentario": "<!-- F: PLAN.md, Fase 6, «Qué no se afirma»; CLAUDE.md, hallazgo 9 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 465,
+      "comentario": "<!-- F: PLAN.md, Fase 1, «Qué se hace» y «Decisiones de la persona sobre el conjunto reservado (2026-09-25)» -->",
+      "motivos": [],
+      "numeros_que_cubre": [
+        {
+          "valor": "20%",
+          "linea": 462
+        }
+      ],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 468,
+      "comentario": "<!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 477,
+      "comentario": "<!-- F: informe/anteproyecto.md, sección 4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y «Decisión de la persona sobre las columnas de procedencia (2026-09-25)»; commits «Fase 1: sellar el conjunto reservado» (2026-09-25 18:07) y «auditoria-de-fugas: columnas de procedencia» (2026-09-25 18:35) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md",
+        "otro documento de informe/",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 480,
+      "comentario": "<!-- F: CLAUDE.md, hallazgo 8, «Salvedad para la Fase 5»; PLAN.md, Fase 5, «Salvedad de M2» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 524,
+      "comentario": "<!-- F: .claude/skills/modelado-baseline/SKILL.md, requisitos; informe/casos-de-fallo.md, «Caso B» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "SKILL.md",
+        "otro documento de informe/"
+      ]
+    },
+    {
+      "linea": 542,
+      "comentario": "<!-- F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 610,
+      "comentario": "<!-- F: CLAUDE.md, Pendientes, el mecanismo del 2a -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md"
+      ]
+    },
+    {
+      "linea": 624,
+      "comentario": "<!-- F: «La métrica principal no agota lo que pidió el cliente» (M2 − M1) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 645,
+      "comentario": "<!-- F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 694,
+      "comentario": "<!-- F: CLAUDE.md, hallazgo 4; «Método», «Qué se mide», líneas 31–33 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 698,
+      "comentario": "<!-- F: CLAUDE.md, hallazgo 4, «Interpretación, no medición» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md"
+      ]
+    },
+    {
+      "linea": 716,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Contingencia» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 723,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Variante secundaria M4b» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 781,
+      "comentario": "<!-- F: «Método», «Cómo se compara» (el criterio) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 832,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Nota de lectura, de la persona, fijada antes de correr» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 848,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Regla de recomendación» y «Modelo recomendado: decisión de la persona, 2026-09-26» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 864,
+      "comentario": "<!-- F: PLAN.md, Fase 4b, «Levanta la regla \"Solo esta corrida\" de la Fase 4» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 868,
+      "comentario": "<!-- F: PLAN.md, Fase 4c, «Pregunta 2» (C4: la puntuación de la red y esa puntuación dividida por su media dentro del paciente, como en M4b y C2) -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 882,
+      "comentario": "<!-- F: PLAN.md, Fase 4c, «Segunda ronda, declarada» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 925,
+      "comentario": "<!-- F: «Resultados», «El modelo recomendado»; PLAN.md, Fase 4, «Modelo recomendado: decisión de la persona, 2026-09-26» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 986,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 991,
+      "comentario": "<!-- F: PLAN.md, Fase 5, «Especificación» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 995,
+      "comentario": "<!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada); PLAN.md, Fase 4c, «La red», «Cómo se entrena, fijado antes de correr y sin ajuste» y «Qué no entra, con su motivo» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md",
+        "SKILL.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 1008,
+      "comentario": "<!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 1012,
+      "comentario": "<!-- F: CLAUDE.md, «Guardarraíles del agente», 4 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md"
+      ]
+    },
+    {
+      "linea": 1042,
+      "comentario": "<!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "script"
+      ]
+    },
+    {
+      "linea": 1046,
+      "comentario": "<!-- F: «Datos y validación», «El conjunto reservado»; PLAN.md, Fase 5, «Salvedad de M2» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 1049,
+      "comentario": "<!-- F: «Método», «Cómo se mide el tiempo de inferencia»; CLAUDE.md, hallazgo 9 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 1057,
+      "comentario": "<!-- F: MEC; «Resultados», «Una decisión por defecto cambia el veredicto» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "sección del informe",
+        "texto libre"
+      ]
+    }
+  ],
+  "marcas_sin_fuente": [],
+  "referencias_local_ausentes": [],
+  "numeros_sin_comentario": [],
+  "control": {
+    "numeros_del_cuerpo_segun_el_verificador": 381,
+    "misma_lista": true
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/sintesis-consultoria/scripts/comentarios_f.py",
+      "--borrador",
+      "informe/borrador-v2.md",
+      "--outputs-dir",
+      "outputs/",
+      "--out",
+      "outputs/sintesis-comentarios-f"
+    ]
+  }
+}

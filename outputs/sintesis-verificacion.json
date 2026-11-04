@@ -1482,6 +1482,10 @@
       "motivo": "Análisis de sensibilidad de una sola partición (semilla 42), superado por sensibilidad-procedencia-repetida.json. Por la regla de CLAUDE.md (hallazgo 3), ninguna conclusión comparativa se escribe desde una sola partición, así que no respalda cifras del informe."
     },
     {
+      "archivo": "sintesis-comentarios-f.json",
+      "motivo": "La salida de comentarios_f.py, el analizador de los comentarios F: del borrador. Sus recuentos y números de línea describen el borrador, no mediciones, como los de sintesis-verificacion.json."
+    },
+    {
       "archivo": "sintesis-verificacion.json",
       "motivo": "La salida de este mismo script. Sus recuentos describen una verificación anterior del borrador, no mediciones; en el corpus, el borrador quedaría respaldado por su propia verificación."
     }

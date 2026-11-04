@@ -215,13 +215,36 @@ cuyos recuentos describen una verificación anterior; y, desde el 2026-11-04,
 `potencia-nadeau-bengio-curva.json`, la curva completa del análisis de
 potencia, cuyas tasas de 4 decimales respaldaban por coincidencia el «0,695»
 del borrador. El resumen de ese análisis, `potencia-nadeau-bengio.json`, sí es
-corpus. Un análisis de
+corpus. También desde el 2026-11-04, `sintesis-comentarios-f.json`, la salida
+del analizador de los comentarios `F:`, cuyos recuentos describen el borrador.
+Un análisis de
 sensibilidad nuevo entra al corpus salvo que se excluya por nombre y con su
 motivo. *Hasta el 2026-10-02 el patrón `sensibilidad-*.json` los excluía
 todos.* Si una cifra del borrador solo
 coincide con uno de ellos, es casualidad, no trazabilidad. La salida los
 lista en `archivos_fuera_del_corpus`. Control positivo:
 `scripts/test_fuera_del_corpus.py`.
+
+**El analizador de los comentarios `F:` (2026-11-04).** Es el paso 2 de «La
+verificación por campo», en `PLAN.md`, Fase 6, y por ahora solo informa.
+`scripts/comentarios_f.py` no verifica ninguna cifra ni toca el borrador:
+- Lee cada comentario `F:` y dice si entra en la gramática de las citas. La
+  gramática está en su docstring y en la especificación.
+- Cuando un comentario no entra, dice por qué.
+- Agrupa por tipo los comentarios que solo citan documentos del proyecto.
+- Lista las marcas «sin fuente».
+- Asigna cada número del cuerpo a su comentario. Esos números son los mismos
+  que cuenta `verificar_trazabilidad.py`, y el script se detiene si no
+  coinciden.
+
+Control: `scripts/test_comentarios_f.py`, con un borrador y un `outputs/`
+sintéticos, cada caso con el que debe fallar. Salida:
+`outputs/sintesis-comentarios-f.json` y `.md`, fuera del corpus.
+
+```bash
+.venv/bin/python .claude/skills/sintesis-consultoria/scripts/comentarios_f.py \
+  --borrador "$BORRADOR" --outputs-dir outputs/ --out outputs/sintesis-comentarios-f
+```
 
 Si el script señala números sin respaldo, corrige el borrador o
 justifica por qué esa cifra no necesita estar en `outputs/` (ej. es un
