@@ -16,8 +16,7 @@ pregunta sobre el escenario sin fotografía corporal total, también cerrada, di
 su resultado a favor, y la recomendación para ese escenario pasa a la red de la
 4e; al cerrar la 4e, la persona decide si se usa cómputo aparte, y la Fase 5
 espera a esa decisión; la Fase 5b, el envío tardío a Kaggle, está fijada para
-después de la Fase 5, con una propuesta del agente pendiente de visto bueno; de
-la Fase 6 hay trabajo hecho.** De la Fase 6:
+después de la Fase 5; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -2608,9 +2607,8 @@ sobre el mismo conjunto de evaluación que el tablero del reto.
 - **El presupuesto.** Si el notebook no corre en tres días de trabajo, la fase
   se cierra sin envío, y se declara.
 
-**Las puntuaciones fuera de pliegue de la red, para C7.** *Propuesta del agente
-(2026-11-04), pendiente del visto bueno de la persona; hasta entonces no está
-fijada.* C7 apila sobre M3 limpio la puntuación de la red de la 4e y su razón a
+**Las puntuaciones fuera de pliegue de la red, para C7.** *Propuesta del agente,
+aprobada por la persona el 2026-11-04: queda fijada.* C7 apila sobre M3 limpio la puntuación de la red de la 4e y su razón a
 la media del paciente (`outputs/fase4e-c7-vs-m3limpio.json > modelos.C7`). Con
 todos los datos, esas dos columnas necesitan puntuaciones de la red que no
 hayan visto su propia lesión:
@@ -2632,6 +2630,13 @@ hayan visto su propia lesión:
 5. **La red que se envía sola** es otra: una red entrenada una sola vez sobre
    los 1.042 pacientes, semilla 0, como la de la Fase 5 lo es sobre el
    desarrollo. Así, C7 y la red sola usan redes distintas, y se declara.
+
+*Declarado, por decisión de la persona:* al predecir, C7 usa el promedio de
+cinco redes, una por pliegue. En la Fase 4e se evaluó de otro modo: con una
+red por pliegue, la que se entrenó sin ese pliegue y lo puntuó, con el atajo de
+la Fase 4c (`outputs/fase4e-c7-vs-m3limpio.json > modelos.C7`). La cifra que dé
+Kaggle es, entonces, la de un C7 que no es exactamente el que se evaluó en la
+validación cruzada.
 
 *Estimación, aritmética nuestra:* cada red con su ajuste tardó en la
 confirmación de la 4e una mediana de 1.780,2 s más 536,4 s, entrenando con
