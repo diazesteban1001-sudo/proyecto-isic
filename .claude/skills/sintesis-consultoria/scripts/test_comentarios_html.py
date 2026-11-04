@@ -42,7 +42,7 @@ VERIFICADOR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verifica
 BORRADOR = (
     "# Informe de prueba\n\n"
     "El modelo da 0,1234.\n"
-    "<!-- F: outputs/x.json > campo; «Método», líneas 31–33; y 0,7777 -->\n\n"
+    "<!-- F: outputs/modelado-baseline.json > pauc_media; «Método», líneas 31–33; y 0,7777 -->\n\n"
     "Una cifra sin respaldo: 0,5555.\n"
     "<!-- F: un comentario\n"
     "     de varias líneas con 0,8888 -->\n"

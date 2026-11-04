@@ -12,11 +12,12 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      Sin este caso, los demás pasarían con un generador que se negara siempre.
   B. Recomendación: el intervalo corregido de la pAUC de M3 limpio − M2 cruza
      el cero. La regla da M2, no coincide con RECOMENDADO y no se escribe.
-  C. Archivo sin conjunto: diseno-validacion.json sin el campo datos. La
-     página sale con el aviso de cifras exploratorias.
-  D. El mismo caso en fase4-m3limpio-vs-m2.json, que la página lee solo para
-     el control de la recomendación. También sale con el aviso: se revisan los
-     archivos que la página lee, no una lista escrita a mano.
+  C. Archivo sin conjunto: diseno-validacion.json sin el campo datos. El
+     borrador cita datos.conjunto de ese archivo, así que la verificación por
+     campo se detiene por la cita rota, y no se escribe. *Hasta el 2026-11-04,
+     antes de la verificación por campo, salía con el aviso.*
+  D. El mismo caso en fase4-m3limpio-vs-m2.json: tampoco se escribe, por la
+     cita rota.
   E. Reservado fuera de la Fase 5: modelado-baseline.json declara el
      reservado. No se escribe.
   F. Reservado en la salida de la Fase 5: comprobar_conjuntos lo acepta en el
@@ -34,6 +35,12 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      número de numeros_en_comentarios en sintesis-verificacion.json. La ficha
      de síntesis los enumera como si cubrieran todo, así que no se escribe, y
      el motivo tiene que ser la suma, no la correspondencia con el borrador.
+  P. Archivo con otro conjunto: diseno-validacion.json con datos.conjunto
+     «completo», que no es «desarrollo». La ruta existe, así que no hay cita
+     rota, y la página sale con el aviso de cifras exploratorias.
+  Q. El mismo caso en fase4-m3limpio-vs-m2.json, que la página lee solo para
+     el control de la recomendación. También sale con el aviso: se revisan los
+     archivos que la página lee, no una lista escrita a mano.
   L. Cada frase de «La imagen sola, sin el sistema de fotografía corporal
      total» que depende de los datos, y la viñeta de DINOv2, con un archivo
      alterado para que deje de ser cierta. No se escribe, y el motivo tiene
@@ -203,6 +210,9 @@ def main():
     def sin_datos(o):
         o.pop("datos", None)
 
+    def otro_conjunto(o):
+        o["datos"]["conjunto"] = "completo"
+
     def reservado(o):
         o["datos"]["conjunto"] = "reservado"
 
@@ -331,6 +341,8 @@ def main():
         "B": generar("B", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", intervalo_que_cruza)),
         "C": generar("C", lambda d: cambiar(d, "diseno-validacion", sin_datos)),
         "D": generar("D", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", sin_datos)),
+        "P": generar("P", lambda d: cambiar(d, "diseno-validacion", otro_conjunto)),
+        "Q": generar("Q", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", otro_conjunto)),
         "E": generar("E", lambda d: cambiar(d, "modelado-baseline", reservado)),
         "G": generar("G", lambda d: verificar(d, "informe/borrador.md")),
         "H": generar("H", lambda d: verificar(d, "informe/borrador-v2.md", "--tolerancia", "0.01")),
@@ -355,11 +367,17 @@ def main():
         ok, _, err = corridas[c]
         return not ok, f"escrita: {ok}; {err}"
 
+    def negada_por(c, frase):
+        ok, _, err = corridas[c]
+        return not ok and frase in err, f"escrita: {ok}; {err}"
+
     casos = [
         ("A. base: escribe la página, sin aviso", *escrita("A", False)),
         ("B. el intervalo de M3 limpio − M2 cruza el cero: no escribe", *negada("B")),
-        ("C. diseno-validacion.json sin datos: escribe con aviso", *escrita("C", True)),
-        ("D. fase4-m3limpio-vs-m2.json sin datos: escribe con aviso", *escrita("D", True)),
+        ("C. diseno-validacion.json sin datos: no escribe, por la cita rota", *negada_por("C", "cita rota")),
+        ("D. fase4-m3limpio-vs-m2.json sin datos: no escribe, por la cita rota", *negada_por("D", "cita rota")),
+        ("P. diseno-validacion.json con otro conjunto: escribe con aviso", *escrita("P", True)),
+        ("Q. fase4-m3limpio-vs-m2.json con otro conjunto: escribe con aviso", *escrita("Q", True)),
         ("E. modelado-baseline.json declara el reservado: no escribe", *negada("E")),
         ("F. el reservado se acepta solo en la salida de la Fase 5", f_ok, f_detalle),
         ("G. verificación sobre informe/borrador.md: no escribe", *negada("G")),
