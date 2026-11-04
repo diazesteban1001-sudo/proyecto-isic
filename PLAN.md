@@ -3311,6 +3311,70 @@ la persona).**
   no están en sus campos y 8 que citan un documento del proyecto
   (`outputs/sintesis-verificacion.json > por_campo`).
 
+**La verificación por campo: lo que queda para la Fase 6 (2026-11-04, de la
+persona).** Se resuelve al regenerar el informe, antes de cerrar la fase. Las
+listas salen de `outputs/sintesis-verificacion.json > por_campo`, sobre
+`informe/borrador-v2.md` del 2026-11-04. Los números de línea son los de ese
+borrador, y se mueven al editarlo.
+
+- **Los 42 números que no están en sus campos,** bajo 28 comentarios:
+
+  | Comentario en la línea | Números (línea) | Archivos que cita |
+  |---|---|---|
+  | 223 | 200 (220), 0,2 (222) | `modelado-baseline.json` |
+  | 269 | 10 (268) | `validacion-repetida.json`, `diseno-validacion.json` |
+  | 309 | 34 (303), 22 (305), 384 (306), 14 (306), 384 (307) | `fase4-m3limpio-vs-m2.json` |
+  | 426 | 1.000 (425) | `tiempo-inferencia.json` |
+  | 526 | 15 (525) | `modelado-baseline.json` |
+  | 531 | 11 (528) | `auditoria-de-fugas.json` |
+  | 549 | 41 (544) | `auditoria-de-fugas.json` |
+  | 578 | 5 (575) | `fase4-m2-vs-m1.json`, `fase4-m4-vs-m2.json`, `fase4-m4b-vs-m2.json`, `fase4-m3-vs-m2.json`, `fase4-m3limpio-vs-m2.json` |
+  | 586 | 50 (584) | `validacion-repetida.json`, `modelado-baseline.json` |
+  | 592 | 0,5 (590) | `modelado-baseline.json` |
+  | 598 | 0,999 (596), 0,09% (596), 4,42% (597) | `mecanismo-2a.json` |
+  | 603 | 36,28% (600), 20 (600), 1,58% (601) | `mecanismo-2a.json` |
+  | 608 | 20% (605), 20% (606), 0,75% (606), 99% (607) | `mecanismo-2a.json` |
+  | 617 | 50 (615), 10 (616) | `validacion-repetida.json` |
+  | 629 | 10 (627) | `validacion-repetida.json` |
+  | 641 | 50 (639) | `sensibilidad-procedencia-repetida.json` |
+  | 654 | 10 (651) | `efecto-particion.json` |
+  | 665 | 1 (663) | `efecto-particion.json` |
+  | 704 | 384 (702) | `extraccion-imagen.json` |
+  | 719 | 384 (717) | `eda-diagnostico.json` |
+  | 733 | 10 (732), 10 (732) | `fase4-m4-vs-m2.json`, `fase4-m4b-vs-m2.json` |
+  | 754 | 384 (751) | `imagen-sola.json` |
+  | 802 | 50 (801) | `fase4c-red-sola-vs-imagen.json` |
+  | 871 | 50 (870) | `fase4c-c4-vs-m3limpio.json` |
+  | 889 | 1.000 (886) | `tiempo-inferencia.json` |
+  | 893 | 1.000 (891) | `tiempo-inferencia.json` |
+  | 905 | 1.000 (897) | `fase4-m2-vs-m1.json`, `fase4-m3limpio-vs-m2.json`, `fase4-m4-vs-m2.json`, `fase4-m4b-vs-m2.json`, `tiempo-inferencia.json` |
+  | 935 | 1.000 (933) | `fase4-m4-vs-m2.json`, `fase4-m4b-vs-m2.json`, `tiempo-inferencia.json` |
+
+  *Lectura del agente, sin revisarlos uno por uno:* muchos son recuentos del
+  diseño escritos en el texto, como 10 semillas, 50 pliegues, 384 variables o
+  «por 1.000 lesiones», que el campo citado no guarda como número. Otros son
+  porcentajes que el campo guarda como fracción con más decimales, y la regla
+  de los porcentajes exige que la fracción por 100 coincida exactamente. En los
+  dos casos el arreglo es del comentario, o un `n(ruta)`, o una marca «sin
+  fuente» con su motivo, y lo decide la persona en la Fase 6.
+- **Las 9 citas de `referencias/` que apuntan a líneas nuestras**
+  (8 solo a líneas nuestras y 1 a una mezcla):
+
+  | Comentario en la línea | Archivo | Líneas citadas | Tipo |
+  |---|---|---|---|
+  | 278 | `nadeau-bengio-2003-t-corregido.md` | 60–74, 95 | solo nuestras |
+  | 283 | `nadeau-bengio-2003-t-corregido.md` | 34–56 | solo nuestras |
+  | 366 | `simeoni-2025-dinov3.md` | 9–10, 64–74 | solo nuestras |
+  | 371 | `oquab-2023-dinov2.md` | 10 | solo nuestras |
+  | 374 | `slice3d-fechas-de-publicacion.md` | 11–13, 96–99 | solo nuestras |
+  | 562 | `slice3d-metadata-tbp-lv.md` | 47, 81–82 | mezcla |
+  | 799 | `efficientnet-b0-preentrenamiento.md` | 77–108 | solo nuestras |
+  | 1039 | `nadeau-bengio-2003-t-corregido.md` | 134–143 | solo nuestras |
+  | 1053 | `slice3d-metadata-tbp-lv.md` | 81–87 | solo nuestras |
+
+  Por ellas, 8 números citan un documento del proyecto y quedan
+  señalados: «1» (276), «5» (277), «1» (277), «1» (277), «4» (277), «1» (277), «2025» (362), «2023» (368).
+
 ---
 
 ## Decisiones
