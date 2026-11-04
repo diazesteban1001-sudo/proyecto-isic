@@ -660,11 +660,15 @@ este proyecto manda Kaggle — es la evaluación que estamos replicando.
       at no cost to the other participants."* (`referencias/kaggle-rules.md`,
       §7.C). Los datos de la competencia son CC BY-NC 4.0, uso no comercial y
       académico. Herramientas de AutoML permitidas con licencia apropiada (§A.2).
-- [ ] Límites de cómputo y acceso a internet en las entregas — **NO VERIFICADO.**
-      Falta la página *Code Requirements* de Kaggle, que no está en
-      `referencias/`. Ni la página de evaluación ni la de reglas mencionan
-      tiempo máximo de ejecución, tipo de hardware ni si el notebook de
-      inferencia corre sin internet. No se completa de memoria.
+- [x] Límites de cómputo y acceso a internet en las entregas — **VERIFICADO
+      (2026-11-04).** Los envíos se hacen con notebooks, que tienen que cumplir
+      *"CPU Notebook <= 12 hours run-time"*, *"GPU Notebook <= 12 hours
+      run-time"* e *"Internet access disabled"*. Se admiten *"Freely & publicly
+      available external data"*, incluidos los modelos preentrenados
+      (`referencias/kaggle-code-requirements.md`, ficha de la página *Code
+      Requirements*, copiada por la persona con sesión iniciada). La página no
+      da el tipo de hardware ni límites de memoria. *Hasta el 2026-11-04 este
+      punto decía «NO VERIFICADO»: faltaba esa página en `referencias/`.*
 - [x] Licencia del dataset: dos variantes, estándar CC-BY-NC y *"Permissive"*
       CC-BY (https://challenge.isic-archive.com/data/2024/)
 
@@ -1355,8 +1359,13 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       Kaggle en `referencias/`, reducidas a ficha el 2026-09-21 por la regla 3)
 - [x] Cerrar el umbral de la métrica (80% TPR) y las reglas de datos externos
       (2026-08-11)
-- [ ] Copiar la página *Code Requirements* de Kaggle a `referencias/` para
-      cerrar límites de cómputo e internet en las entregas
+- [x] Copiar la página *Code Requirements* de Kaggle a `referencias/` para
+      cerrar límites de cómputo e internet en las entregas. *Cumplido el
+      2026-11-04: `referencias/kaggle-code-requirements.md`, ficha de la copia
+      que tomó la persona con sesión iniciada. A su lado va
+      `referencias/kaggle-envio-tardio-2026-11-04.png`, la captura del panel de
+      envío, que muestra que el envío tardío está abierto («Te quedan 100
+      intentos para enviar hoy»).*
 - [x] Descargar la metadata a `data/` (2026-08-11 — `train-metadata.csv`
       257 MB / 401.059 filas / 55 columnas, `test-metadata.csv` 3 filas /
       44 columnas). Cifras del paper confirmadas contra los datos reales:
