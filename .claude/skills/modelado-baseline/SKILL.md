@@ -593,6 +593,45 @@ caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase4e_a
   --red-ajustada data/fase4e-puntuaciones-red-ajustada-exploracion.csv.gz --out outputs/fase4e-exploracion
 ```
 
+## La potencia de la prueba (2026-11-04)
+
+`scripts/potencia_nadeau_bengio.py` calcula, sin entrenar nada, con qué
+probabilidad la prueba de las fases 4d a 4f (`fase4d.valor_p`: valor p
+bilateral menor que 0,05 y media positiva) daría su resultado a favor de un
+modelo que fuera δ mejor que M3 limpio en la pAUC. Solo lee las diferencias
+pliegue a pliegue guardadas en cuatro archivos de `outputs/`, las de C4, C5,
+C6 y C7 − M3 limpio; no lee `data/` ni el reservado.
+- **La curva** es la de la t no central de n − 1 grados de libertad, con
+  error estándar s·√(1/n + 1/4). Es el modelo de varianza de la propia
+  prueba: correlación 1/5 entre las diferencias. Va de δ = 0,002 a 0,02 y se
+  calcula para n = 25 y n = 50, con la s de cada comparación. Reporta también
+  el δ con el 50 % y con el 80 % de potencia.
+- **Una línea entre semillas:** el error estándar de la media entre semillas,
+  frente al de la prueba.
+
+**Controles**, cada uno con su caso que debe fallar:
+- Las diferencias guardadas reproducen la media, la desviación, el intervalo y
+  el valor p guardados, y coinciden semilla por semilla con las métricas por
+  pliegue.
+- El valor p vectorizado es `fase4d.valor_p`.
+- La cola inferior de la t no central se calcula por simetría, porque
+  `stats.nct.cdf` da `nan` con no centralidad grande, y coincide con ella
+  donde da un valor.
+- Una simulación con el generador del control negativo de la 4d
+  (`test_fase4d_comparacion.correlacionadas`) coincide con la curva dentro de
+  4 errores de Monte Carlo. Con δ = 0, la tasa queda a lo sumo en el 5 %; con
+  δ = 0,05, la tasa a favor es al menos del 99 %.
+
+Si un control falla, se detiene sin escribir. La especificación es de la
+persona, fijada antes de correr (`PLAN.md`, Fase 6). Salida:
+`outputs/potencia-nadeau-bengio.json` y `.md`, con el intérprete y los
+argumentos reales en `comando`.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/potencia_nadeau_bengio.py \
+  --out outputs/potencia-nadeau-bengio
+```
+
 ## Cómo correrlo
 
 ```bash

@@ -8,7 +8,7 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-11-02): fases 0 a 4, 4b, 4c, 4d y 4e, cerradas; ni
+**Dónde está la ruta (2026-11-04): fases 0 a 4, 4b, 4c, 4d y 4e, cerradas; ni
 la Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
 ni la 4e, la receta de imagen del 10.º puesto, cambiaron el modelo
 recomendado, M3 limpio, ni la especificación de la Fase 5; la Fase 4f, una sola
@@ -16,8 +16,9 @@ pregunta sobre el escenario sin fotografía corporal total, también cerrada, di
 su resultado a favor, y la recomendación para ese escenario pasa a la red de la
 4e; al cerrar la 4e, la persona decide si se usa cómputo aparte, y la Fase 5
 espera a esa decisión; de la Fase 6 hay trabajo hecho.** De la Fase 6:
-`informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02 y las dos
-mediciones del 2026-10-04, el efecto de la partición y la imagen sola. La Fase 4 tiene fijados sus modelos y sus
+`informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
+mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
+análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
 comparaciones (decisión del 2026-09-25) y la especificación de M3 (2026-09-26).
 Hechas:
 - las métricas de triaje y el contexto de paciente;
@@ -2865,6 +2866,30 @@ ninguna recomendación, no suma a la bitácora y no toca el reservado.
     sin corregir.
   - **Los δ al 50 % y al 80 %** se buscan sobre la curva analítica continua,
     no en la rejilla de 0,001, y se reportan con 4 decimales.
+
+**La potencia de la prueba: la corrida.**
+- **Cuándo:** el 2026-11-04, en el commit «modelado-baseline: la potencia de la
+  prueba de Nadeau y Bengio, descriptiva».
+- **La primera corrida se detuvo sin escribir nada.**
+  - **Qué falló:** el control (a), en C5 con n = 25 y en C6 con n = 50, en un
+    δ de 21 cada uno.
+  - **Por qué:** no era la simulación. Con δ = 0,05, `stats.nct.cdf(−t_c, gl,
+    nc)` (scipy 1.17.1) da `nan` cuando la no centralidad es grande: 10,95 en
+    la primera y 13,16 en la segunda, δ / (s·√(1/n + 1/4)) con la `s` de la
+    salida. El rechazo bilateral analítico salía `nan`, y el control lo
+    contaba como fuera de tolerancia.
+- **La corrección, aprobada por la persona el mismo día.** La cola inferior se
+  calcula por simetría, `stats.nct.sf(t_c, gl, −nc)`, que es la misma
+  probabilidad. Si la t no central no da un valor finito, el script se detiene
+  con un error. No cambian la tolerancia, la semilla ni el número de juegos.
+- **El control nuevo:** la cola por simetría coincide con `stats.nct.cdf` en
+  los 166 de 168 casos en que este da un valor, con una diferencia máxima de
+  0. *Debe fallar:* sin cambiar el signo de la no centralidad, la diferencia
+  es 1.
+- **Los controles:** 82 de 82 casos dan lo esperado, y 41 de ellos son los que
+  deben fallar (`outputs/potencia-nadeau-bengio.json > controles`).
+- **Salida:** `outputs/potencia-nadeau-bengio.json` y su `.md`. Es descriptiva:
+  no suma a la bitácora.
 
 ---
 
