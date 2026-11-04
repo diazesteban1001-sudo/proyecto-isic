@@ -1,4 +1,4 @@
-<!-- Cabecera nuestra, del 2026-10-30. Lo que sigue a la primera línea «---» es la investigación tal como llegó, sin cambios. -->
+<!-- Cabecera nuestra, del 2026-10-30, ampliada el 2026-11-04. Lo que sigue a la primera línea «---» es la investigación tal como llegó, sin cambios. -->
 
 # Investigación «Medir mejor antes de entrenar más» (insumo de trabajo)
 
@@ -46,6 +46,40 @@ novena fila del registro de incidentes).
   - los *«270 s por entrenamiento»* son la mediana por red, con su predicción
     (`puntuaciones_de_la_red.segundos_por_red` en los `outputs/fase4c-*.json`).
 - Lo demás no se cotejó.
+
+**Lo que se cotejó el 2026-11-04: la Tabla 3 de Kurtansky et al. 2025.** Se
+cotejó contra el texto completo versionado,
+`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, líneas 198 a 246.
+- **Se sostiene en las diez filas** la asignación de filas a clases de
+  variables. La investigación la da por inferida: en su tabla de verificación,
+  las filas 4, 6 y 9 quedaron sin asignar. Hay tres comprobaciones
+  independientes:
+  - **Las columnas.** En el texto, cada celda va separada por un tabulador, y
+    las diez filas tienen 11 campos, así que cada marca cae en su columna.
+  - **El texto del artículo.** Sus resultados citan valores de siete de las
+    diez filas, con la variante a la que corresponden. Las tres que no cita
+    son las 4, 6 y 9.
+  - **La eliminación.** Los métodos describen diez variantes, cinco
+    combinaciones con y sin contexto de paciente, y las diez filas son esas
+    diez, sin repetir ninguna.
+- **Las cifras que cita la investigación se sostienen:**
+  - modelo completo, 0,173;
+  - sin contexto de paciente, 0,165;
+  - sin imágenes, 0,164, en la fila con Meta-basic, Meta-WB360 y contexto de
+    paciente;
+  - solo imágenes, 0,142, el mismo valor con y sin contexto de paciente.
+- **Precisiones:**
+  - **Las marcas.** Las clases incluidas se marcan con una «x», no con marcas
+    de verificación: *"The included feature classes are noted with an “x” for
+    each model variant."*
+  - **Los valores** son exactos a 3 decimales, así que los «≈» de la
+    investigación sobran.
+  - **«Meta-basic» incluye la etiqueta del hospital.** Los métodos la definen
+    como *"basic “demographics” metadata (i.e., patient age and sex, lesion
+    anatomical site, and hospital)"*. Así que «sin imágenes» no es solo
+    demografía, y M3 limpio no usa esa etiqueta.
+- Lo demás de esa sección no se cotejó: ni la afirmación sobre las pruebas de
+  DeLong ni la ablación del 4.º puesto.
 
 ---
 
