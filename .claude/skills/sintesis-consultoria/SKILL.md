@@ -191,8 +191,12 @@ propio script, declara los archivos en los que no se busca respaldo, cada
 uno con su motivo: `holdout-pacientes.json`, los recuentos del conjunto
 reservado; `sensibilidad-procedencia.json`, el análisis de sensibilidad de una
 sola partición, superado por `sensibilidad-procedencia-repetida.json`, que sí
-es corpus; y `sintesis-verificacion.json`, la salida del propio verificador,
-cuyos recuentos describen una verificación anterior. Un análisis de
+es corpus; `sintesis-verificacion.json`, la salida del propio verificador,
+cuyos recuentos describen una verificación anterior; y, desde el 2026-11-04,
+`potencia-nadeau-bengio-curva.json`, la curva completa del análisis de
+potencia, cuyas tasas de 4 decimales respaldaban por coincidencia el «0,695»
+del borrador. El resumen de ese análisis, `potencia-nadeau-bengio.json`, sí es
+corpus. Un análisis de
 sensibilidad nuevo entra al corpus salvo que se excluya por nombre y con su
 motivo. *Hasta el 2026-10-02 el patrón `sensibilidad-*.json` los excluía
 todos.* Si una cifra del borrador solo

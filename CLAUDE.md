@@ -1336,6 +1336,10 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
     - **La primera corrida se detuvo.** `stats.nct.cdf` daba `nan` con δ =
       0,05, y la cola inferior se calcula ahora por simetría, con su control
       (`PLAN.md`, Fase 6, «La potencia de la prueba: la corrida»).
+    - **La curva completa** está en `outputs/potencia-nadeau-bengio-curva.json`,
+      fuera del corpus del verificador de trazabilidad, porque sus tasas
+      respaldaban cifras del borrador por coincidencia (misma sección de
+      `PLAN.md`).
 
 ### Dónde se lee la fase vigente
 
@@ -1662,21 +1666,23 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         README; la única coincidencia, en la línea 936 del borrador, habla de
         detectar cáncer. Al añadirla, acompaña a las lecturas de «no mejora»
         de las fases 4b a 4e (hallazgo 16, la lectura).
-      - **Lo que cambia en la verificación** (comprobado el 2026-11-04 en el
-        scratchpad, sin regenerar la salida versionada):
-        - `outputs/potencia-nadeau-bengio.json` entra al corpus del
-          verificador, con 1.767 valores numéricos, casi todos tasas de 4
-          decimales entre 0 y 1.
-        - Recalculada sobre `informe/borrador-v2.md`, la verificación pasa de
-          356 números con respaldo y 25 señalados a 357 y 24. La única
-          diferencia es el «0,695» de la línea 835, la sensibilidad top-15 de
-          la variante del ganador sin recortes de imagen, que sale de Kurtansky
-          2025 y no de `outputs/`. Lo respalda por coincidencia
-          `comparaciones.C7.curva_analitica.25[12].a_favor`, 0,6945.
-        - Sin este archivo, la verificación da los mismos recuentos y los
-          mismos señalados que la versionada.
-        - Al regenerar, hay que tratarlo como señalado, o decidir si el
-          archivo va a `FUERA_DEL_CORPUS`. No se ha decidido.
+      - **Lo que cambia en la verificación: nada, desde la separación del
+        2026-11-04.**
+        - **Qué pasaba.** Con la curva completa en el corpus, la verificación
+          del borrador, recalculada en el scratchpad, pasaba de 356 números con
+          respaldo y 25 señalados a 357 y 24. La única diferencia era el
+          «0,695» de la línea 835: la sensibilidad top-15 de la variante del
+          ganador sin recortes de imagen, que sale de Kurtansky 2025 y no de
+          `outputs/`. Lo respaldaba por coincidencia una tasa de la curva de C7,
+          0,6945.
+        - **Qué se decidió (la persona).** La curva pasó a
+          `outputs/potencia-nadeau-bengio-curva.json`, en `FUERA_DEL_CORPUS`,
+          y el resumen se queda en `outputs/potencia-nadeau-bengio.json`. La
+          medición de las tasas de coincidencia por azar está en `PLAN.md`,
+          Fase 6, «La potencia de la prueba: la corrida».
+        - **Cómo queda.** Recalculada con el resumen en el corpus, la
+          verificación da los mismos recuentos y los mismos señalados que la
+          versionada, y el «0,695» vuelve a estar señalado.
       - **Dónde faltan:** `informe/borrador-v2.md`, el README e
         `informe/demo.html`, con su copia `docs/index.html`. Se dejan para
         después por decisión de la persona.
@@ -1748,7 +1754,9 @@ registran aparte desde el 2026-10-04—, y no lo busca en los archivos que
 declara fuera del corpus (`FUERA_DEL_CORPUS`, desde el 2026-09-25: el
 conjunto reservado; el análisis de sensibilidad de una sola partición,
 `sensibilidad-procedencia.json`, excluido por nombre y con su motivo, porque
-lo supera la validación repetida; y la salida del propio verificador. *Hasta
+lo supera la validación repetida; la salida del propio verificador; y, desde
+el 2026-11-04, `potencia-nadeau-bengio-curva.json`, la curva completa del
+análisis de potencia, cuyas tasas respaldaban cifras por coincidencia. *Hasta
 el 2026-10-02 un patrón excluía todos los análisis de sensibilidad*). La
 tolerancia de redondeo depende de cómo está escrita la
 cifra: con decimales, media unidad de su último dígito («0,1451» tiene que
@@ -1817,6 +1825,15 @@ borrador, con los cinco `outputs/fase4d-*.json` en el corpus, la verificación
 da una salida idéntica a la versionada, en el `.json` y en el `.md`. La última
 corrida sigue al día, y no se regeneró: el borrador no tiene todavía la Fase 4d
 (Pendientes).
+
+*Regenerada el 2026-11-04, sobre el mismo borrador, en el commit «Potencia: la
+curva completa, aparte y fuera del corpus del verificador».* Los recuentos no
+cambian: 646, 356 y 25. Cambian dos campos:
+- `archivos_fuera_del_corpus`, que pasa a 4 con la curva de potencia.
+- `campos_declarados_como_porcentaje_en_outputs`, que pasa de 16 a 17 por un
+  valor de `outputs/prueba-tiempo-red-4e.json`, de la Fase 4e. Ese archivo entró
+  al corpus después de la regeneración anterior, así que la salida versionada
+  ya estaba desfasada en este campo antes de excluir la curva.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya

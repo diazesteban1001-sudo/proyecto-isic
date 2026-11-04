@@ -11,4 +11,4 @@ Diferencias pliegue a pliegue de la pAUC de C4 a C7 − M3 limpio, cada una por 
 
 Entre semillas, error estándar de la media frente al de la prueba: C4 0.0006 frente a 0.0042; C5 0.0008 frente a 0.0044; C6 0.0011 frente a 0.0039; C7 0.0010 frente a 0.0054.
 
-Controles: 82 de 82 casos como se esperaba (41 deben fallar y fallan). Simulación con el generador de la 4d: 20000 juegos por comparación y n, semilla 2026. La curva completa está en el .json. No interpreta.
+Controles: 82 de 82 casos como se esperaba (41 deben fallar y fallan). Simulación con el generador de la 4d: 20000 juegos por comparación y n, semilla 2026. La curva completa está en outputs/potencia-nadeau-bengio-curva.json, fuera del corpus del verificador. No interpreta.

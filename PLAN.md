@@ -2890,6 +2890,44 @@ ninguna recomendación, no suma a la bitácora y no toca el reservado.
   deben fallar (`outputs/potencia-nadeau-bengio.json > controles`).
 - **Salida:** `outputs/potencia-nadeau-bengio.json` y su `.md`. Es descriptiva:
   no suma a la bitácora.
+- **La salida, separada el mismo día (decisión de la persona).**
+  - **Por qué:** con la curva en el corpus del verificador de trazabilidad, el
+    «0,695» de `informe/borrador-v2.md`, que sale de Kurtansky 2025, pasaba
+    por coincidencia.
+  - **La medición de antes de decidir.** Se usaron los rangos del límite del
+    `SKILL.md` de `sintesis-consultoria` («Límite que queda, medido») y,
+    además, los valores de 3 decimales entre 0,5 y 1. La curva subía la tasa
+    de coincidencias por azar:
+
+    | Rango | Sin los archivos de potencia | Con la curva | Con el resumen solo |
+    |---|---|---|---|
+    | Enteros del 1 al 200 | 176 de 200 (88,0 %) | 176 (88,0 %) | 176 (88,0 %) |
+    | 4 decimales, 0,0001 a 0,0499 | 446 de 499 (89,4 %) | 447 (89,6 %) | 446 (89,4 %) |
+    | 4 decimales, 0,0500 a 0,2000 | 911 de 1.501 (60,7 %) | 959 (63,9 %) | 911 (60,7 %) |
+    | 3 decimales, 0,500 a 1,000 | 464 de 501 (92,6 %) | 476 (95,0 %) | 464 (92,6 %) |
+    | Valores distintos en el corpus | 7.338 | 7.640 | 7.358 |
+
+    Cómo rehacerla: el comando de ese límite, con un cuarto rango,
+    `[f'0,{k:03d}' for k in range(500, 1000)] + ['1,000']`, sobre `outputs/`
+    sin los dos archivos de potencia, con el archivo de antes de separarlo y
+    con el resumen solo.
+  - **Qué se hizo.** `outputs/potencia-nadeau-bengio.json` se queda con el
+    resumen: los δ al 50 % y al 80 %, los errores estándar y los controles. La
+    curva completa, analítica y simulada, pasa a
+    `outputs/potencia-nadeau-bengio-curva.json`, que entra en
+    `FUERA_DEL_CORPUS` de `verificar_trazabilidad.py` con su motivo.
+  - **Cómo se comprobó.**
+    - Las dos partes juntas reproducen la salida anterior, salvo `segundos` y
+      `comando`.
+    - `test_fuera_del_corpus.py` da 10 de 10 con la curva y el resumen, y con
+      el verificador anterior falla.
+    - Recalculada sobre el borrador, la verificación vuelve a dar los mismos
+      recuentos y los mismos 25 señalados que la versionada. El «0,695» vuelve
+      a estar entre ellos.
+  - *De paso:* sin los archivos de potencia, las tasas ya están muy por encima
+    de las del límite del `SKILL.md`. Ese límite se midió sobre el `outputs/`
+    del 2026-10-02, con 2.864 valores, y está desfasado. No se actualizó: lo
+    decide la persona.
 
 ---
 

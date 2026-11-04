@@ -185,6 +185,14 @@ FUERA_DEL_CORPUS = {
         "anterior del borrador, no mediciones; en el corpus, el borrador quedaría "
         "respaldado por su propia verificación."
     ),
+    "potencia-nadeau-bengio-curva.json": (
+        "La curva completa del análisis de potencia (PLAN.md, Fase 6): tasas de la t "
+        "no central y de la simulación, con 4 decimales, en una rejilla de δ. No son "
+        "cifras que el informe cite; en el corpus subían la tasa de coincidencias por "
+        "azar y respaldaban por coincidencia el «0,695» del borrador, que sale de "
+        "Kurtansky 2025. El resumen, potencia-nadeau-bengio.json, sí es corpus. "
+        "Excluida el 2026-11-04, por decisión de la persona."
+    ),
 }
 
 

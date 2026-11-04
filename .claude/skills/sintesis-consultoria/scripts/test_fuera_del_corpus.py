@@ -17,9 +17,13 @@ archivo de un outputs/ sintético, en un directorio temporal.
   - 777 solo en holdout-pacientes.json: NO debe contar.
   - 344 solo en sintesis-verificacion.json, la salida del propio
     verificador: NO debe contar.
+  - 0,6945 solo en potencia-nadeau-bengio-curva.json, la curva completa del
+    análisis de potencia: NO debe contar (desde el 2026-11-04).
+  - 0,0115 solo en potencia-nadeau-bengio.json, el resumen de ese análisis:
+    tiene que contar.
 
-Y el caso discrimina: con los tres archivos excluidos renombrados fuera de la
-lista, las cinco cuentan como respaldadas. La diferencia la hace la lista y
+Y el caso discrimina: con los cuatro archivos excluidos renombrados fuera de la
+lista, las siete cuentan como respaldadas. La diferencia la hace la lista y
 nada más.
 
 Uso:
@@ -40,7 +44,9 @@ BORRADOR = (
     "La validación repetida con otras columnas da 0,4321.\n\n"
     "La corrida con otras columnas da 0,5678.\n\n"
     "Quedan apartados 777 pacientes.\n\n"
-    "La verificación anterior contó 344 números.\n"
+    "La verificación anterior contó 344 números.\n\n"
+    "La curva de potencia da 0,6945.\n\n"
+    "El resumen de potencia da 0,0115.\n"
 )
 
 
@@ -68,6 +74,8 @@ def main():
         "sensibilidad-procedencia.json": {"pauc_media": 0.5678},
         "holdout-pacientes.json": {"recuentos": {"pacientes": 777}},
         "sintesis-verificacion.json": {"numeros_en_borrador": 344},
+        "potencia-nadeau-bengio-curva.json": {"curva_analitica": {"C7": {"25": [{"a_favor": 0.6945}]}}},
+        "potencia-nadeau-bengio.json": {"comparaciones": {"C6": {"delta_80": {"25": 0.0115}}}},
     })
     renombrados = verificar({
         "modelado-baseline.json": {"pauc_media": 0.1234},
@@ -75,6 +83,8 @@ def main():
         "otra-corrida.json": {"pauc_media": 0.5678},
         "otros-recuentos.json": {"recuentos": {"pacientes": 777}},
         "otra-verificacion.json": {"numeros_en_borrador": 344},
+        "otra-curva.json": {"curva_analitica": {"C7": {"25": [{"a_favor": 0.6945}]}}},
+        "potencia-nadeau-bengio.json": {"comparaciones": {"C6": {"delta_80": {"25": 0.0115}}}},
     })
     # El verificador guarda el token tal cual, con la puntuación que lo sigue
     # ("0,5678."). Se normaliza antes de comparar: sin eso, un caso que
@@ -97,15 +107,21 @@ def main():
          "777" in senalados, f"señaladas: {sorted(senalados)}"),
         ("la cifra que solo está en la salida del propio verificador NO cuenta",
          "344" in senalados, f"señaladas: {sorted(senalados)}"),
-        ("con la lista, cuentan exactamente las dos del corpus",
-         con_lista["numeros_con_respaldo_en_outputs"] == 2,
+        ("la cifra que solo está en la curva de potencia NO cuenta",
+         "0,6945" in senalados, f"señaladas: {sorted(senalados)}"),
+        ("la cifra que solo está en el resumen de potencia cuenta como respaldada",
+         "0,0115" not in senalados and "potencia-nadeau-bengio.json" not in fuera,
+         f"señaladas: {sorted(senalados)}; fuera del corpus: {fuera}"),
+        ("con la lista, cuentan exactamente las tres del corpus",
+         con_lista["numeros_con_respaldo_en_outputs"] == 3,
          f"con respaldo: {con_lista['numeros_con_respaldo_en_outputs']}"),
-        ("los tres archivos quedan registrados fuera del corpus, con su motivo",
-         fuera == ["holdout-pacientes.json", "sensibilidad-procedencia.json", "sintesis-verificacion.json"]
+        ("los cuatro archivos quedan registrados fuera del corpus, con su motivo",
+         fuera == ["holdout-pacientes.json", "potencia-nadeau-bengio-curva.json", "sensibilidad-procedencia.json",
+                   "sintesis-verificacion.json"]
          and all(a["motivo"] for a in con_lista["archivos_fuera_del_corpus"]),
          f"archivos_fuera_del_corpus: {fuera}"),
-        ("el caso discrimina: renombrados fuera de la lista, las cinco cuentan",
-         not senalados_ren and renombrados["numeros_con_respaldo_en_outputs"] == 5,
+        ("el caso discrimina: renombrados fuera de la lista, las siete cuentan",
+         not senalados_ren and renombrados["numeros_con_respaldo_en_outputs"] == 7,
          f"señaladas: {sorted(senalados_ren) or 'ninguna'}; con respaldo: {renombrados['numeros_con_respaldo_en_outputs']}"),
     ]
     fallos = 0

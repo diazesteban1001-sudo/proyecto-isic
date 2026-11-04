@@ -30,6 +30,11 @@ desplazada una semilla, el valor p vectorizado sin corregir, el generador con ρ
 en (a) y δ = −0,05 en (c). Si un control falla, se detiene sin escribir nada. No
 interpreta.
 
+Salida: <out>.json, el resumen (los δ al 50 % y al 80 %, los errores estándar y los
+controles); <out>-curva.json, la curva completa, analítica y simulada, que está en
+FUERA_DEL_CORPUS de verificar_trazabilidad.py porque sus tasas respaldaban por
+coincidencia cifras del borrador (decisión de la persona del 2026-11-04); y <out>.md.
+
 Uso:
     .venv/bin/python .claude/skills/modelado-baseline/scripts/potencia_nadeau_bengio.py \\
         --out outputs/potencia-nadeau-bengio
@@ -281,10 +286,12 @@ def simular(nombre, s, n, rng):
 
 # ---- salida ------------------------------------------------------------------------------------
 
-def escribir(out, resultado):
+def escribir(out, resultado, curva):
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     with open(out + ".json", "w", encoding="utf-8") as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
+    with open(out + "-curva.json", "w", encoding="utf-8") as f:
+        json.dump(curva, f, ensure_ascii=False, indent=2)
     comp, sim = resultado["comparaciones"], resultado["simulacion"]
     lineas = ["# Potencia de la prueba de Nadeau y Bengio frente a M3 limpio (descriptivo)", "",
               "Diferencias pliegue a pliegue de la pAUC de C4 a C7 − M3 limpio, cada una por separado. «A favor»: "
@@ -302,10 +309,10 @@ def escribir(out, resultado):
         f"Controles: {sum(k['ok'] for k in resultado['controles'])} de {len(resultado['controles'])} casos como se "
         f"esperaba ({sum(k['debe_fallar'] for k in resultado['controles'])} deben fallar y fallan). Simulación con el "
         f"generador de la 4d: {sim['juegos']} juegos por comparación y n, semilla {sim['semilla']}. La curva completa "
-        "está en el .json. No interpreta."]
+        f"está en {resultado['curva']}, fuera del corpus del verificador. No interpreta."]
     with open(out + ".md", "w", encoding="utf-8") as f:
         f.write("\n".join(lineas) + "\n")
-    print(f"Escrito: {out}.json y .md", flush=True)
+    print(f"Escrito: {out}.json, {out}-curva.json y {out}.md", flush=True)
 
 
 def main():
@@ -322,17 +329,16 @@ def main():
     control_cola_inferior(datos)
 
     rng = np.random.default_rng(SEMILLA)
-    comparaciones, simulacion = {}, {}
+    comparaciones, curvas, simulacion = {}, {}, {}
     for nombre, c in datos.items():
         s = float(np.std(c["x"], ddof=1))
-        curva = {str(n): [dict(zip(("delta", "a_favor", "rechazo_bilateral"),
-                                   (d, *(round(v, 4) for v in tasas_analiticas(d, s, n))))) for d in DELTAS]
-                 for n in NS}
+        curvas[nombre] = {str(n): [dict(zip(("delta", "a_favor", "rechazo_bilateral"),
+                                            (d, *(round(v, 4) for v in tasas_analiticas(d, s, n)))))
+                                   for d in DELTAS] for n in NS}
         comparaciones[nombre] = {
             "archivo": c["archivo"], "campo": CAMPO, "nuevo": c["nuevo"], "semillas": c["semillas"],
             "n_diferencias": len(c["x"]), "s": s, "media_observada": c["guardado"]["media"],
             **{k: {str(n): round(delta_con_potencia(p, s, n), 4) for n in NS} for k, p in OBJETIVOS.items()},
-            "curva_analitica": curva,
             "entre_semillas": entre_semillas(c, s),
         }
         simulacion[nombre] = {str(n): simular(nombre, s, n, rng) for n in NS}
@@ -340,6 +346,16 @@ def main():
     if not all(k["ok"] for k in casos):
         raise SystemExit("ERROR: algún control no da lo esperado; no se escribe nada.")
 
+    ruta_curva = os.path.relpath(os.path.abspath(args.out + "-curva.json"), RAIZ)
+    curva = {
+        "que_es": ("La curva completa del análisis de potencia: las tasas analíticas y las simuladas en cada δ. El "
+                   f"resumen, con los δ al 50 % y al 80 %, los errores estándar y los controles, está en "
+                   f"{os.path.relpath(os.path.abspath(args.out + '.json'), RAIZ)}. Fuera del corpus del verificador "
+                   "de trazabilidad (FUERA_DEL_CORPUS)."),
+        "deltas": DELTAS,
+        "curva_analitica": curvas,
+        "simulacion": {"deltas": [0.0] + DELTAS + [DELTA_GRANDE], "por_comparacion": simulacion},
+    }
     resultado = {
         "que_es": ("Potencia descriptiva de la prueba de las fases 4d a 4f frente a M3 limpio (PLAN.md, Fase 6, «La "
                    "potencia de la prueba»). No compara ningún modelo, no cambia ninguna recomendación y no suma a la "
@@ -348,12 +364,12 @@ def main():
                    "error_estandar": "s·√(1/n + 1/(n_splits − 1))", "termino_de_correccion": RAZON, "rho": RHO,
                    "a_favor": "valor p bilateral < alfa y media > 0", "grados_de_libertad": "n − 1",
                    "potencia": "t no central de n − 1 grados de libertad, no centralidad δ / (s·√(1/n + 1/4))"},
-        "deltas": DELTAS, "ns": list(NS), "objetivos": OBJETIVOS,
+        "rejilla_de_delta": "de 0,002 a 0,02 en pasos de 0,001; más 0 y 0,05 en la simulación",
+        "curva": ruta_curva, "ns": list(NS), "objetivos": OBJETIVOS,
         "comparaciones": comparaciones,
         "simulacion": {"generador": "test_fase4d_comparacion.correlacionadas", "rho": RHO,
                        "escala": "s/√(1 − ρ)", "juegos": JUEGOS, "semilla": SEMILLA, "z_monte_carlo": Z_MC,
-                       "tolerancia": "4·√(max(p(1 − p), 1/juegos)/juegos), con p la tasa analítica",
-                       "deltas": [0.0] + DELTAS + [DELTA_GRANDE], "por_comparacion": simulacion},
+                       "tolerancia": "4·√(max(p(1 − p), 1/juegos)/juegos), con p la tasa analítica"},
         "controles": casos,
         "comando": {"interprete": os.path.relpath(sys.executable, RAIZ), "argumentos": sys.argv},
         "segundos": round(time.perf_counter() - inicio, 1),
@@ -361,7 +377,7 @@ def main():
                  "tendría las diferencias de C4 a C7 desplazadas en δ. El modelo de varianza, ρ = 1/5, es el que la "
                  "prueba ya supone. «entre_semillas» mide la variación con los mismos pacientes. Sin interpretación."),
     }
-    escribir(args.out, resultado)
+    escribir(args.out, resultado, curva)
 
 
 if __name__ == "__main__":

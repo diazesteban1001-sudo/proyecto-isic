@@ -1474,6 +1474,10 @@
       "motivo": "Recuentos del conjunto reservado. No son mediciones del informe, y el conjunto reservado no se toca hasta la evaluación final."
     },
     {
+      "archivo": "potencia-nadeau-bengio-curva.json",
+      "motivo": "La curva completa del análisis de potencia (PLAN.md, Fase 6): tasas de la t no central y de la simulación, con 4 decimales, en una rejilla de δ. No son cifras que el informe cite; en el corpus subían la tasa de coincidencias por azar y respaldaban por coincidencia el «0,695» del borrador, que sale de Kurtansky 2025. El resumen, potencia-nadeau-bengio.json, sí es corpus. Excluida el 2026-11-04, por decisión de la persona."
+    },
+    {
       "archivo": "sensibilidad-procedencia.json",
       "motivo": "Análisis de sensibilidad de una sola partición (semilla 42), superado por sensibilidad-procedencia-repetida.json. Por la regla de CLAUDE.md (hallazgo 3), ninguna conclusión comparativa se escribe desde una sola partición, así que no respalda cifras del informe."
     },
@@ -1482,5 +1486,5 @@
       "motivo": "La salida de este mismo script. Sus recuentos describen una verificación anterior del borrador, no mediciones; en el corpus, el borrador quedaría respaldado por su propia verificación."
     }
   ],
-  "campos_declarados_como_porcentaje_en_outputs": 16
+  "campos_declarados_como_porcentaje_en_outputs": 17
 }

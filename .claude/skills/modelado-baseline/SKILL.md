@@ -624,8 +624,14 @@ C6 y C7 − M3 limpio; no lee `data/` ni el reservado.
 
 Si un control falla, se detiene sin escribir. La especificación es de la
 persona, fijada antes de correr (`PLAN.md`, Fase 6). Salida:
-`outputs/potencia-nadeau-bengio.json` y `.md`, con el intérprete y los
-argumentos reales en `comando`.
+- `outputs/potencia-nadeau-bengio.json`, el resumen: los δ al 50 % y al 80 %,
+  los errores estándar y los controles, con el intérprete y los argumentos
+  reales en `comando`;
+- `outputs/potencia-nadeau-bengio-curva.json`, la curva completa, analítica y
+  simulada. Va en `FUERA_DEL_CORPUS` del verificador de trazabilidad: sus tasas
+  respaldaban cifras del borrador por coincidencia (decisión de la persona del
+  2026-11-04);
+- el `.md`.
 
 ```bash
 .venv/bin/python .claude/skills/modelado-baseline/scripts/potencia_nadeau_bengio.py \
