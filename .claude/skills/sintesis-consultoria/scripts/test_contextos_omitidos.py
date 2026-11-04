@@ -40,7 +40,7 @@ BORRADOR = (
     "Una cifra sin respaldo: 0,5555.\n\n"
     "El intervalo es al 95%.\n"
 )
-REGISTRO = "omitidos.append({\"valor\": crudo, \"contexto\": contexto, \"linea_aprox\": linea})"
+REGISTRO = "omitidos.append({\"valor\": crudo, \"contexto\": contexto, \"linea_aprox\": linea, \"motivo\": omision})"
 
 
 def verificar(script, tmp):

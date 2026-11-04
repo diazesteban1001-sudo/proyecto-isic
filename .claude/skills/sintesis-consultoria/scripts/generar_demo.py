@@ -432,8 +432,10 @@ def construir_datos(outputs_dir, leidos):
     verificacion = cargar("sintesis-verificacion")
     comprobar_suma_verificacion(verificacion)
     # Parte B, B8: el ejemplo tiene que seguir existiendo entre los señalados.
+    # *Desde el 2026-11-04 los años de las citas bibliográficas, «Autor (AAAA)»,
+    # se omiten por su contexto; el ejemplo es ahora un año de una fuente que no
+    # va entre paréntesis, como «agosto de 2025». Antes se exigía el paréntesis.*
     afirmar(any(re.fullmatch(r"(19|20)\d\d", s["valor"].rstrip(".,"))
-                and f"({s['valor'].rstrip('.,')})" in s["contexto"]
                 for s in verificacion["numeros_sin_respaldo"]),
             "un número señalado puede ser legítimo, como el año de una fuente")
     fase4 = {archivo: cargar(archivo) for _, archivo in COMPARACIONES}
@@ -1106,7 +1108,7 @@ const HALLAZGOS = {
     `El verificador encontró ${cifra(mil(V.total), fVer("numeros_en_borrador"))} números en el informe. ` +
     `${cifra(mil(V.comentarios), fVer("numeros_en_comentarios"))} están en los comentarios que dan la fuente de cada frase, ` +
     `y no se les busca respaldo; ` +
-    `${cifra(V.omitidos, fVer("numeros_en_contextos_omitidos"))} se omiten por una lista declarada de contextos; ` +
+    `${cifra(V.omitidos, fVer("numeros_en_contextos_omitidos"))} se omiten por su contexto, con una lista declarada y los años de las citas bibliográficas; ` +
     `${cifra(V.metodo, fVer("porcentajes_de_metodo_excluidos"))} son parámetros del método; ` +
     `${cifra(mil(V.con), fVer("numeros_con_respaldo_en_outputs"))} tienen respaldo en outputs/, y ` +
     `${cifra(V.sin, fVer("numeros_sin_respaldo"))} quedan señalados para revisarlos a mano. ` +

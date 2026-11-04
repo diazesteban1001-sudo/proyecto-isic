@@ -87,6 +87,34 @@ def candidatos(crudo):
 # registrarlos: sobre informe/borrador-v2.md faltaban 48 de 352.*
 IGNORAR_CONTEXTOS = ["2024", "2026", "Nivel 0", "Nivel 1", "Nivel 2"]
 
+# El año de una cita bibliográfica tampoco es una cifra medida: «Marchetti et
+# al. (2023)», «Nadeau y Bengio (2003)», «(Kurtansky et al., 2025)». Se omite
+# igual que los años de IGNORAR_CONTEXTOS, y se lista con su motivo. Es un año
+# de cuatro cifras, de 1900 a 2099, que va entre paréntesis justo detrás de un
+# autor, o detrás del autor y una coma dentro del paréntesis, y que cierra el
+# paréntesis o sigue con «;» o «,». «Agosto de 2025» o «1200 pacientes» siguen
+# contando. *Desde el 2026-11-04, por decisión de la persona.* Control:
+# test_anios_de_citas.py.
+AUTOR = r"[A-ZÁÉÍÓÚÑ][\wáéíóúñü'’-]*(?:\s+[A-ZÁÉÍÓÚÑ][\wáéíóúñü'’-]*)*"
+ANTES_DE_ANIO_DE_CITA = re.compile(
+    rf"(?:{AUTOR}(?:\s+et\s+al\.|\s+[ye]\s+{AUTOR})?\s*\(\s*|\(\s*{AUTOR}(?:\s+et\s+al\.)?,\s*)$")
+ANIO_DE_CITA = re.compile(r"(?:19|20)\d\d(?=\s*[),;])")
+
+
+def es_anio_de_cita(texto, ini):
+    """True si el número que empieza en `ini` es el año de una cita bibliográfica."""
+    return bool(ANIO_DE_CITA.match(texto, ini) and ANTES_DE_ANIO_DE_CITA.search(texto[max(0, ini - 120):ini]))
+
+
+def motivo_de_omision(texto, ini, contexto):
+    """El motivo por el que un número se omite por su contexto, o None."""
+    ig = next((ig for ig in IGNORAR_CONTEXTOS if ig in contexto), None)
+    if ig is not None:
+        return f"contexto «{ig}»"
+    if es_anio_de_cita(texto, ini):
+        return "año de una cita bibliográfica"
+    return None
+
 # Los comentarios HTML del borrador (<!-- F: … -->) son trazabilidad, no
 # afirmaciones: dicen de dónde sale la frase de encima. Sus números —líneas,
 # páginas, fechas, nombres de campo— no se buscan en outputs/: se cuentan y se
@@ -280,8 +308,9 @@ def es_numeracion_de_seccion(texto, ini, linea_texto, col):
 
 
 def extraer_numeros_del_borrador(texto):
-    """Devuelve, por número, (lecturas, crudo, contexto, línea, en_comentario):
-    el último es True si el número está dentro de un comentario HTML."""
+    """Devuelve, por número, (lecturas, crudo, contexto, línea, en_comentario,
+    omision): en_comentario es True si el número está dentro de un comentario
+    HTML, y omision, el motivo por el que se omite por su contexto, o None."""
     encontrados = []
     inicios_de_linea = [m.end() for m in re.finditer(r"^", texto, re.MULTILINE)]
     lineas = texto.split("\n")
@@ -302,7 +331,8 @@ def extraer_numeros_del_borrador(texto):
         contexto = texto[inicio:fin].replace("\n", " ").strip()
         linea_aprox = texto[: match.start()].count("\n") + 1
         en_comentario = any(ini <= match.start() < fin for ini, fin in comentarios)
-        encontrados.append((valores, crudo, contexto, linea_aprox, en_comentario))
+        omision = motivo_de_omision(texto, match.start(), contexto)
+        encontrados.append((valores, crudo, contexto, linea_aprox, en_comentario, omision))
     return encontrados
 
 
@@ -389,15 +419,15 @@ def main():
     omitidos = []
     comentarios = []
     con_respaldo = 0
-    for valores, crudo, contexto, linea, en_comentario in encontrados:
+    for valores, crudo, contexto, linea, en_comentario, omision in encontrados:
         # Trazabilidad, no afirmación: no se le busca respaldo, se registra
         # (ver COMENTARIO_HTML). Va antes que los contextos omitidos, así que
         # un año dentro de un comentario cuenta aquí y no allí.
         if en_comentario:
             comentarios.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea})
             continue
-        if any(ig in contexto for ig in IGNORAR_CONTEXTOS):
-            omitidos.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea})
+        if omision:
+            omitidos.append({"valor": crudo, "contexto": contexto, "linea_aprox": linea, "motivo": omision})
             continue
 
         es_porcentaje = crudo.endswith("%")
@@ -487,8 +517,9 @@ def main():
         f"declarada (no se les busca respaldo): {len(excluidos_metodo)}"
     )
     lineas.append(
-        f"Omitidos por su contexto (IGNORAR_CONTEXTOS: {', '.join(IGNORAR_CONTEXTOS)}), "
-        f"sin buscarles respaldo: {len(omitidos)}"
+        f"Omitidos por su contexto (IGNORAR_CONTEXTOS: {', '.join(IGNORAR_CONTEXTOS)}; y los años de "
+        f"citas bibliográficas, «Autor (AAAA)»), sin buscarles respaldo: {len(omitidos)}, de ellos "
+        f"{sum(o['motivo'] == 'año de una cita bibliográfica' for o in omitidos)} años de citas"
     )
     for o in omitidos[:10]:
         lineas.append(f"  - línea ~{o['linea_aprox']}: \"{o['valor']}\" en «...{o['contexto']}...»")

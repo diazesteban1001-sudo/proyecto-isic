@@ -247,9 +247,9 @@ sintéticos, cada caso con el que debe fallar. Salida:
 ```
 
 **La verificación por campo (2026-11-04).** Es el paso 4 de la misma
-especificación, y **todavía no está conectada al verificador**: chocaba con dos
-casos de `test_generar_demo.py`, y esa decisión es de la persona (`PLAN.md`,
-Fase 6). `scripts/por_campo.py` busca cada número del cuerpo en lo que cita su
+especificación, y está conectada al verificador desde el mismo día, por
+decisión de la persona: una ruta citada que no existe detiene la verificación y
+la demo. `scripts/por_campo.py` busca cada número del cuerpo en lo que cita su
 comentario `F:`:
 - **en los campos citados**, aunque su archivo esté en `FUERA_DEL_CORPUS`;
 - **en las líneas citadas de `referencias/`**, pero solo en las del texto
@@ -275,8 +275,8 @@ los números que cubre cada comentario es:
 | 4 decimales, 0,0500 a 0,2000 | 1,2 % | 0 % | 14,6 % |
 | 3 decimales, 0,500 a 1,000 | 2,9 % | 0 % | 50,1 % |
 
-Será el límite nuevo cuando la verificación por campo se conecte al
-verificador. El de arriba es el de la búsqueda en todo el corpus.
+Es el límite de la verificación por campo. El de arriba es el de la búsqueda
+en todo el corpus, que se mantiene como diagnóstico.
 
 ```bash
 .venv/bin/python .claude/skills/sintesis-consultoria/scripts/por_campo.py \
@@ -461,21 +461,37 @@ Reglas, idénticas a las del informe escrito:
     {"valor": str, "motivo": str, "contexto": str, "linea_aprox": int}, ...
   ],
   "numeros_en_contextos_omitidos": [
-    {"valor": str, "contexto": str, "linea_aprox": int}, ...
+    {"valor": str, "contexto": str, "linea_aprox": int, "motivo": str}, ...
   ],
   "numeros_en_comentarios": [
     {"valor": str, "contexto": str, "linea_aprox": int}, ...
   ],
   "modo_tolerancia": "decimales_escritos" | "fija",
-  "tolerancia_redondeo": float | null
+  "tolerancia_redondeo": float | null,
+  "por_campo": {...}
 }
 ```
 
 Los cinco grupos —con respaldo, sin respaldo, porcentajes del método,
-omitidos por su contexto (`IGNORAR_CONTEXTOS`) y en comentarios HTML— suman
-`numeros_en_borrador`, y el verificador se detiene si no. *Hasta el
-2026-10-02 los omitidos se saltaban sin registrarse.* Control:
-`scripts/test_contextos_omitidos.py`.
+omitidos por su contexto y en comentarios HTML— suman `numeros_en_borrador`,
+y el verificador se detiene si no. *Hasta el 2026-10-02 los omitidos se
+saltaban sin registrarse.* Control: `scripts/test_contextos_omitidos.py`.
+
+**Qué se omite por su contexto,** cada uno con su motivo en `motivo`:
+- los números cuyo contexto contiene algo de `IGNORAR_CONTEXTOS`;
+- desde el 2026-11-04, por decisión de la persona, los años de las citas
+  bibliográficas: un año de 1900 a 2099 entre paréntesis justo detrás de un
+  autor, como «Marchetti et al. (2023)», o detrás del autor y una coma, como
+  «(Kurtansky et al., 2025)».
+
+«Agosto de 2025» o «1200 pacientes» siguen contando. Control:
+`scripts/test_anios_de_citas.py`, con un mutante sin la regla como caso que
+debe fallar.
+
+`por_campo` es la verificación por campo (ver «La verificación por campo»,
+más arriba). Está conectada desde el 2026-11-04, y el verificador se detiene si
+algún comentario `F:` no entra en la gramática; si es por una ruta o un
+archivo que no existe, el mensaje empieza por «cita rota».
 
 Los números dentro de un comentario HTML (`<!-- F: … -->`) no se buscan en
 `outputs/`: el comentario es trazabilidad, no una afirmación del informe. Se

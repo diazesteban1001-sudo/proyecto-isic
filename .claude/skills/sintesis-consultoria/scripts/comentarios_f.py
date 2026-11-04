@@ -313,7 +313,7 @@ def numeros_del_cuerpo(texto):
         if not valores:
             continue
         contexto = texto[max(0, m.start() - 40): min(len(texto), m.end() + 10)].replace("\n", " ").strip()
-        if any(a <= m.start() < b for a, b in comentarios) or any(ig in contexto for ig in vt.IGNORAR_CONTEXTOS):
+        if any(a <= m.start() < b for a, b in comentarios) or vt.motivo_de_omision(texto, m.start(), contexto):
             continue
         if crudo.endswith("%") and any(any(abs(x - v) <= vt.EXACTO for x, _ in valores)
                                         for v in vt.PORCENTAJES_DE_METODO):
@@ -326,8 +326,8 @@ def segun_el_verificador(texto):
     """(crudo, línea) de los números del cuerpo según verificar_trazabilidad.py,
     con sus mismos filtros, para el control."""
     salida = []
-    for valores, crudo, contexto, linea, en_comentario in vt.extraer_numeros_del_borrador(texto):
-        if en_comentario or any(ig in contexto for ig in vt.IGNORAR_CONTEXTOS):
+    for valores, crudo, contexto, linea, en_comentario, omision in vt.extraer_numeros_del_borrador(texto):
+        if en_comentario or omision:
             continue
         if crudo.endswith("%") and any(any(abs(x - v) <= vt.EXACTO for x, _ in valores)
                                         for v in vt.PORCENTAJES_DE_METODO):
