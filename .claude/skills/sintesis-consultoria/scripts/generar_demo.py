@@ -1700,11 +1700,17 @@ BORRADOR_VIGENTE = "informe/borrador-v2.md"
 def comprobar_verificacion(outputs_dir):
     with tempfile.TemporaryDirectory() as tmp:
         recalculada = os.path.join(tmp, "sintesis-verificacion")
-        subprocess.run(
+        r = subprocess.run(
             [sys.executable, VERIFICADOR, "--borrador", BORRADOR_VIGENTE,
              "--outputs-dir", os.path.abspath(outputs_dir), "--out", recalculada],
-            cwd=RAIZ, check=True, capture_output=True,
+            cwd=RAIZ, capture_output=True, text=True,
         )
+        # Desde la verificación por campo, el verificador se detiene si un
+        # comentario F: no entra en la gramática; una ruta citada que no existe
+        # es una cita rota. Entonces no se escribe la página, con su motivo.
+        if r.returncode != 0:
+            motivo = (r.stderr.strip().splitlines() or ["sin mensaje"])[-1]
+            raise SystemExit(f"El verificador se detuvo: {motivo} No se escribe la página.")
         esperado_json = json.loads(leer(f"{recalculada}.json"))
         esperado_md = leer(f"{recalculada}.md")
     actual_json = json.loads(leer(os.path.join(outputs_dir, "sintesis-verificacion.json")))

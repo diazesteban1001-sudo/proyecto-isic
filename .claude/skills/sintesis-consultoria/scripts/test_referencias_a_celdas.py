@@ -57,8 +57,13 @@ def verificar(script, tmp):
     with open(borrador, "w", encoding="utf-8") as f:
         f.write(BORRADOR)
     salida = os.path.join(tmp, "verificacion")
+    # El mutante se escribe en un directorio temporal: la carpeta real de los
+    # scripts va en PYTHONPATH para que encuentre por_campo, que el verificador
+    # importa desde la verificación por campo.
+    entorno = dict(os.environ, PYTHONPATH=os.pathsep.join(
+        x for x in (os.path.dirname(VERIFICADOR), os.environ.get("PYTHONPATH")) if x))
     r = subprocess.run([sys.executable, script, "--borrador", borrador, "--outputs-dir", outputs_dir,
-                        "--out", salida], capture_output=True, text=True)
+                        "--out", salida], capture_output=True, text=True, env=entorno)
     if r.returncode != 0:
         raise SystemExit(f"el verificador no corrió: {r.stderr.strip().splitlines()[-1:]}")
     with open(f"{salida}.json", encoding="utf-8") as f:

@@ -163,7 +163,9 @@ def clasificar(texto, outputs_dir, raiz=RAIZ, tolerancia_fija=None, regla="propi
     comentarios, sin_comentario, _ = cf.analizar(texto, outputs_dir, raiz=raiz)
     fuera = [c for c in comentarios if c["clase"] == "no entra"]
     if fuera:
-        raise SystemExit("ERROR: comentarios F: fuera de la gramática; no se verifica por campo: "
+        rota = any(m.startswith(("ruta que no existe", "no existe")) for c in fuera for m in c["motivos"])
+        raise SystemExit(("ERROR: cita rota. " if rota else "ERROR: ")
+                         + "Comentarios F: fuera de la gramática; no se verifica por campo: "
                          + "; ".join(f"línea {c['linea']}: {', '.join(c['motivos'])}" for c in fuera))
     cache, por_clase = {}, collections.defaultdict(list)
     citas_por_tipo = {"solo_lineas_nuestras": [], "mezcla": [], "solo_lineas_originales": 0, "no_comprobables": 0}

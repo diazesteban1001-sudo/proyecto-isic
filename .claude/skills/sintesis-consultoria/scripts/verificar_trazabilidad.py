@@ -27,6 +27,7 @@ import glob
 import json
 import os
 import re
+import sys
 
 
 # El borrador está en español: separador decimal coma, separador de miles
@@ -440,6 +441,13 @@ def main():
         "archivos_fuera_del_corpus": archivos_fuera,
         "campos_declarados_como_porcentaje_en_outputs": len(valores_pct),
     }
+    # La verificación por campo (PLAN.md, Fase 6): cada número del cuerpo, en lo
+    # que cita su comentario F:. Se importa aquí, y no arriba, porque por_campo
+    # importa este módulo. Se detiene si algún comentario no entra en la
+    # gramática: una ruta que no existe es una cita rota.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import por_campo
+    resultado["por_campo"] = por_campo.clasificar(texto, args.outputs_dir, tolerancia_fija=args.tolerancia)
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
@@ -459,6 +467,21 @@ def main():
         lineas.append(f"  - línea ~{s['linea_aprox']}: \"{s['valor']}\" en «...{s['contexto']}...»")
     if len(sin_respaldo) > 10:
         lineas.append(f"  ... y {len(sin_respaldo) - 10} más — detalle en el .json")
+    pc = resultado["por_campo"]
+    k = pc["por_clase"]
+    lineas.append(
+        f"Por campo, cada cifra en lo que cita su comentario F: ({pc['numeros_del_cuerpo']} números del cuerpo): "
+        f"respaldadas por su campo {k['respaldada_por_su_campo']} y por su referencia "
+        f"{k['respaldada_por_su_referencia']}; señaladas {pc['senaladas']} (no están en sus campos "
+        f"{k['no_esta_en_sus_campos']}, fuera de las líneas citadas {k['fuera_de_las_lineas_citadas']}, citan "
+        f"un documento del proyecto {k['cita_un_documento_del_proyecto']}, sin comentario {k['sin_comentario']}); "
+        f"no comprobables aquí {k['no_comprobable_aqui']}; declaradas sin fuente {k['declarada_sin_fuente']}"
+    )
+    cr = pc["citas_de_referencias"]
+    lineas.append(
+        f"Citas de referencias/ que apuntan solo a líneas nuestras: {cr['solo_lineas_nuestras']}; a una mezcla: "
+        f"{cr['mezcla']}; solo a líneas originales: {cr['solo_lineas_originales']}"
+    )
     lineas.append(
         f"Porcentajes que son parámetros del método, excluidos por lista "
         f"declarada (no se les busca respaldo): {len(excluidos_metodo)}"
