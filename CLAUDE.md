@@ -806,7 +806,7 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman diecisiete del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman dieciocho del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
@@ -818,10 +818,11 @@ tres `outputs/fase4d-*.json` de las preguntas, `outputs/fase4d-holm.json`,
 `outputs/fase4e-exploracion.json`, los dos `outputs/fase4e-*.json` de las
 preguntas, `outputs/fase4e-holm.json`,
 `outputs/fase4f-red4e-vs-imagen-basicos.json`,
-`outputs/potencia-nadeau-bengio.json`, `outputs/fase5-reservado.json` y
-`outputs/fase5-posterior.json`. Desde el 2026-09-25 sus
+`outputs/potencia-nadeau-bengio.json`, `outputs/fase5-reservado.json`,
+`outputs/fase5-posterior.json`, los cuatro `outputs/fase5b-envio-*.json` y
+`outputs/fase5b-comparacion.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo, salvo las del reservado en el
-hallazgo 17; las de la corrida sobre el 100 % de los datos están en la tabla de
+hallazgo 17 y las de Kaggle en el 18; las de la corrida sobre el 100 % de los datos están en la tabla de
 antes y después de `PLAN.md`, Fase 1.
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
@@ -1449,6 +1450,99 @@ antes y después de `PLAN.md`, Fase 1.
       después de ver los resultados y no cambian ningún modelo.
     - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
       (Pendientes).
+
+18. **Los cuatro envíos tardíos a Kaggle recibieron puntuación. En la privada,
+    C7 queda 0,01404 por debajo del ganador; M3 limpio, 0,01266 por debajo de la
+    variante «sin imágenes» de la Tabla 3; y la red de la 4e, 0,0261 por debajo
+    de «solo imágenes» y 0,02655 por encima de «Imagen + básicos»** (Fase 5b,
+    2026-11-05; `outputs/fase5b-envio-*.json` y `outputs/fase5b-comparacion.json`).
+    Cada modelo se entrenó una vez con los 1.042 pacientes, semilla 0, y se
+    envió con un notebook privado y sin internet, en una Tesla T4.
+    Especificación de la persona, fijada antes de enviar (`PLAN.md`, Fase 5b).
+
+    **Las puntuaciones,** tal como las devuelve la API de Kaggle
+    (`envios.0.publicScore` y `.privateScore`). La comparación se hace con la
+    privada, la del tablero final; la pública se reporta y no se compara:
+
+    | Modelo | Pública | Privada |
+    |---|---|---|
+    | M3 limpio | 0,17229 | 0,15134 |
+    | Red de la 4e | 0,11108 | 0,11590 |
+    | C7 | 0,17893 | 0,15856 |
+    | «Imagen + básicos» | 0,10126 | 0,08935 |
+
+    **La comparación descriptiva** (`fase5b-comparacion.json >
+    comparaciones_con_la_privada`), sin intervalo:
+    - C7 frente al ganador en el tablero privado: 0,15856 frente a 0,1726
+      (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, línea 196),
+      −0,01404;
+    - M3 limpio frente a «sin imágenes» de la Tabla 3: 0,15134 frente a 0,164
+      (línea 209), −0,01266;
+    - la red de la 4e frente a «solo imágenes»: 0,1159 frente a 0,142 (línea
+      216), −0,0261;
+    - la red de la 4e frente a «Imagen + básicos», las dos de Kaggle: 0,1159
+      frente a 0,08935, +0,02655.
+
+    **Aritmética descriptiva de dos fuentes distintas**
+    (`aritmetica_de_dos_fuentes`): C7 − M3 limpio en la privada de Kaggle,
+    +0,00722; «modelo completo» − «sin imágenes» en la Tabla 3, +0,009 (0,173
+    − 0,164, líneas 207 y 209).
+
+    **En las tres evaluaciones** (`tabla_tres_evaluaciones`), en la pAUC:
+
+    | Modelo | Desarrollo | Reservado | Kaggle, privada |
+    |---|---|---|---|
+    | M3 limpio | 0,1621 (semillas 0 a 9); 0,1641 (semillas 5 a 9) | 0,1588 | 0,15134 |
+    | Red de la 4e | 0,1376 (semillas 5 a 9) | 0,1307 | 0,1159 |
+    | C7 | 0,1669 (semillas 5 a 9) | no se evaluó | 0,15856 |
+    | «Imagen + básicos» | 0,084 (semillas 0 a 9); 0,0884 (semillas 5 a 9) | 0,1385 | 0,08935 |
+
+    **Cómo se hizo** (`PLAN.md`, Fase 5b, «Los envíos» y «Lo que dio Kaggle»):
+    - **la huella,** fijada antes del primer envío: la versión 2 del conjunto de
+      datos, tal como la sirve Kaggle, con 190 archivos y 0 diferencias con lo
+      subido, y el SHA-256 de los cuatro notebooks
+      (`outputs/fase5b-huella.json`). Se comprobó antes de cada envío, y en los
+      cuatro era la fijada (`fase5b-envio-*.json >
+      al_enviar.comprobado_antes_de_enviar`);
+    - **el control en Kaggle** pasó antes de cada envío: 2 de 2 casos en M3
+      limpio, 3 de 3 en la red, 7 de 7 en C7 y 3 de 3 en «Imagen + básicos»
+      (`outputs/fase5b-kaggle-*.json > salida_del_notebook.control`);
+    - **el orden** fijado fue M3 limpio, la red, C7 e «Imagen + básicos».
+      Ningún envío falló y ninguno se reenvió;
+    - **la comparación** sale de `fase5b_comparacion.py`, que lee las cifras de
+      Kurtansky 2025 de su texto completo en la línea fijada y se detiene si la
+      línea no dice lo que espera: 5 de 5 controles, 4 de ellos casos que deben
+      fallar (`fase5b-comparacion.json > controles`).
+
+    *Salvedades:*
+    - **Tres evaluaciones distintas.** Son conjuntos y tipos de estimación
+      distintos (`fase5b-comparacion.json > como_leerla`):
+      - en desarrollo, la media por pliegue de la validación cruzada, entrenando
+        con cuatro quintos de los 833 pacientes;
+      - en el reservado, un modelo entrenado con el desarrollo y puntuado en los
+        209 pacientes reservados;
+      - en Kaggle, modelos entrenados con los 1.042 pacientes y puntuados en el
+        subconjunto privado de la prueba oculta. Kaggle no da intervalo.
+    - **La Tabla 3** es la reproducción del ganador que los organizadores
+      hicieron en su entorno, con 3 decimales (líneas 200 y 315). El 0,1726 es la
+      puntuación oficial del ganador en el tablero privado.
+    - **«Sin imágenes» usa la etiqueta del hospital,** con los datos básicos
+      (línea 315). M3 limpio no la usa
+      (`outputs/auditoria-de-fugas.json > columnas_procedencia`).
+    - **El C7 de Kaggle no es exactamente el evaluado** en la validación
+      cruzada: puntúa con la media de cinco redes, una por pliegue, y en la
+      validación cruzada se usó una red por pliegue. C7 no está en el
+      reservado.
+    - **El cuarto envío,** «Imagen + básicos», se decidió después de ver el
+      reservado, y se declaró así antes de enviar (`PLAN.md`, Fase 5b).
+    - **Sin posiciones en el tablero:** no hay ninguna fuente versionada del
+      tablero completo.
+    - **El reservado dejó de estar reservado:** los modelos de Kaggle se
+      entrenaron también con él, después de su única evaluación.
+    - **Es descriptiva.** No da ningún resultado a favor ni en contra, no cambia
+      ninguna recomendación y no suma a la bitácora (`PLAN.md`, Fase 5b).
+    - **Sobre qué se midió:** los recortes de la prueba del reto, no fotos de
+      teléfono (Pendientes).
 
 ### Dónde se lee la fase vigente
 
