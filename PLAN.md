@@ -8,7 +8,7 @@ archivo, no cuando se acaba su semana.
 medido—. Este archivo describe **la ruta**: en qué orden, con qué condición de
 salida, y qué hacer cuando algo no se pueda cerrar.
 
-**Dónde está la ruta (2026-11-04): fases 0 a 4, 4b, 4c, 4d y 4e, cerradas; ni
+**Dónde está la ruta (2026-11-05): fases 0 a 4, 4b, 4c, 4d y 4e, cerradas; ni
 la Fase 4b, ni la 4c, ni la 4d, que salió de la retroalimentación del avance,
 ni la 4e, la receta de imagen del 10.º puesto, cambiaron el modelo
 recomendado, M3 limpio, ni la especificación de la Fase 5; la Fase 4f, una sola
@@ -19,8 +19,8 @@ su resultado a favor, y la recomendación para ese escenario pasa a la red de la
 no lee el reservado y, solo si pasa entero, la apertura (Fase 5, «El programa y
 el ensayo»); el ensayo pasó, y la apertura corrió una sola vez el mismo día y
 escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el envío tardío a Kaggle, se abrió el mismo día, y
-el 2026-11-05 se hicieron sus cuatro envíos, los cuatro con puntuación; le falta
-la comparación descriptiva de su puerta; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+el 2026-11-05 se hicieron sus cuatro envíos, los cuatro con puntuación, y cerró
+por su puerta, con su comparación descriptiva; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -53,7 +53,8 @@ especificación de la Fase 5 la red de la 4e y «Imagen + básicos», como
 resultado descriptivo que no cambia ninguna recomendación.* *2026-11-02: la
 Fase 4f cerró por su regla con su pregunta a favor.* *2026-11-04: la persona
 fijó la Fase 5b, el envío tardío a Kaggle, que va después de la Fase 5; no se
-envía nada antes.* *2026-11-04: la persona abrió la Fase 5.*
+envía nada antes.* *2026-11-04: la persona abrió la Fase 5.* *2026-11-05: la
+Fase 5b cerró por su puerta, con los cuatro envíos puntuados.*
 
 ## Cómo leer una puerta
 
@@ -2732,14 +2733,15 @@ salida, `outputs/curva-aprendizaje.json` con su `.md`.
 
 ---
 
-## Fase 5b — Envío tardío a Kaggle — ABIERTA (2026-11-04)
+## Fase 5b — Envío tardío a Kaggle — CERRADA (2026-11-05)
 
 **Estado.** Fijada el 2026-11-04 por la persona, antes de abrir la Fase 5. Va
 después de la Fase 5, y no se envía nada a Kaggle antes de cerrarla. *Abierta el
 2026-11-04, con la Fase 5 cerrada, por decisión de la persona. Hasta el
 2026-11-05 no se envió nada (abajo, «La apertura»).* *El 2026-11-05 se hicieron
 los cuatro envíos, en el orden fijado, y los cuatro recibieron puntuación
-(abajo, «Lo que dio Kaggle»). Falta la comparación descriptiva de la puerta.*
+(abajo, «Lo que dio Kaggle»).* *Cerrada el 2026-11-05 por su puerta (abajo,
+«Cierre»).*
 
 **Por qué existe.** Kaggle acepta envíos tardíos: el panel de envío de la
 competición dice *«Te quedan 100 intentos para enviar hoy»*
@@ -3098,6 +3100,15 @@ la esperada; y un modelo sin envío puntuado se rechaza.
 **Puerta.** Las puntuaciones pública y privada de los envíos que se hagan, en
 `outputs/`, con su comparación descriptiva. O bien la declaración de que la fase
 se cerró sin envío, y por qué.
+
+**Cierre (2026-11-05).** La puerta está: las puntuaciones pública y privada de
+los cuatro envíos, en `outputs/fase5b-envio-m3limpio.json`,
+`outputs/fase5b-envio-red4e.json`, `outputs/fase5b-envio-c7.json` y
+`outputs/fase5b-envio-imagenbasicos.json`, y su comparación descriptiva, en
+`outputs/fase5b-comparacion.json`. Los cuatro envíos se hicieron dentro del
+presupuesto de tres días, así que el cuarto no se cayó. Ningún modelo se cambió
+después de ver las puntuaciones, y ninguno se vuelve a enviar: los cuatro
+tienen puntuación (arriba, «Los envíos»).
 
 ---
 
