@@ -1,0 +1,311 @@
+{
+  "que_es": "los modelos de los envíos tardíos de la Fase 5b, entrenados con todos los datos de entrenamiento (PLAN.md, Fase 5b); no envía nada y no calcula ninguna métrica",
+  "datos": {
+    "archivo": "data/train-metadata.csv",
+    "conjunto": "todos: desarrollo y reservado",
+    "filas": 401059,
+    "pacientes": 1042,
+    "lesiones_malignas": 393,
+    "pacientes_del_reservado": 209
+  },
+  "dinov2": {
+    "desarrollo": {
+      "archivo": "data/dinov2-vits14-desarrollo.h5",
+      "sha256": "52a7fd12855ae7548df2a21b46d513f51ab056c817acc468ab0e1c70576f3cfd",
+      "filas": 318229
+    },
+    "reservado": {
+      "archivo": "data/dinov2-vits14-reservado.h5",
+      "sha256": "7e145c16238ded00599c6ddc39a25b11b4ef185956d29259dde2b0673ee35c80",
+      "filas": 82830
+    }
+  },
+  "control": {
+    "semilla": 7,
+    "minimo_de_lesiones": 1000,
+    "pacientes": [
+      "IP_7212568",
+      "IP_1928390",
+      "IP_3905195",
+      "IP_6032376",
+      "IP_5453533",
+      "IP_0825466"
+    ],
+    "lesiones": 1042,
+    "sha256_isic_id": "d4f2fd6dc6e4b8254f955b532efad4719383ab896946e1ea55d56b7eb69c7bec",
+    "que_es": "filas de entrenamiento puntuadas como nuevas, referencias para inferencia_5b.py"
+  },
+  "pliegues_de_c7": {
+    "semilla": 0,
+    "n_splits": 5,
+    "sha256": "f04ade12a5253334f19b4bd2ace9306560a8547eff4c7082ce1c0f0507de0259",
+    "lesiones_por_pliegue": [
+      80211,
+      80216,
+      80211,
+      80211,
+      80210
+    ]
+  },
+  "modelos": {
+    "M3limpio": {
+      "n_variables": 239,
+      "arboles": 290,
+      "iteraciones_corridas": 390
+    },
+    "ImagenBasicos": {
+      "n_variables": 387,
+      "avisos": []
+    },
+    "C7": {
+      "n_variables": 241,
+      "arboles": 257,
+      "iteraciones_corridas": 357,
+      "alineacion": {
+        "antes": true,
+        "razon": true,
+        "despues": true,
+        "filas_remuestreadas": 97061
+      },
+      "puntuacion_al_predecir": "la media de las puntuaciones (sigmoide del logit) de las cinco redes"
+    }
+  },
+  "redes": {
+    "pliegue-0": {
+      "epocas": 20,
+      "positivos": 315,
+      "negativos_en_mas_de_una_epoca": 0,
+      "lotes_del_ajuste": [
+        500,
+        500
+      ],
+      "segundos_base": 2361.167,
+      "segundos_ajuste": 650.883,
+      "sha256_pesos_ajustados": "1d99e0d5496243c9fcb0510a10b9cc6fc57e05651ff64d0d5f2b1e5a13bf1a0d"
+    },
+    "pliegue-1": {
+      "epocas": 20,
+      "positivos": 310,
+      "negativos_en_mas_de_una_epoca": 0,
+      "lotes_del_ajuste": [
+        500,
+        500
+      ],
+      "segundos_base": 2111.689,
+      "segundos_ajuste": 661.548,
+      "sha256_pesos_ajustados": "c880203d325223a2310eb962da9726f65eed472e7ba67a7f0d13a1c50b7fad8a"
+    },
+    "pliegue-2": {
+      "epocas": 20,
+      "positivos": 315,
+      "negativos_en_mas_de_una_epoca": 0,
+      "lotes_del_ajuste": [
+        500,
+        500
+      ],
+      "segundos_base": 2005.94,
+      "segundos_ajuste": 660.349,
+      "sha256_pesos_ajustados": "d8ec59a6e6a369e52983a924a8bc3e00d3d458b7a6f703102936d53a0946086a"
+    },
+    "pliegue-3": {
+      "epocas": 20,
+      "positivos": 316,
+      "negativos_en_mas_de_una_epoca": 0,
+      "lotes_del_ajuste": [
+        500,
+        500
+      ],
+      "segundos_base": 2000.401,
+      "segundos_ajuste": 657.307,
+      "sha256_pesos_ajustados": "16d045b1eae3af570c8c12de5637dfcc12f15d2bea78b45b8608b24e74d96ad7"
+    },
+    "pliegue-4": {
+      "epocas": 20,
+      "positivos": 316,
+      "negativos_en_mas_de_una_epoca": 0,
+      "lotes_del_ajuste": [
+        500,
+        500
+      ],
+      "segundos_base": 1987.445,
+      "segundos_ajuste": 658.905,
+      "sha256_pesos_ajustados": "c0f6462f8bb6e2692a7675031253740f28150397278154e672e02dc0aaa54542"
+    },
+    "sola": {
+      "epocas": 20,
+      "positivos": 393,
+      "negativos_en_mas_de_una_epoca": 0,
+      "lotes_del_ajuste": [
+        626,
+        626
+      ],
+      "segundos_base": 2478.888,
+      "segundos_ajuste": 612.443,
+      "sha256_pesos_ajustados": "d69f2b92cd148a9e0d8913695354d21c527c2bd428df63c28ae8ab185f69af04"
+    }
+  },
+  "controles_de_la_red_4e": {
+    "archivo": "data/fase4e-controles.json",
+    "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+    "casos": 34,
+    "fallos": 0
+  },
+  "archivos": {
+    "data/fase5b/c7.cbm": {
+      "bytes": 335336,
+      "sha256": "7ba1f29cc3d40c6984300b01d818d6284d440da2c1357add60c5ae258e087586"
+    },
+    "data/fase5b/control.npz": {
+      "bytes": 5443446,
+      "sha256": "2d10e73900cab70da332e495268da63389aed341df6bd1294bea718e5e1f5007"
+    },
+    "data/fase5b/imagen-basicos.json": {
+      "bytes": 460,
+      "sha256": "918baa4d4375b90cfd3e63bbdb54cf9871f682b0de76375ca93be9f2f393c472"
+    },
+    "data/fase5b/imagen-basicos.npz": {
+      "bytes": 10324,
+      "sha256": "da3775f7c288008a48e66a3296cd24870098a45a755aa3e27b429d08ede61070"
+    },
+    "data/fase5b/m3limpio-ajuste.json": {
+      "bytes": 15022,
+      "sha256": "9d4f3594b7671d49af052923873c252bac11b30350c650f89eca81438441fdc1"
+    },
+    "data/fase5b/m3limpio-ajuste.npz": {
+      "bytes": 25496,
+      "sha256": "5fd601a67b1c780323a56d67241c4740fbd92b44e616f1f5a28ca9039042f442"
+    },
+    "data/fase5b/m3limpio.cbm": {
+      "bytes": 374512,
+      "sha256": "9738991e81ed4339d28bca729195957c9d4174983ed623c63765696f79ae8f57"
+    },
+    "data/fase5b/puntuaciones-fuera-de-pliegue.csv.gz": {
+      "bytes": 9174754,
+      "sha256": "c8aa749353a85627622edba94e7e847062f641e5cbda81161f83166bdd79e560"
+    },
+    "data/fase5b/redes/pliegue-0.json": {
+      "bytes": 3711,
+      "sha256": "6e74585e1eefe45fc1c142575b633821d388685f93dfda955e9e81448c95eb93"
+    },
+    "data/fase5b/redes/pliegue-0.npz": {
+      "bytes": 4225666,
+      "sha256": "069883f79e8e046f1440b082eb2fa0d9f1e0d179fc57a2d85209adf2ad843835"
+    },
+    "data/fase5b/redes/pliegue-0.pt": {
+      "bytes": 16329419,
+      "sha256": "1d99e0d5496243c9fcb0510a10b9cc6fc57e05651ff64d0d5f2b1e5a13bf1a0d"
+    },
+    "data/fase5b/redes/pliegue-1.json": {
+      "bytes": 3706,
+      "sha256": "c1536b460a045962cbac0043b68d6c677d57b4c1d94d496b73d3230ea36ec466"
+    },
+    "data/fase5b/redes/pliegue-1.npz": {
+      "bytes": 4225926,
+      "sha256": "bd62170414b43b8c9fd5e1ed58f35e89517563e6eed953d01f33d051ad51ff16"
+    },
+    "data/fase5b/redes/pliegue-1.pt": {
+      "bytes": 16329419,
+      "sha256": "c880203d325223a2310eb962da9726f65eed472e7ba67a7f0d13a1c50b7fad8a"
+    },
+    "data/fase5b/redes/pliegue-2.json": {
+      "bytes": 3696,
+      "sha256": "627b53a04acaf81349ca2b19f4c3f134ccf91688f01e3c8f8590e93cdaf4bb80"
+    },
+    "data/fase5b/redes/pliegue-2.npz": {
+      "bytes": 4225666,
+      "sha256": "35d1dfe2157ec800072fbf86a8e0994d93fb580546ef954213cf2c0ed8123a7c"
+    },
+    "data/fase5b/redes/pliegue-2.pt": {
+      "bytes": 16329419,
+      "sha256": "d8ec59a6e6a369e52983a924a8bc3e00d3d458b7a6f703102936d53a0946086a"
+    },
+    "data/fase5b/redes/pliegue-3.json": {
+      "bytes": 3693,
+      "sha256": "d53bb67b707ff6f7505447eaceef323e7a3a29c3e23f3910c6ae625eb82b6179"
+    },
+    "data/fase5b/redes/pliegue-3.npz": {
+      "bytes": 4225666,
+      "sha256": "0e875bba369e87509a365bb79f608d46b53332904ed41a4a3b595aeeebdfd61e"
+    },
+    "data/fase5b/redes/pliegue-3.pt": {
+      "bytes": 16329419,
+      "sha256": "16d045b1eae3af570c8c12de5637dfcc12f15d2bea78b45b8608b24e74d96ad7"
+    },
+    "data/fase5b/redes/pliegue-4.json": {
+      "bytes": 3694,
+      "sha256": "9f91e5da0b01ff96ec3a3bdd402c176517c26b4bced700482cb53f0e546caef3"
+    },
+    "data/fase5b/redes/pliegue-4.npz": {
+      "bytes": 4225614,
+      "sha256": "5140eccb0d3df587002eec81936f5342c20376977ce88c79b9b646e2ea308379"
+    },
+    "data/fase5b/redes/pliegue-4.pt": {
+      "bytes": 16329419,
+      "sha256": "c0f6462f8bb6e2692a7675031253740f28150397278154e672e02dc0aaa54542"
+    },
+    "data/fase5b/redes/sola.json": {
+      "bytes": 3567,
+      "sha256": "5ffae68f17cb24465a5e5be7982e8c01345ebfa52c7768ad55597a4482c8df3f"
+    },
+    "data/fase5b/redes/sola.npz": {
+      "bytes": 54694,
+      "sha256": "80d16a43684e873717c108abac6550f483390eb6f8bd1c1476a496e6b41b14f7"
+    },
+    "data/fase5b/redes/sola.pt": {
+      "bytes": 16309541,
+      "sha256": "d69f2b92cd148a9e0d8913695354d21c527c2bd428df63c28ae8ab185f69af04"
+    }
+  },
+  "sha256_del_codigo": {
+    "fase5b_entrenar.py": "abf1ae1e27e1aec8d04e67855ac388e57fee02ff1e9e4168ffd7638909636544",
+    "fase4_comparar.py": "7f9e8fa309e1e5264304825e115fd72680e24bfaf2f9957d8f9dda6784f345a2",
+    "fase4b.py": "27602d8460f69fcdccbba8034436346c7b3ae8875ecefa595c596ba136c9fbe7",
+    "fase4b_comparar.py": "bb4f67406a4c14b2c4b9f0ec12ae9ea37d808fb93513dba67b6795f65b483fee",
+    "fase4c.py": "842592f9a8a0c918bc32da50da4ee5cb54642743e44760cabc1cc94d3f8da4b3",
+    "fase5.py": "313198f874471726f71021ee247590dc46574b84a8ed3c03fe5e1d6333f20a47",
+    "ganador_m3.py": "5569719323be1ed4e8e6be31028feef6969c9a71dc24099b0251fdf626a7336f",
+    "imagen_sola.py": "34e455aaa2ae8a0d67b0d93c6f1934f2e960a95fe8a7f14775a81124e54fdea6",
+    "apilado_imagen.py": "219ffdf2e030b1cbcd324d9e20db2af392b0b893f463c60459cc5af052811654",
+    "train_and_evaluate.py": "0fffab39d5eb1d2416ec0e78d633bbeab018b1914e428b147c5b4deb5f81b767",
+    "fase4e.py": "2f3c5ddc210634076f7f9dd21226fa67053c9ea33eece899bbb5263438ee6462",
+    "fase4e_ajuste.py": "1436a3e73d77af477086e1fcf31f4a8a7e85288529a5f41d0608e0b4370761ab",
+    "prueba_tiempo_red_imagen.py": "46352387a38df26680b0e9dc83d86787ec921011a9672b5adad7e9c0a447d9e1"
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase5b_entrenar.py",
+      "--out",
+      "outputs/fase5b-entrenamiento"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "este proceso"
+    }
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scikit_learn": "1.9.0",
+    "catboost": "1.2.8",
+    "torch": "2.14.0",
+    "torchvision": "0.29.0"
+  },
+  "fecha": "2026-11-05T08:30:27.187668+00:00",
+  "segundos": {
+    "carga": 3.9,
+    "M3limpio": 28.9,
+    "ImagenBasicos": 11.5,
+    "red-pliegue-0": 3012.3,
+    "red-pliegue-1": 2773.3,
+    "red-pliegue-2": 2666.3,
+    "red-pliegue-3": 2657.7,
+    "red-pliegue-4": 2646.4,
+    "red-sola": 3091.4,
+    "C7": 9.9,
+    "total": 16907.7
+  },
+  "nota": "No envía nada y no calcula ninguna métrica."
+}
