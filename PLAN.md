@@ -18,8 +18,9 @@ su resultado a favor, y la recomendación para ese escenario pasa a la red de la
 2026-11-04 abrió la Fase 5 con el equipo propio, en dos tiempos: un ensayo que
 no lee el reservado y, solo si pasa entero, la apertura (Fase 5, «El programa y
 el ensayo»); el ensayo pasó, y la apertura corrió una sola vez el mismo día y
-escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el envío tardío a Kaggle, se abrió el mismo día, sin
-ningún envío todavía; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el envío tardío a Kaggle, se abrió el mismo día, y
+el 2026-11-05 se hicieron sus cuatro envíos, los cuatro con puntuación; le falta
+la comparación descriptiva de su puerta; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -2735,8 +2736,10 @@ salida, `outputs/curva-aprendizaje.json` con su `.md`.
 
 **Estado.** Fijada el 2026-11-04 por la persona, antes de abrir la Fase 5. Va
 después de la Fase 5, y no se envía nada a Kaggle antes de cerrarla. *Abierta el
-2026-11-04, con la Fase 5 cerrada, por decisión de la persona. Todavía no se ha
-enviado nada (abajo, «La apertura»).*
+2026-11-04, con la Fase 5 cerrada, por decisión de la persona. Hasta el
+2026-11-05 no se envió nada (abajo, «La apertura»).* *El 2026-11-05 se hicieron
+los cuatro envíos, en el orden fijado, y los cuatro recibieron puntuación
+(abajo, «Lo que dio Kaggle»). Falta la comparación descriptiva de la puerta.*
 
 **Por qué existe.** Kaggle acepta envíos tardíos: el panel de envío de la
 competición dice *«Te quedan 100 intentos para enviar hoy»*
@@ -3001,6 +3004,34 @@ envío):**
 - **El registro.** La puntuación pública y la privada de cada envío van a
   `outputs/fase5b-envio-<modelo>.json`, tal como las devuelve la API de Kaggle,
   sin interpretar.
+
+**Lo que dio Kaggle (2026-11-05).** Los cuatro envíos se hicieron en el orden
+fijado y los cuatro recibieron puntuación, así que ninguno se reenvió. Cada uno
+es la versión 1 del kernel de su modelo. Las puntuaciones, tal como las
+devuelve la API (`outputs/fase5b-envio-<modelo>.json > envios.0.publicScore` y
+`.privateScore`):
+
+| Modelo | Envío | Pública | Privada |
+|---|---|---|---|
+| M3 limpio | 58025548 | 0,17229 | 0,15134 |
+| Red de la 4e | 58026355 | 0,11108 | 0,11590 |
+| C7 | 58027561 | 0,17893 | 0,15856 |
+| «Imagen + básicos» | 58028197 | 0,10126 | 0,08935 |
+
+- **El control en Kaggle,** antes de cada envío
+  (`outputs/fase5b-kaggle-<modelo>.json > salida_del_notebook.control`): 2 de 2
+  casos bien en M3 limpio, 3 de 3 en la red, 7 de 7 en C7 y 3 de 3 en «Imagen +
+  básicos», con un caso que debe fallar por modelo.
+- **La huella,** comprobada antes de cada envío
+  (`outputs/fase5b-envio-<modelo>.json > al_enviar.comprobado_antes_de_enviar`):
+  en los cuatro, la versión 2 del conjunto de datos, su huella y los SHA-256 de
+  los cuatro notebooks son los fijados en `outputs/fase5b-huella.json`.
+- **Ningún envío previo:** al enviar, ningún modelo tenía otro envío en la
+  competición (`al_enviar.envios_previos_del_modelo`).
+
+Falta la comparación descriptiva que pide la puerta, con las referencias de
+arriba («Qué se hace»). No se ha escrito: la instrucción de la persona era
+registrar las puntuaciones sin interpretar.
 
 **Puerta.** Las puntuaciones pública y privada de los envíos que se hagan, en
 `outputs/`, con su comparación descriptiva. O bien la declaración de que la fase
