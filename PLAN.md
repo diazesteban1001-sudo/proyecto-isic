@@ -2664,6 +2664,48 @@ y su `.md`, la puerta de la fase):
 - **La marca** `data/fase5-apertura-iniciada.json` queda en `data/`. Con ella, y
   con la salida, el programa se niega a volver a correr.
 
+**Análisis posterior a la apertura (2026-11-04).** *Decisión de la persona del
+2026-11-04, después de leer la apertura: dos comprobaciones descriptivas,
+declaradas como hechas después de abrir el reservado.* No cambian ningún modelo
+ni ninguna recomendación, no entrenan nada y no suman a la bitácora. El script es
+`modelado-baseline/scripts/fase5_posterior.py`, y la salida,
+`outputs/fase5-posterior.json` con su `.md`.
+- **El motivo** (la persona): «Imagen + básicos» pasa de cerca de 0,088 de pAUC
+  en desarrollo a 0,1385 en el reservado, mientras los otros tres modelos se
+  mueven poco.
+- **1. La procedencia de DINOv2 y la identidad del modelo** (`procedencia`,
+  `recalculo` e `imagen_basicos`):
+  - los dos archivos de características salen de una sola extracción, con los
+    mismos atributos salvo el conjunto: modelo, pesos, preprocesado,
+    característica y commit del código. Sus SHA-256 son los que esa extracción
+    registró;
+  - recalculado DINOv2 desde las imágenes en 256 recortes al azar de cada
+    archivo, la diferencia máxima con el archivo es 0 en los dos. Sin la
+    normalización del preprocesado, 9,7 y 10,1;
+  - «Imagen + básicos» de la Fase 5 es el de `outputs/imagen-sola.json`,
+    entrenado con todo el desarrollo. El ensayo reprodujo su pliegue 0 de la
+    semilla 0 a 4 decimales, con la huella de código de la apertura.
+- **2. Red de la 4e − «Imagen + básicos» en el reservado,** con las mismas
+  remuestras (`red4e_menos_imagen_basicos`):
+  - pAUC −0,0078 [−0,0306; 0,02];
+  - AUC 0,0011 [−0,0312; 0,036];
+  - SEtop-15 0,1282 [−0,0035; 0,2585];
+  - NNT80% SE −40,8361 [−194,3999; 110,3913].
+
+  Ningún intervalo excluye el cero. En la Fase 4f, en desarrollo, la pAUC era
+  +0,0493 [0,0218; 0,0767].
+- **La tabla** de cada modelo en desarrollo y en el reservado está en `tabla`,
+  con la fuente y las semillas de cada fila. Su forma de leerse está en
+  `tabla.como_leerla`: en desarrollo, la media por pliegue de modelos entrenados
+  con cuatro quintos del desarrollo; en el reservado, un solo modelo entrenado
+  con todo el desarrollo. Los intervalos de los dos lados no miden lo mismo.
+- **Controles:** 21 de 21 bien, 8 de ellos casos que deben fallar. Antes de
+  calcular, las puntuaciones y las remuestras guardadas reproducen los puntos y
+  los intervalos de la apertura, y M3 limpio − M2, remuestra a remuestra, sus
+  intervalos.
+- **Lo que vuelve a leer:** las etiquetas del reservado, desde el CSV, para
+  recalcular los puntos sin redondear. No vuelve a puntuar nada.
+
 ---
 
 ## Fase 5b — Envío tardío a Kaggle — FIJADA, NO ABIERTA

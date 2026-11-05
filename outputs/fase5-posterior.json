@@ -1,0 +1,670 @@
+{
+  "que_es": "análisis descriptivo posterior a la apertura del reservado (PLAN.md, Fase 5, «Análisis posterior a la apertura», decisión de la persona del 2026-11-04); no cambia ningún modelo ni ninguna recomendación, y no entrena nada",
+  "procedencia": {
+    "extraccion": {
+      "fecha": "2026-09-26T02:53:06.732895+00:00",
+      "una_sola_corrida": true,
+      "lote": 64,
+      "dispositivo": "mps",
+      "repositorio_commit": "7764ea0f912e53c92e82eb78a2a1631e92725fc8"
+    },
+    "atributos_comunes": {
+      "modelo": "dinov2_vits14",
+      "pesos_sha256": "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9",
+      "preprocesado": "JPEG a RGB; redimensionado bicúbico a 224 x 224, sin recorte central; normalización por defecto de DINOv2 (media 0.485, 0.456, 0.406; desviación 0.229, 0.224, 0.225)",
+      "caracteristica": "token CLS tras la normalización final (x_norm_clstoken), 384 dimensiones",
+      "codigo_commit": "134b9f0cda5fbb4d5b09069dd267f1b387ba42e2"
+    },
+    "archivos": {
+      "desarrollo": {
+        "archivo": "data/dinov2-vits14-desarrollo.h5",
+        "sha256": "52a7fd12855ae7548df2a21b46d513f51ab056c817acc468ab0e1c70576f3cfd"
+      },
+      "reservado": {
+        "archivo": "data/dinov2-vits14-reservado.h5",
+        "sha256": "7e145c16238ded00599c6ddc39a25b11b4ef185956d29259dde2b0673ee35c80"
+      }
+    }
+  },
+  "recalculo": {
+    "muestra": 256,
+    "semilla": 0,
+    "tolerancia": 0.001,
+    "funcion": "tiempo_inferencia.caracteristicas_dinov2, con extraer.preprocesar, lote 64, MPS",
+    "por_archivo": {
+      "desarrollo": {
+        "recortes": 256,
+        "diferencia_maxima": 0.0,
+        "diferencia_maxima_sin_normalizar": 9.70145034790039
+      },
+      "reservado": {
+        "recortes": 256,
+        "diferencia_maxima": 0.0,
+        "diferencia_maxima_sin_normalizar": 10.056605339050293
+      }
+    }
+  },
+  "imagen_basicos": {
+    "modelo": "modelo_imagen() de apilado_imagen.py sobre las 384 variables de DINOv2 más age_approx, sex y anatom_site_general (codificar_fold), estandarizadas juntas, como en imagen_sola.py",
+    "n_variables": {
+      "fase5": 387
+    },
+    "diferencia": "en imagen-sola.json se ajusta con el pliegue de entrenamiento (cuatro quintos del desarrollo); en la Fase 5, con todo el desarrollo"
+  },
+  "red4e_menos_imagen_basicos": {
+    "pauc": {
+      "punto": -0.0078,
+      "intervalo_95": [
+        -0.0306,
+        0.02
+      ],
+      "intervalo_excluye_el_cero": false
+    },
+    "auc": {
+      "punto": 0.0011,
+      "intervalo_95": [
+        -0.0312,
+        0.036
+      ],
+      "intervalo_excluye_el_cero": false
+    },
+    "setop15": {
+      "punto": 0.1282,
+      "intervalo_95": [
+        -0.0035,
+        0.2585
+      ],
+      "intervalo_excluye_el_cero": false
+    },
+    "nnt80": {
+      "punto": -40.8361,
+      "intervalo_95": [
+        -194.3999,
+        110.3913
+      ],
+      "intervalo_excluye_el_cero": false
+    }
+  },
+  "bootstrap": {
+    "remuestras": 2000,
+    "semilla": 2026,
+    "de": "data/fase5-reservado/remuestras.csv.gz",
+    "pareo": "la misma remuestra para los dos modelos, como M3 limpio − M2 en la apertura"
+  },
+  "tabla": {
+    "modelos": {
+      "M3limpio": {
+        "desarrollo": [
+          {
+            "fuente": "outputs/fase4-m3limpio-vs-m2.json > metricas.M3limpio.*.media_global",
+            "semillas": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "pliegues": 5,
+            "pauc": 0.1621,
+            "auc": 0.9552,
+            "setop15": 0.7292,
+            "nnt80": 65.554
+          }
+        ],
+        "reservado": {
+          "pauc": {
+            "punto": 0.1588,
+            "intervalo_95": [
+              0.1387,
+              0.1766
+            ]
+          },
+          "auc": {
+            "punto": 0.949,
+            "intervalo_95": [
+              0.9205,
+              0.9707
+            ]
+          },
+          "setop15": {
+            "punto": 0.7628,
+            "intervalo_95": [
+              0.6438,
+              0.8599
+            ]
+          },
+          "nnt80": {
+            "punto": 96.7541,
+            "intervalo_95": [
+              43.1217,
+              241.3779
+            ]
+          }
+        }
+      },
+      "M2": {
+        "desarrollo": [
+          {
+            "fuente": "outputs/fase4-m2-vs-m1.json > metricas.M2.*.media_global",
+            "semillas": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "pliegues": 5,
+            "pauc": 0.144,
+            "auc": 0.9343,
+            "setop15": 0.7065,
+            "nnt80": 85.6158
+          }
+        ],
+        "reservado": {
+          "pauc": {
+            "punto": 0.1387,
+            "intervalo_95": [
+              0.1074,
+              0.1668
+            ]
+          },
+          "auc": {
+            "punto": 0.9271,
+            "intervalo_95": [
+              0.8837,
+              0.9611
+            ]
+          },
+          "setop15": {
+            "punto": 0.7212,
+            "intervalo_95": [
+              0.603,
+              0.8262
+            ]
+          },
+          "nnt80": {
+            "punto": 153.9508,
+            "intervalo_95": [
+              46.7726,
+              290.1911
+            ]
+          }
+        }
+      },
+      "Red4e": {
+        "desarrollo": [
+          {
+            "fuente": "outputs/fase4f-red4e-vs-imagen-basicos.json > metricas.Red4eAjustada.*.media_global",
+            "semillas": [
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "pliegues": 5,
+            "pauc": 0.1376,
+            "auc": 0.9179,
+            "setop15": 0.5859,
+            "nnt80": 154.3424
+          }
+        ],
+        "reservado": {
+          "pauc": {
+            "punto": 0.1307,
+            "intervalo_95": [
+              0.0986,
+              0.1614
+            ]
+          },
+          "auc": {
+            "punto": 0.9103,
+            "intervalo_95": [
+              0.863,
+              0.9478
+            ]
+          },
+          "setop15": {
+            "punto": 0.6314,
+            "intervalo_95": [
+              0.5033,
+              0.75
+            ]
+          },
+          "nnt80": {
+            "punto": 198.8852,
+            "intervalo_95": [
+              75.0072,
+              386.1779
+            ]
+          }
+        }
+      },
+      "ImagenBasicos": {
+        "desarrollo": [
+          {
+            "fuente": "outputs/imagen-sola.json > metricas.Imagen + básicos.*.media_global",
+            "semillas": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "pliegues": 5,
+            "pauc": 0.084,
+            "auc": 0.8295,
+            "setop15": 0.3885,
+            "nnt80": 390.5636
+          },
+          {
+            "fuente": "outputs/fase4f-red4e-vs-imagen-basicos.json > metricas.ImagenBasicos.*.media_global",
+            "semillas": [
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "pliegues": 5,
+            "pauc": 0.0884,
+            "auc": 0.8349,
+            "setop15": 0.3921,
+            "nnt80": 366.995
+          }
+        ],
+        "reservado": {
+          "pauc": {
+            "punto": 0.1385,
+            "intervalo_95": [
+              0.1117,
+              0.159
+            ]
+          },
+          "auc": {
+            "punto": 0.9093,
+            "intervalo_95": [
+              0.868,
+              0.9393
+            ]
+          },
+          "setop15": {
+            "punto": 0.5032,
+            "intervalo_95": [
+              0.366,
+              0.6273
+            ]
+          },
+          "nnt80": {
+            "punto": 239.7213,
+            "intervalo_95": [
+              106.3714,
+              376.0217
+            ]
+          }
+        }
+      }
+    },
+    "diferencias": {
+      "m3limpio_menos_m2": {
+        "desarrollo": {
+          "fuente": "outputs/fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.*",
+          "semillas": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pliegues": 5,
+          "intervalo": "t al 95 % con la corrección de Nadeau y Bengio",
+          "pauc": {
+            "media": 0.0181,
+            "intervalo_95": [
+              0.0021,
+              0.0341
+            ]
+          },
+          "auc": {
+            "media": 0.021,
+            "intervalo_95": [
+              0.0043,
+              0.0376
+            ]
+          },
+          "setop15": {
+            "media": 0.0227,
+            "intervalo_95": [
+              -0.0291,
+              0.0746
+            ]
+          },
+          "nnt80": {
+            "media": -20.0618,
+            "intervalo_95": [
+              -49.7373,
+              9.6137
+            ]
+          }
+        },
+        "reservado": {
+          "pauc": {
+            "punto": 0.0201,
+            "intervalo_95": [
+              0.0008,
+              0.0413
+            ],
+            "intervalo_entero_por_debajo_de_cero": false
+          },
+          "auc": {
+            "punto": 0.0219,
+            "intervalo_95": [
+              0.0009,
+              0.0459
+            ],
+            "intervalo_entero_por_debajo_de_cero": false
+          },
+          "setop15": {
+            "punto": 0.0417,
+            "intervalo_95": [
+              -0.0296,
+              0.117
+            ],
+            "intervalo_entero_por_debajo_de_cero": false
+          },
+          "nnt80": {
+            "punto": -57.1967,
+            "intervalo_95": [
+              -127.1367,
+              41.4539
+            ],
+            "intervalo_entero_por_debajo_de_cero": false
+          }
+        }
+      },
+      "red4e_menos_imagen_basicos": {
+        "desarrollo": {
+          "fuente": "outputs/fase4f-red4e-vs-imagen-basicos.json > comparaciones_nuevo_menos_base.*",
+          "semillas": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pliegues": 5,
+          "intervalo": "t al 95 % con la corrección de Nadeau y Bengio",
+          "pauc": {
+            "media": 0.0493,
+            "intervalo_95": [
+              0.0218,
+              0.0767
+            ]
+          },
+          "auc": {
+            "media": 0.0829,
+            "intervalo_95": [
+              0.0465,
+              0.1193
+            ]
+          },
+          "setop15": {
+            "media": 0.1938,
+            "intervalo_95": [
+              0.1062,
+              0.2813
+            ]
+          },
+          "nnt80": {
+            "media": -212.6526,
+            "intervalo_95": [
+              -337.8064,
+              -87.4988
+            ]
+          }
+        },
+        "reservado": {
+          "pauc": {
+            "punto": -0.0078,
+            "intervalo_95": [
+              -0.0306,
+              0.02
+            ],
+            "intervalo_excluye_el_cero": false
+          },
+          "auc": {
+            "punto": 0.0011,
+            "intervalo_95": [
+              -0.0312,
+              0.036
+            ],
+            "intervalo_excluye_el_cero": false
+          },
+          "setop15": {
+            "punto": 0.1282,
+            "intervalo_95": [
+              -0.0035,
+              0.2585
+            ],
+            "intervalo_excluye_el_cero": false
+          },
+          "nnt80": {
+            "punto": -40.8361,
+            "intervalo_95": [
+              -194.3999,
+              110.3913
+            ],
+            "intervalo_excluye_el_cero": false
+          }
+        }
+      }
+    },
+    "como_leerla": "en desarrollo, la media de las métricas por pliegue sobre las semillas indicadas, cada pliegue con un modelo entrenado con cuatro quintos del desarrollo, y en las diferencias el intervalo de Nadeau y Bengio; en el reservado, un solo modelo entrenado con todo el desarrollo, con el intervalo del bootstrap por paciente. Los dos intervalos no miden lo mismo"
+  },
+  "controles": {
+    "casos": [
+      {
+        "control": "procedencia",
+        "caso": "los dos archivos tienen los atributos de la extracción, salvo el conjunto",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "modelo": "dinov2_vits14",
+          "pesos_sha256": "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9",
+          "preprocesado": "JPEG a RGB; redimensionado bicúbico a 224 x 224, sin recorte central; normalización por defecto de DINOv2 (media 0.485, 0.456, 0.406; desviación 0.229, 0.224, 0.225)",
+          "caracteristica": "token CLS tras la normalización final (x_norm_clstoken), 384 dimensiones",
+          "codigo_commit": "134b9f0cda5fbb4d5b09069dd267f1b387ba42e2"
+        }
+      },
+      {
+        "control": "procedencia",
+        "caso": "con otro preprocesado en el del reservado",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "se detecta"
+      },
+      {
+        "control": "procedencia",
+        "caso": "extraer.py declara hoy el mismo modelo, pesos, preprocesado y característica",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "iguales"
+      },
+      {
+        "control": "procedencia",
+        "caso": "los dos SHA-256 son los que registró la extracción",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "desarrollo": "52a7fd12855a…",
+          "reservado": "7e145c16238d…"
+        }
+      },
+      {
+        "control": "procedencia",
+        "caso": "el del reservado frente al registrado para el desarrollo",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "distintos"
+      },
+      {
+        "control": "recalculo",
+        "caso": "desarrollo: DINOv2 recalculado en 256 recortes, a 0.001 o menos",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.00e+00"
+      },
+      {
+        "control": "recalculo",
+        "caso": "desarrollo: sin la normalización del preprocesado",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 9.70e+00"
+      },
+      {
+        "control": "recalculo",
+        "caso": "reservado: DINOv2 recalculado en 256 recortes, a 0.001 o menos",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.00e+00"
+      },
+      {
+        "control": "recalculo",
+        "caso": "reservado: sin la normalización del preprocesado",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 1.01e+01"
+      },
+      {
+        "control": "imagen_basicos",
+        "caso": "el ensayo reprodujo su pliegue 0 de imagen-sola.json, y su caso que debe fallar se disparó",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": [
+          "«Imagen + básicos»: las cuatro métricas de su pliegue 0, a 4 decimales",
+          "«Imagen + básicos»: frente a las de su pliegue 1"
+        ]
+      },
+      {
+        "control": "imagen_basicos",
+        "caso": "la apertura corrió con la huella de código del ensayo",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "imagen_sola.py": "34e455aaa2ae…",
+          "apilado_imagen.py": "219ffdf2e030…",
+          "fase5.py": "313198f87447…"
+        }
+      },
+      {
+        "control": "imagen_basicos",
+        "caso": "imagen-sola.json leyó el archivo de desarrollo de la extracción",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "52a7fd12855a…"
+      },
+      {
+        "control": "imagen_basicos",
+        "caso": "frente al SHA-256 del reservado",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "distintos"
+      },
+      {
+        "control": "guardados",
+        "caso": "data/fase5-reservado/puntuaciones.csv.gz tiene el SHA-256 de la salida de la apertura",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "6cc3b101ad02…"
+      },
+      {
+        "control": "guardados",
+        "caso": "data/fase5-reservado/remuestras.csv.gz tiene el SHA-256 de la salida de la apertura",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "efa8fdfee245…"
+      },
+      {
+        "control": "guardados",
+        "caso": "los puntos de los cuatro modelos, recalculados, a 4 decimales",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "82830 lesiones, 76 malignas"
+      },
+      {
+        "control": "guardados",
+        "caso": "los de la red frente a los guardados de «Imagen + básicos»",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "distintos"
+      },
+      {
+        "control": "guardados",
+        "caso": "los intervalos de los cuatro modelos, desde las remuestras",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "2000 remuestras por modelo"
+      },
+      {
+        "control": "guardados",
+        "caso": "los de la red frente a los guardados de «Imagen + básicos»",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "distintos"
+      },
+      {
+        "control": "guardados",
+        "caso": "M3 limpio − M2, remuestra a remuestra, da los intervalos de la apertura",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "las remuestras están pareadas"
+      },
+      {
+        "control": "guardados",
+        "caso": "con las remuestras de M2 barajadas",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "distintos"
+      }
+    ],
+    "de_casos": 21,
+    "fallos": 0,
+    "deben_fallar": 8
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase5_posterior.py",
+      "--out",
+      "outputs/fase5-posterior"
+    ]
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5"
+  },
+  "fecha": "2026-11-05T03:30:21.221848+00:00",
+  "segundos": 10.8,
+  "nota": "No interpreta. Posterior a la apertura: no vuelve a abrir el reservado ni a entrenar."
+}

@@ -667,6 +667,19 @@ Salida: `outputs/fase5-ensayo.*` o `outputs/fase5-reservado.*`. En `data/`
 quedan las puntuaciones, las métricas de cada remuestra y los registros de la
 red.
 
+`scripts/fase5_posterior.py` es el análisis descriptivo posterior a la
+apertura, decidido por la persona después de leerla (`PLAN.md`, Fase 5). No
+entrena nada: lee los archivos de la apertura. Comprueba la procedencia de las
+características de DINOv2 de los dos conjuntos, recalculándolas desde las
+imágenes en una muestra. Antes de calcular, comprueba que las puntuaciones y las
+remuestras guardadas reproducen la salida de la apertura. Después calcula, con
+las mismas remuestras, la diferencia red de la 4e − «Imagen + básicos», y
+escribe una tabla de cada modelo en desarrollo y en el reservado.
+
+```bash
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5_posterior.py --out outputs/fase5-posterior
+```
+
 ## Cómo correrlo
 
 ```bash
