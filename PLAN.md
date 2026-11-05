@@ -2759,7 +2759,9 @@ sobre el mismo conjunto de evaluación que el tablero del reto.
   página de requisitos permite (`referencias/kaggle-code-requirements.md`,
   línea 8).
 - **Un envío por modelo.** Cada uno se envía una sola vez, y no se envía nada
-  antes de la Fase 5.
+  antes de la Fase 5. *Precisado el 2026-11-05 por la persona: un envío sin
+  puntuación, por un error del notebook, se puede rehacer (abajo, «Los
+  envíos»).*
 - **Se reporta todo.** Se reportan las puntuaciones pública y privada, sea cual
   sea el resultado. Después de verlas no se cambia ningún modelo.
 - **La comparación es descriptiva y sin intervalo,** cada cifra con su fuente.
@@ -2939,9 +2941,66 @@ Las piezas están en `modelado-baseline/scripts/` (`SKILL.md`, «La Fase 5b»):
   una se apartaba 0,18 de la de referencia; en esta, cada red da la suya, y ese
   caso se aparta 0,80.
 
-Falta el reporte a la persona antes del primer envío. No se ha enviado nada a
-la competición: el `submission.csv` del notebook de medición, con las 3 filas de
-la prueba visible, es una salida del notebook privado, no un envío.
+Con esto se reportó a la persona antes del primer envío. Hasta aquí no se envió
+nada a la competición: el `submission.csv` del notebook de medición, con las 3
+filas de la prueba visible, es una salida del notebook privado, no un envío.
+
+**Los envíos (decisión de la persona del 2026-11-05, fijada antes del primer
+envío):**
+- **La huella de lo que se envía** (`outputs/fase5b-huella.json`, de
+  `fase5b_kaggle.py --huella`). Sirve para comprobar que nada cambió entre un
+  envío y otro.
+  - **El conjunto de datos.** `estebandazz/isic2024-fase5b-modelos`, versión 2
+    (`conjunto_de_datos.version`), tal como lo sirve Kaggle: se descargó y se
+    calculó el SHA-256 de cada uno de sus 190 archivos. Su huella es el SHA-256
+    de las líneas «sha256  ruta» ordenadas por ruta, el formato de `sha256sum`:
+    `5b6a0ed4a303e982d578022b32666e2ac11df499e160187ce6bfc128f05892dd`
+    (`conjunto_de_datos.huella_sha256`). Coincide archivo por archivo con lo
+    subido desde `data/fase5b/kaggle-dataset`, con 0 diferencias
+    (`diferencias_con_lo_subido`). Kaggle no sirve `dataset-metadata.json` ni
+    los `.DS_Store`, y sirve `dinov2.zip` descomprimido en `dinov2/`.
+  - **Los cuatro notebooks de envío**, en el orden de envío
+    (`notebooks.*.archivos`), con el SHA-256 del `.ipynb`:
+    - M3 limpio, `isic2024-fase5b-m3limpio.ipynb`:
+      `b6cea6044735953fde1f3db76e4591fee706ba7e21c0b7481756494c11aad764`;
+    - la red de la 4e, `isic2024-fase5b-red4e.ipynb`:
+      `b642b571b816c18b167a5e346c56805a0bc897f93e83bf629245940cf542fa0c`;
+    - C7, `isic2024-fase5b-c7.ipynb`:
+      `cce8ec442c4415081ad211dbfedcd3038e3aeb571511fc70c9ab232850bda6cb`;
+    - «Imagen + básicos», `isic2024-fase5b-imagenbasicos.ipynb`:
+      `c817b8690260213aa59806e1a3381add2fb3d72d4cceb9f858e598121a6a9705`.
+
+    El de cada `kernel-metadata.json` (privado, sin internet, con GPU y las dos
+    entradas) está al lado, en el mismo campo. Los cuatro notebooks salen de
+    `fase5b_notebook.py` y solo cambian en la línea `MODO`.
+  - **Los controles** (`controles`): 6 de 6 casos bien, 3 de ellos casos que
+    deben fallar. Con un archivo subido alterado, la comparación da una
+    diferencia y la huella cambia; un modelo con un envío puntuado no se puede
+    volver a enviar.
+  - **Cómo se comprueba:** `fase5b_kaggle.py --huella --comprobar` vuelve a
+    descargar el conjunto de datos, vuelve a construir los notebooks y se
+    detiene si algún SHA-256 o la versión no son los fijados. `--enviar` lo hace
+    antes de cada envío y guarda la comprobación con el registro del envío.
+- **El orden: M3 limpio, la red de la 4e, C7 y, si cabe, «Imagen + básicos».**
+  Los cuatro se envían pase lo que pase con el primero. «Si cabe» es dentro del
+  presupuesto de tres días de la fase (arriba, «Qué se hace»).
+- **El primer envío.** Si M3 limpio no recibe puntuación, se detiene y se
+  reporta a la persona. Si la recibe, los otros tres se envían en el orden
+  fijado, sin esperar a la persona.
+- **Si un envío falla:**
+  - **Si Kaggle no da puntuación** (un error del notebook), se corrige solo lo
+    técnico, se declara aquí y se reenvía. Si la corrección cambia un notebook
+    o el conjunto de datos, su SHA-256 deja de ser el fijado: el cambio se
+    declara con la huella nueva antes de reenviar, y la fijada se queda como
+    está.
+  - **Si da puntuación,** ese modelo no se vuelve a enviar nunca, aunque el
+    resultado decepcione. `--enviar` se niega a enviar un modelo que ya tiene un
+    envío con puntuación, o uno pendiente.
+- **Cada envío** es la versión del kernel del modelo que corrió en Kaggle con el
+  control bien, registrada antes en `outputs/fase5b-kaggle-<modelo>.json`.
+- **El registro.** La puntuación pública y la privada de cada envío van a
+  `outputs/fase5b-envio-<modelo>.json`, tal como las devuelve la API de Kaggle,
+  sin interpretar.
 
 **Puerta.** Las puntuaciones pública y privada de los envíos que se hagan, en
 `outputs/`, con su comparación descriptiva. O bien la declaración de que la fase
