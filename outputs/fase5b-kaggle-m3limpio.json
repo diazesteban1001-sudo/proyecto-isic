@@ -1,0 +1,76 @@
+{
+  "que_es": "la salida del notebook de la Fase 5b en Kaggle, copiada sin tocar, con su procedencia (PLAN.md, Fase 5b); no es un envío a la competición",
+  "kernel": {
+    "id": "estebandazz/isic2024-fase5b-m3limpio",
+    "version": 1,
+    "privado": true,
+    "internet": false
+  },
+  "conjunto_de_datos": "estebandazz/isic2024-fase5b-modelos",
+  "competicion": "isic-2024-challenge",
+  "archivos": {
+    "fase5b-M3limpio.json": {
+      "bytes": 1191,
+      "sha256": "f964e871cd4c89c3544eb786e558135d7806eee0a33774793820867bca1ebabb"
+    },
+    "submission.csv": {
+      "bytes": 113,
+      "sha256": "bba9ad83dbbcb2061eefdd4bce039c014182beac6319a4368e623ebc92163996"
+    },
+    "isic2024-fase5b-m3limpio.ipynb": {
+      "bytes": 15691,
+      "sha256": "b6cea6044735953fde1f3db76e4591fee706ba7e21c0b7481756494c11aad764"
+    }
+  },
+  "salida_del_notebook": {
+    "modo": "M3limpio",
+    "dispositivo": "cuda",
+    "gpu": "Tesla T4",
+    "trabajadores": 4,
+    "entrada": {
+      "competicion": "/kaggle/input/competitions/isic-2024-challenge",
+      "modelos": "/kaggle/input/datasets/estebandazz/isic2024-fase5b-modelos"
+    },
+    "segundos_carga_de_modelos": 0.5,
+    "control": {
+      "lesiones": 1042,
+      "tolerancias": {
+        "logit": 0.01,
+        "dinov2": 0.01,
+        "probabilidad": 0.001
+      },
+      "casos": [
+        {
+          "caso": "M3limpio: puntuación del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 2.168404344971009e-19
+        },
+        {
+          "caso": "M3limpio: con las filas corridas una",
+          "ok": true,
+          "debe_fallar": true,
+          "diferencia_maxima": 0.9142491640699738
+        }
+      ],
+      "fallos": 0,
+      "segundos": 4.7
+    },
+    "prueba": {
+      "filas": 3,
+      "modelo_en_submission": "M3limpio",
+      "segundos": 0.2
+    },
+    "versiones": {
+      "python": "3.13.16",
+      "numpy": "2.1.3",
+      "pandas": "2.3.3",
+      "scikit_learn": "1.6.1",
+      "catboost": "1.2.10",
+      "torch": "2.11.0+cu130",
+      "torchvision": "0.26.0+cu130",
+      "pillow": "13.0.0"
+    },
+    "segundos_total": 22.6
+  }
+}
