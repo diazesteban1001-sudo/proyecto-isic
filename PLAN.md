@@ -2706,6 +2706,29 @@ ni ninguna recomendación, no entrenan nada y no suman a la bitácora. El script
 - **Lo que vuelve a leer:** las etiquetas del reservado, desde el CSV, para
   recalcular los puntos sin redondear. No vuelve a puntuar nada.
 
+**Curva de aprendizaje, solo desarrollo (2026-11-04).** *Decisión de la persona,
+posterior a la apertura del reservado y declarada así.* Es descriptiva: no toca
+el reservado, no cambia ningún modelo ni ninguna recomendación y no suma a la
+bitácora. El script es `modelado-baseline/scripts/curva_aprendizaje.py`, y la
+salida, `outputs/curva-aprendizaje.json` con su `.md`.
+- **La pregunta** (la persona): ¿sube «Imagen + básicos» con más datos más que
+  la red?
+- **«Imagen + básicos»,** en los pliegues de la semilla 0, entrenado con 2/5,
+  3/5 y 4/5 del desarrollo y puntuando el pliegue que queda fuera
+  (`imagen_basicos.curva`). *Elegido por el agente, declarado:* cada tamaño usa
+  todas las combinaciones de los otros cuatro pliegues, 6, 4 y 1. La pAUC media
+  es 0,0626 con 2/5 (333,2 pacientes de entrenamiento de media), 0,0732 con 3/5
+  y 0,0784 con 4/5: +0,0158 de 2/5 a 4/5
+  (`pregunta.imagen_basicos_de_2_a_4_quintos`). El AUC, 0,7694, 0,7989 y 0,8152.
+- **La red de la 4e,** solo con lo ya medido (`red4e`): todas sus redes de
+  desarrollo se entrenaron con 4/5, así que hay un solo tamaño. Su pAUC media en
+  los mismos pliegues es 0,1426. Sin entrenar redes nuevas, la pregunta no se
+  puede responder, porque la curva de la red no está medida. Medirla pediría
+  entrenar redes con 2/5 y 3/5.
+- **Controles:** 14 de 14 bien, 7 de ellos casos que deben fallar. Con 4/5, el
+  entrenamiento es el pliegue de la Fase 4, y las cuatro métricas reproducen
+  `outputs/imagen-sola.json`, semilla 0, pliegue a pliegue.
+
 ---
 
 ## Fase 5b — Envío tardío a Kaggle — FIJADA, NO ABIERTA

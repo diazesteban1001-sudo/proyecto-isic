@@ -1,0 +1,1276 @@
+{
+  "que_es": "curva de aprendizaje de «Imagen + básicos» y de la red de la 4e, solo con el desarrollo; análisis descriptivo posterior a la apertura del reservado (PLAN.md, Fase 5, decisión de la persona del 2026-11-04); no toca el reservado",
+  "datos": {
+    "archivo": "/Users/ediaz07/proyecto-isic/data/train-metadata.csv",
+    "conjunto": "desarrollo",
+    "sin_los_pacientes_de": "outputs/holdout-pacientes.json"
+  },
+  "pliegues": {
+    "semilla": 0,
+    "n_splits": 5,
+    "sha256": "e544a6b29a7637e86bc6e2e5ab88e9ff2eb3edf5612353c2adc554311c9d00df",
+    "como": "construir_folds de train_and_evaluate.py, los de la Fase 4"
+  },
+  "imagen_basicos": {
+    "modelo": "imagen_sola._ajustar_imagen sobre DINOv2 + age_approx, sex y anatom_site_general",
+    "combinaciones": "todas las de 2, 3 y 4 de los otros cuatro pliegues",
+    "curva": {
+      "2/5": {
+        "ajustes": 30,
+        "combinaciones_por_pliegue": 6,
+        "pacientes_medios": 333.2,
+        "malignas_medias": 126.8,
+        "media_por_pliegue": {
+          "0": {
+            "pauc": 0.0663,
+            "auc": 0.7814,
+            "setop15": 0.2735,
+            "nnt80": 515.4444
+          },
+          "1": {
+            "pauc": 0.074,
+            "auc": 0.8007,
+            "setop15": 0.3466,
+            "nnt80": 428.8814
+          },
+          "2": {
+            "pauc": 0.0803,
+            "auc": 0.8165,
+            "setop15": 0.3735,
+            "nnt80": 392.1282
+          },
+          "3": {
+            "pauc": 0.0564,
+            "auc": 0.7549,
+            "setop15": 0.2581,
+            "nnt80": 570.5098
+          },
+          "4": {
+            "pauc": 0.0362,
+            "auc": 0.6933,
+            "setop15": 0.3669,
+            "nnt80": 840.0425
+          }
+        },
+        "media": {
+          "pauc": 0.0626,
+          "auc": 0.7694,
+          "setop15": 0.3237,
+          "nnt80": 549.4013
+        },
+        "minimo_y_maximo_de_los_ajustes": {
+          "pauc": [
+            0.0298,
+            0.1066
+          ],
+          "auc": [
+            0.6758,
+            0.8556
+          ],
+          "setop15": [
+            0.168,
+            0.441
+          ],
+          "nnt80": [
+            265.2692,
+            929.7647
+          ]
+        }
+      },
+      "3/5": {
+        "ajustes": 20,
+        "combinaciones_por_pliegue": 4,
+        "pacientes_medios": 499.8,
+        "malignas_medias": 190.2,
+        "media_por_pliegue": {
+          "0": {
+            "pauc": 0.072,
+            "auc": 0.8109,
+            "setop15": 0.3336,
+            "nnt80": 512.5637
+          },
+          "1": {
+            "pauc": 0.0881,
+            "auc": 0.8299,
+            "setop15": 0.3636,
+            "nnt80": 360.8558
+          },
+          "2": {
+            "pauc": 0.0957,
+            "auc": 0.8425,
+            "setop15": 0.4023,
+            "nnt80": 364.2356
+          },
+          "3": {
+            "pauc": 0.0734,
+            "auc": 0.7966,
+            "setop15": 0.2817,
+            "nnt80": 459.2647
+          },
+          "4": {
+            "pauc": 0.0369,
+            "auc": 0.7147,
+            "setop15": 0.3953,
+            "nnt80": 764.6863
+          }
+        },
+        "media": {
+          "pauc": 0.0732,
+          "auc": 0.7989,
+          "setop15": 0.3553,
+          "nnt80": 492.3212
+        },
+        "minimo_y_maximo_de_los_ajustes": {
+          "pauc": [
+            0.0319,
+            0.1236
+          ],
+          "auc": [
+            0.698,
+            0.8822
+          ],
+          "setop15": [
+            0.2408,
+            0.4601
+          ],
+          "nnt80": [
+            244.8077,
+            810.0784
+          ]
+        }
+      },
+      "4/5": {
+        "ajustes": 5,
+        "combinaciones_por_pliegue": 1,
+        "pacientes_medios": 666.4,
+        "malignas_medias": 253.6,
+        "media_por_pliegue": {
+          "0": {
+            "pauc": 0.0733,
+            "auc": 0.8269,
+            "setop15": 0.4045,
+            "nnt80": 362.4706
+          },
+          "1": {
+            "pauc": 0.0938,
+            "auc": 0.8446,
+            "setop15": 0.3569,
+            "nnt80": 278.3269
+          },
+          "2": {
+            "pauc": 0.1073,
+            "auc": 0.8562,
+            "setop15": 0.4167,
+            "nnt80": 338.7885
+          },
+          "3": {
+            "pauc": 0.0788,
+            "auc": 0.8188,
+            "setop15": 0.3327,
+            "nnt80": 401.7647
+          },
+          "4": {
+            "pauc": 0.0389,
+            "auc": 0.7294,
+            "setop15": 0.4049,
+            "nnt80": 685.8627
+          }
+        },
+        "media": {
+          "pauc": 0.0784,
+          "auc": 0.8152,
+          "setop15": 0.3831,
+          "nnt80": 413.4427
+        },
+        "minimo_y_maximo_de_los_ajustes": {
+          "pauc": [
+            0.0389,
+            0.1073
+          ],
+          "auc": [
+            0.7294,
+            0.8562
+          ],
+          "setop15": [
+            0.3327,
+            0.4167
+          ],
+          "nnt80": [
+            278.3269,
+            685.8627
+          ]
+        }
+      }
+    },
+    "ajustes": [
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          1,
+          2
+        ],
+        "quintos": 2,
+        "pacientes": 334,
+        "lesiones": 127292,
+        "malignas": 128,
+        "pauc": 0.0829,
+        "auc": 0.8307,
+        "setop15": 0.3747,
+        "nnt80": 298.5882
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          1,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 335,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0655,
+        "auc": 0.7884,
+        "setop15": 0.282,
+        "nnt80": 516.6078
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          1,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127291,
+        "malignas": 127,
+        "pauc": 0.0648,
+        "auc": 0.7751,
+        "setop15": 0.2491,
+        "nnt80": 505.2549
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          2,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 335,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0689,
+        "auc": 0.7814,
+        "setop15": 0.2418,
+        "nnt80": 545.5098
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          2,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127291,
+        "malignas": 127,
+        "pauc": 0.0635,
+        "auc": 0.763,
+        "setop15": 0.2457,
+        "nnt80": 610.5882
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          3,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 334,
+        "lesiones": 127291,
+        "malignas": 126,
+        "pauc": 0.0523,
+        "auc": 0.7496,
+        "setop15": 0.2477,
+        "nnt80": 616.1176
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          1,
+          2,
+          3
+        ],
+        "quintos": 3,
+        "pacientes": 502,
+        "lesiones": 190938,
+        "malignas": 191,
+        "pauc": 0.0848,
+        "auc": 0.8327,
+        "setop15": 0.3668,
+        "nnt80": 421.9216
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          1,
+          2,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 500,
+        "lesiones": 190937,
+        "malignas": 191,
+        "pauc": 0.0824,
+        "auc": 0.8239,
+        "setop15": 0.3484,
+        "nnt80": 419.7451
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          1,
+          3,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 501,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0575,
+        "auc": 0.7956,
+        "setop15": 0.3614,
+        "nnt80": 614.2157
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          2,
+          3,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 501,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0633,
+        "auc": 0.7914,
+        "setop15": 0.2577,
+        "nnt80": 594.3725
+      },
+      {
+        "pliegue": 0,
+        "pliegues_de_entrenamiento": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "quintos": 4,
+        "pacientes": 668,
+        "lesiones": 254583,
+        "malignas": 254,
+        "pauc": 0.0733,
+        "auc": 0.8269,
+        "setop15": 0.4045,
+        "nnt80": 362.4706
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          0,
+          2
+        ],
+        "quintos": 2,
+        "pacientes": 332,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0871,
+        "auc": 0.8152,
+        "setop15": 0.4058,
+        "nnt80": 402.3269
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          0,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127292,
+        "malignas": 126,
+        "pauc": 0.0927,
+        "auc": 0.8378,
+        "setop15": 0.3877,
+        "nnt80": 317.0577
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          0,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 331,
+        "lesiones": 127291,
+        "malignas": 126,
+        "pauc": 0.0495,
+        "auc": 0.7542,
+        "setop15": 0.2953,
+        "nnt80": 579.8077
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          2,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 335,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0864,
+        "auc": 0.8286,
+        "setop15": 0.3279,
+        "nnt80": 358.8654
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          2,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127291,
+        "malignas": 127,
+        "pauc": 0.0613,
+        "auc": 0.7764,
+        "setop15": 0.3351,
+        "nnt80": 525.9231
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          3,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 334,
+        "lesiones": 127291,
+        "malignas": 126,
+        "pauc": 0.067,
+        "auc": 0.7921,
+        "setop15": 0.3279,
+        "nnt80": 389.3077
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          0,
+          2,
+          3
+        ],
+        "quintos": 3,
+        "pacientes": 500,
+        "lesiones": 190938,
+        "malignas": 190,
+        "pauc": 0.1039,
+        "auc": 0.8566,
+        "setop15": 0.4601,
+        "nnt80": 307.2692
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          0,
+          2,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 498,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0872,
+        "auc": 0.8143,
+        "setop15": 0.3025,
+        "nnt80": 427.6923
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          0,
+          3,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 499,
+        "lesiones": 190937,
+        "malignas": 189,
+        "pauc": 0.0732,
+        "auc": 0.8185,
+        "setop15": 0.4112,
+        "nnt80": 374.8846
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          2,
+          3,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 501,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0883,
+        "auc": 0.8301,
+        "setop15": 0.2808,
+        "nnt80": 333.5769
+      },
+      {
+        "pliegue": 1,
+        "pliegues_de_entrenamiento": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "quintos": 4,
+        "pacientes": 666,
+        "lesiones": 254583,
+        "malignas": 253,
+        "pauc": 0.0938,
+        "auc": 0.8446,
+        "setop15": 0.3569,
+        "nnt80": 278.3269
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          0,
+          1
+        ],
+        "quintos": 2,
+        "pacientes": 332,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0856,
+        "auc": 0.8219,
+        "setop15": 0.3333,
+        "nnt80": 373.5
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          0,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127292,
+        "malignas": 126,
+        "pauc": 0.1066,
+        "auc": 0.8556,
+        "setop15": 0.3698,
+        "nnt80": 265.2692
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          0,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 331,
+        "lesiones": 127291,
+        "malignas": 126,
+        "pauc": 0.057,
+        "auc": 0.7868,
+        "setop15": 0.3385,
+        "nnt80": 529.9615
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          1,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 335,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.087,
+        "auc": 0.8384,
+        "setop15": 0.4132,
+        "nnt80": 364.2885
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          1,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127291,
+        "malignas": 127,
+        "pauc": 0.0714,
+        "auc": 0.7858,
+        "setop15": 0.3854,
+        "nnt80": 439.3269
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          3,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 334,
+        "lesiones": 127291,
+        "malignas": 126,
+        "pauc": 0.0745,
+        "auc": 0.8107,
+        "setop15": 0.401,
+        "nnt80": 380.4231
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          3
+        ],
+        "quintos": 3,
+        "pacientes": 500,
+        "lesiones": 190938,
+        "malignas": 190,
+        "pauc": 0.1236,
+        "auc": 0.8822,
+        "setop15": 0.4062,
+        "nnt80": 244.8077
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 498,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0849,
+        "auc": 0.8116,
+        "setop15": 0.3385,
+        "nnt80": 485.5962
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          0,
+          3,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 499,
+        "lesiones": 190937,
+        "malignas": 189,
+        "pauc": 0.0821,
+        "auc": 0.8392,
+        "setop15": 0.4583,
+        "nnt80": 309.9038
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          1,
+          3,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 501,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0923,
+        "auc": 0.8371,
+        "setop15": 0.4062,
+        "nnt80": 416.6346
+      },
+      {
+        "pliegue": 2,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          3,
+          4
+        ],
+        "quintos": 4,
+        "pacientes": 666,
+        "lesiones": 254583,
+        "malignas": 253,
+        "pauc": 0.1073,
+        "auc": 0.8562,
+        "setop15": 0.4167,
+        "nnt80": 338.7885
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          0,
+          1
+        ],
+        "quintos": 2,
+        "pacientes": 332,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0468,
+        "auc": 0.7436,
+        "setop15": 0.2102,
+        "nnt80": 524.1961
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          0,
+          2
+        ],
+        "quintos": 2,
+        "pacientes": 332,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0518,
+        "auc": 0.7609,
+        "setop15": 0.3259,
+        "nnt80": 593.0588
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          0,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 331,
+        "lesiones": 127291,
+        "malignas": 126,
+        "pauc": 0.0336,
+        "auc": 0.6872,
+        "setop15": 0.2959,
+        "nnt80": 836.8431
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          1,
+          2
+        ],
+        "quintos": 2,
+        "pacientes": 334,
+        "lesiones": 127292,
+        "malignas": 128,
+        "pauc": 0.0791,
+        "auc": 0.8077,
+        "setop15": 0.2959,
+        "nnt80": 424.7451
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          1,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127291,
+        "malignas": 127,
+        "pauc": 0.0624,
+        "auc": 0.7734,
+        "setop15": 0.2524,
+        "nnt80": 515.2353
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          2,
+          4
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127291,
+        "malignas": 127,
+        "pauc": 0.0649,
+        "auc": 0.7568,
+        "setop15": 0.168,
+        "nnt80": 528.9804
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          2
+        ],
+        "quintos": 3,
+        "pacientes": 499,
+        "lesiones": 190938,
+        "malignas": 191,
+        "pauc": 0.0829,
+        "auc": 0.8141,
+        "setop15": 0.298,
+        "nnt80": 399.5882
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 498,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0584,
+        "auc": 0.7737,
+        "setop15": 0.2667,
+        "nnt80": 537.7647
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          0,
+          2,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 498,
+        "lesiones": 190937,
+        "malignas": 190,
+        "pauc": 0.0623,
+        "auc": 0.7625,
+        "setop15": 0.2408,
+        "nnt80": 541.2745
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          1,
+          2,
+          4
+        ],
+        "quintos": 3,
+        "pacientes": 500,
+        "lesiones": 190937,
+        "malignas": 191,
+        "pauc": 0.09,
+        "auc": 0.8363,
+        "setop15": 0.3211,
+        "nnt80": 358.4314
+      },
+      {
+        "pliegue": 3,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "quintos": 4,
+        "pacientes": 665,
+        "lesiones": 254583,
+        "malignas": 254,
+        "pauc": 0.0788,
+        "auc": 0.8188,
+        "setop15": 0.3327,
+        "nnt80": 401.7647
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          0,
+          1
+        ],
+        "quintos": 2,
+        "pacientes": 332,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0298,
+        "auc": 0.6777,
+        "setop15": 0.4049,
+        "nnt80": 929.7647
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          0,
+          2
+        ],
+        "quintos": 2,
+        "pacientes": 332,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.037,
+        "auc": 0.6758,
+        "setop15": 0.3076,
+        "nnt80": 730.8431
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          0,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 333,
+        "lesiones": 127292,
+        "malignas": 126,
+        "pauc": 0.0382,
+        "auc": 0.7027,
+        "setop15": 0.441,
+        "nnt80": 910.451
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          1,
+          2
+        ],
+        "quintos": 2,
+        "pacientes": 334,
+        "lesiones": 127292,
+        "malignas": 128,
+        "pauc": 0.0378,
+        "auc": 0.6935,
+        "setop15": 0.3736,
+        "nnt80": 808.4118
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          1,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 335,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0385,
+        "auc": 0.7159,
+        "setop15": 0.3354,
+        "nnt80": 843.5098
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          2,
+          3
+        ],
+        "quintos": 2,
+        "pacientes": 335,
+        "lesiones": 127292,
+        "malignas": 127,
+        "pauc": 0.0358,
+        "auc": 0.6943,
+        "setop15": 0.3389,
+        "nnt80": 817.2745
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          2
+        ],
+        "quintos": 3,
+        "pacientes": 499,
+        "lesiones": 190938,
+        "malignas": 191,
+        "pauc": 0.0319,
+        "auc": 0.698,
+        "setop15": 0.391,
+        "nnt80": 810.0784
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          3
+        ],
+        "quintos": 3,
+        "pacientes": 500,
+        "lesiones": 190938,
+        "malignas": 190,
+        "pauc": 0.0408,
+        "auc": 0.734,
+        "setop15": 0.4326,
+        "nnt80": 720.3922
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          0,
+          2,
+          3
+        ],
+        "quintos": 3,
+        "pacientes": 500,
+        "lesiones": 190938,
+        "malignas": 190,
+        "pauc": 0.0377,
+        "auc": 0.7011,
+        "setop15": 0.3806,
+        "nnt80": 790.9608
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          1,
+          2,
+          3
+        ],
+        "quintos": 3,
+        "pacientes": 502,
+        "lesiones": 190938,
+        "malignas": 191,
+        "pauc": 0.0372,
+        "auc": 0.7255,
+        "setop15": 0.3771,
+        "nnt80": 737.3137
+      },
+      {
+        "pliegue": 4,
+        "pliegues_de_entrenamiento": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "quintos": 4,
+        "pacientes": 667,
+        "lesiones": 254584,
+        "malignas": 254,
+        "pauc": 0.0389,
+        "auc": 0.7294,
+        "setop15": 0.4049,
+        "nnt80": 685.8627
+      }
+    ],
+    "avisos_no_convergencia": 0,
+    "caracteristicas_de_imagen": {
+      "archivo": "data/dinov2-vits14-desarrollo.h5",
+      "sha256": "52a7fd12855ae7548df2a21b46d513f51ab056c817acc468ab0e1c70576f3cfd"
+    }
+  },
+  "red4e": {
+    "4/5": {
+      "fuente": "outputs/fase4e-exploracion.json > paso_2 (Red4eAjustada), semilla 0",
+      "media_por_pliegue": {
+        "0": {
+          "pauc": 0.1472,
+          "auc": 0.932,
+          "setop15": 0.638,
+          "nnt80": 108.5686
+        },
+        "1": {
+          "pauc": 0.1574,
+          "auc": 0.9405,
+          "setop15": 0.5525,
+          "nnt80": 88.9038
+        },
+        "2": {
+          "pauc": 0.136,
+          "auc": 0.9235,
+          "setop15": 0.6476,
+          "nnt80": 78.0577
+        },
+        "3": {
+          "pauc": 0.1174,
+          "auc": 0.8994,
+          "setop15": 0.5129,
+          "nnt80": 164.7451
+        },
+        "4": {
+          "pauc": 0.1552,
+          "auc": 0.9399,
+          "setop15": 0.666,
+          "nnt80": 99.1961
+        }
+      },
+      "media": {
+        "pauc": 0.1426,
+        "auc": 0.9271,
+        "setop15": 0.6034,
+        "nnt80": 107.8943
+      }
+    },
+    "tamanos_medidos": [
+      "4/5"
+    ],
+    "tamanos_sin_medir": [
+      "2/5",
+      "3/5"
+    ],
+    "por_que": "todas las redes de la 4e de desarrollo, en data/fase4e-redes y data/fase4e-ajuste, se entrenaron con el pliegue de entrenamiento: 4/5 del desarrollo, una por semilla y pliegue"
+  },
+  "pregunta": {
+    "texto": "¿sube «Imagen + básicos» con más datos más que la red?",
+    "imagen_basicos_de_2_a_4_quintos": {
+      "pauc": 0.0158,
+      "auc": 0.0458,
+      "setop15": 0.0594,
+      "nnt80": -135.9586
+    },
+    "red4e_de_2_a_4_quintos": null,
+    "se_puede_responder_con_lo_medido": false,
+    "por_que": "la red tiene un solo tamaño de entrenamiento medido en desarrollo, 4/5; su curva no está medida"
+  },
+  "controles": {
+    "casos": [
+      {
+        "control": "pliegues",
+        "caso": "los de la semilla 0 tienen la huella de fase4-m2-vs-m1.json y de fase4e-exploracion.json",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "e544a6b29a76…"
+      },
+      {
+        "control": "pliegues",
+        "caso": "frente a la huella de la semilla 1",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "distintas"
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 0, 4/5: el entrenamiento de la Fase 4 y las cuatro métricas de imagen-sola.json, semilla 0",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pauc": 0.0733,
+          "auc": 0.8269,
+          "setop15": 0.4045,
+          "nnt80": 362.4706
+        }
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 0, 4/5: frente a la semilla 1 de imagen-sola.json",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "iguales: False"
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 1, 4/5: el entrenamiento de la Fase 4 y las cuatro métricas de imagen-sola.json, semilla 0",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pauc": 0.0938,
+          "auc": 0.8446,
+          "setop15": 0.3569,
+          "nnt80": 278.3269
+        }
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 1, 4/5: frente a la semilla 1 de imagen-sola.json",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "iguales: False"
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 2, 4/5: el entrenamiento de la Fase 4 y las cuatro métricas de imagen-sola.json, semilla 0",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pauc": 0.1073,
+          "auc": 0.8562,
+          "setop15": 0.4167,
+          "nnt80": 338.7885
+        }
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 2, 4/5: frente a la semilla 1 de imagen-sola.json",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "iguales: False"
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 3, 4/5: el entrenamiento de la Fase 4 y las cuatro métricas de imagen-sola.json, semilla 0",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pauc": 0.0788,
+          "auc": 0.8188,
+          "setop15": 0.3327,
+          "nnt80": 401.7647
+        }
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 3, 4/5: frente a la semilla 1 de imagen-sola.json",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "iguales: False"
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 4, 4/5: el entrenamiento de la Fase 4 y las cuatro métricas de imagen-sola.json, semilla 0",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pauc": 0.0389,
+          "auc": 0.7294,
+          "setop15": 0.4049,
+          "nnt80": 685.8627
+        }
+      },
+      {
+        "control": "reproduccion",
+        "caso": "pliegue 4, 4/5: frente a la semilla 1 de imagen-sola.json",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "iguales: False"
+      },
+      {
+        "control": "pacientes",
+        "caso": "en los 55 ajustes, ningún paciente a los dos lados",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "55 ajustes"
+      },
+      {
+        "control": "pacientes",
+        "caso": "con una fila de validación en el entrenamiento",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "se detecta"
+      }
+    ],
+    "de_casos": 14,
+    "fallos": 0,
+    "deben_fallar": 7
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/curva_aprendizaje.py",
+      "--out",
+      "outputs/curva-aprendizaje"
+    ]
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.4.6"
+  },
+  "fecha": "2026-11-05T03:41:56.796985+00:00",
+  "segundos": 241.2,
+  "nota": "No interpreta. Posterior a la apertura; solo desarrollo."
+}
