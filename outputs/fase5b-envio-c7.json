@@ -1,0 +1,69 @@
+{
+  "que_es": "los envíos de este modelo a la competición, tal como los devuelve la API de Kaggle, sin tocar (PLAN.md, Fase 5b)",
+  "modelo": "C7",
+  "kernel": {
+    "id": "estebandazz/isic2024-fase5b-c7",
+    "version": 1
+  },
+  "huella_fijada": {
+    "archivo": "outputs/fase5b-huella.json",
+    "conjunto_de_datos": {
+      "version": 2,
+      "huella_sha256": "5b6a0ed4a303e982d578022b32666e2ac11df499e160187ce6bfc128f05892dd"
+    },
+    "notebook": {
+      "isic2024-fase5b-c7.ipynb": "cce8ec442c4415081ad211dbfedcd3038e3aeb571511fc70c9ab232850bda6cb",
+      "kernel-metadata.json": "6de409f76b1e771b18ce860ed89f6ca473d7570df31c2b5d7a4a392112b5ad3d"
+    }
+  },
+  "al_enviar": {
+    "mensaje": "Fase 5b: C7, kernel estebandazz/isic2024-fase5b-c7 v1",
+    "respuesta": {
+      "message": "",
+      "ref": 58027561
+    },
+    "comprobado_antes_de_enviar": {
+      "fecha": "2026-11-05T10:25:27-0500",
+      "conjunto_de_datos": {
+        "version": 2,
+        "huella_sha256": "5b6a0ed4a303e982d578022b32666e2ac11df499e160187ce6bfc128f05892dd"
+      },
+      "notebooks": {
+        "M3limpio": {
+          "isic2024-fase5b-m3limpio.ipynb": "b6cea6044735953fde1f3db76e4591fee706ba7e21c0b7481756494c11aad764",
+          "kernel-metadata.json": "6b94c240539da328fed5ef698abc4c79e4e412afb31559ace2bbbe2eba35feec"
+        },
+        "Red4e": {
+          "isic2024-fase5b-red4e.ipynb": "b642b571b816c18b167a5e346c56805a0bc897f93e83bf629245940cf542fa0c",
+          "kernel-metadata.json": "f0b719bfa0f6821a2bad3f3af1a06e91a55162f80e32e935beb0a47754188173"
+        },
+        "C7": {
+          "isic2024-fase5b-c7.ipynb": "cce8ec442c4415081ad211dbfedcd3038e3aeb571511fc70c9ab232850bda6cb",
+          "kernel-metadata.json": "6de409f76b1e771b18ce860ed89f6ca473d7570df31c2b5d7a4a392112b5ad3d"
+        },
+        "ImagenBasicos": {
+          "isic2024-fase5b-imagenbasicos.ipynb": "c817b8690260213aa59806e1a3381add2fb3d72d4cceb9f858e598121a6a9705",
+          "kernel-metadata.json": "4d6c7d42cc3bca88c987d023e73f487c4d390f479c4b31ede5e426d0dfe6f2fc"
+        }
+      }
+    },
+    "envios_previos_del_modelo": []
+  },
+  "envios": [
+    {
+      "ref": 58027561,
+      "totalBytes": 17971140,
+      "date": "2026-11-05T15:25:29.020Z",
+      "description": "Fase 5b: C7, kernel estebandazz/isic2024-fase5b-c7 v1",
+      "errorDescription": null,
+      "fileName": "submission.csv",
+      "publicScore": "0.17893",
+      "privateScore": "0.15856",
+      "status": "COMPLETE",
+      "submittedBy": "estebandazz",
+      "submittedByRef": "estebandazz",
+      "teamName": "Esteban Díazz",
+      "url": "/code/estebandazz/isic2024-fase5b-c7?scriptVersionId=365998972"
+    }
+  ]
+}

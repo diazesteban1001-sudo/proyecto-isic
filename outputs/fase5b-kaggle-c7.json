@@ -1,0 +1,106 @@
+{
+  "que_es": "la salida del notebook de la Fase 5b en Kaggle, copiada sin tocar, con su procedencia (PLAN.md, Fase 5b); no es un envío a la competición",
+  "kernel": {
+    "id": "estebandazz/isic2024-fase5b-c7",
+    "version": 1,
+    "privado": true,
+    "internet": false
+  },
+  "conjunto_de_datos": "estebandazz/isic2024-fase5b-modelos",
+  "competicion": "isic-2024-challenge",
+  "archivos": {
+    "fase5b-C7.json": {
+      "bytes": 2020,
+      "sha256": "e6fe08e30ba9f9ead055cb4ab324fee3a6d2d743712468db0c3433f55d0a83df"
+    },
+    "submission.csv": {
+      "bytes": 112,
+      "sha256": "ced16e0c2e33754a14b567e4f482b912a7209fc99b440f38eb7f70a85c0be46b"
+    },
+    "isic2024-fase5b-c7.ipynb": {
+      "bytes": 15685,
+      "sha256": "cce8ec442c4415081ad211dbfedcd3038e3aeb571511fc70c9ab232850bda6cb"
+    }
+  },
+  "salida_del_notebook": {
+    "modo": "C7",
+    "dispositivo": "cuda",
+    "gpu": "Tesla T4",
+    "trabajadores": 4,
+    "entrada": {
+      "competicion": "/kaggle/input/competitions/isic-2024-challenge",
+      "modelos": "/kaggle/input/datasets/estebandazz/isic2024-fase5b-modelos"
+    },
+    "segundos_carga_de_modelos": 12.5,
+    "control": {
+      "lesiones": 1042,
+      "tolerancias": {
+        "logit": 0.01,
+        "dinov2": 0.01,
+        "probabilidad": 0.001
+      },
+      "casos": [
+        {
+          "caso": "C7: puntuación del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 2.710505431213761e-20
+        },
+        {
+          "caso": "C7: con las filas corridas una",
+          "ok": true,
+          "debe_fallar": true,
+          "diferencia_maxima": 0.8914718665314122
+        },
+        {
+          "caso": "red pliegue-0: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 0.000213623046875
+        },
+        {
+          "caso": "red pliegue-1: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 3.337860107421875e-06
+        },
+        {
+          "caso": "red pliegue-2: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 9.059906005859375e-06
+        },
+        {
+          "caso": "red pliegue-3: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 4.291534423828125e-06
+        },
+        {
+          "caso": "red pliegue-4: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 6.198883056640625e-06
+        }
+      ],
+      "fallos": 0,
+      "segundos": 11.8
+    },
+    "prueba": {
+      "filas": 3,
+      "modelo_en_submission": "C7",
+      "segundos": 0.5
+    },
+    "versiones": {
+      "python": "3.13.16",
+      "numpy": "2.1.3",
+      "pandas": "2.3.3",
+      "scikit_learn": "1.6.1",
+      "catboost": "1.2.10",
+      "torch": "2.11.0+cu130",
+      "torchvision": "0.26.0+cu130",
+      "pillow": "13.0.0"
+    },
+    "segundos_total": 34.6
+  }
+}
