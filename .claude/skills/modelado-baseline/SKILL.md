@@ -638,6 +638,35 @@ persona, fijada antes de correr (`PLAN.md`, Fase 6). Salida:
   --out outputs/potencia-nadeau-bengio
 ```
 
+## La Fase 5: abrir el reservado (2026-11-04)
+
+`scripts/fase5.py` entrena una sola vez, con semilla 0, cuatro modelos y los
+puntúa en la evaluación: M3 limpio, el resultado principal; M2, la referencia;
+y la red de la 4e e «Imagen + básicos», los dos descriptivos. Mide las cuatro
+métricas de `fase4_comparar.medir`, con un bootstrap por paciente de 2.000
+remuestras y semilla 2026. Las mismas remuestras sirven para los cuatro modelos
+y para la diferencia M3 limpio − M2. La especificación es de la persona
+(`PLAN.md`, Fase 5).
+- **`--modo ensayo`:** el pliegue 0 de la semilla 0 del desarrollo hace de
+  reservado de mentira, y no se lee el reservado. Cada modelo tiene que
+  reproducir lo que dio en ese pliegue en las fases 4 y 4e: puntuaciones, pesos
+  y logit exactos donde están guardados, y las cuatro métricas a 4 decimales.
+- **`--modo apertura`:** el reservado. Exige el ensayo completo con la misma
+  huella del código, y el código y el ensayo en el último commit.
+
+En los dos modos se niega a correr si ya existe la salida del reservado o la
+marca de que la apertura empezó. Las etiquetas de la evaluación se leen solo
+cuando las cuatro puntuaciones están escritas en `data/`. Si un control falla,
+no escribe la salida. El control que no entrena nada es `scripts/test_fase5.py`.
+
+```bash
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5.py --modo ensayo
+```
+
+Salida: `outputs/fase5-ensayo.*` o `outputs/fase5-reservado.*`. En `data/`
+quedan las puntuaciones, las métricas de cada remuestra y los registros de la
+red.
+
 ## Cómo correrlo
 
 ```bash

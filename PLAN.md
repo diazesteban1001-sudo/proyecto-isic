@@ -14,9 +14,11 @@ ni la 4e, la receta de imagen del 10.º puesto, cambiaron el modelo
 recomendado, M3 limpio, ni la especificación de la Fase 5; la Fase 4f, una sola
 pregunta sobre el escenario sin fotografía corporal total, también cerrada, dio
 su resultado a favor, y la recomendación para ese escenario pasa a la red de la
-4e; al cerrar la 4e, la persona decide si se usa cómputo aparte, y la Fase 5
-espera a esa decisión; la Fase 5b, el envío tardío a Kaggle, está fijada para
-después de la Fase 5; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+4e; al cerrar la 4e, la persona decidía si se usaba cómputo aparte, y el
+2026-11-04 abrió la Fase 5 con el equipo propio, en dos tiempos: un ensayo que
+no lee el reservado y, solo si pasa entero, la apertura (Fase 5, «El programa y
+el ensayo»); la Fase 5b, el envío tardío a Kaggle, está fijada para después de
+la Fase 5; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -49,7 +51,7 @@ especificación de la Fase 5 la red de la 4e y «Imagen + básicos», como
 resultado descriptivo que no cambia ninguna recomendación.* *2026-11-02: la
 Fase 4f cerró por su regla con su pregunta a favor.* *2026-11-04: la persona
 fijó la Fase 5b, el envío tardío a Kaggle, que va después de la Fase 5; no se
-envía nada antes.*
+envía nada antes.* *2026-11-04: la persona abrió la Fase 5.*
 
 ## Cómo leer una puerta
 
@@ -2466,7 +2468,7 @@ pregunta, sin corrección por multiplicidad dentro de la fase.
 
 ---
 
-## Fase 5 — Abrir el holdout. Una sola vez
+## Fase 5 — Abrir el holdout. Una sola vez — EN CURSO (2026-11-04)
 
 **Qué se hace.** Evaluar sobre el holdout sellado en la fase 1 **el modelo
 recomendado**, uno solo, y reportar punto e intervalo.
@@ -2563,6 +2565,78 @@ mano.
 **Contingencia.** Que la apertura quede registrada en un commit propio, con el
 modelo elegido fijado en el commit **anterior**. Así el orden es verificable
 desde fuera y no depende de que nadie recuerde haberse portado bien.
+
+**El programa y el ensayo (2026-11-04).** *Decisión de la persona del
+2026-11-04: la Fase 5 se abre en dos tiempos.* Primero, el programa y un ensayo
+que no lee el reservado. Solo si el ensayo pasa entero, la apertura, una sola
+vez, en segundo plano con caffeinate y sin leer ninguna cifra hasta que la
+salida esté escrita completa. Si algo falla durante la apertura, no se repite.
+
+El programa es `modelado-baseline/scripts/fase5.py`, con dos modos y el mismo
+código de punta a punta:
+- **`--modo ensayo`.** El pliegue 0 de `construir_folds` con semilla 0 hace de
+  reservado de mentira, y los pliegues 1 a 4 hacen de desarrollo. No lee el
+  reservado. Son los pliegues de la Fase 4, así que cada modelo tiene que
+  reproducir lo que ya dio en ese pliegue:
+  - M2 y M3 limpio, sus puntuaciones de
+    `data/fase4b-predicciones-m3limpio-m2.csv.gz`, exactas;
+  - la red de la 4e, los pesos de su red de la exploración, `s0-p0`, tensor a
+    tensor, y su logit ajustado, exacto;
+  - los cuatro modelos, sus cuatro métricas de ese pliegue en `outputs/`, a 4
+    decimales.
+
+  *Elegido por el agente, declarado:* qué pliegue hace de reservado de mentira.
+  Se eligió este porque permite esas reproducciones.
+- **`--modo apertura`.** El reservado.
+
+Lo que impone el programa:
+- **Las negativas a correr.** En los dos modos, antes de leer nada, se niega si
+  ya existe `outputs/fase5-reservado.json` o `.md`, o
+  `data/fase5-apertura-iniciada.json`. *Añadido por el agente, declarado:* esa
+  marca la escribe la apertura antes de leer el reservado, para que una
+  apertura que se corte no se repita sin que la persona lo decida. La apertura
+  exige además el ensayo completo, con 0 controles fallidos y la misma huella
+  del código, y el código y el ensayo en el último commit.
+- **Las etiquetas.** La evaluación se carga sin la etiqueta. La etiqueta se lee
+  del CSV solo cuando las cuatro puntuaciones están escritas en `data/`, y la
+  red recibe −1 como etiqueta de cada fila de evaluación.
+- **El bootstrap.** 2.000 remuestras con semilla 2026, las mismas para los
+  cuatro modelos y para la diferencia M3 limpio − M2. *Detalles que la
+  especificación no fijaba, elegidos por el agente y declarados:*
+  - se sortean los `patient_id` de la evaluación, ordenados;
+  - los percentiles 2,5 y 97,5 son los de `numpy.percentile`, con su
+    interpolación lineal;
+  - un paciente que sale dos veces cuenta como dos en SEtop-15;
+  - el programa se detiene si una remuestra tiene una sola clase.
+- **Los controles de la corrida,** cada uno con su caso que debe fallar:
+  pacientes a un solo lado, puntuaciones finitas, remuestras por paciente,
+  recuentos frente a `outputs/holdout-pacientes.json`, la salida completa y, en
+  el ensayo, las reproducciones. Si uno falla, no se escribe la salida.
+
+La prueba, `test_fase5.py`, da 47 de 47 casos sin entrenar nada. Cubre:
+- las negativas a correr y el ensayo previo;
+- el versionado y los lectores del reservado;
+- la separación de las etiquetas;
+- el bootstrap, los recuentos y la salida.
+
+Antes del ensayo se hizo una corrida de humo en el scratchpad. En ella la red
+se sustituyó por su resultado guardado, para probar lo que va después de la red
+sin entrenarla, y pasó.
+
+**El ensayo, corrido el 2026-11-04** (`outputs/fase5-ensayo.json`):
+- **Controles:** 27 de 27 bien, 13 de ellos casos que deben fallar
+  (`controles`). Los cuatro modelos reproducen su pliegue, la red al bit.
+- **Tiempo:** 2.830,1 s en total (`segundos`):
+  - la carga, 5,6 s;
+  - M2, 4 s; M3 limpio, 16,2 s; «Imagen + básicos», 7,1 s;
+  - la red, 1.989,1 s de entrenamiento y 644,9 s de ajuste fino y predicción;
+  - el bootstrap, 157,8 s.
+- **Sus cifras son del desarrollo** y no se leen como resultado: el ensayo prueba
+  el programa.
+- **El verificador de trazabilidad,** recalculado en el scratchpad con el
+  ensayo en el corpus, da los mismos recuentos, en todo el corpus y por campo.
+  Solo `campos_declarados_como_porcentaje_en_outputs` pasa de 17 a 19.
+  `outputs/sintesis-verificacion.json` no se regeneró.
 
 ---
 
