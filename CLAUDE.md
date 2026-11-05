@@ -1861,10 +1861,19 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
-- [ ] **Las fases 4d, 4e, 4f y 5, y el análisis de potencia de la prueba, no
-      están todavía en el informe, el README ni la demo** (2026-10-31; la 4e,
-      desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia y la Fase 5,
-      desde el 2026-11-04).
+- [ ] **Las fases 4d, 4e, 4f, 5 y 5b, y el análisis de potencia de la prueba,
+      no están todavía en el informe, el README ni la demo** (2026-10-31; la
+      4e, desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia y la
+      Fase 5, desde el 2026-11-04; la 5b, desde el 2026-11-05).
+      - **La Fase 5b:** el hallazgo 18, con los cuatro
+        `outputs/fase5b-envio-*.json` y `outputs/fase5b-comparacion.json`, y
+        `PLAN.md`, Fase 5b. Toca un pasaje que el borrador ya tiene:
+        `informe/borrador-v2.md`, líneas 833 a 837, pone la pAUC media de M3 en
+        desarrollo al lado del 0,164 de la variante del ganador sin recortes de
+        imagen, *«como control de que la reproducción está bien montada, no como
+        comparación»*. La Fase 5b da ahora la puntuación privada de M3 limpio en
+        Kaggle frente a esa misma variante, como comparación descriptiva fijada
+        de antemano.
       - **La Fase 5:** el hallazgo 17, con `outputs/fase5-reservado.json` y
         `outputs/fase5-posterior.json`. Lo que no reproduce el reservado, la
         ventaja de la red de la 4e sobre «Imagen + básicos», toca la
@@ -1879,8 +1888,20 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         README; la única coincidencia, en la línea 936 del borrador, habla de
         detectar cáncer. Al añadirla, acompaña a las lecturas de «no mejora»
         de las fases 4b a 4e (hallazgo 16, la lectura).
-      - **Lo que cambia en la verificación: nada, desde la separación del
-        2026-11-04.**
+      - **Lo que cambia en la verificación: con las salidas de la 5b, un
+        número.** Antes de ellas, nada, desde la separación del 2026-11-04.
+        - **Con las salidas de la 5b (2026-11-05).** La verificación del
+          borrador, recalculada en el scratchpad con los `outputs/fase5b-*.json`
+          en el corpus, pasa en la búsqueda en todo el corpus de 356 números con
+          respaldo y 12 señalados a 357 y 11. La única diferencia es el «7,500»
+          de la línea 226, el monto de cada premio secundario, que sale de las
+          reglas de Kaggle y no de `outputs/`. Lo respalda por coincidencia
+          `outputs/fase5b-kaggle-red4e.json > salida_del_notebook.control.segundos`,
+          7,5, porque el verificador lee también la coma de «7,500» como
+          decimal: es el defecto (a) del registro de incidentes, duodécima
+          fila. La verificación por campo (`por_campo`) no cambia, y
+          `campos_declarados_como_porcentaje_en_outputs` pasa de 17 a 19. La
+          versionada no se regeneró.
         - **Qué pasaba.** Con la curva completa en el corpus, la verificación
           del borrador, recalculada en el scratchpad, pasaba de 356 números con
           respaldo y 25 señalados a 357 y 24. La única diferencia era el
