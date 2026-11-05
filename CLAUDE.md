@@ -806,7 +806,7 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman dieciséis del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman diecisiete del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
@@ -817,10 +817,12 @@ train, `tbp_lv_nevi_confidence`). Se suman dieciséis del modelado, trazables a
 tres `outputs/fase4d-*.json` de las preguntas, `outputs/fase4d-holm.json`,
 `outputs/fase4e-exploracion.json`, los dos `outputs/fase4e-*.json` de las
 preguntas, `outputs/fase4e-holm.json`,
-`outputs/fase4f-red4e-vs-imagen-basicos.json` y
-`outputs/potencia-nadeau-bengio.json`. Desde el 2026-09-25 sus
-cifras son las del conjunto de desarrollo; las de la corrida sobre el 100 % de
-los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
+`outputs/fase4f-red4e-vs-imagen-basicos.json`,
+`outputs/potencia-nadeau-bengio.json`, `outputs/fase5-reservado.json` y
+`outputs/fase5-posterior.json`. Desde el 2026-09-25 sus
+cifras son las del conjunto de desarrollo, salvo las del reservado en el
+hallazgo 17; las de la corrida sobre el 100 % de los datos están en la tabla de
+antes y después de `PLAN.md`, Fase 1.
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
    Nivel 2a da pAUC 0,0005, *por debajo del piso aleatorio de la métrica* (0,02).
@@ -1345,6 +1347,109 @@ los datos están en la tabla de antes y después de `PLAN.md`, Fase 1.
       respaldaban cifras del borrador por coincidencia (misma sección de
       `PLAN.md`).
 
+17. **El conjunto reservado, abierto una sola vez: confirma la ventaja de M3
+    limpio sobre M2 en la pAUC y el AUC, y no reproduce la de la red de la 4e
+    sobre «Imagen + básicos»** (Fase 5, 2026-11-04; `outputs/fase5-reservado.json`
+    y, posterior a la apertura, `outputs/fase5-posterior.json`). Cada modelo se
+    entrenó una vez con los 833 pacientes de desarrollo, con semilla 0, y se
+    puntuó en los 209 pacientes reservados: 82.830 lesiones, 76 de ellas
+    malignas, en 52 pacientes (`datos`). Los intervalos son de un bootstrap por
+    paciente: 2.000 remuestras, semilla 2026, percentiles 2,5 y 97,5, y las
+    mismas remuestras para todos los modelos y las diferencias. Especificación
+    de la persona, fijada antes de abrir (`PLAN.md`, Fase 5).
+
+    **En el reservado** (`metricas.*.punto` e `.intervalo_95`):
+
+    | Modelo | pAUC | AUC | SEtop-15 | NNT80% SE |
+    |---|---|---|---|---|
+    | M3 limpio, principal | 0,1588 [0,1387; 0,1766] | 0,949 [0,9205; 0,9707] | 0,7628 [0,6438; 0,8599] | 96,7541 [43,1217; 241,3779] |
+    | M2, referencia | 0,1387 [0,1074; 0,1668] | 0,9271 [0,8837; 0,9611] | 0,7212 [0,603; 0,8262] | 153,9508 [46,7726; 290,1911] |
+    | Red de la 4e, descriptivo | 0,1307 [0,0986; 0,1614] | 0,9103 [0,863; 0,9478] | 0,6314 [0,5033; 0,75] | 198,8852 [75,0072; 386,1779] |
+    | «Imagen + básicos», descriptivo | 0,1385 [0,1117; 0,159] | 0,9093 [0,868; 0,9393] | 0,5032 [0,366; 0,6273] | 239,7213 [106,3714; 376,0217] |
+
+    **La pAUC en desarrollo y en el reservado** (`fase5-posterior.json >
+    tabla.modelos`). En desarrollo es `media_global`, con las semillas
+    indicadas:
+
+    | Modelo | Desarrollo | Reservado |
+    |---|---|---|
+    | M3 limpio | 0,1621 (semillas 0 a 9) | 0,1588 |
+    | M2 | 0,144 (semillas 0 a 9) | 0,1387 |
+    | Red de la 4e | 0,1376 (semillas 5 a 9) | 0,1307 |
+    | «Imagen + básicos» | 0,084 (semillas 0 a 9); 0,0884 (semillas 5 a 9) | 0,1385 |
+
+    **Lo que se confirma: M3 limpio − M2** (`diferencia_m3limpio_menos_m2`):
+    - pAUC +0,0201 [0,0008; 0,0413]; en desarrollo, +0,0181 [0,0021; 0,0341]
+      (hallazgo 8);
+    - AUC +0,0219 [0,0009; 0,0459]; en desarrollo, +0,021 [0,0043; 0,0376];
+    - SEtop-15 +0,0417 [−0,0296; 0,117] y NNT80% SE −57,1967
+      [−127,1367; 41,4539]. Los dos intervalos contienen el cero, como en
+      desarrollo.
+
+    En la pAUC y el AUC, los intervalos excluyen el cero a los dos lados y con
+    el mismo signo. La diferencia no queda entera por debajo de cero en
+    ninguna métrica, así que la regla de la especificación sobre una
+    contradicción entre las dos estimaciones no se activa
+    (`intervalo_entero_por_debajo_de_cero`).
+
+    **Lo que no se reproduce: la ventaja de la red de la 4e sobre «Imagen +
+    básicos»** (`fase5-posterior.json > red4e_menos_imagen_basicos`, con las
+    mismas remuestras):
+    - pAUC −0,0078 [−0,0306; 0,02]; en la Fase 4f, en desarrollo, +0,0493
+      [0,0218; 0,0767] (hallazgo 15);
+    - AUC +0,0011 [−0,0312; 0,036]; SEtop-15 +0,1282 [−0,0035; 0,2585]; NNT80%
+      SE −40,8361 [−194,3999; 110,3913].
+
+    Ningún intervalo excluye el cero; en la Fase 4f, los cuatro lo excluían. En
+    la pAUC, la diferencia cambia de signo. De desarrollo al reservado, la pAUC
+    de «Imagen + básicos» pasa de 0,0884 a 0,1385 en las semillas de la 4f, y la
+    de la red, de 0,1376 a 0,1307.
+
+    **Comprobaciones posteriores a la apertura,** decididas por la persona
+    después de leerla, descriptivas (`fase5-posterior.json`; `PLAN.md`, Fase 5,
+    «Análisis posterior a la apertura»):
+    - las características de DINOv2 del reservado salen de la misma extracción
+      que las del desarrollo, con los mismos atributos y los SHA-256 que esa
+      extracción registró. Recalculadas desde las imágenes en 256 recortes de
+      cada archivo, la diferencia máxima con el archivo es 0 (`recalculo`);
+    - «Imagen + básicos» de la Fase 5 es el de `outputs/imagen-sola.json`,
+      entrenado con todo el desarrollo. El ensayo reprodujo su pliegue 0 de la
+      semilla 0 a 4 decimales, con la huella de código de la apertura
+      (`imagen_basicos`);
+    - por qué «Imagen + básicos» da más en el reservado que en desarrollo no
+      está medido.
+
+    **Cómo se corrió** (`PLAN.md`, Fase 5, «El programa y el ensayo»):
+    - el programa es `modelado-baseline/scripts/fase5.py`. Antes de la
+      apertura, un ensayo con un pliegue del desarrollo como reservado de
+      mentira reprodujo los cuatro modelos de las fases 4 y 4e, la red al bit:
+      27 de 27 controles (`outputs/fase5-ensayo.json`);
+    - la apertura corrió con ese código, ya en un commit subido, en 3.258,6 s:
+      12 de 12 controles. Las etiquetas del reservado se leyeron después de
+      escribir las cuatro puntuaciones (`orden`);
+    - el programa se niega a volver a correr: existen la salida y la marca de
+      la apertura.
+
+    *Salvedades:*
+    - **Los dos lados no se miden igual.** En desarrollo, la cifra es la media
+      por pliegue de modelos entrenados con cuatro quintos del desarrollo, con
+      el intervalo de Nadeau y Bengio. En el reservado, es un solo modelo
+      entrenado con todo el desarrollo, con el intervalo del bootstrap por
+      paciente. Los dos intervalos no miden lo mismo
+      (`fase5-posterior.json > tabla.como_leerla`).
+    - **Qué no cambia, por la especificación.** La estimación principal sigue
+      siendo la validación cruzada repetida, y el reservado no cambia la
+      recomendación: M3 limpio donde se toma la fotografía corporal total. La
+      red de la 4e y «Imagen + básicos» entraron como resultado descriptivo,
+      sin cambiar ninguna recomendación (`PLAN.md`, Fase 5).
+    - **El reservado tampoco es ajeno** al diseño de las variables de M2 y de
+      M3 limpio, ni a la receta de la red: sus autores los fijaron sobre todo el
+      conjunto de entrenamiento del reto (`PLAN.md`, Fase 5, y hallazgo 8).
+    - **Las comprobaciones son posteriores a la apertura.** Se decidieron
+      después de ver los resultados y no cambian ningún modelo.
+    - **Sobre qué se midió:** los recortes de SLICE-3D, no fotos de teléfono
+      (Pendientes).
+
 ### Dónde se lee la fase vigente
 
 En `PLAN.md`, no aquí. La ruta —qué fase está en curso, cuál es el siguiente
@@ -1662,10 +1767,15 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
-- [ ] **Las fases 4d, 4e y 4f, y el análisis de potencia de la prueba, no
+- [ ] **Las fases 4d, 4e, 4f y 5, y el análisis de potencia de la prueba, no
       están todavía en el informe, el README ni la demo** (2026-10-31; la 4e,
-      desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia, desde el
-      2026-11-04).
+      desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia y la Fase 5,
+      desde el 2026-11-04).
+      - **La Fase 5:** el hallazgo 17, con `outputs/fase5-reservado.json` y
+        `outputs/fase5-posterior.json`. Lo que no reproduce el reservado, la
+        ventaja de la red de la 4e sobre «Imagen + básicos», toca la
+        recomendación para el escenario sin fotografía corporal total, que el
+        informe todavía no tiene (abajo, «Lo que la 4f deja desfasado»).
       - **Dónde están:** los hallazgos 13, 14, 15 y 16 y `PLAN.md`, fases 4d,
         4e y 4f y, en la Fase 6, «La potencia de la prueba». Sus cifras están
         en `outputs/fase4d-*.json`, `outputs/fase4e-*.json`,
