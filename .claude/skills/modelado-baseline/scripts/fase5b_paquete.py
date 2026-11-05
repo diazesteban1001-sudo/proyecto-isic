@@ -206,7 +206,7 @@ def main():
         "conjunto_de_datos": {"id": f"{USUARIO}/{SLUG}", "directorio": os.path.relpath(destino, RAIZ),
                               "archivos": {os.path.relpath(a, destino): {"bytes": os.path.getsize(a), "sha256": sha(a)}
                                            for a in archivos},
-                              "pesos_dinov2": {"sha256": extraer.PESOS_SHA256, "licencia": "Apache 2.0, codigo/dinov2-LICENSE"}},
+                              "pesos_dinov2": {"sha256": extraer.PESOS_SHA256, "licencia": "Apache 2.0, dinov2-LICENSE"}},
         "registro_del_entrenamiento": os.path.relpath(args.registro, RAIZ),
         "comando": {"interprete": os.path.relpath(sys.executable, RAIZ), "argumentos": sys.argv},
         "versiones": {"python": platform.python_version(), "numpy": np.__version__, "pandas": pd.__version__,
