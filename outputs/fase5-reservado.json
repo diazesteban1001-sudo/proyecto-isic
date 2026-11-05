@@ -1,0 +1,439 @@
+{
+  "especificacion": "PLAN.md, Fase 5, fijada el 2026-09-26 y ampliada el 2026-11-02, antes de abrir el reservado",
+  "modo": "apertura",
+  "datos": {
+    "entrenamiento": {
+      "conjunto": "desarrollo",
+      "archivo": "data/train-metadata.csv",
+      "sin_los_pacientes_de": "outputs/holdout-pacientes.json",
+      "filas": "todo el desarrollo",
+      "pacientes": 833,
+      "lesiones": 318229,
+      "malignas": 317
+    },
+    "evaluacion": {
+      "que_es": "los pacientes de outputs/holdout-pacientes.json",
+      "pacientes": 209,
+      "lesiones": 82830,
+      "malignas": 76,
+      "pacientes_con_malignas": 52,
+      "caracteristicas_de_imagen": {
+        "archivo": "data/dinov2-vits14-reservado.h5",
+        "sha256": "7e145c16238ded00599c6ddc39a25b11b4ef185956d29259dde2b0673ee35c80",
+        "isic_id_en_datos": 82830,
+        "isic_id_en_archivo": 82830,
+        "en_datos_sin_caracteristicas": 0,
+        "en_archivo_sin_fila_en_datos": 0,
+        "imagenes_no_decodificadas": 0,
+        "nan_tras_alinear": 0,
+        "sha256_igual_al_de_la_extraccion": true
+      }
+    }
+  },
+  "modelos": {
+    "M3limpio": {
+      "nombre": "M3 limpio",
+      "papel": "principal",
+      "descripcion": "M3 limpio: las variables de M3 sin descartar las de la celda 24, con las transformaciones sin etiqueta ajustadas en cada pliegue de entrenamiento, y CatBoost con la parada de M3 y el resto por defecto (ganador_m3.py); semilla 0, parada sobre el 20 % interno del entrenamiento"
+    },
+    "M2": {
+      "nombre": "M2",
+      "papel": "referencia",
+      "descripcion": "M1 + contexto de paciente (contexto_paciente.py); HistGradientBoostingClassifier(class_weight='balanced', random_state=0)"
+    },
+    "Red4e": {
+      "nombre": "red de la 4e",
+      "papel": "descriptivo",
+      "descripcion": "EfficientNet-B0 con la receta de la Fase 4e y su ajuste fino con pAUC_CVaR_Loss (fase4e.py y fase4e_ajuste.py), semilla 0; solo la imagen; la puntuación es la sigmoide del logit en float64"
+    },
+    "ImagenBasicos": {
+      "nombre": "«Imagen + básicos»",
+      "papel": "descriptivo",
+      "descripcion": "modelo_imagen() de apilado_imagen.py sobre las 384 variables de DINOv2 más age_approx, sex y anatom_site_general (codificar_fold), estandarizadas juntas, como en imagen_sola.py"
+    }
+  },
+  "metricas": {
+    "M3limpio": {
+      "pauc": {
+        "punto": 0.1588,
+        "intervalo_95": [
+          0.1387,
+          0.1766
+        ]
+      },
+      "auc": {
+        "punto": 0.949,
+        "intervalo_95": [
+          0.9205,
+          0.9707
+        ]
+      },
+      "setop15": {
+        "punto": 0.7628,
+        "intervalo_95": [
+          0.6438,
+          0.8599
+        ]
+      },
+      "nnt80": {
+        "punto": 96.7541,
+        "intervalo_95": [
+          43.1217,
+          241.3779
+        ]
+      }
+    },
+    "M2": {
+      "pauc": {
+        "punto": 0.1387,
+        "intervalo_95": [
+          0.1074,
+          0.1668
+        ]
+      },
+      "auc": {
+        "punto": 0.9271,
+        "intervalo_95": [
+          0.8837,
+          0.9611
+        ]
+      },
+      "setop15": {
+        "punto": 0.7212,
+        "intervalo_95": [
+          0.603,
+          0.8262
+        ]
+      },
+      "nnt80": {
+        "punto": 153.9508,
+        "intervalo_95": [
+          46.7726,
+          290.1911
+        ]
+      }
+    },
+    "Red4e": {
+      "pauc": {
+        "punto": 0.1307,
+        "intervalo_95": [
+          0.0986,
+          0.1614
+        ]
+      },
+      "auc": {
+        "punto": 0.9103,
+        "intervalo_95": [
+          0.863,
+          0.9478
+        ]
+      },
+      "setop15": {
+        "punto": 0.6314,
+        "intervalo_95": [
+          0.5033,
+          0.75
+        ]
+      },
+      "nnt80": {
+        "punto": 198.8852,
+        "intervalo_95": [
+          75.0072,
+          386.1779
+        ]
+      }
+    },
+    "ImagenBasicos": {
+      "pauc": {
+        "punto": 0.1385,
+        "intervalo_95": [
+          0.1117,
+          0.159
+        ]
+      },
+      "auc": {
+        "punto": 0.9093,
+        "intervalo_95": [
+          0.868,
+          0.9393
+        ]
+      },
+      "setop15": {
+        "punto": 0.5032,
+        "intervalo_95": [
+          0.366,
+          0.6273
+        ]
+      },
+      "nnt80": {
+        "punto": 239.7213,
+        "intervalo_95": [
+          106.3714,
+          376.0217
+        ]
+      }
+    }
+  },
+  "diferencia_m3limpio_menos_m2": {
+    "pauc": {
+      "punto": 0.0201,
+      "intervalo_95": [
+        0.0008,
+        0.0413
+      ],
+      "intervalo_entero_por_debajo_de_cero": false
+    },
+    "auc": {
+      "punto": 0.0219,
+      "intervalo_95": [
+        0.0009,
+        0.0459
+      ],
+      "intervalo_entero_por_debajo_de_cero": false
+    },
+    "setop15": {
+      "punto": 0.0417,
+      "intervalo_95": [
+        -0.0296,
+        0.117
+      ],
+      "intervalo_entero_por_debajo_de_cero": false
+    },
+    "nnt80": {
+      "punto": -57.1967,
+      "intervalo_95": [
+        -127.1367,
+        41.4539
+      ],
+      "intervalo_entero_por_debajo_de_cero": false
+    }
+  },
+  "bootstrap": {
+    "unidad": "paciente",
+    "remuestras": 2000,
+    "semilla": 2026,
+    "percentiles": [
+      2.5,
+      97.5
+    ],
+    "metodo_de_percentil": "numpy.percentile, interpolación lineal",
+    "sorteo": "numpy.random.default_rng(semilla).integers(0, pacientes, (remuestras, pacientes)), sobre los patient_id de la evaluación ordenados",
+    "mismas_remuestras_para_los_cuatro_modelos_y_la_diferencia": true,
+    "paciente_repetido": "cada vez que sale un paciente es un grupo nuevo en SEtop-15",
+    "sha256_de_los_sorteos": "c6d661e54685eca80d495877d805f5f20edbc9fdd083db299137a9c408ea48e2"
+  },
+  "entrenamiento": {
+    "M2": {
+      "n_variables": 77
+    },
+    "M3limpio": {
+      "n_variables": 239,
+      "arboles": 113,
+      "iteraciones_corridas": 213
+    },
+    "ImagenBasicos": {
+      "n_variables": 387,
+      "avisos_no_convergencia": 0
+    },
+    "Red4e": {
+      "epocas": 20,
+      "negativos_en_mas_de_una_epoca": 0,
+      "positivos": 317,
+      "lotes_del_ajuste_corridos": [
+        496,
+        496
+      ],
+      "pesos_base": "data/fase5-reservado/red-base.pt",
+      "sha256_pesos_base": "4fe7ba9273c7687182debb3cfa835e15a770d8080b281346a58c03aab1e684fa",
+      "registro_completo": "data/fase5-reservado/red.json"
+    }
+  },
+  "controles": {
+    "casos": [
+      {
+        "control": "pacientes",
+        "caso": "ningún paciente en el entrenamiento y en la evaluación",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "0"
+      },
+      {
+        "control": "pacientes",
+        "caso": "con un paciente de la evaluación añadido al entrenamiento",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "ERROR: 1 pacientes están en el entrenamiento y en la evaluación (p. ej. ['IP_4111386'])."
+      },
+      {
+        "control": "puntuaciones",
+        "caso": "una puntuación finita por fila de evaluación en los cuatro modelos",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "M2": 82830,
+          "M3limpio": 82830,
+          "ImagenBasicos": 82830,
+          "Red4e": 82830
+        }
+      },
+      {
+        "control": "puntuaciones",
+        "caso": "con un NaN en M3 limpio",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "se detecta"
+      },
+      {
+        "control": "bootstrap",
+        "caso": "en las 20 primeras remuestras, cada paciente entra con todas sus lesiones",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "209 pacientes"
+      },
+      {
+        "control": "bootstrap",
+        "caso": "una remuestra por lesiones, del mismo tamaño",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "se detecta"
+      },
+      {
+        "control": "recuentos",
+        "caso": "la evaluación: los de reservado en holdout-pacientes.json",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pacientes": 209,
+          "pacientes_portadores": 52,
+          "lesiones_malignas": 76
+        }
+      },
+      {
+        "control": "recuentos",
+        "caso": "la evaluación frente a los de desarrollo",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "iguales: False"
+      },
+      {
+        "control": "recuentos",
+        "caso": "el entrenamiento: los de desarrollo en holdout-pacientes.json",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pacientes": 833,
+          "pacientes_portadores": 207,
+          "lesiones_malignas": 317
+        }
+      },
+      {
+        "control": "recuentos",
+        "caso": "el entrenamiento frente a los de reservado",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "iguales: False"
+      },
+      {
+        "control": "salida",
+        "caso": "la salida tiene punto e intervalo de todo lo que pide la especificación",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "completa"
+      },
+      {
+        "control": "salida",
+        "caso": "sin la SEtop-15 de la red",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": [
+          "metricas.Red4e.setop15"
+        ]
+      }
+    ],
+    "de_casos": 12,
+    "fallos": 0,
+    "deben_fallar": 6,
+    "controles_de_la_red_4e": {
+      "archivo": "data/fase4e-controles.json",
+      "sha256": "c52ca7c100e90bdbf264e1f3214a87b559e1c9f931a1b1c4449b119549d8f633",
+      "casos": 34,
+      "fallos": 0
+    }
+  },
+  "orden": {
+    "puntuaciones_escritas": "2026-11-05T03:18:58.207292+00:00",
+    "etiquetas_leidas": "2026-11-05T03:18:59.100588+00:00",
+    "nota": "las etiquetas de la evaluación se leen del CSV después de escribir las puntuaciones de los cuatro modelos"
+  },
+  "archivos": {
+    "puntuaciones": {
+      "archivo": "data/fase5-reservado/puntuaciones.csv.gz",
+      "sha256": "6cc3b101ad022e0f91dc1a73a23a69b17424229c8594e33aad8ae7b461cd6d28"
+    },
+    "remuestras": {
+      "archivo": "data/fase5-reservado/remuestras.csv.gz",
+      "sha256": "efa8fdfee245fe6cf36743403fd3f332b073c6f4a107f3bb5017182592dcc1c3"
+    },
+    "como_leerlos": "pd.read_csv(archivo, float_precision='round_trip')"
+  },
+  "ensayo": {
+    "archivo": "outputs/fase5-ensayo.json",
+    "sha256": "9b44b83521e3a010aeae9a20fbcfa4ad021da9da6a261ef97c3a7dcb5cffc140",
+    "completo": true,
+    "controles": 27,
+    "mismo_codigo": true
+  },
+  "sha256_del_codigo": {
+    "fase5.py": "313198f874471726f71021ee247590dc46574b84a8ed3c03fe5e1d6333f20a47",
+    "fase4_comparar.py": "7f9e8fa309e1e5264304825e115fd72680e24bfaf2f9957d8f9dda6784f345a2",
+    "ganador_m3.py": "5569719323be1ed4e8e6be31028feef6969c9a71dc24099b0251fdf626a7336f",
+    "contexto_paciente.py": "d074e3b754e58dc49e844b9e50206f540e871495875b427b9992fb751c467af3",
+    "train_and_evaluate.py": "0fffab39d5eb1d2416ec0e78d633bbeab018b1914e428b147c5b4deb5f81b767",
+    "evaluar_repetido.py": "6a273b08b44411d33063e69b087c3c7b5e96563bb0d8bed23487530a3c272b94",
+    "metricas_triaje.py": "4494aec6b2523b4ccd1a012375458f30222eeda318efa2710dde7d1643ec1227",
+    "apilado_imagen.py": "219ffdf2e030b1cbcd324d9e20db2af392b0b893f463c60459cc5af052811654",
+    "imagen_sola.py": "34e455aaa2ae8a0d67b0d93c6f1934f2e960a95fe8a7f14775a81124e54fdea6",
+    "fase4c.py": "842592f9a8a0c918bc32da50da4ee5cb54642743e44760cabc1cc94d3f8da4b3",
+    "fase4c_redes.py": "dd401c3d308fbf1651d6abb5e18ea1456548a5443c036965f9ee72bf167570ec",
+    "fase4e.py": "2f3c5ddc210634076f7f9dd21226fa67053c9ea33eece899bbb5263438ee6462",
+    "fase4e_ajuste.py": "1436a3e73d77af477086e1fcf31f4a8a7e85288529a5f41d0608e0b4370761ab",
+    "fase4e_redes.py": "1de58d0c0b5eaab80a7af10c5fd0e0d78bb9d7737f0ae06240167c67b16fb989",
+    "prueba_tiempo_red_imagen.py": "46352387a38df26680b0e9dc83d86787ec921011a9672b5adad7e9c0a447d9e1",
+    "datos_desarrollo.py": "4cc8a8ed721408cc2459d319655fca3cc93963e62b6a03ef7773bd36349e2902"
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase5.py",
+      "--modo",
+      "apertura"
+    ],
+    "caffeinate": {
+      "activo": true,
+      "asercion": "PreventUserIdleSystemSleep",
+      "a_nombre_de": "este proceso"
+    }
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scikit_learn": "1.9.0",
+    "catboost": "1.2.8",
+    "torch": "2.14.0",
+    "torchvision": "0.29.0"
+  },
+  "fecha": "2026-11-05T03:21:49.878445+00:00",
+  "segundos": {
+    "carga": 7.6,
+    "M2": 5.2,
+    "M3limpio": 22.7,
+    "ImagenBasicos": 9.0,
+    "Red4e_entrenamiento": 2381.6,
+    "Red4e_ajuste_y_prediccion": 659.3,
+    "bootstrap": 170.4,
+    "total": 3258.6
+  },
+  "completo": true,
+  "nota": "No interpreta. El resultado principal es M3 limpio; M2 es la referencia; la red de la 4e e «Imagen + básicos» son descriptivos."
+}

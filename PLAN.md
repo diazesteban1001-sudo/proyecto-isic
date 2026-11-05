@@ -17,7 +17,8 @@ su resultado a favor, y la recomendación para ese escenario pasa a la red de la
 4e; al cerrar la 4e, la persona decidía si se usaba cómputo aparte, y el
 2026-11-04 abrió la Fase 5 con el equipo propio, en dos tiempos: un ensayo que
 no lee el reservado y, solo si pasa entero, la apertura (Fase 5, «El programa y
-el ensayo»); la Fase 5b, el envío tardío a Kaggle, está fijada para después de
+el ensayo»); el ensayo pasó, y la apertura corrió una sola vez el mismo día y
+escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el envío tardío a Kaggle, está fijada para después de
 la Fase 5; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
@@ -2468,7 +2469,7 @@ pregunta, sin corrección por multiplicidad dentro de la fase.
 
 ---
 
-## Fase 5 — Abrir el holdout. Una sola vez — EN CURSO (2026-11-04)
+## Fase 5 — Abrir el holdout. Una sola vez — CERRADA (2026-11-04)
 
 **Qué se hace.** Evaluar sobre el holdout sellado en la fase 1 **el modelo
 recomendado**, uno solo, y reportar punto e intervalo.
@@ -2637,6 +2638,31 @@ sin entrenarla, y pasó.
   ensayo en el corpus, da los mismos recuentos, en todo el corpus y por campo.
   Solo `campos_declarados_como_porcentaje_en_outputs` pasa de 17 a 19.
   `outputs/sintesis-verificacion.json` no se regeneró.
+
+**La apertura, corrida el 2026-11-04, una sola vez** (`outputs/fase5-reservado.json`
+y su `.md`, la puerta de la fase):
+- **El código:** el del commit «Fase 5: el programa de la apertura y su
+  ensayo», subido antes de lanzarla. La apertura comprobó que el ensayo de ese
+  commit tiene su misma huella (`ensayo.mismo_codigo`) y que el código no tenía
+  cambios sin commit. Corrió bajo caffeinate (`comando.caffeinate`).
+- **Controles:** 12 de 12 bien, 6 de ellos casos que deben fallar
+  (`controles`). Los recuentos son los de `outputs/holdout-pacientes.json`: 209
+  pacientes, 52 con lesiones malignas y 76 lesiones malignas en la evaluación, y
+  833, 207 y 317 en el entrenamiento. Las características de DINOv2 del
+  reservado tienen el SHA-256 de la extracción y se alinean con las 82.830
+  lesiones (`datos.evaluacion.caracteristicas_de_imagen`).
+- **El orden:** las etiquetas del reservado se leyeron después de escribir las
+  cuatro puntuaciones (`orden`).
+- **Tiempo:** 3.258,6 s (`segundos`). La red, 2.381,6 s de entrenamiento y 659,3
+  s de ajuste fino y predicción; el bootstrap, 170,4 s.
+- **La regla de la especificación:** la diferencia M3 limpio − M2 no queda entera
+  por debajo de cero en ninguna de las cuatro métricas
+  (`diferencia_m3limpio_menos_m2.*.intervalo_entero_por_debajo_de_cero`), así
+  que la regla de la contradicción no se activa.
+- **Los resultados** se leen en la salida, punto e intervalo de cada modelo. No
+  se interpretan aquí, y no están todavía en `CLAUDE.md` ni en el informe.
+- **La marca** `data/fase5-apertura-iniciada.json` queda en `data/`. Con ella, y
+  con la salida, el programa se niega a volver a correr.
 
 ---
 
