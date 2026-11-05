@@ -1,0 +1,223 @@
+{
+  "que_es": "la comprobación en el Mac de inferencia_5b.py frente a las referencias del entrenamiento de la Fase 5b, y el conjunto de datos privado para el notebook de Kaggle (PLAN.md, Fase 5b); no envía nada",
+  "tolerancias": {
+    "redes_logit": 0.0001,
+    "dinov2": 0.001,
+    "probabilidades": 1e-06
+  },
+  "controles": {
+    "casos": [
+      {
+        "control": "m3limpio",
+        "caso": "las variables de M3 limpio del control, idénticas",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "m3limpio",
+        "caso": "la puntuación de M3 limpio, idéntica",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "m3limpio",
+        "caso": "frente a la de C7",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "distintas"
+      },
+      {
+        "control": "m3limpio",
+        "caso": "el k-means en números asigna como scikit-learn las filas de entrenamiento",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "0 de 401059 distintas"
+      },
+      {
+        "control": "m3limpio",
+        "caso": "con los centros en orden inverso",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "394262 distintas"
+      },
+      {
+        "control": "redes",
+        "caso": "los logits de las seis redes ajustadas, a 0.0001",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "sola": "0.0e+00",
+          "pliegue-0": "0.0e+00",
+          "pliegue-1": "0.0e+00",
+          "pliegue-2": "0.0e+00",
+          "pliegue-3": "0.0e+00",
+          "pliegue-4": "0.0e+00"
+        }
+      },
+      {
+        "control": "redes",
+        "caso": "con los pesos de la red sin ajustar",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 1.1e+01"
+      },
+      {
+        "control": "dinov2",
+        "caso": "las variables de DINOv2 recalculadas, a 0.001 de las del archivo",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "dinov2",
+        "caso": "con las filas corridas una",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 1.2e+01"
+      },
+      {
+        "control": "imagen_basicos",
+        "caso": "los tres básicos codificados, idénticos",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "imagen_basicos",
+        "caso": "la puntuación, a 1e-06",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "imagen_basicos",
+        "caso": "con el sexo borrado",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 1.7e-01"
+      },
+      {
+        "control": "c7",
+        "caso": "la puntuación de C7 con la media de las cinco redes, a 1e-06",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "c7",
+        "caso": "con la red sola en lugar de las cinco",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 2.0e-01"
+      }
+    ],
+    "de_casos": 14,
+    "fallos": 0,
+    "deben_fallar": 6
+  },
+  "conjunto_de_datos": {
+    "id": "estebandazz/isic2024-fase5b-modelos",
+    "directorio": "data/fase5b/kaggle-dataset",
+    "archivos": {
+      "c7.cbm": {
+        "bytes": 335336,
+        "sha256": "7ba1f29cc3d40c6984300b01d818d6284d440da2c1357add60c5ae258e087586"
+      },
+      "control.npz": {
+        "bytes": 5443446,
+        "sha256": "2d10e73900cab70da332e495268da63389aed341df6bd1294bea718e5e1f5007"
+      },
+      "dataset-metadata.json": {
+        "bytes": 144,
+        "sha256": "a5f1382236c6eabf40db66e3686293e6c04b527a69a3c444ce140f545de25b8a"
+      },
+      "dinov2-LICENSE": {
+        "bytes": 11359,
+        "sha256": "600cc67cc4cb2f5ea317dcfc687ad1c74dc4bec8782bbe9db0afd83513b935b7"
+      },
+      "dinov2.zip": {
+        "bytes": 251472,
+        "sha256": "39c7a6a983c8cf06d0f2a07e1a28932afe53c36ce6237960b1b28901723991aa"
+      },
+      "dinov2_vits14_pretrain.pth": {
+        "bytes": 88283115,
+        "sha256": "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9"
+      },
+      "ganador_m3.py": {
+        "bytes": 26384,
+        "sha256": "5569719323be1ed4e8e6be31028feef6969c9a71dc24099b0251fdf626a7336f"
+      },
+      "imagen-basicos.json": {
+        "bytes": 460,
+        "sha256": "918baa4d4375b90cfd3e63bbdb54cf9871f682b0de76375ca93be9f2f393c472"
+      },
+      "imagen-basicos.npz": {
+        "bytes": 10324,
+        "sha256": "da3775f7c288008a48e66a3296cd24870098a45a755aa3e27b429d08ede61070"
+      },
+      "inferencia_5b.py": {
+        "bytes": 9133,
+        "sha256": "ac69781e0231046156a51241e336f7cda490d154856e6861c10e45e08c7e6374"
+      },
+      "m3limpio-ajuste.json": {
+        "bytes": 15022,
+        "sha256": "9d4f3594b7671d49af052923873c252bac11b30350c650f89eca81438441fdc1"
+      },
+      "m3limpio-ajuste.npz": {
+        "bytes": 25496,
+        "sha256": "5fd601a67b1c780323a56d67241c4740fbd92b44e616f1f5a28ca9039042f442"
+      },
+      "m3limpio.cbm": {
+        "bytes": 374512,
+        "sha256": "9738991e81ed4339d28bca729195957c9d4174983ed623c63765696f79ae8f57"
+      },
+      "red-pliegue-0.pt": {
+        "bytes": 16329419,
+        "sha256": "1d99e0d5496243c9fcb0510a10b9cc6fc57e05651ff64d0d5f2b1e5a13bf1a0d"
+      },
+      "red-pliegue-1.pt": {
+        "bytes": 16329419,
+        "sha256": "c880203d325223a2310eb962da9726f65eed472e7ba67a7f0d13a1c50b7fad8a"
+      },
+      "red-pliegue-2.pt": {
+        "bytes": 16329419,
+        "sha256": "d8ec59a6e6a369e52983a924a8bc3e00d3d458b7a6f703102936d53a0946086a"
+      },
+      "red-pliegue-3.pt": {
+        "bytes": 16329419,
+        "sha256": "16d045b1eae3af570c8c12de5637dfcc12f15d2bea78b45b8608b24e74d96ad7"
+      },
+      "red-pliegue-4.pt": {
+        "bytes": 16329419,
+        "sha256": "c0f6462f8bb6e2692a7675031253740f28150397278154e672e02dc0aaa54542"
+      },
+      "red-sola.pt": {
+        "bytes": 16309541,
+        "sha256": "d69f2b92cd148a9e0d8913695354d21c527c2bd428df63c28ae8ab185f69af04"
+      }
+    },
+    "pesos_dinov2": {
+      "sha256": "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9",
+      "licencia": "Apache 2.0, dinov2-LICENSE"
+    }
+  },
+  "registro_del_entrenamiento": "outputs/fase5b-entrenamiento.json",
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase5b_paquete.py",
+      "--out",
+      "outputs/fase5b-paquete"
+    ]
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "torch": "2.14.0"
+  },
+  "fecha": "2026-11-05T08:32:17.124067+00:00",
+  "segundos": 27.5
+}
