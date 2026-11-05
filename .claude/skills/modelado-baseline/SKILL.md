@@ -680,6 +680,38 @@ escribe una tabla de cada modelo en desarrollo y en el reservado.
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5_posterior.py --out outputs/fase5-posterior
 ```
 
+## La Fase 5b: el envío tardío a Kaggle (2026-11-04)
+
+Cinco piezas, en este orden (`PLAN.md`, Fase 5b):
+- **`scripts/fase5b_entrenar.py`** entrena con todos los datos, 1.042 pacientes,
+  y semilla 0: M3 limpio, «Imagen + básicos», la red de la 4e sola y C7. Las
+  puntuaciones fuera de pliegue de C7 salen de cinco redes. Solo usa el código
+  verificado. Puntúa además un conjunto de control, pacientes de entrenamiento
+  tratados como filas nuevas: son las referencias. Cada red se guarda y la
+  corrida se reanuda.
+- **`scripts/inferencia_5b.py`** es la inferencia que viaja al notebook. Los
+  ajustes van en números, no como objetos de scikit-learn, y una sola pasada por
+  las imágenes alimenta a las redes y a DINOv2.
+- **`scripts/fase5b_paquete.py`** comprueba en el Mac que la inferencia
+  portátil reproduce las referencias, con un caso que debe fallar por
+  comprobación, y arma el conjunto de datos privado de Kaggle, plano.
+- **`scripts/fase5b_notebook.py`** es el notebook. Repite en Kaggle la
+  comprobación del control y no escribe `submission.csv` si falla. Con
+  `MODO = "medicion"`, mide el tiempo sobre recortes de entrenamiento y lo
+  proyecta al tamaño de la prueba.
+- **`scripts/fase5b_kaggle.py`** lo convierte en `.ipynb` con su
+  `kernel-metadata.json`: privado, sin internet y con GPU. Con `--local`, lo
+  ensaya en el Mac sobre una entrada que imita la de Kaggle.
+
+No envía nada: subir el conjunto de datos y el notebook se hace con la CLI de
+Kaggle, y enviar es un paso aparte.
+
+```bash
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_entrenar.py --out outputs/fase5b-entrenamiento
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_paquete.py --out outputs/fase5b-paquete
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion --destino data/fase5b-kernel-medicion
+```
+
 ## Cómo correrlo
 
 ```bash

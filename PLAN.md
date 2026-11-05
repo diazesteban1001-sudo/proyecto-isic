@@ -18,8 +18,8 @@ su resultado a favor, y la recomendación para ese escenario pasa a la red de la
 2026-11-04 abrió la Fase 5 con el equipo propio, en dos tiempos: un ensayo que
 no lee el reservado y, solo si pasa entero, la apertura (Fase 5, «El programa y
 el ensayo»); el ensayo pasó, y la apertura corrió una sola vez el mismo día y
-escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el envío tardío a Kaggle, está fijada para después de
-la Fase 5; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el envío tardío a Kaggle, se abrió el mismo día, sin
+ningún envío todavía; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -2731,10 +2731,12 @@ salida, `outputs/curva-aprendizaje.json` con su `.md`.
 
 ---
 
-## Fase 5b — Envío tardío a Kaggle — FIJADA, NO ABIERTA
+## Fase 5b — Envío tardío a Kaggle — ABIERTA (2026-11-04)
 
 **Estado.** Fijada el 2026-11-04 por la persona, antes de abrir la Fase 5. Va
-después de la Fase 5, y no se envía nada a Kaggle antes de cerrarla.
+después de la Fase 5, y no se envía nada a Kaggle antes de cerrarla. *Abierta el
+2026-11-04, con la Fase 5 cerrada, por decisión de la persona. Todavía no se ha
+enviado nada (abajo, «La apertura»).*
 
 **Por qué existe.** Kaggle acepta envíos tardíos: el panel de envío de la
 competición dice *«Te quedan 100 intentos para enviar hoy»*
@@ -2844,6 +2846,64 @@ tres días.
   privado.
 - **Es descriptiva.** No da ningún resultado a favor ni en contra, no cambia
   ninguna recomendación y no suma a la bitácora.
+
+**La apertura (2026-11-04).** *Decisión de la persona:* entrenar en el Mac los
+modelos de los envíos con todos los datos, preparar el notebook sin internet y
+comprobar su tiempo en Kaggle antes de enviar nada. El primer envío espera al
+reporte a la persona.
+
+Las piezas están en `modelado-baseline/scripts/` (`SKILL.md`, «La Fase 5b»):
+- `fase5b_entrenar.py` entrena con el código verificado y puntúa un conjunto de
+  control;
+- `inferencia_5b.py` es la inferencia que viaja al notebook;
+- `fase5b_paquete.py` comprueba esa inferencia en el Mac y arma el conjunto de
+  datos privado;
+- `fase5b_notebook.py` es el notebook, y `fase5b_kaggle.py` lo convierte y lo
+  ensaya en local.
+
+*Elegido por el agente, declarado:*
+- **El conjunto de control:** pacientes completos de entrenamiento, elegidos
+  como el subconjunto de `tiempo_inferencia.py` (semilla 7, hasta 1.000
+  lesiones o más): 6 pacientes y 1.042 lesiones. El entrenamiento los puntúa
+  como filas nuevas con el código verificado. En el Mac y en Kaggle, la
+  inferencia portátil tiene que reproducir esas puntuaciones, y el notebook no
+  escribe `submission.csv` si no lo hace.
+- **Los pesos de las redes ajustadas:** `fase4e_ajuste.ajustar_y_puntuar` no los
+  guarda. Para no tocar el código de la 4e, se envuelve `fase4e.predecir`, que
+  recibe la red ajustada antes de puntuar. `fase5b_paquete.py` comprueba que los
+  pesos guardados reproducen los logits.
+- **La puntuación de C7 al predecir:** la media de las probabilidades de las
+  cinco redes, la sigmoide de cada logit, y no la media de los logits.
+- **La inferencia en números:** el one-hot, el estandarizado, el k-means y la
+  logística viajan como números (json y npz), no como objetos de scikit-learn,
+  porque la versión de Kaggle es otra.
+- **El tiempo:** la prueba visible tiene 3 filas, y su `test-image.hdf5` pesa
+  10.639 bytes en el listado de la competición. Por eso el notebook mide el
+  tiempo sobre 4.096 recortes y 20.204 lesiones de entrenamiento, y lo proyecta
+  a 500.000 lesiones, el tamaño de la prueba según Kurtansky et al. 2025
+  (`referencias/kurtansky-2025-triaje-automatizado-tbp.md`, línea 299).
+
+**Lo comprobado hasta aquí** (2026-11-04):
+- **En el Mac, con los artefactos de una corrida de humo** en la que las redes
+  se sustituyeron por otras sin entrenar, la inferencia portátil reproduce sin
+  diferencia ninguna las variables y la puntuación de M3 limpio, los básicos y la
+  puntuación de «Imagen + básicos» y las variables de DINOv2. El k-means en
+  números asigna como scikit-learn las 401.059 filas de entrenamiento. Con pesos
+  reales, los logits de la red portátil son los de `fase4e.predecir` en 300
+  recortes, con diferencia 0.
+- **En Kaggle, con ese mismo conjunto del humo** (privado,
+  `estebandazz/isic2024-fase5b-modelos`), el notebook de medición corrió en una
+  Tesla T4, con Python 3.13, pandas 2.3.3, scikit-learn 1.6.1, CatBoost 1.2.10 y
+  torch 2.11. Reprodujo el control del Mac: diferencia máxima de 2,2e-19 en M3
+  limpio, 0 en C7, 1,7e-6 en los logits, 5,0e-5 en DINOv2 y 1,5e-5 en «Imagen +
+  básicos». La proyección a 500.000 lesiones dio 0,04 h para M3 limpio, 0,42 h
+  para C7, 0,32 h para la red y 0,75 h para «Imagen + básicos», frente al límite
+  de 12 horas. La primera corrida falló porque Kaggle descomprime los zip de un
+  conjunto de datos, y el notebook acepta ahora las dos formas.
+- **El entrenamiento con todos los datos** corre en el Mac. Faltan, en este
+  orden: la comprobación del paquete con los modelos reales, la versión real del
+  conjunto de datos, la medición en Kaggle con ellos y el reporte a la persona
+  antes del primer envío.
 
 **Puerta.** Las puntuaciones pública y privada de los envíos que se hagan, en
 `outputs/`, con su comparación descriptiva. O bien la declaración de que la fase
