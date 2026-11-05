@@ -1,0 +1,287 @@
+{
+  "que_es": "la salida del notebook de la Fase 5b en Kaggle, copiada sin tocar, con su procedencia (PLAN.md, Fase 5b); no es un envío a la competición",
+  "kernel": {
+    "id": "estebandazz/isic2024-fase5b-medicion",
+    "version": 3,
+    "privado": true,
+    "internet": false
+  },
+  "conjunto_de_datos": "estebandazz/isic2024-fase5b-modelos",
+  "competicion": "isic-2024-challenge",
+  "archivos": {
+    "fase5b-medicion.json": {
+      "bytes": 4585,
+      "sha256": "9b93e508d0a452b452a1d049aacc3e3129f7eec136b0b453feff474614550b43"
+    },
+    "submission.csv": {
+      "bytes": 113,
+      "sha256": "bba9ad83dbbcb2061eefdd4bce039c014182beac6319a4368e623ebc92163996"
+    },
+    "isic2024-fase5b-medicion.ipynb": {
+      "bytes": 15691,
+      "sha256": "cfe4e0242c0b9c1915f7ad66fcbab9efb7bfce06ac66fb817129970c653176cc"
+    }
+  },
+  "salida_del_notebook": {
+    "modo": "medicion",
+    "dispositivo": "cuda",
+    "gpu": "Tesla T4",
+    "trabajadores": 4,
+    "entrada": {
+      "competicion": "/kaggle/input/competitions/isic-2024-challenge",
+      "modelos": "/kaggle/input/datasets/estebandazz/isic2024-fase5b-modelos"
+    },
+    "segundos_carga_de_modelos": 51.6,
+    "control": {
+      "lesiones": 1042,
+      "tolerancias": {
+        "logit": 0.01,
+        "dinov2": 0.01,
+        "probabilidad": 0.001
+      },
+      "casos": [
+        {
+          "caso": "M3limpio: puntuación del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 2.168404344971009e-19
+        },
+        {
+          "caso": "M3limpio: con las filas corridas una",
+          "ok": true,
+          "debe_fallar": true,
+          "diferencia_maxima": 0.9142491640699738
+        },
+        {
+          "caso": "C7: puntuación del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 2.710505431213761e-20
+        },
+        {
+          "caso": "C7: con las filas corridas una",
+          "ok": true,
+          "debe_fallar": true,
+          "diferencia_maxima": 0.8914718665314122
+        },
+        {
+          "caso": "red pliegue-0: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 0.000213623046875
+        },
+        {
+          "caso": "red pliegue-1: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 3.337860107421875e-06
+        },
+        {
+          "caso": "red pliegue-2: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 9.059906005859375e-06
+        },
+        {
+          "caso": "red pliegue-3: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 4.291534423828125e-06
+        },
+        {
+          "caso": "red pliegue-4: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 6.198883056640625e-06
+        },
+        {
+          "caso": "Red4e: puntuación del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 1.1998103018884265e-06
+        },
+        {
+          "caso": "Red4e: con las filas corridas una",
+          "ok": true,
+          "debe_fallar": true,
+          "diferencia_maxima": 0.8019348982676161
+        },
+        {
+          "caso": "red sola: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 1.71661376953125e-05
+        },
+        {
+          "caso": "ImagenBasicos: puntuación del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 1.521422182310106e-05
+        },
+        {
+          "caso": "ImagenBasicos: con las filas corridas una",
+          "ok": true,
+          "debe_fallar": true,
+          "diferencia_maxima": 0.999989022127829
+        },
+        {
+          "caso": "DINOv2: variables del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 5.042552947998047e-05
+        }
+      ],
+      "fallos": 0,
+      "segundos": 24.5
+    },
+    "tiempo": {
+      "muestra_de_imagenes": 4096,
+      "muestra_tabular": 20204,
+      "lesiones_de_prueba_supuestas": 500000,
+      "segundos_fijos_hasta_aqui": 126.2,
+      "limite_horas": 12,
+      "proyeccion": {
+        "M3limpio": {
+          "segundos_por_1000_lesiones_imagenes": 0.0,
+          "segundos_por_1000_lesiones_tabular": 0.047,
+          "horas_proyectadas": 0.04,
+          "cabe_en_el_limite": true
+        },
+        "C7": {
+          "segundos_por_1000_lesiones_imagenes": 2.516,
+          "segundos_por_1000_lesiones_tabular": 0.047,
+          "horas_proyectadas": 0.39,
+          "cabe_en_el_limite": true
+        },
+        "Red4e": {
+          "segundos_por_1000_lesiones_imagenes": 1.967,
+          "segundos_por_1000_lesiones_tabular": 0.0,
+          "horas_proyectadas": 0.31,
+          "cabe_en_el_limite": true
+        },
+        "ImagenBasicos": {
+          "segundos_por_1000_lesiones_imagenes": 4.884,
+          "segundos_por_1000_lesiones_tabular": 0.0,
+          "horas_proyectadas": 0.71,
+          "cabe_en_el_limite": true
+        }
+      },
+      "nota": "proyección lineal: lo fijo medido en esta corrida más el costo por lesión por N_PRUEBA; la carga de los modelos va en lo fijo"
+    },
+    "prueba": {
+      "filas": 3,
+      "modelo_en_submission": "M3limpio",
+      "segundos": 1.1
+    },
+    "versiones": {
+      "python": "3.13.16",
+      "numpy": "2.1.3",
+      "pandas": "2.3.3",
+      "scikit_learn": "1.6.1",
+      "catboost": "1.2.10",
+      "torch": "2.11.0+cu130",
+      "torchvision": "0.26.0+cu130",
+      "pillow": "13.0.0"
+    },
+    "segundos_total": 127.3
+  },
+  "control_frente_a_la_version_anterior": {
+    "que_es": "la diferencia máxima de cada caso del control en esta versión y en la anterior del mismo notebook; los modelos que no cambiaron entre las dos versiones del conjunto de datos tienen que repetirla",
+    "anterior": {
+      "archivo": "fase5b-medicion.json",
+      "sha256": "8a9c45bf79fa5f7b7c1109dc85d0aee60a27ac8d34047cfbaa2831a8e754dc3b"
+    },
+    "casos": [
+      {
+        "caso": "M3limpio: puntuación del control",
+        "anterior": 2.168404344971009e-19,
+        "esta": 2.168404344971009e-19,
+        "igual": true
+      },
+      {
+        "caso": "M3limpio: con las filas corridas una",
+        "anterior": 0.9142491640699738,
+        "esta": 0.9142491640699738,
+        "igual": true
+      },
+      {
+        "caso": "C7: puntuación del control",
+        "anterior": 0.0,
+        "esta": 2.710505431213761e-20,
+        "igual": false
+      },
+      {
+        "caso": "C7: con las filas corridas una",
+        "anterior": 0.9520339837181282,
+        "esta": 0.8914718665314122,
+        "igual": false
+      },
+      {
+        "caso": "red pliegue-0: logits del control",
+        "anterior": 1.6689300537109375e-06,
+        "esta": 0.000213623046875,
+        "igual": false
+      },
+      {
+        "caso": "red pliegue-1: logits del control",
+        "anterior": 1.6689300537109375e-06,
+        "esta": 3.337860107421875e-06,
+        "igual": false
+      },
+      {
+        "caso": "red pliegue-2: logits del control",
+        "anterior": 1.6689300537109375e-06,
+        "esta": 9.059906005859375e-06,
+        "igual": false
+      },
+      {
+        "caso": "red pliegue-3: logits del control",
+        "anterior": 1.6689300537109375e-06,
+        "esta": 4.291534423828125e-06,
+        "igual": false
+      },
+      {
+        "caso": "red pliegue-4: logits del control",
+        "anterior": 1.6689300537109375e-06,
+        "esta": 6.198883056640625e-06,
+        "igual": false
+      },
+      {
+        "caso": "Red4e: puntuación del control",
+        "anterior": 3.997496036411974e-07,
+        "esta": 1.1998103018884265e-06,
+        "igual": false
+      },
+      {
+        "caso": "Red4e: con las filas corridas una",
+        "anterior": 0.18348413668718355,
+        "esta": 0.8019348982676161,
+        "igual": false
+      },
+      {
+        "caso": "red sola: logits del control",
+        "anterior": 1.6689300537109375e-06,
+        "esta": 1.71661376953125e-05,
+        "igual": false
+      },
+      {
+        "caso": "ImagenBasicos: puntuación del control",
+        "anterior": 1.521422182310106e-05,
+        "esta": 1.521422182310106e-05,
+        "igual": true
+      },
+      {
+        "caso": "ImagenBasicos: con las filas corridas una",
+        "anterior": 0.999989022127829,
+        "esta": 0.999989022127829,
+        "igual": true
+      },
+      {
+        "caso": "DINOv2: variables del control",
+        "anterior": 5.042552947998047e-05,
+        "esta": 5.042552947998047e-05,
+        "igual": true
+      }
+    ]
+  }
+}

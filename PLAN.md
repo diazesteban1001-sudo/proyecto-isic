@@ -2900,10 +2900,48 @@ Las piezas están en `modelado-baseline/scripts/` (`SKILL.md`, «La Fase 5b»):
   para C7, 0,32 h para la red y 0,75 h para «Imagen + básicos», frente al límite
   de 12 horas. La primera corrida falló porque Kaggle descomprime los zip de un
   conjunto de datos, y el notebook acepta ahora las dos formas.
-- **El entrenamiento con todos los datos** corre en el Mac. Faltan, en este
-  orden: la comprobación del paquete con los modelos reales, la versión real del
-  conjunto de datos, la medición en Kaggle con ellos y el reporte a la persona
-  antes del primer envío.
+- **El entrenamiento con todos los datos** terminó en el Mac el 2026-11-05, en
+  16.907,7 s (`outputs/fase5b-entrenamiento.json > segundos`). M3 limpio
+  quedó con 290 árboles y C7 con 257 (`modelos`). Las cinco redes de pliegue
+  tardaron de 2.646,4 s a 3.012,3 s cada una, y la red sola 3.091,4 s, con
+  su ajuste fino. La estimación de arriba era de unos 48 minutos por red de
+  pliegue y alrededor de una hora para la red sola.
+
+**Lo comprobado con los modelos reales** (2026-11-05):
+- **En el Mac** (`outputs/fase5b-paquete.json > controles`), 14 de 14 casos
+  bien, 6 de ellos casos que deben fallar. La inferencia portátil reproduce el
+  control con diferencia 0 en los seis grupos: las variables y la puntuación de
+  M3 limpio, los logits de las seis redes ajustadas, las variables de DINOv2,
+  los básicos y la puntuación de «Imagen + básicos», y C7 con la media de las
+  cinco redes. El k-means en números asigna como scikit-learn las 401.059 filas
+  de entrenamiento.
+- **En Kaggle**, con la versión real del conjunto de datos, la versión 3 del
+  notebook de medición (`outputs/fase5b-kaggle-medicion.json`), en una Tesla
+  T4, con las mismas versiones de librerías que la corrida del humo. El control
+  dio 15 de 15 casos bien, 4 de ellos casos que deben fallar
+  (`salida_del_notebook.control`). Diferencia máxima con el Mac:
+  - 2,2e-19 en M3 limpio y 2,7e-20 en C7;
+  - de 3,3e-6 a 2,1e-4 en los logits de las seis redes, y 1,2e-6 en la
+    puntuación de la red;
+  - 1,5e-5 en «Imagen + básicos» y 5,0e-5 en DINOv2.
+- **El tiempo,** proyectado a 500.000 lesiones frente al límite de 12 horas
+  (`salida_del_notebook.tiempo.proyeccion`): 0,04 h para M3 limpio, 0,39 h para
+  C7, 0,31 h para la red y 0,71 h para «Imagen + básicos». El notebook entero
+  tardó 127,3 s, y cargar los modelos, 51,6 s. Según la proyección, caben los
+  cuatro envíos, también el cuarto.
+- **Que Kaggle montó la versión real y no la del humo**
+  (`control_frente_a_la_version_anterior`). El control de esta versión se
+  compara, caso por caso, con el de la versión 2, que corrió con los modelos del
+  humo. Los 5 casos que no dependen de las redes repiten su diferencia máxima
+  exacta: dos de M3 limpio, dos de «Imagen + básicos» y el de DINOv2. Los 10 que
+  dependen de ellas cambian. En la versión 2 los logits de las seis redes daban
+  la misma diferencia, 1,7e-6, y la puntuación de la red con las filas corridas
+  una se apartaba 0,18 de la de referencia; en esta, cada red da la suya, y ese
+  caso se aparta 0,80.
+
+Falta el reporte a la persona antes del primer envío. No se ha enviado nada a
+la competición: el `submission.csv` del notebook de medición, con las 3 filas de
+la prueba visible, es una salida del notebook privado, no un envío.
 
 **Puerta.** Las puntuaciones pública y privada de los envíos que se hagan, en
 `outputs/`, con su comparación descriptiva. O bien la declaración de que la fase
