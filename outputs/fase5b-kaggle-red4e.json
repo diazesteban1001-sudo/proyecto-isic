@@ -1,0 +1,82 @@
+{
+  "que_es": "la salida del notebook de la Fase 5b en Kaggle, copiada sin tocar, con su procedencia (PLAN.md, Fase 5b); no es un envío a la competición",
+  "kernel": {
+    "id": "estebandazz/isic2024-fase5b-red4e",
+    "version": 1,
+    "privado": true,
+    "internet": false
+  },
+  "conjunto_de_datos": "estebandazz/isic2024-fase5b-modelos",
+  "competicion": "isic-2024-challenge",
+  "archivos": {
+    "fase5b-Red4e.json": {
+      "bytes": 1345,
+      "sha256": "2d897226ca22a970e4bb9133b47805a83cb3eca3682efdd89987f5264e7f63b1"
+    },
+    "submission.csv": {
+      "bytes": 115,
+      "sha256": "30c2f6712cd09fec1e04b53a7c5d835e3429a9b43eac7f87ebac223bfa5b7ec4"
+    },
+    "isic2024-fase5b-red4e.ipynb": {
+      "bytes": 15688,
+      "sha256": "b642b571b816c18b167a5e346c56805a0bc897f93e83bf629245940cf542fa0c"
+    }
+  },
+  "salida_del_notebook": {
+    "modo": "Red4e",
+    "dispositivo": "cuda",
+    "gpu": "Tesla T4",
+    "trabajadores": 4,
+    "entrada": {
+      "competicion": "/kaggle/input/competitions/isic-2024-challenge",
+      "modelos": "/kaggle/input/datasets/estebandazz/isic2024-fase5b-modelos"
+    },
+    "segundos_carga_de_modelos": 7.7,
+    "control": {
+      "lesiones": 1042,
+      "tolerancias": {
+        "logit": 0.01,
+        "dinov2": 0.01,
+        "probabilidad": 0.001
+      },
+      "casos": [
+        {
+          "caso": "Red4e: puntuación del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 1.1998103018884265e-06
+        },
+        {
+          "caso": "Red4e: con las filas corridas una",
+          "ok": true,
+          "debe_fallar": true,
+          "diferencia_maxima": 0.8019348982676161
+        },
+        {
+          "caso": "red sola: logits del control",
+          "ok": true,
+          "debe_fallar": false,
+          "diferencia_maxima": 1.71661376953125e-05
+        }
+      ],
+      "fallos": 0,
+      "segundos": 7.5
+    },
+    "prueba": {
+      "filas": 3,
+      "modelo_en_submission": "Red4e",
+      "segundos": 0.3
+    },
+    "versiones": {
+      "python": "3.13.16",
+      "numpy": "2.1.3",
+      "pandas": "2.3.3",
+      "scikit_learn": "1.6.1",
+      "catboost": "1.2.10",
+      "torch": "2.11.0+cu130",
+      "torchvision": "0.26.0+cu130",
+      "pillow": "13.0.0"
+    },
+    "segundos_total": 28.6
+  }
+}
