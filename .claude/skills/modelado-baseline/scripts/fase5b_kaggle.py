@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 fase5b_kaggle.py — arma el notebook de Kaggle de la Fase 5b (PLAN.md) desde
-fase5b_notebook.py, con su kernel-metadata.json, y lo ensaya en local. No envía
-nada a Kaggle: subir el conjunto de datos y el notebook se hace aparte, con la
-CLI de Kaggle, y enviar, todavía más aparte.
+fase5b_notebook.py, con su kernel-metadata.json, lo ensaya en local, fija la
+huella de lo que se envía y hace los envíos. Subir el conjunto de datos y el
+notebook se hace aparte, con la CLI de Kaggle.
 
   construir: el .ipynb con MODO fijado (una celda por cada «# %%» de
       fase5b_notebook.py) y kernel-metadata.json: privado, sin internet, con GPU,
@@ -11,6 +11,17 @@ CLI de Kaggle, y enviar, todavía más aparte.
   --registrar: copia a outputs/ la salida que el notebook escribió en Kaggle, ya
       descargada, sin tocarla, con su procedencia; con --anterior, pone al lado el
       control de otra versión del mismo notebook.
+  --huella: construye los cuatro notebooks de envío, descarga el conjunto de datos
+      tal como lo sirve Kaggle y escribe outputs/fase5b-huella: el SHA-256 de cada
+      archivo servido y del conjunto, su versión, su comparación con lo subido y el
+      SHA-256 de cada notebook. Se escribe una sola vez, antes del primer envío.
+      Con --comprobar, lo vuelve a calcular y se detiene si algo no coincide.
+  --enviar: comprueba la huella y envía a la competición la versión --version del
+      kernel del modelo. Se niega si el modelo ya tiene un envío con puntuación o
+      uno pendiente (PLAN.md, Fase 5b, «Los envíos»).
+  --puntuacion: copia a outputs/ los envíos del modelo tal como los devuelve la
+      API de Kaggle; sale con código 3, sin escribir nada, si alguno sigue
+      pendiente.
   --local: ensaya el notebook en el Mac sobre una entrada que imita la de Kaggle:
       la competición con train-metadata.csv y train-image.hdf5 reales, y una
       prueba hecha con tres filas de entrenamiento con las columnas de
@@ -23,14 +34,21 @@ Uso:
     .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion \\
         --destino data/fase5b-kernel-medicion --registrar data/fase5b-kaggle-salida-3 --version 3 \\
         --anterior data/fase5b-kaggle-salida-2 --out outputs/fase5b-kaggle-medicion
+    .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --huella [--comprobar]
+    .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo M3limpio --enviar --version 1
+    .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo M3limpio --puntuacion \\
+        --version 1 --out outputs/fase5b-envio-m3limpio
 """
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
 import sys
+import tempfile
 import time
+import zipfile
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(AQUI, "..", "..", "..", ".."))
@@ -39,10 +57,17 @@ USUARIO = "estebandazz"
 CONJUNTO = f"{USUARIO}/isic2024-fase5b-modelos"
 COMPETICION = "isic-2024-challenge"
 MODOS = ("medicion", "M3limpio", "C7", "Red4e", "ImagenBasicos")
+ENVIOS = ("M3limpio", "Red4e", "C7", "ImagenBasicos")  # el orden de envío que fijó la persona (PLAN.md, Fase 5b)
+HUELLA = os.path.join(RAIZ, "outputs", "fase5b-huella")
+SUBIDO = os.path.join(RAIZ, "data", "fase5b", "kaggle-dataset")
 
 
 def slug(modo):
     return f"isic2024-fase5b-{modo.lower()}"
+
+
+def directorio_kernel(modo):
+    return os.path.join(RAIZ, "data", f"fase5b-kernel-{modo.lower()}")
 
 
 def celdas(texto):
@@ -114,13 +139,16 @@ def entrada_local(base, conjunto):
     os.symlink(os.path.abspath(conjunto), enlace)
 
 
-def sha256(ruta):
-    import hashlib
+def sha256_flujo(f):
     h = hashlib.sha256()
-    with open(ruta, "rb") as f:
-        for bloque in iter(lambda: f.read(1 << 20), b""):
-            h.update(bloque)
+    for bloque in iter(lambda: f.read(1 << 20), b""):
+        h.update(bloque)
     return h.hexdigest()
+
+
+def sha256(ruta):
+    with open(ruta, "rb") as f:
+        return sha256_flujo(f)
 
 
 def registrar(modo, destino, salida, version, out, anterior=None):
@@ -178,17 +206,254 @@ def registrar(modo, destino, salida, version, out, anterior=None):
     print(f"Escrito: {out}.json y .md", flush=True)
 
 
+# ---- la huella y los envíos ------------------------------------------------------------------
+
+def api():
+    from kaggle.api.kaggle_api_extended import KaggleApi
+    a = KaggleApi()
+    a.authenticate()
+    return a
+
+
+def huella_conjunto(archivos):
+    """El SHA-256 de las líneas «sha256  ruta» de cada archivo, ordenadas por ruta: el formato de sha256sum."""
+    return hashlib.sha256("".join(f"{archivos[r]}  {r}\n" for r in sorted(archivos)).encode()).hexdigest()
+
+
+def archivos_del_zip(ruta, prefijo=""):
+    with zipfile.ZipFile(ruta) as z:
+        return {prefijo + n: sha256_flujo(z.open(n)) for n in z.namelist() if not n.endswith("/")}
+
+
+def lo_subido(conjunto):
+    """Lo que Kaggle tiene que servir del directorio subido, con el SHA-256 de cada archivo: todo salvo
+    dataset-metadata.json, que no sirve; dinov2.zip, descomprimido en dinov2/; y sin los .DS_Store, que
+    tampoco sirve."""
+    archivos = {}
+    for n in sorted(os.listdir(conjunto)):
+        ruta = os.path.join(conjunto, n)
+        if n == "dataset-metadata.json":
+            continue
+        archivos.update(archivos_del_zip(ruta, "dinov2/") if n == "dinov2.zip" else {n: sha256(ruta)})
+    return {r: h for r, h in archivos.items() if os.path.basename(r) != ".DS_Store"}
+
+
+def diferencias(servido, subido):
+    return [{"ruta": r, "servido": servido.get(r), "subido": subido.get(r)}
+            for r in sorted(set(servido) | set(subido)) if servido.get(r) != subido.get(r)]
+
+
+def mensaje(modo, version):
+    return f"Fase 5b: {modo}, kernel {USUARIO}/{slug(modo)} v{version}"
+
+
+def del_modelo(envios, modo):
+    """Los envíos a la competición que son de este modelo, por el mensaje con que se enviaron."""
+    return [e for e in envios if (e.get("description") or "").startswith(f"Fase 5b: {modo},")]
+
+
+def ya_puntuado(envios, modo):
+    """Si el modelo tiene un envío con puntuación: entonces no se vuelve a enviar nunca (PLAN.md, Fase 5b)."""
+    return any(e.get("status") == "COMPLETE" for e in del_modelo(envios, modo))
+
+
+def envios_en_kaggle(a):
+    return [s.to_dict(ignore_defaults=False) for s in (a.competition_submissions(COMPETICION, page_size=200) or [])
+            if s is not None]
+
+
+def calcular_huella(conjunto):
+    a = api()
+    with tempfile.TemporaryDirectory(dir=os.path.join(RAIZ, "data")) as d:
+        antes = next(x for x in a.dataset_list(mine=True) if x.ref == CONJUNTO)
+        a.dataset_download_files(CONJUNTO, path=d, quiet=True)
+        despues = next(x for x in a.dataset_list(mine=True) if x.ref == CONJUNTO)
+        if antes.current_version_number != despues.current_version_number:
+            raise SystemExit("ERROR: la versión del conjunto de datos cambió durante la descarga.")
+        servido = archivos_del_zip(os.path.join(d, f"{CONJUNTO.split('/')[1]}.zip"))
+    subido = lo_subido(conjunto)
+    notebooks = {}
+    for modo in ENVIOS:
+        destino = directorio_kernel(modo)
+        construir(modo, destino)
+        notebooks[modo] = {"kernel": f"{USUARIO}/{slug(modo)}", "directorio": os.path.relpath(destino, RAIZ),
+                           "archivos": {n: {"bytes": os.path.getsize(os.path.join(destino, n)),
+                                            "sha256": sha256(os.path.join(destino, n))}
+                                        for n in (f"{slug(modo)}.ipynb", "kernel-metadata.json")}}
+    huella = {"conjunto_de_datos": {"id": CONJUNTO, "version": antes.current_version_number,
+                                    "ultima_actualizacion": str(antes.last_updated), "archivos_servidos": len(servido),
+                                    "huella_sha256": huella_conjunto(servido), "archivos": servido},
+              "lo_subido": {"directorio": os.path.relpath(conjunto, RAIZ), "archivos_esperados": len(subido),
+                            "huella_sha256": huella_conjunto(subido)},
+              "diferencias_con_lo_subido": diferencias(servido, subido), "notebooks": notebooks}
+    return huella, subido
+
+
+def controles_huella(huella, subido):
+    servido = huella["conjunto_de_datos"]["archivos"]
+    alterado = dict(subido)
+    alterado[sorted(alterado)[0]] = "0" * 64
+    puntuado = [{"description": mensaje(ENVIOS[0], 1), "status": "COMPLETE"}]
+    con_error = [{"description": mensaje(ENVIOS[0], 1), "status": "ERROR"}]
+    casos = [
+        {"caso": "lo que sirve Kaggle es lo subido", "ok": not diferencias(servido, subido), "debe_fallar": False},
+        {"caso": "con un archivo subido alterado, una diferencia", "ok": len(diferencias(servido, alterado)) == 1,
+         "debe_fallar": True},
+        {"caso": "con un archivo alterado, la huella cambia",
+         "ok": huella_conjunto(alterado) != huella_conjunto(subido), "debe_fallar": True},
+        {"caso": "un modelo con un envío puntuado no se vuelve a enviar", "ok": ya_puntuado(puntuado, ENVIOS[0]),
+         "debe_fallar": True},
+        {"caso": "un envío con error no cuenta como puntuado", "ok": not ya_puntuado(con_error, ENVIOS[0]),
+         "debe_fallar": False},
+        {"caso": "el envío puntuado de otro modelo no cuenta", "ok": not ya_puntuado(puntuado, ENVIOS[1]),
+         "debe_fallar": False},
+    ]
+    return {"casos": casos, "fallos": sum(not c["ok"] for c in casos)}
+
+
+def fijar_huella(conjunto):
+    if os.path.exists(f"{HUELLA}.json"):
+        raise SystemExit(f"ERROR: {HUELLA}.json ya existe; la huella se fija una sola vez. Usa --comprobar.")
+    huella, subido = calcular_huella(conjunto)
+    huella["controles"] = controles_huella(huella, subido)
+    if huella["controles"]["fallos"] or huella["diferencias_con_lo_subido"]:
+        print(json.dumps({k: huella[k] for k in ("diferencias_con_lo_subido", "controles")}, indent=1), flush=True)
+        raise SystemExit("ERROR: la huella no pasa sus controles; no se escribe.")
+    registro = {"que_es": "la huella de lo que se envía en la Fase 5b, fijada antes del primer envío (PLAN.md, Fase "
+                          "5b): el conjunto de datos tal como lo sirve Kaggle y los cuatro notebooks de envío",
+                "orden_de_envio": list(ENVIOS), **huella,
+                "fecha": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
+    with open(f"{HUELLA}.json", "w", encoding="utf-8") as f:
+        json.dump(registro, f, ensure_ascii=False, indent=2)
+    c, s = huella["conjunto_de_datos"], huella["controles"]
+    lineas = ["# Fase 5b — la huella de lo que se envía",
+              f"Conjunto de datos {c['id']}, versión {c['version']}: {c['archivos_servidos']} archivos servidos, "
+              f"huella SHA-256 {c['huella_sha256']}; 0 diferencias con lo subido.",
+              f"Controles: {len(s['casos']) - s['fallos']} de {len(s['casos'])} bien, "
+              f"{sum(x['debe_fallar'] for x in s['casos'])} de ellos casos que deben fallar.",
+              "Notebooks de envío, en el orden de envío:"]
+    for modo in ENVIOS:
+        n = huella["notebooks"][modo]
+        lineas.append(f"- {modo}: {n['kernel']}, " + ", ".join(f"{k} {v['sha256']}" for k, v in n["archivos"].items()))
+    with open(f"{HUELLA}.md", "w", encoding="utf-8") as f:
+        f.write("\n".join(lineas) + "\n")
+    print(f"Escrito: {HUELLA}.json y .md", flush=True)
+
+
+def comprobar_huella(conjunto):
+    """Vuelve a calcular la huella y se detiene si no es la fijada."""
+    with open(f"{HUELLA}.json", encoding="utf-8") as f:
+        fijada = json.load(f)
+    actual, _ = calcular_huella(conjunto)
+    problemas = [f"conjunto de datos, {k}: {fijada['conjunto_de_datos'][k]} fijado, {actual['conjunto_de_datos'][k]} "
+                 "ahora" for k in ("version", "huella_sha256")
+                 if actual["conjunto_de_datos"][k] != fijada["conjunto_de_datos"][k]]
+    problemas += [f"{modo}, {n}" for modo in ENVIOS for n, v in fijada["notebooks"][modo]["archivos"].items()
+                  if actual["notebooks"][modo]["archivos"][n]["sha256"] != v["sha256"]]
+    if problemas:
+        raise SystemExit("ERROR: la huella no es la fijada: " + "; ".join(problemas))
+    comprobacion = {"fecha": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                    "conjunto_de_datos": {k: actual["conjunto_de_datos"][k] for k in ("version", "huella_sha256")},
+                    "notebooks": {modo: {n: v["sha256"] for n, v in actual["notebooks"][modo]["archivos"].items()}
+                                  for modo in ENVIOS}}
+    print("La huella es la fijada:", json.dumps(comprobacion, indent=1), flush=True)
+    return comprobacion
+
+
+def ruta_respuesta(modo):
+    return os.path.join(RAIZ, "data", f"fase5b-envio-{modo.lower()}-respuesta.json")
+
+
+def enviar(modo, version, conjunto):
+    comprobacion = comprobar_huella(conjunto)
+    a = api()
+    previos = del_modelo(envios_en_kaggle(a), modo)
+    if ya_puntuado(previos, modo):
+        raise SystemExit(f"ERROR: {modo} ya tiene un envío con puntuación; no se vuelve a enviar (PLAN.md, Fase 5b).")
+    if any(e.get("status") == "PENDING" for e in previos):
+        raise SystemExit(f"ERROR: {modo} tiene un envío pendiente.")
+    with open(os.path.join(RAIZ, "outputs", f"fase5b-kaggle-{modo.lower()}.json"), encoding="utf-8") as f:
+        corrida = json.load(f)
+    if corrida["kernel"]["version"] != version:
+        raise SystemExit(f"ERROR: la corrida registrada es de la versión {corrida['kernel']['version']}, no de la {version}.")
+    if corrida["salida_del_notebook"]["control"]["fallos"]:
+        raise SystemExit("ERROR: el control de la corrida registrada tiene fallos.")
+    if corrida["archivos"][f"{slug(modo)}.ipynb"]["sha256"] != comprobacion["notebooks"][modo][f"{slug(modo)}.ipynb"]:
+        raise SystemExit("ERROR: el notebook de la corrida registrada no es el fijado en la huella.")
+    texto = mensaje(modo, version)
+    respuesta = a.competition_submit_code("submission.csv", texto, COMPETICION, kernel=f"{USUARIO}/{slug(modo)}",
+                                          kernel_version=version, quiet=True)
+    registro = {"mensaje": texto, "respuesta": respuesta.to_dict(ignore_defaults=False),
+                "comprobado_antes_de_enviar": comprobacion, "envios_previos_del_modelo": previos}
+    with open(ruta_respuesta(modo), "w", encoding="utf-8") as f:
+        json.dump(registro, f, ensure_ascii=False, indent=2)
+    print(json.dumps(registro["respuesta"], ensure_ascii=False), flush=True)
+
+
+def puntuacion(modo, version, out):
+    envios = del_modelo(envios_en_kaggle(api()), modo)
+    if not envios:
+        raise SystemExit(f"ERROR: no hay envíos de {modo} en la competición.")
+    if any(e.get("status") == "PENDING" for e in envios):
+        print(f"{modo}: pendiente", flush=True)
+        raise SystemExit(3)
+    with open(f"{HUELLA}.json", encoding="utf-8") as f:
+        huella = json.load(f)
+    respuesta = None
+    if os.path.exists(ruta_respuesta(modo)):
+        with open(ruta_respuesta(modo), encoding="utf-8") as f:
+            respuesta = json.load(f)
+    registro = {"que_es": "los envíos de este modelo a la competición, tal como los devuelve la API de Kaggle, sin "
+                          "tocar (PLAN.md, Fase 5b)",
+                "modelo": modo, "kernel": {"id": f"{USUARIO}/{slug(modo)}", "version": version},
+                "huella_fijada": {"archivo": "outputs/fase5b-huella.json",
+                                  "conjunto_de_datos": {k: huella["conjunto_de_datos"][k]
+                                                        for k in ("version", "huella_sha256")},
+                                  "notebook": {n: v["sha256"] for n, v in huella["notebooks"][modo]["archivos"].items()}},
+                "al_enviar": respuesta, "envios": envios}
+    with open(f"{out}.json", "w", encoding="utf-8") as f:
+        json.dump(registro, f, ensure_ascii=False, indent=2)
+    lineas = [f"# Fase 5b — los envíos de {modo} a la competición",
+              f"Kernel {USUARIO}/{slug(modo)}, versión {version}. Tal como los devuelve la API de Kaggle:"]
+    lineas += [f"- {e.get('date')}: {e.get('status')}; puntuación pública {e.get('publicScore')}, privada "
+               f"{e.get('privateScore')}" + (f"; error: {e.get('errorDescription')}" if e.get("errorDescription") else "")
+               + f" («{e.get('description')}»)" for e in envios]
+    with open(f"{out}.md", "w", encoding="utf-8") as f:
+        f.write("\n".join(lineas) + "\n")
+    print(f"Escrito: {out}.json y .md", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--modo", required=True, choices=MODOS)
-    ap.add_argument("--destino", required=True)
+    ap.add_argument("--modo", choices=MODOS)
+    ap.add_argument("--destino")
+    ap.add_argument("--huella", action="store_true", help="fija la huella de lo que se envía; no construye otra cosa")
+    ap.add_argument("--comprobar", action="store_true", help="con --huella: comprueba la fijada en vez de fijarla")
+    ap.add_argument("--enviar", action="store_true", help="envía a la competición la versión --version del kernel")
+    ap.add_argument("--puntuacion", action="store_true", help="copia a outputs/ los envíos del modelo")
     ap.add_argument("--local", action="store_true")
-    ap.add_argument("--conjunto", default=os.path.join(RAIZ, "data", "fase5b", "kaggle-dataset"))
+    ap.add_argument("--conjunto", default=SUBIDO)
     ap.add_argument("--registrar", metavar="SALIDA", help="la salida descargada de Kaggle; no construye nada")
-    ap.add_argument("--version", type=int, help="con --registrar: la versión del kernel que la escribió")
+    ap.add_argument("--version", type=int, help="con --registrar, --enviar o --puntuacion: la versión del kernel")
     ap.add_argument("--anterior", metavar="SALIDA", help="con --registrar: la salida de la versión anterior")
-    ap.add_argument("--out", help="con --registrar: outputs/<nombre>, sin extensión")
+    ap.add_argument("--out", help="con --registrar o --puntuacion: outputs/<nombre>, sin extensión")
     args = ap.parse_args()
+    if args.huella:
+        (comprobar_huella if args.comprobar else fijar_huella)(args.conjunto)
+        return
+    if not args.modo:
+        raise SystemExit("ERROR: falta --modo.")
+    if args.enviar or args.puntuacion:
+        if args.modo not in ENVIOS or args.version is None or (args.puntuacion and not args.out):
+            raise SystemExit("ERROR: --enviar y --puntuacion necesitan un modo de envío y --version; "
+                             "--puntuacion, también --out.")
+        if args.enviar:
+            enviar(args.modo, args.version, args.conjunto)
+        else:
+            puntuacion(args.modo, args.version, args.out)
+        return
+    if not args.destino:
+        raise SystemExit("ERROR: falta --destino.")
     if args.registrar:
         if args.version is None or not args.out:
             raise SystemExit("ERROR: --registrar necesita --version y --out.")

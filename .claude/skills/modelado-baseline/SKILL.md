@@ -704,16 +704,26 @@ Cinco piezas, en este orden (`PLAN.md`, Fase 5b):
   ensaya en el Mac sobre una entrada que imita la de Kaggle. Con
   `--registrar`, copia a `outputs/` la salida que el notebook escribió en
   Kaggle, ya descargada, sin tocarla y con su procedencia; con `--anterior`,
-  pone al lado el control de otra versión del mismo notebook.
+  pone al lado el control de otra versión del mismo notebook. Con `--huella`,
+  fija una sola vez, antes del primer envío, el SHA-256 del conjunto de datos
+  tal como lo sirve Kaggle y el de los cuatro notebooks de envío, en
+  `outputs/fase5b-huella`; con `--comprobar`, lo vuelve a calcular y se detiene
+  si algo cambió. Con `--enviar`, comprueba la huella y envía la versión del
+  kernel de un modelo, y se niega si ese modelo ya tiene un envío con
+  puntuación o uno pendiente. Con `--puntuacion`, copia a `outputs/` los envíos
+  del modelo tal como los devuelve la API de Kaggle.
 
-No envía nada: subir el conjunto de datos y el notebook se hace con la CLI de
-Kaggle, y enviar es un paso aparte.
+Subir el conjunto de datos y el notebook, y correr el kernel, se hace con la CLI
+de Kaggle; enviar es un paso aparte, con `--enviar`.
 
 ```bash
 caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_entrenar.py --out outputs/fase5b-entrenamiento
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_paquete.py --out outputs/fase5b-paquete
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion --destino data/fase5b-kernel-medicion
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion --destino data/fase5b-kernel-medicion --registrar data/fase5b-kaggle-salida-3 --version 3 --anterior data/fase5b-kaggle-salida-2 --out outputs/fase5b-kaggle-medicion
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --huella
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo M3limpio --enviar --version 1
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo M3limpio --puntuacion --version 1 --out outputs/fase5b-envio-m3limpio
 ```
 
 ## Cómo correrlo
