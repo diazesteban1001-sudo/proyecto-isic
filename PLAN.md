@@ -3029,9 +3029,71 @@ devuelve la API (`outputs/fase5b-envio-<modelo>.json > envios.0.publicScore` y
 - **Ningún envío previo:** al enviar, ningún modelo tenía otro envío en la
   competición (`al_enviar.envios_previos_del_modelo`).
 
-Falta la comparación descriptiva que pide la puerta, con las referencias de
-arriba («Qué se hace»). No se ha escrito: la instrucción de la persona era
-registrar las puntuaciones sin interpretar.
+**La comparación descriptiva de la puerta** (2026-11-05;
+`outputs/fase5b-comparacion.json`, de `fase5b_comparacion.py`). Especificación
+de la persona del mismo día, con las referencias de arriba («Qué se hace»):
+- **Las fuentes:** las cifras salen solo de `outputs/` y de `referencias/`. Las
+  de Kurtansky et al. 2025 se leen de su texto completo en la línea fijada, y el
+  script se detiene si la línea no dice lo que espera (`referencias`).
+- **Qué se compara:** las puntuaciones privadas, las del tablero final. Las
+  públicas se reportan arriba, en «Lo que dio Kaggle», y no se comparan.
+- **Sin intervalo:** Kaggle da una cifra por envío. Es descriptiva: no da
+  ningún resultado a favor ni en contra y no cambia ninguna recomendación.
+- **Sin posiciones en el tablero:** no hay ninguna fuente versionada del
+  tablero completo.
+
+Las tres comparaciones fijadas y la del cuarto envío
+(`comparaciones_con_la_privada`):
+- **C7 frente al ganador en el tablero privado:** 0,15856 frente a 0,1726
+  (Kurtansky 2025, línea 196), diferencia −0,01404.
+- **M3 limpio frente a «sin imágenes» de la Tabla 3:** 0,15134 frente a 0,164
+  (línea 209), diferencia −0,01266. Esa variante usa los datos básicos, que
+  incluyen la etiqueta del hospital (línea 315); M3 limpio no la usa
+  (`outputs/auditoria-de-fugas.json > columnas_procedencia`).
+- **La red de la 4e frente a «solo imágenes» de la Tabla 3:** 0,1159 frente a
+  0,142 (línea 216), diferencia −0,0261.
+- **La red de la 4e frente a «Imagen + básicos»,** las dos puntuaciones de
+  Kaggle: 0,1159 frente a 0,08935, diferencia +0,02655. El cuarto envío se
+  decidió después de ver el reservado, y se declara así (arriba, «Qué se
+  hace»).
+
+**Aritmética descriptiva de dos fuentes distintas**
+(`aritmetica_de_dos_fuentes`): C7 − M3 limpio en la puntuación privada de
+Kaggle da +0,00722; «modelo completo» − «sin imágenes» en la Tabla 3, 0,173 −
+0,164 (líneas 207 y 209), da +0,009.
+
+**Los cuatro modelos en las tres evaluaciones** (`tabla_tres_evaluaciones`), en
+la pAUC:
+
+| Modelo | Desarrollo, validación cruzada | Reservado | Kaggle, privada |
+|---|---|---|---|
+| M3 limpio | 0,1621 (semillas 0 a 9); 0,1641 (semillas 5 a 9) | 0,1588 | 0,15134 |
+| Red de la 4e | 0,1376 (semillas 5 a 9) | 0,1307 | 0,1159 |
+| C7 | 0,1669 (semillas 5 a 9) | no se evaluó | 0,15856 |
+| «Imagen + básicos» | 0,084 (semillas 0 a 9); 0,0884 (semillas 5 a 9) | 0,1385 | 0,08935 |
+
+Cómo leerla (`como_leerla`):
+- **Son conjuntos y tipos de estimación distintos:**
+  - en desarrollo, la media por pliegue de la validación cruzada sobre los 833
+    pacientes de desarrollo, entrenando con cuatro quintos, con las semillas
+    indicadas;
+  - en el reservado, un solo modelo entrenado con el desarrollo y puntuado en
+    los 209 pacientes reservados;
+  - en Kaggle, modelos entrenados con los 1.042 pacientes y puntuados en el
+    subconjunto privado de la prueba oculta.
+- **Kaggle no da intervalo.**
+- **La Tabla 3** es la reproducción del ganador que los organizadores hicieron en
+  su entorno, con 3 decimales, sobre el conjunto del tablero privado (líneas 200
+  y 315). El 0,1726 es la puntuación oficial del ganador en el tablero privado.
+- **El C7 de Kaggle** puntúa con la media de cinco redes, una por pliegue. En la
+  validación cruzada se evaluó con una red por pliegue (arriba, «Las
+  puntuaciones fuera de pliegue de la red, para C7»).
+- **C7 no está en el reservado:** la Fase 5 no lo incluía.
+
+**Los controles** (`controles`): 5 de 5 casos bien, 4 de ellos casos que deben
+fallar. Con la línea siguiente a la fijada, ni la fila de «sin imágenes» ni la
+frase del ganador se leen; con la Tabla 3 corrida una línea, su estructura no es
+la esperada; y un modelo sin envío puntuado se rechaza.
 
 **Puerta.** Las puntuaciones pública y privada de los envíos que se hagan, en
 `outputs/`, con su comparación descriptiva. O bien la declaración de que la fase

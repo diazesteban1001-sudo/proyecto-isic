@@ -682,7 +682,7 @@ escribe una tabla de cada modelo en desarrollo y en el reservado.
 
 ## La Fase 5b: el envío tardío a Kaggle (2026-11-04)
 
-Cinco piezas, en este orden (`PLAN.md`, Fase 5b):
+Seis piezas, en este orden (`PLAN.md`, Fase 5b):
 - **`scripts/fase5b_entrenar.py`** entrena con todos los datos, 1.042 pacientes,
   y semilla 0: M3 limpio, «Imagen + básicos», la red de la 4e sola y C7. Las
   puntuaciones fuera de pliegue de C7 salen de cinco redes. Solo usa el código
@@ -712,6 +712,11 @@ Cinco piezas, en este orden (`PLAN.md`, Fase 5b):
   kernel de un modelo, y se niega si ese modelo ya tiene un envío con
   puntuación o uno pendiente. Con `--puntuacion`, copia a `outputs/` los envíos
   del modelo tal como los devuelve la API de Kaggle.
+- **`scripts/fase5b_comparacion.py`** escribe la comparación descriptiva de la
+  puerta: las puntuaciones privadas de Kaggle frente a las referencias fijadas
+  de Kurtansky et al. 2025, que lee de su texto completo en la línea fijada y
+  se detiene si la línea no dice lo que espera, y los cuatro modelos en las
+  tres evaluaciones del proyecto. No da intervalos ni posiciones en el tablero.
 
 Subir el conjunto de datos y el notebook, y correr el kernel, se hace con la CLI
 de Kaggle; enviar es un paso aparte, con `--enviar`.
@@ -724,6 +729,7 @@ caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_e
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --huella
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo M3limpio --enviar --version 1
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo M3limpio --puntuacion --version 1 --out outputs/fase5b-envio-m3limpio
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_comparacion.py --out outputs/fase5b-comparacion
 ```
 
 ## Cómo correrlo

@@ -1,0 +1,286 @@
+{
+  "que_es": "la comparación descriptiva de la puerta de la Fase 5b (PLAN.md, Fase 5b): sin intervalo, no da ningún resultado a favor ni en contra y no cambia ninguna recomendación",
+  "referencias": {
+    "ganador_tablero_privado": {
+      "texto": "0.1726",
+      "fuente": "referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 196",
+      "pauc": 0.1726
+    },
+    "modelo_completo": {
+      "texto": "0.173",
+      "fuente": "referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3, línea 207",
+      "clases_de_variables": {
+        "Meta-basic": true,
+        "Meta-WB360": true,
+        "Tiles": true,
+        "Patient context": true
+      },
+      "pauc": 0.173
+    },
+    "sin_imagenes": {
+      "texto": "0.164",
+      "fuente": "referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3, línea 209",
+      "clases_de_variables": {
+        "Meta-basic": true,
+        "Meta-WB360": true,
+        "Tiles": false,
+        "Patient context": true
+      },
+      "pauc": 0.164
+    },
+    "solo_imagenes": {
+      "texto": "0.142",
+      "fuente": "referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3, línea 216",
+      "clases_de_variables": {
+        "Meta-basic": false,
+        "Meta-WB360": false,
+        "Tiles": true,
+        "Patient context": false
+      },
+      "pauc": 0.142
+    }
+  },
+  "kaggle": {
+    "M3limpio": {
+      "envio": 58025548,
+      "publica": 0.17229,
+      "privada": 0.15134,
+      "texto": {
+        "publica": "0.17229",
+        "privada": "0.15134"
+      },
+      "fuente": "outputs/fase5b-envio-m3limpio.json > envios.0.publicScore y .privateScore"
+    },
+    "Red4e": {
+      "envio": 58026355,
+      "publica": 0.11108,
+      "privada": 0.1159,
+      "texto": {
+        "publica": "0.11108",
+        "privada": "0.11590"
+      },
+      "fuente": "outputs/fase5b-envio-red4e.json > envios.0.publicScore y .privateScore"
+    },
+    "C7": {
+      "envio": 58027561,
+      "publica": 0.17893,
+      "privada": 0.15856,
+      "texto": {
+        "publica": "0.17893",
+        "privada": "0.15856"
+      },
+      "fuente": "outputs/fase5b-envio-c7.json > envios.0.publicScore y .privateScore"
+    },
+    "ImagenBasicos": {
+      "envio": 58028197,
+      "publica": 0.10126,
+      "privada": 0.08935,
+      "texto": {
+        "publica": "0.10126",
+        "privada": "0.08935"
+      },
+      "fuente": "outputs/fase5b-envio-imagenbasicos.json > envios.0.publicScore y .privateScore"
+    }
+  },
+  "comparaciones_con_la_privada": {
+    "c7_menos_ganador": {
+      "que_es": "C7 frente al ganador en el tablero privado",
+      "modelo": 0.15856,
+      "referencia": 0.1726,
+      "diferencia": -0.01404
+    },
+    "m3limpio_menos_sin_imagenes": {
+      "que_es": "M3 limpio frente a la variante «sin imágenes» de la Tabla 3",
+      "modelo": 0.15134,
+      "referencia": 0.164,
+      "diferencia": -0.01266
+    },
+    "red4e_menos_solo_imagenes": {
+      "que_es": "la red de la 4e frente a la variante «solo imágenes» de la Tabla 3",
+      "modelo": 0.1159,
+      "referencia": 0.142,
+      "diferencia": -0.0261
+    },
+    "red4e_menos_imagen_basicos": {
+      "que_es": "la red de la 4e frente a «Imagen + básicos», las dos puntuaciones de Kaggle; el cuarto envío se decidió después de ver el reservado",
+      "modelo": 0.1159,
+      "referencia": 0.08935,
+      "diferencia": 0.02655
+    }
+  },
+  "aritmetica_de_dos_fuentes": {
+    "que_es": "aritmética descriptiva de dos fuentes distintas: la diferencia C7 − M3 limpio en la puntuación privada de Kaggle, y la diferencia «modelo completo» − «sin imágenes» de la Tabla 3",
+    "c7_menos_m3limpio_kaggle_privada": 0.00722,
+    "completo_menos_sin_imagenes_tabla_3": 0.009
+  },
+  "tabla_tres_evaluaciones": {
+    "M3limpio": {
+      "desarrollo": [
+        {
+          "semillas": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pauc": 0.1621,
+          "fuente": "outputs/fase4-m3limpio-vs-m2.json > metricas.M3limpio.*.media_global"
+        },
+        {
+          "semillas": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pauc": 0.1641,
+          "fuente": "outputs/fase4e-c7-vs-m3limpio.json > metricas.M3limpio.pauc.media_global"
+        }
+      ],
+      "reservado": {
+        "pauc": 0.1588,
+        "fuente": "outputs/fase5-reservado.json > metricas.M3limpio.pauc.punto"
+      },
+      "kaggle_privada": {
+        "pauc": 0.15134,
+        "fuente": "outputs/fase5b-envio-m3limpio.json > envios.0.publicScore y .privateScore"
+      }
+    },
+    "Red4e": {
+      "desarrollo": [
+        {
+          "semillas": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pauc": 0.1376,
+          "fuente": "outputs/fase4f-red4e-vs-imagen-basicos.json > metricas.Red4eAjustada.*.media_global"
+        }
+      ],
+      "reservado": {
+        "pauc": 0.1307,
+        "fuente": "outputs/fase5-reservado.json > metricas.Red4e.pauc.punto"
+      },
+      "kaggle_privada": {
+        "pauc": 0.1159,
+        "fuente": "outputs/fase5b-envio-red4e.json > envios.0.publicScore y .privateScore"
+      }
+    },
+    "C7": {
+      "desarrollo": [
+        {
+          "semillas": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pauc": 0.1669,
+          "fuente": "outputs/fase4e-c7-vs-m3limpio.json > metricas.C7.pauc.media_global"
+        }
+      ],
+      "reservado": null,
+      "kaggle_privada": {
+        "pauc": 0.15856,
+        "fuente": "outputs/fase5b-envio-c7.json > envios.0.publicScore y .privateScore"
+      }
+    },
+    "ImagenBasicos": {
+      "desarrollo": [
+        {
+          "semillas": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pauc": 0.084,
+          "fuente": "outputs/imagen-sola.json > metricas.Imagen + básicos.*.media_global"
+        },
+        {
+          "semillas": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "pauc": 0.0884,
+          "fuente": "outputs/fase4f-red4e-vs-imagen-basicos.json > metricas.ImagenBasicos.*.media_global"
+        }
+      ],
+      "reservado": {
+        "pauc": 0.1385,
+        "fuente": "outputs/fase5-reservado.json > metricas.ImagenBasicos.pauc.punto"
+      },
+      "kaggle_privada": {
+        "pauc": 0.08935,
+        "fuente": "outputs/fase5b-envio-imagenbasicos.json > envios.0.publicScore y .privateScore"
+      }
+    }
+  },
+  "como_leerla": [
+    "las tres evaluaciones son conjuntos y tipos de estimación distintos. Desarrollo: la media por pliegue de la validación cruzada repetida sobre los 833 pacientes de desarrollo, con las semillas indicadas, entrenando con cuatro quintos. Reservado: un solo modelo entrenado con el desarrollo y puntuado en los 209 pacientes reservados. Kaggle: modelos entrenados con los 1.042 pacientes y puntuados en el subconjunto privado de la prueba oculta",
+    "Kaggle da una cifra por envío, sin intervalo",
+    "las cifras de la Tabla 3 son de la reproducción del ganador que los organizadores hicieron en su entorno, con 3 decimales, sobre el conjunto del tablero privado (líneas 200 y 315); el 0.1726 es la puntuación oficial del ganador en el tablero privado (línea 196)",
+    "la variante «sin imágenes» de la Tabla 3 usa los datos básicos, que incluyen la etiqueta del hospital (línea 315); M3 limpio no la usa (outputs/auditoria-de-fugas.json > columnas_procedencia)",
+    "el C7 de Kaggle puntúa con la media de cinco redes, una por pliegue; en la validación cruzada se evaluó con una red por pliegue (PLAN.md, Fase 5b)",
+    "C7 no se evaluó en el reservado: la Fase 5 no lo incluía",
+    "las públicas se reportan; las comparaciones se hacen con las privadas, las del tablero final",
+    "no se dan posiciones en el tablero: no hay ninguna fuente versionada del tablero completo"
+  ],
+  "controles": {
+    "casos": [
+      {
+        "caso": "las cuatro referencias se leen en su línea",
+        "ok": true,
+        "debe_fallar": false
+      },
+      {
+        "caso": "las clases de «sin imágenes» en la línea siguiente no se leen",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "la frase del ganador en la línea siguiente no se lee",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "la Tabla 3 corrida una línea no tiene la estructura esperada",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "un modelo sin envío puntuado se rechaza",
+        "ok": true,
+        "debe_fallar": true
+      }
+    ],
+    "fallos": 0
+  },
+  "comando": {
+    "argumentos": [
+      "--out",
+      "outputs/fase5b-comparacion"
+    ]
+  },
+  "fecha": "2026-11-05T12:10:46-0500"
+}
