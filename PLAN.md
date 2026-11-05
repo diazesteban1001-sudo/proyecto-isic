@@ -2747,6 +2747,15 @@ sobre el mismo conjunto de evaluación que el tablero del reto.
   entrenamiento, M3 limpio, C7 y la red de la 4e, cada uno con su
   especificación fija. Esos datos son el desarrollo y el reservado: 833 y 209
   pacientes, 1.042 en total (`outputs/holdout-pacientes.json > recuentos`).
+- **Un cuarto envío, de prioridad menor:** «Imagen + básicos», entrenado con
+  todos los datos, para compararlo con la red de la 4e en el mismo conjunto de
+  prueba. *Decisión de la persona del 2026-11-04, tomada después de ver el
+  reservado y declarada así* (Fase 5, hallazgo 17 de `CLAUDE.md`). Si no cabe en
+  el presupuesto de tres días, es el primero que se cae, y se declara. En el
+  notebook necesita las variables de DINOv2 de los recortes de prueba, así que
+  el notebook corre DINOv2 con sus pesos públicos, un dato externo que la
+  página de requisitos permite (`referencias/kaggle-code-requirements.md`,
+  línea 8).
 - **Un envío por modelo.** Cada uno se envía una sola vez, y no se envía nada
   antes de la Fase 5.
 - **Se reporta todo.** Se reportan las puntuaciones pública y privada, sea cual
@@ -2763,7 +2772,9 @@ sobre el mismo conjunto de evaluación que el tablero del reto.
     total y el contexto de paciente;
   - **la red de la 4e frente a la fila «solo imágenes»,** 0,142 (línea 216):
     la variante del ganador que solo usa los recortes, sin contexto de
-    paciente.
+    paciente;
+  - **«Imagen + básicos» frente a la red de la 4e,** con las dos puntuaciones
+    de Kaggle, si el cuarto envío se hace.
 - **El notebook solo predice.** Los modelos se entrenan en el Mac y se suben a
   Kaggle como conjunto de datos privado. El envío se hace con un notebook
   (`referencias/kaggle-code-requirements.md`, línea 3). Ese notebook corre sin
@@ -2834,7 +2845,7 @@ tres días.
 - **Es descriptiva.** No da ningún resultado a favor ni en contra, no cambia
   ninguna recomendación y no suma a la bitácora.
 
-**Puerta.** Las puntuaciones pública y privada de los tres envíos, en
+**Puerta.** Las puntuaciones pública y privada de los envíos que se hagan, en
 `outputs/`, con su comparación descriptiva. O bien la declaración de que la fase
 se cerró sin envío, y por qué.
 
