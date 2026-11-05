@@ -701,7 +701,10 @@ Cinco piezas, en este orden (`PLAN.md`, Fase 5b):
   proyecta al tamaño de la prueba.
 - **`scripts/fase5b_kaggle.py`** lo convierte en `.ipynb` con su
   `kernel-metadata.json`: privado, sin internet y con GPU. Con `--local`, lo
-  ensaya en el Mac sobre una entrada que imita la de Kaggle.
+  ensaya en el Mac sobre una entrada que imita la de Kaggle. Con
+  `--registrar`, copia a `outputs/` la salida que el notebook escribió en
+  Kaggle, ya descargada, sin tocarla y con su procedencia; con `--anterior`,
+  pone al lado el control de otra versión del mismo notebook.
 
 No envía nada: subir el conjunto de datos y el notebook se hace con la CLI de
 Kaggle, y enviar es un paso aparte.
@@ -710,6 +713,7 @@ Kaggle, y enviar es un paso aparte.
 caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_entrenar.py --out outputs/fase5b-entrenamiento
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_paquete.py --out outputs/fase5b-paquete
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion --destino data/fase5b-kernel-medicion
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion --destino data/fase5b-kernel-medicion --registrar data/fase5b-kaggle-salida-3 --version 3 --anterior data/fase5b-kaggle-salida-2 --out outputs/fase5b-kaggle-medicion
 ```
 
 ## Cómo correrlo

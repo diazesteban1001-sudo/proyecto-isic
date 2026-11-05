@@ -8,6 +8,9 @@ CLI de Kaggle, y enviar, todavía más aparte.
   construir: el .ipynb con MODO fijado (una celda por cada «# %%» de
       fase5b_notebook.py) y kernel-metadata.json: privado, sin internet, con GPU,
       con la competición y el conjunto de datos de fase5b_paquete.py como entradas.
+  --registrar: copia a outputs/ la salida que el notebook escribió en Kaggle, ya
+      descargada, sin tocarla, con su procedencia; con --anterior, pone al lado el
+      control de otra versión del mismo notebook.
   --local: ensaya el notebook en el Mac sobre una entrada que imita la de Kaggle:
       la competición con train-metadata.csv y train-image.hdf5 reales, y una
       prueba hecha con tres filas de entrenamiento con las columnas de
@@ -17,6 +20,9 @@ CLI de Kaggle, y enviar, todavía más aparte.
 Uso:
     .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion \\
         --destino data/fase5b/kernel-medicion [--local]
+    .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_kaggle.py --modo medicion \\
+        --destino data/fase5b-kernel-medicion --registrar data/fase5b-kaggle-salida-3 --version 3 \\
+        --anterior data/fase5b-kaggle-salida-2 --out outputs/fase5b-kaggle-medicion
 """
 
 import argparse
@@ -108,13 +114,86 @@ def entrada_local(base, conjunto):
     os.symlink(os.path.abspath(conjunto), enlace)
 
 
+def sha256(ruta):
+    import hashlib
+    h = hashlib.sha256()
+    with open(ruta, "rb") as f:
+        for bloque in iter(lambda: f.read(1 << 20), b""):
+            h.update(bloque)
+    return h.hexdigest()
+
+
+def registrar(modo, destino, salida, version, out, anterior=None):
+    """Copia a outputs/ la salida que el notebook escribió en Kaggle, sin tocarla, con
+    su procedencia. Con anterior (la salida de otra versión del mismo notebook), pone
+    al lado las diferencias del control de las dos, caso por caso."""
+    nombre = slug(modo)
+    ruta = os.path.join(salida, f"fase5b-{modo}.json")
+    with open(ruta, encoding="utf-8") as f:
+        notebook = json.load(f)
+    if notebook.get("modo") != modo:
+        raise SystemExit(f"ERROR: {ruta} es del modo {notebook.get('modo')!r}, no de {modo!r}.")
+    archivos = {os.path.basename(p): {"bytes": os.path.getsize(p), "sha256": sha256(p)}
+                for p in (ruta, os.path.join(salida, "submission.csv"), os.path.join(destino, f"{nombre}.ipynb"))}
+    registro = {"que_es": "la salida del notebook de la Fase 5b en Kaggle, copiada sin tocar, con su procedencia "
+                          "(PLAN.md, Fase 5b); no es un envío a la competición",
+                "kernel": {"id": f"{USUARIO}/{nombre}", "version": version, "privado": True, "internet": False},
+                "conjunto_de_datos": CONJUNTO, "competicion": COMPETICION, "archivos": archivos,
+                "salida_del_notebook": notebook}
+    if anterior:
+        with open(os.path.join(anterior, f"fase5b-{modo}.json"), encoding="utf-8") as f:
+            previa = json.load(f)
+        pares = list(zip(previa["control"]["casos"], notebook["control"]["casos"], strict=True))
+        if any(a["caso"] != b["caso"] for a, b in pares):
+            raise SystemExit("ERROR: los casos del control no son los mismos en las dos versiones.")
+        registro["control_frente_a_la_version_anterior"] = {
+            "que_es": "la diferencia máxima de cada caso del control en esta versión y en la anterior del mismo "
+                      "notebook; los modelos que no cambiaron entre las dos versiones del conjunto de datos tienen "
+                      "que repetirla",
+            "anterior": {"archivo": f"fase5b-{modo}.json", "sha256": sha256(os.path.join(anterior, f"fase5b-{modo}.json"))},
+            "casos": [{"caso": a["caso"], "anterior": a["diferencia_maxima"], "esta": b["diferencia_maxima"],
+                       "igual": a["diferencia_maxima"] == b["diferencia_maxima"]}
+                      for a, b in pares]}
+    with open(f"{out}.json", "w", encoding="utf-8") as f:
+        json.dump(registro, f, ensure_ascii=False, indent=2)
+    c, t = notebook["control"], notebook.get("tiempo")
+    lineas = [f"# Fase 5b — el notebook en Kaggle, modo {modo}",
+              f"Kernel {USUARIO}/{nombre}, versión {version}, privado y sin internet; {notebook['gpu']}, "
+              f"{notebook['trabajadores']} procesos de datos. No es un envío a la competición.",
+              f"Control: {len(c['casos']) - c['fallos']} de {len(c['casos'])} bien, "
+              f"{sum(x['debe_fallar'] for x in c['casos'])} de ellos casos que deben fallar "
+              f"(tolerancias: logit {c['tolerancias']['logit']}, DINOv2 {c['tolerancias']['dinov2']}, "
+              f"probabilidad {c['tolerancias']['probabilidad']})."]
+    if t:
+        lineas.append(f"Proyección a {t['lesiones_de_prueba_supuestas']} lesiones, frente al límite de "
+                      f"{t['limite_horas']} h: " + ", ".join(f"{k} {v['horas_proyectadas']} h"
+                                                             for k, v in t["proyeccion"].items()) + ".")
+    if anterior:
+        casos = registro["control_frente_a_la_version_anterior"]["casos"]
+        lineas.append(f"Frente a la versión anterior: {sum(x['igual'] for x in casos)} de {len(casos)} casos del "
+                      "control repiten su diferencia máxima.")
+    lineas.append(f"Tiempo total en Kaggle: {notebook['segundos_total']} s.")
+    with open(f"{out}.md", "w", encoding="utf-8") as f:
+        f.write("\n".join(lineas) + "\n")
+    print(f"Escrito: {out}.json y .md", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--modo", required=True, choices=MODOS)
     ap.add_argument("--destino", required=True)
     ap.add_argument("--local", action="store_true")
     ap.add_argument("--conjunto", default=os.path.join(RAIZ, "data", "fase5b", "kaggle-dataset"))
+    ap.add_argument("--registrar", metavar="SALIDA", help="la salida descargada de Kaggle; no construye nada")
+    ap.add_argument("--version", type=int, help="con --registrar: la versión del kernel que la escribió")
+    ap.add_argument("--anterior", metavar="SALIDA", help="con --registrar: la salida de la versión anterior")
+    ap.add_argument("--out", help="con --registrar: outputs/<nombre>, sin extensión")
     args = ap.parse_args()
+    if args.registrar:
+        if args.version is None or not args.out:
+            raise SystemExit("ERROR: --registrar necesita --version y --out.")
+        registrar(args.modo, args.destino, args.registrar, args.version, args.out, args.anterior)
+        return
     script = construir(args.modo, args.destino)
     print(f"Escrito: {args.destino}/{slug(args.modo)}.ipynb y kernel-metadata.json", flush=True)
     if args.local:
