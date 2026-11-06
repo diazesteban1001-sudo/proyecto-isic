@@ -1873,6 +1873,28 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       pliegue a pliegue.
       *Cumplido el 2026-10-04 (mismo commit): la subsección se llama ahora
       «Una ventaja que la pAUC no ve» y da las otras tres métricas.*
+- [ ] **Los 33 señalados por campo de `informe/borrador-v2.md` van al anexo de
+      trazabilidad** (2026-11-06; `outputs/sintesis-verificacion.json >
+      por_campo.detalle`). 17 de los 50 se resolvieron citando el campo que
+      traía la cifra (guardarraíl 2, la octava corrida). Los 33 que quedan:
+      - **No se resuelven citando un campo, porque ninguno de `outputs/` trae
+        la cifra como número** (12): la unidad «1.000 lesiones», que solo está
+        en el nombre de los campos (5); las 384 dimensiones de DINOv2, que
+        `outputs/extraccion-imagen.json > caracteristica` da dentro de un texto
+        (5); el 0,5 del azar del AUC y el «percentil 20» del mecanismo del 2a,
+        también dentro de un texto. El único 1.000 numérico, en
+        `outputs/tiempo-inferencia.json`, es otra cosa: las filas comprobadas al
+        azar.
+      - **Porcentajes calculados a partir de una fracción** (8): los del
+        mecanismo del 2a.
+      - **De una fuente externa o de un documento del proyecto** (3): el «200»
+        (pendiente aparte, arriba), el «34» y el «22».
+      - **Etiquetas leídas como números** (2): «ViT-S/14» y el «1» de «2b − 1».
+      - **Citan solo documentos del proyecto** (8), contando como tales las
+        líneas de `referencias/` que son nuestras y no texto original: la
+        fórmula de Nadeau y Bengio, 6 números, que cita además
+        `evaluar_repetido.py`, y dos fechas de artículos, que citan además
+        `PLAN.md`.
 - [ ] **El anteproyecto afirma sobre los datos de los trabajos colombianos
       algo que sus fuentes no sostienen** (2026-10-04).
       - **Qué afirma:** el anteproyecto (§2.4, documento entregado) dice que
@@ -1982,13 +2004,25 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
-- [ ] **Las fases 4d, 4e, 4f, 5, 5b y 5c, y el análisis de potencia de la
-      prueba, no están todavía en el README** (2026-10-31; la 4e, desde el
-      2026-11-01; la 4f, desde el 2026-11-02; la potencia y la Fase 5, desde el
-      2026-11-04; la 5b y la 5c, desde el 2026-11-05). *En el borrador están
-      todas desde el 2026-11-05, en tres bloques (abajo), y en la demo desde el
-      2026-11-06 (abajo, «En la demo»); hasta esos días este punto decía también
-      «en el informe» y «ni en la demo».*
+- [x] **Las fases 4d, 4e, 4f, 5, 5b y 5c, y el análisis de potencia de la
+      prueba, no estaban todavía en el informe, el README ni la demo**
+      (2026-10-31; la 4e, desde el 2026-11-01; la 4f, desde el 2026-11-02; la
+      potencia y la Fase 5, desde el 2026-11-04; la 5b y la 5c, desde el
+      2026-11-05). *Cumplido el 2026-11-06: en el borrador están todas desde el
+      2026-11-05, en tres bloques (abajo); en la demo, desde el 2026-11-06
+      (abajo, «En la demo»); y en el README, desde el mismo día (abajo, «En el
+      README»).*
+      - **En el README, desde el 2026-11-06** (commit «README: al día con las
+        fases 4d a 5c»). El objetivo 5 pasa a «Cumplido»: su criterio en el
+        anteproyecto pide *«el resultado de esa verificación y … las métricas
+        del conjunto reservado reportadas con su intervalo»*, y
+        `outputs/fase5-reservado.json > metricas.M3limpio` trae las cuatro, con
+        su intervalo. Cada cifra nueva se cotejó a mano con el campo que se cita
+        al lado. Corrido sobre el README, el verificador encuentra 150 números:
+        140 con respaldo en `outputs/`, 2 del método, 7 omitidos por su contexto
+        y 1 señalado, el «384» de las variables de DINOv2, que en `outputs/`
+        solo está dentro de un texto. El README no lleva comentarios `F:`, así
+        que la verificación por campo no se le aplica.
       - **En la demo, desde el 2026-11-06** (commits «generar_demo: las fases 4d
         a 5c, desde frases verificadas del borrador» y «Regenerar la demo con las
         fases 4d a 5c»). La red de la 4e y la Fase 4f van al final de «La imagen
@@ -1998,12 +2032,15 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         puede afirmar» y «Limitaciones» copian el borrador. Sale la sección «Lo
         que sigue», que anunciaba la apertura del reservado. Control:
         `test_generar_demo.py`, 61 de 61, con los casos R y S nuevos.
-      - **Una frase del borrador que la demo deja fuera:** «Datos y validación»,
-        «Los datos», dice que el archivo de prueba del reto es un marcador de
-        posición, *«así que no hay contra qué medir un resultado final
+      - **La frase del archivo de prueba, al día** (2026-11-06, commit «Borrador
+        v2: la frase del archivo de prueba, al día con Kaggle»). «Datos y
+        validación», «Los datos», decía que, con el archivo de prueba del reto
+        como marcador de posición, *«no hay contra qué medir un resultado final
         independiente fuera de lo que este proyecto aparte»*. Desde las fases 5b
-        y 5c, Kaggle da una cifra sobre la prueba oculta. La demo la copiaba al
-        principio de «Limitaciones» y ya no; el borrador no se ha tocado.
+        y 5c, Kaggle da una cifra sobre la prueba oculta. Ahora dice que la
+        prueba oculta solo se mide enviando a Kaggle, que da una cifra por
+        envío sin intervalo, y que el resultado final con intervalo es el del
+        reservado; la demo vuelve a abrir «Limitaciones» con esa frase.
       - **En el borrador desde el 2026-11-05: las fases 4d, 4e y 4f y la
         potencia** (commit «Borrador v2: las fases 4d, 4e y 4f, y la potencia de
         la prueba»). Van en «Resultados»: la red de la 4e y la Fase 4f, al final
@@ -2345,6 +2382,25 @@ puede afirmar», «Qué no se puede afirmar» y «Limitaciones» reemplazadas (c
   la segunda cita de las líneas 48 y 67–70 de
   `referencias/kaggle-code-requirements.md`, ahora en «Limitaciones». Su
   párrafo no tiene números.
+
+*Y una octava,* en el commit «Regenerar la verificación, el analizador y la
+demo con 17 señalados resueltos», del 2026-11-06, con la frase del archivo de
+prueba corregida y quince comentarios `F:` que citan ahora el campo de su cifra
+(commits «Borrador v2: la frase del archivo de prueba, al día con Kaggle» y
+«Borrador v2: 17 cifras señaladas, con el campo que las respalda»):
+- **Búsqueda en todo el corpus:** 1.045 números; 565 con respaldo, 11
+  señalados, los mismos de antes, 10 del método, 21 omitidos por su contexto y
+  438 en comentarios.
+- **Por campo, sobre los 576 números del cuerpo:** 524 respaldados por su campo
+  y 19 por su referencia; **33 señalados**, 25 que no están en sus campos y 8
+  que citan un documento del proyecto. Los 17 resueltos son 12 denominadores y
+  tamaños del diseño, 3 recuentos de una lista, ahora con `n(…)`, y dos
+  constantes del método, el máximo de la pAUC y el umbral alto del mecanismo
+  del 2a. Ninguno nuevo.
+- **El analizador:** 264 comentarios `F:`, 194 que entran en la gramática y 70
+  que solo citan documentos del proyecto; ninguno que no entre.
+- **Las citas de `referencias/`:** suma una a líneas originales, la línea 31 de
+  `referencias/kaggle-code-requirements.md`, en la frase del archivo de prueba.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
