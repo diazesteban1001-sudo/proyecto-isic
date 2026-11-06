@@ -22,8 +22,9 @@ escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el e
 el 2026-11-05 se hicieron sus cuatro envíos, los cuatro con puntuación, y cerró
 por su puerta, con su comparación descriptiva; el mismo día la persona abrió la
 Fase 5c, decidida después de ver la 5b: cuatro envíos más para descomponer la
-distancia al ganador, después de los cuales no se envía nada más a Kaggle; de la
-Fase 6 hay trabajo hecho.** De la Fase 6:
+distancia al ganador, después de los cuales no se envía nada más a Kaggle; se
+hicieron los cuatro el mismo día, los cuatro con puntuación, y su puerta está,
+sin cerrar; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -58,7 +59,8 @@ Fase 4f cerró por su regla con su pregunta a favor.* *2026-11-04: la persona
 fijó la Fase 5b, el envío tardío a Kaggle, que va después de la Fase 5; no se
 envía nada antes.* *2026-11-04: la persona abrió la Fase 5.* *2026-11-05: la
 Fase 5b cerró por su puerta, con los cuatro envíos puntuados.* *2026-11-05: la
-persona abrió la Fase 5c, decidida después de ver los resultados de la 5b.*
+persona abrió la Fase 5c, decidida después de ver los resultados de la 5b.* *2026-11-05: los
+cuatro envíos de la Fase 5c, con puntuación.*
 
 ## Cómo leer una puerta
 
@@ -3120,7 +3122,9 @@ tienen puntuación (arriba, «Los envíos»).
 
 **Estado.** Fijada el 2026-11-05 por la persona, **después de ver los
 resultados de la Fase 5b**, y declarada así. Se escribió en un commit propio
-antes de entrenar nada.
+antes de entrenar nada. *El mismo día se hicieron los cuatro envíos, en el
+orden fijado, y los cuatro recibieron puntuación (abajo, «Lo que dio
+Kaggle»). La puerta está; la fase no se ha cerrado.*
 
 **Por qué existe.** En la Fase 5b, C7 quedó a −0,01404 del ganador en el
 tablero privado (`outputs/fase5b-comparacion.json >
@@ -3334,6 +3338,58 @@ fijada antes del primer envío:
 - **Los controles** (`controles`): 8 de 8 casos bien, 3 de ellos casos que deben
   fallar. Además de los de la 5b, «M3limpioProm» no se confunde con
   «M3limpioPromHosp», y un envío de la 5b no cuenta como de la 5c.
+
+**Lo que dio Kaggle (2026-11-05).** Los cuatro envíos se hicieron en el orden
+fijado y los cuatro recibieron puntuación, así que ninguno se reenvió. Cada uno
+es la versión 1 del kernel de su modelo. Las puntuaciones, tal como las
+devuelve la API (`outputs/fase5c-envio-<modelo>.json > envios.0.publicScore` y
+`.privateScore`):
+
+| Modelo | Envío | Pública | Privada |
+|---|---|---|---|
+| «M3 limpio promediado» | 58042728 | 0,17724 | 0,15577 |
+| «M3 limpio promediado + hospital» | 58042874 | 0,17797 | 0,15625 |
+| «C7 promediado» | 58043021 | 0,18256 | 0,16363 |
+| «C7 promediado + hospital» | 58044111 | 0,18113 | 0,16600 |
+
+- **El control en Kaggle,** antes de cada envío
+  (`outputs/fase5c-kaggle-<modelo>.json > salida_del_notebook.control`): 2 de 2
+  casos bien en los dos envíos sin red, 7 de 7 en «C7 promediado» y 8 de 8 en «C7
+  promediado + hospital», con un caso que debe fallar por modelo.
+- **La huella,** comprobada antes de cada envío
+  (`outputs/fase5c-envio-<modelo>.json > al_enviar.comprobado_antes_de_enviar`):
+  en los cuatro, la versión 1 del conjunto de datos, su huella y los SHA-256 de
+  los cuatro notebooks son los fijados en `outputs/fase5c-huella.json`.
+- **Ningún envío previo:** al enviar, ningún modelo tenía otro envío en la
+  competición (`al_enviar.envios_previos_del_modelo`).
+- **Con estos cuatro, el proyecto no envía nada más a Kaggle** (arriba, «Qué se
+  hace»).
+
+**Los seis efectos** (`outputs/fase5c-efectos.json`, de `fase5c_efectos.py`),
+restas entre puntuaciones de Kaggle, sin intervalo. Las de la 5b son las de
+`outputs/fase5b-envio-m3limpio.json` y `outputs/fase5b-envio-c7.json`: M3
+limpio, 0,15134 en la privada y 0,17229 en la pública; C7, 0,15856 y 0,17893
+(`kaggle`). Se comparan las privadas, y las públicas van al lado (`efectos`):
+
+| Efecto | Resta | Privada | Pública |
+|---|---|---|---|
+| Promediar, sin imagen | «M3 limpio promediado» − M3 limpio | +0,00443 | +0,00495 |
+| Promediar, con imagen | «C7 promediado» − C7 | +0,00507 | +0,00363 |
+| El hospital, sin imagen | «M3 limpio promediado + hospital» − «M3 limpio promediado» | +0,00048 | +0,00073 |
+| El hospital, con imagen | «C7 promediado + hospital» − «C7 promediado» | +0,00237 | −0,00143 |
+| La imagen, sin hospital | «C7 promediado» − «M3 limpio promediado» | +0,00786 | +0,00532 |
+| La imagen, con hospital | «C7 promediado + hospital» − «M3 limpio promediado + hospital» | +0,00975 | +0,00316 |
+
+- **Los dos efectos de promediar son sin hospital,** como fija la
+  especificación.
+- **Los controles** (`controles`): 4 de 4 casos bien, 3 de ellos casos que deben
+  fallar. Un registro sin envío puntuado y el registro de otro modelo se
+  rechazan, y con «C7 promediado» y «M3 limpio promediado» intercambiados, el
+  efecto de la imagen sin hospital cambia de signo.
+- **Cómo leerlos** (`como_leerlos`): son restas entre dos cifras por envío, sin
+  intervalo, sobre el mismo conjunto de prueba que la 5b, y promediar cambia dos
+  cosas a la vez (arriba, «Salvedades»). Es descriptiva: no da ningún resultado a
+  favor ni en contra y no cambia ninguna recomendación.
 
 **Puerta.** Las puntuaciones pública y privada de los cuatro envíos, en
 `outputs/fase5c-envio-<modelo>.json`, y los seis efectos, en

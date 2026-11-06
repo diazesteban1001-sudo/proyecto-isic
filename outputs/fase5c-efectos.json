@@ -1,0 +1,157 @@
+{
+  "que_es": "los seis efectos descriptivos de la Fase 5c (PLAN.md): restas entre puntuaciones de Kaggle, sin intervalo; no da ningún resultado a favor ni en contra y no cambia ninguna recomendación",
+  "kaggle": {
+    "M3limpio": {
+      "nombre": "M3 limpio (Fase 5b)",
+      "envio": 58025548,
+      "publica": 0.17229,
+      "privada": 0.15134,
+      "texto": {
+        "publica": "0.17229",
+        "privada": "0.15134"
+      },
+      "fuente": "outputs/fase5b-envio-m3limpio.json > envios.0.publicScore y .privateScore"
+    },
+    "C7": {
+      "nombre": "C7 (Fase 5b)",
+      "envio": 58027561,
+      "publica": 0.17893,
+      "privada": 0.15856,
+      "texto": {
+        "publica": "0.17893",
+        "privada": "0.15856"
+      },
+      "fuente": "outputs/fase5b-envio-c7.json > envios.0.publicScore y .privateScore"
+    },
+    "M3limpioProm": {
+      "nombre": "M3 limpio promediado",
+      "envio": 58042728,
+      "publica": 0.17724,
+      "privada": 0.15577,
+      "texto": {
+        "publica": "0.17724",
+        "privada": "0.15577"
+      },
+      "fuente": "outputs/fase5c-envio-m3limpioprom.json > envios.0.publicScore y .privateScore"
+    },
+    "M3limpioPromHosp": {
+      "nombre": "M3 limpio promediado + hospital",
+      "envio": 58042874,
+      "publica": 0.17797,
+      "privada": 0.15625,
+      "texto": {
+        "publica": "0.17797",
+        "privada": "0.15625"
+      },
+      "fuente": "outputs/fase5c-envio-m3limpiopromhosp.json > envios.0.publicScore y .privateScore"
+    },
+    "C7Prom": {
+      "nombre": "C7 promediado",
+      "envio": 58043021,
+      "publica": 0.18256,
+      "privada": 0.16363,
+      "texto": {
+        "publica": "0.18256",
+        "privada": "0.16363"
+      },
+      "fuente": "outputs/fase5c-envio-c7prom.json > envios.0.publicScore y .privateScore"
+    },
+    "C7PromHosp": {
+      "nombre": "C7 promediado + hospital",
+      "envio": 58044111,
+      "publica": 0.18113,
+      "privada": 0.166,
+      "texto": {
+        "publica": "0.18113",
+        "privada": "0.16600"
+      },
+      "fuente": "outputs/fase5c-envio-c7promhosp.json > envios.0.publicScore y .privateScore"
+    }
+  },
+  "efectos": {
+    "promediar_sin_imagen": {
+      "que_es": "el efecto de promediar, sin hospital y sin imagen",
+      "modelo": "M3 limpio promediado",
+      "menos": "M3 limpio (Fase 5b)",
+      "privada": 0.00443,
+      "publica": 0.00495
+    },
+    "promediar_con_imagen": {
+      "que_es": "el efecto de promediar, sin hospital y con imagen",
+      "modelo": "C7 promediado",
+      "menos": "C7 (Fase 5b)",
+      "privada": 0.00507,
+      "publica": 0.00363
+    },
+    "hospital_sin_imagen": {
+      "que_es": "el efecto del hospital, sin imagen",
+      "modelo": "M3 limpio promediado + hospital",
+      "menos": "M3 limpio promediado",
+      "privada": 0.00048,
+      "publica": 0.00073
+    },
+    "hospital_con_imagen": {
+      "que_es": "el efecto del hospital, con imagen",
+      "modelo": "C7 promediado + hospital",
+      "menos": "C7 promediado",
+      "privada": 0.00237,
+      "publica": -0.00143
+    },
+    "imagen_sin_hospital": {
+      "que_es": "el efecto de la imagen, sin hospital",
+      "modelo": "C7 promediado",
+      "menos": "M3 limpio promediado",
+      "privada": 0.00786,
+      "publica": 0.00532
+    },
+    "imagen_con_hospital": {
+      "que_es": "el efecto de la imagen, con hospital",
+      "modelo": "C7 promediado + hospital",
+      "menos": "M3 limpio promediado + hospital",
+      "privada": 0.00975,
+      "publica": 0.00316
+    }
+  },
+  "como_leerlos": [
+    "cada efecto es una resta entre las puntuaciones de dos envíos; la privada es la del tablero final, y con ella se compara, como en la Fase 5b; la pública se reporta al lado",
+    "Kaggle da una cifra por envío y no da intervalo",
+    "promediar cambia dos cosas a la vez: los modelos de la 5b se ajustan con todos los pacientes y cada uno de los 45 con cuatro quintos (PLAN.md, Fase 5c, «Salvedades»)",
+    "la fase se decidió después de ver los resultados de la 5b: es una segunda mirada al mismo conjunto de prueba"
+  ],
+  "controles": {
+    "casos": [
+      {
+        "caso": "los seis registros tienen un envío puntuado de su modelo",
+        "ok": true,
+        "debe_fallar": false
+      },
+      {
+        "caso": "un registro sin envío puntuado se rechaza",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "el registro de otro modelo se rechaza",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "con C7 promediado y M3 limpio promediado intercambiados, el efecto de la imagen sin hospital cambia de signo",
+        "ok": true,
+        "debe_fallar": true
+      }
+    ],
+    "de_casos": 4,
+    "fallos": 0,
+    "deben_fallar": 3
+  },
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase5c_efectos.py",
+      "--out",
+      "outputs/fase5c-efectos"
+    ]
+  },
+  "fecha": "2026-11-06T04:00:29.913608+00:00"
+}
