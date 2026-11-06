@@ -1,0 +1,69 @@
+{
+  "que_es": "los envíos de este modelo a la competición, tal como los devuelve la API de Kaggle, sin tocar (PLAN.md, Fase 5c)",
+  "modelo": "C7PromHosp",
+  "kernel": {
+    "id": "estebandazz/isic2024-fase5c-c7promhosp",
+    "version": 1
+  },
+  "huella_fijada": {
+    "archivo": "outputs/fase5c-huella.json",
+    "conjunto_de_datos": {
+      "version": 1,
+      "huella_sha256": "946047b2bb08e05bd7ffa9f47fa9e5deef50cbe4c9ffaeb0e4310bacc916510e"
+    },
+    "notebook": {
+      "isic2024-fase5c-c7promhosp.ipynb": "55546b617625bb2be531f3ad32cece32f85257780abb365ecbe1009ae512d55a",
+      "kernel-metadata.json": "40243f16b7d02b5f64764cc922a84c28e21273a5506627c05ab4803a4e269e1a"
+    }
+  },
+  "al_enviar": {
+    "mensaje": "Fase 5c: C7PromHosp, kernel estebandazz/isic2024-fase5c-c7promhosp v1",
+    "respuesta": {
+      "message": "",
+      "ref": 58044111
+    },
+    "comprobado_antes_de_enviar": {
+      "fecha": "2026-11-05T22:36:04-0500",
+      "conjunto_de_datos": {
+        "version": 1,
+        "huella_sha256": "946047b2bb08e05bd7ffa9f47fa9e5deef50cbe4c9ffaeb0e4310bacc916510e"
+      },
+      "notebooks": {
+        "M3limpioProm": {
+          "isic2024-fase5c-m3limpioprom.ipynb": "ef2941cc4f3a1b3bfabe367eb62db5beb896d4a253094caefa4c8c0bee9420fa",
+          "kernel-metadata.json": "8dfd8e76643d06ed93f8503728117dc85ec813397d1dccc4449895ad9f95c1a7"
+        },
+        "M3limpioPromHosp": {
+          "isic2024-fase5c-m3limpiopromhosp.ipynb": "d02cd24f97ff72cf253c4d3304a3179020e1cdba1d5251ad77687c3608bcdfc8",
+          "kernel-metadata.json": "b3f061ebfc3493af60d3d66bb1b5f7750a706d7148063e8ef4809bf047c081ed"
+        },
+        "C7Prom": {
+          "isic2024-fase5c-c7prom.ipynb": "c6ac951b8fa495c46c7e6bacba5f91b782ea547644c7f2054089c95f638603a2",
+          "kernel-metadata.json": "251e8f6f1654d0d52fbb8aab208c29a66ecd6be09cc41de635462c82e43a724e"
+        },
+        "C7PromHosp": {
+          "isic2024-fase5c-c7promhosp.ipynb": "55546b617625bb2be531f3ad32cece32f85257780abb365ecbe1009ae512d55a",
+          "kernel-metadata.json": "40243f16b7d02b5f64764cc922a84c28e21273a5506627c05ab4803a4e269e1a"
+        }
+      }
+    },
+    "envios_previos_del_modelo": []
+  },
+  "envios": [
+    {
+      "ref": 58044111,
+      "totalBytes": 17756519,
+      "date": "2026-11-06T03:36:05.730Z",
+      "description": "Fase 5c: C7PromHosp, kernel estebandazz/isic2024-fase5c-c7promhosp v1",
+      "errorDescription": null,
+      "fileName": "submission.csv",
+      "publicScore": "0.18113",
+      "privateScore": "0.16600",
+      "status": "COMPLETE",
+      "submittedBy": "estebandazz",
+      "submittedByRef": "estebandazz",
+      "teamName": "Esteban Díazz",
+      "url": "/code/estebandazz/isic2024-fase5c-c7promhosp?scriptVersionId=366147158"
+    }
+  ]
+}
