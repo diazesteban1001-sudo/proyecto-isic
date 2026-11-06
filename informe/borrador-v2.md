@@ -820,6 +820,41 @@ comparan. Y todo esto se midió sobre los recortes del sistema de fotografía
 corporal total, no sobre fotos de teléfono.
 <!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 216) y línea 272; PLAN.md, Fase 4, «Orden de magnitud, no comparación»; «Estado del arte» («el ganador ajustó sus propias redes»); IS > datos; referencias/kurtansky-2024-slice3d-descriptor.md, líneas 194 y 226; referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 -->
 
+La red de la Fase 4e, la EfficientNet-B0 con la receta del décimo puesto y el
+ajuste fino que se describen en «El modelo recomendado», queda sola por encima
+de la red de la Fase 4c: 0,1376 frente a 0,1086, +0,029, [0,002; 0,056] (23 de
+25; 5 de 5). En el AUC, +0,044, [0,0062; 0,0818], y en la sensibilidad top-15,
++0,1232, [0,043; 0,2035], el intervalo también excluye el cero; en el NNT80%
+SE, no.
+<!-- F: outputs/fase4e-red-vs-red4c.json > metricas.Red4eAjustada.pauc.media_global, metricas.Red.pauc.media_global, C.pauc.media, .intervalo_t_95_nadeau_bengio, .nuevo_mejor_en_folds, .n_diferencias, .nuevo_mejor_en_semillas, C.auc.media, .intervalo_t_95_nadeau_bengio, C.setop15.media, .intervalo_t_95_nadeau_bengio, C.nnt80.intervalo_t_95_nadeau_bengio y n(semillas_corridas); «Resultados», «El modelo recomendado» -->
+
+Aun así, la regla no la da por establecida. Su valor p, 0,0365, no llega al
+umbral de Holm para la primera de dos preguntas, 0,025; con una sola pregunta,
+el umbral habría sido 0,05. Lo que decide es la corrección por multiplicidad,
+fijada antes de correr. Es el mismo tipo de hallazgo que recoge «Qué suma este
+proyecto»: una decisión de método, aquí cuántas preguntas se corrigen juntas,
+cambia el veredicto.
+<!-- F: outputs/fase4e-red-vs-red4c.json > C.pauc.valor_p_nadeau_bengio; outputs/fase4e-holm.json > preguntas[0].umbral_holm y alfa; PLAN.md, Fase 4e, «Regla, fijada antes de correr»; «Estado del arte», «Qué suma este proyecto» -->
+
+Después se comparó esa red con «Imagen + básicos», el punto de partida que
+este informe daba para el escenario sin fotografía corporal total, en los
+mismos 25 pliegues de la confirmación. La pregunta se eligió después de ver la
+Fase 4e, y se declara así: la diferencia de medias ya se podía calcular con lo
+guardado, y el valor p no se había calculado.
+<!-- F: outputs/fase4f-red4e-vs-imagen-basicos.json > C.pauc.n_diferencias; PLAN.md, Fase 4f, «Elegida después de ver la 4e, y se declara»; «Recomendación», «Qué se recomienda» -->
+
+Con la regla de una sola pregunta, la red supera a «Imagen + básicos»: 0,1376
+frente a 0,0884, +0,0493, [0,0218; 0,0767] (25 de 25; 5 de 5), con un valor p
+de 0,0011. Las tres métricas secundarias van en la misma dirección, con
+intervalos que excluyen el cero: AUC +0,0829, [0,0465; 0,1193]; sensibilidad
+top-15 +0,1938, [0,1062; 0,2813], y NNT80% SE −212,65, [−337,81; −87,50].
+<!-- F: outputs/fase4f-red4e-vs-imagen-basicos.json > metricas.Red4eAjustada.pauc.media_global, metricas.ImagenBasicos.pauc.media_global, C.pauc.media, .intervalo_t_95_nadeau_bengio, .nuevo_mejor_en_folds, .n_diferencias, .nuevo_mejor_en_semillas, .valor_p_nadeau_bengio, C.auc.media, .intervalo_t_95_nadeau_bengio, C.setop15.media, .intervalo_t_95_nadeau_bengio, C.nnt80.media, .intervalo_t_95_nadeau_bengio y n(semillas_corridas); PLAN.md, Fase 4f, «Regla, fijada antes de correr» -->
+
+Por la regla, la recomendación para ese escenario pasó a la red, que además
+usa menos datos de entrada: solo la imagen, sin edad, sexo ni zona del
+cuerpo. Se midió sobre los recortes de SLICE-3D, no sobre fotos de teléfono.
+<!-- F: PLAN.md, Fase 4f, «Resultado de la regla (2026-11-02)»; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono» -->
+
 ### El modelo recomendado
 
 La parte tabular reproducida del ganador (M3 − M2) supera a M2 en la métrica
@@ -880,6 +915,100 @@ pAUC que el atajo en los cinco pliegues, de +0,0012 a +0,0063.
 Las dos preguntas se eligieron conociendo los resultados de las fases 4 y 4b,
 y la corrección cubre solo esas dos.
 <!-- F: PLAN.md, Fase 4c, «Segunda ronda, declarada» -->
+
+La retroalimentación del avance pidió acercarse al ganador con el equipo
+propio, antes de alquilar cómputo. Se abrieron dos rondas más, las fases 4d y
+4e, cada una con sus preguntas y su regla fijadas antes de correr, y con la
+corrección de Holm por varias preguntas.
+<!-- F: PLAN.md, Fase 4d, «Decisión de la persona (2026-10-30)» y «Regla, fijada antes de correr»; PLAN.md, Fase 4e, «Regla, fijada antes de correr» -->
+
+La Fase 4d hizo tres preguntas. La primera, C5, añade a C4 las variables que
+el código del ganador construye sobre la puntuación de imagen, sin la etiqueta
+del hospital: la puntuación estandarizada por zona del cuerpo y edad, y las
+estandarizadas por conglomerado, con un ruido en el apilado que no está en su
+código. Su pAUC media es de 0,1659, frente a 0,1621 de M3 limpio: +0,0039,
+[−0,005; 0,0127] (37 de 50; 10 de 10), con un valor p de 0,3859.
+<!-- F: PLAN.md, Fase 4d, «Pregunta 1 · C5 frente a M3 limpio»; outputs/fase4d-c5-vs-m3limpio.json > metricas.C5.pauc.media_global, metricas.M3limpio.pauc.media_global, C.pauc.media, .intervalo_t_95_nadeau_bengio, .nuevo_mejor_en_folds, .n_diferencias, .nuevo_mejor_en_semillas, .valor_p_nadeau_bengio y n(semillas_corridas) -->
+
+La segunda entrenó la red durante más épocas, con un conjunto distinto de
+negativos en cada una, dos ideas que vienen del décimo puesto de la
+competición. Salió por debajo de la red de la Fase 4c: 0,0923 frente a 0,1079,
+−0,0156, [−0,0318; 0,0005] (5 de 25; 0 de 5), con un valor p de 0,0574. Cambió
+dos cosas a la vez, así que el resultado no se atribuye a ninguna de las dos
+por separado.
+<!-- F: outputs/fase4d-red-mejorada-vs-red.json > metricas.RedMejorada.pauc.media_global, metricas.Red.pauc.media_global, C.pauc.media, .intervalo_t_95_nadeau_bengio, .nuevo_mejor_en_folds, .n_diferencias, .nuevo_mejor_en_semillas, .valor_p_nadeau_bengio y n(semillas_corridas); PLAN.md, Fase 4d, «Pregunta 2 · La red mejorada frente a la red de la Fase 4c» -->
+
+La tercera, C6, que es C5 con esa red, queda en 0,165 frente a 0,1601 de M3
+limpio en las mismas semillas: +0,005, [−0,0031; 0,0131] (19 de 25; 5 de 5),
+con un valor p de 0,2172.
+<!-- F: outputs/fase4d-c6-vs-m3limpio.json > metricas.C6.pauc.media_global, metricas.M3limpio.pauc.media_global, C.pauc.media, .intervalo_t_95_nadeau_bengio, .nuevo_mejor_en_folds, .n_diferencias, .nuevo_mejor_en_semillas, .valor_p_nadeau_bengio y n(semillas_corridas); PLAN.md, Fase 4d, «Pregunta 3 · C6 frente a M3 limpio» -->
+
+Holm no aceptó ninguna de las tres preguntas, y M3 limpio siguió siendo el
+modelo recomendado.
+<!-- F: outputs/fase4d-holm.json > preguntas; PLAN.md, Fase 4d, «Resultado de la regla (2026-10-31)» -->
+
+La Fase 4e cambió de estrategia: en lugar de añadir variables, entrenó mejor
+la red. Siguió la receta de imagen del décimo puesto, que usa la misma red y la
+misma resolución que la de la Fase 4c: aumentos fuertes de las imágenes, una
+tasa de aprendizaje que sube y luego baja, y los negativos repartidos en un
+conjunto distinto por época. En los negativos sigue el README del autor, no su
+código, que hace otra cosa. Después, si la exploración lo justificaba, la red
+se ajustaba con una pérdida de pAUC unilateral sobre las clases invertidas,
+como las invierte el script oficial de la métrica.
+<!-- F: PLAN.md, Fase 4e, «Por qué esta receta», «Qué se entrena: la red de la 4e», «Exploración, semilla 0 (descriptiva)» y «Los ajustes del paso 2 (2026-11-01), fijados antes de leer la exploración»; referencias/tomo20180402-2024-isic2024-10mo-puesto.md, líneas 73, 75, 84, 174 y 237–247; referencias/isic-primary-metric-pauc.py.md, líneas 48 y 49 -->
+
+Una exploración en la semilla 0, que solo decidía si se gastaba la
+confirmación y con qué red, puso la red nueva por encima de la de la Fase 4c en
+5 de 5 pliegues, y la red ajustada por encima de la sin ajustar en 4 de 5, así
+que la confirmación usó la red ajustada.
+<!-- F: outputs/fase4e-exploracion.json > paso_1.nuevo_mejor_en_pliegues, paso_1.de_pliegues, paso_2.nuevo_mejor_en_pliegues, paso_2.de_pliegues y paso_2.llega_al_umbral; PLAN.md, Fase 4e, «Exploración, semilla 0 (descriptiva)» -->
+
+En la confirmación, sobre otras semillas, C7, que es C4 con la red ajustada,
+queda en 0,1669 frente a 0,1641 de M3 limpio: +0,0029, [−0,0084; 0,0141] (14
+de 25; 4 de 5), con un valor p de 0,6028. Holm no aceptó ninguna de las dos
+preguntas de la fase, y M3 limpio siguió siendo el modelo recomendado. La
+otra pregunta, la de la red sola, está en «La imagen sola, sin el sistema de
+fotografía corporal total».
+<!-- F: outputs/fase4e-c7-vs-m3limpio.json > metricas.C7.pauc.media_global, metricas.M3limpio.pauc.media_global, C.pauc.media, .intervalo_t_95_nadeau_bengio, .nuevo_mejor_en_folds, .n_diferencias, .nuevo_mejor_en_semillas, .valor_p_nadeau_bengio y n(semillas_corridas); outputs/fase4e-holm.json > preguntas; PLAN.md, Fase 4e, «Resultado de la regla (2026-11-01)» -->
+
+Las cuatro versiones que apilan una red de imagen sobre M3 limpio, de C4 a C7,
+quedaron por encima de él en la media, de +0,0029 a +0,0067, y ninguna
+diferencia llegó a la regla. Qué dice eso, y qué no, está en «Lo que la prueba
+alcanza a ver».
+<!-- F: outputs/potencia-nadeau-bengio.json > comparaciones.C7.media_observada y comparaciones.C4.media_observada -->
+
+Cada ronda se eligió conociendo los resultados de las anteriores, y su
+corrección cubre solo sus propias preguntas.
+<!-- F: PLAN.md, Fase 4d, «Tercera ronda, declarada»; PLAN.md, Fase 4e, «Cuarta ronda, declarada» -->
+
+### Lo que la prueba alcanza a ver
+
+Que ninguna de esas diferencias llegara a la regla no dice si las mejoras
+existen. Para saber qué tamaño de mejora alcanza a distinguir esta prueba, se
+calculó la potencia de la prueba de Nadeau y Bengio con la variabilidad
+observada en las comparaciones contra M3 limpio, de C4 a C7.
+<!-- F: PLAN.md, Fase 6, «La potencia de la prueba: especificación (2026-11-04, de la persona)»; outputs/potencia-nadeau-bengio.json > comparaciones.*.s -->
+
+Con esa variabilidad, para dar su resultado a favor con un 80% de
+probabilidad, la prueba necesita una mejora real de entre 0,0109 y 0,0159 de
+pAUC, según la comparación y el número de semillas; para un 50%, de entre
+0,0076 y 0,0111. Las mejoras observadas, de +0,0029 a +0,0067, quedan por
+debajo del umbral del 50% en las cuatro comparaciones.
+<!-- F: outputs/potencia-nadeau-bengio.json > objetivos, comparaciones.*.delta_80, comparaciones.*.delta_50 y comparaciones.*.media_observada -->
+
+Más semillas casi no ayudan. De 5 a 10 semillas, el umbral del 80% baja de
+0,0127 a 0,0120 en C4 y de 0,0159 a 0,0150 en C7. El error estándar que usa la
+prueba tiene dos términos: uno baja con el número de diferencias, y el otro,
+0,25, corrige la correlación entre diferencias que comparten pacientes de
+entrenamiento y no baja con más semillas. Al repetir con semillas nuevas, la
+media casi no cambia: su error estándar entre semillas es entre 3,44 y 6,99
+veces menor que el que usa la prueba.
+<!-- F: outputs/potencia-nadeau-bengio.json > comparaciones.C4.delta_80, comparaciones.C7.delta_80, comparaciones.*.entre_semillas, prueba.error_estandar y prueba.termino_de_correccion; CLAUDE.md, hallazgo 16, «Cómo se calcula» -->
+
+Por eso importa la diferencia entre «no se distingue» y «no mejora». Lo que
+se midió es compatible con que no haya mejora, y también con una mejora que
+esta prueba no alcanza a ver.
+<!-- F: CLAUDE.md, hallazgo 16, «Lectura, no medición» -->
 
 ### El costo de inferencia
 
