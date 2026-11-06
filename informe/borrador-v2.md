@@ -275,7 +275,7 @@ El intervalo de la diferencia media se corrige por el solape entre los
 conjuntos de entrenamiento, con la corrección de Nadeau y Bengio (2003): la
 varianza de las diferencias se multiplica por 1/n + n_prueba/n_entrenamiento,
 que en 5 pliegues es 1/n + 1/4, con el mismo t de n − 1 grados de libertad.
-<!-- F: .claude/skills/modelado-baseline/scripts/evaluar_repetido.py, _nadeau_bengio; referencias/nadeau-bengio-2003-t-corregido.md, sección 4, líneas 60–74 y 95 (LOCAL) -->
+<!-- F: .claude/skills/modelado-baseline/scripts/evaluar_repetido.py, _nadeau_bengio; outputs/validacion-repetida.json > n_splits; referencias/nadeau-bengio-2003-t-corregido.md, sección 4, líneas 60–74 y 95 (LOCAL) -->
 El artículo deriva la corrección para divisiones aleatorias independientes,
 y sus autores presentan ese estimador como cercano al de la validación
 cruzada por K pliegues. Aquí se aplica a una validación cruzada por pliegues:
@@ -306,7 +306,7 @@ repetida.
 | M4 | M2 más las 384 variables de imagen de DINOv2 ViT-S/14, tal cual. |
 | M4b | M2 más dos variables de imagen: la puntuación de una regresión logística balanceada sobre las 384, y esa puntuación dividida por su media dentro del paciente. |
 
-<!-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M2, M3, M4), «Variante secundaria M4b», «M3 limpio y regla de recomendación»; outputs/fase4-m3limpio-vs-m2.json > hiperparametros; .claude/skills/modelado-baseline/SKILL.md, «Contexto de paciente, las variables de M2» (las 34 variables) -->
+<!-- F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M2, M3, M4), «Variante secundaria M4b», «M3 limpio y regla de recomendación»; outputs/fase4-m3limpio-vs-m2.json > hiperparametros; outputs/fase4-m3-vs-m2.json > n(m3.variables.salen.columns_to_drop_celda_24) (las 22 columnas de la celda 24); .claude/skills/modelado-baseline/SKILL.md, «Contexto de paciente, las variables de M2» (las 34 variables) -->
 
 La Fase 4b probó tres combinaciones de M3 limpio, y la Fase 4c una red de
 imagen entrenada, EfficientNet-B0, sola y apilada sobre M3 limpio (C4).
