@@ -573,6 +573,16 @@ def datos_fases_4d_a_5c(cargar):
     afirmar(sorted(dev, key=dev.get) == sorted(kag, key=kag.get)
             and tabla["ImagenBasicos"]["reservado"]["pauc"] > tabla["Red4e"]["reservado"]["pauc"],
             "En el desarrollo y en Kaggle, los cuatro modelos quedan en el mismo orden; en el reservado, «Imagen + básicos» queda por encima de la red")
+    # Rediseño, paso 2, gráfico 3: los puntos del reservado salen de la tabla de tres
+    # evaluaciones y su intervalo, de fase5-reservado.json. Solo se pueden dibujar
+    # juntos si el punto de la tabla es el de ese archivo, y el modelo que la tabla
+    # no evaluó en el reservado tampoco está en él. Control: test_generar_demo.py,
+    # caso T3.
+    afirmar(all((tabla[m]["reservado"] is None) == (m not in reservado["metricas"])
+                and (tabla[m]["reservado"] is None
+                     or tabla[m]["reservado"]["pauc"] == reservado["metricas"][m]["pauc"]["punto"])
+                for m in tabla),
+            "Los puntos del reservado de la tabla de tres evaluaciones son los de fase5-reservado.json, con su intervalo")
     proy = medicion["salida_del_notebook"]["tiempo"]
     return {
         "preguntas": preguntas,
@@ -607,7 +617,9 @@ def datos_fases_4d_a_5c(cargar):
                    "pacientes_desarrollo": reservado["datos"]["entrenamiento"]["pacientes"],
                    "privadas": privadas, "nombres": NOMBRES_KAGGLE,
                    "tabla": {m: {"desarrollo": dev[m], "reservado": (tabla[m]["reservado"] or {}).get("pauc"),
+                                 "reservado_ic": (reservado["metricas"].get(m) or {}).get("pauc", {}).get("intervalo_95"),
                                  "kaggle": kag[m]} for m in ("C7", "M3limpio", "Red4e", "ImagenBasicos")},
+                   "semillas_desarrollo": rango_de_semillas([5, 6, 7, 8, 9]),
                    "efectos": {k: {"privada": v["privada"], "publica": v["publica"]} for k, v in ef.items()},
                    "descomposicion": efectos["descomposicion_de_la_distancia_al_ganador"],
                    "horas": {m: proy["proyeccion"][m]["horas_proyectadas"] for m in ("M3limpio", "C7", "Red4e")},
@@ -1151,8 +1163,13 @@ __AVISO_EXPLORATORIO__
     <p class="frase" id="frase-reservado"></p>
     <h3>En la prueba de Kaggle</h3>
     <p class="frase" id="frase-kaggle"></p>
-    <div class="tabla-envoltura"><table id="tabla-tres"></table></div>
-    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-5"></div></details>
+    <div class="lienzo"><canvas id="gr-tres"></canvas></div>
+    <p class="pie-grafico" id="pie-tres"></p>
+    <details class="detalle"><summary>Detalle</summary>
+      <div class="texto" id="det-5a"></div>
+      <div class="tabla-envoltura"><table id="tabla-tres"></table></div>
+      <div class="texto" id="det-5b" style="margin-top:16px"></div>
+    </details>
   </div>
 </section>
 
@@ -1945,8 +1962,7 @@ document.getElementById("tabla-tres").innerHTML =
     `<td>${cifra(dec(f.kaggle), fTres(m, "kaggle_privada.pauc"))}</td></tr>`).join("") + `</tbody>`;
 const restoKaggle2 = P([
   `En el desarrollo y en Kaggle, los cuatro modelos quedan en el mismo orden; en el reservado, «Imagen + básicos» queda por ` +
-  `encima de la red. Son conjuntos y estimaciones distintos: la media por pliegue en el desarrollo, un solo modelo en el ` +
-  `reservado y una sola puntuación en Kaggle, sin intervalo.`,
+  `encima de la red.`,
   `Para descomponer la distancia al ganador se hicieron cuatro envíos más, en un diseño de dos por dos fijado antes de ` +
   `entrenarlos: con imagen o sin ella, y con la etiqueta del hospital o sin ella. En los cuatro, la parte tabular es la media ` +
   `de varios CatBoost, uno por pliegue y semilla, como los que entrena el código del ganador; cómo combina él sus ` +
@@ -1966,10 +1982,76 @@ const restoKaggle2 = P([
   `De las dos mejoras de la descomposición, promediar es la única que no usa datos que el proyecto excluyó, y casi la ` +
   `mitad de la distancia no la cubre ninguna de las dos. Ninguno de estos envíos cambia una recomendación.`]);
 // La frase que hacía de subtítulo de la sección va también al «Detalle».
-document.getElementById("det-5").innerHTML =
+// Rediseño, paso 2, gráfico 3: la tabla de tres evaluaciones pasa al «Detalle», y
+// la frase de que no miden lo mismo, al pie del gráfico.
+document.getElementById("pie-tres").innerHTML =
+  `Son conjuntos y estimaciones distintos: la media por pliegue en el desarrollo, un solo modelo en el ` +
+  `reservado y una sola puntuación en Kaggle, sin intervalo.`;
+const EVAL = [
+  { nombre: `Desarrollo, ${KG.semillas_desarrollo}`, clave: "desarrollo", color: "#9db7cc",
+    campo: m => `fase5b-comparacion.json > tabla_tres_evaluaciones.${m}.desarrollo (la de ${KG.semillas_desarrollo})` },
+  { nombre: "Reservado, con el intervalo del bootstrap por paciente", clave: "reservado", color: "#1f5f8b",
+    campo: m => `fase5b-comparacion.json > tabla_tres_evaluaciones.${m}.reservado.pauc; fase5-reservado.json > metricas.${m}.pauc.intervalo_95` },
+  { nombre: "Kaggle, privada", clave: "kaggle", color: "#d08c3a",
+    campo: m => `fase5b-comparacion.json > tabla_tres_evaluaciones.${m}.kaggle_privada.pauc` },
+];
+const MODELOS_TRES = Object.keys(KG.tabla);
+// El intervalo del reservado, como bigote sobre su barra, y «no se evaluó» donde
+// el modelo no entró en el reservado.
+const bigotesReservado = {
+  id: "bigotesReservado",
+  afterDatasetsDraw(ch) {
+    const meta = ch.getDatasetMeta(1), y = ch.scales.y, cx = ch.ctx;
+    cx.save(); cx.strokeStyle = "#16202b"; cx.lineWidth = 1.5;
+    meta.data.forEach((barra, i) => {
+      const f = KG.tabla[MODELOS_TRES[i]];
+      if (f.reservado_ic === null) {
+        cx.save(); cx.translate(barra.x, ch.chartArea.bottom - 6); cx.rotate(-Math.PI / 2);
+        cx.font = "11px -apple-system, sans-serif"; cx.fillStyle = "#5b6b7c"; cx.textAlign = "left";
+        cx.fillText("no se evaluó", 0, 4); cx.restore();
+        return;
+      }
+      const arriba = y.getPixelForValue(f.reservado_ic[1]), abajo = y.getPixelForValue(f.reservado_ic[0]), x = barra.x;
+      cx.beginPath();
+      cx.moveTo(x, arriba); cx.lineTo(x, abajo);
+      cx.moveTo(x - 6, arriba); cx.lineTo(x + 6, arriba);
+      cx.moveTo(x - 6, abajo); cx.lineTo(x + 6, abajo);
+      cx.stroke();
+    });
+    cx.restore();
+  }
+};
+new Chart(document.getElementById("gr-tres"), {
+  type: "bar",
+  plugins: [bigotesReservado],
+  data: {
+    labels: MODELOS_TRES.map(m => KG.nombres[m]),
+    datasets: EVAL.map(e => ({ label: e.nombre, data: MODELOS_TRES.map(m => KG.tabla[m][e.clave]),
+                              backgroundColor: e.color, borderRadius: 3 }))
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: { y: { beginAtZero: true, suggestedMax: D.escala.maximo, title: { display: true, text: "pAUC" } } },
+    plugins: {
+      legend: { position: "bottom" },
+      tooltip: {
+        callbacks: {
+          label: it => {
+            const f = KG.tabla[MODELOS_TRES[it.dataIndex]], e = EVAL[it.datasetIndex];
+            return `${e.nombre.split(",")[0]}: ${dec(f[e.clave])}` +
+                   (e.clave === "reservado" ? `, [${dec(f.reservado_ic[0])}; ${dec(f.reservado_ic[1])}]` : "");
+          },
+          afterLabel: it => EVAL[it.datasetIndex].campo(MODELOS_TRES[it.dataIndex])
+        }
+      }
+    }
+  }
+});
+document.getElementById("det-5a").innerHTML =
   P([`El conjunto reservado, abierto una sola vez, y Kaggle, que da una sola cifra por envío.`]) +
   `<h3>El conjunto reservado, abierto una sola vez</h3>` + restoReservado +
-  `<h3>En la prueba de Kaggle</h3>` + restoKaggle + restoKaggle2;
+  `<h3>En la prueba de Kaggle</h3>` + restoKaggle;
+document.getElementById("det-5b").innerHTML = restoKaggle2;
 
 /* ---------- 6. la pregunta del cliente, entera ---------- */
 // borrador-v2.md, «Resultados», «La pregunta del cliente, entera»: la cabecera y las filas, con las cifras de outputs/.

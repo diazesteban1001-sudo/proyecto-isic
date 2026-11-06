@@ -89,6 +89,8 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
          otro intervalo que el de efecto-particion.json.
      T2. Las barras de la imagen sola: la red de la 4e de la Fase 4f sin
          reproducir la de la Fase 4e.
+     T3. Las tres evaluaciones: el punto de la red en fase5-reservado.json,
+         distinto del de la tabla de fase5b-comparacion.json.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -397,6 +399,9 @@ def main():
         ("T2. la Fase 4f sin reproducir la red de la Fase 4e", "fase4f-red4e-vs-imagen-basicos",
          poner(["reproduccion_de_la_red", "reproduce_fold_a_fold"], False),
          "La barra de la red de la 4e es la red de la Fase 4e"),
+        ("T3. el punto del reservado de la red distinto en fase5-reservado.json", "fase5-reservado",
+         poner(["metricas", "Red4e", "pauc", "punto"], 0.1308),
+         "Los puntos del reservado de la tabla de tres evaluaciones son los de fase5-reservado.json"),
     ]
 
     corridas = {
