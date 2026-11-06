@@ -1,5 +1,5 @@
 {
-  "numeros_en_borrador": 1045,
+  "numeros_en_borrador": 1046,
   "numeros_con_respaldo_en_outputs": 565,
   "numeros_sin_respaldo": [
     {
@@ -737,6 +737,11 @@
     {
       "valor": "-25",
       "contexto": "F: PLAN.md, Fase 4: decisión del 2026-09-25 (M1, M2,",
+      "linea_aprox": 309
+    },
+    {
+      "valor": "22",
+      "contexto": "es.salen.columns_to_drop_celda_24) (las 22 columnas",
       "linea_aprox": 309
     },
     {
@@ -2469,16 +2474,16 @@
     "que_es": "Cada número del cuerpo, buscado en lo que cita su comentario F: (PLAN.md, Fase 6, «La verificación por campo»). Las clases señaladas van con su comentario y lo que cita.",
     "numeros_del_cuerpo": 576,
     "por_clase": {
-      "respaldada_por_su_campo": 524,
+      "respaldada_por_su_campo": 526,
       "respaldada_por_su_referencia": 19,
-      "no_esta_en_sus_campos": 25,
+      "no_esta_en_sus_campos": 24,
       "fuera_de_las_lineas_citadas": 0,
       "no_comprobable_aqui": 0,
-      "cita_un_documento_del_proyecto": 8,
+      "cita_un_documento_del_proyecto": 7,
       "sin_comentario": 0,
       "declarada_sin_fuente": 0
     },
-    "senaladas": 33,
+    "senaladas": 31,
     "detalle": {
       "no_esta_en_sus_campos": [
         {
@@ -2496,16 +2501,8 @@
           "linea": 303,
           "comentario_en_linea": 309,
           "campos": [
-            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
-          ],
-          "referencias": []
-        },
-        {
-          "valor": "22",
-          "linea": 305,
-          "comentario_en_linea": 309,
-          "campos": [
-            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros",
+            "outputs/fase4-m3-vs-m2.json > n(m3.variables.salen.columns_to_drop_celda_24)"
           ],
           "referencias": []
         },
@@ -2514,7 +2511,8 @@
           "linea": 306,
           "comentario_en_linea": 309,
           "campos": [
-            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros",
+            "outputs/fase4-m3-vs-m2.json > n(m3.variables.salen.columns_to_drop_celda_24)"
           ],
           "referencias": []
         },
@@ -2523,7 +2521,8 @@
           "linea": 306,
           "comentario_en_linea": 309,
           "campos": [
-            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros",
+            "outputs/fase4-m3-vs-m2.json > n(m3.variables.salen.columns_to_drop_celda_24)"
           ],
           "referencias": []
         },
@@ -2532,7 +2531,8 @@
           "linea": 307,
           "comentario_en_linea": 309,
           "campos": [
-            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros"
+            "outputs/fase4-m3limpio-vs-m2.json > hiperparametros",
+            "outputs/fase4-m3-vs-m2.json > n(m3.variables.salen.columns_to_drop_celda_24)"
           ],
           "referencias": []
         },
@@ -2745,16 +2745,9 @@
           "valor": "1",
           "linea": 276,
           "comentario_en_linea": 278,
-          "campos": [],
-          "referencias": [
-            "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
-          ]
-        },
-        {
-          "valor": "5",
-          "linea": 277,
-          "comentario_en_linea": 278,
-          "campos": [],
+          "campos": [
+            "outputs/validacion-repetida.json > n_splits"
+          ],
           "referencias": [
             "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
           ]
@@ -2763,7 +2756,9 @@
           "valor": "1",
           "linea": 277,
           "comentario_en_linea": 278,
-          "campos": [],
+          "campos": [
+            "outputs/validacion-repetida.json > n_splits"
+          ],
           "referencias": [
             "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
           ]
@@ -2772,7 +2767,9 @@
           "valor": "1",
           "linea": 277,
           "comentario_en_linea": 278,
-          "campos": [],
+          "campos": [
+            "outputs/validacion-repetida.json > n_splits"
+          ],
           "referencias": [
             "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
           ]
@@ -2781,7 +2778,9 @@
           "valor": "4,",
           "linea": 277,
           "comentario_en_linea": 278,
-          "campos": [],
+          "campos": [
+            "outputs/validacion-repetida.json > n_splits"
+          ],
           "referencias": [
             "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
           ]
@@ -2790,7 +2789,9 @@
           "valor": "1",
           "linea": 277,
           "comentario_en_linea": 278,
-          "campos": [],
+          "campos": [
+            "outputs/validacion-repetida.json > n_splits"
+          ],
           "referencias": [
             "referencias/nadeau-bengio-2003-t-corregido.md, líneas [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 95]"
           ]
