@@ -453,9 +453,10 @@ cada lesión, datos del paciente y, solo en el conjunto de entrenamiento, el
 diagnóstico.
 <!-- F: outputs/eda-diagnostico.json > fuente.n_columnas y columnas_solo_en_train; referencias/kurtansky-2024-slice3d-descriptor.md, Tabla 1 (las tbp_lv_*, el diámetro mayor y la zona del cuerpo llevan el asterisco de la línea 226, «Canfield Scientific, Inc. Lesion Visualizer metric»; la edad y el sexo, no) y línea 199 (el tipo de captura, la luz de la foto 3D); referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 299 («estimated solely from 3D TBP images by proprietary Vectra WB360 tooling») -->
 El archivo de prueba que publica el reto es un marcador de posición, sin
-casos reales, así que no hay contra qué medir un resultado final
-independiente fuera de lo que este proyecto aparte.
-<!-- F: outputs/eda-diagnostico.json > test_is_placeholder -->
+casos reales. La prueba oculta solo se puede medir enviando modelos a Kaggle,
+que da una cifra por envío, sin intervalo; el resultado final con intervalo es
+el del conjunto que este proyecto apartó.
+<!-- F: outputs/eda-diagnostico.json > test_is_placeholder; referencias/kaggle-code-requirements.md, línea 31 (los envíos se hacen con notebooks); «Resultados», «En la prueba de Kaggle» y «El conjunto reservado, abierto una sola vez» -->
 
 ### El conjunto reservado
 

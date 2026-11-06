@@ -1954,8 +1954,11 @@ document.getElementById("no-se-puede").innerHTML = L([
   `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 
 /* ---------- 8. limitaciones ---------- */
-// borrador-v2.md, «Limitaciones».
-document.getElementById("limitaciones").innerHTML = L([
+// borrador-v2.md, «Datos y validación», «Los datos» (la frase del archivo de prueba), y «Limitaciones».
+document.getElementById("limitaciones").innerHTML = P([
+  `El archivo de prueba que publica el reto es un marcador de posición, sin casos reales. La prueba oculta solo se puede ` +
+  `medir enviando modelos a Kaggle, que da una cifra por envío, sin intervalo; el resultado final con intervalo es el del ` +
+  `conjunto que este proyecto apartó.`]) + L([
   `<b>La clase negativa no está confirmada.</b> Las lesiones malignas tienen patología; de las benignas, <i>"most never underwent a skin biopsy"</i>. ` +
   `La mayoría de los negativos son lesiones que un dermatólogo no consideró preocupantes, no lesiones confirmadas como sanas.`,
   `<b>Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente.</b> Así las describe el artículo del conjunto de datos: ` +
