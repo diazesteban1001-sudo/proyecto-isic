@@ -583,6 +583,14 @@ def datos_fases_4d_a_5c(cargar):
                      or tabla[m]["reservado"]["pauc"] == reservado["metricas"][m]["pauc"]["punto"])
                 for m in tabla),
             "Los puntos del reservado de la tabla de tres evaluaciones son los de fase5-reservado.json, con su intervalo")
+    # Rediseño, paso 2, gráfico 4: la cascada parte de la distancia de C7 al ganador,
+    # suma lo que cubren promediar y el hospital, y tiene que llegar a lo que queda;
+    # la distancia tiene que ser la de fase5b-comparacion.json. Control:
+    # test_generar_demo.py, caso T4.
+    des = efectos["descomposicion_de_la_distancia_al_ganador"]
+    afirmar(abs(des["distancia_de_c7_al_ganador"] + des["cubre_promediar"] + des["cubre_el_hospital"] - des["queda"]) < 5e-6
+            and des["distancia_de_c7_al_ganador"] == comparacion["comparaciones_con_la_privada"]["c7_menos_ganador"]["diferencia"],
+            "La cascada cierra: la distancia de C7 al ganador, más lo que cubren promediar y el hospital, es lo que queda")
     proy = medicion["salida_del_notebook"]["tiempo"]
     return {
         "preguntas": preguntas,
@@ -1165,6 +1173,8 @@ __AVISO_EXPLORATORIO__
     <p class="frase" id="frase-kaggle"></p>
     <div class="lienzo"><canvas id="gr-tres"></canvas></div>
     <p class="pie-grafico" id="pie-tres"></p>
+    <div class="lienzo" style="margin-top:24px"><canvas id="gr-cascada"></canvas></div>
+    <p class="pie-grafico" id="pie-cascada"></p>
     <details class="detalle"><summary>Detalle</summary>
       <div class="texto" id="det-5a"></div>
       <div class="tabla-envoltura"><table id="tabla-tres"></table></div>
@@ -1977,8 +1987,7 @@ const restoKaggle2 = P([
   `${cifra(dec(DES.porcentaje_de_la_distancia.promediar) + "%", fDes("porcentaje_de_la_distancia.promediar"))}; el hospital, ` +
   `${cifra(firmado(DES.cubre_el_hospital), fDes("cubre_el_hospital"))}, el ` +
   `${cifra(dec(DES.porcentaje_de_la_distancia.hospital) + "%", fDes("porcentaje_de_la_distancia.hospital"))}, y quedan ` +
-  `${cifra(firmado(DES.queda), fDes("queda"))}, el ${cifra(dec(DES.porcentaje_de_la_distancia.queda) + "%", fDes("porcentaje_de_la_distancia.queda"))}. ` +
-  `El reparto depende del orden: C7 con el hospital y sin promediar no se envió.`,
+  `${cifra(firmado(DES.queda), fDes("queda"))}, el ${cifra(dec(DES.porcentaje_de_la_distancia.queda) + "%", fDes("porcentaje_de_la_distancia.queda"))}.`,
   `De las dos mejoras de la descomposición, promediar es la única que no usa datos que el proyecto excluyó, y casi la ` +
   `mitad de la distancia no la cubre ninguna de las dos. Ninguno de estos envíos cambia una recomendación.`]);
 // La frase que hacía de subtítulo de la sección va también al «Detalle».
@@ -2042,6 +2051,70 @@ new Chart(document.getElementById("gr-tres"), {
                    (e.clave === "reservado" ? `, [${dec(f.reservado_ic[0])}; ${dec(f.reservado_ic[1])}]` : "");
           },
           afterLabel: it => EVAL[it.datasetIndex].campo(MODELOS_TRES[it.dataIndex])
+        }
+      }
+    }
+  }
+});
+// Rediseño, paso 2, gráfico 4: la cascada de la distancia de C7 al ganador en la
+// privada. Cada paso es un campo de fase5c-efectos.json; los escalones intermedios
+// son la suma de los anteriores y no se escriben. La salvedad del orden, que deja
+// el «Detalle», va al pie.
+document.getElementById("pie-cascada").innerHTML =
+  `El reparto depende del orden: C7 con el hospital y sin promediar no se envió.`;
+const PASOS = [
+  { nombre: "C7 frente al ganador", campo: "distancia_de_c7_al_ganador", desde: 0, hasta: DES.distancia_de_c7_al_ganador, color: "#c98b7a" },
+  { nombre: "Promediar", campo: "cubre_promediar", desde: DES.distancia_de_c7_al_ganador,
+    hasta: DES.distancia_de_c7_al_ganador + DES.cubre_promediar, color: "rgba(30,122,82,.65)" },
+  { nombre: "Hospital", campo: "cubre_el_hospital", desde: DES.distancia_de_c7_al_ganador + DES.cubre_promediar,
+    hasta: DES.distancia_de_c7_al_ganador + DES.cubre_promediar + DES.cubre_el_hospital, color: "rgba(30,122,82,.65)" },
+  { nombre: "Queda", campo: "queda", desde: DES.queda, hasta: 0, color: "rgba(91,107,124,.45)" },
+];
+const cascada = {
+  id: "cascada",
+  afterDatasetsDraw(ch) {
+    const y = ch.scales.y, a = ch.chartArea, cx = ch.ctx, meta = ch.getDatasetMeta(0);
+    cx.save();
+    // El cero es el ganador.
+    const y0 = y.getPixelForValue(0);
+    cx.strokeStyle = "#16202b"; cx.setLineDash([5, 4]); cx.lineWidth = 1.4;
+    cx.beginPath(); cx.moveTo(a.left, y0); cx.lineTo(a.right, y0); cx.stroke();
+    cx.font = "600 11px -apple-system, sans-serif"; cx.textAlign = "left"; cx.fillStyle = "#16202b";
+    cx.fillText(`Ganador, privada: ${dec(DES.ganador.pauc)}`, a.left + 6, y0 - 6);
+    // Uniones entre escalones, y el valor de cada paso.
+    cx.setLineDash([2, 3]); cx.lineWidth = 1; cx.strokeStyle = "#5b6b7c";
+    meta.data.forEach((barra, i) => {
+      if (i < meta.data.length - 1) {
+        const yy = y.getPixelForValue(PASOS[i].hasta), siguiente = meta.data[i + 1];
+        cx.beginPath(); cx.moveTo(barra.x + barra.width / 2, yy); cx.lineTo(siguiente.x - siguiente.width / 2, yy); cx.stroke();
+      }
+      const v = DES[PASOS[i].campo];
+      cx.fillStyle = "#16202b"; cx.textAlign = "center";
+      cx.fillText(firmado(v), barra.x, y.getPixelForValue(Math.min(PASOS[i].desde, PASOS[i].hasta)) + 14);
+    });
+    cx.restore();
+  }
+};
+new Chart(document.getElementById("gr-cascada"), {
+  type: "bar",
+  plugins: [cascada],
+  data: {
+    labels: PASOS.map(p => p.nombre),
+    datasets: [{ data: PASOS.map(p => [p.desde, p.hasta]), backgroundColor: PASOS.map(p => p.color),
+                 borderSkipped: false, borderRadius: 3, maxBarThickness: 110 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: { y: { suggestedMin: DES.distancia_de_c7_al_ganador * 1.15, suggestedMax: 0.002,
+                   title: { display: true, text: "Diferencia con el ganador, pAUC privada" } } },
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: "La distancia de C7 al ganador en la privada de Kaggle", align: "start" },
+      tooltip: {
+        callbacks: {
+          label: it => `${PASOS[it.dataIndex].nombre}: ${firmado(DES[PASOS[it.dataIndex].campo])}`,
+          afterLabel: it => [fE("descomposicion_de_la_distancia_al_ganador." + PASOS[it.dataIndex].campo),
+                             "Ganador: " + fE("descomposicion_de_la_distancia_al_ganador.ganador.pauc")]
         }
       }
     }

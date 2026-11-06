@@ -91,6 +91,8 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
          reproducir la de la Fase 4e.
      T3. Las tres evaluaciones: el punto de la red en fase5-reservado.json,
          distinto del de la tabla de fase5b-comparacion.json.
+     T4. La cascada de la distancia al ganador: lo que cubre promediar,
+         cambiado para que los pasos no lleguen a lo que queda.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -402,6 +404,9 @@ def main():
         ("T3. el punto del reservado de la red distinto en fase5-reservado.json", "fase5-reservado",
          poner(["metricas", "Red4e", "pauc", "punto"], 0.1308),
          "Los puntos del reservado de la tabla de tres evaluaciones son los de fase5-reservado.json"),
+        ("T4. una cascada que no cierra en fase5c-efectos.json", "fase5c-efectos",
+         poner(["descomposicion_de_la_distancia_al_ganador", "cubre_promediar"], 0.006),
+         "La cascada cierra"),
     ]
 
     corridas = {
