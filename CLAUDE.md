@@ -1983,11 +1983,27 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
 - [ ] **Las fases 4d, 4e, 4f, 5, 5b y 5c, y el análisis de potencia de la
-      prueba, no están todavía en el README ni en la demo** (2026-10-31; la 4e,
-      desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia y la Fase 5,
-      desde el 2026-11-04; la 5b y la 5c, desde el 2026-11-05). *En el borrador
-      están todas desde el 2026-11-05, en tres bloques (abajo); hasta ese día
-      este punto decía también «en el informe».*
+      prueba, no están todavía en el README** (2026-10-31; la 4e, desde el
+      2026-11-01; la 4f, desde el 2026-11-02; la potencia y la Fase 5, desde el
+      2026-11-04; la 5b y la 5c, desde el 2026-11-05). *En el borrador están
+      todas desde el 2026-11-05, en tres bloques (abajo), y en la demo desde el
+      2026-11-06 (abajo, «En la demo»); hasta esos días este punto decía también
+      «en el informe» y «ni en la demo».*
+      - **En la demo, desde el 2026-11-06** (commits «generar_demo: las fases 4d
+        a 5c, desde frases verificadas del borrador» y «Regenerar la demo con las
+        fases 4d a 5c»). La red de la 4e y la Fase 4f van al final de «La imagen
+        sola»; las fases 4d y 4e y la potencia, en «Recomendación»; y el
+        reservado y Kaggle, en una sección nueva, «Fuera del conjunto de
+        desarrollo». «Qué se recomienda», «Qué se puede afirmar», «Qué no se
+        puede afirmar» y «Limitaciones» copian el borrador. Sale la sección «Lo
+        que sigue», que anunciaba la apertura del reservado. Control:
+        `test_generar_demo.py`, 61 de 61, con los casos R y S nuevos.
+      - **Una frase del borrador que la demo deja fuera:** «Datos y validación»,
+        «Los datos», dice que el archivo de prueba del reto es un marcador de
+        posición, *«así que no hay contra qué medir un resultado final
+        independiente fuera de lo que este proyecto aparte»*. Desde las fases 5b
+        y 5c, Kaggle da una cifra sobre la prueba oculta. La demo la copiaba al
+        principio de «Limitaciones» y ya no; el borrador no se ha tocado.
       - **En el borrador desde el 2026-11-05: las fases 4d, 4e y 4f y la
         potencia** (commit «Borrador v2: las fases 4d, 4e y 4f, y la potencia de
         la prueba»). Van en «Resultados»: la red de la 4e y la Fase 4f, al final
@@ -2015,8 +2031,9 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         (2026-11-05, mismo commit). «Resultados» y «Qué se recomienda» dan las
         dos la red de la 4e para el escenario sin fotografía corporal total, con
         sus salvedades: el reservado no reprodujo su ventaja y el envío a Kaggle
-        que la compara se decidió después. **En la demo sigue sin resolver**
-        (abajo, «Lo que la 4f deja desfasado»).
+        que la compara se decidió después. *Resuelta también en la demo el
+        2026-11-06; hasta ese día este punto decía «En la demo sigue sin
+        resolver».*
       - **La Fase 5c:** el hallazgo 19, con los cuatro
         `outputs/fase5c-envio-*.json` y `outputs/fase5c-efectos.json`, y
         `PLAN.md`, Fase 5c. Toca el mismo pasaje que la 5b
@@ -2093,16 +2110,12 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Dónde faltan:** `informe/borrador-v2.md`, el README e
         `informe/demo.html`, con su copia `docs/index.html`. Se dejan para
         después por decisión de la persona.
-      - **Lo que la 4f deja desfasado:** la demo dice que donde no hay sistema
-        de fotografía corporal total el punto de partida es la imagen con edad,
-        sexo y zona del cuerpo: el texto de «Qué se recomienda» en
-        `generar_demo.py`, y con él `informe/demo.html` y `docs/index.html`. Por
-        la regla de la Fase 4f, la recomendación para ese escenario es la red de
-        la 4e (hallazgo 15). La demo repite también las dos viñetas que salieron
-        de «Qué no se puede afirmar», la del reservado sin abrir incluida. El
-        README no da una recomendación para ese escenario: le falta la 4f, no la
-        contradice. *Hasta el 2026-11-05 esto valía también para «Qué se
-        recomienda» de `informe/borrador-v2.md`, reescrito ese día (arriba).*
+      - **Lo que la 4f deja desfasado:** nada, desde el 2026-11-06. El README no
+        da una recomendación para el escenario sin fotografía corporal total: le
+        falta la 4f, no la contradice. *Hasta el 2026-11-05 «Qué se recomienda»
+        de `informe/borrador-v2.md` daba «Imagen + básicos» para ese escenario,
+        y hasta el 2026-11-06 también la demo, que repetía además las dos
+        viñetas que salieron de «Qué no se puede afirmar».*
       - **Qué hacer al añadirlas:** regenerar `outputs/sintesis-verificacion.json`
         y revisar, uno por uno, los números nuevos que pasen por coincidencia,
         como al añadir las fases 4b y 4c.
