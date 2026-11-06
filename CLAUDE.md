@@ -1987,6 +1987,19 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       (2026-10-31; la 4e, desde el 2026-11-01; la 4f, desde el 2026-11-02; la
       potencia y la Fase 5, desde el 2026-11-04; la 5b y la 5c, desde el
       2026-11-05).
+      - **En el borrador desde el 2026-11-05: las fases 4d, 4e y 4f y la
+        potencia** (commit «Borrador v2: las fases 4d, 4e y 4f, y la potencia de
+        la prueba»). Van en «Resultados»: la red de la 4e y la Fase 4f, al final
+        de «La imagen sola, sin el sistema de fotografía corporal total»; las
+        fases 4d y 4e, al final de «El modelo recomendado»; y la potencia, en la
+        subsección nueva «Lo que la prueba alcanza a ver». Les faltan el README
+        y la demo. Las fases 5, 5b y 5c siguen fuera del borrador.
+      - **Lo que el bloque deja desfasado en el borrador:** «Resultados» dice
+        ahora que, por la regla de la Fase 4f, la recomendación para el escenario
+        sin fotografía corporal total pasó a la red de la 4e, y «Qué se
+        recomienda» sigue dando «Imagen + básicos» (abajo, «Lo que la 4f deja
+        desfasado»). Hasta que se reescriba, el borrador se contradice en ese
+        punto.
       - **La Fase 5c:** el hallazgo 19, con los cuatro
         `outputs/fase5c-envio-*.json` y `outputs/fase5c-efectos.json`, y
         `PLAN.md`, Fase 5c. Toca el mismo pasaje que la 5b
@@ -2238,6 +2251,28 @@ años de las citas bibliográficas omitidos, por decisión de la persona
 
 Desde este commit, una ruta citada que no existe detiene el verificador y la
 demo.
+
+*Y una quinta,* en el commit «Regenerar la verificación y el analizador con el
+bloque 1 en el borrador», del 2026-11-05, con las fases 4d, 4e y 4f y la
+potencia ya en `informe/borrador-v2.md` (commit «Borrador v2: las fases 4d, 4e
+y 4f, y la potencia de la prueba»):
+- **Búsqueda en todo el corpus:** 825 números; 458 con respaldo, 11 señalados,
+  los mismos de antes, 9 del método, 21 omitidos por su contexto y 326 en
+  comentarios. Los dos del método que se suman son dos «80%» de la potencia,
+  «con un 80% de probabilidad» y «el umbral del 80%»: la lista los excluye
+  porque el 80% es también el umbral de sensibilidad de la métrica, así que no
+  se les busca respaldo. Su fuente es
+  `outputs/potencia-nadeau-bengio.json > objetivos.delta_80`.
+- **Por campo, sobre los 469 números del cuerpo:** 400 respaldados por su campo
+  y 19 por su referencia; 50 señalados, los mismos de antes, 42 que no están en
+  sus campos y 8 que citan un documento del proyecto. Los 101 números nuevos
+  quedan respaldados por su campo.
+- **El analizador:** 231 comentarios `F:`, 163 que entran en la gramática y 68
+  que solo citan documentos del proyecto; ninguno que no entre.
+- **Las citas de `referencias/`:** suman una que apunta solo a líneas nuestras,
+  las filas de la tabla de `referencias/isic-primary-metric-pauc.py.md`, y una
+  que mezcla, las del 10.º puesto: tres líneas del README, que son cita, y doce
+  de bloques de código de la ficha. El párrafo que las cita no tiene números.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
