@@ -67,6 +67,20 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      sola por encima en menos de la mitad de los pliegues, y las bases que no
      son las de imagen-sola.json y de la Fase 4. En la copia sin cambios, los
      datos de la página traen las dos preguntas.
+  R. Las fases 4d a 5c (2026-11-06). Cada frase que la página comprueba sobre
+     ellas, con un archivo alterado para que deje de ser cierta: Holm con una
+     pregunta a favor, el valor p de la red bajo el umbral de Holm, la Fase 4f
+     sin su resultado a favor, una diferencia de C4 a C7 por encima del umbral
+     del 50 %, la ventaja de M3 limpio en el reservado sin excluir el cero, la
+     de la red sobre «Imagen + básicos» excluyéndolo, un envío por encima del
+     ganador y el efecto del hospital con imagen con el mismo signo en la
+     pública. No se escribe, y el motivo tiene que ser esa frase. En la copia
+     sin cambios, los datos de la página traen las cinco preguntas, el
+     reservado y Kaggle.
+  S. Los archivos que no declaran conjunto y que la página lee desde las fases
+     4d a 5c: con una puntuación de fase5c-efectos.json que no sale de un
+     registro de envío, o con una comparación de potencia-nadeau-bengio.json que
+     no sale de un archivo del desarrollo, la página sale con el aviso.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -336,6 +350,38 @@ def main():
          "Añadidas al modelo con contexto de paciente, las variables de imagen de DINOv2"),
     ]
 
+    def poner(ruta, valor):
+        def cambio(o):
+            *camino, ultimo = ruta
+            for k in camino:
+                o = o[k]
+            o[ultimo] = valor(o[ultimo]) if callable(valor) else valor
+        return cambio
+
+    casos_r = [
+        ("Holm acepta una pregunta de la Fase 4e", "fase4e-holm", poner(["preguntas", 1, "a_favor"], True),
+         "Holm no aceptó ninguna de las preguntas de la Fase 4e"),
+        ("Holm acepta una pregunta de la Fase 4d", "fase4d-holm", poner(["preguntas", 0, "a_favor"], True),
+         "Holm no aceptó ninguna de las preguntas de la Fase 4d"),
+        ("el valor p de la red bajo el umbral de Holm", "fase4e-holm", poner(["preguntas", 0, "valor_p"], 0.02),
+         "Su valor p no llega al umbral de Holm"),
+        ("la Fase 4f sin su resultado a favor", "fase4f-red4e-vs-imagen-basicos", poner(["regla", "a_favor"], False),
+         "Con la regla de una sola pregunta, la red supera"),
+        ("C4 por encima del umbral del 50 %", "potencia-nadeau-bengio", poner(["comparaciones", "C4", "media_observada"], 0.02),
+         "las cuatro diferencias quedan por debajo del tamaño"),
+        ("M3 limpio − M2 en el reservado sin excluir el cero", "fase5-reservado",
+         poner(["diferencia_m3limpio_menos_m2", "pauc", "intervalo_95"], [-0.001, 0.0413]),
+         "la ventaja sobre M2 se mantiene en la pAUC y en el AUC"),
+        ("la red − «Imagen + básicos» en el reservado excluyendo el cero", "fase5-posterior",
+         poner(["red4e_menos_imagen_basicos", "setop15", "intervalo_95"], [0.001, 0.2585]),
+         "La ventaja de la red sobre «Imagen + básicos» no se reprodujo"),
+        ("un envío por encima del ganador", "fase5c-efectos", poner(["kaggle", "C7PromHosp", "privada"], 0.18),
+         "ninguno de los ocho envíos llega a la del ganador"),
+        ("el efecto del hospital con imagen con el mismo signo en la pública", "fase5c-efectos",
+         poner(["efectos", "hospital_con_imagen", "mismo_signo_en_la_publica"], True),
+         "cambia de signo entre la puntuación pública y la privada"),
+    ]
+
     corridas = {
         "A": generar("A"),
         "B": generar("B", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", intervalo_que_cruza)),
@@ -356,6 +402,11 @@ def main():
         corridas[f"L{i}"] = generar(f"L{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
     for i, (_, archivo, cambio, _) in enumerate(casos_o):
         corridas[f"O{i}"] = generar(f"O{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
+    for i, (_, archivo, cambio, _) in enumerate(casos_r):
+        corridas[f"R{i}"] = generar(f"R{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
+    corridas["S1"] = generar("S1", lambda d: cambiar(d, "fase5c-efectos", poner(["kaggle", "C7", "fuente"], "outputs/otro.json")))
+    corridas["S2"] = generar("S2", lambda d: cambiar(d, "potencia-nadeau-bengio",
+                                                     poner(["comparaciones", "C4", "archivo"], "outputs/fase5c-entrenamiento.json")))
     f_ok, f_detalle = caso_f()
     m = caso_m()
 
@@ -411,6 +462,20 @@ def main():
         (f"O. {titulo}: no escribe, por esa frase",
          not corridas[f"O{i}"][0] and frase in corridas[f"O{i}"][2], f"escrita: {corridas[f'O{i}'][0]}; {corridas[f'O{i}'][2]}")
         for i, (titulo, _, _, frase) in enumerate(casos_o)
+    ] + [
+        ("R. en la página base, los datos traen las cinco preguntas de las fases 4d y 4e, el reservado y Kaggle",
+         corridas["A"][1] is not None
+         and all(f"{a}.json" in corridas["A"][1] for a in ("fase4d-c5-vs-m3limpio", "fase4d-red-mejorada-vs-red",
+                                                          "fase4d-c6-vs-m3limpio", "fase4e-red-vs-red4c", "fase4e-c7-vs-m3limpio",
+                                                          "fase5-reservado", "fase5b-comparacion", "fase5c-efectos")),
+         f"escrita: {corridas['A'][0]}"),
+    ] + [
+        (f"R. {titulo}: no escribe, por esa frase",
+         not corridas[f"R{i}"][0] and frase in corridas[f"R{i}"][2], f"escrita: {corridas[f'R{i}'][0]}; {corridas[f'R{i}'][2]}")
+        for i, (titulo, _, _, frase) in enumerate(casos_r)
+    ] + [
+        ("S. una puntuación de fase5c-efectos.json que no sale de un envío: escribe con aviso", *escrita("S1", True)),
+        ("S. una comparación de la potencia que no sale del desarrollo: escribe con aviso", *escrita("S2", True)),
     ]
     fallos = 0
     for titulo, ok, detalle in casos:

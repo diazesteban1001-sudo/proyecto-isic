@@ -94,8 +94,9 @@ CADENA = [
         "etapa": "Modelos de referencia",
         "tipo": "medición",
         "funcion": "Se entrenaron y evaluaron los niveles de referencia, los modelos M1 a M4b, los "
-                   "intentos de mejorar al recomendado de la Fase 4b y la red de imagen entrenada de la "
-                   "Fase 4c, sobre pliegues agrupados por paciente",
+                   "intentos de mejorar al recomendado de las fases 4b a 4e y las redes de imagen "
+                   "entrenadas, sobre pliegues agrupados por paciente; al final, el conjunto reservado, "
+                   "una sola vez, y los envíos a Kaggle",
         "md": "modelado-baseline",
         "mide": "Primero, los niveles de referencia con la métrica oficial. Después, los modelos "
                 "M1 a M4b en validación cruzada repetida, en cuatro métricas —la pAUC, el AUC "
@@ -159,6 +160,22 @@ FASE4C = {
     "red_sola": ("La red sola frente a la imagen sola con DINOv2", "fase4c-red-sola-vs-imagen", "Red", "Imagen"),
     "c4": ("M3 limpio con la red frente a M3 limpio", "fase4c-c4-vs-m3limpio", "C4", "M3limpio"),
 }
+# Las cinco preguntas de las fases 4d y 4e (PLAN.md), en su orden, con su
+# etiqueta, su archivo y los modelos que compara. La regla de las dos fases es
+# Holm sobre el valor p bilateral de Nadeau y Bengio, y el intervalo que se
+# muestra es el de Nadeau y Bengio al 95 %.
+FASE4DE = [
+    ("4d", "M3 limpio con las variables de imagen del ganador, sin el hospital (C5)", "fase4d-c5-vs-m3limpio", "C5", "M3limpio"),
+    ("4d", "La red con más épocas frente a la red de la Fase 4c", "fase4d-red-mejorada-vs-red", "RedMejorada", "Red"),
+    ("4d", "C5 con esa red (C6)", "fase4d-c6-vs-m3limpio", "C6", "M3limpio"),
+    ("4e", "La red con la receta del 10.º puesto frente a la de la Fase 4c", "fase4e-red-vs-red4c", "Red4eAjustada", "Red"),
+    ("4e", "M3 limpio con esa red (C7)", "fase4e-c7-vs-m3limpio", "C7", "M3limpio"),
+]
+CLAVE_IC_NB = "intervalo_t_95_nadeau_bengio"
+# Los ocho envíos a Kaggle (PLAN.md, fases 5b y 5c), con su nombre en la página.
+NOMBRES_KAGGLE = {"M3limpio": "M3 limpio", "Red4e": "Red de la 4e", "C7": "C7", "ImagenBasicos": "«Imagen + básicos»",
+                  "M3limpioProm": "M3 limpio promediado", "M3limpioPromHosp": "M3 limpio promediado + hospital",
+                  "C7Prom": "C7 promediado", "C7PromHosp": "C7 promediado + hospital"}
 NIVELES_VR = [
     ("Nivel 1", "Regresión logística", "nivel_1_regresion_logistica"),
     ("Nivel 2a", "Gradient boosting sin balancear", "nivel_2a_gradient_boosting_sin_balancear"),
@@ -413,6 +430,139 @@ def datos_particion(particion):
                     for m in ("pauc", "auc", "nnt80")}
             for corto, n in (("n1", n1), ("n2b", n2b))
         },
+    }
+
+
+def datos_fases_4d_a_5c(cargar):
+    """borrador-v2.md, «Resultados»: el final de «La imagen sola» (la red de la 4e
+    y la Fase 4f), el de «El modelo recomendado» (las fases 4d y 4e), «Lo que la
+    prueba alcanza a ver», «El conjunto reservado, abierto una sola vez» y «En la
+    prueba de Kaggle»; y lo que de ellas usa «Recomendación». Cada frase que dice
+    algo de los datos se comprueba aquí. Control positivo: test_generar_demo.py,
+    caso R."""
+    preguntas = []
+    for fase, etiqueta, archivo, nuevo, base in FASE4DE:
+        o = cargar(archivo)
+        if (o["comparacion"]["nuevo"], o["comparacion"]["base"]) != (nuevo, base):
+            raise SystemExit(f"{archivo}.json no compara {nuevo} con {base}. No se escribe la página.")
+        c = o["comparaciones_nuevo_menos_base"]
+        preguntas.append({
+            "fase": fase, "etiqueta": etiqueta, "archivo": f"{archivo}.json", "nuevo": nuevo, "base": base,
+            "media_nuevo": o["metricas"][nuevo]["pauc"]["media_global"],
+            "media_base": o["metricas"][base]["pauc"]["media_global"],
+            "semillas_corridas": len(o["semillas_corridas"]),
+            "metricas": {k: {"media": c[k]["media"], "ic": c[k][CLAVE_IC_NB], "p": c[k]["valor_p_nadeau_bengio"],
+                             "folds": c[k]["nuevo_mejor_en_folds"], "de_folds": c[k]["de_folds"],
+                             "semillas": c[k]["nuevo_mejor_en_semillas"], "de_semillas": c[k]["de_semillas"]}
+                         for k in METRICAS},
+        })
+    Q = {q["nuevo"]: q for q in preguntas}
+    holm = {"4d": cargar("fase4d-holm"), "4e": cargar("fase4e-holm")}
+    for fase, h in holm.items():
+        archivos = [p["archivo"] for p in h["preguntas"]]
+        esperados = [f"outputs/{q['archivo']}" for q in preguntas if q["fase"] == fase]
+        if sorted(archivos) != sorted(esperados):
+            raise SystemExit(f"fase{fase}-holm.json no es la decisión de las preguntas de la Fase {fase}. No se escribe la página.")
+        afirmar(not any(p["a_favor"] for p in h["preguntas"]),
+                f"Holm no aceptó ninguna de las preguntas de la Fase {fase}, y M3 limpio siguió siendo el modelo recomendado")
+    p_red = next(p for p in holm["4e"]["preguntas"] if p["archivo"] == "outputs/fase4e-red-vs-red4c.json")
+    afirmar(p_red["orden_holm"] == 1 and p_red["umbral_holm"] < p_red["valor_p"] < holm["4e"]["alfa"],
+            "Su valor p no llega al umbral de Holm para la primera de dos preguntas; con una sola pregunta, el umbral habría sido 0,05")
+    red = Q["Red4eAjustada"]["metricas"]
+    afirmar(red["pauc"]["media"] > 0 and red["pauc"]["ic"][0] > 0 and red["auc"]["ic"][0] > 0
+            and red["setop15"]["ic"][0] > 0 and contiene_cero(red["nnt80"]["ic"]),
+            "En el AUC y en la sensibilidad top-15 el intervalo también excluye el cero; en el NNT80% SE, no")
+
+    potencia = cargar("potencia-nadeau-bengio")
+    pc = potencia["comparaciones"]
+    observadas = {k: v["media_observada"] for k, v in pc.items()}
+    afirmar(set(pc) == {"C4", "C5", "C6", "C7"} and all(v > 0 for v in observadas.values()),
+            "Las cuatro versiones que apilan una red de imagen sobre M3 limpio quedaron por encima de él en la media")
+    afirmar(all(observadas[k] < min(pc[k]["delta_50"].values()) for k in pc),
+            "las cuatro diferencias quedan por debajo del tamaño que la prueba distingue con un 50% de probabilidad")
+    d80 = [v for k in pc for v in pc[k]["delta_80"].values()]
+    d50 = [v for k in pc for v in pc[k]["delta_50"].values()]
+    razones = [pc[k]["entre_semillas"]["ee_prueba_sobre_ee_semillas"] for k in pc]
+
+    f4f = cargar("fase4f-red4e-vs-imagen-basicos")
+    c4f = f4f["comparaciones_nuevo_menos_base"]
+    afirmar(f4f["regla"]["a_favor"] and c4f["pauc"]["media"] > 0 and c4f["pauc"]["valor_p_nadeau_bengio"] < 0.05,
+            "Con la regla de una sola pregunta, la red supera a «Imagen + básicos»")
+    afirmar(c4f["auc"][CLAVE_IC_NB][0] > 0 and c4f["setop15"][CLAVE_IC_NB][0] > 0 and c4f["nnt80"][CLAVE_IC_NB][1] < 0,
+            "Las tres métricas secundarias van en la misma dirección, con intervalos que excluyen el cero")
+
+    reservado = cargar("fase5-reservado")
+    dif = reservado["diferencia_m3limpio_menos_m2"]
+    afirmar(dif["pauc"]["intervalo_95"][0] > 0 and dif["auc"]["intervalo_95"][0] > 0,
+            "en el conjunto reservado, abierto una sola vez, la ventaja sobre M2 se mantiene en la pAUC y en el AUC")
+    afirmar(contiene_cero(dif["setop15"]["intervalo_95"]) and contiene_cero(dif["nnt80"]["intervalo_95"]),
+            "En la sensibilidad top-15 y el NNT80% SE, el intervalo contiene el cero, como en el desarrollo")
+    posterior = cargar("fase5-posterior")
+    rib = posterior["red4e_menos_imagen_basicos"]
+    afirmar(all(contiene_cero(rib[k]["intervalo_95"]) for k in METRICAS) and rib["pauc"]["punto"] < 0,
+            "La ventaja de la red sobre «Imagen + básicos» no se reprodujo")
+
+    comparacion = cargar("fase5b-comparacion")
+    efectos = cargar("fase5c-efectos")
+    medicion = cargar("fase5b-kaggle-medicion")
+    ganador = comparacion["referencias"]["ganador_tablero_privado"]["pauc"]
+    privadas = {m: v["privada"] for m, v in efectos["kaggle"].items()}
+    privadas.update({m: comparacion["kaggle"][m]["privada"] for m in ("Red4e", "ImagenBasicos")})
+    afirmar(len(privadas) == 8 and max(privadas.values()) < ganador,
+            "En la puntuación privada de Kaggle, ninguno de los ocho envíos llega a la del ganador")
+    afirmar(max(privadas, key=privadas.get) == "C7PromHosp"
+            and max((m for m in privadas if "Hosp" not in m), key=privadas.get) == "C7Prom",
+            "El más cercano, «C7 promediado + hospital», y el más cercano sin la etiqueta del hospital, «C7 promediado»")
+    ef = efectos["efectos"]
+    afirmar(not ef["hospital_con_imagen"]["mismo_signo_en_la_publica"]
+            and all(v["mismo_signo_en_la_publica"] for k, v in ef.items() if k != "hospital_con_imagen"),
+            "el mayor de los dos efectos del hospital cambia de signo entre la puntuación pública y la privada")
+    afirmar(privadas["Red4e"] > privadas["ImagenBasicos"], "en Kaggle la red vuelve a quedar por encima")
+    tabla = comparacion["tabla_tres_evaluaciones"]
+    dev = {m: next(d["pauc"] for d in tabla[m]["desarrollo"] if d["semillas"] == [5, 6, 7, 8, 9]) for m in tabla}
+    kag = {m: tabla[m]["kaggle_privada"]["pauc"] for m in tabla}
+    afirmar(sorted(dev, key=dev.get) == sorted(kag, key=kag.get)
+            and tabla["ImagenBasicos"]["reservado"]["pauc"] > tabla["Red4e"]["reservado"]["pauc"],
+            "En el desarrollo y en Kaggle, los cuatro modelos quedan en el mismo orden; en el reservado, «Imagen + básicos» queda por encima de la red")
+    proy = medicion["salida_del_notebook"]["tiempo"]
+    return {
+        "preguntas": preguntas,
+        "holm": {f: {"alfa": h["alfa"], "preguntas": [{"archivo": p["archivo"], "umbral": p["umbral_holm"],
+                                                       "a_favor": p["a_favor"]} for p in h["preguntas"]]}
+                 for f, h in holm.items()},
+        "red_holm": {"p": p_red["valor_p"], "umbral": p_red["umbral_holm"], "alfa": holm["4e"]["alfa"]},
+        "potencia": {"obs_min": min(observadas.values()), "obs_max": max(observadas.values()),
+                     "obs_min_de": min(observadas, key=observadas.get), "obs_max_de": max(observadas, key=observadas.get),
+                     "d80": [min(d80), max(d80)], "d50": [min(d50), max(d50)],
+                     "d80_c4": pc["C4"]["delta_80"], "d80_c7": pc["C7"]["delta_80"],
+                     "razones": [min(razones), max(razones)], "termino": potencia["prueba"]["termino_de_correccion"],
+                     "objetivos": potencia["objetivos"]},
+        "fase4f": {"media_red": f4f["metricas"]["Red4eAjustada"]["pauc"]["media_global"],
+                   "media_ib": f4f["metricas"]["ImagenBasicos"]["pauc"]["media_global"],
+                   "metricas": {k: {"media": c4f[k]["media"], "ic": c4f[k][CLAVE_IC_NB], "p": c4f[k]["valor_p_nadeau_bengio"],
+                                    "folds": c4f[k]["nuevo_mejor_en_folds"], "de_folds": c4f[k]["de_folds"],
+                                    "semillas": c4f[k]["nuevo_mejor_en_semillas"], "de_semillas": c4f[k]["de_semillas"]}
+                                for k in METRICAS}},
+        "reservado": {"pacientes": reservado["datos"]["evaluacion"]["pacientes"],
+                      "malignas": reservado["datos"]["evaluacion"]["malignas"],
+                      "pacientes_con_malignas": reservado["datos"]["evaluacion"]["pacientes_con_malignas"],
+                      "remuestras": reservado["bootstrap"]["remuestras"],
+                      "m3": reservado["metricas"]["M3limpio"]["pauc"], "m2": reservado["metricas"]["M2"]["pauc"],
+                      "dif": {k: dif[k] for k in ("pauc", "auc")},
+                      "red": reservado["metricas"]["Red4e"]["pauc"]["punto"],
+                      "ib": reservado["metricas"]["ImagenBasicos"]["pauc"]["punto"],
+                      "red_menos_ib": {k: rib[k] for k in ("pauc", "setop15")}},
+        "kaggle": {"ganador": ganador, "comparaciones": comparacion["comparaciones_con_la_privada"],
+                   "c7_menos_m3": comparacion["aritmetica_de_dos_fuentes"]["c7_menos_m3limpio_kaggle_privada"],
+                   "pacientes": reservado["datos"]["entrenamiento"]["pacientes"] + reservado["datos"]["evaluacion"]["pacientes"],
+                   "pacientes_desarrollo": reservado["datos"]["entrenamiento"]["pacientes"],
+                   "privadas": privadas, "nombres": NOMBRES_KAGGLE,
+                   "tabla": {m: {"desarrollo": dev[m], "reservado": (tabla[m]["reservado"] or {}).get("pauc"),
+                                 "kaggle": kag[m]} for m in ("C7", "M3limpio", "Red4e", "ImagenBasicos")},
+                   "efectos": {k: {"privada": v["privada"], "publica": v["publica"]} for k, v in ef.items()},
+                   "descomposicion": efectos["descomposicion_de_la_distancia_al_ganador"],
+                   "horas": {m: proy["proyeccion"][m]["horas_proyectadas"] for m in ("M3limpio", "C7", "Red4e")},
+                   "lesiones_prueba": proy["lesiones_de_prueba_supuestas"]},
     }
 
 
@@ -692,6 +842,7 @@ def construir_datos(outputs_dir, leidos):
         "mecanismo": datos_mecanismo(mecanismo, metrica),
         "particion": datos_particion(particion),
         "imagen_sola": datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion, tiempo),
+        "posteriores": datos_fases_4d_a_5c(cargar),
         "verificacion": {
             "total": verificacion["numeros_en_borrador"],
             "con": verificacion["numeros_con_respaldo_en_outputs"],
@@ -921,7 +1072,20 @@ __AVISO_EXPLORATORIO__
 </section>
 
 <section>
-  <h2><span class="num">5</span>La pregunta del cliente, entera</h2>
+  <h2><span class="num">5</span>Fuera del conjunto de desarrollo</h2>
+  <p class="sub">El conjunto reservado, abierto una sola vez, y Kaggle, que da una sola cifra por env&iacute;o.</p>
+  <div class="tarjeta">
+    <h3>El conjunto reservado, abierto una sola vez</h3>
+    <div class="texto" id="texto-reservado"></div>
+    <h3>En la prueba de Kaggle</h3>
+    <div class="texto" id="texto-kaggle"></div>
+    <div class="tabla-envoltura"><table id="tabla-tres"></table></div>
+    <div class="texto" id="texto-kaggle-2" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>La pregunta del cliente, entera</h2>
   <div class="tarjeta">
     <div class="tabla-envoltura"><table id="tabla-ejes"></table></div>
     <div class="texto" id="texto-5" style="margin-top:16px"></div>
@@ -929,7 +1093,7 @@ __AVISO_EXPLORATORIO__
 </section>
 
 <section>
-  <h2><span class="num">6</span>Recomendaci&oacute;n</h2>
+  <h2><span class="num">7</span>Recomendaci&oacute;n</h2>
   <p class="sub">Lo que un consultor le entregar&iacute;a al cliente: el hallazgo, la recomendaci&oacute;n y lo que a&uacute;n no se puede afirmar.</p>
   <div class="medida ok sola">
     <div class="cifra" id="tit-reco"></div>
@@ -946,19 +1110,8 @@ __AVISO_EXPLORATORIO__
 </section>
 
 <section>
-  <h2><span class="num">7</span>Limitaciones</h2>
+  <h2><span class="num">8</span>Limitaciones</h2>
   <div class="tarjeta"><div class="texto" id="limitaciones"></div></div>
-</section>
-
-<section>
-  <h2><span class="num">8</span>Lo que sigue</h2>
-  <p class="sub">Trabajo previsto, no ejecutado. Sin cifras: el conjunto reservado no se ha abierto.</p>
-  <div class="tarjeta">
-    <div class="texto"><p>Abrir el conjunto reservado, una sola vez. M3 limpio se entrena una sola vez con los pacientes de desarrollo y se eval&uacute;a sobre los reservados, con punto e intervalo por bootstrap de pacientes; M2 se punt&uacute;a en la misma corrida, como referencia. Todo se fij&oacute; antes de abrirlo, y despu&eacute;s no se cambia nada: ni el modelo, ni las caracter&iacute;sticas, ni el criterio. El resultado se reporta sea cual sea, y la recomendaci&oacute;n no cambia por &eacute;l.</p></div>
-    <p class="aviso">Ninguna cifra aparece en esta secci&oacute;n porque ninguna est&aacute; medida.
-    A diferencia del resto de la p&aacute;gina, aqu&iacute; no hay archivo en <code>outputs/</code> que
-    respalde nada &mdash; y por eso no se afirma nada.</p>
-  </div>
 </section>
 
 <footer id="pie"></footer>
@@ -1030,7 +1183,7 @@ document.getElementById("ctx-datos").innerHTML =
   `—no de las filas—, estratificado por centro y por tener al menos una lesión maligna, con semilla ` +
   `${cifra(String(D.sellado.semilla), "holdout-pacientes.json > semilla")}, y se selló. ` +
   `El conjunto reservado tiene ${cifra(mil(R.pacientes), fExt("conjuntos.reservado.cobertura.pacientes"))} pacientes y ` +
-  `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} imágenes, y ningún modelo se ha evaluado sobre él.`;
+  `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} imágenes, y se abrió una sola vez, con todo fijado antes.`;
 
 // borrador-v2.md, «Método», «Qué se mide».
 document.getElementById("ctx-metrica").innerHTML =
@@ -1467,6 +1620,36 @@ const fF4c = (q, k, campo) => `${F4C[q].archivo} > comparaciones_nuevo_menos_bas
 const fF4cM = (q, modelo) => `${F4C[q].archivo} > metricas.${modelo}.pauc.media_global`;
 const RS = F4C.red_sola.metricas, C4 = F4C.c4.metricas;
 const bonfF4c = (q, k) => fF4c(q, k, "intervalo_bonferroni_nadeau_bengio");
+// Las fases 4d a 5c (datos_fases_4d_a_5c): las preguntas de las fases 4d y 4e, la 4f,
+// la potencia, el reservado y Kaggle.
+const PO = D.posteriores, Q4 = Object.fromEntries(PO.preguntas.map(q => [q.nuevo, q]));
+const fQ = (n, k, campo) => `${Q4[n].archivo} > comparaciones_nuevo_menos_base.${k}.${campo}`;
+const mediaQ = (n, k) => cifra(firmado(Q4[n].metricas[k].media, k === "nnt80" ? 2 : undefined), fQ(n, k, "media"));
+const icQ = (n, k) => ic(Q4[n].metricas[k].ic[0], Q4[n].metricas[k].ic[1], fQ(n, k, "intervalo_t_95_nadeau_bengio"),
+  k === "nnt80" ? 2 : undefined);
+const pQ = (n, k) => cifra(fijo(Q4[n].metricas[k].p, 4), fQ(n, k, "valor_p_nadeau_bengio"));
+const vicQ = (n, k) => `${cifra(Q4[n].metricas[k].folds, fQ(n, k, "nuevo_mejor_en_folds"))} de ` +
+  `${cifra(Q4[n].metricas[k].de_folds, fQ(n, k, "de_folds"))}; ${cifra(Q4[n].metricas[k].semillas, fQ(n, k, "nuevo_mejor_en_semillas"))} de ` +
+  `${cifra(Q4[n].metricas[k].de_semillas, fQ(n, k, "de_semillas"))}`;
+const medQ = (n, cual) => cifra(dec(cual === "nuevo" ? Q4[n].media_nuevo : Q4[n].media_base),
+  `${Q4[n].archivo} > metricas.${cual === "nuevo" ? Q4[n].nuevo : Q4[n].base}.pauc.media_global`);
+const F4F = PO.fase4f, fF = (k, campo) => `fase4f-red4e-vs-imagen-basicos.json > comparaciones_nuevo_menos_base.${k}.${campo}`;
+const mediaF = k => cifra(firmado(F4F.metricas[k].media, k === "nnt80" ? 2 : undefined), fF(k, "media"));
+const icF = k => ic(F4F.metricas[k].ic[0], F4F.metricas[k].ic[1], fF(k, "intervalo_t_95_nadeau_bengio"), k === "nnt80" ? 2 : undefined);
+const vicF = k => `${cifra(F4F.metricas[k].folds, fF(k, "nuevo_mejor_en_folds"))} de ${cifra(F4F.metricas[k].de_folds, fF(k, "de_folds"))}; ` +
+  `${cifra(F4F.metricas[k].semillas, fF(k, "nuevo_mejor_en_semillas"))} de ${cifra(F4F.metricas[k].de_semillas, fF(k, "de_semillas"))}`;
+const RH = PO.red_holm, fH4e = c => "fase4e-holm.json > " + c;
+const POT = PO.potencia, fPot = c => "potencia-nadeau-bengio.json > " + c;
+const RES = PO.reservado, fRes = c => "fase5-reservado.json > " + c, fPos = c => "fase5-posterior.json > " + c;
+const icRes = (o, fuente, d) => ic(o.intervalo_95[0], o.intervalo_95[1], fuente, d);
+const KG = PO.kaggle, fK = c => "fase5b-comparacion.json > " + c, fE = c => "fase5c-efectos.json > " + c;
+const priv = m => cifra(dec(KG.privadas[m]), ["Red4e", "ImagenBasicos"].includes(m)
+  ? fK(`kaggle.${m}.privada`) : fE(`kaggle.${m}.privada`));
+const efecto = k => cifra(firmado(KG.efectos[k].privada), fE(`efectos.${k}.privada`));
+const DES = KG.descomposicion, fDes = c => fE("descomposicion_de_la_distancia_al_ganador." + c);
+const horas = m => cifra(dec(KG.horas[m]), `fase5b-kaggle-medicion.json > salida_del_notebook.tiempo.proyeccion.${m}.horas_proyectadas`);
+const lesionesPrueba = cifra(mil(KG.lesiones_prueba), "fase5b-kaggle-medicion.json > salida_del_notebook.tiempo.lesiones_de_prueba_supuestas");
+const pctObj = k => cifra(Math.round(POT.objetivos[k] * 100) + "%", fPot("objetivos." + k));
 document.getElementById("texto-4b").innerHTML = P([
   `Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software de la fotografía corporal total; ` +
   `sin ese sistema, esos modelos no se pueden aplicar tal cual. ` +
@@ -1511,9 +1694,115 @@ document.getElementById("texto-4b").innerHTML = P([
   `por sospecha, aunque con el extractor congelado, DINOv2, queda lejos de M1. Edad, sexo y zona del cuerpo son ` +
   `datos que una persona puede informar sin aparatos, aunque en estos datos la zona del cuerpo pudo venir del software del sistema. El ganador ajustó sus propias redes de imagen, y su variante con solo los ` +
   `recortes llega a un AUC de ${auc922}, pero en otros datos y con otra evaluación, así que las cifras no se comparan. ` +
-  `Y todo esto se midió sobre los recortes del sistema de fotografía corporal total, no sobre fotos de teléfono.`]);
+  `Y todo esto se midió sobre los recortes del sistema de fotografía corporal total, no sobre fotos de teléfono.`,
+  // borrador-v2.md, «Resultados», el final de «La imagen sola, sin el sistema de fotografía corporal total».
+  `La red de la Fase 4e, la EfficientNet-B0 con la receta del décimo puesto y el ajuste fino que se describen en ` +
+  `«Recomendación», queda sola por encima de la red de la Fase 4c: ${medQ("Red4eAjustada", "nuevo")} frente a ` +
+  `${medQ("Red4eAjustada", "base")}, ${mediaQ("Red4eAjustada", "pauc")}, ${icQ("Red4eAjustada", "pauc")} (${vicQ("Red4eAjustada", "pauc")}). ` +
+  `En el AUC, ${mediaQ("Red4eAjustada", "auc")}, ${icQ("Red4eAjustada", "auc")}, y en la sensibilidad top-15, ` +
+  `${mediaQ("Red4eAjustada", "setop15")}, ${icQ("Red4eAjustada", "setop15")}, el intervalo también excluye el cero; en el NNT80% SE, no.`,
+  `Aun así, la regla no la da por establecida. Su valor p, ${cifra(fijo(RH.p, 4), fH4e("preguntas[0].valor_p"))}, no llega al ` +
+  `umbral de Holm para la primera de dos preguntas, ${cifra(dec(RH.umbral), fH4e("preguntas[0].umbral_holm"))}; con una sola ` +
+  `pregunta, el umbral habría sido ${cifra(dec(RH.alfa), fH4e("alfa"))}. Lo que decide es la corrección por multiplicidad, ` +
+  `fijada antes de correr. Es el mismo tipo de hallazgo que el de la sección 2: una decisión de método, aquí cuántas ` +
+  `preguntas se corrigen juntas, cambia el veredicto.`,
+  `Después se comparó esa red con «Imagen + básicos», el punto de partida que el informe daba para el escenario sin ` +
+  `fotografía corporal total, en los mismos ${cifra(F4F.metricas.pauc.de_folds, fF("pauc", "de_folds"))} pliegues de la ` +
+  `confirmación. La pregunta se eligió después de ver la Fase 4e, y se declara así: la diferencia de medias ya se podía ` +
+  `calcular con lo guardado, y el valor p no se había calculado.`,
+  `Con la regla de una sola pregunta, la red supera a «Imagen + básicos»: ` +
+  `${cifra(dec(F4F.media_red), "fase4f-red4e-vs-imagen-basicos.json > metricas.Red4eAjustada.pauc.media_global")} frente a ` +
+  `${cifra(dec(F4F.media_ib), "fase4f-red4e-vs-imagen-basicos.json > metricas.ImagenBasicos.pauc.media_global")}, ` +
+  `${mediaF("pauc")}, ${icF("pauc")} (${vicF("pauc")}), con un valor p de ${cifra(fijo(F4F.metricas.pauc.p, 4), fF("pauc", "valor_p_nadeau_bengio"))}. ` +
+  `Las tres métricas secundarias van en la misma dirección, con intervalos que excluyen el cero: AUC ${mediaF("auc")}, ` +
+  `${icF("auc")}; sensibilidad top-15 ${mediaF("setop15")}, ${icF("setop15")}, y NNT80% SE ${mediaF("nnt80")}, ${icF("nnt80")}.`,
+  `Por la regla, la recomendación para ese escenario pasó a la red, que además usa menos datos de entrada: solo la imagen, ` +
+  `sin edad, sexo ni zona del cuerpo. Se midió sobre los recortes de SLICE-3D, no sobre fotos de teléfono.`]);
 
-/* ---------- 5. la pregunta del cliente, entera ---------- */
+/* ---------- 5. fuera del conjunto de desarrollo ---------- */
+// borrador-v2.md, «Resultados», «El conjunto reservado, abierto una sola vez».
+const M3L = COMP["M3 limpio − M2"].metricas;
+document.getElementById("texto-reservado").innerHTML = P([
+  `El conjunto reservado se abrió una sola vez, con todo fijado antes: M3 limpio, el modelo recomendado, y M2 como ` +
+  `referencia, entrenados con todo el desarrollo, y, como resultado descriptivo, la red de la Fase 4e e «Imagen + básicos». ` +
+  `Son ${cifra(RES.pacientes, fRes("datos.evaluacion.pacientes"))} pacientes, con ${cifra(RES.malignas, fRes("datos.evaluacion.malignas"))} ` +
+  `lesiones malignas repartidas en ${cifra(RES.pacientes_con_malignas, fRes("datos.evaluacion.pacientes_con_malignas"))} de ellos. ` +
+  `Los intervalos salen de un bootstrap por paciente con ${cifra(mil(RES.remuestras), fRes("bootstrap.remuestras"))} remuestras.`,
+  `M3 limpio da una pAUC de ${cifra(dec(RES.m3.punto), fRes("metricas.M3limpio.pauc.punto"))}, ` +
+  `${icRes(RES.m3, fRes("metricas.M3limpio.pauc.intervalo_95"))}, y supera a M2, ${cifra(dec(RES.m2.punto), fRes("metricas.M2.pauc.punto"))}, ` +
+  `por ${cifra(firmado(RES.dif.pauc.punto), fRes("diferencia_m3limpio_menos_m2.pauc.punto"))}, ` +
+  `${icRes(RES.dif.pauc, fRes("diferencia_m3limpio_menos_m2.pauc.intervalo_95"))}. En el AUC, ` +
+  `${cifra(firmado(RES.dif.auc.punto), fRes("diferencia_m3limpio_menos_m2.auc.punto"))}, ` +
+  `${icRes(RES.dif.auc, fRes("diferencia_m3limpio_menos_m2.auc.intervalo_95"))}. En el desarrollo, la diferencia en la pAUC era ` +
+  `${mediaC("M3 limpio − M2", "pauc")}, ${ic(M3L.pauc.ic[0], M3L.pauc.ic[1], fComp("M3 limpio − M2", "pauc", D.clave_ic))}: en los dos ` +
+  `lados, el intervalo excluye el cero y el signo es el mismo. En la sensibilidad top-15 y el NNT80% SE, el intervalo ` +
+  `contiene el cero, como en el desarrollo. Los dos intervalos no miden lo mismo: en el desarrollo, el de la media por ` +
+  `pliegue, con la corrección de Nadeau y Bengio; en el reservado, el de un solo modelo, con el bootstrap por paciente.`,
+  `Con pacientes con los que no se entrenó ningún modelo, la ventaja de M3 limpio sobre M2 se mantiene en la pAUC y el AUC. ` +
+  `El reservado no es ajeno del todo: el diseño de las variables de M2 y de M3 limpio lo fijó el ganador sobre todo el ` +
+  `conjunto de entrenamiento del reto, que incluye a estos pacientes.`,
+  `La ventaja de la red sobre «Imagen + básicos» no se reprodujo. En el reservado, la red da ` +
+  `${cifra(dec(RES.red), fRes("metricas.Red4e.pauc.punto"))} e «Imagen + básicos», ${cifra(dec(RES.ib), fRes("metricas.ImagenBasicos.pauc.punto"))}; ` +
+  `la diferencia es de ${cifra(firmado(RES.red_menos_ib.pauc.punto), fPos("red4e_menos_imagen_basicos.pauc.punto"))}, ` +
+  `${icRes(RES.red_menos_ib.pauc, fPos("red4e_menos_imagen_basicos.pauc.intervalo_95"))}. En la sensibilidad top-15 la red ` +
+  `queda por encima, ${cifra(firmado(RES.red_menos_ib.setop15.punto), fPos("red4e_menos_imagen_basicos.setop15.punto"))}, pero el ` +
+  `intervalo, ${icRes(RES.red_menos_ib.setop15, fPos("red4e_menos_imagen_basicos.setop15.intervalo_95"))}, contiene el cero, como los ` +
+  `de las otras tres métricas; en la Fase 4f, los cuatro lo excluían. Por qué «Imagen + básicos» da más en el reservado que ` +
+  `en el desarrollo no está medido.`,
+  `Por la regla fijada antes, el reservado no cambia ninguna recomendación: la estimación principal sigue siendo la ` +
+  `validación cruzada repetida. Pero la ventaja de la red sobre «Imagen + básicos» no quedó confirmada con los pacientes reservados.`]);
+// borrador-v2.md, «Resultados», «En la prueba de Kaggle».
+const CP = KG.comparaciones, fCP = (k, c) => fK(`comparaciones_con_la_privada.${k}.${c}`);
+document.getElementById("texto-kaggle").innerHTML = P([
+  `Kaggle sigue aceptando envíos a la competición cerrada, y a cada uno le dio una puntuación pública y una privada, sin ` +
+  `intervalo. Se enviaron cuatro modelos entrenados con los ` +
+  `${cifra(mil(KG.pacientes), fRes("datos.entrenamiento.pacientes") + " + datos.evaluacion.pacientes")} pacientes, cada uno una ` +
+  `sola vez: M3 limpio, la red de la 4e y C7, fijados antes de abrir el reservado, y un cuarto, «Imagen + básicos», decidido ` +
+  `después. Que la puntuación privada salga del mismo subconjunto de la prueba que el tablero final del reto es lectura ` +
+  `nuestra: ninguna fuente versionada lo dice.`,
+  `En la puntuación privada, C7 obtiene ${cifra(dec(CP.c7_menos_ganador.modelo), fCP("c7_menos_ganador", "modelo"))}, y el ganador, ` +
+  `${cifra(dec(CP.c7_menos_ganador.referencia), fCP("c7_menos_ganador", "referencia"))}: una diferencia de ` +
+  `${cifra(firmado(CP.c7_menos_ganador.diferencia), fCP("c7_menos_ganador", "diferencia"))}. M3 limpio obtiene ` +
+  `${cifra(dec(CP.m3limpio_menos_sin_imagenes.modelo), fCP("m3limpio_menos_sin_imagenes", "modelo"))}, frente a ` +
+  `${cifra(dec(CP.m3limpio_menos_sin_imagenes.referencia), fCP("m3limpio_menos_sin_imagenes", "referencia"))} de la versión del ganador ` +
+  `sin imágenes, que usa la etiqueta del hospital; la red sola, ${cifra(dec(CP.red4e_menos_solo_imagenes.modelo), fCP("red4e_menos_solo_imagenes", "modelo"))}, ` +
+  `frente a ${cifra(dec(CP.red4e_menos_solo_imagenes.referencia), fCP("red4e_menos_solo_imagenes", "referencia"))} de la versión que solo ` +
+  `usa las imágenes. Esas dos versiones son de la reproducción del ganador que hicieron los organizadores, sobre el conjunto ` +
+  `del tablero privado, con tres decimales.`,
+  `El cuarto envío comparó la red con «Imagen + básicos» en Kaggle. Se decidió después de ver el reservado, y se declara así. ` +
+  `La red obtiene ${priv("Red4e")} e «Imagen + básicos», ${priv("ImagenBasicos")}: en la privada, la red vuelve a quedar por ` +
+  `encima, como en el desarrollo y al revés que en el reservado.`]);
+const fTres = (m, c) => fK(`tabla_tres_evaluaciones.${m}.${c}`);
+document.getElementById("tabla-tres").innerHTML =
+  `<thead><tr><th>Modelo</th><th>Desarrollo, semillas 5 a 9</th><th>Reservado</th><th>Kaggle, privada</th></tr></thead><tbody>` +
+  Object.entries(KG.tabla).map(([m, f]) => `<tr><td>${esc(KG.nombres[m])}</td>` +
+    `<td>${cifra(dec(f.desarrollo), fTres(m, "desarrollo"))}</td>` +
+    `<td>${f.reservado === null ? "no se evaluó" : cifra(dec(f.reservado), fTres(m, "reservado.pauc"))}</td>` +
+    `<td>${cifra(dec(f.kaggle), fTres(m, "kaggle_privada.pauc"))}</td></tr>`).join("") + `</tbody>`;
+document.getElementById("texto-kaggle-2").innerHTML = P([
+  `En el desarrollo y en Kaggle, los cuatro modelos quedan en el mismo orden; en el reservado, «Imagen + básicos» queda por ` +
+  `encima de la red. Son conjuntos y estimaciones distintos: la media por pliegue en el desarrollo, un solo modelo en el ` +
+  `reservado y una sola puntuación en Kaggle, sin intervalo.`,
+  `Para descomponer la distancia al ganador se hicieron cuatro envíos más, en un diseño de dos por dos fijado antes de ` +
+  `entrenarlos: con imagen o sin ella, y con la etiqueta del hospital o sin ella. En los cuatro, la parte tabular es la media ` +
+  `de varios CatBoost, uno por pliegue y semilla, como los que entrena el código del ganador; cómo combina él sus ` +
+  `predicciones en la prueba no está en su notebook. El diseño se decidió después de ver los primeros envíos, y con él el ` +
+  `proyecto cerró Kaggle: no se envía nada más.`,
+  `Promediar sube la puntuación privada en ${efecto("promediar_sin_imagen")} sin imagen y en ${efecto("promediar_con_imagen")} ` +
+  `con imagen, con el mismo signo en la pública. El hospital suma ${efecto("hospital_sin_imagen")} sin imagen y ` +
+  `${efecto("hospital_con_imagen")} con imagen, y este último cambia de signo en la pública. C7 promediado obtiene ` +
+  `${priv("C7Prom")}, y con el hospital, ${priv("C7PromHosp")}.`,
+  `Como aritmética descriptiva, de la diferencia de C7 con el ganador, ${cifra(firmado(DES.distancia_de_c7_al_ganador), fDes("distancia_de_c7_al_ganador"))}, ` +
+  `promediar cubre ${cifra(firmado(DES.cubre_promediar), fDes("cubre_promediar"))}, el ` +
+  `${cifra(dec(DES.porcentaje_de_la_distancia.promediar) + "%", fDes("porcentaje_de_la_distancia.promediar"))}; el hospital, ` +
+  `${cifra(firmado(DES.cubre_el_hospital), fDes("cubre_el_hospital"))}, el ` +
+  `${cifra(dec(DES.porcentaje_de_la_distancia.hospital) + "%", fDes("porcentaje_de_la_distancia.hospital"))}, y quedan ` +
+  `${cifra(firmado(DES.queda), fDes("queda"))}, el ${cifra(dec(DES.porcentaje_de_la_distancia.queda) + "%", fDes("porcentaje_de_la_distancia.queda"))}. ` +
+  `El reparto depende del orden: C7 con el hospital y sin promediar no se envió.`,
+  `De las dos mejoras de la descomposición, promediar es la única que no usa datos que el proyecto excluyó, y casi la ` +
+  `mitad de la distancia no la cubre ninguna de las dos. Ninguno de estos envíos cambia una recomendación.`]);
+
+/* ---------- 6. la pregunta del cliente, entera ---------- */
 // borrador-v2.md, «Resultados», «La pregunta del cliente, entera»: la cabecera y las filas, con las cifras de outputs/.
 const fMet = (f, k) => `${f.archivo} > metricas.${f.clave}.${k}.media_global`;
 document.getElementById("tabla-ejes").innerHTML =
@@ -1529,7 +1818,7 @@ document.getElementById("texto-5").innerHTML = P([
   `M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo por cada ${milLesiones} lesiones. ` +
   `Lo caro, con diferencia, es la imagen, y ni M4 ni M4b mejoraron a M2 en la métrica principal de forma distinguible.`]);
 
-/* ---------- 6. recomendacion ---------- */
+/* ---------- 7. recomendacion ---------- */
 document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
 document.getElementById("rot-reco").innerHTML = reco;
 // borrador-v2.md, «Resultados», «El modelo recomendado», los párrafos de las fases 4b y 4c: el texto y las cifras de las tablas.
@@ -1554,52 +1843,119 @@ const red4c = P([
     `<td>${cifra(q.metricas.pauc.semillas, fF4c(q.clave, "pauc", "nuevo_mejor_en_semillas"))} de ` +
     `${cifra(q.metricas.pauc.de_semillas, fF4c(q.clave, "pauc", "de_semillas"))}</td></tr>`).join("") +
   `</tbody></table></div>`;
+// borrador-v2.md, «Resultados», «El modelo recomendado», los párrafos de las fases 4d y 4e, y «Lo que la prueba alcanza a ver».
+const ronda4de = P([
+  `<b>Dos rondas más, las fases 4d y 4e.</b> La retroalimentación del avance pidió acercarse al ganador con el equipo propio, ` +
+  `antes de alquilar cómputo. Cada ronda tuvo sus preguntas y su regla fijadas antes de correr, con la corrección de Holm por ` +
+  `varias preguntas. Holm no aceptó ninguna, y M3 limpio siguió siendo el modelo recomendado. Cada ronda se eligió conociendo ` +
+  `los resultados de las anteriores, y su corrección cubre solo sus propias preguntas.`]) +
+  `<div class="tabla-envoltura"><table class="tabla-intentos"><thead><tr><th>Pregunta</th><th>Fase</th>` +
+  `<th>Diferencia en la pAUC</th><th>Intervalo al 95%</th><th>Valor p</th></tr></thead><tbody>` +
+  PO.preguntas.map(q => `<tr><td>${esc(q.etiqueta)}</td><td>${esc(q.fase)}</td><td>${mediaQ(q.nuevo, "pauc")}</td>` +
+    `<td>${icQ(q.nuevo, "pauc")}</td><td>${pQ(q.nuevo, "pauc")}</td></tr>`).join("") +
+  `</tbody></table></div>` + P([
+  `<b>Lo que la prueba alcanza a ver.</b> Las cuatro versiones que apilan una red de imagen sobre M3 limpio, de C4 a C7, ` +
+  `quedaron por encima de él en la media, de ${cifra(firmado(POT.obs_min), fPot(`comparaciones.${POT.obs_min_de}.media_observada`))} a ` +
+  `${cifra(firmado(POT.obs_max), fPot(`comparaciones.${POT.obs_max_de}.media_observada`))}, y ninguna diferencia llegó a la regla. ` +
+  `Con la variabilidad observada, para dar su resultado a favor con un ${pctObj("delta_80")} de probabilidad, la prueba necesita ` +
+  `una mejora real de entre ${cifra(dec(POT.d80[0]), fPot("comparaciones.*.delta_80"))} y ${cifra(dec(POT.d80[1]), fPot("comparaciones.*.delta_80"))} ` +
+  `de pAUC, según la comparación y el número de semillas; para un ${pctObj("delta_50")}, de entre ` +
+  `${cifra(dec(POT.d50[0]), fPot("comparaciones.*.delta_50"))} y ${cifra(dec(POT.d50[1]), fPot("comparaciones.*.delta_50"))}. ` +
+  `Más semillas casi no ayudan: su error estándar entre semillas es entre ${cifra(dec(POT.razones[0]), fPot("comparaciones.*.entre_semillas.ee_prueba_sobre_ee_semillas"))} ` +
+  `y ${cifra(dec(POT.razones[1]), fPot("comparaciones.*.entre_semillas.ee_prueba_sobre_ee_semillas"))} veces menor que el que usa la prueba. ` +
+  `Lo que se midió es compatible con que no haya mejora, y también con una mejora que esta prueba no alcanza a ver.`]);
 // borrador-v2.md, «Recomendación», «Qué se recomienda».
 document.getElementById("texto-6").innerHTML = P([
   `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
-  `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.`]) +
-  intentos + red4c + P([
-  `<b>Donde se toma la fotografía corporal total, no se recomienda añadir las variables de imagen</b> tal como se probaron. ` +
-  `Añadidas al modelo con contexto de paciente no mejoraron ninguna métrica de forma distinguible, ` +
-  `y al predecir cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio. ` +
+  `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero. ` +
+  `Ninguna de las versiones que se le compararon después de elegirlo, de la Fase 4b a la 4e, llegó a su regla, y en el ` +
+  `conjunto reservado, abierto una sola vez, la ventaja sobre M2 se mantiene en la pAUC y en el AUC.`]) +
+  intentos + red4c + ronda4de + P([
+  `<b>Donde se toma la fotografía corporal total, no se recomienda, por ahora, añadir la imagen.</b> Añadida al modelo con ` +
+  `contexto de paciente como variables de DINOv2, sueltas en M4 o apiladas en M4b, no mejoró ninguna métrica de forma distinguible, ` +
+  `y al predecir esos dos modelos cuestan ${tiempoT("M4")} y ${tiempoT("M4b")} segundos por cada ${milLesiones} lesiones, frente a ${tiempoT("M3 limpio")} de M3 limpio. ` +
   `Eso no dice que la imagen no sirva para detectar cáncer: en la ablación de los organizadores, la variante del modelo ganador ` +
   `que solo usa los recortes llega a un AUC de ${auc922}, y la presentan como una base sólida para cuando no se pueden recoger ` +
-  `los metadatos, como al usar la cámara de un teléfono.`,
+  `los metadatos, como al usar la cámara de un teléfono. ` +
+  `Con una red entrenada sobre los recortes y apilada sobre M3 limpio, las cuatro versiones, de C4 a C7, quedaron por encima de ` +
+  `él en la media, y ninguna llegó a su regla; las cuatro diferencias quedan por debajo del tamaño que la prueba distingue con ` +
+  `un ${pctObj("delta_50")} de probabilidad. En Kaggle, C7 queda por encima de M3 limpio en la puntuación privada, ` +
+  `${cifra(firmado(KG.c7_menos_m3), fK("aritmetica_de_dos_fuentes.c7_menos_m3limpio_kaggle_privada"))}, sin intervalo. ` +
+  `El tiempo de inferencia de C7 no se midió con el procedimiento del proyecto; el notebook de Kaggle, en otro equipo, lo ` +
+  `proyectó en ${horas("C7")} horas por cada ${lesionesPrueba} lesiones, frente a ${horas("M3limpio")} horas de M3 limpio.`,
+  `<i>Lectura, no medición:</i> con lo medido, no se puede decir si apilar la red sobre M3 limpio lo mejora: la mejora no se ` +
+  `distingue, pero tampoco se descarta. Por eso la recomendación se queda, por ahora, con M3 limpio, sin imagen.`,
   `<b>Donde no hay ese sistema, M3 limpio no se puede aplicar tal cual, y la imagen es el insumo disponible.</b> ` +
   `Es el escenario que el artículo del conjunto de datos pone como objetivo: algoritmos que decidan a partir de ${citaIS("telefono")}. ` +
-  `Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que mejora el AUC de la imagen sola. Esa mejora se ` +
-  `midió con una zona del cuerpo que pudo venir del software del sistema, así que antes de usarla habría que medirla con fotos ` +
-  `de teléfono y con la zona que informe la persona. Una red entrenada sobre los recortes supera a la imagen sola, sin edad, sexo ` +
-  `ni zona del cuerpo, en la mayoría de los pliegues, sin que la diferencia en la pAUC quede establecida; la red con esos datos no se probó.`,
+  `Ahí se recomienda la red de la Fase 4e, que usa solo la imagen. Por la regla de la Fase 4f, fijada antes de correr, supera a ` +
+  `«Imagen + básicos», el punto de partida que daba antes el informe: ${mediaF("pauc")} de pAUC, ${icF("pauc")}, mejor en ` +
+  `${cifra(F4F.metricas.pauc.folds, fF("pauc", "nuevo_mejor_en_folds"))} de ${cifra(F4F.metricas.pauc.de_folds, fF("pauc", "de_folds"))} pliegues.`,
+  `Esta recomendación tiene tres salvedades. La pregunta se eligió después de ver la Fase 4e. En el conjunto reservado, la ventaja ` +
+  `no se reprodujo: ${cifra(firmado(RES.red_menos_ib.pauc.punto), fPos("red4e_menos_imagen_basicos.pauc.punto"))}, ` +
+  `${icRes(RES.red_menos_ib.pauc, fPos("red4e_menos_imagen_basicos.pauc.intervalo_95"))}, y por qué «Imagen + básicos» da más en el ` +
+  `reservado no está medido. Y en Kaggle la red vuelve a quedar por encima, ${priv("Red4e")} frente a ${priv("ImagenBasicos")}, ` +
+  `pero es una sola cifra por envío, sin intervalo, y ese envío se decidió después de ver el reservado. Por la regla fijada antes ` +
+  `de abrirlo, el reservado no cambia la recomendación.`,
+  `Para usarla con pacientes falta medir cómo rinde con fotos de teléfono y cuánto cuesta al predecir con el procedimiento del ` +
+  `proyecto; el notebook de Kaggle, en otro equipo, lo proyectó en ${horas("Red4e")} horas por cada ${lesionesPrueba} lesiones. ` +
+  `La red con edad, sexo y zona del cuerpo no se probó.`,
+  `<i>Lectura, no medición:</i> como la red no usa la zona del cuerpo, no le alcanza la salvedad de «Imagen + básicos», cuya ` +
+  `zona del cuerpo pudo venir del software del sistema.`,
   `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
 // borrador-v2.md, «Recomendación», «Qué se puede afirmar».
+const masCercano = Object.entries(KG.privadas).sort((a, b) => b[1] - a[1]);
 document.getElementById("se-puede").innerHTML = L([
   `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
+  `En el conjunto reservado, con pacientes con los que no se entrenó ningún modelo, M3 limpio también supera a M2 en la pAUC, ` +
+  `${cifra(firmado(RES.dif.pauc.punto), fRes("diferencia_m3limpio_menos_m2.pauc.punto"))}, ${icRes(RES.dif.pauc, fRes("diferencia_m3limpio_menos_m2.pauc.intervalo_95"))}, ` +
+  `y en el AUC, ${cifra(firmado(RES.dif.auc.punto), fRes("diferencia_m3limpio_menos_m2.auc.punto"))}, ${icRes(RES.dif.auc, fRes("diferencia_m3limpio_menos_m2.auc.intervalo_95"))}.`,
   `El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80% SE.`,
   `Añadidas al modelo con contexto de paciente, las variables de imagen de DINOv2, como variables sueltas o apiladas, no mejoran de forma distinguible ninguna de las métricas.`,
   `Sin el sistema de fotografía corporal total, la imagen sola distingue lesiones malignas muy por encima del azar, pero con el extractor congelado, DINOv2, queda por debajo de M1 en las cuatro métricas.`,
-  `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`]);
+  `En el conjunto de desarrollo, la red de la Fase 4e, que usa solo la imagen, supera a «Imagen + básicos» en la pAUC con la regla de una sola pregunta, y las tres métricas secundarias van en la misma dirección.`,
+  `Una decisión de método cambia el veredicto sobre la red de la Fase 4e frente a la de la 4c. Su valor p, ` +
+  `${cifra(fijo(RH.p, 4), fH4e("preguntas[0].valor_p"))}, no llega al umbral de Holm para la primera de dos preguntas, ` +
+  `${cifra(dec(RH.umbral), fH4e("preguntas[0].umbral_holm"))}; con una sola pregunta, el umbral habría sido ${cifra(dec(RH.alfa), fH4e("alfa"))}.`,
+  `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`,
+  `En la puntuación privada de Kaggle, ninguno de los ocho envíos llega a la del ganador, ` +
+  `${cifra(dec(KG.ganador), fK("referencias.ganador_tablero_privado.pauc"))}. El más cercano, «${esc(KG.nombres[masCercano[0][0]])}», da ` +
+  `${priv(masCercano[0][0])}, y el más cercano sin la etiqueta del hospital, «C7 promediado», ${priv("C7Prom")}. Son cifras sueltas, sin intervalo.`]);
 // borrador-v2.md, «Recomendación», «Qué no se puede afirmar».
 document.getElementById("no-se-puede").innerHTML = L([
   `<b>Que M3 limpio sea mejor en las métricas de triaje.</b> En la sensibilidad top-15 y en el NNT80% SE no se distingue de M2.`,
   `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
-  `<b>Cuánto rinde M3 limpio fuera del conjunto de desarrollo.</b> El conjunto reservado no se ha abierto. Cuando se abra, la estimación principal ` +
-  `seguirá siendo la validación cruzada repetida, y la recomendación no cambiará por su resultado.`,
-  `<b>Nada sobre otras redes de imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo y una red pequeña, EfficientNet-B0, ` +
-  `entrenada sobre los recortes con ajustes fijos; las redes del ganador quedaron fuera.`,
-  `<b>Cuánto rinde un modelo con fotos de teléfono.</b> La imagen sola se midió sobre los recortes estandarizados del sistema de fotografía corporal total. ` +
-  `El artículo del conjunto de datos advierte que las fotos que toman los pacientes ${citaIS("luz_y_campo")}.`,
-  `<b>Que no exista una forma de mejorar a M3 limpio.</b> Solo se probaron tres combinaciones y una red de imagen pequeña con ajustes fijos, ` +
-  `sin ajustar hiperparámetros. M3 limpio con la red apilada queda por encima de M3 limpio en las ` +
-  `${cifra(C4.pauc.semillas, fF4c("c4", "pauc", "nuevo_mejor_en_semillas"))} semillas, pero sin diferencia establecida.`,
-  `<b>Que este trabajo supere o no a la solución ganadora.</b> Su evaluación usó otros datos y otras particiones.`,
+  `<b>Que la red de la Fase 4e supere a «Imagen + básicos» con pacientes nuevos.</b> En el reservado la ventaja no se ` +
+  `reprodujo, y Kaggle da una sola cifra por envío. Por qué «Imagen + básicos» da más en el reservado que en el desarrollo no ` +
+  `está medido. Se midió su curva de aprendizaje en el desarrollo, pero no la de la red, así que no se sabe si uno de los dos ` +
+  `mejora más que el otro con más datos.`,
+  `<b>Nada sobre otras redes de imagen.</b> Solo se probaron las variables de DINOv2 sin reentrenarlo y una red pequeña, ` +
+  `EfficientNet-B0, entrenada sobre los recortes con tres recetas: la de la Fase 4c, con ajustes fijos; la de la 4d, con más ` +
+  `épocas y los negativos en bloques; y la del 10.º puesto, con un ajuste fino por la pAUC, en la 4e. Las redes del ganador quedaron fuera.`,
+  `<b>Cuánto rinde un modelo con fotos de teléfono.</b> Todos los modelos de imagen, también la red de la Fase 4e, se midieron ` +
+  `sobre los recortes estandarizados del sistema de fotografía corporal total, y en Kaggle, sobre los recortes de la prueba del ` +
+  `reto. El artículo del conjunto de datos advierte que las fotos que toman los pacientes ${citaIS("luz_y_campo")}.`,
+  `<b>Cuánto cuesta predecir con la red de la Fase 4e o con C7 frente a los demás modelos.</b> Sus tiempos no se midieron con ` +
+  `el procedimiento del proyecto, y la eficiencia es uno de los tres ejes de la pregunta del cliente. Solo hay la proyección del ` +
+  `notebook de Kaggle, en otro equipo: ${horas("Red4e")} horas para la red y ${horas("C7")} para C7 por cada ${lesionesPrueba} ` +
+  `lesiones, que no se compara con los tiempos de la sección 6.`,
+  `<b>Que no exista una forma de mejorar a M3 limpio.</b> Ninguna de las siete versiones que se le compararon, de C1 a C7, en ` +
+  `las fases 4b a 4e, llegó a su regla. Ninguna buscó hiperparámetros: sus ajustes se fijaron antes de correr, y la única ` +
+  `elección hecha con resultados fue la de la exploración de la 4e, que decidió con la semilla 0 usar el ajuste fino. Las ` +
+  `cuatro que apilan una red de imagen, de C4 a C7, quedaron por encima de él en la media, y la prueba no distingue mejoras de ` +
+  `ese tamaño: no distinguirlas no es lo mismo que no tenerlas.`,
+  `<b>Que promediar varios CatBoost, o usar la etiqueta del hospital, mejore el modelo.</b> Solo se midieron en Kaggle, con una ` +
+  `cifra por envío. Promediar cambia dos cosas a la vez, y el mayor de los dos efectos del hospital cambia de signo entre la ` +
+  `puntuación pública y la privada. En la validación cruzada no se probó promediar varios CatBoost de la misma especificación, ` +
+  `ni la etiqueta del hospital con M3 limpio o con C7. Esa etiqueta, junto con la otra columna de procedencia, solo se probó con ` +
+  `los modelos de referencia.`,
+  `<b>Cuánto se separa de verdad este trabajo de la solución ganadora.</b> La distancia en Kaggle es una resta entre dos cifras ` +
+  `sin intervalo, y su reparto entre promediar y el hospital depende del orden de los envíos. En el desarrollo, la evaluación ` +
+  `usó otros datos y otras particiones que la del ganador.`,
   `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
 
-/* ---------- 7. limitaciones ---------- */
-// borrador-v2.md, «Datos y validación», «Los datos» (la frase del archivo de prueba), y «Limitaciones».
-document.getElementById("limitaciones").innerHTML = P([
-  `El archivo de prueba que publica el reto es un marcador de posición, sin casos reales, así que no hay contra qué medir un resultado final ` +
-  `independiente fuera de lo que este proyecto aparte.`]) + L([
+/* ---------- 8. limitaciones ---------- */
+// borrador-v2.md, «Limitaciones».
+document.getElementById("limitaciones").innerHTML = L([
   `<b>La clase negativa no está confirmada.</b> Las lesiones malignas tienen patología; de las benignas, <i>"most never underwent a skin biopsy"</i>. ` +
   `La mayoría de los negativos son lesiones que un dermatólogo no consideró preocupantes, no lesiones confirmadas como sanas.`,
   `<b>Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente.</b> Así las describe el artículo del conjunto de datos: ` +
@@ -1610,10 +1966,25 @@ document.getElementById("limitaciones").innerHTML = P([
   `cuatro métricas, y las dos de las columnas de procedencia —con y sin ellas, en el boosting y en la logística—, solo en la pAUC. ` +
   `Las de las fases 4b y 4c se corrigen por multiplicidad dentro de cada fase, con Bonferroni; las demás no, y el intervalo del ` +
   `NNT80% SE de M2 − M1 queda al límite del cero.`,
+  `<b>Cada ronda se eligió viendo las anteriores.</b> La bitácora del proyecto registra todas las comparaciones por la pAUC ` +
+  `desde la Fase 4. Las fases 4d y 4e se corrigen con Holm dentro de cada una, y la 4f es una sola pregunta, sin corrección; ` +
+  `ninguna corrección cubre varias rondas a la vez. La pregunta de la 4f se eligió con la diferencia de medias ya calculable ` +
+  `desde outputs/, y en la 4e la exploración y la confirmación usan semillas que reparten a los mismos pacientes.`,
+  `<b>La prueba no distingue mejoras pequeñas frente a M3 limpio.</b> Con la variabilidad observada, para dar su resultado a ` +
+  `favor con un ${pctObj("delta_80")} de probabilidad necesita una mejora real de entre ${cifra(dec(POT.d80[0]), fPot("comparaciones.*.delta_80"))} ` +
+  `y ${cifra(dec(POT.d80[1]), fPot("comparaciones.*.delta_80"))} de pAUC, y más semillas casi no bajan ese umbral. El cálculo hereda la ` +
+  `aproximación de la propia prueba y toma la dispersión observada como la verdadera.`,
   `<b>La corrección de la varianza es aproximada.</b> Nadeau y Bengio la derivan para divisiones aleatorias independientes, y aquí se aplica a una validación por pliegues.`,
   `<b>El NNT80% SE se calcula con una lectura propia</b>, porque el organizador no publica script para él.`,
-  `<b>El conjunto reservado no es del todo independiente.</b> No es ajeno a las decisiones tomadas antes de sellarlo ni al diseño de las variables de la ` +
-  `solución ganadora, que siguen M2 y M3 limpio.`,
+  `<b>El conjunto reservado no es del todo independiente.</b> No es ajeno a las decisiones tomadas antes de sellarlo, al diseño ` +
+  `de las variables de la solución ganadora, que siguen M2 y M3 limpio, ni a la receta de la red de la Fase 4e, que su autor ` +
+  `fijó sobre todo el conjunto de entrenamiento del reto. Tiene ${cifra(RES.malignas, fRes("datos.evaluacion.malignas"))} lesiones ` +
+  `malignas, en ${cifra(RES.pacientes_con_malignas, fRes("datos.evaluacion.pacientes_con_malignas"))} pacientes. Y después de su ` +
+  `única evaluación dejó de estar reservado: los modelos de Kaggle se entrenaron también con él.`,
+  `<b>Kaggle da una sola cifra por envío.</b> Sin intervalo, no se puede decir qué diferencias entre los ocho envíos son ruido. ` +
+  `Los cuatro de la Fase 5c se decidieron después de ver los de la 5b: son una segunda mirada al mismo conjunto de prueba. Y que ` +
+  `la puntuación privada de los envíos tardíos salga del mismo subconjunto que el tablero final es lectura nuestra; ninguna ` +
+  `fuente versionada lo dice.`,
   `<b>Los tiempos son de un solo equipo</b>, con DINOv2 en la GPU y los modelos tabulares en la CPU. Solo comparan estos modelos entre sí.`,
   `<b>Dos supuestos sin verificar.</b> No se sabe si el clasificador de nevus que produce <code>tbp_lv_nevi_confidence</code> se entrenó con lesiones ` +
   `de este conjunto. Y nada comprueba la versión del código de DINOv2; solo sus pesos, por hash.`,
@@ -1648,10 +2019,58 @@ AVISO_EXPLORATORIO = (
     "de los datos y se est&aacute;n re-midiendo sobre el conjunto de desarrollo.</div>"
 )
 
-# Nombre, sin extensión, de la salida de la Fase 5 en outputs/. No está
-# fijado: lo fija el guion que abra el reservado (PLAN.md, Fase 5). Hasta
-# entonces ningún archivo que lea la página puede declarar el reservado.
-SALIDA_FASE_5 = None
+# Nombre, sin extensión, de la salida de la Fase 5 en outputs/: la que escribió
+# el guion que abrió el reservado, una sola vez (PLAN.md, Fase 5). Ningún otro
+# archivo que lea la página puede declarar el reservado. *Hasta el 2026-11-06
+# valía None: el reservado no se había abierto.* La salida no declara
+# datos.conjunto: declara datos.entrenamiento y datos.evaluacion, y cuenta como
+# válida si entrena con el desarrollo y evalúa los pacientes de
+# holdout-pacientes.json.
+SALIDA_FASE_5 = "fase5-reservado"
+
+
+def es_salida_fase_5(contenido):
+    d = contenido.get("datos") or {}
+    if d.get("conjunto") == "reservado":
+        return True
+    return ((d.get("entrenamiento") or {}).get("conjunto") == "desarrollo"
+            and "holdout-pacientes" in str((d.get("evaluacion") or {}).get("que_es", "")))
+
+
+# Archivos que no miden sobre un conjunto sino que resumen otros. Cuentan como
+# no exploratorios solo si cada archivo del que salen está entre los leídos y
+# declara el conjunto de desarrollo.
+# - fase4d-holm y fase4e-holm: la decisión de Holm sobre las preguntas de cada
+#   fase (preguntas[*].archivo).
+# - potencia-nadeau-bengio: la potencia de la prueba con las comparaciones de C4
+#   a C7 contra M3 limpio (comparaciones.*.archivo).
+DERIVADOS = {
+    "fase4d-holm": lambda c: [p["archivo"] for p in c.get("preguntas", [])],
+    "fase4e-holm": lambda c: [p["archivo"] for p in c.get("preguntas", [])],
+    "potencia-nadeau-bengio": lambda c: [v["archivo"] for v in (c.get("comparaciones") or {}).values()],
+}
+
+# Archivos posteriores a la apertura del reservado, que tampoco miden sobre el
+# desarrollo. Cuentan como no exploratorios solo si declaran lo que los hace
+# válidos:
+# - fase5-posterior: el análisis posterior a la apertura, con sus controles bien.
+# - fase5b-comparacion y fase5c-efectos: comparaciones con las puntuaciones de
+#   Kaggle, cada una leída de un registro de envío, con sus controles bien.
+# - fase5b-kaggle-medicion: la corrida del notebook de medición en Kaggle,
+#   privado y sin internet, con el control bien.
+POSTERIORES = {
+    "fase5-posterior": lambda c: "posterior a la apertura" in str(c.get("que_es", ""))
+    and (c.get("controles") or {}).get("fallos") == 0,
+    "fase5b-comparacion": lambda c: bool(c.get("kaggle")) and all(
+        str(v.get("fuente", "")).startswith("outputs/fase5b-envio-") for v in c["kaggle"].values())
+    and (c.get("controles") or {}).get("fallos") == 0,
+    "fase5c-efectos": lambda c: bool(c.get("kaggle")) and all(
+        str(v.get("fuente", "")).startswith(("outputs/fase5b-envio-", "outputs/fase5c-envio-")) for v in c["kaggle"].values())
+    and (c.get("controles") or {}).get("fallos") == 0,
+    "fase5b-kaggle-medicion": lambda c: (c.get("kernel") or {}).get("privado") is True
+    and (c.get("kernel") or {}).get("internet") is False
+    and ((c.get("salida_del_notebook") or {}).get("control") or {}).get("fallos") == 0,
+}
 
 # Archivos que no miden sobre un conjunto sino que reparten entre los dos, y
 # por eso no declaran datos.conjunto. Cuentan como no exploratorios solo si
@@ -1678,6 +2097,16 @@ def comprobar_conjuntos(leidos, salida_fase_5=SALIDA_FASE_5):
             continue
         if nombre in REPARTOS:
             exploratorio = exploratorio or not REPARTOS[nombre](contenido)
+            continue
+        if nombre in POSTERIORES:
+            exploratorio = exploratorio or not POSTERIORES[nombre](contenido)
+            continue
+        if nombre in DERIVADOS:
+            fuentes = [os.path.splitext(os.path.basename(a))[0] for a in DERIVADOS[nombre](contenido)]
+            exploratorio = exploratorio or not fuentes or not all(
+                f in leidos and (leidos[f].get("datos") or {}).get("conjunto") == "desarrollo" for f in fuentes)
+            continue
+        if nombre == salida_fase_5 and es_salida_fase_5(contenido):
             continue
         conjunto = (contenido.get("datos") or {}).get("conjunto")
         if conjunto == "reservado":
