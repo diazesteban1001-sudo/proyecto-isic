@@ -1873,10 +1873,11 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       pliegue a pliegue.
       *Cumplido el 2026-10-04 (mismo commit): la subsección se llama ahora
       «Una ventaja que la pAUC no ve» y da las otras tres métricas.*
-- [ ] **Los 33 señalados por campo de `informe/borrador-v2.md` van al anexo de
+- [ ] **Los 31 señalados por campo de `informe/borrador-v2.md` van al anexo de
       trazabilidad** (2026-11-06; `outputs/sintesis-verificacion.json >
-      por_campo.detalle`). 17 de los 50 se resolvieron citando el campo que
-      traía la cifra (guardarraíl 2, la octava corrida). Los 33 que quedan:
+      por_campo.detalle`). 19 de los 50 se resolvieron citando el campo que
+      traía la cifra (guardarraíl 2, la octava y la novena corrida). Los 31 que
+      quedan:
       - **No se resuelven citando un campo, porque ninguno de `outputs/` trae
         la cifra como número** (12): la unidad «1.000 lesiones», que solo está
         en el nombre de los campos (5); las 384 dimensiones de DINOv2, que
@@ -1885,16 +1886,24 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         también dentro de un texto. El único 1.000 numérico, en
         `outputs/tiempo-inferencia.json`, es otra cosa: las filas comprobadas al
         azar.
-      - **Porcentajes calculados a partir de una fracción** (8): los del
-        mecanismo del 2a.
-      - **De una fuente externa o de un documento del proyecto** (3): el «200»
-        (pendiente aparte, arriba), el «34» y el «22».
+      - **Constantes del método escritas como porcentaje** (2): los dos «20%»
+        del mecanismo del 2a, que son 100 − 80, el complemento del umbral de
+        sensibilidad de la métrica, y no el valor de un campo.
+      - **Porcentajes calculados a partir de una fracción** (6): los demás del
+        mecanismo del 2a, cada uno de un campo de `outputs/mecanismo-2a.json` ×
+        100, o 100 menos eso.
+      - **De una fuente externa o de un documento del proyecto** (2): el «200»
+        (pendiente aparte, arriba) y el «34».
       - **Etiquetas leídas como números** (2): «ViT-S/14» y el «1» de «2b − 1».
-      - **Citan solo documentos del proyecto** (8), contando como tales las
+      - **Citan solo documentos del proyecto** (7), contando como tales las
         líneas de `referencias/` que son nuestras y no texto original: la
-        fórmula de Nadeau y Bengio, 6 números, que cita además
+        fórmula de Nadeau y Bengio, 5 números, que cita además
         `evaluar_repetido.py`, y dos fechas de artículos, que citan además
         `PLAN.md`.
+      - *Hasta la novena corrida eran 33. Salieron el «22» de las columnas de
+        la celda 24 y el «5» de «en 5 pliegues», que se resolvían citando un
+        campo y se habían quedado sin resolver en la octava. Y los dos «20%»
+        se contaban entre los porcentajes calculados.*
 - [ ] **El anteproyecto afirma sobre los datos de los trabajos colombianos
       algo que sus fuentes no sostienen** (2026-10-04).
       - **Qué afirma:** el anteproyecto (§2.4, documento entregado) dice que
@@ -2401,6 +2410,30 @@ prueba corregida y quince comentarios `F:` que citan ahora el campo de su cifra
   que solo citan documentos del proyecto; ninguno que no entre.
 - **Las citas de `referencias/`:** suma una a líneas originales, la línea 31 de
   `referencias/kaggle-code-requirements.md`, en la frase del archivo de prueba.
+
+*Y una novena,* en el commit «Regenerar la verificación y la demo con el 22 y el
+5 respaldados», del 2026-11-06, con dos comentarios `F:` más que citan el campo
+que mide lo que dice su frase (commit «Borrador v2: el 22 y el 5 de «5
+pliegues», con el campo que los respalda»): el «22» de las columnas de la celda
+24, con `n(outputs/fase4-m3-vs-m2.json >
+m3.variables.salen.columns_to_drop_celda_24)`, y el «5» de «en 5 pliegues», con
+`outputs/validacion-repetida.json > n_splits`, la salida de
+`evaluar_repetido.py`, el script que cita el mismo comentario. Los otros 22 de
+`outputs/`, los `nuevo_mejor_en_folds` de `outputs/fase4-m4b-vs-m2.json` y de
+`outputs/fase4b-c3-vs-m3limpio.json`, coinciden por azar y no se citan.
+- **Búsqueda en todo el corpus:** 1.046 números; 565 con respaldo, los mismos
+  11 señalados, 10 del método, 21 omitidos por su contexto y 439 en comentarios.
+  El número de más es el 22 del comentario nuevo.
+- **Por campo, sobre los 576 números del cuerpo:** 526 respaldados por su campo
+  y 19 por su referencia; **31 señalados**, 24 que no están en sus campos y 7
+  que citan un documento del proyecto. Salen solo el 22 y el 5, y no entra
+  ninguno. Las otras cinco cifras de la fórmula siguen contando como que citan
+  un documento: están en las líneas nuestras de la ficha, y `clase_de()`, en
+  `por_campo.py`, lo comprueba antes de mirar si el comentario tiene rutas.
+- **El analizador:** salida idéntica a la versionada; 264 comentarios `F:`, 194
+  que entran en la gramática y ninguno que no entre.
+- **La demo** muestra el total de números y los de los comentarios, así que se
+  regeneró también; `test_generar_demo.py`, 61 de 61.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
