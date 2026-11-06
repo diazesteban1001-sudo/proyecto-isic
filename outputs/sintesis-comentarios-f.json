@@ -20,15 +20,15 @@
     }
   ],
   "resumen": {
-    "comentarios_f": 231,
+    "comentarios_f": 249,
     "por_clase": {
-      "entra": 163,
-      "solo documentos del proyecto": 68
+      "entra": 179,
+      "solo documentos del proyecto": 70
     },
     "no_entran_que_cubren_numeros": 0,
-    "numeros_del_cuerpo": 469,
+    "numeros_del_cuerpo": 539,
     "numeros_por_clase_de_comentario": {
-      "entra": 469,
+      "entra": 539,
       "solo documentos del proyecto": 0
     },
     "numeros_sin_comentario": 0,
@@ -38,7 +38,7 @@
   "no_entran": [],
   "solo_documentos_del_proyecto_por_tipo": {
     "PLAN.md": {
-      "comentarios": 29,
+      "comentarios": 30,
       "numeros": 0,
       "lineas": [
         262,
@@ -67,9 +67,10 @@
         917,
         923,
         982,
-        1115,
-        1120,
-        1137
+        1055,
+        1234,
+        1239,
+        1256
       ]
     },
     "sección del informe": {
@@ -87,7 +88,7 @@
       ]
     },
     "CLAUDE.md + PLAN.md": {
-      "comentarios": 7,
+      "comentarios": 8,
       "numeros": 0,
       "lineas": [
         292,
@@ -96,7 +97,8 @@
         440,
         480,
         542,
-        645
+        645,
+        1035
       ]
     },
     "CLAUDE.md": {
@@ -108,7 +110,7 @@
         610,
         698,
         1011,
-        1141
+        1260
       ]
     },
     "PLAN.md + sección del informe": {
@@ -117,8 +119,8 @@
       "lineas": [
         52,
         856,
-        1054,
-        1175
+        1173,
+        1294
       ]
     },
     "CLAUDE.md + sección del informe": {
@@ -127,7 +129,7 @@
       "lineas": [
         182,
         694,
-        1178
+        1297
       ]
     },
     "script": {
@@ -135,7 +137,7 @@
       "numeros": 0,
       "lineas": [
         259,
-        1171
+        1290
       ]
     },
     "texto libre": {
@@ -191,14 +193,14 @@
       "comentarios": 1,
       "numeros": 0,
       "lineas": [
-        1124
+        1243
       ]
     },
     "sección del informe + texto libre": {
       "comentarios": 1,
       "numeros": 0,
       "lineas": [
-        1186
+        1305
       ]
     }
   },
@@ -744,7 +746,26 @@
       ]
     },
     {
-      "linea": 1054,
+      "linea": 1035,
+      "comentario": "<!-- F: PLAN.md, Fase 5, «La apertura, corrida el 2026-11-04, una sola vez» y «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado»; CLAUDE.md, hallazgos 8 y 17 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 1055,
+      "comentario": "<!-- F: PLAN.md, Fase 5, «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 1173,
       "comentario": "<!-- F: «Resultados», «El modelo recomendado»; PLAN.md, Fase 4, «Modelo recomendado: decisión de la persona, 2026-09-26» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -754,7 +775,7 @@
       ]
     },
     {
-      "linea": 1115,
+      "linea": 1234,
       "comentario": "<!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -763,7 +784,7 @@
       ]
     },
     {
-      "linea": 1120,
+      "linea": 1239,
       "comentario": "<!-- F: PLAN.md, Fase 5, «Especificación» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -772,7 +793,7 @@
       ]
     },
     {
-      "linea": 1124,
+      "linea": 1243,
       "comentario": "<!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada); PLAN.md, Fase 4c, «La red», «Cómo se entrena, fijado antes de correr y sin ajuste» y «Qué no entra, con su motivo» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -783,7 +804,7 @@
       ]
     },
     {
-      "linea": 1137,
+      "linea": 1256,
       "comentario": "<!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -792,7 +813,7 @@
       ]
     },
     {
-      "linea": 1141,
+      "linea": 1260,
       "comentario": "<!-- F: CLAUDE.md, «Guardarraíles del agente», 4 -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -801,7 +822,7 @@
       ]
     },
     {
-      "linea": 1171,
+      "linea": 1290,
       "comentario": "<!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -810,7 +831,7 @@
       ]
     },
     {
-      "linea": 1175,
+      "linea": 1294,
       "comentario": "<!-- F: «Datos y validación», «El conjunto reservado»; PLAN.md, Fase 5, «Salvedad de M2» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -820,7 +841,7 @@
       ]
     },
     {
-      "linea": 1178,
+      "linea": 1297,
       "comentario": "<!-- F: «Método», «Cómo se mide el tiempo de inferencia»; CLAUDE.md, hallazgo 9 -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -830,7 +851,7 @@
       ]
     },
     {
-      "linea": 1186,
+      "linea": 1305,
       "comentario": "<!-- F: MEC; «Resultados», «Una decisión por defecto cambia el veredicto» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -844,7 +865,7 @@
   "referencias_local_ausentes": [],
   "numeros_sin_comentario": [],
   "control": {
-    "numeros_del_cuerpo_segun_el_verificador": 469,
+    "numeros_del_cuerpo_segun_el_verificador": 539,
     "misma_lista": true
   },
   "comando": {
