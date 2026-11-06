@@ -806,7 +806,7 @@ cifras del borrador tienen respaldo en un archivo y cuáles no.
 ### Hallazgos vivos para el informe
 
 Los tres primeros ya están arriba (agrupación por paciente, 11 columnas solo en
-train, `tbp_lv_nevi_confidence`). Se suman dieciocho del modelado, trazables a
+train, `tbp_lv_nevi_confidence`). Se suman diecinueve del modelado, trazables a
 `outputs/modelado-baseline.json`, `outputs/validacion-repetida.json`,
 `outputs/sensibilidad-procedencia-repetida.json`, `outputs/fase4-m2-vs-m1.json`,
 `outputs/fase4-m4-vs-m2.json`, `outputs/fase4-m4b-vs-m2.json`,
@@ -819,10 +819,11 @@ tres `outputs/fase4d-*.json` de las preguntas, `outputs/fase4d-holm.json`,
 preguntas, `outputs/fase4e-holm.json`,
 `outputs/fase4f-red4e-vs-imagen-basicos.json`,
 `outputs/potencia-nadeau-bengio.json`, `outputs/fase5-reservado.json`,
-`outputs/fase5-posterior.json`, los cuatro `outputs/fase5b-envio-*.json` y
-`outputs/fase5b-comparacion.json`. Desde el 2026-09-25 sus
+`outputs/fase5-posterior.json`, los cuatro `outputs/fase5b-envio-*.json`,
+`outputs/fase5b-comparacion.json`, los cuatro `outputs/fase5c-envio-*.json` y
+`outputs/fase5c-efectos.json`. Desde el 2026-09-25 sus
 cifras son las del conjunto de desarrollo, salvo las del reservado en el
-hallazgo 17 y las de Kaggle en el 18; las de la corrida sobre el 100 % de los datos están en la tabla de
+hallazgo 17 y las de Kaggle en el 18 y el 19; las de la corrida sobre el 100 % de los datos están en la tabla de
 antes y después de `PLAN.md`, Fase 1.
 
 1. **El gradient boosting sin balancear falla de un modo peor que el esperado.**
@@ -1541,6 +1542,126 @@ antes y después de `PLAN.md`, Fase 1.
       entrenaron también con él, después de su única evaluación.
     - **Es descriptiva.** No da ningún resultado a favor ni en contra, no cambia
       ninguna recomendación y no suma a la bitácora (`PLAN.md`, Fase 5b).
+    - **Sobre qué se midió:** los recortes de la prueba del reto, no fotos de
+      teléfono (Pendientes).
+
+19. **Cuatro envíos más a Kaggle descomponen la distancia de C7 al ganador en la
+    privada, −0,01404: promediar cubre +0,00507, el hospital +0,00237 y quedan
+    −0,0066** (Fase 5c, 2026-11-05; los cuatro `outputs/fase5c-envio-*.json` y
+    `outputs/fase5c-efectos.json`). Es un 2 × 2 de envíos, {solo tabular,
+    tabular + red de la 4e} × {sin hospital, con hospital}, todos entrenados con
+    los 1.042 pacientes:
+    - **«Promediado»:** 45 CatBoost, uno por pliegue de un `StratifiedGroupKFold`
+      de 5 agrupado por paciente con las semillas 1 a 9, como en las celdas 22 y
+      25 del notebook del ganador. Cada uno lleva la parada temprana de M3
+      limpio, y la predicción es la media de las 45 probabilidades.
+    - **«Con hospital»:** `attribution` entra en el one-hot (celdas 3 y 8) y, en
+      C7, también la puntuación de la red estandarizada por hospital, zona y edad
+      (celda 17).
+
+    Especificación de la persona, fijada antes de entrenar y decidida después de
+    ver la 5b (`PLAN.md`, Fase 5c).
+
+    **Las puntuaciones,** tal como las devuelve la API de Kaggle
+    (`envios.0.publicScore` y `.privateScore`):
+
+    | Modelo | Pública | Privada |
+    |---|---|---|
+    | «M3 limpio promediado» | 0,17724 | 0,15577 |
+    | «M3 limpio promediado + hospital» | 0,17797 | 0,15625 |
+    | «C7 promediado» | 0,18256 | 0,16363 |
+    | «C7 promediado + hospital» | 0,18113 | 0,16600 |
+
+    **Los seis efectos** (`fase5c-efectos.json > efectos`), junto con M3 limpio y
+    C7 de la 5b (hallazgo 18). Son descriptivos: un solo número cada uno, una
+    resta entre dos puntuaciones, sin intervalo. Se comparan con la privada, y
+    la pública va al lado:
+
+    | Efecto | Privada | Pública | ¿Mismo signo? |
+    |---|---|---|---|
+    | Promediar, sin imagen: «M3 limpio promediado» − M3 limpio | +0,00443 | +0,00495 | sí |
+    | Promediar, con imagen: «C7 promediado» − C7 | +0,00507 | +0,00363 | sí |
+    | El hospital, sin imagen | +0,00048 | +0,00073 | sí |
+    | El hospital, con imagen | +0,00237 | −0,00143 | no |
+    | La imagen, sin hospital | +0,00786 | +0,00532 | sí |
+    | La imagen, con hospital | +0,00975 | +0,00316 | sí |
+
+    Cinco de los seis tienen el mismo signo en la pública y en la privada
+    (`mismo_signo_en_la_publica`). El del hospital con imagen cambia de signo:
+    +0,00237 en la privada y −0,00143 en la pública.
+
+    **La distancia de C7 al ganador, descompuesta,** como aritmética descriptiva
+    (`descomposicion_de_la_distancia_al_ganador`). En la privada, C7 queda a
+    −0,01404 del ganador, 0,1726 (`outputs/fase5b-comparacion.json`, hallazgo
+    18). De esa distancia:
+    - promediar cubre +0,00507, el 36,1 % («C7 promediado» − C7);
+    - el hospital cubre +0,00237, el 16,9 % («C7 promediado + hospital» − «C7
+      promediado»);
+    - y quedan −0,0066, el 47,0 % («C7 promediado + hospital» − el ganador).
+
+    **Cómo se hizo** (`PLAN.md`, Fase 5c, «Lo comprobado antes de enviar», «La
+    huella» y «Lo que dio Kaggle»):
+    - **el entrenamiento** tardó 932,0 s en el Mac
+      (`outputs/fase5c-entrenamiento.json > segundos`). Antes de entrenar, sin
+      hospital, las variables del control y los dos CatBoost de la 5b dieron las
+      puntuaciones que guardó la 5b, con diferencia 0
+      (`de_la_fase_5b.iguales_sin_hospital`). Así, entre M3 limpio y «M3 limpio
+      promediado» solo cambia el CatBoost;
+    - **la inferencia portátil** pasó 22 de 22 casos en el Mac, 8 de ellos casos
+      que deben fallar (`outputs/fase5c-paquete.json > controles`), y el notebook
+      de medición, 14 de 14 en Kaggle, 4 de ellos casos que deben fallar
+      (`outputs/fase5c-kaggle-medicion.json > salida_del_notebook.control`);
+    - **la huella,** fijada antes del primer envío: la versión 1 del conjunto de
+      datos, con 194 archivos y 0 diferencias con lo subido, y el SHA-256 de los
+      cuatro notebooks (`outputs/fase5c-huella.json`). Se comprobó antes de cada
+      envío, y en los cuatro era la fijada (`fase5c-envio-*.json >
+      al_enviar.comprobado_antes_de_enviar`). La CLI devolvió un error 499 al
+      crear el conjunto de datos, pero Kaggle lo creó entero y no se volvió a
+      subir;
+    - **el control en Kaggle** pasó antes de cada envío: 2 de 2 casos en los dos
+      sin red, 7 de 7 en «C7 promediado» y 8 de 8 en «C7 promediado + hospital»
+      (`outputs/fase5c-kaggle-*.json > salida_del_notebook.control`);
+    - **los envíos** se hicieron en el orden fijado: «M3 limpio promediado», «M3
+      limpio promediado + hospital», «C7 promediado» y «C7 promediado +
+      hospital». Ninguno falló y ninguno se reenvió;
+    - **los efectos y la descomposición** salen de `fase5c_efectos.py`: 7 de 7
+      controles, 4 de ellos casos que deben fallar (`fase5c-efectos.json >
+      controles`).
+
+    **Lo que deja:**
+    - **Kaggle queda cerrado.** Por la regla de la fase, este proyecto no envía
+      nada más a la competición (`PLAN.md`, Fase 5c, «Qué se hace» y «Cierre»).
+      `fase5b_kaggle.py` y `fase5c_kaggle.py` solo envían sus cuatro modelos y se
+      niegan a reenviar uno con puntuación; con los ocho puntuados, ninguno de
+      los dos envía nada. Nada impide escribir otro programa: la regla es la
+      frase de `PLAN.md`.
+    - **No cambia ninguna recomendación.** La fase es descriptiva y no suma a la
+      bitácora. M3 limpio sigue siendo el modelo recomendado donde se toma la
+      fotografía corporal total.
+    - **Promediar es la única de las dos mejoras de la descomposición que no usa
+      datos que el proyecto excluyó.** Usa las mismas variables que M3 limpio y
+      C7. El hospital usa `attribution`, que `auditoria-de-fugas` excluye como
+      columna de procedencia (`outputs/auditoria-de-fugas.json >
+      columnas_procedencia`).
+
+    *Salvedades:*
+    - **Se decidió después de ver la 5b:** es una segunda mirada al mismo
+      conjunto de prueba, elegida por lo que dio la primera.
+    - **Promediar cambia dos cosas a la vez.** El M3 limpio y el C7 de la 5b se
+      ajustan con todos los pacientes, y cada uno de los 45 modelos con cuatro
+      quintos. El efecto de promediar incluye los dos cambios, que no se separan.
+    - **El orden de la descomposición** es el de los envíos: primero promediar,
+      después el hospital. C7 con hospital y sin promediar no se envió, así que
+      la parte de cada uno depende de ese orden (`como_leerla`).
+    - **El hospital en la prueba.** Según el descriptor de SLICE-3D, Alfred
+      Hospital y FNQH Cairns aportaron datos solo al conjunto de prueba
+      (`referencias/kurtansky-2024-slice3d-descriptor.md`, línea 320). En sus
+      lesiones el one-hot del hospital es todo ceros y la variable de la celda
+      17 es NaN: el efecto que se mide es el de la prueba tal como es.
+    - **El C7 de esta fase hereda la salvedad del de la 5b:** al predecir usa el
+      promedio de cinco redes, no la red del pliegue con que se evaluó en la
+      validación cruzada.
+    - **Sin intervalo:** Kaggle da una cifra por envío.
     - **Sobre qué se midió:** los recortes de la prueba del reto, no fotos de
       teléfono (Pendientes).
 
