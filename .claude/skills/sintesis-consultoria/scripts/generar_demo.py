@@ -40,10 +40,13 @@ VERIFICADOR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verifica
 # que es lo que esta skill sí produce como evidencia de su trabajo.
 # Los textos de las cuatro primeras etapas son los de antes; los de la
 # extracción, el modelado y la síntesis, los de huecos-demo.md, Parte B.
+# «palabra» es lo único que la tira muestra de cada etapa; el nombre y la
+# función pasan al «Detalle» de la sección (rediseño, paso 1, 2026-11-06).
 CADENA = [
     {
         "nombre": "eda-diagnostico",
         "etapa": "Diagnóstico del dataset",
+        "palabra": "Diagnóstico",
         "tipo": "medición",
         "funcion": "Se perfiló el archivo: tipos, faltantes, desbalance y estructura de grupos por paciente",
         "md": "eda-diagnostico",
@@ -56,6 +59,7 @@ CADENA = [
     {
         "nombre": "diseno-validacion",
         "etapa": "Diseño de la validación",
+        "palabra": "Validación",
         "tipo": "medición",
         "funcion": "Se construyó y se verificó la validación cruzada agrupada por paciente",
         "md": "diseno-validacion",
@@ -69,6 +73,7 @@ CADENA = [
     {
         "nombre": "auditoria-de-fugas",
         "etapa": "Auditoría de fugas",
+        "palabra": "Fugas",
         "tipo": "medición",
         "funcion": "Se auditó la fuga estructural y se escaneó columna por columna",
         "md": "auditoria-de-fugas",
@@ -81,6 +86,7 @@ CADENA = [
     {
         "nombre": "extraccion-imagen",
         "etapa": "Extracción de imagen",
+        "palabra": "Imagen",
         "tipo": "medición",
         "funcion": "Se extrajeron características congeladas de cada imagen con DINOv2, sin ajuste fino",
         "md": "extraccion-imagen",
@@ -92,6 +98,7 @@ CADENA = [
     {
         "nombre": "modelado-baseline",
         "etapa": "Modelos de referencia",
+        "palabra": "Modelos",
         "tipo": "medición",
         "funcion": "Se entrenaron y evaluaron los niveles de referencia, los modelos M1 a M4b, los "
                    "intentos de mejorar al recomendado de las fases 4b a 4e y las redes de imagen "
@@ -110,6 +117,7 @@ CADENA = [
     {
         "nombre": "sintesis-consultoria",
         "etapa": "Síntesis y verificación",
+        "palabra": "Síntesis",
         "tipo": "interpretación",
         "funcion": "Se cruzaron las cinco salidas, se redactó el informe y se verificó su trazabilidad",
         # No mide nada, así que no tiene un .md de resultados propio: se le
@@ -886,11 +894,24 @@ PLANTILLA = r"""<!DOCTYPE html>
     text-transform: uppercase; letter-spacing: .16em; font-size: 12px;
     color: var(--suave); font-weight: 600;
   }
-  h1 { font-size: 30px; margin: 10px 0 16px; line-height: 1.25; }
-  .contexto { margin: 0 0 22px; max-width: 860px; }
-  .contexto p { margin: 0 0 12px; font-size: 15.5px; }
-  .contexto b { color: var(--acento); }
+  h1 { font-size: 30px; margin: 10px 0 12px; line-height: 1.25; }
+  .tesis { margin: 0 0 22px; max-width: 860px; font-size: 18px; line-height: 1.45; }
+  /* Las cuatro cifras de los datos, en una fila; en el teléfono, dos por fila. */
+  .cifras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .cifras .medida { padding: 16px 10px; }
+  .cifras .medida .cifra { font-size: 34px; color: var(--acento); }
+  .cifras .medida .rot { margin-top: 6px; font-size: 14px; }
   section { margin-top: 52px; }
+  /* La frase que queda a la vista en cada sección; el resto va en «Detalle». */
+  .frase { margin: 0 0 16px; font-size: 16px; max-width: 860px; }
+  details.detalle { margin-top: 18px; border-top: 1px solid var(--linea); padding-top: 12px; }
+  details.detalle > summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--acento); }
+  details.detalle[open] > summary { margin-bottom: 14px; }
+  header details.detalle { max-width: 860px; }
+  .columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .columnas h3 { margin-top: 4px; }
+  .medida.reco .det { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; margin: 0 0 10px; }
+  .medida.reco .cifra { font-size: 30px; line-height: 1.15; }
   h2 { font-size: 21px; margin: 0 0 6px; display: flex; align-items: center; }
   h2 .num {
     flex: 0 0 30px; width: 30px; height: 30px; line-height: 30px;
@@ -898,6 +919,7 @@ PLANTILLA = r"""<!DOCTYPE html>
     border-radius: 50%; font-size: 14px; margin-right: 10px;
   }
   h3 { font-size: 16px; margin: 22px 0 8px; }
+  .tarjeta > h3:first-child { margin-top: 0; }
   .sub { color: var(--suave); margin: 0 0 20px; font-size: 15px; }
   .tarjeta {
     background: #fff; border: 1px solid var(--linea); border-radius: 10px;
@@ -906,24 +928,18 @@ PLANTILLA = r"""<!DOCTYPE html>
   .texto p { margin: 0 0 12px; font-size: 15px; }
   .texto ul { margin: 0 0 12px; padding-left: 20px; font-size: 15px; }
   .texto li { margin-bottom: 8px; }
-  .cadena { display: flex; align-items: stretch; gap: 4px; flex-wrap: wrap; }
+  /* Una sola fila, también a 375 px: los pasos encogen, no saltan de línea. */
+  .cadena { display: flex; align-items: stretch; gap: 4px; flex-wrap: nowrap; }
   .paso {
-    flex: 1 1 120px; text-align: left; cursor: pointer; background: #fff;
+    flex: 1 1 0; min-width: 0; text-align: center; cursor: pointer; background: #fff;
     border: 1px solid var(--linea); border-top: 4px solid var(--suave);
-    border-radius: 8px; padding: 13px 14px; font: inherit; color: inherit;
+    border-radius: 8px; padding: 12px 6px; font: inherit; color: inherit;
     transition: transform .12s, box-shadow .12s, border-color .12s;
-    display: flex; flex-direction: column;
   }
   .paso:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(22,32,43,.12); }
   .paso[aria-selected="true"] { border-color: var(--acento); border-top-color: var(--acento); background: #eef5fa; }
   .paso.final { border-top-color: var(--acento); }
-  .paso .nom { font-weight: 700; font-size: 14px; display: block; }
-  .paso .tipo {
-    font-size: 10px; text-transform: uppercase; letter-spacing: .1em;
-    color: var(--suave); font-weight: 600; white-space: nowrap;
-  }
-  .paso.final .tipo { color: var(--acento); }
-  .paso .fun { font-size: 12px; color: var(--suave); margin-top: 6px; display: block; }
+  .paso .nom { font-weight: 700; font-size: 14px; display: block; white-space: nowrap; }
   .flecha { align-self: center; color: var(--suave); font-size: 16px; }
   .salida {
     margin-top: 16px; background: #fff; border: 1px solid var(--linea);
@@ -984,8 +1000,16 @@ PLANTILLA = r"""<!DOCTYPE html>
   @media (max-width: 760px) {
     .hoja { padding: 0 16px 56px; }
     h1 { font-size: 25px; }
-    .duo, .paneles { grid-template-columns: 1fr; }
+    .duo, .paneles, .columnas { grid-template-columns: 1fr; }
+    .cifras { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cifras .medida .cifra { font-size: 28px; }
+    .tesis { font-size: 16.5px; }
     .flecha { display: none; }
+    /* Cada paso toma el ancho de su palabra y reparte el sobrante: con anchos
+       iguales, «Diagnóstico» no cabía en su casilla a 375 px. */
+    .cadena { gap: 3px; }
+    .paso { flex: 1 1 auto; padding: 10px 2px; }
+    .paso .nom { font-size: 10.5px; }
     .tarjeta { padding: 16px; }
     .medida .cifra { font-size: 44px; }
     .lienzo { height: 300px; }
@@ -1003,17 +1027,14 @@ __AVISO_EXPLORATORIO__
 <header>
   <div class="kicker">Consultor&iacute;a e Investigaci&oacute;n &middot; Estad&iacute;stica &middot; caso ISIC 2024</div>
   <h1>Proyecto de consultor&iacute;a ISIC 2024</h1>
-  <div class="contexto">
-    <p><b>El problema.</b> <span id="ctx-problema"></span></p>
-    <p><b>Los datos.</b> <span id="ctx-datos"></span></p>
-    <p id="ctx-metrica"></p>
-    <p><b>Por qu&eacute; este caso.</b> <span id="ctx-eleccion"></span></p>
-  </div>
+  <p class="tesis" id="tesis"></p>
+  <div class="cifras" id="cifras"></div>
+  <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-0"></div></details>
 </header>
 
 <section>
   <h2><span class="num">1</span>C&oacute;mo se desarroll&oacute; el trabajo</h2>
-  <p class="sub">Seis etapas. Las cinco primeras miden y dejan su salida en un archivo; la sexta interpreta y redacta. Haz clic en cualquiera para ver la salida real que produjo.</p>
+  <p class="frase">Haz clic en cualquiera para ver la salida real que produjo.</p>
   <div class="cadena" id="cadena"></div>
   <div class="salida" id="salida" hidden>
     <h3 id="salida-nombre"></h3>
@@ -1025,62 +1046,53 @@ __AVISO_EXPLORATORIO__
     <h3 id="salida-titulo"></h3>
     <pre id="salida-texto"></pre>
   </div>
+  <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-1"></div></details>
 </section>
 
 <section>
   <h2><span class="num">2</span>Una decisi&oacute;n por defecto cambia el veredicto</h2>
-  <p class="sub" id="sub-resultados"></p>
-  <div class="duo">
-    <div class="medida mal">
-      <div class="cifra" id="tit-2a"></div>
-      <div class="rot" id="rot-2a"></div>
-    </div>
-    <div class="medida ok">
-      <div class="cifra" id="tit-2b"></div>
-      <div class="rot" id="rot-2b"></div>
-    </div>
-  </div>
   <div class="tarjeta">
-    <div class="texto" id="texto-2"></div>
+    <p class="frase" id="frase-2"></p>
     <div class="lienzo"><canvas id="gr-niveles"></canvas></div>
     <p class="pie-grafico">Los bigotes marcan una desviaci&oacute;n est&aacute;ndar entre pliegues, no un intervalo de confianza.</p>
+    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-2"></div></details>
   </div>
 </section>
 
 <section>
   <h2><span class="num">3</span>Una ventaja que la pAUC no ve</h2>
   <div class="tarjeta">
-    <div class="texto" id="texto-3"></div>
+    <p class="frase" id="frase-3"></p>
     <div class="lienzo"><canvas id="gr-pareada"></canvas></div>
     <h3>Las columnas de procedencia no explican la ventaja</h3>
-    <div class="texto" id="texto-3b"></div>
+    <p class="frase" id="frase-3b"></p>
     <h3>Partir por filas no cambia el veredicto</h3>
-    <div class="texto" id="texto-3c"></div>
+    <p class="frase" id="frase-3c"></p>
+    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-3"></div></details>
   </div>
 </section>
 
 <section>
   <h2><span class="num">4</span>La m&eacute;trica principal no agota lo que pidi&oacute; el cliente</h2>
   <div class="tarjeta">
-    <div class="texto" id="texto-4"></div>
+    <p class="frase" id="frase-4"></p>
     <div class="paneles" id="paneles"></div>
     <p class="pie-grafico" id="pie-paneles"></p>
-    <div class="texto" id="lectura-4"></div>
     <h3>La imagen sola, sin el sistema de fotograf&iacute;a corporal total</h3>
-    <div class="texto" id="texto-4b"></div>
+    <p class="frase" id="frase-4b"></p>
+    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-4"></div></details>
   </div>
 </section>
 
 <section>
   <h2><span class="num">5</span>Fuera del conjunto de desarrollo</h2>
-  <p class="sub">El conjunto reservado, abierto una sola vez, y Kaggle, que da una sola cifra por env&iacute;o.</p>
   <div class="tarjeta">
     <h3>El conjunto reservado, abierto una sola vez</h3>
-    <div class="texto" id="texto-reservado"></div>
+    <p class="frase" id="frase-reservado"></p>
     <h3>En la prueba de Kaggle</h3>
-    <div class="texto" id="texto-kaggle"></div>
+    <p class="frase" id="frase-kaggle"></p>
     <div class="tabla-envoltura"><table id="tabla-tres"></table></div>
-    <div class="texto" id="texto-kaggle-2" style="margin-top:16px"></div>
+    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-5"></div></details>
   </div>
 </section>
 
@@ -1088,30 +1100,40 @@ __AVISO_EXPLORATORIO__
   <h2><span class="num">6</span>La pregunta del cliente, entera</h2>
   <div class="tarjeta">
     <div class="tabla-envoltura"><table id="tabla-ejes"></table></div>
-    <div class="texto" id="texto-5" style="margin-top:16px"></div>
+    <p class="frase" id="frase-6" style="margin-top:16px"></p>
+    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-6"></div></details>
   </div>
 </section>
 
 <section>
   <h2><span class="num">7</span>Recomendaci&oacute;n</h2>
-  <p class="sub">Lo que un consultor le entregar&iacute;a al cliente: el hallazgo, la recomendaci&oacute;n y lo que a&uacute;n no se puede afirmar.</p>
-  <div class="medida ok sola">
-    <div class="cifra" id="tit-reco"></div>
-    <div class="rot" id="rot-reco"></div>
-    <div class="det">El modelo recomendado &middot; pAUC</div>
+  <div class="duo">
+    <div class="medida ok reco">
+      <div class="det">Con fotograf&iacute;a corporal total</div>
+      <div class="cifra" id="reco-con"></div>
+    </div>
+    <div class="medida ok reco">
+      <div class="det">Sin fotograf&iacute;a corporal total</div>
+      <div class="cifra" id="reco-sin"></div>
+    </div>
   </div>
   <div class="tarjeta">
-    <div class="texto" id="texto-6"></div>
-    <h3>Qu&eacute; se puede afirmar</h3>
-    <div class="texto" id="se-puede"></div>
-    <h3>Qu&eacute; no se puede afirmar</h3>
-    <div class="texto" id="no-se-puede"></div>
+    <p class="frase" id="frase-7"></p>
+    <div class="columnas">
+      <div><h3>Qu&eacute; se puede afirmar</h3><div class="texto" id="se-puede"></div></div>
+      <div><h3>Qu&eacute; no se puede afirmar</h3><div class="texto" id="no-se-puede"></div></div>
+    </div>
+    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-7"></div></details>
   </div>
 </section>
 
 <section>
   <h2><span class="num">8</span>Limitaciones</h2>
-  <div class="tarjeta"><div class="texto" id="limitaciones"></div></div>
+  <div class="tarjeta">
+    <p class="frase" id="frase-8"></p>
+    <div class="texto" id="limitaciones"></div>
+    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-8"></div></details>
+  </div>
 </section>
 
 <footer id="pie"></footer>
@@ -1162,44 +1184,30 @@ const milLesiones = cifra(mil(1000), "tiempo-inferencia.json > tiempos.*.mediana
 const reco = cifra(esc(D.recomendado), "RECOMENDADO, comprobado contra la regla de recomendación sobre fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.pauc." + D.clave_ic);
 
 /* ---------- 0. cabecera ---------- */
-// huecos-demo.md, Parte B, B2; borrador-v2.md, «Limitaciones», la viñeta de la resolución.
-document.getElementById("ctx-problema").innerHTML =
-  `El reto ISIC 2024 usa el conjunto SLICE-3D: recortes de lesiones de piel extraídos de fotografías corporales totales en 3D, para detectar cáncer de piel. ` +
-  `La clase maligna está confirmada por patología: melanoma, carcinoma basocelular o carcinoma escamocelular. ` +
-  `Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente. ` +
-  `Así las describe el artículo del conjunto de datos: <i>"comparable in optical resolution to smartphone images"</i>.`;
-
-// borrador-v2.md, «Datos y validación», «El conjunto de desarrollo» y «El conjunto reservado»; Parte B, B3.
-document.getElementById("ctx-datos").innerHTML =
-  `El conjunto de desarrollo tiene ${cifra(mil(E.n_filas), fEda("estructura_grupos.n_filas"))} lesiones de ` +
-  `${cifra(mil(E.n_pacientes), fEda("estructura_grupos.n_grupos"))} pacientes. ` +
-  `Solo ${cifra(mil(E.positivos), fEda("desbalance_target.conteos.1"))} lesiones son malignas, el ` +
-  `${cifra(dec(E.pct_positivos) + "%", fEda("desbalance_target.pct_positivos"))}, y solo ` +
-  `${cifra(mil(DI.n_grupos_positivos), fDis("n_grupos_positivos"))} pacientes tienen alguna. ` +
-  `Cada paciente aporta entre ${cifra(mil(E.min), fEda("estructura_grupos.filas_por_grupo.min"))} y ` +
-  `${cifra(mil(E.max), fEda("estructura_grupos.filas_por_grupo.max"))} lesiones, con una mediana de ` +
-  `${cifra(mil(E.mediana), fEda("estructura_grupos.filas_por_grupo.mediana"))}. ` +
-  `Antes de volver a medir nada, se apartó el ${cifra(D.sellado.pct + "%", "holdout-pacientes.json > metodo.fraccion")} de los pacientes ` +
-  `—no de las filas—, estratificado por centro y por tener al menos una lesión maligna, con semilla ` +
-  `${cifra(String(D.sellado.semilla), "holdout-pacientes.json > semilla")}, y se selló. ` +
-  `El conjunto reservado tiene ${cifra(mil(R.pacientes), fExt("conjuntos.reservado.cobertura.pacientes"))} pacientes y ` +
-  `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} imágenes, y se abrió una sola vez, con todo fijado antes.`;
+// Rediseño, paso 1 (2026-11-06): la cabecera queda con una línea de tesis y las
+// cuatro cifras de los datos. «El problema», «Los datos» y «Por qué este caso»
+// se quitaron; la definición de la métrica pasa a su «Detalle».
+// borrador-v2.md, «Estado del arte», «Cómo se evalúa un sistema de triaje».
+document.getElementById("tesis").innerHTML =
+  `Toma la métrica que eligió el cliente y lee a su lado el AUC y las dos métricas de triaje, porque sobre las mismas predicciones pueden discrepar.`;
+const tarjetaCifra = (v, fuente, rotulo) =>
+  `<div class="medida"><div class="cifra">${cifra(v, fuente)}</div><div class="rot">${rotulo}</div></div>`;
+// borrador-v2.md, «Datos y validación», «El conjunto de desarrollo» y «El conjunto reservado».
+document.getElementById("cifras").innerHTML =
+  tarjetaCifra(mil(E.n_filas), fEda("estructura_grupos.n_filas"), "lesiones de desarrollo") +
+  tarjetaCifra(mil(E.positivos), fEda("desbalance_target.conteos.1"), "malignas") +
+  tarjetaCifra(mil(E.n_pacientes), fEda("estructura_grupos.n_grupos"), "pacientes de desarrollo") +
+  tarjetaCifra(mil(R.pacientes), fExt("conjuntos.reservado.cobertura.pacientes"), "pacientes reservados");
 
 // borrador-v2.md, «Método», «Qué se mide».
-document.getElementById("ctx-metrica").innerHTML =
+document.getElementById("det-0").innerHTML = P([
   `<b>La métrica principal es la del reto:</b> el área parcial bajo la curva ROC por encima del ` +
   `${cifra(D.metrica.tpr + "%", fMod("metrica"))} de sensibilidad, o pAUC, que va de ` +
   `${cifra(dec(D.metrica.rmin), fMod("metrica"))} a ${cifra(dec(D.metrica.rmax), fMod("metrica"))}. ` +
   `El organizador la justifica en términos clínicos, no estadísticos: <i>"there are regions in the ROC space where the values of TPR are unacceptable in clinical practice"</i>, ` +
   `y <i>"Systems that aid in diagnosing cancers are required to be highly-sensitive"</i>. ` +
   `Esa es la función de utilidad del cliente, escrita en su métrica: la región del espacio ROC donde la sensibilidad es clínicamente inaceptable no cuenta. ` +
-  `Un clasificador al azar obtiene ${azar} y uno perfecto, ${cifra(dec(D.escala.maximo), fMod("escala_de_referencia_pauc.maximo"))}.`;
-
-// Parte B, B4.
-document.getElementById("ctx-eleccion").innerHTML =
-  `Se eligió este caso y se descartaron dos de RSNA, de rodilla y de columna lumbar: son imágenes médicas en 3D, que exigen una GPU potente y aportan poco desde lo estadístico. ` +
-  `En este, la metadata tabular hace gran parte del trabajo, y el desbalance y la agrupación por paciente son estadísticamente interesantes. ` +
-  `La imagen entró después, como una extensión que profundiza la tesis sin reemplazarla.`;
+  `Un clasificador al azar obtiene ${azar} y uno perfecto, ${cifra(dec(D.escala.maximo), fMod("escala_de_referencia_pauc.maximo"))}.`]);
 
 /* ---------- 1. cadena ---------- */
 // La prosa de cada instrumento (que mide, por que existe) viaja en el JSON
@@ -1215,6 +1223,11 @@ const MIDE = {
     `${cifra(mil(R.imagenes), fExt("conjuntos.reservado.cobertura.imagenes"))} del reservado. ` +
     `No se leyó ninguna etiqueta ni se calculó ninguna métrica.`
 };
+const MB_1 = `El mismo gradient boosting da resultados opuestos según una sola opción.`;
+const MB_resto = () =>
+  `Sin balancear, su pAUC media es ${mediaN("Nivel 2a")}, ` +
+  `por debajo del piso aleatorio de ${azar} en los ${cifra(VR.n_folds_2a, fVR("nivel_2a_gradient_boosting_sin_balancear.pauc_por_semilla_y_fold (todos)"))} pliegues. ` +
+  `Con <code>class_weight="balanced"</code>, y nada más distinto, llega a ${mediaN("Nivel 2b")}.`;
 const HALLAZGOS = {
   // borrador-v2.md, «Datos y validación», «Los datos» y «La auditoría de columnas».
   "eda-diagnostico": () => P([
@@ -1251,11 +1264,9 @@ const HALLAZGOS = {
     `<i>"${esc(D.panderm.antes)}${cifra(esc(D.panderm.numero), D.panderm.fuente)}${esc(D.panderm.despues)}"</i>.`,
     `<i>Interpretación, no medición:</i> es el razonamiento de la auditoría de fugas, un nivel más arriba. ` +
     `Con modelos fundacionales, la fuga puede venir del preentrenamiento de un tercero y no del conjunto de datos.`]),
-  // borrador-v2.md, «Resultados», «Una decisión por defecto cambia el veredicto».
-  "modelado-baseline": () => P([
-    `El mismo gradient boosting da resultados opuestos según una sola opción. Sin balancear, su pAUC media es ${mediaN("Nivel 2a")}, ` +
-    `por debajo del piso aleatorio de ${azar} en los ${cifra(VR.n_folds_2a, fVR("nivel_2a_gradient_boosting_sin_balancear.pauc_por_semilla_y_fold (todos)"))} pliegues. ` +
-    `Con <code>class_weight="balanced"</code>, y nada más distinto, llega a ${mediaN("Nivel 2b")}.`]),
+  // borrador-v2.md, «Resultados», «Una decisión por defecto cambia el veredicto». La
+  // sección 2 muestra la primera frase y pasa el resto a su «Detalle».
+  "modelado-baseline": () => P([MB_1 + " " + MB_resto()]),
   // Parte B, B8, con el texto de la persona del 2026-10-04.
   "sintesis-consultoria": () => P([
     `El verificador encontró ${cifra(mil(V.total), fVer("numeros_en_borrador"))} números en el informe. ` +
@@ -1273,9 +1284,8 @@ D.cadena.forEach((s, i) => {
   const b = document.createElement("button");
   b.className = "paso" + (s.tipo === "interpretación" ? " final" : "");
   b.setAttribute("aria-selected", "false");
-  b.innerHTML = `<span class="tipo">${i + 1} &middot; ${esc(s.tipo)}</span>
-                 <span class="nom">${esc(s.etapa)}</span>
-                 <span class="fun">${esc(s.funcion)}</span>`;
+  b.title = s.etapa;
+  b.innerHTML = `<span class="nom">${esc(s.palabra)}</span>`;
   b.onclick = () => {
     const abierto = b.getAttribute("aria-selected") === "true";
     document.querySelectorAll(".paso").forEach(p => p.setAttribute("aria-selected", "false"));
@@ -1297,19 +1307,23 @@ D.cadena.forEach((s, i) => {
     cadena.appendChild(f);
   }
 });
+// Lo que la tira mostraba antes del rediseño: la frase de las seis etapas y el
+// nombre, el tipo y la función de cada una.
+document.getElementById("det-1").innerHTML =
+  P([`Seis etapas. Las cinco primeras miden y dejan su salida en un archivo; la sexta interpreta y redacta.`]) +
+  L(D.cadena.map((s, i) => `<b>${i + 1}. ${esc(s.etapa)}</b> (${esc(s.tipo)}). ${esc(s.funcion)}.`));
 
 /* ---------- 2. una decision por defecto ---------- */
-// borrador-v2.md, «Resultados», párrafo inicial.
-document.getElementById("sub-resultados").innerHTML =
+// Desde el rediseño, paso 1 (2026-11-06), cada sección deja a la vista la
+// primera frase de cada subsección y su gráfico o tabla; el resto va en su
+// «Detalle», plegado. Las dos cifras grandes del 2a y el 2b se quitaron: el
+// gráfico y el «Detalle» dan las mismas.
+document.getElementById("frase-2").innerHTML = MB_1;
+// borrador-v2.md, «Resultados», párrafo inicial, y «Una decisión por defecto cambia el veredicto».
+document.getElementById("det-2").innerHTML = P([
   `Salvo donde se indica, las métricas de desempeño son del conjunto de desarrollo, con ${semillasVR} semillas y ` +
   `${cifra(VR.n_splits, fVR("n_splits"))} pliegues. Cada diferencia es «nuevo − base», y su intervalo es el corregido al ${nivelIC}. ` +
-  `Los pliegues y semillas en que gana el nuevo se dan entre paréntesis.`;
-document.getElementById("tit-2a").innerHTML = mediaN("Nivel 2a");
-document.getElementById("rot-2a").textContent = "Nivel 2a — " + NIV["Nivel 2a"].descripcion;
-document.getElementById("tit-2b").innerHTML = mediaN("Nivel 2b");
-document.getElementById("rot-2b").textContent = "Nivel 2b — " + NIV["Nivel 2b"].descripcion;
-// borrador-v2.md, «Resultados», «Una decisión por defecto cambia el veredicto».
-document.getElementById("texto-2").innerHTML = HALLAZGOS["modelado-baseline"]() + P([
+  `Los pliegues y semillas en que gana el nuevo se dan entre paréntesis.`, MB_resto(),
   `La métrica por defecto no es ciega a ese fallo, pero lo lee distinto. En la partición de la semilla ` +
   `${cifra(String(D.seed42.seed), fMod("esquema_cv.seed"))}, el AUC estándar del modelo sin balancear es ` +
   `${cifra(dec(D.seed42.auc_2a), fMod("nivel_2a_gradient_boosting_sin_balancear.auc_estandar_media"))}, por encima del azar de su escala, ` +
@@ -1425,12 +1439,14 @@ const PA = VR.pareada, EP = D.particion;
 const fEP = c => "efecto-particion.json > particiones.paciente.comparacion_2b_menos_1." + c;
 const fEPf = c => "efecto-particion.json > filas_menos_paciente." + c;
 // borrador-v2.md, «Resultados», «Una ventaja que la pAUC no ve».
-document.getElementById("texto-3").innerHTML = P([
+document.getElementById("frase-3").innerHTML =
   `El gradient boosting balanceado supera a la regresión logística balanceada por ` +
   `${cifra(dec(PA.media), fVR("comparacion_pareada_2b_menos_1.media"))} en promedio, con intervalo ` +
   `${ic(PA.ic[0], PA.ic[1], fVR("comparacion_pareada_2b_menos_1.intervalo_t_95_nadeau_bengio"))} ` +
   `(${cifra(PA.gana, fVR("comparacion_pareada_2b_menos_1.gana_2b_en"))} de ${cifra(PA.de, fVR("comparacion_pareada_2b_menos_1.de"))} pliegues; ` +
-  `${cifra(PA.semillas, fVR("comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"))} de ${semillasVR} semillas). La ventaja no está establecida. ` +
+  `${cifra(PA.semillas, fVR("comparacion_pareada_2b_menos_1.semillas_a_favor_de_2b"))} de ${semillasVR} semillas).`;
+const resto3 = P([
+  `La ventaja no está establecida. ` +
   `En las otras tres métricas sí lo está: AUC ${cifra(firmado(EP.otras.auc.media), fEP("auc.media"))}, ` +
   `${ic(EP.otras.auc.ic[0], EP.otras.auc.ic[1], fEP("auc.intervalo_t_95_nadeau_bengio"))}; sensibilidad top-15 ` +
   `${cifra(firmado(EP.otras.setop15.media), fEP("setop15.media"))}, ` +
@@ -1442,9 +1458,10 @@ document.getElementById("texto-3").innerHTML = P([
   `Con las ${semillasVR} semillas el orden se invierte: su desviación entre pliegues es ${stdN("Nivel 2b")}, frente a ${stdN("Nivel 1")}. ` +
   `Ese argumento se retiró.`]);
 // borrador-v2.md, «Resultados», «Las columnas de procedencia no explican la ventaja».
-document.getElementById("texto-3b").innerHTML = P([
+document.getElementById("frase-3b").innerHTML =
   `Con las columnas de centro y licencia, la diferencia entre el boosting y la logística es ` +
-  `${cifra(dec(PR.a_con), fPro("a_2b_menos_1_con_procedencia.media"))}; sin ellas, ${cifra(dec(PR.a_sin), fPro("a_2b_menos_1_sin_procedencia.media"))}. ` +
+  `${cifra(dec(PR.a_con), fPro("a_2b_menos_1_con_procedencia.media"))}; sin ellas, ${cifra(dec(PR.a_sin), fPro("a_2b_menos_1_sin_procedencia.media"))}.`;
+const resto3b = P([
   `Incluirlas mueve el boosting en ${cifra(dec(PR.b.media), fPro("b_2b_con_menos_2b_sin.media"))}, con intervalo ` +
   `${ic(PR.b.ic[0], PR.b.ic[1], fPro("b_2b_con_menos_2b_sin.intervalo_t_95_nadeau_bengio"))}, y la logística en ` +
   `${cifra(dec(PR.c.media), fPro("c_1_con_menos_1_sin.media"))}, con ${ic(PR.c.ic[0], PR.c.ic[1], fPro("c_1_con_menos_1_sin.intervalo_t_95_nadeau_bengio"))}. ` +
@@ -1457,9 +1474,11 @@ document.getElementById("texto-3b").innerHTML = P([
 const FP = EP.filas_menos_paciente, semEP = cifra(EP.semillas, "efecto-particion.json > esquema.semillas");
 const mejorF = (n, m, nivel) => cifra(FP[n][m].mejor, fEPf(nivel + "." + m + ".semillas_filas_mejor"));
 const N1 = "nivel_1_regresion_logistica", N2B = "nivel_2b_gradient_boosting_balanceado";
-document.getElementById("texto-3c").innerHTML = P([
+document.getElementById("frase-3c").innerHTML =
   `Se probaron las dos particiones con la logística y el gradient boosting balanceados, con una regla de lectura ` +
-  `fijada antes de correr. La partición por filas infla una métrica si da mejor en las ${semEP} semillas, y cambia el ` +
+  `fijada antes de correr.`;
+const resto3c = P([
+  `La partición por filas infla una métrica si da mejor en las ${semEP} semillas, y cambia el ` +
   `veredicto si el intervalo de 2b − 1 en la pAUC excluye el cero en una partición y no en la otra.`,
   `No se cumple ninguna de las dos. Partir por filas mueve la pAUC en ` +
   `${cifra(firmado(FP.n1.pauc.dif), fEPf(N1 + ".pauc.diferencia_de_medias"))} con la logística y en ` +
@@ -1476,6 +1495,9 @@ document.getElementById("texto-3c").innerHTML = P([
   `${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes quede a los dos ` +
   `lados no se traduce en una métrica inflada. Lo medido vale para la logística y el boosting balanceados; no se probó con ` +
   `el contexto de paciente ni con M3 limpio.`]);
+document.getElementById("det-3").innerHTML = resto3 +
+  `<h3>Las columnas de procedencia no explican la ventaja</h3>` + resto3b +
+  `<h3>Partir por filas no cambia el veredicto</h3>` + resto3c;
 
 // Líneas horizontales: el cero, la media y el intervalo corregido.
 const lineasH = {
@@ -1523,9 +1545,9 @@ new Chart(document.getElementById("gr-pareada"), {
 
 /* ---------- 4. la metrica principal no agota lo que pidio el cliente ---------- */
 // borrador-v2.md, «Método», «Cómo se compara».
-document.getElementById("texto-4").innerHTML = P([
-  `<b>El criterio:</b> una diferencia se da por establecida solo si su intervalo corregido al ${nivelIC} no contiene el cero. ` +
-  `Junto al intervalo se reportan los pliegues y las semillas en que gana cada modelo.`]);
+document.getElementById("frase-4").innerHTML =
+  `<b>El criterio:</b> una diferencia se da por establecida solo si su intervalo corregido al ${nivelIC} no contiene el cero.`;
+const resto4 = P([`Junto al intervalo se reportan los pliegues y las semillas en que gana cada modelo.`]);
 const NOMBRES = { pauc: "pAUC", auc: "AUC estándar", setop15: "Sensibilidad top-15", nnt80: "NNT80% SE" };
 // Marca de la media sobre cada barra de intervalo, y la línea del cero.
 const mediasYcero = {
@@ -1584,7 +1606,7 @@ const paneles = document.getElementById("paneles");
 document.getElementById("pie-paneles").innerHTML = esc(D.nota_nnt);
 // borrador-v2.md, «Resultados», «La métrica principal no agota lo que pidió el cliente»,
 // «Añadida al modelo con contexto de paciente, la imagen no justifica su costo» y «El modelo recomendado».
-document.getElementById("lectura-4").innerHTML = L([
+const lectura4 = L([
   `<b>M2 − M1.</b> Quien solo lea la pAUC concluye que el contexto de paciente no aporta; la sensibilidad top-15, que el cliente premió aparte, y el NNT80% SE dicen lo contrario. ` +
   `Son cuatro métricas sobre una misma comparación, y el intervalo del NNT queda al límite del cero. ` +
   `<i>Interpretación, no medición:</i> las variables relativas al paciente ordenan las lesiones dentro de cada paciente, que es lo que mide la sensibilidad top-15, ` +
@@ -1650,9 +1672,10 @@ const DES = KG.descomposicion, fDes = c => fE("descomposicion_de_la_distancia_al
 const horas = m => cifra(dec(KG.horas[m]), `fase5b-kaggle-medicion.json > salida_del_notebook.tiempo.proyeccion.${m}.horas_proyectadas`);
 const lesionesPrueba = cifra(mil(KG.lesiones_prueba), "fase5b-kaggle-medicion.json > salida_del_notebook.tiempo.lesiones_de_prueba_supuestas");
 const pctObj = k => cifra(Math.round(POT.objetivos[k] * 100) + "%", fPot("objetivos." + k));
-document.getElementById("texto-4b").innerHTML = P([
+document.getElementById("frase-4b").innerHTML =
   `Las mediciones de las que dependen M1, M2 y M3 limpio las calcula el software de la fotografía corporal total; ` +
-  `sin ese sistema, esos modelos no se pueden aplicar tal cual. ` +
+  `sin ese sistema, esos modelos no se pueden aplicar tal cual.`;
+const resto4b = P([
   `Los organizadores del reto describen ese sistema como ${citaIS("costo_tbp")}. ` +
   `M2 y M3 limpio, además, comparan cada lesión con las demás del mismo paciente. Del modelo ganador, que hace lo mismo, ` +
   `los organizadores advierten que por eso ${citaIS("lesiones_sueltas")}.`,
@@ -1718,13 +1741,16 @@ document.getElementById("texto-4b").innerHTML = P([
   `${icF("auc")}; sensibilidad top-15 ${mediaF("setop15")}, ${icF("setop15")}, y NNT80% SE ${mediaF("nnt80")}, ${icF("nnt80")}.`,
   `Por la regla, la recomendación para ese escenario pasó a la red, que además usa menos datos de entrada: solo la imagen, ` +
   `sin edad, sexo ni zona del cuerpo. Se midió sobre los recortes de SLICE-3D, no sobre fotos de teléfono.`]);
+document.getElementById("det-4").innerHTML = resto4 + lectura4 +
+  `<h3>La imagen sola, sin el sistema de fotografía corporal total</h3>` + resto4b;
 
 /* ---------- 5. fuera del conjunto de desarrollo ---------- */
 // borrador-v2.md, «Resultados», «El conjunto reservado, abierto una sola vez».
 const M3L = COMP["M3 limpio − M2"].metricas;
-document.getElementById("texto-reservado").innerHTML = P([
+document.getElementById("frase-reservado").innerHTML =
   `El conjunto reservado se abrió una sola vez, con todo fijado antes: M3 limpio, el modelo recomendado, y M2 como ` +
-  `referencia, entrenados con todo el desarrollo, y, como resultado descriptivo, la red de la Fase 4e e «Imagen + básicos». ` +
+  `referencia, entrenados con todo el desarrollo, y, como resultado descriptivo, la red de la Fase 4e e «Imagen + básicos».`;
+const restoReservado = P([
   `Son ${cifra(RES.pacientes, fRes("datos.evaluacion.pacientes"))} pacientes, con ${cifra(RES.malignas, fRes("datos.evaluacion.malignas"))} ` +
   `lesiones malignas repartidas en ${cifra(RES.pacientes_con_malignas, fRes("datos.evaluacion.pacientes_con_malignas"))} de ellos. ` +
   `Los intervalos salen de un bootstrap por paciente con ${cifra(mil(RES.remuestras), fRes("bootstrap.remuestras"))} remuestras.`,
@@ -1753,9 +1779,11 @@ document.getElementById("texto-reservado").innerHTML = P([
   `validación cruzada repetida. Pero la ventaja de la red sobre «Imagen + básicos» no quedó confirmada con los pacientes reservados.`]);
 // borrador-v2.md, «Resultados», «En la prueba de Kaggle».
 const CP = KG.comparaciones, fCP = (k, c) => fK(`comparaciones_con_la_privada.${k}.${c}`);
-document.getElementById("texto-kaggle").innerHTML = P([
+document.getElementById("frase-kaggle").innerHTML =
   `Kaggle sigue aceptando envíos a la competición cerrada, y a cada uno le dio una puntuación pública y una privada, sin ` +
-  `intervalo. Se enviaron cuatro modelos entrenados con los ` +
+  `intervalo.`;
+const restoKaggle = P([
+  `Se enviaron cuatro modelos entrenados con los ` +
   `${cifra(mil(KG.pacientes), fRes("datos.entrenamiento.pacientes") + " + datos.evaluacion.pacientes")} pacientes, cada uno una ` +
   `sola vez: M3 limpio, la red de la 4e y C7, fijados antes de abrir el reservado, y un cuarto, «Imagen + básicos», decidido ` +
   `después. Que la puntuación privada salga del mismo subconjunto de la prueba que el tablero final del reto es lectura ` +
@@ -1779,7 +1807,7 @@ document.getElementById("tabla-tres").innerHTML =
     `<td>${cifra(dec(f.desarrollo), fTres(m, "desarrollo"))}</td>` +
     `<td>${f.reservado === null ? "no se evaluó" : cifra(dec(f.reservado), fTres(m, "reservado.pauc"))}</td>` +
     `<td>${cifra(dec(f.kaggle), fTres(m, "kaggle_privada.pauc"))}</td></tr>`).join("") + `</tbody>`;
-document.getElementById("texto-kaggle-2").innerHTML = P([
+const restoKaggle2 = P([
   `En el desarrollo y en Kaggle, los cuatro modelos quedan en el mismo orden; en el reservado, «Imagen + básicos» queda por ` +
   `encima de la red. Son conjuntos y estimaciones distintos: la media por pliegue en el desarrollo, un solo modelo en el ` +
   `reservado y una sola puntuación en Kaggle, sin intervalo.`,
@@ -1801,6 +1829,11 @@ document.getElementById("texto-kaggle-2").innerHTML = P([
   `El reparto depende del orden: C7 con el hospital y sin promediar no se envió.`,
   `De las dos mejoras de la descomposición, promediar es la única que no usa datos que el proyecto excluyó, y casi la ` +
   `mitad de la distancia no la cubre ninguna de las dos. Ninguno de estos envíos cambia una recomendación.`]);
+// La frase que hacía de subtítulo de la sección va también al «Detalle».
+document.getElementById("det-5").innerHTML =
+  P([`El conjunto reservado, abierto una sola vez, y Kaggle, que da una sola cifra por envío.`]) +
+  `<h3>El conjunto reservado, abierto una sola vez</h3>` + restoReservado +
+  `<h3>En la prueba de Kaggle</h3>` + restoKaggle + restoKaggle2;
 
 /* ---------- 6. la pregunta del cliente, entera ---------- */
 // borrador-v2.md, «Resultados», «La pregunta del cliente, entera»: la cabecera y las filas, con las cifras de outputs/.
@@ -1811,16 +1844,21 @@ document.getElementById("tabla-ejes").innerHTML =
     `<td>${cifra(fijo(f.setop15, 4), fMet(f, "setop15"))}</td><td>${cifra(fijo(f.nnt80, 2), fMet(f, "nnt80"))}</td>` +
     `<td>${tiempoT(f.modelo)}</td></tr>`).join("") + `</tbody>`;
 // borrador-v2.md, «Resultados», «La pregunta del cliente, entera» y «El costo de inferencia».
-document.getElementById("texto-5").innerHTML = P([
-  `La tabla responde la pregunta con sus tres ejes —la métrica principal, la sensibilidad por paciente y el costo— y añade el NNT80% SE, la segunda métrica de triaje. ` +
+document.getElementById("frase-6").innerHTML =
+  `La tabla responde la pregunta con sus tres ejes —la métrica principal, la sensibilidad por paciente y el costo— y añade el NNT80% SE, la segunda métrica de triaje.`;
+document.getElementById("det-6").innerHTML = P([
   `Son medias y medianas; las diferencias, con sus intervalos, están arriba. M2 se distingue de M1 en las dos métricas de triaje, no en la pAUC. ` +
   `Frente a M2, de los otros tres solo M3 limpio se distingue, y solo en la pAUC y en el AUC estándar; en las métricas de triaje no se distingue ninguno de los tres.`,
   `M3 limpio cuesta más que M2, pero los dos quedan por debajo de una décima de segundo por cada ${milLesiones} lesiones. ` +
   `Lo caro, con diferencia, es la imagen, y ni M4 ni M4b mejoraron a M2 en la métrica principal de forma distinguible.`]);
 
 /* ---------- 7. recomendacion ---------- */
-document.getElementById("tit-reco").innerHTML = cifra(dec(D.recomendado_pauc), D.recomendado_fuente);
-document.getElementById("rot-reco").innerHTML = reco;
+// Las dos recomendaciones, en dos tarjetas: la de M3 limpio sale de la constante
+// comprobada; la de la red, de la regla de la Fase 4f, que la página comprueba al
+// generarse (datos_fases_4d_a_5c).
+document.getElementById("reco-con").innerHTML = reco;
+document.getElementById("reco-sin").innerHTML =
+  cifra("Red de la Fase 4e", "fase4f-red4e-vs-imagen-basicos.json > regla.a_favor (la regla de la Fase 4f)");
 // borrador-v2.md, «Resultados», «El modelo recomendado», los párrafos de las fases 4b y 4c: el texto y las cifras de las tablas.
 const fIntento = (i, campo) => `${i.archivo} > comparaciones_nuevo_menos_base.pauc.${campo}`;
 const intentos = P([
@@ -1865,8 +1903,9 @@ const ronda4de = P([
   `y ${cifra(dec(POT.razones[1]), fPot("comparaciones.*.entre_semillas.ee_prueba_sobre_ee_semillas"))} veces menor que el que usa la prueba. ` +
   `Lo que se midió es compatible con que no haya mejora, y también con una mejora que esta prueba no alcanza a ver.`]);
 // borrador-v2.md, «Recomendación», «Qué se recomienda».
-document.getElementById("texto-6").innerHTML = P([
-  `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor. ` +
+document.getElementById("frase-7").innerHTML =
+  `<b>Al cliente se le recomienda ${reco}:</b> la parte tabular reproducida de la solución ganadora, sin los dos sesgos conocidos a su favor.`;
+const resto7 = P([
   `Se eligió con una regla fijada antes de correr la comparación: el intervalo corregido de su diferencia con M2 en la pAUC queda entero por encima de cero. ` +
   `Ninguna de las versiones que se le compararon después de elegirlo, de la Fase 4b a la 4e, llegó a su regla, y en el ` +
   `conjunto reservado, abierto una sola vez, la ventaja sobre M2 se mantiene en la pAUC y en el AUC.`]) +
@@ -1904,7 +1943,7 @@ document.getElementById("texto-6").innerHTML = P([
   `<b>Y se recomienda no leer solo la pAUC.</b> El contexto de paciente no se nota en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.`]);
 // borrador-v2.md, «Recomendación», «Qué se puede afirmar».
 const masCercano = Object.entries(KG.privadas).sort((a, b) => b[1] - a[1]);
-document.getElementById("se-puede").innerHTML = L([
+const SE_PUEDE = [
   `En el conjunto de desarrollo, con validación cruzada repetida y el intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.`,
   `En el conjunto reservado, con pacientes con los que no se entrenó ningún modelo, M3 limpio también supera a M2 en la pAUC, ` +
   `${cifra(firmado(RES.dif.pauc.punto), fRes("diferencia_m3limpio_menos_m2.pauc.punto"))}, ${icRes(RES.dif.pauc, fRes("diferencia_m3limpio_menos_m2.pauc.intervalo_95"))}, ` +
@@ -1919,9 +1958,9 @@ document.getElementById("se-puede").innerHTML = L([
   `Una partición por filas habría dejado al ${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes a los dos lados de la validación.`,
   `En la puntuación privada de Kaggle, ninguno de los ocho envíos llega a la del ganador, ` +
   `${cifra(dec(KG.ganador), fK("referencias.ganador_tablero_privado.pauc"))}. El más cercano, «${esc(KG.nombres[masCercano[0][0]])}», da ` +
-  `${priv(masCercano[0][0])}, y el más cercano sin la etiqueta del hospital, «C7 promediado», ${priv("C7Prom")}. Son cifras sueltas, sin intervalo.`]);
+  `${priv(masCercano[0][0])}, y el más cercano sin la etiqueta del hospital, «C7 promediado», ${priv("C7Prom")}. Son cifras sueltas, sin intervalo.`];
 // borrador-v2.md, «Recomendación», «Qué no se puede afirmar».
-document.getElementById("no-se-puede").innerHTML = L([
+const NO_SE_PUEDE = [
   `<b>Que M3 limpio sea mejor en las métricas de triaje.</b> En la sensibilidad top-15 y en el NNT80% SE no se distingue de M2.`,
   `<b>Cuál de los dos sesgos de M3 pesaba.</b> M3 limpio cambia tres cosas a la vez.`,
   `<b>Que la red de la Fase 4e supere a «Imagen + básicos» con pacientes nuevos.</b> En el reservado la ventaja no se ` +
@@ -1951,14 +1990,36 @@ document.getElementById("no-se-puede").innerHTML = L([
   `<b>Cuánto se separa de verdad este trabajo de la solución ganadora.</b> La distancia en Kaggle es una resta entre dos cifras ` +
   `sin intervalo, y su reparto entre promediar y el hospital depende del orden de los envíos. En el desarrollo, la evaluación ` +
   `usó otros datos y otras particiones que la del ganador.`,
-  `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`]);
+  `<b>Nada clínico.</b> Los modelos ordenan lesiones por sospecha; no dicen qué tiene un paciente ni qué hacer con él. Son evidencia para una decisión humana.`];
+// La primera frase de una viñeta que abre en negrita: la negrita entera si acaba
+// en punto; si no, hasta el primer punto seguido de espacio que venga después.
+const partir = b => {
+  if (!b.startsWith("<b>")) return [b, ""];
+  const fin = b.indexOf("</b>") + 4;
+  if (b[fin - 5] === ".") return [b.slice(0, fin), b.slice(fin).trim()];
+  const punto = b.indexOf(". ", fin);
+  return punto < 0 ? [b, ""] : [b.slice(0, punto + 1), b.slice(punto + 2)];
+};
+// A la vista, cuatro viñetas por columna; las listas enteras van en el «Detalle».
+// Qué se puede: las dos de M3 limpio frente a M2, la del contexto de paciente y la
+// de la red frente a «Imagen + básicos», que respalda la segunda tarjeta. Qué no
+// se puede: la primera frase de las que acotan cada recomendación —las métricas
+// de triaje de M3 limpio, la red con pacientes nuevos y con fotos de teléfono— y
+// la del uso clínico.
+document.getElementById("se-puede").innerHTML = L([0, 1, 2, 5].map(i => SE_PUEDE[i]));
+document.getElementById("no-se-puede").innerHTML = L([0, 2, 4, 9].map(i => partir(NO_SE_PUEDE[i])[0]));
+document.getElementById("det-7").innerHTML =
+  P([`Lo que un consultor le entregaría al cliente: el hallazgo, la recomendación y lo que aún no se puede afirmar.`]) +
+  resto7 + `<h3>Qué se puede afirmar</h3>` + L(SE_PUEDE) + `<h3>Qué no se puede afirmar</h3>` + L(NO_SE_PUEDE);
 
 /* ---------- 8. limitaciones ---------- */
 // borrador-v2.md, «Datos y validación», «Los datos» (la frase del archivo de prueba), y «Limitaciones».
-document.getElementById("limitaciones").innerHTML = P([
-  `El archivo de prueba que publica el reto es un marcador de posición, sin casos reales. La prueba oculta solo se puede ` +
+document.getElementById("frase-8").innerHTML =
+  `El archivo de prueba que publica el reto es un marcador de posición, sin casos reales.`;
+const restoPrueba = P([`La prueba oculta solo se puede ` +
   `medir enviando modelos a Kaggle, que da una cifra por envío, sin intervalo; el resultado final con intervalo es el del ` +
-  `conjunto que este proyecto apartó.`]) + L([
+  `conjunto que este proyecto apartó.`]);
+const LIMITACIONES = [
   `<b>La clase negativa no está confirmada.</b> Las lesiones malignas tienen patología; de las benignas, <i>"most never underwent a skin biopsy"</i>. ` +
   `La mayoría de los negativos son lesiones que un dermatólogo no consideró preocupantes, no lesiones confirmadas como sanas.`,
   `<b>Las imágenes tienen una resolución óptica comparable a la de un teléfono inteligente.</b> Así las describe el artículo del conjunto de datos: ` +
@@ -1994,7 +2055,10 @@ document.getElementById("limitaciones").innerHTML = P([
   `<b>Un mecanismo medido a medias.</b> Se midió cómo falla el gradient boosting sin balancear: hunde a una parte de los ` +
   `positivos al fondo del ordenamiento. Por qué lo hace no se midió.`,
   `<b>La prueba de la partición cubre dos modelos.</b> Que partir por filas no cambie el veredicto se midió con la logística ` +
-  `y el boosting balanceados, no con los modelos que usan el contexto de paciente.`]);
+  `y el boosting balanceados, no con los modelos que usan el contexto de paciente.`];
+// Una línea por limitación: su primera frase. La lista entera va en el «Detalle».
+document.getElementById("limitaciones").innerHTML = L(LIMITACIONES.map(b => partir(b)[0]));
+document.getElementById("det-8").innerHTML = restoPrueba + L(LIMITACIONES);
 
 /* ---------- pie ---------- */
 // Parte B, B10, con el texto de la persona del 2026-10-04.
