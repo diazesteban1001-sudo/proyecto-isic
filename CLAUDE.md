@@ -1718,18 +1718,6 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
 - [x] Preparar demo en vivo: `informe/demo.html`, generada solo por
       `generar_demo.py`, abre por doble clic sin servidor y muestra cada cifra
       con su archivo y campo de origen al pasar el cursor
-- [ ] **`informe/demo.html` y `docs/index.html` difieren hasta publicar, en el
-      paso 3 del rediseño de la demo** (2026-11-06).
-      - **Qué pasa:** los pasos 1 y 2 del rediseño regeneran solo
-        `informe/demo.html`, por decisión de la persona. `docs/index.html`, la
-        copia que publica GitHub Pages, sigue siendo la demo de antes del
-        rediseño.
-      - **Qué dice lo contrario mientras tanto:** el `SKILL.md` de
-        `sintesis-consultoria`, Etapa 4, que a `--salida` «siempre se le pasan
-        las dos» y que las dos copias «son idénticos byte a byte por
-        construcción»; y el README, que «no pueden desincronizarse».
-      - **Qué lo cierra:** el paso 3, que publica regenerando la demo con las
-        dos rutas en `--salida`, como pide el `SKILL.md`.
 - [ ] **Deuda de reproducibilidad: el comando con que se corrieron
       `fase4_comparar.py` y `tiempo_inferencia.py`.**
       - **Qué falta:** ningún archivo versionado trae el comando exacto que
