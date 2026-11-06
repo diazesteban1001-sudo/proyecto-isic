@@ -1,16 +1,11 @@
 {
-  "numeros_en_borrador": 688,
-  "numeros_con_respaldo_en_outputs": 356,
+  "numeros_en_borrador": 825,
+  "numeros_con_respaldo_en_outputs": 458,
   "numeros_sin_respaldo": [
     {
       "valor": "23.538",
       "contexto": "a de un solo centro, con 35 pacientes y 23.538 lesiones,",
       "linea_aprox": 29
-    },
-    {
-      "valor": "7,500",
-      "contexto": "emio propio:** *\"Two Secondary Prizes: $7,500 each for",
-      "linea_aprox": 226
     },
     {
       "valor": "384",
@@ -60,7 +55,7 @@
     {
       "valor": "0,695",
       "contexto": "r sin recortes de imagen obtuvo 0,164 y 0,695 en la eva",
-      "linea_aprox": 835
+      "linea_aprox": 870
     }
   ],
   "porcentajes_de_metodo_excluidos": [
@@ -105,6 +100,18 @@
       "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
       "contexto": "ejor_en_semillas) -->  Para capturar el 80% de las ma",
       "linea_aprox": 769
+    },
+    {
+      "valor": "80%",
+      "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
+      "contexto": "d, para dar su resultado a favor con un 80% de probab",
+      "linea_aprox": 992
+    },
+    {
+      "valor": "80%",
+      "motivo": "umbral de TPR del pAUC de Kaggle (constante del cliente)",
+      "contexto": "udan. De 5 a 10 semillas, el umbral del 80% baja de 0",
+      "linea_aprox": 999
     }
   ],
   "numeros_en_contextos_omitidos": [
@@ -1418,283 +1425,453 @@
     },
     {
       "valor": "299",
-      "contexto": "-2025-triaje-automatizado-tbp.md, línea 299 -->  ###",
+      "contexto": "-2025-triaje-automatizado-tbp.md, línea 299 -->  La r",
       "linea_aprox": 821
+    },
+    {
+      "valor": "0",
+      "contexto": "o; outputs/fase4e-holm.json > preguntas[0].umbral_h",
+      "linea_aprox": 837
+    },
+    {
+      "valor": "2026",
+      "contexto": "AN.md, Fase 4f, «Resultado de la regla (2026-11-02)»;",
+      "linea_aprox": 856
+    },
+    {
+      "valor": "-11",
+      "contexto": "d, Fase 4f, «Resultado de la regla (2026-11-02)»; «Qu",
+      "linea_aprox": 856
+    },
+    {
+      "valor": "-02",
+      "contexto": "Fase 4f, «Resultado de la regla (2026-11-02)»; «Qué n",
+      "linea_aprox": 856
     },
     {
       "valor": "3,",
       "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3, líneas 20",
-      "linea_aprox": 838
+      "linea_aprox": 873
     },
     {
       "valor": "206",
       "contexto": "je-automatizado-tbp.md, Tabla 3, líneas 206 y 209 (Me",
-      "linea_aprox": 838
+      "linea_aprox": 873
     },
     {
       "valor": "209",
       "contexto": "omatizado-tbp.md, Tabla 3, líneas 206 y 209 (Meta-bas",
-      "linea_aprox": 838
+      "linea_aprox": 873
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 848
+      "linea_aprox": 883
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> Q",
-      "linea_aprox": 848
+      "linea_aprox": 883
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Quit",
-      "linea_aprox": 848
+      "linea_aprox": 883
     },
     {
       "valor": "8",
       "contexto": "F3L > C.pauc.media; CLAUDE.md, hallazgo 8 -->  Ante",
-      "linea_aprox": 852
+      "linea_aprox": 887
     },
     {
       "valor": "1",
       "contexto": "alo_bonferroni_nadeau_bengio (confianza 1 − 0,05/3,",
-      "linea_aprox": 861
+      "linea_aprox": 896
     },
     {
       "valor": "0,05",
       "contexto": "bonferroni_nadeau_bengio (confianza 1 − 0,05/3, con la",
-      "linea_aprox": 861
+      "linea_aprox": 896
     },
     {
       "valor": "3,",
       "contexto": "rroni_nadeau_bengio (confianza 1 − 0,05/3, con la co",
-      "linea_aprox": 861
+      "linea_aprox": 896
     },
     {
       "valor": "2026",
       "contexto": "es de correr» y «Resultado de la regla (2026-10-22)» -",
-      "linea_aprox": 861
+      "linea_aprox": 896
     },
     {
       "valor": "-10",
       "contexto": "e correr» y «Resultado de la regla (2026-10-22)» -->",
-      "linea_aprox": 861
+      "linea_aprox": 896
     },
     {
       "valor": "-22",
       "contexto": "orrer» y «Resultado de la regla (2026-10-22)» --> Las",
-      "linea_aprox": 861
+      "linea_aprox": 896
     },
     {
       "valor": "2",
       "contexto": "te. <!-- F: PLAN.md, Fase 4c, «Pregunta 2» (C4: la",
-      "linea_aprox": 868
+      "linea_aprox": 903
     },
     {
       "valor": "1",
       "contexto": "alo_bonferroni_nadeau_bengio (confianza 1 − 0,05/2,",
-      "linea_aprox": 875
+      "linea_aprox": 910
     },
     {
       "valor": "0,05",
       "contexto": "bonferroni_nadeau_bengio (confianza 1 − 0,05/2, con la",
-      "linea_aprox": 875
+      "linea_aprox": 910
     },
     {
       "valor": "2,",
       "contexto": "rroni_nadeau_bengio (confianza 1 − 0,05/2, con la co",
-      "linea_aprox": 875
+      "linea_aprox": 910
     },
     {
       "valor": "2026",
       "contexto": "es de correr» y «Resultado de la regla (2026-10-23)» -",
-      "linea_aprox": 875
+      "linea_aprox": 910
     },
     {
       "valor": "-10",
       "contexto": "e correr» y «Resultado de la regla (2026-10-23)» -->",
-      "linea_aprox": 875
+      "linea_aprox": 910
     },
     {
       "valor": "-23",
       "contexto": "orrer» y «Resultado de la regla (2026-10-23)» --> Las",
-      "linea_aprox": 875
+      "linea_aprox": 910
+    },
+    {
+      "valor": "2026",
+      "contexto": "N.md, Fase 4d, «Decisión de la persona (2026-10-30)» y",
+      "linea_aprox": 923
+    },
+    {
+      "valor": "-10",
+      "contexto": ", Fase 4d, «Decisión de la persona (2026-10-30)» y «R",
+      "linea_aprox": 923
+    },
+    {
+      "valor": "-30",
+      "contexto": "ase 4d, «Decisión de la persona (2026-10-30)» y «Regl",
+      "linea_aprox": 923
+    },
+    {
+      "valor": "1",
+      "contexto": "59. <!-- F: PLAN.md, Fase 4d, «Pregunta 1 · C5 fren",
+      "linea_aprox": 931
+    },
+    {
+      "valor": "2",
+      "contexto": "_corridas); PLAN.md, Fase 4d, «Pregunta 2 · La red",
+      "linea_aprox": 939
+    },
+    {
+      "valor": "3",
+      "contexto": "_corridas); PLAN.md, Fase 4d, «Pregunta 3 · C6 fren",
+      "linea_aprox": 944
+    },
+    {
+      "valor": "2026",
+      "contexto": "AN.md, Fase 4d, «Resultado de la regla (2026-10-31)» -",
+      "linea_aprox": 948
+    },
+    {
+      "valor": "-10",
+      "contexto": "d, Fase 4d, «Resultado de la regla (2026-10-31)» -->",
+      "linea_aprox": 948
+    },
+    {
+      "valor": "-31",
+      "contexto": "Fase 4d, «Resultado de la regla (2026-10-31)» -->  La",
+      "linea_aprox": 948
+    },
+    {
+      "valor": "2",
+      "contexto": "(descriptiva)» y «Los ajustes del paso 2 (2026-11-",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "2026",
+      "contexto": "escriptiva)» y «Los ajustes del paso 2 (2026-11-01), f",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "-11",
+      "contexto": "iptiva)» y «Los ajustes del paso 2 (2026-11-01), fija",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "-01",
+      "contexto": "iva)» y «Los ajustes del paso 2 (2026-11-01), fijados",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "-2024",
+      "contexto": "a exploración»; referencias/tomo20180402-2024-isic2024-",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "73,",
+      "contexto": "02-2024-isic2024-10mo-puesto.md, líneas 73, 75, 84, 1",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "75,",
+      "contexto": "024-isic2024-10mo-puesto.md, líneas 73, 75, 84, 174 y",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "84,",
+      "contexto": "isic2024-10mo-puesto.md, líneas 73, 75, 84, 174 y 237",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "174",
+      "contexto": "2024-10mo-puesto.md, líneas 73, 75, 84, 174 y 237–247",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "237",
+      "contexto": "0mo-puesto.md, líneas 73, 75, 84, 174 y 237–247; refe",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "247",
+      "contexto": "puesto.md, líneas 73, 75, 84, 174 y 237–247; referenc",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "48",
+      "contexto": "/isic-primary-metric-pauc.py.md, líneas 48 y 49 -->",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "49",
+      "contexto": "-primary-metric-pauc.py.md, líneas 48 y 49 -->  Una",
+      "linea_aprox": 958
+    },
+    {
+      "valor": "2026",
+      "contexto": "AN.md, Fase 4e, «Resultado de la regla (2026-11-01)» -",
+      "linea_aprox": 972
+    },
+    {
+      "valor": "-11",
+      "contexto": "d, Fase 4e, «Resultado de la regla (2026-11-01)» -->",
+      "linea_aprox": 972
+    },
+    {
+      "valor": "-01",
+      "contexto": "Fase 4e, «Resultado de la regla (2026-11-01)» -->  La",
+      "linea_aprox": 972
+    },
+    {
+      "valor": "2026",
+      "contexto": "potencia de la prueba: especificación (2026-11-04, de",
+      "linea_aprox": 990
+    },
+    {
+      "valor": "-11",
+      "contexto": "encia de la prueba: especificación (2026-11-04, de la",
+      "linea_aprox": 990
+    },
+    {
+      "valor": "-04,",
+      "contexto": "ia de la prueba: especificación (2026-11-04, de la per",
+      "linea_aprox": 990
+    },
+    {
+      "valor": "16,",
+      "contexto": "mino_de_correccion; CLAUDE.md, hallazgo 16, «Cómo se",
+      "linea_aprox": 1006
+    },
+    {
+      "valor": "16,",
+      "contexto": "anza a ver. <!-- F: CLAUDE.md, hallazgo 16, «Lectura,",
+      "linea_aprox": 1011
     },
     {
       "valor": "9",
       "contexto": "cia.json > tiempos; CLAUDE.md, hallazgo 9 -->  ###",
-      "linea_aprox": 893
+      "linea_aprox": 1022
     },
     {
       "valor": "50",
       "contexto": "cas.M1 y metricas.M2 (las medias de los 50 pliegues,",
-      "linea_aprox": 905
+      "linea_aprox": 1034
     },
     {
       "valor": "55",
       "contexto": "C.*.IC; «Método», «Qué se mide», líneas 55–59 (NNT80",
-      "linea_aprox": 914
+      "linea_aprox": 1043
     },
     {
       "valor": "59",
       "contexto": ".IC; «Método», «Qué se mide», líneas 55–59 (NNT80% S",
-      "linea_aprox": 914
+      "linea_aprox": 1043
     },
     {
       "valor": "495",
       "contexto": "80% SE); informe/anteproyecto.md, línea 495 (la top-1",
-      "linea_aprox": 914
+      "linea_aprox": 1043
     },
     {
       "valor": "2026",
       "contexto": "lo recomendado: decisión de la persona, 2026-09-26» --",
-      "linea_aprox": 925
+      "linea_aprox": 1054
     },
     {
       "valor": "-09",
       "contexto": "ecomendado: decisión de la persona, 2026-09-26» --> S",
-      "linea_aprox": 925
+      "linea_aprox": 1054
     },
     {
       "valor": "-26",
       "contexto": "mendado: decisión de la persona, 2026-09-26» --> Se e",
-      "linea_aprox": 925
+      "linea_aprox": 1054
     },
     {
       "valor": "3",
       "contexto": "-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 21",
-      "linea_aprox": 940
+      "linea_aprox": 1069
     },
     {
       "valor": "216",
       "contexto": "aje-automatizado-tbp.md, Tabla 3 (línea 216) y líneas",
-      "linea_aprox": 940
+      "linea_aprox": 1069
     },
     {
       "valor": "272",
       "contexto": "do-tbp.md, Tabla 3 (línea 216) y líneas 272 y 284 -->",
-      "linea_aprox": 940
+      "linea_aprox": 1069
     },
     {
       "valor": "284",
       "contexto": ".md, Tabla 3 (línea 216) y líneas 272 y 284 -->  **Do",
-      "linea_aprox": 940
+      "linea_aprox": 1069
     },
     {
       "valor": "109,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 109, cita lite",
-      "linea_aprox": 946
+      "linea_aprox": 1075
     },
     {
       "valor": "1",
       "contexto": "eau_bengio; PLAN.md, Fase 4c, «Pregunta 1» (la red",
-      "linea_aprox": 954
+      "linea_aprox": 1083
     },
     {
       "valor": "115,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 115, cita lite",
-      "linea_aprox": 1000
+      "linea_aprox": 1129
     },
     {
       "valor": "2026",
       "contexto": "on su motivo» y «Resultado de la regla (2026-10-23)»;",
-      "linea_aprox": 1005
+      "linea_aprox": 1134
     },
     {
       "valor": "-10",
       "contexto": "u motivo» y «Resultado de la regla (2026-10-23)»; out",
-      "linea_aprox": 1005
+      "linea_aprox": 1134
     },
     {
       "valor": "-23",
       "contexto": "otivo» y «Resultado de la regla (2026-10-23)»; output",
-      "linea_aprox": 1005
+      "linea_aprox": 1134
     },
     {
       "valor": "4",
       "contexto": "CLAUDE.md, «Guardarraíles del agente», 4 -->  ## L",
-      "linea_aprox": 1012
+      "linea_aprox": 1141
     },
     {
       "valor": "306,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 306, cita lite",
-      "linea_aprox": 1020
+      "linea_aprox": 1149
     },
     {
       "valor": "4",
       "contexto": "6, cita literal; CLAUDE.md, guardarraíl 4 --> - **L",
-      "linea_aprox": 1020
+      "linea_aprox": 1149
     },
     {
       "valor": "99,",
       "contexto": "ansky-2024-slice3d-descriptor.md, línea 99, cita lite",
-      "linea_aprox": 1026
+      "linea_aprox": 1155
     },
     {
       "valor": "4",
       "contexto": "del cero.   <!-- F: CLAUDE.md, hallazgo 4 («son cua",
-      "linea_aprox": 1035
+      "linea_aprox": 1164
     },
     {
       "valor": "1",
       "contexto": "u_bengio (fase4b_comparar.py, confianza 1 − 0,05/3;",
-      "linea_aprox": 1035
+      "linea_aprox": 1164
     },
     {
       "valor": "0,05",
       "contexto": "ngio (fase4b_comparar.py, confianza 1 − 0,05/3; fase4c",
-      "linea_aprox": 1035
+      "linea_aprox": 1164
     },
     {
       "valor": "3",
       "contexto": "(fase4b_comparar.py, confianza 1 − 0,05/3; fase4c_c",
-      "linea_aprox": 1035
+      "linea_aprox": 1164
     },
     {
       "valor": "1",
       "contexto": "nfianza 1 − 0,05/3; fase4c_comparar.py, 1 − 0,05/2)",
-      "linea_aprox": 1035
+      "linea_aprox": 1164
     },
     {
       "valor": "0,05",
       "contexto": "nza 1 − 0,05/3; fase4c_comparar.py, 1 − 0,05/2) --> -",
-      "linea_aprox": 1035
+      "linea_aprox": 1164
     },
     {
       "valor": "2",
       "contexto": "− 0,05/3; fase4c_comparar.py, 1 − 0,05/2) --> - **",
-      "linea_aprox": 1035
+      "linea_aprox": 1164
     },
     {
       "valor": "134",
       "contexto": "md, «Salvedad de aplicabilidad», líneas 134–143 (LOCA",
-      "linea_aprox": 1039
+      "linea_aprox": 1168
     },
     {
       "valor": "143",
       "contexto": "«Salvedad de aplicabilidad», líneas 134–143 (LOCAL) -",
-      "linea_aprox": 1039
+      "linea_aprox": 1168
     },
     {
       "valor": "9",
       "contexto": "mpo de inferencia»; CLAUDE.md, hallazgo 9 --> - **D",
-      "linea_aprox": 1049
+      "linea_aprox": 1178
     },
     {
       "valor": "2,",
       "contexto": "encias/slice3d-metadata-tbp-lv.md, nota 2, líneas 81",
-      "linea_aprox": 1053
+      "linea_aprox": 1182
     },
     {
       "valor": "81",
       "contexto": "ce3d-metadata-tbp-lv.md, nota 2, líneas 81–87; .clau",
-      "linea_aprox": 1053
+      "linea_aprox": 1182
     },
     {
       "valor": "87",
       "contexto": "d-metadata-tbp-lv.md, nota 2, líneas 81–87; .claude/",
-      "linea_aprox": 1053
+      "linea_aprox": 1182
     }
   ],
   "modo_tolerancia": "decimales_escritos",
@@ -1721,12 +1898,12 @@
       "motivo": "La salida de este mismo script. Sus recuentos describen una verificación anterior del borrador, no mediciones; en el corpus, el borrador quedaría respaldado por su propia verificación."
     }
   ],
-  "campos_declarados_como_porcentaje_en_outputs": 17,
+  "campos_declarados_como_porcentaje_en_outputs": 22,
   "por_campo": {
     "que_es": "Cada número del cuerpo, buscado en lo que cita su comentario F: (PLAN.md, Fase 6, «La verificación por campo»). Las clases señaladas van con su comentario y lo que cita.",
-    "numeros_del_cuerpo": 368,
+    "numeros_del_cuerpo": 469,
     "por_clase": {
-      "respaldada_por_su_campo": 299,
+      "respaldada_por_su_campo": 400,
       "respaldada_por_su_referencia": 19,
       "no_esta_en_sus_campos": 42,
       "fuera_de_las_lineas_citadas": 0,
@@ -2126,8 +2303,8 @@
         },
         {
           "valor": "50",
-          "linea": 870,
-          "comentario_en_linea": 871,
+          "linea": 905,
+          "comentario_en_linea": 906,
           "campos": [
             "outputs/fase4c-c4-vs-m3limpio.json > metricas.C4.pauc.media_global",
             "outputs/fase4c-c4-vs-m3limpio.json > metricas.M3limpio.pauc.media_global",
@@ -2138,8 +2315,8 @@
         },
         {
           "valor": "1.000",
-          "linea": 886,
-          "comentario_en_linea": 889,
+          "linea": 1015,
+          "comentario_en_linea": 1018,
           "campos": [
             "outputs/tiempo-inferencia.json > tiempos.*.mediana_segundos_por_1000_lesiones"
           ],
@@ -2147,8 +2324,8 @@
         },
         {
           "valor": "1.000",
-          "linea": 891,
-          "comentario_en_linea": 893,
+          "linea": 1020,
+          "comentario_en_linea": 1022,
           "campos": [
             "outputs/tiempo-inferencia.json > tiempos"
           ],
@@ -2156,8 +2333,8 @@
         },
         {
           "valor": "1.000",
-          "linea": 897,
-          "comentario_en_linea": 905,
+          "linea": 1026,
+          "comentario_en_linea": 1034,
           "campos": [
             "outputs/fase4-m2-vs-m1.json > metricas.M1",
             "outputs/fase4-m2-vs-m1.json > metricas.M2",
@@ -2170,8 +2347,8 @@
         },
         {
           "valor": "1.000",
-          "linea": 933,
-          "comentario_en_linea": 935,
+          "linea": 1062,
+          "comentario_en_linea": 1064,
           "campos": [
             "outputs/fase4-m4-vs-m2.json > comparaciones_nuevo_menos_base.*.intervalo_t_95_nadeau_bengio",
             "outputs/fase4-m4b-vs-m2.json > comparaciones_nuevo_menos_base.*.intervalo_t_95_nadeau_bengio",
@@ -2261,8 +2438,8 @@
     "marcas_sin_fuente": [],
     "citas_de_referencias": {
       "solo_lineas_originales": 57,
-      "mezcla": 1,
-      "solo_lineas_nuestras": 8,
+      "mezcla": 2,
+      "solo_lineas_nuestras": 9,
       "no_comprobables_aqui": 0,
       "lista_solo_lineas_nuestras": [
         {
@@ -2406,7 +2583,17 @@
           "nuestras": 32
         },
         {
-          "comentario_en_linea": 1039,
+          "comentario_en_linea": 958,
+          "archivo": "referencias/isic-primary-metric-pauc.py.md",
+          "lineas": [
+            48,
+            49
+          ],
+          "originales": 0,
+          "nuestras": 2
+        },
+        {
+          "comentario_en_linea": 1168,
           "archivo": "referencias/nadeau-bengio-2003-t-corregido.md",
           "lineas": [
             134,
@@ -2424,7 +2611,7 @@
           "nuestras": 10
         },
         {
-          "comentario_en_linea": 1053,
+          "comentario_en_linea": 1182,
           "archivo": "referencias/slice3d-metadata-tbp-lv.md",
           "lineas": [
             81,
@@ -2450,6 +2637,29 @@
           ],
           "originales": 1,
           "nuestras": 2
+        },
+        {
+          "comentario_en_linea": 958,
+          "archivo": "referencias/tomo20180402-2024-isic2024-10mo-puesto.md",
+          "lineas": [
+            73,
+            75,
+            84,
+            174,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245,
+            246,
+            247
+          ],
+          "originales": 3,
+          "nuestras": 12
         }
       ]
     }
