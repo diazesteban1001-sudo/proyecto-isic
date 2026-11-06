@@ -1983,10 +1983,11 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
 - [ ] **Las fases 4d, 4e, 4f, 5, 5b y 5c, y el análisis de potencia de la
-      prueba, no están todavía en el informe, el README ni la demo**
-      (2026-10-31; la 4e, desde el 2026-11-01; la 4f, desde el 2026-11-02; la
-      potencia y la Fase 5, desde el 2026-11-04; la 5b y la 5c, desde el
-      2026-11-05).
+      prueba, no están todavía en el README ni en la demo** (2026-10-31; la 4e,
+      desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia y la Fase 5,
+      desde el 2026-11-04; la 5b y la 5c, desde el 2026-11-05). *En el borrador
+      están todas desde el 2026-11-05, en tres bloques (abajo); hasta ese día
+      este punto decía también «en el informe».*
       - **En el borrador desde el 2026-11-05: las fases 4d, 4e y 4f y la
         potencia** (commit «Borrador v2: las fases 4d, 4e y 4f, y la potencia de
         la prueba»). Van en «Resultados»: la red de la 4e y la Fase 4f, al final
@@ -1998,14 +1999,24 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         el conjunto reservado y los envíos a Kaggle»): dos subsecciones nuevas
         en «Resultados», después de «Lo que la prueba alcanza a ver», «El
         conjunto reservado, abierto una sola vez» y «En la prueba de Kaggle».
-        También les faltan el README y la demo. Con ellas, todas las fases de
-        este pendiente están en el borrador, salvo en «Qué se recomienda».
-      - **Lo que el bloque deja desfasado en el borrador:** «Resultados» dice
-        ahora que, por la regla de la Fase 4f, la recomendación para el escenario
-        sin fotografía corporal total pasó a la red de la 4e, y «Qué se
-        recomienda» sigue dando «Imagen + básicos» (abajo, «Lo que la 4f deja
-        desfasado»). Hasta que se reescriba, el borrador se contradice en ese
-        punto.
+        También les faltan el README y la demo.
+      - **Y la recomendación y las limitaciones** (commit «Borrador v2: la
+        recomendación y las limitaciones con las fases 4d a 5c»): «Qué se
+        recomienda», «Qué se puede afirmar», «Qué no se puede afirmar» y
+        «Limitaciones», reemplazadas enteras. Salen dos viñetas de «Qué no se
+        puede afirmar»: «Cuánto rinde M3 limpio fuera del conjunto de
+        desarrollo», que decía que el reservado no se había abierto, y «Que este
+        trabajo supere o no a la solución ganadora», que pasa a «Cuánto se separa
+        de verdad este trabajo de la solución ganadora». Ninguna otra frase del
+        borrador las citaba. En «Datos y validación», «El conjunto reservado»
+        dejó de decir que ningún modelo se había evaluado sobre el reservado: era
+        falso desde el bloque 2.
+      - **La contradicción de «Qué se recomienda», resuelta en el borrador**
+        (2026-11-05, mismo commit). «Resultados» y «Qué se recomienda» dan las
+        dos la red de la 4e para el escenario sin fotografía corporal total, con
+        sus salvedades: el reservado no reprodujo su ventaja y el envío a Kaggle
+        que la compara se decidió después. **En la demo sigue sin resolver**
+        (abajo, «Lo que la 4f deja desfasado»).
       - **La Fase 5c:** el hallazgo 19, con los cuatro
         `outputs/fase5c-envio-*.json` y `outputs/fase5c-efectos.json`, y
         `PLAN.md`, Fase 5c. Toca el mismo pasaje que la 5b
@@ -2082,15 +2093,16 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
       - **Dónde faltan:** `informe/borrador-v2.md`, el README e
         `informe/demo.html`, con su copia `docs/index.html`. Se dejan para
         después por decisión de la persona.
-      - **Lo que la 4f deja desfasado:** «Qué se recomienda» de
-        `informe/borrador-v2.md` dice que donde no hay sistema de fotografía
-        corporal total el punto de partida es la imagen con edad, sexo y zona
-        del cuerpo. Por la regla de la Fase 4f, la recomendación para ese
-        escenario es ahora la red de la 4e (hallazgo 15), así que ese párrafo
-        cambia. La demo lo repite: el texto de «Qué se recomienda» en
-        `generar_demo.py`, y con él `informe/demo.html` y `docs/index.html`. El
-        README no da una recomendación para ese escenario: le falta la 4f, no
-        la contradice.
+      - **Lo que la 4f deja desfasado:** la demo dice que donde no hay sistema
+        de fotografía corporal total el punto de partida es la imagen con edad,
+        sexo y zona del cuerpo: el texto de «Qué se recomienda» en
+        `generar_demo.py`, y con él `informe/demo.html` y `docs/index.html`. Por
+        la regla de la Fase 4f, la recomendación para ese escenario es la red de
+        la 4e (hallazgo 15). La demo repite también las dos viñetas que salieron
+        de «Qué no se puede afirmar», la del reservado sin abrir incluida. El
+        README no da una recomendación para ese escenario: le falta la 4f, no la
+        contradice. *Hasta el 2026-11-05 esto valía también para «Qué se
+        recomienda» de `informe/borrador-v2.md`, reescrito ese día (arriba).*
       - **Qué hacer al añadirlas:** regenerar `outputs/sintesis-verificacion.json`
         y revisar, uno por uno, los números nuevos que pasen por coincidencia,
         como al añadir las fases 4b y 4c.
@@ -2300,6 +2312,26 @@ reservado y los envíos a Kaggle»):
   página y qué no muestra la captura. Respalda que ninguna fuente versionada
   diga que la puntuación privada de un envío tardío salga del subconjunto del
   tablero final, y el párrafo que la cita no tiene números.
+
+*Y una séptima,* en el commit «Regenerar la verificación y el analizador con el
+bloque 3 en el borrador», del 2026-11-05, con «Qué se recomienda», «Qué se
+puede afirmar», «Qué no se puede afirmar» y «Limitaciones» reemplazadas (commit
+«Borrador v2: la recomendación y las limitaciones con las fases 4d a 5c»):
+- **Búsqueda en todo el corpus:** 1.046 números; 565 con respaldo, 11
+  señalados, los mismos de antes, 10 del método, 21 omitidos por su contexto y
+  439 en comentarios. El del método que se suma es otro «80%» de la potencia,
+  en «Limitaciones».
+- **Por campo, sobre los 576 números del cuerpo:** 507 respaldados por su campo
+  y 19 por su referencia; 50 señalados, los mismos de antes. Los 37 números
+  nuevos quedan respaldados por su campo. El «19» de la bitácora de `PLAN.md`,
+  que traía el borrador del bloque, se quitó antes de insertarlo, porque no está
+  en `outputs/`.
+- **El analizador:** 264 comentarios `F:`, 194 que entran en la gramática y 70
+  que solo citan documentos del proyecto; ninguno que no entre.
+- **Las citas de `referencias/`:** suma una que apunta solo a líneas nuestras,
+  la segunda cita de las líneas 48 y 67–70 de
+  `referencias/kaggle-code-requirements.md`, ahora en «Limitaciones». Su
+  párrafo no tiene números.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
