@@ -1214,6 +1214,7 @@ __AVISO_EXPLORATORIO__
     <h3>En la prueba de Kaggle</h3>
     <p class="frase" id="frase-kaggle"></p>
     <div class="lienzo"><canvas id="gr-tres"></canvas></div>
+    <div class="leyenda" id="leyenda-tres"></div>
     <p class="pie-grafico" id="pie-tres"></p>
     <div class="lienzo" style="margin-top:24px"><canvas id="gr-cascada"></canvas></div>
     <p class="pie-grafico" id="pie-cascada"></p>
@@ -2091,7 +2092,9 @@ new Chart(document.getElementById("gr-tres"), {
     responsive: true, maintainAspectRatio: false,
     scales: { y: { beginAtZero: true, suggestedMax: D.escala.maximo, title: { display: true, text: "pAUC" } } },
     plugins: {
-      legend: { position: "bottom" },
+      // La leyenda va en HTML (leyenda-tres): la de Chart.js cortaba a 375 px el
+      // rótulo del reservado.
+      legend: { display: false },
       tooltip: {
         callbacks: {
           label: it => {
@@ -2169,6 +2172,7 @@ new Chart(document.getElementById("gr-cascada"), {
     }
   }
 });
+leyenda("leyenda-tres", EVAL.map(e => [`background:${e.color}`, e.nombre]));
 document.getElementById("det-5a").innerHTML =
   P([`El conjunto reservado, abierto una sola vez, y Kaggle, que da una sola cifra por envío.`]) +
   `<h3>El conjunto reservado, abierto una sola vez</h3>` + restoReservado +
