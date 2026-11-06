@@ -1982,10 +1982,22 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         conteo. Control: `test_referencias_a_fases_y_semillas.py`, 11 de 11,
         con la expresión anterior como caso que debe fallar; la prueba de las
         celdas, al día, 7 de 7.*
-- [ ] **Las fases 4d, 4e, 4f, 5 y 5b, y el análisis de potencia de la prueba,
-      no están todavía en el informe, el README ni la demo** (2026-10-31; la
-      4e, desde el 2026-11-01; la 4f, desde el 2026-11-02; la potencia y la
-      Fase 5, desde el 2026-11-04; la 5b, desde el 2026-11-05).
+- [ ] **Las fases 4d, 4e, 4f, 5, 5b y 5c, y el análisis de potencia de la
+      prueba, no están todavía en el informe, el README ni la demo**
+      (2026-10-31; la 4e, desde el 2026-11-01; la 4f, desde el 2026-11-02; la
+      potencia y la Fase 5, desde el 2026-11-04; la 5b y la 5c, desde el
+      2026-11-05).
+      - **La Fase 5c:** el hallazgo 19, con los cuatro
+        `outputs/fase5c-envio-*.json` y `outputs/fase5c-efectos.json`, y
+        `PLAN.md`, Fase 5c. Toca el mismo pasaje que la 5b
+        (`informe/borrador-v2.md`, líneas 833 a 837), que dice que la variante
+        del ganador sin recortes de imagen tenía *«la etiqueta del hospital
+        entre sus variables»*. La 5c mide en Kaggle lo que aporta el hospital,
+        sin intervalo: +0,00048 en la privada en la parte tabular y +0,00237 con
+        la red (`fase5c-efectos.json > efectos`). Al añadirla, va con lo que
+        deja (hallazgo 19): Kaggle queda cerrado, no cambia ninguna
+        recomendación, y de las dos mejoras de la descomposición, promediar es
+        la única que no usa datos que el proyecto excluyó.
       - **La Fase 5b:** el hallazgo 18, con los cuatro
         `outputs/fase5b-envio-*.json` y `outputs/fase5b-comparacion.json`, y
         `PLAN.md`, Fase 5b. Toca un pasaje que el borrador ya tiene:
@@ -2010,7 +2022,17 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         detectar cáncer. Al añadirla, acompaña a las lecturas de «no mejora»
         de las fases 4b a 4e (hallazgo 16, la lectura).
       - **Lo que cambia en la verificación: con las salidas de la 5b, un
-        número.** Antes de ellas, nada, desde la separación del 2026-11-04.
+        número; con las de la 5c, ninguno.** Antes de ellas, nada, desde la
+        separación del 2026-11-04.
+        - **Con las salidas de la 5c (2026-11-05).** Recalculada en el
+          scratchpad con los 13 `outputs/fase5c-*.json` en el corpus, además de
+          los de la 5b, la verificación del borrador da los mismos recuentos que
+          sin ellos: 688 números, 357 con respaldo y 11 señalados, y los mismos
+          señalados. La verificación por campo (`por_campo`) tampoco cambia. Solo
+          `campos_declarados_como_porcentaje_en_outputs` pasa de 19 a 22, por los
+          tres porcentajes de la descomposición
+          (`fase5c-efectos.json > descomposicion_de_la_distancia_al_ganador.porcentaje_de_la_distancia`).
+          La versionada no se regeneró.
         - **Con las salidas de la 5b (2026-11-05).** La verificación del
           borrador, recalculada en el scratchpad con los `outputs/fase5b-*.json`
           en el corpus, pasa en la búsqueda en todo el corpus de 356 números con
