@@ -466,9 +466,11 @@ semilla 2026, y se selló.
 Ningún estrato quedó vacío: todos los centros tienen al menos un paciente con
 lesión maligna a cada lado.
 <!-- F: PLAN.md, Fase 1, «Sellado (2026-09-25)» -->
-Desde entonces, todas las mediciones de este informe son del conjunto de
-desarrollo, y ningún modelo se ha evaluado sobre el reservado.
-<!-- F: PLAN.md, Fase 1, «Estado»; outputs/auditoria-de-fugas.json, outputs/diseno-validacion.json, outputs/eda-diagnostico.json, outputs/efecto-particion.json, outputs/fase4-m2-vs-m1.json, outputs/fase4-m3-vs-m2.json, outputs/fase4-m3limpio-vs-m2.json, outputs/fase4-m4-vs-m2.json, outputs/fase4-m4b-vs-m2.json, outputs/fase4b-c1-vs-m3limpio.json, outputs/fase4b-c2-vs-m3limpio.json, outputs/fase4b-c3-vs-m3limpio.json, outputs/fase4c-c4-vs-m3limpio.json, outputs/fase4c-control-atajo.json, outputs/fase4c-red-sola-vs-imagen.json, outputs/fase4d-c5-vs-m3limpio.json, outputs/fase4d-c6-vs-m3limpio.json, outputs/fase4d-red-mejorada-vs-red.json, outputs/fase4e-c7-vs-m3limpio.json, outputs/fase4e-exploracion.json, outputs/fase4e-red-vs-red4c.json, outputs/fase4f-red4e-vs-imagen-basicos.json, outputs/imagen-sola.json, outputs/mecanismo-2a.json, outputs/modelado-baseline.json, outputs/prueba-tiempo-dinov2.json, outputs/prueba-tiempo-red-4e.json, outputs/prueba-tiempo-red-imagen.json, outputs/sensibilidad-procedencia-repetida.json, outputs/sensibilidad-procedencia.json, outputs/tiempo-inferencia.json y outputs/validacion-repetida.json > datos.conjunto (los 32 dicen «desarrollo») -->
+Desde entonces y hasta abrirlo, una sola vez, todas las mediciones de este
+informe son del conjunto de desarrollo; las del reservado y las de Kaggle van en
+«Resultados», «El conjunto reservado, abierto una sola vez» y «En la prueba de
+Kaggle».
+<!-- F: «Resultados», «El conjunto reservado, abierto una sola vez» y «En la prueba de Kaggle»; PLAN.md, Fase 1, «Estado»; outputs/auditoria-de-fugas.json, outputs/diseno-validacion.json, outputs/eda-diagnostico.json, outputs/efecto-particion.json, outputs/fase4-m2-vs-m1.json, outputs/fase4-m3-vs-m2.json, outputs/fase4-m3limpio-vs-m2.json, outputs/fase4-m4-vs-m2.json, outputs/fase4-m4b-vs-m2.json, outputs/fase4b-c1-vs-m3limpio.json, outputs/fase4b-c2-vs-m3limpio.json, outputs/fase4b-c3-vs-m3limpio.json, outputs/fase4c-c4-vs-m3limpio.json, outputs/fase4c-control-atajo.json, outputs/fase4c-red-sola-vs-imagen.json, outputs/fase4d-c5-vs-m3limpio.json, outputs/fase4d-c6-vs-m3limpio.json, outputs/fase4d-red-mejorada-vs-red.json, outputs/fase4e-c7-vs-m3limpio.json, outputs/fase4e-exploracion.json, outputs/fase4e-red-vs-red4c.json, outputs/fase4f-red4e-vs-imagen-basicos.json, outputs/imagen-sola.json, outputs/mecanismo-2a.json, outputs/modelado-baseline.json, outputs/prueba-tiempo-dinov2.json, outputs/prueba-tiempo-red-4e.json, outputs/prueba-tiempo-red-imagen.json, outputs/sensibilidad-procedencia-repetida.json, outputs/sensibilidad-procedencia.json, outputs/tiempo-inferencia.json y outputs/validacion-repetida.json > datos.conjunto (los 32 dicen «desarrollo») -->
 
 El reservado no es ajeno a lo que se decidió antes de apartarlo, con todos
 los datos: qué columnas se excluyen —salvo las dos de procedencia, decididas
@@ -1174,32 +1176,63 @@ solución ganadora, sin los dos sesgos conocidos a su favor.
 Se eligió con una regla fijada antes de correr la comparación: el intervalo
 corregido de su diferencia con M2 en la pAUC queda entero por encima de cero.
 <!-- F: PLAN.md, Fase 4, «Regla de recomendación»; F3L > C.pauc.IC -->
+Ninguna de las versiones que se le compararon después de elegirlo, de la Fase
+4b a la 4e, llegó a su regla, y en el conjunto reservado, abierto una sola vez,
+la ventaja sobre M2 se mantiene en la pAUC y en el AUC.
+<!-- F: «Resultados», «El conjunto reservado, abierto una sola vez»; outputs/fase5-reservado.json > diferencia_m3limpio_menos_m2.pauc.intervalo_95 y diferencia_m3limpio_menos_m2.auc.intervalo_95; PLAN.md, Fase 4b, «Resultado de la regla (2026-10-22)»; PLAN.md, Fase 4c, «Resultado de la regla (2026-10-23)»; PLAN.md, Fase 4d, «Resultado de la regla (2026-10-31)»; PLAN.md, Fase 4e, «Resultado de la regla (2026-11-01)» -->
 
-**Donde se toma la fotografía corporal total, no se recomienda añadir las
-variables de imagen** tal como se probaron. Añadidas al modelo con contexto de
-paciente no mejoraron ninguna métrica de forma distinguible, y al predecir
-cuestan 14,5156 y 14,6321 segundos por cada 1.000 lesiones, frente a 0,0435 de
-M3 limpio.
+**Donde se toma la fotografía corporal total, no se recomienda, por ahora,
+añadir la imagen.** Añadida al modelo con contexto de paciente como variables
+de DINOv2, sueltas en M4 o apiladas en M4b, no mejoró ninguna métrica de forma
+distinguible, y al predecir esos dos modelos cuestan 14,5156 y 14,6321
+segundos por cada 1.000 lesiones, frente a 0,0435 de M3 limpio.
 <!-- F: F42 y F4b > C.*.IC; outputs/tiempo-inferencia.json > tiempos.M4, tiempos.M4b y tiempos.M3limpio (mediana_segundos_por_1000_lesiones) -->
 Eso no dice que la imagen no sirva para detectar cáncer: en la ablación de los
 organizadores, la variante del modelo ganador que solo usa los recortes llega
 a un AUC de 0,922, y la presentan como una base sólida para cuando no se pueden
 recoger los metadatos, como al usar la cámara de un teléfono.
 <!-- F: referencias/kurtansky-2025-triaje-automatizado-tbp.md, Tabla 3 (línea 216) y líneas 272 y 284 -->
+Con una red entrenada sobre los recortes y apilada sobre M3 limpio, las cuatro
+versiones, de C4 a C7, quedaron por encima de él en la media, de +0,0029 a
++0,0067, y ninguna llegó a su regla; las cuatro diferencias quedan por debajo
+del tamaño que la prueba distingue con un 50% de probabilidad. En Kaggle, C7
+queda por encima de M3 limpio en la puntuación privada, +0,00722, sin
+intervalo. El tiempo de inferencia de C7 no se midió con el procedimiento del
+proyecto; el notebook de Kaggle, en otro equipo, lo proyectó en 0,39 horas por
+cada 500.000 lesiones, frente a 0,04 horas de M3 limpio.
+<!-- F: outputs/potencia-nadeau-bengio.json > comparaciones.C7.media_observada, comparaciones.C4.media_observada, comparaciones.*.media_observada, comparaciones.*.delta_50 y objetivos; outputs/fase5b-comparacion.json > aritmetica_de_dos_fuentes.c7_menos_m3limpio_kaggle_privada; outputs/fase5b-kaggle-medicion.json > salida_del_notebook.tiempo.proyeccion.C7.horas_proyectadas, salida_del_notebook.tiempo.proyeccion.M3limpio.horas_proyectadas y salida_del_notebook.tiempo.lesiones_de_prueba_supuestas; «Resultados», «El modelo recomendado» y «Lo que la prueba alcanza a ver»; CLAUDE.md, hallazgo 14 (no se midió con el procedimiento de tiempo-inferencia) -->
+*Lectura, no medición:* con lo medido, no se puede decir si apilar la red sobre
+M3 limpio lo mejora: la mejora no se distingue, pero tampoco se descarta. Por
+eso la recomendación se queda, por ahora, con M3 limpio, sin imagen.
+<!-- F: «Resultados», «Lo que la prueba alcanza a ver»; CLAUDE.md, hallazgo 16, «Lectura, no medición» -->
 
 **Donde no hay ese sistema, M3 limpio no se puede aplicar tal cual, y la
 imagen es el insumo disponible.** Es el escenario que el artículo del conjunto
 de datos pone como objetivo: algoritmos que decidan a partir de *"clinical
 photos resembling the resolution of smartphone images"*.
 <!-- F: «Resultados», «La imagen sola, sin el sistema de fotografía corporal total»; referencias/kurtansky-2024-slice3d-descriptor.md, línea 109, cita literal -->
-Ahí, el punto de partida es la imagen con edad, sexo y zona del cuerpo, que
-mejora el AUC de la imagen sola. Esa mejora se midió con una zona del cuerpo
-que pudo venir del software del sistema, así que antes de usarla habría que
-medirla con fotos de teléfono y con la zona que informe la persona. Una red
-entrenada sobre los recortes supera a la imagen sola, sin edad, sexo ni zona
-del cuerpo, en la mayoría de los pliegues, sin que la diferencia en la pAUC
-quede establecida; la red con esos datos no se probó.
-<!-- F: IS > C.imagen_basicos_menos_imagen.auc.IC; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono»; «Resultados», «La imagen sola, sin el sistema de fotografía corporal total» (las fuentes sobre la zona del cuerpo y la red entrenada); outputs/fase4c-red-sola-vs-imagen.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds y .intervalo_bonferroni_nadeau_bengio; PLAN.md, Fase 4c, «Pregunta 1» (la red frente a «Imagen», sin los datos básicos) -->
+Ahí se recomienda la red de la Fase 4e, que usa solo la imagen. Por la regla
+de la Fase 4f, fijada antes de correr, supera a «Imagen + básicos», el punto de
+partida que daba antes este informe: +0,0493 de pAUC, [0,0218; 0,0767], mejor
+en 25 de 25 pliegues.
+<!-- F: outputs/fase4f-red4e-vs-imagen-basicos.json > C.pauc.media, .intervalo_t_95_nadeau_bengio, .nuevo_mejor_en_folds, .de_folds y regla.a_favor; PLAN.md, Fase 4f, «Resultado de la regla (2026-11-02)» -->
+Esta recomendación tiene tres salvedades. La pregunta se eligió después de ver
+la Fase 4e. En el conjunto reservado, la ventaja no se reprodujo: −0,0078,
+[−0,0306; 0,02], y por qué «Imagen + básicos» da más en el reservado no está
+medido. Y en Kaggle la red vuelve a quedar por encima, 0,1159 frente a 0,08935,
+pero es una sola cifra por envío, sin intervalo, y ese envío se decidió después
+de ver el reservado. Por la regla fijada antes de abrirlo, el reservado no
+cambia la recomendación.
+<!-- F: PLAN.md, Fase 4f, «Lo que el resultado no dice»; outputs/fase5-posterior.json > red4e_menos_imagen_basicos.pauc.punto e .intervalo_95; PLAN.md, Fase 5, «Análisis posterior a la apertura (2026-11-04)»; outputs/fase5b-comparacion.json > comparaciones_con_la_privada.red4e_menos_imagen_basicos.modelo y .referencia; PLAN.md, Fase 5b, «Qué se hace (decisión de la persona, 2026-11-04)»; PLAN.md, Fase 5, «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado» -->
+Para usarla con pacientes falta medir cómo rinde con fotos de teléfono y
+cuánto cuesta al predecir con el procedimiento del proyecto; el notebook de
+Kaggle, en otro equipo, lo proyectó en 0,31 horas por cada 500.000 lesiones. La
+red con edad, sexo y zona del cuerpo no se probó.
+<!-- F: «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono»; outputs/fase5b-kaggle-medicion.json > salida_del_notebook.tiempo.proyeccion.Red4e.horas_proyectadas y salida_del_notebook.tiempo.lesiones_de_prueba_supuestas; PLAN.md, Fase 4f, «Lo que el resultado no dice» y «Lo que esta fase no hace» -->
+*Lectura, no medición:* como la red no usa la zona del cuerpo, no le alcanza la
+salvedad de «Imagen + básicos», cuya zona del cuerpo pudo venir del software
+del sistema.
+<!-- F: PLAN.md, Fase 4f, «Lo que el resultado no dice» (la «Lectura nuestra, no medición» que le sigue); CLAUDE.md, hallazgo 10 -->
 
 **Y se recomienda no leer solo la pAUC.** El contexto de paciente no se nota
 en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80% SE.
@@ -1210,6 +1243,10 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
 - En el conjunto de desarrollo, con validación cruzada repetida y el
   intervalo corregido, M3 limpio supera a M2 en la pAUC y en el AUC estándar.
   <!-- F: F3L > C.pauc.IC y C.auc.IC -->
+- En el conjunto reservado, con pacientes con los que no se entrenó ningún
+  modelo, M3 limpio también supera a M2 en la pAUC, +0,0201, [0,0008; 0,0413],
+  y en el AUC, +0,0219, [0,0009; 0,0459].
+  <!-- F: outputs/fase5-reservado.json > diferencia_m3limpio_menos_m2.pauc.punto, .intervalo_95, diferencia_m3limpio_menos_m2.auc.punto e .intervalo_95 -->
 - El contexto de paciente mejora frente a M1 la sensibilidad top-15 y el NNT80%
   SE.
   <!-- F: F21 > C.setop15.IC y C.nnt80.IC -->
@@ -1221,9 +1258,22 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   lesiones malignas muy por encima del azar, pero con el extractor congelado,
   DINOv2, queda por debajo de M1 en las cuatro métricas.
   <!-- F: «Resultados», «La imagen sola, sin el sistema de fotografía corporal total»; IS > metricas.Imagen.pauc.por_semilla_y_fold; IS > C.imagen_menos_m1.*.IC -->
+- En el conjunto de desarrollo, la red de la Fase 4e, que usa solo la imagen,
+  supera a «Imagen + básicos» en la pAUC con la regla de una sola pregunta, y
+  las tres métricas secundarias van en la misma dirección.
+  <!-- F: outputs/fase4f-red4e-vs-imagen-basicos.json > C.pauc.valor_p_nadeau_bengio, regla.a_favor y C.*.intervalo_t_95_nadeau_bengio -->
+- Una decisión de método cambia el veredicto sobre la red de la Fase 4e frente
+  a la de la 4c. Su valor p, 0,0365, no llega al umbral de Holm para la primera
+  de dos preguntas, 0,025; con una sola pregunta, el umbral habría sido 0,05.
+  <!-- F: outputs/fase4e-red-vs-red4c.json > C.pauc.valor_p_nadeau_bengio; outputs/fase4e-holm.json > preguntas[0].umbral_holm y alfa -->
 - Una partición por filas habría dejado al 98,92% de los pacientes a los dos
   lados de la validación.
   <!-- F: outputs/diseno-validacion.json > comparacion_particion_naive.pct_grupos_con_fuga -->
+- En la puntuación privada de Kaggle, ninguno de los ocho envíos llega a la del
+  ganador, 0,1726. El más cercano, «C7 promediado + hospital», da 0,166, y el
+  más cercano sin la etiqueta del hospital, «C7 promediado», 0,16363. Son cifras
+  sueltas, sin intervalo.
+  <!-- F: outputs/fase5b-comparacion.json > comparaciones_con_la_privada.c7_menos_ganador.referencia; outputs/fase5c-efectos.json > kaggle.*.privada, kaggle.C7PromHosp.privada y kaggle.C7Prom.privada; outputs/fase5b-envio-red4e.json y outputs/fase5b-envio-imagenbasicos.json > envios.0.privateScore -->
 
 ### Qué no se puede afirmar
 
@@ -1232,28 +1282,55 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   <!-- F: F3L > C.setop15.IC y C.nnt80.IC -->
 - **Cuál de los dos sesgos de M3 pesaba.** M3 limpio cambia tres cosas a la vez.
   <!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->
-- **Cuánto rinde M3 limpio fuera del conjunto de desarrollo.** El conjunto
-  reservado no se ha abierto. Cuando se abra, la estimación principal seguirá
-  siendo la validación cruzada repetida, y la recomendación no cambiará por su
-  resultado.
-  <!-- F: PLAN.md, Fase 5, «Especificación» -->
+- **Que la red de la Fase 4e supere a «Imagen + básicos» con pacientes
+  nuevos.** En el reservado la ventaja no se reprodujo, y Kaggle da una sola
+  cifra por envío. Por qué «Imagen + básicos» da más en el reservado que en el
+  desarrollo no está medido. Se midió su curva de aprendizaje en el desarrollo,
+  pero no la de la red, así que no se sabe si uno de los dos mejora más que el
+  otro con más datos.
+  <!-- F: outputs/fase5-posterior.json > red4e_menos_imagen_basicos.*.intervalo_95; outputs/fase5b-comparacion.json > como_leerla; PLAN.md, Fase 5, «Análisis posterior a la apertura (2026-11-04)» y «Curva de aprendizaje, solo desarrollo (2026-11-04)»; outputs/curva-aprendizaje.json > imagen_basicos.curva y red4e -->
 - **Nada sobre otras redes de imagen.** Solo se probaron las variables de
   DINOv2 sin reentrenarlo y una red pequeña, EfficientNet-B0, entrenada sobre
-  los recortes con ajustes fijos; las redes del ganador quedaron fuera.
-  <!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada); PLAN.md, Fase 4c, «La red», «Cómo se entrena, fijado antes de correr y sin ajuste» y «Qué no entra, con su motivo» -->
-- **Cuánto rinde un modelo con fotos de teléfono.** La imagen sola se midió
-  sobre los recortes estandarizados del sistema de fotografía corporal total.
-  El artículo del conjunto de datos advierte que las fotos que toman los
-  pacientes *"vary greatly in lighting and FOV"*.
-  <!-- F: IS > datos; referencias/kurtansky-2024-slice3d-descriptor.md, línea 115, cita literal -->
-- **Que no exista una forma de mejorar a M3 limpio.** Solo se probaron tres
-  combinaciones y una red de imagen pequeña con ajustes fijos, sin ajustar
-  hiperparámetros. M3 limpio con la red apilada queda por encima de M3 limpio
-  en las 10 semillas, pero sin diferencia establecida.
-  <!-- F: PLAN.md, Fase 4b, «Qué no entra, con su motivo»; PLAN.md, Fase 4c, «Qué no entra, con su motivo» y «Resultado de la regla (2026-10-23)»; outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_semillas y .intervalo_bonferroni_nadeau_bengio; PLAN.md, Fase 4, especificación de M3 (del ajuste de hiperparámetros del ganador solo consta un estudio de Optuna comentado, celda 23) -->
-- **Que este trabajo supere o no a la solución ganadora.** Su evaluación usó
-  otros datos y otras particiones.
-  <!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
+  los recortes con tres recetas: la de la Fase 4c, con ajustes fijos; la de la
+  4d, con más épocas y los negativos en bloques; y la del 10.º puesto, con un
+  ajuste fino por la pAUC, en la 4e. Las redes del ganador quedaron fuera.
+  <!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada); PLAN.md, Fase 4c, «La red», «Cómo se entrena, fijado antes de correr y sin ajuste» y «Qué no entra, con su motivo»; PLAN.md, Fase 4d, «Pregunta 2 · La red mejorada frente a la red de la Fase 4c»; PLAN.md, Fase 4e, «Qué se entrena: la red de la 4e» -->
+- **Cuánto rinde un modelo con fotos de teléfono.** Todos los modelos de
+  imagen, también la red de la Fase 4e, se midieron sobre los recortes
+  estandarizados del sistema de fotografía corporal total, y en Kaggle, sobre
+  los recortes de la prueba del reto. El artículo del conjunto de datos advierte
+  que las fotos que toman los pacientes *"vary greatly in lighting and FOV"*.
+  <!-- F: IS > datos; PLAN.md, Fase 4f, «Resultado de la regla (2026-11-02)»; CLAUDE.md, hallazgo 18, «Sobre qué se midió»; referencias/kurtansky-2024-slice3d-descriptor.md, línea 115, cita literal -->
+- **Cuánto cuesta predecir con la red de la Fase 4e o con C7 frente a los
+  demás modelos.** Sus tiempos no se midieron con el procedimiento de «Cómo se
+  mide el tiempo de inferencia», y la eficiencia es uno de los tres ejes de la
+  pregunta del cliente. Solo hay la proyección del notebook de Kaggle, en otro
+  equipo: 0,31 horas para la red y 0,39 para C7 por cada 500.000 lesiones, que
+  no se compara con los tiempos de «El costo de inferencia».
+  <!-- F: outputs/fase5b-kaggle-medicion.json > salida_del_notebook.tiempo.proyeccion.Red4e.horas_proyectadas, salida_del_notebook.tiempo.proyeccion.C7.horas_proyectadas y salida_del_notebook.tiempo.lesiones_de_prueba_supuestas; PLAN.md, Fase 4f, «Lo que el resultado no dice»; CLAUDE.md, hallazgo 14; «Método», «Cómo se mide el tiempo de inferencia»; «Resultados», «La pregunta del cliente, entera» -->
+- **Que no exista una forma de mejorar a M3 limpio.** Ninguna de las siete
+  versiones que se le compararon, de C1 a C7, en las fases 4b a 4e, llegó a su
+  regla. Ninguna buscó hiperparámetros: sus ajustes se fijaron antes de correr,
+  y la única elección hecha con resultados fue la de la exploración de la 4e,
+  que decidió con la semilla 0 usar el ajuste fino. Las cuatro que apilan una
+  red de imagen, de C4 a C7, quedaron por encima de él en la media, y la prueba
+  no distingue mejoras de ese tamaño: no distinguirlas no es lo mismo que no
+  tenerlas.
+  <!-- F: PLAN.md, Fase 4b, «Resultado de la regla (2026-10-22)»; PLAN.md, Fase 4c, «Resultado de la regla (2026-10-23)»; PLAN.md, Fase 4d, «Resultado de la regla (2026-10-31)»; PLAN.md, Fase 4e, «Resultado de la regla (2026-11-01)»; PLAN.md, fases 4b, 4c y 4d, «Qué no entra, con su motivo» (el ajuste de hiperparámetros); PLAN.md, Fase 4e, «Exploración, semilla 0 (descriptiva)» y «Los ajustes del paso 2 (2026-11-01), fijados antes de leer la exploración»; PLAN.md, Fase 4, especificación de M3 (del ajuste de hiperparámetros del ganador solo consta un estudio de Optuna comentado, celda 23); «Resultados», «Lo que la prueba alcanza a ver» -->
+- **Que promediar varios CatBoost, o usar la etiqueta del hospital, mejore el
+  modelo.** Solo se midieron en Kaggle, con una cifra por envío. Promediar
+  cambia dos cosas a la vez, y el mayor de los dos efectos del hospital cambia
+  de signo entre la puntuación pública y la privada. En la validación cruzada
+  no se probó promediar varios CatBoost de la misma especificación, ni la
+  etiqueta del hospital con M3 limpio o con C7. Esa etiqueta, junto con la otra
+  columna de procedencia, solo se probó con los modelos de referencia.
+  <!-- F: PLAN.md, Fase 5c, «Salvedades» y «Qué se hace (decisión de la persona, 2026-11-05)»; outputs/fase5c-efectos.json > efectos.hospital_con_imagen.mismo_signo_en_la_publica; outputs/auditoria-de-fugas.json > columnas_procedencia; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin; CLAUDE.md, hallazgo 3; .claude/skills/modelado-baseline/scripts/ganador_m3.py, docstring (M3 y M3 limpio excluyen attribution) -->
+- **Cuánto se separa de verdad este trabajo de la solución ganadora.** La
+  distancia en Kaggle es una resta entre dos cifras sin intervalo, y su reparto
+  entre promediar y el hospital depende del orden de los envíos. En el
+  desarrollo, la evaluación usó otros datos y otras particiones que la del
+  ganador.
+  <!-- F: outputs/fase5b-comparacion.json > como_leerla; outputs/fase5c-efectos.json > como_leerlos; PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->
 - **Nada clínico.** Los modelos ordenan lesiones por sospecha; no dicen qué
   tiene un paciente ni qué hacer con él. Son evidencia para una decisión
   humana.
@@ -1281,6 +1358,20 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   multiplicidad dentro de cada fase, con Bonferroni; las demás no, y el
   intervalo del NNT80% SE de M2 − M1 queda al límite del cero.
   <!-- F: CLAUDE.md, hallazgo 4 («son cuatro métricas sobre una misma comparación, y el NNT queda al límite»); fase4_comparar.py (un intervalo por métrica, sin ajuste por multiplicidad); F21 > C.nnt80.IC; EP > particiones.paciente.comparacion_2b_menos_1 y particiones.filas.comparacion_2b_menos_1; IS > C.imagen_menos_m1 y C.imagen_basicos_menos_imagen; outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (solo la pAUC); outputs/fase4b-c1-vs-m3limpio.json, outputs/fase4b-c2-vs-m3limpio.json, outputs/fase4b-c3-vs-m3limpio.json, outputs/fase4c-red-sola-vs-imagen.json y outputs/fase4c-c4-vs-m3limpio.json > comparaciones_nuevo_menos_base.*.intervalo_bonferroni_nadeau_bengio (fase4b_comparar.py, confianza 1 − 0,05/3; fase4c_comparar.py, 1 − 0,05/2) -->
+- **Cada ronda se eligió viendo las anteriores.** La bitácora de `PLAN.md`
+  registra todas las comparaciones por la pAUC desde la Fase 4. Las fases 4d y 4e
+  se corrigen con Holm dentro de cada una, y la 4f es una sola pregunta, sin
+  corrección; ninguna corrección cubre varias rondas a la vez. La pregunta de la
+  4f se eligió con la diferencia de medias ya calculable desde `outputs/`, y en
+  la 4e la exploración y la confirmación usan semillas que reparten a los mismos
+  pacientes.
+  <!-- F: PLAN.md, Fase 4f, «Bitácora, fila de la Fase 4f» y «Lo que el resultado no dice»; outputs/fase4d-holm.json > preguntas; outputs/fase4e-holm.json > preguntas; CLAUDE.md, hallazgo 14, «Las semillas» -->
+- **La prueba no distingue mejoras pequeñas frente a M3 limpio.** Con la
+  variabilidad observada, para dar su resultado a favor con un 80% de
+  probabilidad necesita una mejora real de entre 0,0109 y 0,0159 de pAUC, y más
+  semillas casi no bajan ese umbral. El cálculo hereda la aproximación de la
+  propia prueba y toma la dispersión observada como la verdadera.
+  <!-- F: outputs/potencia-nadeau-bengio.json > comparaciones.*.delta_80 y prueba.rho; CLAUDE.md, hallazgo 16, «Salvedades» -->
 - **La corrección de la varianza es aproximada.** Nadeau y Bengio la derivan
   para divisiones aleatorias independientes, y aquí se aplica a una validación
   por pliegues.
@@ -1289,9 +1380,19 @@ en ella y sí en las dos métricas de triaje: la sensibilidad top-15 y el NNT80%
   publica script para él.
   <!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->
 - **El conjunto reservado no es del todo independiente.** No es ajeno a las
-  decisiones tomadas antes de sellarlo ni al diseño de las variables de la
-  solución ganadora, que siguen M2 y M3 limpio.
-  <!-- F: «Datos y validación», «El conjunto reservado»; PLAN.md, Fase 5, «Salvedad de M2» -->
+  decisiones tomadas antes de sellarlo, al diseño de las variables de la
+  solución ganadora, que siguen M2 y M3 limpio, ni a la receta de la red de la
+  Fase 4e, que su autor fijó sobre todo el conjunto de entrenamiento del reto.
+  Tiene 76 lesiones malignas, en 52 pacientes. Y después de su única evaluación
+  dejó de estar reservado: los modelos de Kaggle se entrenaron también con él.
+  <!-- F: «Datos y validación», «El conjunto reservado»; PLAN.md, Fase 5, «Salvedad de M2» y «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado»; outputs/fase5-reservado.json > datos.evaluacion.malignas y .pacientes_con_malignas; CLAUDE.md, hallazgo 18, «El reservado dejó de estar reservado» -->
+- **Kaggle da una sola cifra por envío.** Sin intervalo, no se puede decir qué
+  diferencias entre los ocho envíos son ruido. Los cuatro de la Fase 5c se
+  decidieron después de ver los de la 5b: son una segunda mirada al mismo
+  conjunto de prueba. Y que la puntuación privada de los envíos tardíos salga
+  del mismo subconjunto que el tablero final es lectura nuestra; ninguna fuente
+  versionada lo dice.
+  <!-- F: outputs/fase5b-comparacion.json > como_leerla; PLAN.md, Fase 5c, «Salvedades»; «Resultados», «En la prueba de Kaggle»; referencias/kaggle-code-requirements.md, líneas 48 y 67–70 -->
 - **Los tiempos son de un solo equipo**, con DINOv2 en la GPU y los modelos
   tabulares en la CPU. Solo comparan estos modelos entre sí.
   <!-- F: «Método», «Cómo se mide el tiempo de inferencia»; CLAUDE.md, hallazgo 9 -->
