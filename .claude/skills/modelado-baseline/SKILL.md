@@ -732,6 +732,42 @@ caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_e
 .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5b_comparacion.py --out outputs/fase5b-comparacion
 ```
 
+## La Fase 5c: descomponer la distancia al ganador en Kaggle (2026-11-05)
+
+Las mismas piezas que la 5b, con los nombres de la 5c (`PLAN.md`, Fase 5c). Usan
+el código de la 5b sin cambiarlo:
+- **`scripts/fase5c_entrenar.py`** entrena, con los 1.042 pacientes, los cuatro
+  envíos: {M3 limpio, C7} promediados × {sin hospital, con hospital}. Cada
+  envío son 45 CatBoost, uno por pliegue de `construir_folds` con las semillas 1
+  a 9, cada uno con la parada temprana de M3 limpio, y su puntuación es la media
+  de los 45. C7 usa las puntuaciones fuera de pliegue de la red de la 5b; con
+  hospital, `attribution` entra en el one-hot y, en C7, la puntuación
+  estandarizada por hospital, zona y edad de la celda 17
+  (`fase4d.estandarizar`). Antes de entrenar comprueba que, sin hospital, las
+  variables son las de la 5b. Cada CatBoost se guarda y la corrida se reanuda.
+- **`scripts/inferencia_5c.py`** es la inferencia que viaja al notebook, con
+  `inferencia_5b.py`.
+- **`scripts/fase5c_paquete.py`** comprueba en el Mac la inferencia portátil
+  contra las referencias del entrenamiento, con un caso que debe fallar por
+  comprobación, y arma el conjunto de datos privado.
+- **`scripts/fase5c_notebook.py`** es el notebook, y **`scripts/fase5c_kaggle.py`**
+  lo construye, lo ensaya, registra sus corridas, fija la huella, envía y copia
+  las puntuaciones, como `fase5b_kaggle.py`. Solo envía los cuatro modelos de la
+  5c.
+- **`scripts/fase5c_efectos.py`** escribe los seis efectos descriptivos de la
+  fase, restas entre puntuaciones privadas de Kaggle, sin intervalo.
+
+```bash
+caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_entrenar.py --out outputs/fase5c-entrenamiento
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_paquete.py --out outputs/fase5c-paquete
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_kaggle.py --modo medicion --destino data/fase5c-kernel-medicion --local
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_kaggle.py --modo medicion --destino data/fase5c-kernel-medicion --registrar data/fase5c-kaggle-salida-medicion --version 1 --out outputs/fase5c-kaggle-medicion
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_kaggle.py --huella
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_kaggle.py --modo M3limpioProm --enviar --version 1
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_kaggle.py --modo M3limpioProm --puntuacion --version 1 --out outputs/fase5c-envio-m3limpioprom
+.venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_efectos.py --out outputs/fase5c-efectos
+```
+
 ## Cómo correrlo
 
 ```bash
