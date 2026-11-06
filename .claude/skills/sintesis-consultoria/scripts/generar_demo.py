@@ -1131,7 +1131,13 @@ PLANTILLA = r"""<!DOCTYPE html>
     .lienzo { height: 300px; }
     /* La tabla de tres ejes cabe entera: el costo no queda fuera de la vista. */
     table { font-size: 12.5px; }
-    th, td { padding: 6px 4px; }
+    /* Con 4 px por lado, la tabla de tres ejes sobresalía 7 px de su caja a 375 px
+       y recortaba la última columna; el nombre del modelo puede partirse. */
+    th, td { padding: 6px 3px; }
+    td:first-child { white-space: normal; }
+    /* La de las fases 4d y 4e, en el «Detalle» de la sección 7, sobresalía 15 px:
+       sus intervalos se parten tras el punto y coma. */
+    .tabla-intentos td { white-space: normal; }
     th { font-size: 9.5px; letter-spacing: .03em; }
   }
 </style>
@@ -1522,16 +1528,18 @@ const piso = {
   // El rótulo va DESPUÉS de las barras y sobre fondo opaco: dibujado
   // antes, la barra del nivel 2b le pasaba por encima y solo se leia
   // "aleatorio 0,02".
+  // Centrado sobre el nivel 2a, cuya barra no llega a la línea: a la derecha, a
+  // 375 px, el rótulo quedaba encima de la barra del nivel 2b.
   afterDatasetsDraw(ch) {
     const y = ch.scales.y.getPixelForValue(D.escala.azar), cx = ch.ctx;
     if (!isFinite(y)) return;
     const texto = "piso aleatorio " + dec(D.escala.azar);
     cx.save();
-    cx.font = "600 11px -apple-system, sans-serif"; cx.textAlign = "right";
+    cx.font = `600 ${ch.width < 500 ? 10 : 11}px -apple-system, sans-serif`; cx.textAlign = "center";
     const ancho = cx.measureText(texto).width;
-    const x = ch.chartArea.right - 6;
+    const x = ch.getDatasetMeta(0).data[VR.niveles.findIndex(n => n.etiqueta === "Nivel 2a")].x;
     cx.fillStyle = "rgba(255,255,255,.85)";
-    cx.fillRect(x - ancho - 4, y - 18, ancho + 8, 15);
+    cx.fillRect(x - ancho / 2 - 4, y - 18, ancho + 8, 15);
     cx.fillStyle = "#b8341f";
     cx.fillText(texto, x, y - 7);
     cx.restore();
@@ -1960,10 +1968,13 @@ document.getElementById("det-4").innerHTML = resto4 + lectura4 +
 /* ---------- 5. fuera del conjunto de desarrollo ---------- */
 // borrador-v2.md, «Resultados», «El conjunto reservado, abierto una sola vez».
 const M3L = COMP["M3 limpio − M2"].metricas;
+// Rediseño, paso 3: a la vista, la frase del resultado; la que describe la
+// apertura vuelve al «Detalle», al principio de su párrafo.
 document.getElementById("frase-reservado").innerHTML =
-  `El conjunto reservado se abrió una sola vez, con todo fijado antes: M3 limpio, el modelo recomendado, y M2 como ` +
-  `referencia, entrenados con todo el desarrollo, y, como resultado descriptivo, la red de la Fase 4e e «Imagen + básicos».`;
+  `Con pacientes con los que no se entrenó ningún modelo, la ventaja de M3 limpio sobre M2 se mantiene en la pAUC y el AUC.`;
 const restoReservado = P([
+  `El conjunto reservado se abrió una sola vez, con todo fijado antes: M3 limpio, el modelo recomendado, y M2 como ` +
+  `referencia, entrenados con todo el desarrollo, y, como resultado descriptivo, la red de la Fase 4e e «Imagen + básicos». ` +
   `Son ${cifra(RES.pacientes, fRes("datos.evaluacion.pacientes"))} pacientes, con ${cifra(RES.malignas, fRes("datos.evaluacion.malignas"))} ` +
   `lesiones malignas repartidas en ${cifra(RES.pacientes_con_malignas, fRes("datos.evaluacion.pacientes_con_malignas"))} de ellos. ` +
   `Los intervalos salen de un bootstrap por paciente con ${cifra(mil(RES.remuestras), fRes("bootstrap.remuestras"))} remuestras.`,
@@ -1977,7 +1988,6 @@ const restoReservado = P([
   `lados, el intervalo excluye el cero y el signo es el mismo. En la sensibilidad top-15 y el NNT80% SE, el intervalo ` +
   `contiene el cero, como en el desarrollo. Los dos intervalos no miden lo mismo: en el desarrollo, el de la media por ` +
   `pliegue, con la corrección de Nadeau y Bengio; en el reservado, el de un solo modelo, con el bootstrap por paciente.`,
-  `Con pacientes con los que no se entrenó ningún modelo, la ventaja de M3 limpio sobre M2 se mantiene en la pAUC y el AUC. ` +
   `El reservado no es ajeno del todo: el diseño de las variables de M2 y de M3 limpio lo fijó el ganador sobre todo el ` +
   `conjunto de entrenamiento del reto, que incluye a estos pacientes.`,
   `La ventaja de la red sobre «Imagen + básicos» no se reprodujo. En el reservado, la red da ` +
@@ -2095,6 +2105,7 @@ new Chart(document.getElementById("gr-tres"), {
       // La leyenda va en HTML (leyenda-tres): la de Chart.js cortaba a 375 px el
       // rótulo del reservado.
       legend: { display: false },
+      title: { display: true, text: "La pAUC de los cuatro modelos en las tres evaluaciones", align: "start" },
       tooltip: {
         callbacks: {
           label: it => {
@@ -2228,8 +2239,9 @@ const bandaYmedias = {
     const x0 = x.getPixelForValue(0);
     cx.strokeStyle = "#16202b"; cx.setLineDash([4, 3]); cx.lineWidth = 1.2;
     cx.beginPath(); cx.moveTo(x0, a.top); cx.lineTo(x0, a.bottom); cx.stroke();
+    // El rótulo del cero, encima del área del gráfico: dentro tocaba la barra de C1.
     cx.font = "600 11px -apple-system, sans-serif"; cx.fillStyle = "#16202b"; cx.textAlign = "left";
-    cx.fillText("M3 limpio", x0 + 4, a.top + 11);
+    cx.fillText("M3 limpio", x0 + 4, a.top - 5);
     cx.setLineDash([]); cx.lineWidth = 2.5;
     SV.filas.forEach((f, i) => {
       const xm = x.getPixelForValue(f.media), ym = y.getPixelForValue(i);
@@ -2253,6 +2265,7 @@ new Chart(document.getElementById("gr-siete"), {
   },
   options: {
     indexAxis: "y", responsive: true, maintainAspectRatio: false,
+    layout: { padding: { top: 16 } },
     scales: { x: { title: { display: true, text: "Diferencia de pAUC con M3 limpio" } },
               // Sin saltar rótulos: a 375 px Chart.js dejaba sin nombre a C2, C4 y C6.
               y: { ticks: { autoSkip: false, font: c => ({ size: c.chart.width < 500 ? 10 : 12 }) } } },
@@ -2434,14 +2447,15 @@ const partir = b => {
   const punto = b.indexOf(". ", fin);
   return punto < 0 ? [b, ""] : [b.slice(0, punto + 1), b.slice(punto + 2)];
 };
-// A la vista, cuatro viñetas por columna; las listas enteras van en el «Detalle».
-// Qué se puede: las dos de M3 limpio frente a M2, la del contexto de paciente y la
-// de la red frente a «Imagen + básicos», que respalda la segunda tarjeta. Qué no
-// se puede: la primera frase de las que acotan cada recomendación —las métricas
-// de triaje de M3 limpio, la red con pacientes nuevos y con fotos de teléfono— y
-// la del uso clínico.
+// A la vista, cuatro viñetas en «Qué se puede» y cinco en «Qué no se puede»; las
+// listas enteras van en el «Detalle». Qué se puede: las dos de M3 limpio frente a
+// M2, la del contexto de paciente y la de la red frente a «Imagen + básicos», que
+// respalda la segunda tarjeta. Qué no se puede: la primera frase de las que acotan
+// cada recomendación —las métricas de triaje de M3 limpio, la red con pacientes
+// nuevos y con fotos de teléfono—, la del uso clínico y, de quinta desde el paso 3
+// del rediseño, la de que no exista una forma de mejorar a M3 limpio.
 document.getElementById("se-puede").innerHTML = L([0, 1, 2, 5].map(i => SE_PUEDE[i]));
-document.getElementById("no-se-puede").innerHTML = L([0, 2, 4, 9].map(i => partir(NO_SE_PUEDE[i])[0]));
+document.getElementById("no-se-puede").innerHTML = L([0, 2, 4, 9, 6].map(i => partir(NO_SE_PUEDE[i])[0]));
 document.getElementById("det-7").innerHTML =
   P([`Lo que un consultor le entregaría al cliente: el hallazgo, la recomendación y lo que aún no se puede afirmar.`]) +
   resto7 + `<h3>Qué se puede afirmar</h3>` + L(SE_PUEDE) + `<h3>Qué no se puede afirmar</h3>` + L(NO_SE_PUEDE);
