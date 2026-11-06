@@ -3,7 +3,7 @@
   "borrador": "informe/borrador-v2.md",
   "abreviaturas": [
     {
-      "linea": 567,
+      "linea": 569,
       "tabla": {
         "VR": "outputs/validacion-repetida.json",
         "F21": "outputs/fase4-m2-vs-m1.json",
@@ -20,15 +20,15 @@
     }
   ],
   "resumen": {
-    "comentarios_f": 249,
+    "comentarios_f": 264,
     "por_clase": {
-      "entra": 179,
+      "entra": 194,
       "solo documentos del proyecto": 70
     },
     "no_entran_que_cubren_numeros": 0,
-    "numeros_del_cuerpo": 539,
+    "numeros_del_cuerpo": 576,
     "numeros_por_clase_de_comentario": {
-      "entra": 539,
+      "entra": 576,
       "solo documentos del proyecto": 0
     },
     "numeros_sin_comentario": 0,
@@ -38,7 +38,7 @@
   "no_entran": [],
   "solo_documentos_del_proyecto_por_tipo": {
     "PLAN.md": {
-      "comentarios": 30,
+      "comentarios": 28,
       "numeros": 0,
       "lineas": [
         262,
@@ -58,19 +58,32 @@
         413,
         420,
         468,
-        716,
-        723,
-        867,
-        883,
-        899,
-        903,
-        917,
-        923,
-        982,
-        1055,
-        1234,
-        1239,
-        1256
+        718,
+        725,
+        869,
+        885,
+        901,
+        905,
+        919,
+        925,
+        984,
+        1057,
+        1284
+      ]
+    },
+    "CLAUDE.md + PLAN.md": {
+      "comentarios": 9,
+      "numeros": 0,
+      "lineas": [
+        292,
+        344,
+        379,
+        440,
+        482,
+        544,
+        647,
+        1037,
+        1235
       ]
     },
     "sección del informe": {
@@ -83,22 +96,8 @@
         176,
         190,
         193,
-        624,
-        781
-      ]
-    },
-    "CLAUDE.md + PLAN.md": {
-      "comentarios": 8,
-      "numeros": 0,
-      "lineas": [
-        292,
-        344,
-        379,
-        440,
-        480,
-        542,
-        645,
-        1035
+        626,
+        783
       ]
     },
     "CLAUDE.md": {
@@ -107,10 +106,10 @@
       "lineas": [
         230,
         296,
-        610,
-        698,
-        1011,
-        1260
+        612,
+        700,
+        1013,
+        1337
       ]
     },
     "PLAN.md + sección del informe": {
@@ -118,18 +117,19 @@
       "numeros": 0,
       "lineas": [
         52,
-        856,
-        1173,
-        1294
+        858,
+        1175,
+        1319
       ]
     },
     "CLAUDE.md + sección del informe": {
-      "comentarios": 3,
+      "comentarios": 4,
       "numeros": 0,
       "lineas": [
         182,
-        694,
-        1297
+        696,
+        1207,
+        1398
       ]
     },
     "script": {
@@ -137,7 +137,7 @@
       "numeros": 0,
       "lineas": [
         259,
-        1290
+        1381
       ]
     },
     "texto libre": {
@@ -179,28 +179,28 @@
       "comentarios": 1,
       "numeros": 0,
       "lineas": [
-        477
+        479
       ]
     },
     "SKILL.md + otro documento de informe/": {
       "comentarios": 1,
       "numeros": 0,
       "lineas": [
-        524
+        526
       ]
     },
     "PLAN.md + SKILL.md + sección del informe": {
       "comentarios": 1,
       "numeros": 0,
       "lineas": [
-        1243
+        1297
       ]
     },
     "sección del informe + texto libre": {
       "comentarios": 1,
       "numeros": 0,
       "lineas": [
-        1305
+        1406
       ]
     }
   },
@@ -549,7 +549,7 @@
       ]
     },
     {
-      "linea": 477,
+      "linea": 479,
       "comentario": "<!-- F: informe/anteproyecto.md, sección 4.2; PLAN.md, Fase 1, «Sellado (2026-09-25)» y «Decisión de la persona sobre las columnas de procedencia (2026-09-25)»; commits «Fase 1: sellar el conjunto reservado» (2026-09-25 18:07) y «auditoria-de-fugas: columnas de procedencia» (2026-09-25 18:35) -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -560,7 +560,7 @@
       ]
     },
     {
-      "linea": 480,
+      "linea": 482,
       "comentario": "<!-- F: CLAUDE.md, hallazgo 8, «Salvedad para la Fase 5»; PLAN.md, Fase 5, «Salvedad de M2» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -570,7 +570,7 @@
       ]
     },
     {
-      "linea": 524,
+      "linea": 526,
       "comentario": "<!-- F: .claude/skills/modelado-baseline/SKILL.md, requisitos; informe/casos-de-fallo.md, «Caso B» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -580,7 +580,7 @@
       ]
     },
     {
-      "linea": 542,
+      "linea": 544,
       "comentario": "<!-- F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -590,7 +590,7 @@
       ]
     },
     {
-      "linea": 610,
+      "linea": 612,
       "comentario": "<!-- F: CLAUDE.md, Pendientes, el mecanismo del 2a -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -599,7 +599,7 @@
       ]
     },
     {
-      "linea": 624,
+      "linea": 626,
       "comentario": "<!-- F: «La métrica principal no agota lo que pidió el cliente» (M2 − M1) -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -608,7 +608,7 @@
       ]
     },
     {
-      "linea": 645,
+      "linea": 647,
       "comentario": "<!-- F: CLAUDE.md, hallazgo 3; PLAN.md, Fase 6, decisión del 2026-10-02 -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -618,7 +618,7 @@
       ]
     },
     {
-      "linea": 694,
+      "linea": 696,
       "comentario": "<!-- F: CLAUDE.md, hallazgo 4; «Método», «Qué se mide», líneas 31–33 -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -628,7 +628,7 @@
       ]
     },
     {
-      "linea": 698,
+      "linea": 700,
       "comentario": "<!-- F: CLAUDE.md, hallazgo 4, «Interpretación, no medición» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -637,7 +637,7 @@
       ]
     },
     {
-      "linea": 716,
+      "linea": 718,
       "comentario": "<!-- F: PLAN.md, Fase 4, «Contingencia» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -646,7 +646,7 @@
       ]
     },
     {
-      "linea": 723,
+      "linea": 725,
       "comentario": "<!-- F: PLAN.md, Fase 4, «Variante secundaria M4b» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -655,7 +655,7 @@
       ]
     },
     {
-      "linea": 781,
+      "linea": 783,
       "comentario": "<!-- F: «Método», «Cómo se compara» (el criterio) -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -664,7 +664,7 @@
       ]
     },
     {
-      "linea": 856,
+      "linea": 858,
       "comentario": "<!-- F: PLAN.md, Fase 4f, «Resultado de la regla (2026-11-02)»; «Qué no se puede afirmar», «Cuánto rinde un modelo con fotos de teléfono» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -674,7 +674,7 @@
       ]
     },
     {
-      "linea": 867,
+      "linea": 869,
       "comentario": "<!-- F: PLAN.md, Fase 4, «Nota de lectura, de la persona, fijada antes de correr» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -683,7 +683,7 @@
       ]
     },
     {
-      "linea": 883,
+      "linea": 885,
       "comentario": "<!-- F: PLAN.md, Fase 4, «Regla de recomendación» y «Modelo recomendado: decisión de la persona, 2026-09-26» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -692,7 +692,7 @@
       ]
     },
     {
-      "linea": 899,
+      "linea": 901,
       "comentario": "<!-- F: PLAN.md, Fase 4b, «Levanta la regla \"Solo esta corrida\" de la Fase 4» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -701,7 +701,7 @@
       ]
     },
     {
-      "linea": 903,
+      "linea": 905,
       "comentario": "<!-- F: PLAN.md, Fase 4c, «Pregunta 2» (C4: la puntuación de la red y esa puntuación dividida por su media dentro del paciente, como en M4b y C2) -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -710,7 +710,7 @@
       ]
     },
     {
-      "linea": 917,
+      "linea": 919,
       "comentario": "<!-- F: PLAN.md, Fase 4c, «Segunda ronda, declarada» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -719,7 +719,7 @@
       ]
     },
     {
-      "linea": 923,
+      "linea": 925,
       "comentario": "<!-- F: PLAN.md, Fase 4d, «Decisión de la persona (2026-10-30)» y «Regla, fijada antes de correr»; PLAN.md, Fase 4e, «Regla, fijada antes de correr» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -728,7 +728,7 @@
       ]
     },
     {
-      "linea": 982,
+      "linea": 984,
       "comentario": "<!-- F: PLAN.md, Fase 4d, «Tercera ronda, declarada»; PLAN.md, Fase 4e, «Cuarta ronda, declarada» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -737,7 +737,7 @@
       ]
     },
     {
-      "linea": 1011,
+      "linea": 1013,
       "comentario": "<!-- F: CLAUDE.md, hallazgo 16, «Lectura, no medición» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -746,7 +746,7 @@
       ]
     },
     {
-      "linea": 1035,
+      "linea": 1037,
       "comentario": "<!-- F: PLAN.md, Fase 5, «La apertura, corrida el 2026-11-04, una sola vez» y «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado»; CLAUDE.md, hallazgos 8 y 17 -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -756,7 +756,7 @@
       ]
     },
     {
-      "linea": 1055,
+      "linea": 1057,
       "comentario": "<!-- F: PLAN.md, Fase 5, «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -765,7 +765,7 @@
       ]
     },
     {
-      "linea": 1173,
+      "linea": 1175,
       "comentario": "<!-- F: «Resultados», «El modelo recomendado»; PLAN.md, Fase 4, «Modelo recomendado: decisión de la persona, 2026-09-26» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -775,7 +775,27 @@
       ]
     },
     {
-      "linea": 1234,
+      "linea": 1207,
+      "comentario": "<!-- F: «Resultados», «Lo que la prueba alcanza a ver»; CLAUDE.md, hallazgo 16, «Lectura, no medición» -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "sección del informe"
+      ]
+    },
+    {
+      "linea": 1235,
+      "comentario": "<!-- F: PLAN.md, Fase 4f, «Lo que el resultado no dice» (la «Lectura nuestra, no medición» que le sigue); CLAUDE.md, hallazgo 10 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md",
+        "PLAN.md"
+      ]
+    },
+    {
+      "linea": 1284,
       "comentario": "<!-- F: PLAN.md, Fase 4, «Lectura, declarada antes de correr» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -784,17 +804,8 @@
       ]
     },
     {
-      "linea": 1239,
-      "comentario": "<!-- F: PLAN.md, Fase 5, «Especificación» -->",
-      "motivos": [],
-      "numeros_que_cubre": [],
-      "tipos": [
-        "PLAN.md"
-      ]
-    },
-    {
-      "linea": 1243,
-      "comentario": "<!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada); PLAN.md, Fase 4c, «La red», «Cómo se entrena, fijado antes de correr y sin ajuste» y «Qué no entra, con su motivo» -->",
+      "linea": 1297,
+      "comentario": "<!-- F: «Método», «Qué se compara»; PLAN.md, Fase 4, «Quedan fuera, con su motivo»; .claude/skills/extraccion-imagen/SKILL.md (sin ajuste fino; pasada congelada); PLAN.md, Fase 4c, «La red», «Cómo se entrena, fijado antes de correr y sin ajuste» y «Qué no entra, con su motivo»; PLAN.md, Fase 4d, «Pregunta 2 · La red mejorada frente a la red de la Fase 4c»; PLAN.md, Fase 4e, «Qué se entrena: la red de la 4e» -->",
       "motivos": [],
       "numeros_que_cubre": [],
       "tipos": [
@@ -804,35 +815,8 @@
       ]
     },
     {
-      "linea": 1256,
-      "comentario": "<!-- F: PLAN.md, Fase 4, «Orden de magnitud, no comparación» -->",
-      "motivos": [],
-      "numeros_que_cubre": [],
-      "tipos": [
-        "PLAN.md"
-      ]
-    },
-    {
-      "linea": 1260,
-      "comentario": "<!-- F: CLAUDE.md, «Guardarraíles del agente», 4 -->",
-      "motivos": [],
-      "numeros_que_cubre": [],
-      "tipos": [
-        "CLAUDE.md"
-      ]
-    },
-    {
-      "linea": 1290,
-      "comentario": "<!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->",
-      "motivos": [],
-      "numeros_que_cubre": [],
-      "tipos": [
-        "script"
-      ]
-    },
-    {
-      "linea": 1294,
-      "comentario": "<!-- F: «Datos y validación», «El conjunto reservado»; PLAN.md, Fase 5, «Salvedad de M2» -->",
+      "linea": 1319,
+      "comentario": "<!-- F: PLAN.md, Fase 4b, «Resultado de la regla (2026-10-22)»; PLAN.md, Fase 4c, «Resultado de la regla (2026-10-23)»; PLAN.md, Fase 4d, «Resultado de la regla (2026-10-31)»; PLAN.md, Fase 4e, «Resultado de la regla (2026-11-01)»; PLAN.md, fases 4b, 4c y 4d, «Qué no entra, con su motivo» (el ajuste de hiperparámetros); PLAN.md, Fase 4e, «Exploración, semilla 0 (descriptiva)» y «Los ajustes del paso 2 (2026-11-01), fijados antes de leer la exploración»; PLAN.md, Fase 4, especificación de M3 (del ajuste de hiperparámetros del ganador solo consta un estudio de Optuna comentado, celda 23); «Resultados», «Lo que la prueba alcanza a ver» -->",
       "motivos": [],
       "numeros_que_cubre": [],
       "tipos": [
@@ -841,7 +825,25 @@
       ]
     },
     {
-      "linea": 1297,
+      "linea": 1337,
+      "comentario": "<!-- F: CLAUDE.md, «Guardarraíles del agente», 4 -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "CLAUDE.md"
+      ]
+    },
+    {
+      "linea": 1381,
+      "comentario": "<!-- F: .claude/skills/modelado-baseline/scripts/metricas_triaje.py, docstring -->",
+      "motivos": [],
+      "numeros_que_cubre": [],
+      "tipos": [
+        "script"
+      ]
+    },
+    {
+      "linea": 1398,
       "comentario": "<!-- F: «Método», «Cómo se mide el tiempo de inferencia»; CLAUDE.md, hallazgo 9 -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -851,7 +853,7 @@
       ]
     },
     {
-      "linea": 1305,
+      "linea": 1406,
       "comentario": "<!-- F: MEC; «Resultados», «Una decisión por defecto cambia el veredicto» -->",
       "motivos": [],
       "numeros_que_cubre": [],
@@ -865,7 +867,7 @@
   "referencias_local_ausentes": [],
   "numeros_sin_comentario": [],
   "control": {
-    "numeros_del_cuerpo_segun_el_verificador": 539,
+    "numeros_del_cuerpo_segun_el_verificador": 576,
     "misma_lista": true
   },
   "comando": {
