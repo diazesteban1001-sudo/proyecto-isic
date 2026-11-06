@@ -74,43 +74,66 @@
       "modelo": "M3 limpio promediado",
       "menos": "M3 limpio (Fase 5b)",
       "privada": 0.00443,
-      "publica": 0.00495
+      "publica": 0.00495,
+      "mismo_signo_en_la_publica": true
     },
     "promediar_con_imagen": {
       "que_es": "el efecto de promediar, sin hospital y con imagen",
       "modelo": "C7 promediado",
       "menos": "C7 (Fase 5b)",
       "privada": 0.00507,
-      "publica": 0.00363
+      "publica": 0.00363,
+      "mismo_signo_en_la_publica": true
     },
     "hospital_sin_imagen": {
       "que_es": "el efecto del hospital, sin imagen",
       "modelo": "M3 limpio promediado + hospital",
       "menos": "M3 limpio promediado",
       "privada": 0.00048,
-      "publica": 0.00073
+      "publica": 0.00073,
+      "mismo_signo_en_la_publica": true
     },
     "hospital_con_imagen": {
       "que_es": "el efecto del hospital, con imagen",
       "modelo": "C7 promediado + hospital",
       "menos": "C7 promediado",
       "privada": 0.00237,
-      "publica": -0.00143
+      "publica": -0.00143,
+      "mismo_signo_en_la_publica": false
     },
     "imagen_sin_hospital": {
       "que_es": "el efecto de la imagen, sin hospital",
       "modelo": "C7 promediado",
       "menos": "M3 limpio promediado",
       "privada": 0.00786,
-      "publica": 0.00532
+      "publica": 0.00532,
+      "mismo_signo_en_la_publica": true
     },
     "imagen_con_hospital": {
       "que_es": "el efecto de la imagen, con hospital",
       "modelo": "C7 promediado + hospital",
       "menos": "M3 limpio promediado + hospital",
       "privada": 0.00975,
-      "publica": 0.00316
+      "publica": 0.00316,
+      "mismo_signo_en_la_publica": true
     }
+  },
+  "descomposicion_de_la_distancia_al_ganador": {
+    "que_es": "aritmética descriptiva: la distancia de C7 al ganador en la privada, en lo que cubre promediar, lo que cubre el hospital y lo que queda, en ese orden",
+    "ganador": {
+      "pauc": 0.1726,
+      "fuente": "outputs/fase5b-comparacion.json > referencias.ganador_tablero_privado (referencias/kurtansky-2025-triaje-automatizado-tbp.md, línea 196)"
+    },
+    "distancia_de_c7_al_ganador": -0.01404,
+    "cubre_promediar": 0.00507,
+    "cubre_el_hospital": 0.00237,
+    "queda": -0.0066,
+    "porcentaje_de_la_distancia": {
+      "promediar": 36.1,
+      "hospital": 16.9,
+      "queda": 47.0
+    },
+    "como_leerla": "el orden es el de los envíos: primero promediar, después el hospital; C7 con hospital y sin promediar no se envió, así que la parte de cada uno depende de ese orden"
   },
   "como_leerlos": [
     "cada efecto es una resta entre las puntuaciones de dos envíos; la privada es la del tablero final, y con ella se compara, como en la Fase 5b; la pública se reporta al lado",
@@ -139,11 +162,26 @@
         "caso": "con C7 promediado y M3 limpio promediado intercambiados, el efecto de la imagen sin hospital cambia de signo",
         "ok": true,
         "debe_fallar": true
+      },
+      {
+        "caso": "la distancia de C7 al ganador es la de outputs/fase5b-comparacion.json",
+        "ok": true,
+        "debe_fallar": false
+      },
+      {
+        "caso": "con la puntuación pública de C7, la distancia no es la de la 5b",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "lo que queda es «C7 promediado + hospital» − el ganador",
+        "ok": true,
+        "debe_fallar": false
       }
     ],
-    "de_casos": 4,
+    "de_casos": 7,
     "fallos": 0,
-    "deben_fallar": 3
+    "deben_fallar": 4
   },
   "comando": {
     "interprete": ".venv/bin/python",
@@ -153,5 +191,5 @@
       "outputs/fase5c-efectos"
     ]
   },
-  "fecha": "2026-11-06T04:00:29.913608+00:00"
+  "fecha": "2026-11-06T04:11:05.568710+00:00"
 }

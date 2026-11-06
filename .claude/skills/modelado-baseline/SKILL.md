@@ -755,7 +755,10 @@ el código de la 5b sin cambiarlo:
   las puntuaciones, como `fase5b_kaggle.py`. Solo envía los cuatro modelos de la
   5c.
 - **`scripts/fase5c_efectos.py`** escribe los seis efectos descriptivos de la
-  fase, restas entre puntuaciones privadas de Kaggle, sin intervalo.
+  fase, restas entre puntuaciones privadas de Kaggle, sin intervalo, con el
+  signo de cada uno en la pública. Escribe también la descomposición de la
+  distancia de C7 al ganador en la privada: lo que cubre promediar, lo que cubre
+  el hospital y lo que queda.
 
 ```bash
 caffeinate -i .venv/bin/python .claude/skills/modelado-baseline/scripts/fase5c_entrenar.py --out outputs/fase5c-entrenamiento

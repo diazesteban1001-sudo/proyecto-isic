@@ -6,4 +6,5 @@ Puntuación privada (pública): M3 limpio (Fase 5b) 0.15134 (0.17229); C7 (Fase 
 - el efecto del hospital, con imagen: +0.00237 en la privada (-0.00143 en la pública)
 - el efecto de la imagen, sin hospital: +0.00786 en la privada (+0.00532 en la pública)
 - el efecto de la imagen, con hospital: +0.00975 en la privada (+0.00316 en la pública)
-Controles: 4 de 4 bien, 3 de ellos casos que deben fallar. Kaggle no da intervalo; no cambia ninguna recomendación.
+Distancia de C7 al ganador en la privada: -0.01404; promediar cubre +0.00507, el hospital +0.00237 y queda -0.0066.
+Controles: 7 de 7 bien, 4 de ellos casos que deben fallar. Kaggle no da intervalo; no cambia ninguna recomendación.
