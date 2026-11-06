@@ -1010,6 +1010,125 @@ se midió es compatible con que no haya mejora, y también con una mejora que
 esta prueba no alcanza a ver.
 <!-- F: CLAUDE.md, hallazgo 16, «Lectura, no medición» -->
 
+### El conjunto reservado, abierto una sola vez
+
+El conjunto reservado se abrió una sola vez, con todo fijado antes: M3 limpio,
+el modelo recomendado, y M2 como referencia, entrenados con todo el desarrollo,
+y, como resultado descriptivo, la red de la Fase 4e e «Imagen + básicos». Son
+209 pacientes, con 76 lesiones malignas repartidas en 52 de ellos. Los
+intervalos salen de un bootstrap por paciente con 2.000 remuestras.
+<!-- F: outputs/fase5-reservado.json > datos.evaluacion.pacientes, .malignas, .pacientes_con_malignas y bootstrap.remuestras; PLAN.md, Fase 5, «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado» -->
+
+M3 limpio da una pAUC de 0,1588, [0,1387; 0,1766], y supera a M2, 0,1387, por
++0,0201, [0,0008; 0,0413]. En el AUC, +0,0219, [0,0009; 0,0459]. En el
+desarrollo, la diferencia en la pAUC era +0,0181, [0,0021; 0,0341]: en los dos
+lados, el intervalo excluye el cero y el signo es el mismo. En la sensibilidad
+top-15 y el NNT80% SE, el intervalo contiene el cero, como en el desarrollo.
+Los dos intervalos no miden lo mismo: en el desarrollo, el de la media por
+pliegue, con la corrección de Nadeau y Bengio; en el reservado, el de un solo
+modelo, con el bootstrap por paciente.
+<!-- F: outputs/fase5-reservado.json > metricas.M3limpio.pauc.punto, .intervalo_95, metricas.M2.pauc.punto, diferencia_m3limpio_menos_m2.pauc.punto, .intervalo_95, diferencia_m3limpio_menos_m2.auc.punto, .intervalo_95, diferencia_m3limpio_menos_m2.setop15.intervalo_95 y diferencia_m3limpio_menos_m2.nnt80.intervalo_95; F3L > C.pauc.media e .intervalo_t_95_nadeau_bengio; outputs/fase5-posterior.json > tabla.como_leerla -->
+Con pacientes con los que no se entrenó ningún modelo, la ventaja de M3 limpio
+sobre M2 se mantiene en la pAUC y el AUC. El reservado no es ajeno del todo: el
+diseño de las variables de M2 y de M3 limpio lo fijó el ganador sobre todo el
+conjunto de entrenamiento del reto, que incluye a estos pacientes.
+<!-- F: PLAN.md, Fase 5, «La apertura, corrida el 2026-11-04, una sola vez» y «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado»; CLAUDE.md, hallazgos 8 y 17 -->
+
+La ventaja de la red sobre «Imagen + básicos» no se reprodujo. En el
+reservado, la red da 0,1307 e «Imagen + básicos», 0,1385; la diferencia es de
+−0,0078, [−0,0306; 0,02]. En la sensibilidad top-15 la red queda por encima,
++0,1282, pero el intervalo, [−0,0035; 0,2585], contiene el cero, como los de
+las otras tres métricas; en la Fase 4f, los cuatro lo excluían.
+<!-- F: outputs/fase5-reservado.json > metricas.Red4e.pauc.punto y metricas.ImagenBasicos.pauc.punto; outputs/fase5-posterior.json > red4e_menos_imagen_basicos.pauc.punto, .intervalo_95, red4e_menos_imagen_basicos.setop15.punto, .intervalo_95 y red4e_menos_imagen_basicos.*.intervalo_95; outputs/fase4f-red4e-vs-imagen-basicos.json > C.*.intervalo_t_95_nadeau_bengio -->
+Después de abrir el reservado, y declarado así, se comprobó que las
+características de imagen del reservado salen de la misma extracción que las
+del desarrollo, y que «Imagen + básicos» es el mismo modelo que en la
+validación cruzada, entrenado con todo el desarrollo. Lo que más se movió es
+«Imagen + básicos»: en el desarrollo daba 0,0884, en las mismas semillas que la
+red, y en el reservado, 0,1385; la red pasó de 0,1376 a 0,1307. Por qué, no
+está medido.
+<!-- F: outputs/fase5-posterior.json > procedencia, recalculo.por_archivo, imagen_basicos, tabla.modelos.ImagenBasicos.desarrollo[1].pauc, tabla.modelos.ImagenBasicos.reservado.pauc.punto, tabla.modelos.Red4e.desarrollo[0].pauc y tabla.modelos.Red4e.reservado.pauc.punto; PLAN.md, Fase 5, «Análisis posterior a la apertura (2026-11-04)» -->
+Por la regla fijada antes, el reservado no cambia ninguna recomendación: la
+estimación principal sigue siendo la validación cruzada repetida. Pero la
+ventaja de la red sobre «Imagen + básicos» no quedó confirmada con los
+pacientes reservados.
+<!-- F: PLAN.md, Fase 5, «Especificación: decisión de la persona, fijada el 2026-09-26 antes de abrir el reservado» -->
+
+### En la prueba de Kaggle
+
+Kaggle sigue aceptando envíos a la competición cerrada, y a cada uno le dio
+una puntuación pública y una privada, sin intervalo. Se enviaron cuatro
+modelos entrenados con los 1.042 pacientes, cada uno una sola vez: M3 limpio,
+la red de la 4e y C7, fijados antes de abrir el reservado, y un cuarto,
+«Imagen + básicos», decidido después.
+<!-- F: outputs/fase5b-envio-m3limpio.json, outputs/fase5b-envio-red4e.json, outputs/fase5b-envio-c7.json y outputs/fase5b-envio-imagenbasicos.json > envios; outputs/fase5b-entrenamiento.json > datos.pacientes; referencias/kaggle-code-requirements.md, línea 63; PLAN.md, Fase 5b, «Estado» y «Qué se hace (decisión de la persona, 2026-11-04)» -->
+Que la puntuación privada salga del mismo subconjunto de la prueba que el
+tablero final del reto es lectura nuestra: ninguna fuente versionada lo dice.
+<!-- F: referencias/kaggle-code-requirements.md, líneas 48 y 67–70 (la página no habla de los envíos después del cierre, y la captura solo muestra que el panel está abierto) -->
+
+En la puntuación privada, C7 obtiene 0,15856, y el ganador, 0,1726: una
+diferencia de −0,01404. M3 limpio obtiene 0,15134, frente a 0,164 de la versión
+del ganador sin imágenes, que usa la etiqueta del hospital; la red sola,
+0,1159, frente a 0,142 de la versión que solo usa las imágenes. Esas dos
+versiones son de la reproducción del ganador que hicieron los organizadores,
+sobre el conjunto del tablero privado, con tres decimales.
+<!-- F: outputs/fase5b-comparacion.json > comparaciones_con_la_privada.c7_menos_ganador, .m3limpio_menos_sin_imagenes y .red4e_menos_solo_imagenes; referencias/kurtansky-2025-triaje-automatizado-tbp.md, líneas 196, 200, 209, 216 y 315 -->
+Al lado, como aritmética descriptiva de dos fuentes distintas, lo que la
+imagen le suma a la parte tabular: +0,00722 en la privada, C7 − M3 limpio, y
++0,009 en la tabla de los organizadores, el modelo completo menos la versión
+sin imágenes. Las dos fuentes tienen datos y variables distintos, así que no es
+una comparación.
+<!-- F: outputs/fase5b-comparacion.json > aritmetica_de_dos_fuentes; referencias/kurtansky-2025-triaje-automatizado-tbp.md, líneas 207 y 209 -->
+
+El cuarto envío comparó la red con «Imagen + básicos» en Kaggle. Se decidió
+después de ver el reservado, y se declara así. La red obtiene 0,1159 e «Imagen
++ básicos», 0,08935: en la privada, la red vuelve a quedar por encima, como en
+el desarrollo y al revés que en el reservado.
+<!-- F: outputs/fase5b-comparacion.json > comparaciones_con_la_privada.red4e_menos_imagen_basicos; PLAN.md, Fase 5b, «Qué se hace (decisión de la persona, 2026-11-04)» -->
+
+| Modelo | Desarrollo, semillas 5 a 9 | Reservado | Kaggle, privada |
+|---|---|---|---|
+| C7 | 0,1669 | no se evaluó | 0,15856 |
+| M3 limpio | 0,1641 | 0,1588 | 0,15134 |
+| Red de la 4e | 0,1376 | 0,1307 | 0,1159 |
+| «Imagen + básicos» | 0,0884 | 0,1385 | 0,08935 |
+<!-- F: outputs/fase5b-comparacion.json > tabla_tres_evaluaciones -->
+En el desarrollo y en Kaggle, los cuatro modelos quedan en el mismo orden; en
+el reservado, «Imagen + básicos» queda por encima de la red. Son conjuntos y
+estimaciones distintos: la media por pliegue en el desarrollo, un solo modelo
+en el reservado y una sola puntuación en Kaggle, sin intervalo.
+<!-- F: outputs/fase5b-comparacion.json > tabla_tres_evaluaciones y como_leerla -->
+
+Para descomponer la distancia al ganador se hicieron cuatro envíos más, en un
+diseño de dos por dos fijado antes de entrenarlos: con imagen o sin ella, y con
+la etiqueta del hospital o sin ella. En los cuatro, la parte tabular es la
+media de 45 CatBoost, uno por pliegue de 5 pliegues con 9 semillas, como los
+que entrena el código del ganador; cómo combina él sus predicciones en la
+prueba no está en su notebook. El diseño se decidió después de ver los primeros
+envíos, y con él el proyecto cerró Kaggle: no se envía nada más.
+<!-- F: outputs/fase5c-entrenamiento.json > n(modelos.M3limpioProm.modelos), pliegues.n_splits y n(pliegues.semillas); PLAN.md, Fase 5c, «Estado», «Qué se hace (decisión de la persona, 2026-11-05)» y «Cierre (2026-11-05)» -->
+
+Promediar sube la puntuación privada en +0,00443 sin imagen y en +0,00507 con
+imagen, con el mismo signo en la pública; cada uno de los 45 modelos se
+entrena, además, con cuatro quintos de los pacientes. El hospital suma
++0,00048 sin imagen y +0,00237 con imagen, y este último cambia de signo en la
+pública. C7 promediado obtiene 0,16363, y con el hospital, 0,166.
+<!-- F: outputs/fase5c-efectos.json > efectos.promediar_sin_imagen, efectos.promediar_con_imagen, efectos.hospital_sin_imagen, efectos.hospital_con_imagen, kaggle.C7Prom.privada y kaggle.C7PromHosp.privada; outputs/fase5c-entrenamiento.json > n(modelos.M3limpioProm.modelos); PLAN.md, Fase 5c, «Salvedades» -->
+Como aritmética descriptiva, de la diferencia de C7 con el ganador, −0,01404,
+promediar cubre +0,00507, el 36,1%; el hospital, +0,00237, el 16,9%, y quedan
+−0,0066, el 47%. El reparto depende del orden: C7 con el hospital y sin
+promediar no se envió.
+<!-- F: outputs/fase5c-efectos.json > descomposicion_de_la_distancia_al_ganador -->
+
+*Lectura, no medición:* excluir la etiqueta del hospital, por la razón de uso
+de «La auditoría de columnas», cuesta en el tablero esas milésimas, y la mayor
+de las dos cambia de signo en la pública.
+<!-- F: outputs/fase5c-efectos.json > efectos.hospital_sin_imagen y efectos.hospital_con_imagen; «Datos y validación», «La auditoría de columnas» -->
+De las dos mejoras de la descomposición, promediar es la única que no usa
+datos que el proyecto excluyó, y casi la mitad de la distancia no la cubre
+ninguna de las dos. Ninguno de estos envíos cambia una recomendación.
+<!-- F: outputs/fase5c-efectos.json > descomposicion_de_la_distancia_al_ganador; outputs/auditoria-de-fugas.json > columnas_procedencia; PLAN.md, Fase 5c, «Qué se hace (decisión de la persona, 2026-11-05)» y «Cierre (2026-11-05)» -->
+
 ### El costo de inferencia
 
 La mediana del tiempo de inferencia, en segundos por cada 1.000 lesiones, es
