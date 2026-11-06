@@ -1,0 +1,979 @@
+{
+  "que_es": "la comprobación en el Mac de inferencia_5c.py frente a las referencias del entrenamiento de la Fase 5c, y el conjunto de datos privado para el notebook de Kaggle (PLAN.md, Fase 5c); no envía nada",
+  "tolerancias": {
+    "redes_logit": 0.0001,
+    "probabilidades": 1e-06
+  },
+  "controles": {
+    "casos": [
+      {
+        "control": "variables",
+        "caso": "las variables de M3 limpio sin hospital del control, idénticas",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "variables",
+        "caso": "las variables de M3 limpio con hospital del control, idénticas",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "variables",
+        "caso": "el ajuste con hospital solo añade attribution a las categóricas",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": [
+          "attribution"
+        ]
+      },
+      {
+        "control": "variables",
+        "caso": "las variables con hospital frente a las de sin hospital",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "246 frente a 239 columnas"
+      },
+      {
+        "control": "variables",
+        "caso": "el k-means en números asigna como scikit-learn las filas de entrenamiento",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "0 de 401059 distintas"
+      },
+      {
+        "control": "variables",
+        "caso": "el k-means en números con hospital asigna como scikit-learn las filas de entrenamiento",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "0 de 401059 distintas"
+      },
+      {
+        "control": "variables",
+        "caso": "con los centros en orden inverso",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "394262 distintas"
+      },
+      {
+        "control": "redes",
+        "caso": "los logits de las cinco redes de los pliegues, a 0.0001",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": {
+          "pliegue-0": "0.0e+00",
+          "pliegue-1": "0.0e+00",
+          "pliegue-2": "0.0e+00",
+          "pliegue-3": "0.0e+00",
+          "pliegue-4": "0.0e+00"
+        }
+      },
+      {
+        "control": "redes",
+        "caso": "la red del pliegue 1 frente a la referencia del pliegue 0",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 1.3e+02"
+      },
+      {
+        "control": "redes",
+        "caso": "la media de las cinco redes, a 1e-06 de la de la Fase 5b",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "celda_17",
+        "caso": "la variable de la celda 17 con la media guardada de las redes, idéntica",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00; 0 NaN"
+      },
+      {
+        "control": "celda_17",
+        "caso": "con todas las lesiones en un mismo hospital",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 9.5e+00"
+      },
+      {
+        "control": "M3limpioProm",
+        "caso": "la media de los 45 modelos, idéntica",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00; 45 modelos"
+      },
+      {
+        "control": "M3limpioProm",
+        "caso": "con el primer modelo solo",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 5.3e-01"
+      },
+      {
+        "control": "M3limpioPromHosp",
+        "caso": "la media de los 45 modelos, idéntica",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00; 45 modelos"
+      },
+      {
+        "control": "M3limpioPromHosp",
+        "caso": "con el primer modelo solo",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 5.0e-01"
+      },
+      {
+        "control": "C7Prom",
+        "caso": "la media de los 45 modelos con la media guardada de las redes, idéntica",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00; 45 modelos"
+      },
+      {
+        "control": "C7Prom",
+        "caso": "con el primer modelo solo",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 4.1e-01"
+      },
+      {
+        "control": "C7Prom",
+        "caso": "con la media recalculada de las redes, a 1e-06",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      },
+      {
+        "control": "C7PromHosp",
+        "caso": "la media de los 45 modelos con la media guardada de las redes, idéntica",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00; 45 modelos"
+      },
+      {
+        "control": "C7PromHosp",
+        "caso": "con el primer modelo solo",
+        "ok": true,
+        "debe_fallar": true,
+        "detalle": "diferencia máxima 3.8e-01"
+      },
+      {
+        "control": "C7PromHosp",
+        "caso": "con la media recalculada de las redes, a 1e-06",
+        "ok": true,
+        "debe_fallar": false,
+        "detalle": "diferencia máxima 0.0e+00"
+      }
+    ],
+    "de_casos": 22,
+    "fallos": 0,
+    "deben_fallar": 8
+  },
+  "conjunto_de_datos": {
+    "id": "estebandazz/isic2024-fase5c-modelos",
+    "directorio": "data/fase5c/kaggle-dataset",
+    "archivos": {
+      "cbm-C7Prom-s1-p0.cbm": {
+        "bytes": 102664,
+        "sha256": "4a3c82a65612cf67bff6c170dfe58fb21f94043582396fb0eac3ff04578d870d"
+      },
+      "cbm-C7Prom-s1-p1.cbm": {
+        "bytes": 40696,
+        "sha256": "01c89cecc63c866d41722004d567599f537e170b5c7fc06b010216a8a2976713"
+      },
+      "cbm-C7Prom-s1-p2.cbm": {
+        "bytes": 323504,
+        "sha256": "12c51e7705f3a334cffe138a993369b7532ac5dbbe9f3921a850d856eafc48fc"
+      },
+      "cbm-C7Prom-s1-p3.cbm": {
+        "bytes": 141968,
+        "sha256": "a5133092256ae810ac1d9e2b53d49b53f108d8c7310520e8aca4b7c44709881d"
+      },
+      "cbm-C7Prom-s1-p4.cbm": {
+        "bytes": 245544,
+        "sha256": "3a0b013cbe201d68aec2b632a54d1593169d7130475f39fa261dcbc4c8d60d0c"
+      },
+      "cbm-C7Prom-s2-p0.cbm": {
+        "bytes": 411376,
+        "sha256": "10ec155facd7071f6b3e6ca2970ba365bc6a4ef563b90ad58cc64a0e4aa4e471"
+      },
+      "cbm-C7Prom-s2-p1.cbm": {
+        "bytes": 170672,
+        "sha256": "0a79b28f627dde94c11ee1052eba7ac6eb7f7ccd72db4ceaffb63270cf4fb07f"
+      },
+      "cbm-C7Prom-s2-p2.cbm": {
+        "bytes": 221264,
+        "sha256": "ed16df0f37e5dd63098ffafb9e0bc154951301e8abf4a23440aec15d3b0dc895"
+      },
+      "cbm-C7Prom-s2-p3.cbm": {
+        "bytes": 142088,
+        "sha256": "b1485e123fe6dc9e3853a10b08993ae30fb70c01c9115c843eb4b355316aa3e4"
+      },
+      "cbm-C7Prom-s2-p4.cbm": {
+        "bytes": 220600,
+        "sha256": "2d808874fad9908eac5c2e261310b4fadaf749a116c66b2d410216711f276871"
+      },
+      "cbm-C7Prom-s3-p0.cbm": {
+        "bytes": 413952,
+        "sha256": "747073e7526c3dbde707bed4a815cadeb0a2688a63eac0ac6ba8aee5c0873131"
+      },
+      "cbm-C7Prom-s3-p1.cbm": {
+        "bytes": 230008,
+        "sha256": "ffcfc7d54b3e13ddfe5f277f883e887fa32a993c98902d472ac776213cbf4b96"
+      },
+      "cbm-C7Prom-s3-p2.cbm": {
+        "bytes": 127800,
+        "sha256": "59960bec836198b1f292b7c10994143132504d70bf22bded79cdcc6411bba6d9"
+      },
+      "cbm-C7Prom-s3-p3.cbm": {
+        "bytes": 211136,
+        "sha256": "7ea350108d5ad3b71a92ea951a24e16c510c8964a3878e6f2cab9e77c07e0a8c"
+      },
+      "cbm-C7Prom-s3-p4.cbm": {
+        "bytes": 145656,
+        "sha256": "7ec6086af6e7bc9f8a57d40396d0edd081a2636f24f33f57f1b6060292149ce4"
+      },
+      "cbm-C7Prom-s4-p0.cbm": {
+        "bytes": 382000,
+        "sha256": "97ebad92440bcd288ac9045ce68831013b4dbae4b6a07a0941318a920315cb3c"
+      },
+      "cbm-C7Prom-s4-p1.cbm": {
+        "bytes": 74048,
+        "sha256": "c0f38d7e1e1f781ca1b8e8c3d04413c5520d8748861cc2620995ed6daab3c491"
+      },
+      "cbm-C7Prom-s4-p2.cbm": {
+        "bytes": 87160,
+        "sha256": "ed661671867f66c9e1ede106b31d05c26958ff7056c8d3ec47814becc29fbc07"
+      },
+      "cbm-C7Prom-s4-p3.cbm": {
+        "bytes": 177864,
+        "sha256": "0c3923cd407a80fcdcf5bf64c1ba8709b7709ff9700af330ad44aa722b9ba1c1"
+      },
+      "cbm-C7Prom-s4-p4.cbm": {
+        "bytes": 220520,
+        "sha256": "8dcc1d2378ab049c40cd085382971d02b507ac740863581a3f180ab79b2e8883"
+      },
+      "cbm-C7Prom-s5-p0.cbm": {
+        "bytes": 170640,
+        "sha256": "2f22c508bf5e5398c1c2488cac1b1526095bb4d803353b0c94f5c5c04b1f2aea"
+      },
+      "cbm-C7Prom-s5-p1.cbm": {
+        "bytes": 183688,
+        "sha256": "6418b6d3badbba0d9252a429c76294b0829dab419fa050d7651bc0490d9568da"
+      },
+      "cbm-C7Prom-s5-p2.cbm": {
+        "bytes": 121792,
+        "sha256": "28eb30d0b3324fb0626cda9406dacdd995617465d643f560cdb8d0972e231605"
+      },
+      "cbm-C7Prom-s5-p3.cbm": {
+        "bytes": 481296,
+        "sha256": "b135e4924f2b97822cd086dee98a17598b87d8def3531495b820fa604aff17d6"
+      },
+      "cbm-C7Prom-s5-p4.cbm": {
+        "bytes": 157544,
+        "sha256": "590c0cd171f5b35269755edcb2572251b21631c4be4ad81a63d48a5be03964d4"
+      },
+      "cbm-C7Prom-s6-p0.cbm": {
+        "bytes": 213304,
+        "sha256": "e335ccb1ec3e72b811db370d40dabf7252e7798a43199d8a11b042b246f7e8bf"
+      },
+      "cbm-C7Prom-s6-p1.cbm": {
+        "bytes": 176512,
+        "sha256": "a35c0f9e4cf3561ddbb1e0acdd21b89f96b7253ca230c6e2ea99e9af778c4104"
+      },
+      "cbm-C7Prom-s6-p2.cbm": {
+        "bytes": 354424,
+        "sha256": "d85aec150feb195abb197e0f15d944a0ab991ad7e02b574d47a8ddedfa78a993"
+      },
+      "cbm-C7Prom-s6-p3.cbm": {
+        "bytes": 114600,
+        "sha256": "0eb8c8a32aa282f2d2913d46c816acc52a8854390c41cb4ffdf413188c3ac14b"
+      },
+      "cbm-C7Prom-s6-p4.cbm": {
+        "bytes": 277600,
+        "sha256": "207c6c5efdd51e1043950e7fd3e195d188fe451c949a1b713c344ee26042d6a7"
+      },
+      "cbm-C7Prom-s7-p0.cbm": {
+        "bytes": 177824,
+        "sha256": "c052900efcfab7c2b1416a031aa4c546bfece654a494760ce938c2d9fdd23223"
+      },
+      "cbm-C7Prom-s7-p1.cbm": {
+        "bytes": 285952,
+        "sha256": "e4ff97aa08cac1d144bfc40208b83ff545f13ad2e6e49e453f6abdd498ef2b5a"
+      },
+      "cbm-C7Prom-s7-p2.cbm": {
+        "bytes": 149224,
+        "sha256": "c509351196c36a414d856d99690e3665b4a710af865586d99495f99394dd1809"
+      },
+      "cbm-C7Prom-s7-p3.cbm": {
+        "bytes": 228440,
+        "sha256": "a7fb47a982cbc8556261a00af8c32c4155701798bc6ffceeaa5731c4ec1e7d49"
+      },
+      "cbm-C7Prom-s7-p4.cbm": {
+        "bytes": 210976,
+        "sha256": "427102426377b1f8953f254f99c3b766b98004a359d505b01a1d7b8b5cc356f4"
+      },
+      "cbm-C7Prom-s8-p0.cbm": {
+        "bytes": 161128,
+        "sha256": "a7792458742314461cac8aa2e4017702d998cd87b2207e0bf3ff145fb6323765"
+      },
+      "cbm-C7Prom-s8-p1.cbm": {
+        "bytes": 258080,
+        "sha256": "fc23cee51a46b03d7f4c37df3faad4d40c0aca58c1a10e6c5642fe3be3f2d521"
+      },
+      "cbm-C7Prom-s8-p2.cbm": {
+        "bytes": 305984,
+        "sha256": "233c3f0de7847a8f605711b96ac4ba42f670e787c8578f47658fc5bd024b8e3c"
+      },
+      "cbm-C7Prom-s8-p3.cbm": {
+        "bytes": 159848,
+        "sha256": "9c8c65afaee7987a97a17c6739b5476e4f341ba3f5dc2463338df3eee14f9bd6"
+      },
+      "cbm-C7Prom-s8-p4.cbm": {
+        "bytes": 368856,
+        "sha256": "273f967e937caeba242d5ee9f9cfd1dccfe8b09bbdc46bb58c8cfa2dc4e7436d"
+      },
+      "cbm-C7Prom-s9-p0.cbm": {
+        "bytes": 270408,
+        "sha256": "6aa459cd3e675a76d6eb51ba82b6faeb3083f73bd261ff15a07e89aa87608d9f"
+      },
+      "cbm-C7Prom-s9-p1.cbm": {
+        "bytes": 459928,
+        "sha256": "e44b778460da04743af9bc4be80077e8a8feb6e8eb7f98f86dd46aab8e23ef74"
+      },
+      "cbm-C7Prom-s9-p2.cbm": {
+        "bytes": 135792,
+        "sha256": "269799015cfb55f33a970c924120bcc4321fc62f1d71d2c57ad0eed61f2dfa6f"
+      },
+      "cbm-C7Prom-s9-p3.cbm": {
+        "bytes": 146400,
+        "sha256": "4b98d51c36ea1d544f1a8175f77f22aeac68cab51d8b2b274da9afe5a45642ce"
+      },
+      "cbm-C7Prom-s9-p4.cbm": {
+        "bytes": 74032,
+        "sha256": "c14239ee8de0a706a620e88e5a62211c843ce944782f42d6c9dd3590073d01a2"
+      },
+      "cbm-C7PromHosp-s1-p0.cbm": {
+        "bytes": 83888,
+        "sha256": "9a0259655461b904cd0661f02f19f02aefd3cbe25d06531a4a98243d1e5f3c4b"
+      },
+      "cbm-C7PromHosp-s1-p1.cbm": {
+        "bytes": 460448,
+        "sha256": "9047abf1bde823af64ecf14a290ba3d2c75ba2db33ee75213a3f9dbd20949dfe"
+      },
+      "cbm-C7PromHosp-s1-p2.cbm": {
+        "bytes": 124072,
+        "sha256": "9b7e67b372253b3b95c37f4c0efbc762e00aecb475a5561e9c3f8b955e3e5bf4"
+      },
+      "cbm-C7PromHosp-s1-p3.cbm": {
+        "bytes": 193624,
+        "sha256": "04edbeeed9a6a05efa3bf632a55e9f88a298e12ed29ae005b74d2cc86c0b9d41"
+      },
+      "cbm-C7PromHosp-s1-p4.cbm": {
+        "bytes": 338264,
+        "sha256": "cea4db9699e1b44ca0bbae066cfc4f2f8dd3d9eb1c5b2def27570a42418d5bc9"
+      },
+      "cbm-C7PromHosp-s2-p0.cbm": {
+        "bytes": 69704,
+        "sha256": "c36f7b8e0e03fb127d79caef2ca7ec7d3f2a95cf35f6d12ef3371b324b488db9"
+      },
+      "cbm-C7PromHosp-s2-p1.cbm": {
+        "bytes": 399976,
+        "sha256": "0323b52c9b6af138bd77e55cef9445cfcd0650232dc8a85155b262a4964e2926"
+      },
+      "cbm-C7PromHosp-s2-p2.cbm": {
+        "bytes": 90704,
+        "sha256": "c04670871b8818a5309d57987fb9a0f796079d6b6caba74a46e60fd49ee9b9b4"
+      },
+      "cbm-C7PromHosp-s2-p3.cbm": {
+        "bytes": 219768,
+        "sha256": "42073c16262cc2fbd8be8af4d04fc0ddac5ab94cc6c147a604de326c7c55c839"
+      },
+      "cbm-C7PromHosp-s2-p4.cbm": {
+        "bytes": 232800,
+        "sha256": "da7611f5157019ffcb3ba8c9165ddbf5d3a526ac437192c2b41be634243f076e"
+      },
+      "cbm-C7PromHosp-s3-p0.cbm": {
+        "bytes": 573056,
+        "sha256": "5b4846552e6e5406f0f7c15aa3ac4a457a61ffb301129624ddf9ed52ad00ab51"
+      },
+      "cbm-C7PromHosp-s3-p1.cbm": {
+        "bytes": 192528,
+        "sha256": "644c659619d175109cc78568cd78e5c1d484b1e01d30739bdb1f4273ea86506f"
+      },
+      "cbm-C7PromHosp-s3-p2.cbm": {
+        "bytes": 104240,
+        "sha256": "12e10b488add80f788f9b8f7eae1b6fd7b1f00b483f2068289609451ed163be7"
+      },
+      "cbm-C7PromHosp-s3-p3.cbm": {
+        "bytes": 222144,
+        "sha256": "22901d546dd6968a66136fa11d83fab8748d4d09e7f4d03c910f9645a7b83502"
+      },
+      "cbm-C7PromHosp-s3-p4.cbm": {
+        "bytes": 204232,
+        "sha256": "d50bc788389f63f4df002d478877ca2a0184e5c68ab3b00a312db014ebb75015"
+      },
+      "cbm-C7PromHosp-s4-p0.cbm": {
+        "bytes": 123304,
+        "sha256": "91586e3baac4557a4c78173b535bdb5971e8bbd108162531e3c5c359489d7acd"
+      },
+      "cbm-C7PromHosp-s4-p1.cbm": {
+        "bytes": 139952,
+        "sha256": "103403bb5df97a8fafcef45388afc870e1527a4f527af8fdb801c61937d605e8"
+      },
+      "cbm-C7PromHosp-s4-p2.cbm": {
+        "bytes": 73192,
+        "sha256": "64afde725054cba56d5dc5ef9ce3111c61e15f5fcfe4a11d13ef63f659376beb"
+      },
+      "cbm-C7PromHosp-s4-p3.cbm": {
+        "bytes": 55344,
+        "sha256": "2acf14a0fea3bd2b64efc99031a5247ec4102c3c2a558c08376e19aac1efebec"
+      },
+      "cbm-C7PromHosp-s4-p4.cbm": {
+        "bytes": 172160,
+        "sha256": "7730780ad4c1133fbc26a59c16bbbe99b0eecbfafd3b5ef3a2c02c3fb95a50ae"
+      },
+      "cbm-C7PromHosp-s5-p0.cbm": {
+        "bytes": 273160,
+        "sha256": "8c636dfcebbf94c1ccca2e8e10c436ac5975f05803c18d2629a6c89f65683467"
+      },
+      "cbm-C7PromHosp-s5-p1.cbm": {
+        "bytes": 92272,
+        "sha256": "bba0c8384c67f9e3377953128fe5b10cb5b1cb1bc2fb96be39adefd1577b8f65"
+      },
+      "cbm-C7PromHosp-s5-p2.cbm": {
+        "bytes": 145952,
+        "sha256": "d760aa8b659ec022fae904e6dbdbe7660ff915d382599979170c7987179b5ce3"
+      },
+      "cbm-C7PromHosp-s5-p3.cbm": {
+        "bytes": 355360,
+        "sha256": "3ebf4fc57d2c15f8c6a4874734586eb58b6b314c82b3238871218132c2e6a1a4"
+      },
+      "cbm-C7PromHosp-s5-p4.cbm": {
+        "bytes": 168576,
+        "sha256": "36fbb06dd045770bd5436c2e63ef062f4298ae574b1e656b7e7222a58f123e50"
+      },
+      "cbm-C7PromHosp-s6-p0.cbm": {
+        "bytes": 143600,
+        "sha256": "1d66db58f2a628b7dc514ea05f5dc4f659638e93f0ef007f513a1e3b92c7f478"
+      },
+      "cbm-C7PromHosp-s6-p1.cbm": {
+        "bytes": 337048,
+        "sha256": "00066805ea002744267aca165452515a467a462bd2f17fffde44366a47635684"
+      },
+      "cbm-C7PromHosp-s6-p2.cbm": {
+        "bytes": 71672,
+        "sha256": "8c9b3338db7ec632198f891e335847b5dd4682e99d8fb559204879b57d4c9564"
+      },
+      "cbm-C7PromHosp-s6-p3.cbm": {
+        "bytes": 196032,
+        "sha256": "a74a097e44442cbe503e640e671adbb755462ed7fed38bac5113c255f642f54c"
+      },
+      "cbm-C7PromHosp-s6-p4.cbm": {
+        "bytes": 330040,
+        "sha256": "49fef06910273b048d42de95b108682b04f6587b129930d20f937ff6afb660a5"
+      },
+      "cbm-C7PromHosp-s7-p0.cbm": {
+        "bytes": 89992,
+        "sha256": "92894190df0f631d6615465f0d2b8efe251f626e567b4dcbda68db0b34899e07"
+      },
+      "cbm-C7PromHosp-s7-p1.cbm": {
+        "bytes": 402592,
+        "sha256": "6bf91ca5b91246d8bebdf7caa80cab4b6f09d1005ffdedf983d6651b9a19d19e"
+      },
+      "cbm-C7PromHosp-s7-p2.cbm": {
+        "bytes": 67328,
+        "sha256": "d72c574034fb44d91ee6f23eb15942d3fd58423a4f3e821b7e42e7d576c275eb"
+      },
+      "cbm-C7PromHosp-s7-p3.cbm": {
+        "bytes": 290576,
+        "sha256": "4dc6fda2ae48c3e061075b7a5938ad41f2d515cac91d515df34724d3aebb320e"
+      },
+      "cbm-C7PromHosp-s7-p4.cbm": {
+        "bytes": 270688,
+        "sha256": "5b5acb5d70591b84553ce9486834f4954f99c098f17be9c9d866898e4e339212"
+      },
+      "cbm-C7PromHosp-s8-p0.cbm": {
+        "bytes": 354968,
+        "sha256": "79e86ff6a7630ad721ff4b31ae885859f689d7b939bc013a3f3643adb2d2f94d"
+      },
+      "cbm-C7PromHosp-s8-p1.cbm": {
+        "bytes": 243008,
+        "sha256": "3031be537ba6e48b60ab8cebca45ebf80cca21e178985d3e6429be4c0893ef82"
+      },
+      "cbm-C7PromHosp-s8-p2.cbm": {
+        "bytes": 61368,
+        "sha256": "304c067909a00cddfa071ed3085d79856b563fe1c2cf345fc60d5574f605940b"
+      },
+      "cbm-C7PromHosp-s8-p3.cbm": {
+        "bytes": 351320,
+        "sha256": "dabb4d351965a728ec300e36642fec6deea547e24b2d53e27ee442af411a23e2"
+      },
+      "cbm-C7PromHosp-s8-p4.cbm": {
+        "bytes": 339600,
+        "sha256": "e609bf6e7150f13a3e5a865e70b7203b32a3849cde6fe727fd8f5422b4535b51"
+      },
+      "cbm-C7PromHosp-s9-p0.cbm": {
+        "bytes": 468552,
+        "sha256": "c837770fe59f7e5dcebe39a13bc8d0e33115fcc6fe9563808a1fbedde945110a"
+      },
+      "cbm-C7PromHosp-s9-p1.cbm": {
+        "bytes": 723280,
+        "sha256": "bc6c8bc5bb58cc7017afae3ebc5690de5a7f16558890e1c98dcd9f1ae3612921"
+      },
+      "cbm-C7PromHosp-s9-p2.cbm": {
+        "bytes": 162232,
+        "sha256": "d3997c56193614646e4fc8ccd158f4b27d15187d21464aa128b8303ebefd2422"
+      },
+      "cbm-C7PromHosp-s9-p3.cbm": {
+        "bytes": 163488,
+        "sha256": "5b869cad6c47326ba5b638561fbc9370c32ac466e9521a8268a0e266dfd16669"
+      },
+      "cbm-C7PromHosp-s9-p4.cbm": {
+        "bytes": 193576,
+        "sha256": "ce947a16681f806b16a29d9bea6aa1fe0e25fc70702b0fa0344b0a2f6d2a0b67"
+      },
+      "cbm-M3limpioProm-s1-p0.cbm": {
+        "bytes": 434048,
+        "sha256": "55d75ebd801027d361e93ca8061386285dd8d7bfe4bfa8c20b39416a97e4cc04"
+      },
+      "cbm-M3limpioProm-s1-p1.cbm": {
+        "bytes": 279832,
+        "sha256": "9b0dc2e783c11896f45eb568ae370023ad0c1b87e5607947caacd3109bac5baa"
+      },
+      "cbm-M3limpioProm-s1-p2.cbm": {
+        "bytes": 64032,
+        "sha256": "50bd22be3029dc830e4f9139e5e06f7f003aa1c777faebf01222495afe24bce5"
+      },
+      "cbm-M3limpioProm-s1-p3.cbm": {
+        "bytes": 397408,
+        "sha256": "56349148c10fc6c349dcd879fdcf1f1f67a6953de9a2f9e094e657d0ac0a596a"
+      },
+      "cbm-M3limpioProm-s1-p4.cbm": {
+        "bytes": 224096,
+        "sha256": "2eb1a3a1c1083b816e6ae2cf7da005c14e72370e0402eec2cc71ae4fd5011b16"
+      },
+      "cbm-M3limpioProm-s2-p0.cbm": {
+        "bytes": 129984,
+        "sha256": "c8edb4d682d9f9892243f12ffeb39993d82368ad276755e5cba7374ed46145b5"
+      },
+      "cbm-M3limpioProm-s2-p1.cbm": {
+        "bytes": 436472,
+        "sha256": "c300c358b5787e47d6b1a95e5517a7dce569fedc9c50cbcf3cad08204c17ed9f"
+      },
+      "cbm-M3limpioProm-s2-p2.cbm": {
+        "bytes": 114144,
+        "sha256": "82e25c33b38bf654c147495d460a5e0d6aed10c2c05d81f31db268870d6cf218"
+      },
+      "cbm-M3limpioProm-s2-p3.cbm": {
+        "bytes": 88272,
+        "sha256": "ea2b73eb9ea27f0bc18c1846b8a71f98311f1679f73756d8909eac5510da31ef"
+      },
+      "cbm-M3limpioProm-s2-p4.cbm": {
+        "bytes": 378208,
+        "sha256": "fbf10ca3ff4c49f256db7b9b18e91e21bf74b7dc9ab928b391c119b41e7dff6e"
+      },
+      "cbm-M3limpioProm-s3-p0.cbm": {
+        "bytes": 405424,
+        "sha256": "c8a7a2006d2e9e4d6dc47471fb0ac273207b4a67f7118f3693584e97cb90d98a"
+      },
+      "cbm-M3limpioProm-s3-p1.cbm": {
+        "bytes": 164712,
+        "sha256": "34e5ba2060da08528bbd452df5af11497a533365492385e4412529d721ea09e6"
+      },
+      "cbm-M3limpioProm-s3-p2.cbm": {
+        "bytes": 233664,
+        "sha256": "efe9c48be50139b6f29d95afefc74facb1792633af91c0ce3824414cce89607f"
+      },
+      "cbm-M3limpioProm-s3-p3.cbm": {
+        "bytes": 209744,
+        "sha256": "f32d07a139395434b096e2e7f2bab94fe005b50ebb3a58428275d33f3da9572d"
+      },
+      "cbm-M3limpioProm-s3-p4.cbm": {
+        "bytes": 189488,
+        "sha256": "a3e545e5ff6891cf0ac1d11d36aefd239bbff848bee4c53a2f1d876e6b054215"
+      },
+      "cbm-M3limpioProm-s4-p0.cbm": {
+        "bytes": 266808,
+        "sha256": "6e85dd3a24810643b7176576670c5f05b8d59f8c6f0ac015b52ad65761856768"
+      },
+      "cbm-M3limpioProm-s4-p1.cbm": {
+        "bytes": 149024,
+        "sha256": "a306045398b69e298b185836e9bf0426e694b01b6af22e905162acfabb4812da"
+      },
+      "cbm-M3limpioProm-s4-p2.cbm": {
+        "bytes": 176512,
+        "sha256": "c999e11287d5004c6da4a0cc6b6b5ca7906aa43f4673b3b779362c9acb74f977"
+      },
+      "cbm-M3limpioProm-s4-p3.cbm": {
+        "bytes": 416080,
+        "sha256": "4e2999b47d7435d97eb799cd08fb2e710063c91c8f20ee29aba3daa6fee490c6"
+      },
+      "cbm-M3limpioProm-s4-p4.cbm": {
+        "bytes": 139584,
+        "sha256": "04e51f4cf8f68378731722c7ca1d2a51f4f63091c15e5f98868ca52093e58f4d"
+      },
+      "cbm-M3limpioProm-s5-p0.cbm": {
+        "bytes": 165752,
+        "sha256": "a7dd3f5fd745cdad8457c559a535f1027f26d2e5885bf019069ba9d2791450d9"
+      },
+      "cbm-M3limpioProm-s5-p1.cbm": {
+        "bytes": 170568,
+        "sha256": "cedc5dd17598d8b714390006bdbf3bfadb3dee302cbd7f5601fd4b4e60b5513b"
+      },
+      "cbm-M3limpioProm-s5-p2.cbm": {
+        "bytes": 225288,
+        "sha256": "939d9e54dccf64865fa16bfcb78aa0f0ebf7f7d5c813cb548aa39b1f7d789e7d"
+      },
+      "cbm-M3limpioProm-s5-p3.cbm": {
+        "bytes": 222848,
+        "sha256": "206cec0b2be838c7d9f95fdfbd275f8f16a4508426d0f292885a3c5424d610f6"
+      },
+      "cbm-M3limpioProm-s5-p4.cbm": {
+        "bytes": 218112,
+        "sha256": "065f68a4ba5875b8889502ea5df090b5c5df0c79d0bc8f52b232f7d58461be6a"
+      },
+      "cbm-M3limpioProm-s6-p0.cbm": {
+        "bytes": 295152,
+        "sha256": "5fbc59df89923349608366b6acb3d66f0b24d874b7956e7da08e89c1121c1705"
+      },
+      "cbm-M3limpioProm-s6-p1.cbm": {
+        "bytes": 147896,
+        "sha256": "45dafdb7a82b0dceac736f94e14004928e44ccc48579995aa1b5e7474f6293ca"
+      },
+      "cbm-M3limpioProm-s6-p2.cbm": {
+        "bytes": 178504,
+        "sha256": "52b2e4c823ff77a249041f7fbf2686068888b01d5341d21cc05165f0b93b4e46"
+      },
+      "cbm-M3limpioProm-s6-p3.cbm": {
+        "bytes": 160976,
+        "sha256": "cbac1e3e466c8edf3c0bbb835279aa41290c2c7f50c80dc8883d83ee76383ad4"
+      },
+      "cbm-M3limpioProm-s6-p4.cbm": {
+        "bytes": 495688,
+        "sha256": "a0d29245d6aae5a2af85a1d9694687c7bfa6b9503b87086cd4c8d306faf30041"
+      },
+      "cbm-M3limpioProm-s7-p0.cbm": {
+        "bytes": 153864,
+        "sha256": "fedda167b9290a1fc576c4d8b121ba21a96a9ba9c057d3e6acf52bdceae5657f"
+      },
+      "cbm-M3limpioProm-s7-p1.cbm": {
+        "bytes": 186048,
+        "sha256": "fd9e40a767321b5b618f141e61b4c66c2a01708773889bfd1bfad0312703d96b"
+      },
+      "cbm-M3limpioProm-s7-p2.cbm": {
+        "bytes": 170528,
+        "sha256": "97326621630ddb13db5fc7c06824893caf2e0d0f1c0c2dc3f0105def29e344d2"
+      },
+      "cbm-M3limpioProm-s7-p3.cbm": {
+        "bytes": 202216,
+        "sha256": "6fa59701e3069214e5ffbb47e3c6051c1eb2015dc92e452f32c00cb0f2132882"
+      },
+      "cbm-M3limpioProm-s7-p4.cbm": {
+        "bytes": 208584,
+        "sha256": "f1205c70430d5f743d82aca9f52167e3120608d84c46272c5463d22211552d0c"
+      },
+      "cbm-M3limpioProm-s8-p0.cbm": {
+        "bytes": 141944,
+        "sha256": "e4d58cb485dff4ce4fbcb151c3c734f2b444a599f454ad0eda5f5c963764b9a8"
+      },
+      "cbm-M3limpioProm-s8-p1.cbm": {
+        "bytes": 386160,
+        "sha256": "237ccfb62eb9bf9138c698fad2b2c661fab2834a025af74a57f8f13aa5988115"
+      },
+      "cbm-M3limpioProm-s8-p2.cbm": {
+        "bytes": 335080,
+        "sha256": "92ee4ebdbc228d08d127a3295d51bb709e0e973c9548c39fac14246b125d99e2"
+      },
+      "cbm-M3limpioProm-s8-p3.cbm": {
+        "bytes": 185944,
+        "sha256": "c2c9e578000664a4755c5e947f2a82c9cf9c3c3ae99defa35ce5353fe6ce839b"
+      },
+      "cbm-M3limpioProm-s8-p4.cbm": {
+        "bytes": 200344,
+        "sha256": "adb797d0a54e27d788b376a742fba35716a6d1756c995aa5ec919719011aaec4"
+      },
+      "cbm-M3limpioProm-s9-p0.cbm": {
+        "bytes": 278736,
+        "sha256": "df4c2c75daf33e5fd95d881e92c6f25208a57d1ec034035b6beef8631c618868"
+      },
+      "cbm-M3limpioProm-s9-p1.cbm": {
+        "bytes": 362888,
+        "sha256": "913853c1256037f24be24fdeaa388b30ff556134a2568cd98dd3d6764cbfd2b5"
+      },
+      "cbm-M3limpioProm-s9-p2.cbm": {
+        "bytes": 116504,
+        "sha256": "a1be9f20a4830dea7e4d1874735a8b57e1cbe6cae259e7b9069b08f26ccbb768"
+      },
+      "cbm-M3limpioProm-s9-p3.cbm": {
+        "bytes": 121312,
+        "sha256": "4f2a8f2947992596483051b8d584cd101843c38d5a74c3e6f5c925d31314af71"
+      },
+      "cbm-M3limpioProm-s9-p4.cbm": {
+        "bytes": 283288,
+        "sha256": "d384733825a86c204fbb0f0520734be23befd5130b16c63298651d0b59d89ae3"
+      },
+      "cbm-M3limpioPromHosp-s1-p0.cbm": {
+        "bytes": 57584,
+        "sha256": "99624d47ca3d605a94556b821d5730ced8a9d1cd2c8a810534ba1814da021285"
+      },
+      "cbm-M3limpioPromHosp-s1-p1.cbm": {
+        "bytes": 104096,
+        "sha256": "aa044f8d6331f940acf2cf1872447673e203af1417716bb1159519035783880b"
+      },
+      "cbm-M3limpioPromHosp-s1-p2.cbm": {
+        "bytes": 92920,
+        "sha256": "7af1958b69dc775cea3acef1760f1a131f7313297f2403d8ce447565f97c6033"
+      },
+      "cbm-M3limpioPromHosp-s1-p3.cbm": {
+        "bytes": 307496,
+        "sha256": "219f2c248db9cf1d19a351ddd45d9a07398051a73314f17f0293d3b171302b57"
+      },
+      "cbm-M3limpioPromHosp-s1-p4.cbm": {
+        "bytes": 250512,
+        "sha256": "41b9aa50afae9b6b05142e8373bd72710d2371c987e5fa3d742134f7decfbc88"
+      },
+      "cbm-M3limpioPromHosp-s2-p0.cbm": {
+        "bytes": 63576,
+        "sha256": "f3d6f9859156e300be72c7959ee20debd0d21217f2130aa89827831838e05967"
+      },
+      "cbm-M3limpioPromHosp-s2-p1.cbm": {
+        "bytes": 347696,
+        "sha256": "3d027e771afccbdff1ff6a865602715a1009763d49390de8cf9c1f9e5705ca0b"
+      },
+      "cbm-M3limpioPromHosp-s2-p2.cbm": {
+        "bytes": 79848,
+        "sha256": "b1cdf5b3bcaca78685725b464b7ae9dc0e0f3bdae5450f7c23363ee6618f2000"
+      },
+      "cbm-M3limpioPromHosp-s2-p3.cbm": {
+        "bytes": 118480,
+        "sha256": "b6034139b7dfab1f0cd379f696681e243a8d282fbedcacc540cd482c1c2de315"
+      },
+      "cbm-M3limpioPromHosp-s2-p4.cbm": {
+        "bytes": 404728,
+        "sha256": "0ab5922c4456615d00f15417e155ed264f3b36f2f910d5b46f37cffa3cd58b6e"
+      },
+      "cbm-M3limpioPromHosp-s3-p0.cbm": {
+        "bytes": 617600,
+        "sha256": "19a955148ebea2be1b9e2311ea1c113414eb1dc9436507ae60eea56bc1260179"
+      },
+      "cbm-M3limpioPromHosp-s3-p1.cbm": {
+        "bytes": 476864,
+        "sha256": "0837a0c3b4b798dc77c5875911e5588bdc5f3eebca6b4ec7a8e53db5c52f320e"
+      },
+      "cbm-M3limpioPromHosp-s3-p2.cbm": {
+        "bytes": 152976,
+        "sha256": "f3be51c8003bd49738fb783e050e201590ed35b12e1e35c5ea7f067eb76bcca9"
+      },
+      "cbm-M3limpioPromHosp-s3-p3.cbm": {
+        "bytes": 288312,
+        "sha256": "a970f8695bf1378aef6810a3a811dd7601bbc4b1db101db548ce5c2017cd7925"
+      },
+      "cbm-M3limpioPromHosp-s3-p4.cbm": {
+        "bytes": 154176,
+        "sha256": "e9fd4ff39fa4b76bceaa8a37c23d39e98867e2120d577924140db5b16fa2ce59"
+      },
+      "cbm-M3limpioPromHosp-s4-p0.cbm": {
+        "bytes": 220768,
+        "sha256": "bc0bc5f32f088ceee364a15a6dfa47581c2abb3f68cb7e9cc26ef77ef130e342"
+      },
+      "cbm-M3limpioPromHosp-s4-p1.cbm": {
+        "bytes": 174432,
+        "sha256": "36036c0cf2719c80f6a84bbaecc3d4d1a3e4e89b4d546845d0f46ebf0138450f"
+      },
+      "cbm-M3limpioPromHosp-s4-p2.cbm": {
+        "bytes": 673816,
+        "sha256": "74ec09b9cadaf2551c04961abf986e9af91a0cb8b2f3e967bb3f0134e3b5a529"
+      },
+      "cbm-M3limpioPromHosp-s4-p3.cbm": {
+        "bytes": 309872,
+        "sha256": "69203f2751d58e020f423f859f5dff36da42cf4785c5553106f375e616c3595b"
+      },
+      "cbm-M3limpioPromHosp-s4-p4.cbm": {
+        "bytes": 213696,
+        "sha256": "4e164ba8dab77d893e45f28550b4154497687d56f9349270fa9f40f04e99c863"
+      },
+      "cbm-M3limpioPromHosp-s5-p0.cbm": {
+        "bytes": 233944,
+        "sha256": "fcd9836170421d0878d918216ee5a8b7d8f9a7eb097d94e63627d5af9cac2669"
+      },
+      "cbm-M3limpioPromHosp-s5-p1.cbm": {
+        "bytes": 121984,
+        "sha256": "813b47e4a8929c283fafef02a528582a73059994135bea1c5faf1fc17c9aa9be"
+      },
+      "cbm-M3limpioPromHosp-s5-p2.cbm": {
+        "bytes": 161296,
+        "sha256": "4684999f5908700fb5851cd23806b9fe6926b7f1420152587e60eec595617328"
+      },
+      "cbm-M3limpioPromHosp-s5-p3.cbm": {
+        "bytes": 389288,
+        "sha256": "a46fe82de2ec1329870323c607ca9cf4e1987833aac9c4645d3c2c6e2888a374"
+      },
+      "cbm-M3limpioPromHosp-s5-p4.cbm": {
+        "bytes": 294296,
+        "sha256": "213dc15082451532593c353b4fb4ede798eae3ef63fc85a6b1d10f89d37d7f89"
+      },
+      "cbm-M3limpioPromHosp-s6-p0.cbm": {
+        "bytes": 495736,
+        "sha256": "3185c4b439b5613d289ec7df7fbef6816a6d68de69b10a7a6fdd20f4881e314a"
+      },
+      "cbm-M3limpioPromHosp-s6-p1.cbm": {
+        "bytes": 129152,
+        "sha256": "42ca2bfa97aa300d956248e888adde8e5c02e8c753bffe1c3c852883aed88411"
+      },
+      "cbm-M3limpioPromHosp-s6-p2.cbm": {
+        "bytes": 247776,
+        "sha256": "c146cf97ec67b82f8a5ea2dacf189f045ca18a99bd4836783724a048a41c5375"
+      },
+      "cbm-M3limpioPromHosp-s6-p3.cbm": {
+        "bytes": 168568,
+        "sha256": "d76d7c2f64221409ca5e332af91b40fb0af5552714a54e4eae2b109b5874bb15"
+      },
+      "cbm-M3limpioPromHosp-s6-p4.cbm": {
+        "bytes": 838536,
+        "sha256": "2c59708af3794d9bdb4b831bf2f459019cbe1203751903bf07c60a51df88b61a"
+      },
+      "cbm-M3limpioPromHosp-s7-p0.cbm": {
+        "bytes": 206600,
+        "sha256": "8eede01360635d7ef47c79835004cd092a22c184930cdb4c37f906aac93b7473"
+      },
+      "cbm-M3limpioPromHosp-s7-p1.cbm": {
+        "bytes": 389408,
+        "sha256": "4d7a1fd6d4a91669f770ce36ec29ec6934c5d5cb06651952d680b0c20951749c"
+      },
+      "cbm-M3limpioPromHosp-s7-p2.cbm": {
+        "bytes": 101704,
+        "sha256": "7cec199cd314a34006b31a912fc298c10a087339d6aa0db8eb4d387588323fce"
+      },
+      "cbm-M3limpioPromHosp-s7-p3.cbm": {
+        "bytes": 253672,
+        "sha256": "57ab9dc0c3b9e65e16450ccc7ca2d74a99b4eea023d8bfd1172ef860f802c598"
+      },
+      "cbm-M3limpioPromHosp-s7-p4.cbm": {
+        "bytes": 181528,
+        "sha256": "ccc75ce514c932fadf3197c52bebde2a5ad04ae15e1dff8faaa7990f41ad5b10"
+      },
+      "cbm-M3limpioPromHosp-s8-p0.cbm": {
+        "bytes": 79048,
+        "sha256": "03eff97c01cfb94a90628287aa7e54d94d9a932e0d7a38f044ba36a02f4bf17d"
+      },
+      "cbm-M3limpioPromHosp-s8-p1.cbm": {
+        "bytes": 118032,
+        "sha256": "356a6e9afadcc1773c7c90d519a6c9c00b0162685eb53d011401dba2ef70dda3"
+      },
+      "cbm-M3limpioPromHosp-s8-p2.cbm": {
+        "bytes": 88560,
+        "sha256": "1bf3031f7459b18a2aa8a673eea03531bcb40a28876223d9e108c671e2093be5"
+      },
+      "cbm-M3limpioPromHosp-s8-p3.cbm": {
+        "bytes": 421264,
+        "sha256": "c47d352fcaa5ff5201cbc86d5cb301385f3027b6b52bb332494f41bc7e557d88"
+      },
+      "cbm-M3limpioPromHosp-s8-p4.cbm": {
+        "bytes": 150712,
+        "sha256": "8ec6d248fcfb39635996407e87733727e9c05a0da67e02ede2750d61515a5e7f"
+      },
+      "cbm-M3limpioPromHosp-s9-p0.cbm": {
+        "bytes": 322896,
+        "sha256": "7063a7dbe69eb91c8a6bf860f2efebde483c3c3af4d26644bf6d7bf8ed1e0884"
+      },
+      "cbm-M3limpioPromHosp-s9-p1.cbm": {
+        "bytes": 122000,
+        "sha256": "7bc6fd81faf07227b994f9a43dcb379002992df514a3b505c17f8dd4640cacbd"
+      },
+      "cbm-M3limpioPromHosp-s9-p2.cbm": {
+        "bytes": 190768,
+        "sha256": "d3764b58041995d6fdc9457fd4758cb59de3b61f9947c8c13e19666c2f6ee90b"
+      },
+      "cbm-M3limpioPromHosp-s9-p3.cbm": {
+        "bytes": 131168,
+        "sha256": "ed6780cdc01d29e9bc81a6a9defee771c0cd74bff74a6ac85d1a5dd8960ab55b"
+      },
+      "cbm-M3limpioPromHosp-s9-p4.cbm": {
+        "bytes": 365512,
+        "sha256": "c2eef739f5a63e2f2f9392847067391d8747d349d4434fef35242cc09c33f56d"
+      },
+      "celda17.json": {
+        "bytes": 174685,
+        "sha256": "23c23766cdb5236b84213d4347f9476523a76755ad8bdca8802c4b1af3002793"
+      },
+      "control.npz": {
+        "bytes": 9027642,
+        "sha256": "3ac9b19c0452c3b69f20a73e5296e2a88d51baaf310976d6d38cd07c05dabc1b"
+      },
+      "dataset-metadata.json": {
+        "bytes": 144,
+        "sha256": "58aba58676f1fb74a3ba1b9ea61c598d2c3d65fcc86ab3986465356f14a8420b"
+      },
+      "ganador_m3.py": {
+        "bytes": 26384,
+        "sha256": "5569719323be1ed4e8e6be31028feef6969c9a71dc24099b0251fdf626a7336f"
+      },
+      "inferencia_5b.py": {
+        "bytes": 9133,
+        "sha256": "ac69781e0231046156a51241e336f7cda490d154856e6861c10e45e08c7e6374"
+      },
+      "inferencia_5c.py": {
+        "bytes": 3622,
+        "sha256": "9e84ddaefbd8c20ee25133c922560f3ba97c8f9eec448dc014373d9911d347f7"
+      },
+      "m3limpio-ajuste.json": {
+        "bytes": 15022,
+        "sha256": "9d4f3594b7671d49af052923873c252bac11b30350c650f89eca81438441fdc1"
+      },
+      "m3limpio-ajuste.npz": {
+        "bytes": 25496,
+        "sha256": "57b45b657d1a35dd293073ea2ee7e5115de8135f1968579e58ea2e26f3b32772"
+      },
+      "m3limpio-hospital-ajuste.json": {
+        "bytes": 15762,
+        "sha256": "cd9118d500f6801a477b7e58861b4e8e3f00050471340fe9855b42c0189f4cf0"
+      },
+      "m3limpio-hospital-ajuste.npz": {
+        "bytes": 25496,
+        "sha256": "fee6cdcca6bd4be7a4254d4461e190582a57332004ba9b73a031c737ae2b9b91"
+      },
+      "red-pliegue-0.pt": {
+        "bytes": 16329419,
+        "sha256": "1d99e0d5496243c9fcb0510a10b9cc6fc57e05651ff64d0d5f2b1e5a13bf1a0d"
+      },
+      "red-pliegue-1.pt": {
+        "bytes": 16329419,
+        "sha256": "c880203d325223a2310eb962da9726f65eed472e7ba67a7f0d13a1c50b7fad8a"
+      },
+      "red-pliegue-2.pt": {
+        "bytes": 16329419,
+        "sha256": "d8ec59a6e6a369e52983a924a8bc3e00d3d458b7a6f703102936d53a0946086a"
+      },
+      "red-pliegue-3.pt": {
+        "bytes": 16329419,
+        "sha256": "16d045b1eae3af570c8c12de5637dfcc12f15d2bea78b45b8608b24e74d96ad7"
+      },
+      "red-pliegue-4.pt": {
+        "bytes": 16329419,
+        "sha256": "c0f6462f8bb6e2692a7675031253740f28150397278154e672e02dc0aaa54542"
+      }
+    }
+  },
+  "registro_del_entrenamiento": "outputs/fase5c-entrenamiento.json",
+  "comando": {
+    "interprete": ".venv/bin/python",
+    "argumentos": [
+      ".claude/skills/modelado-baseline/scripts/fase5c_paquete.py",
+      "--out",
+      "outputs/fase5c-paquete"
+    ]
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "torch": "2.14.0"
+  },
+  "fecha": "2026-11-06T02:29:54.599897+00:00",
+  "segundos": 18.8
+}
