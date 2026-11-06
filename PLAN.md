@@ -23,8 +23,8 @@ el 2026-11-05 se hicieron sus cuatro envíos, los cuatro con puntuación, y cerr
 por su puerta, con su comparación descriptiva; el mismo día la persona abrió la
 Fase 5c, decidida después de ver la 5b: cuatro envíos más para descomponer la
 distancia al ganador, después de los cuales no se envía nada más a Kaggle; se
-hicieron los cuatro el mismo día, los cuatro con puntuación, y su puerta está,
-sin cerrar; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+hicieron los cuatro el mismo día, los cuatro con puntuación, y cerró por su
+puerta, con Kaggle cerrado para el proyecto; de la Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -60,7 +60,8 @@ fijó la Fase 5b, el envío tardío a Kaggle, que va después de la Fase 5; no s
 envía nada antes.* *2026-11-04: la persona abrió la Fase 5.* *2026-11-05: la
 Fase 5b cerró por su puerta, con los cuatro envíos puntuados.* *2026-11-05: la
 persona abrió la Fase 5c, decidida después de ver los resultados de la 5b.* *2026-11-05: los
-cuatro envíos de la Fase 5c, con puntuación.*
+cuatro envíos de la Fase 5c, con puntuación.* *2026-11-05: la Fase 5c
+cerró por su puerta; el proyecto no envía nada más a Kaggle.*
 
 ## Cómo leer una puerta
 
@@ -3118,13 +3119,13 @@ tienen puntuación (arriba, «Los envíos»).
 
 ---
 
-## Fase 5c — Descomponer la distancia al ganador en Kaggle — ABIERTA (2026-11-05)
+## Fase 5c — Descomponer la distancia al ganador en Kaggle — CERRADA (2026-11-05)
 
 **Estado.** Fijada el 2026-11-05 por la persona, **después de ver los
 resultados de la Fase 5b**, y declarada así. Se escribió en un commit propio
 antes de entrenar nada. *El mismo día se hicieron los cuatro envíos, en el
 orden fijado, y los cuatro recibieron puntuación (abajo, «Lo que dio
-Kaggle»). La puerta está; la fase no se ha cerrado.*
+Kaggle»).* *Cerrada el 2026-11-05 por su puerta (abajo, «Cierre»).*
 
 **Por qué existe.** En la Fase 5b, C7 quedó a −0,01404 del ganador en el
 tablero privado (`outputs/fase5b-comparacion.json >
@@ -3382,10 +3383,25 @@ limpio, 0,15134 en la privada y 0,17229 en la pública; C7, 0,15856 y 0,17893
 
 - **Los dos efectos de promediar son sin hospital,** como fija la
   especificación.
-- **Los controles** (`controles`): 4 de 4 casos bien, 3 de ellos casos que deben
+- **El signo en la pública** (`efectos.*.mismo_signo_en_la_publica`, añadido el
+  2026-11-05 al escribir el hallazgo 19, a pedido de la persona): cinco de los
+  seis efectos tienen el mismo signo en la pública y en la privada. El del
+  hospital con imagen, no: +0,00237 en la privada y −0,00143 en la pública.
+- **La distancia de C7 al ganador, descompuesta** (aritmética descriptiva,
+  `descomposicion_de_la_distancia_al_ganador`, añadida el mismo día y del mismo
+  modo). En la privada, C7 queda a −0,01404 del ganador, 0,1726 (la distancia de
+  `outputs/fase5b-comparacion.json`). Promediar cubre +0,00507, el 36,1 % de la
+  distancia; el hospital, +0,00237, el 16,9 %; y queda −0,0066, el 47,0 %
+  (`porcentaje_de_la_distancia`). El orden es el de los envíos, primero
+  promediar y después el hospital: C7 con hospital y sin promediar no se envió,
+  así que la parte de cada uno depende de ese orden (`como_leerla`).
+- **Los controles** (`controles`): 7 de 7 casos bien, 4 de ellos casos que deben
   fallar. Un registro sin envío puntuado y el registro de otro modelo se
   rechazan, y con «C7 promediado» y «M3 limpio promediado» intercambiados, el
-  efecto de la imagen sin hospital cambia de signo.
+  efecto de la imagen sin hospital cambia de signo. La distancia de C7 al
+  ganador es la de la 5b y, con la puntuación pública de C7, no lo es; y lo que
+  queda es «C7 promediado + hospital» menos el ganador. *Hasta que se añadió la
+  descomposición, 4 de 4, 3 de ellos casos que deben fallar.*
 - **Cómo leerlos** (`como_leerlos`): son restas entre dos cifras por envío, sin
   intervalo, sobre el mismo conjunto de prueba que la 5b, y promediar cambia dos
   cosas a la vez (arriba, «Salvedades»). Es descriptiva: no da ningún resultado a
@@ -3395,6 +3411,15 @@ limpio, 0,15134 en la privada y 0,17229 en la pública; C7, 0,15856 y 0,17893
 `outputs/fase5c-envio-<modelo>.json`, y los seis efectos, en
 `outputs/fase5c-efectos.json`. O bien la declaración de que un envío no se pudo
 hacer, y por qué.
+
+**Cierre (2026-11-05).** La puerta está: las puntuaciones pública y privada de
+los cuatro envíos, en `outputs/fase5c-envio-m3limpioprom.json`,
+`outputs/fase5c-envio-m3limpiopromhosp.json`, `outputs/fase5c-envio-c7prom.json`
+y `outputs/fase5c-envio-c7promhosp.json`, y los seis efectos, en
+`outputs/fase5c-efectos.json`. Los cuatro envíos se hicieron y ninguno se
+reenvió. **Por la regla de la fase, Kaggle queda cerrado: este proyecto no envía
+nada más a la competición** (arriba, «Qué se hace»). La fase es descriptiva y no
+cambia ninguna recomendación.
 
 ---
 
