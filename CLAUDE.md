@@ -1993,7 +1993,13 @@ Este es estado que caduca, y mantenerlo en dos sitios es cómo se desfasan.
         de «La imagen sola, sin el sistema de fotografía corporal total»; las
         fases 4d y 4e, al final de «El modelo recomendado»; y la potencia, en la
         subsección nueva «Lo que la prueba alcanza a ver». Les faltan el README
-        y la demo. Las fases 5, 5b y 5c siguen fuera del borrador.
+        y la demo.
+      - **Y, desde el mismo día, las fases 5, 5b y 5c** (commit «Borrador v2:
+        el conjunto reservado y los envíos a Kaggle»): dos subsecciones nuevas
+        en «Resultados», después de «Lo que la prueba alcanza a ver», «El
+        conjunto reservado, abierto una sola vez» y «En la prueba de Kaggle».
+        También les faltan el README y la demo. Con ellas, todas las fases de
+        este pendiente están en el borrador, salvo en «Qué se recomienda».
       - **Lo que el bloque deja desfasado en el borrador:** «Resultados» dice
         ahora que, por la regla de la Fase 4f, la recomendación para el escenario
         sin fotografía corporal total pasó a la red de la 4e, y «Qué se
@@ -2273,6 +2279,27 @@ y 4f, y la potencia de la prueba»):
   las filas de la tabla de `referencias/isic-primary-metric-pauc.py.md`, y una
   que mezcla, las del 10.º puesto: tres líneas del README, que son cita, y doce
   de bloques de código de la ficha. El párrafo que las cita no tiene números.
+
+*Y una sexta,* en el commit «Regenerar la verificación y el analizador con el
+bloque 2 en el borrador», del 2026-11-05, con el conjunto reservado y los envíos
+a Kaggle ya en `informe/borrador-v2.md` (commit «Borrador v2: el conjunto
+reservado y los envíos a Kaggle»):
+- **Búsqueda en todo el corpus:** 943 números; 528 con respaldo, 11 señalados,
+  los mismos de antes, 9 del método, 21 omitidos por su contexto y 374 en
+  comentarios.
+- **Por campo, sobre los 539 números del cuerpo:** 470 respaldados por su campo
+  y 19 por su referencia; 50 señalados, los mismos de antes. Los 70 números
+  nuevos quedan respaldados por su campo. En la primera inserción, tres no lo
+  estaban: la diferencia de C7 con el ganador y lo que queda de ella se habían
+  escrito sin signo, 0,01404 y 0,0066, y sus campos los guardan con signo. Se
+  escribieron con signo antes del commit del borrador.
+- **El analizador:** 249 comentarios `F:`, 179 que entran en la gramática y 70
+  que solo citan documentos del proyecto; ninguno que no entre.
+- **Las citas de `referencias/`:** suma una que apunta solo a líneas nuestras,
+  las de `referencias/kaggle-code-requirements.md` que dicen qué no dice la
+  página y qué no muestra la captura. Respalda que ninguna fuente versionada
+  diga que la puntuación privada de un envío tardío salga del subconjunto del
+  tablero final, y el párrafo que la cita no tiene números.
 
 **Límite conocido de este mecanismo:** el verificador se ejecuta sobre
 `informe/borrador-v2.md`, **no sobre `CLAUDE.md`**. Y ese punto ciego ya
