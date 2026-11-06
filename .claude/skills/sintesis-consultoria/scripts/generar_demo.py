@@ -619,14 +619,24 @@ def datos_fases_4d_a_5c(cargar):
                      or tabla[m]["reservado"]["pauc"] == reservado["metricas"][m]["pauc"]["punto"])
                 for m in tabla),
             "Los puntos del reservado de la tabla de tres evaluaciones son los de fase5-reservado.json, con su intervalo")
-    # Rediseño, paso 2, gráfico 4: la cascada parte de la distancia de C7 al ganador,
-    # suma lo que cubren promediar y el hospital, y tiene que llegar a lo que queda;
-    # la distancia tiene que ser la de fase5b-comparacion.json. Control:
-    # test_generar_demo.py, caso T4.
+    # Gráfico 4 (rehecho el 2026-11-06): una barra con la distancia de C7 al ganador
+    # partida en tres tramos, y debajo el recorrido de cuatro puntos en la misma
+    # escala. Los tramos salen de descomposicion_de_la_distancia_al_ganador y los
+    # puntos, de kaggle.*.privada; la figura solo es cierta si cada tramo es la
+    # diferencia entre dos puntos seguidos, los tres suman la distancia, la
+    # distancia es la de fase5b-comparacion.json y cada porcentaje es su tramo
+    # sobre la distancia. Control: test_generar_demo.py, caso T4.
     des = efectos["descomposicion_de_la_distancia_al_ganador"]
-    afirmar(abs(des["distancia_de_c7_al_ganador"] + des["cubre_promediar"] + des["cubre_el_hospital"] - des["queda"]) < 5e-6
-            and des["distancia_de_c7_al_ganador"] == comparacion["comparaciones_con_la_privada"]["c7_menos_ganador"]["diferencia"],
-            "La cascada cierra: la distancia de C7 al ganador, más lo que cubren promediar y el hospital, es lo que queda")
+    kp = {m: efectos["kaggle"][m]["privada"] for m in ("C7", "C7Prom", "C7PromHosp")}
+    gan, dist = des["ganador"]["pauc"], des["distancia_de_c7_al_ganador"]
+    cerca = lambda a, b: abs(a - b) < 5e-6
+    tramos = {"promediar": des["cubre_promediar"], "hospital": des["cubre_el_hospital"], "queda": des["queda"]}
+    afirmar(cerca(kp["C7"] - gan, dist) and cerca(kp["C7Prom"] - kp["C7"], tramos["promediar"])
+            and cerca(kp["C7PromHosp"] - kp["C7Prom"], tramos["hospital"]) and cerca(kp["C7PromHosp"] - gan, tramos["queda"])
+            and cerca(dist + tramos["promediar"] + tramos["hospital"], tramos["queda"])
+            and dist == comparacion["comparaciones_con_la_privada"]["c7_menos_ganador"]["diferencia"]
+            and all(abs(des["porcentaje_de_la_distancia"][k] - abs(v) / abs(dist) * 100) <= 0.05 + 1e-9 for k, v in tramos.items()),
+            "La barra y el recorrido son la misma descomposición: cada tramo va de un punto del recorrido al siguiente, y los tres suman la distancia de C7 al ganador")
     proy = medicion["salida_del_notebook"]["tiempo"]
     return {
         "preguntas": preguntas,
@@ -1106,7 +1116,7 @@ PLANTILLA = r"""<!DOCTYPE html>
   /* Leyenda en HTML: se parte en líneas a 375 px, y la de Chart.js cortaba los
      rótulos largos. */
   .leyenda { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--suave); margin-top: 10px; }
-  .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+  .leyenda > span { display: inline-flex; align-items: center; gap: 6px; }
   .leyenda i { display: inline-block; width: 22px; height: 11px; border-radius: 2px; flex: 0 0 22px; box-sizing: border-box; }
   .cifra-fuente { border-bottom: 1px dotted var(--suave); cursor: help; }
   footer {
@@ -1222,7 +1232,9 @@ __AVISO_EXPLORATORIO__
     <div class="lienzo"><canvas id="gr-tres"></canvas></div>
     <div class="leyenda" id="leyenda-tres"></div>
     <p class="pie-grafico" id="pie-tres"></p>
-    <div class="lienzo" style="margin-top:24px"><canvas id="gr-cascada"></canvas></div>
+    <div class="lienzo" style="height:110px;margin-top:24px"><canvas id="gr-distancia"></canvas></div>
+    <div class="leyenda" id="leyenda-distancia"></div>
+    <div class="lienzo" style="height:150px;margin-top:8px"><canvas id="gr-recorrido"></canvas></div>
     <p class="pie-grafico" id="pie-cascada"></p>
     <details class="detalle"><summary>Detalle</summary>
       <div class="texto" id="det-5a"></div>
@@ -1299,8 +1311,10 @@ const mil = v => v.toLocaleString("es", {useGrouping: "always"});
 const cifra = (v, fuente) => `<span class="cifra-fuente" title="${esc(fuente)}">${v}</span>`;
 const P = ps => ps.map(p => `<p>${p}</p>`).join("");
 const L = ls => `<ul>${ls.map(l => `<li>${l}</li>`).join("")}</ul>`;
+// El texto va en su propio span: suelto, cada cifra quedaba como un elemento más
+// del flex, con hueco a los lados («( 36,1% )»).
 const leyenda = (id, items) => document.getElementById(id).innerHTML =
-  items.map(([estilo, texto]) => `<span><i style="${estilo}"></i>${texto}</span>`).join("");
+  items.map(([estilo, texto]) => `<span>${estilo ? `<i style="${estilo}"></i>` : ""}<span>${texto}</span></span>`).join("");
 
 const E = D.eda, R = D.extraccion.reservado, DS = D.extraccion.desarrollo, DI = D.diseno, A = D.auditoria;
 const VR = D.vr, PR = D.procedencia, V = D.verificacion;
@@ -2119,65 +2133,130 @@ new Chart(document.getElementById("gr-tres"), {
     }
   }
 });
-// Rediseño, paso 2, gráfico 4: la cascada de la distancia de C7 al ganador en la
-// privada. Cada paso es un campo de fase5c-efectos.json; los escalones intermedios
-// son la suma de los anteriores y no se escriben. La salvedad del orden, que deja
-// el «Detalle», va al pie.
+// Gráfico 4 (rehecho el 2026-11-06): la distancia de C7 al ganador en la privada,
+// como una sola barra partida en tres tramos —promediar, el hospital y lo que queda
+// sin explicar—, y debajo el recorrido de cuatro puntos con sus pAUC privadas. Las
+// dos figuras comparten la escala, así que cada tramo va de un punto al siguiente.
+// Los tramos son campos de descomposicion_de_la_distancia_al_ganador; los puntos,
+// de kaggle.*.privada; construir_datos comprueba que coinciden. Sustituye a una
+// cascada con el eje en negativo, que no se entendía. La salvedad del orden va al
+// pie.
 document.getElementById("pie-cascada").innerHTML =
   `El reparto depende del orden: C7 con el hospital y sin promediar no se envió.`;
-const PASOS = [
-  { nombre: "C7 frente al ganador", campo: "distancia_de_c7_al_ganador", desde: 0, hasta: DES.distancia_de_c7_al_ganador, color: "#c98b7a" },
-  { nombre: "Promediar", campo: "cubre_promediar", desde: DES.distancia_de_c7_al_ganador,
-    hasta: DES.distancia_de_c7_al_ganador + DES.cubre_promediar, color: "rgba(30,122,82,.65)" },
-  { nombre: "Hospital", campo: "cubre_el_hospital", desde: DES.distancia_de_c7_al_ganador + DES.cubre_promediar,
-    hasta: DES.distancia_de_c7_al_ganador + DES.cubre_promediar + DES.cubre_el_hospital, color: "rgba(30,122,82,.65)" },
-  { nombre: "Queda", campo: "queda", desde: DES.queda, hasta: 0, color: "rgba(91,107,124,.45)" },
+const fDesc = c => fE("descomposicion_de_la_distancia_al_ganador." + c);
+const RECORRIDO = [
+  { nombre: "C7", pauc: KG.privadas.C7, campo: fE("kaggle.C7.privada"), color: "#c98b7a" },
+  { nombre: "C7 promediado", pauc: KG.privadas.C7Prom, campo: fE("kaggle.C7Prom.privada"), color: "rgba(30,122,82,.9)" },
+  { nombre: "C7 promediado + hospital", pauc: KG.privadas.C7PromHosp, campo: fE("kaggle.C7PromHosp.privada"), color: "#d08c3a" },
+  { nombre: "Ganador", pauc: DES.ganador.pauc, campo: fDesc("ganador.pauc"), color: "#16202b" },
 ];
-const cascada = {
-  id: "cascada",
+const TRAMOS = [
+  { nombre: "Promediar", campo: "cubre_promediar", pct: "promediar", color: "rgba(30,122,82,.75)", texto: "#fff" },
+  { nombre: "Hospital", campo: "cubre_el_hospital", pct: "hospital", color: "#d08c3a", texto: "#fff" },
+  { nombre: "Sin explicar", campo: "queda", pct: "queda", color: "rgba(91,107,124,.35)", texto: "#16202b" },
+].map((t, i) => ({ ...t, desde: RECORRIDO[i].pauc, hasta: RECORRIDO[i + 1].pauc,
+                   etiqueta: `${firmado(DES[t.campo])} (${dec(DES.porcentaje_de_la_distancia[t.pct])}%)` }));
+// La misma escala horizontal y el mismo relleno en las dos figuras, sin ejes
+// verticales: así sus áreas de dibujo quedan alineadas. El relleno tiene que
+// cubrir la mitad del rótulo de los extremos del eje del recorrido; con 12 px,
+// Chart.js le añadía 6 y los tramos se desviaban de los puntos hasta 5 px.
+const margenX = (DES.ganador.pauc - KG.privadas.C7) * 0.06;
+const ejeX = { type: "linear", min: KG.privadas.C7 - margenX, max: DES.ganador.pauc + margenX };
+const rellenoX = { left: 24, right: 24 };
+// Dentro de cada tramo, su nombre y su valor con el porcentaje si caben; si no,
+// solo el porcentaje, y si tampoco, nada: la leyenda de debajo lo da siempre.
+const rotulosTramos = {
+  id: "rotulosTramos",
   afterDatasetsDraw(ch) {
-    const y = ch.scales.y, a = ch.chartArea, cx = ch.ctx, meta = ch.getDatasetMeta(0);
-    cx.save();
-    // El cero es el ganador.
-    const y0 = y.getPixelForValue(0);
-    cx.strokeStyle = "#16202b"; cx.setLineDash([5, 4]); cx.lineWidth = 1.4;
-    cx.beginPath(); cx.moveTo(a.left, y0); cx.lineTo(a.right, y0); cx.stroke();
-    cx.font = "600 11px -apple-system, sans-serif"; cx.textAlign = "left"; cx.fillStyle = "#16202b";
-    cx.fillText(`Ganador, privada: ${dec(DES.ganador.pauc)}`, a.left + 6, y0 - 6);
-    // Uniones entre escalones, y el valor de cada paso.
-    cx.setLineDash([2, 3]); cx.lineWidth = 1; cx.strokeStyle = "#5b6b7c";
-    meta.data.forEach((barra, i) => {
-      if (i < meta.data.length - 1) {
-        const yy = y.getPixelForValue(PASOS[i].hasta), siguiente = meta.data[i + 1];
-        cx.beginPath(); cx.moveTo(barra.x + barra.width / 2, yy); cx.lineTo(siguiente.x - siguiente.width / 2, yy); cx.stroke();
+    const cx = ch.ctx;
+    cx.save(); cx.textAlign = "center"; cx.textBaseline = "middle";
+    TRAMOS.forEach((t, i) => {
+      const b = ch.getDatasetMeta(i).data[0], ancho = Math.abs(b.x - b.base), xc = (b.x + b.base) / 2;
+      const pct = `${dec(DES.porcentaje_de_la_distancia[t.pct])}%`;
+      cx.fillStyle = t.texto;
+      cx.font = "600 11px -apple-system, sans-serif";
+      const necesita = Math.max(cx.measureText(t.nombre).width, cx.measureText(t.etiqueta).width) + 10;
+      if (ancho >= necesita) {
+        cx.fillText(t.nombre, xc, b.y - 8);
+        cx.font = "11px -apple-system, sans-serif"; cx.fillText(t.etiqueta, xc, b.y + 8);
+      } else if (ancho >= cx.measureText(pct).width + 6) {
+        cx.fillText(pct, xc, b.y);
       }
-      const v = DES[PASOS[i].campo];
-      cx.fillStyle = "#16202b"; cx.textAlign = "center";
-      cx.fillText(firmado(v), barra.x, y.getPixelForValue(Math.min(PASOS[i].desde, PASOS[i].hasta)) + 14);
     });
     cx.restore();
   }
 };
-new Chart(document.getElementById("gr-cascada"), {
+new Chart(document.getElementById("gr-distancia"), {
   type: "bar",
-  plugins: [cascada],
+  plugins: [rotulosTramos],
   data: {
-    labels: PASOS.map(p => p.nombre),
-    datasets: [{ data: PASOS.map(p => [p.desde, p.hasta]), backgroundColor: PASOS.map(p => p.color),
-                 borderSkipped: false, borderRadius: 3, maxBarThickness: 110 }]
+    labels: ["Distancia de C7 al ganador"],
+    datasets: TRAMOS.map(t => ({ label: t.nombre, data: [[t.desde, t.hasta]], backgroundColor: t.color,
+                                 grouped: false, borderSkipped: false, borderRadius: 0, barPercentage: 1, categoryPercentage: .85 }))
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    scales: { y: { suggestedMin: DES.distancia_de_c7_al_ganador * 1.15, suggestedMax: 0.002,
-                   title: { display: true, text: "Diferencia con el ganador, pAUC privada" } } },
+    indexAxis: "y", responsive: true, maintainAspectRatio: false,
+    layout: { padding: rellenoX },
+    scales: { x: { ...ejeX, display: false }, y: { display: false } },
     plugins: {
       legend: { display: false },
       title: { display: true, text: "La distancia de C7 al ganador en la privada de Kaggle", align: "start" },
       tooltip: {
         callbacks: {
-          label: it => `${PASOS[it.dataIndex].nombre}: ${firmado(DES[PASOS[it.dataIndex].campo])}`,
-          afterLabel: it => [fE("descomposicion_de_la_distancia_al_ganador." + PASOS[it.dataIndex].campo),
-                             "Ganador: " + fE("descomposicion_de_la_distancia_al_ganador.ganador.pauc")]
+          title: () => `Distancia de C7 al ganador: ${firmado(DES.distancia_de_c7_al_ganador)}`,
+          label: it => `${TRAMOS[it.datasetIndex].nombre}: ${TRAMOS[it.datasetIndex].etiqueta}`,
+          afterLabel: it => {
+            const t = TRAMOS[it.datasetIndex];
+            return [fDesc(t.campo), fDesc("porcentaje_de_la_distancia." + t.pct),
+                    `De ${RECORRIDO[it.datasetIndex].nombre} a ${RECORRIDO[it.datasetIndex + 1].nombre}`];
+          }
+        }
+      }
+    }
+  }
+});
+leyenda("leyenda-distancia", [
+  [null, `Distancia de C7 al ganador: ${cifra(firmado(DES.distancia_de_c7_al_ganador), fDesc("distancia_de_c7_al_ganador"))}`],
+  ...TRAMOS.map(t => [`background:${t.color}`,
+    `${t.nombre} ${cifra(firmado(DES[t.campo]), fDesc(t.campo))} ` +
+    `(${cifra(dec(DES.porcentaje_de_la_distancia[t.pct]) + "%", fDesc("porcentaje_de_la_distancia." + t.pct))})`])]);
+// El recorrido: los rótulos se alternan arriba y abajo para que no choquen a 375 px,
+// y los de los extremos se alinean hacia dentro.
+const rotulosRecorrido = {
+  id: "rotulosRecorrido",
+  afterDatasetsDraw(ch) {
+    const cx = ch.ctx, puntos = ch.getDatasetMeta(0).data;
+    cx.save(); cx.font = "600 11px -apple-system, sans-serif"; cx.fillStyle = "#16202b";
+    RECORRIDO.forEach((p, i) => {
+      const {x, y} = puntos[i], arriba = i % 2 === 0;
+      cx.textAlign = i === 0 ? "left" : i === RECORRIDO.length - 1 ? "right" : "center";
+      const xt = i === 0 ? x - 6 : i === RECORRIDO.length - 1 ? x + 6 : x;
+      const [l1, l2] = arriba ? [p.nombre, dec(p.pauc)] : [dec(p.pauc), p.nombre];
+      const y1 = arriba ? y - 26 : y + 20, y2 = arriba ? y - 12 : y + 34;
+      cx.font = arriba ? "600 11px -apple-system, sans-serif" : "11px -apple-system, sans-serif"; cx.fillText(l1, xt, y1);
+      cx.font = arriba ? "11px -apple-system, sans-serif" : "600 11px -apple-system, sans-serif"; cx.fillText(l2, xt, y2);
+    });
+    cx.restore();
+  }
+};
+new Chart(document.getElementById("gr-recorrido"), {
+  type: "scatter",
+  plugins: [rotulosRecorrido],
+  data: {
+    datasets: [{ data: RECORRIDO.map(p => ({ x: p.pauc, y: 0 })), showLine: true, borderColor: "#5b6b7c", borderWidth: 1.5,
+                 pointRadius: 6, pointHoverRadius: 8, pointBackgroundColor: RECORRIDO.map(p => p.color), pointBorderColor: "#fff" }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    layout: { padding: rellenoX },
+    scales: { x: { ...ejeX, title: { display: true, text: "pAUC privada de Kaggle" } },
+              y: { display: false, min: -1, max: 1 } },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: it => `${RECORRIDO[it.dataIndex].nombre}: ${dec(RECORRIDO[it.dataIndex].pauc)}`,
+          afterLabel: it => RECORRIDO[it.dataIndex].campo
         }
       }
     }

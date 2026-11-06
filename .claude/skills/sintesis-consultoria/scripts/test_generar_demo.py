@@ -91,8 +91,11 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
          reproducir la de la Fase 4e.
      T3. Las tres evaluaciones: el punto de la red en fase5-reservado.json,
          distinto del de la tabla de fase5b-comparacion.json.
-     T4. La cascada de la distancia al ganador: lo que cubre promediar,
-         cambiado para que los pasos no lleguen a lo que queda.
+     T4. La barra de la distancia al ganador y el recorrido de debajo: la pAUC
+         privada de «C7 promediado» cambiada en fase5c-efectos.json, así que el
+         tramo de promediar ya no va de un punto del recorrido al siguiente.
+         *Hasta el 2026-11-06 el gráfico era una cascada, y el caso cambiaba lo
+         que cubre promediar para que los pasos no llegaran a lo que queda.*
      T5. Las siete versiones frente a M3 limpio: la potencia calculada con
          otra media de C5 que la de fase4d-c5-vs-m3limpio.json, así que la
          banda del 80 % no sería la de las filas que tiene detrás.
@@ -407,9 +410,9 @@ def main():
         ("T3. el punto del reservado de la red distinto en fase5-reservado.json", "fase5-reservado",
          poner(["metricas", "Red4e", "pauc", "punto"], 0.1308),
          "Los puntos del reservado de la tabla de tres evaluaciones son los de fase5-reservado.json"),
-        ("T4. una cascada que no cierra en fase5c-efectos.json", "fase5c-efectos",
-         poner(["descomposicion_de_la_distancia_al_ganador", "cubre_promediar"], 0.006),
-         "La cascada cierra"),
+        ("T4. un punto del recorrido que no casa con su tramo en fase5c-efectos.json", "fase5c-efectos",
+         poner(["kaggle", "C7Prom", "privada"], 0.164),
+         "La barra y el recorrido son la misma descomposición"),
         ("T5. la potencia con otra media de C5", "potencia-nadeau-bengio",
          poner(["comparaciones", "C5", "media_observada"], 0.004),
          "La banda del 80 % se calculó con las mismas comparaciones"),
