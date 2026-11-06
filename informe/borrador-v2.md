@@ -220,7 +220,7 @@ La implementación de la pAUC es una transcripción del algoritmo del
 organizador, comprobada contra su script en 200 casos aleatorios, con
 coincidencia exacta, y en el caso del clasificador perfecto, que devuelve
 0,2.
-<!-- F: .claude/skills/modelado-baseline/SKILL.md, «Sobre la métrica: VERIFICADA (2026-08-11)»; outputs/modelado-baseline.json > metrica_fuente -->
+<!-- F: .claude/skills/modelado-baseline/SKILL.md, «Sobre la métrica: VERIFICADA (2026-08-11)»; outputs/modelado-baseline.json > metrica_fuente y escala_de_referencia_pauc.maximo -->
 
 **El cliente declaró dos ejes más, con premio propio:** *"Two Secondary
 Prizes: $7,500 each for "Top-15 Retrieval Sensitivity" and "Model
@@ -266,7 +266,7 @@ Se reportan además otras dos métricas:
 Todas las comparaciones se hacen sobre el conjunto de desarrollo, con
 validación cruzada de 5 pliegues agrupada por paciente y estratificada por la
 etiqueta, repetida con 10 semillas (de la 0 a la 9).
-<!-- F: outputs/validacion-repetida.json > semillas_corridas y n_splits; outputs/diseno-validacion.json > esquema (StratifiedGroupKFold, group_col patient_id) -->
+<!-- F: outputs/validacion-repetida.json > semillas_corridas, n(semillas_corridas) y n_splits; outputs/diseno-validacion.json > esquema (StratifiedGroupKFold, group_col patient_id) -->
 Los dos modelos de cada comparación se evalúan sobre los mismos pliegues, así
 que cada comparación da 50 diferencias pareadas.
 <!-- F: outputs/fase4-m2-vs-m1.json, outputs/fase4-m4-vs-m2.json, outputs/fase4-m4b-vs-m2.json, outputs/fase4-m3-vs-m2.json y outputs/fase4-m3limpio-vs-m2.json > comparaciones_nuevo_menos_base.*.n_diferencias -->
@@ -526,12 +526,12 @@ Antes de modelar, la auditoría de fugas revisa las columnas, y el modelado se
 niega a correr sin su reporte.
 <!-- F: .claude/skills/modelado-baseline/SKILL.md, requisitos; informe/casos-de-fallo.md, «Caso B» -->
 Quedan fuera de los modelos 15 columnas, por cuatro motivos:
-<!-- F: outputs/modelado-baseline.json > columnas_excluidas -->
+<!-- F: outputs/modelado-baseline.json > columnas_excluidas y n(columnas_excluidas) -->
 
 - **11 no existen al predecir.** El conjunto de prueba no las trae. Entre
   ellas están la propia etiqueta, la taxonomía diagnóstica y dos medidas que
   solo existen tras la biopsia.
-  <!-- F: outputs/auditoria-de-fugas.json > columnas_solo_en_train; CLAUDE.md, «Sobre el problema», «Tercera nota» -->
+  <!-- F: outputs/auditoria-de-fugas.json > columnas_solo_en_train y n(columnas_solo_en_train); CLAUDE.md, «Sobre el problema», «Tercera nota» -->
 - **Una es constante:** `image_type`.
   <!-- F: outputs/auditoria-de-fugas.json > columnas_constantes -->
 - **Una identifica la fila:** `isic_id`.
@@ -549,7 +549,7 @@ identificadores, constantes ni exclusivas del entrenamiento, ni `patient_id`,
 su AUC por sí sola fuera de muestra, con la partición agrupada por paciente.
 Ninguna llega al umbral de sospecha de 0,9; la más alta es `tbp_lv_H`, con
 0,8045.
-<!-- F: outputs/auditoria-de-fugas.json > univariado (41 entradas, ninguna sospechosa), umbral_auc_sospechoso, univariado[0]; .claude/skills/auditoria-de-fugas/SKILL.md, description; .claude/skills/auditoria-de-fugas/scripts/audit_leakage.py, excluir_del_univariado -->
+<!-- F: outputs/auditoria-de-fugas.json > univariado (ninguna sospechosa), n(univariado), umbral_auc_sospechoso, univariado[0]; .claude/skills/auditoria-de-fugas/SKILL.md, description; .claude/skills/auditoria-de-fugas/scripts/audit_leakage.py, excluir_del_univariado -->
 
 De las preguntas abiertas de la auditoría, la única que no contestan los
 motivos de arriba es `tbp_lv_nevi_confidence`, por su nombre, aunque sí está
@@ -578,7 +578,7 @@ Salvo donde se indica, las métricas de desempeño son del conjunto de
 desarrollo, con 10 semillas y 5 pliegues. Cada diferencia es «nuevo − base»,
 y su intervalo es el corregido al 95%. Los pliegues y semillas en que gana el
 nuevo se dan entre paréntesis.
-<!-- F: «Método», «Cómo se compara»; F21, F42, F4b, F32 y F3L > C.*.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas -->
+<!-- F: «Método», «Cómo se compara»; F21, F42, F4b, F32 y F3L > C.*.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas; F21 > n(semillas_corridas) y n_splits -->
 
 ### Una decisión por defecto cambia el veredicto
 
@@ -586,7 +586,7 @@ El mismo gradient boosting da resultados opuestos según una sola opción. Sin
 balancear, su pAUC media es 0,0018, por debajo del piso aleatorio de 0,02 en
 los 50 pliegues. Con `class_weight="balanced"`, y nada más distinto, llega a
 0,1375.
-<!-- F: VR > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global y .pauc_por_semilla_y_fold (los 50 valores bajo 0,02); VR > nivel_2b_gradient_boosting_balanceado.pauc_media_global; outputs/modelado-baseline.json > escala_de_referencia_pauc.azar y nivel_2b_gradient_boosting_balanceado.nota («Única diferencia con 2a: class_weight») -->
+<!-- F: VR > nivel_2a_gradient_boosting_sin_balancear.pauc_media_global y .pauc_por_semilla_y_fold (los valores, todos bajo 0,02); VR > comparacion_pareada_2b_menos_1.n_diferencias (los pliegues de la validación repetida); VR > nivel_2b_gradient_boosting_balanceado.pauc_media_global; outputs/modelado-baseline.json > escala_de_referencia_pauc.azar y nivel_2b_gradient_boosting_balanceado.nota («Única diferencia con 2a: class_weight») -->
 
 La métrica por defecto no es ciega a ese fallo, pero lo lee distinto. En la
 partición de la semilla 42, el AUC estándar del modelo sin balancear es
@@ -598,7 +598,7 @@ Se midió también cómo falla el modelo sin balancear, en la partición de la
 semilla 42. No es que ponga arriba a más negativos que positivos, en
 proporción: con probabilidad de 0,999 o más queda el 0,09% de los negativos y
 el 4,42% de los positivos.
-<!-- F: MEC > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_neg_ge_0999 y .frac_pos_ge_0999; MEC > esquema_cv -->
+<!-- F: MEC > niveles.nivel_2a_gradient_boosting_sin_balancear.total.frac_neg_ge_0999 y .frac_pos_ge_0999; MEC > umbral_alto; MEC > esquema_cv -->
 Lo que hace es hundir a una parte de los positivos al fondo del ordenamiento:
 el 36,28% queda en o por debajo del percentil 20 de los negativos, frente al
 1,58% con el modelo balanceado, y 18 positivos comparten con 191 negativos la
@@ -617,7 +617,7 @@ Por qué el modelo los hunde no se midió.
 El gradient boosting balanceado supera a la regresión logística balanceada
 por 0,005 en promedio, con intervalo [−0,0145; 0,0245] (29 de 50 pliegues; 8
 de 10 semillas). La ventaja no está establecida.
-<!-- F: VR > comparacion_pareada_2b_menos_1.media, .intervalo_t_95_nadeau_bengio, .gana_2b_en y .semillas_a_favor_de_2b -->
+<!-- F: VR > comparacion_pareada_2b_menos_1.media, .intervalo_t_95_nadeau_bengio, .gana_2b_en, .de, .semillas_a_favor_de_2b y n(semillas_corridas) -->
 En las otras tres métricas sí lo está: AUC +0,0228, [0,0012; 0,0444];
 sensibilidad top-15 +0,1633, [0,0874; 0,2393]; NNT80% SE −94,82 lesiones por
 cada maligna, [−152,31; −37,33].
@@ -629,7 +629,7 @@ sí distinguen.
 Sobre una sola partición de los datos completos, el boosting parecía además
 más estable que la logística. Con las 10 semillas el orden se invierte: su
 desviación entre pliegues es 0,0165, frente a 0,0138. Ese argumento se retiró.
-<!-- F: CLAUDE.md, hallazgo 2 (la partición única); VR > nivel_2b_gradient_boosting_balanceado.pauc_std_entre_folds y nivel_1_regresion_logistica.pauc_std_entre_folds -->
+<!-- F: CLAUDE.md, hallazgo 2 (la partición única); VR > nivel_2b_gradient_boosting_balanceado.pauc_std_entre_folds, nivel_1_regresion_logistica.pauc_std_entre_folds y n(semillas_corridas) -->
 
 ### Las columnas de procedencia no explican la ventaja
 
@@ -641,7 +641,7 @@ la logística en 0,0025, con [−0,0023; 0,0073].
 <!-- F: outputs/sensibilidad-procedencia-repetida.json > comparaciones.b_2b_con_menos_2b_sin y .c_1_con_menos_1_sin (media e IC) -->
 En la logística, incluirlas mejora en las 10 semillas y en 34 de 50
 pliegues. La magnitud no está establecida.
-<!-- F: outputs/sensibilidad-procedencia-repetida.json > comparaciones.c_1_con_menos_1_sin.gana_primer_termino_en_semillas y .gana_primer_termino_en_folds -->
+<!-- F: outputs/sensibilidad-procedencia-repetida.json > comparaciones.c_1_con_menos_1_sin.gana_primer_termino_en_semillas, .gana_primer_termino_en_folds y .de_folds -->
 La exclusión se sostiene por razón de uso, no de desempeño. Una sola
 partición sugería lo contrario; es el segundo resultado de una sola partición
 que no sobrevive a la validación repetida.
@@ -654,7 +654,7 @@ balanceados, con una regla de lectura fijada antes de correr. La partición por
 filas infla una métrica si da mejor en las 10 semillas, y cambia el veredicto
 si el intervalo de 2b − 1 en la pAUC excluye el cero en una partición y no en
 la otra.
-<!-- F: PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura»; EP > esquema -->
+<!-- F: PLAN.md, Fase 6, «El efecto de la partición: especificación y regla de lectura»; EP > esquema y n(esquema.semillas) -->
 
 No se cumple ninguna de las dos. Partir por filas mueve la pAUC en +0,0005 con
 la logística y en +0,0002 con el boosting, y da mejor en 6 y en 5 de las 10
@@ -733,7 +733,7 @@ La variante secundaria, que resume la imagen en una puntuación apilada
 *Patrón, no efecto establecido:* la forma de incorporar la imagen invierte la
 dirección de la pAUC. Como variables sueltas, M4 queda por encima de M2 en 2
 de 10 semillas; como puntuación apilada, M4b, en 8 de 10.
-<!-- F: F42 > C.pauc.nuevo_mejor_en_semillas; F4b > C.pauc.nuevo_mejor_en_semillas; CLAUDE.md, hallazgo 6 -->
+<!-- F: F42 > C.pauc.nuevo_mejor_en_semillas y .de_semillas; F4b > C.pauc.nuevo_mejor_en_semillas y .de_semillas; CLAUDE.md, hallazgo 6 -->
 
 ### La imagen sola, sin el sistema de fotografía corporal total
 
@@ -802,7 +802,7 @@ cada pliegue.
 <!-- F: PLAN.md, Fase 4c, «La red» y «Cómo se entrena, fijado antes de correr y sin ajuste»; referencias/efficientnet-b0-preentrenamiento.md, líneas 77–108 (el criterio de la Fase 2, comprobado antes de descargar los pesos) -->
 Su pAUC media es de 0,1083, frente a 0,0796 de la imagen sola con DINOv2, y
 queda por encima en 44 de 50 pliegues y en las 10 semillas.
-<!-- F: outputs/fase4c-red-sola-vs-imagen.json > metricas.Red.pauc.media_global, metricas.Imagen.pauc.media_global y comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas; «Imagen» es la de IS, a 4 decimales -->
+<!-- F: outputs/fase4c-red-sola-vs-imagen.json > metricas.Red.pauc.media_global, metricas.Imagen.pauc.media_global y comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds, .de_folds y .nuevo_mejor_en_semillas; «Imagen» es la de IS, a 4 decimales -->
 Con la corrección por haber hecho dos preguntas, el intervalo de la
 diferencia, +0,0287, va de −0,0037 a 0,0611, así que la regla fijada antes no
 la da por establecida.
@@ -906,7 +906,7 @@ puntuación y su razón a la media del paciente.
 <!-- F: PLAN.md, Fase 4c, «Pregunta 2» (C4: la puntuación de la red y esa puntuación dividida por su media dentro del paciente, como en M4b y C2) -->
 Su pAUC media es de 0,1687, frente a 0,1621 de M3 limpio, y queda por encima
 en 39 de 50 pliegues y en las 10 semillas.
-<!-- F: outputs/fase4c-c4-vs-m3limpio.json > metricas.C4.pauc.media_global, metricas.M3limpio.pauc.media_global y comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds y .nuevo_mejor_en_semillas -->
+<!-- F: outputs/fase4c-c4-vs-m3limpio.json > metricas.C4.pauc.media_global, metricas.M3limpio.pauc.media_global y comparaciones_nuevo_menos_base.pauc.nuevo_mejor_en_folds, .de_folds y .nuevo_mejor_en_semillas -->
 Con la corrección de Bonferroni para dos preguntas, el intervalo de la
 diferencia, +0,0067, va de −0,003 a 0,0164: la regla no la da por
 establecida, y M3 limpio sigue siendo el modelo recomendado.
