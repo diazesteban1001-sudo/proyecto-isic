@@ -368,6 +368,44 @@ def datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion, tiempo):
     }
 
 
+def rango_de_semillas(semillas):
+    """«semillas a a b»: el rótulo solo es cierto si las semillas son consecutivas."""
+    afirmar(semillas == list(range(semillas[0], semillas[-1] + 1)),
+            f"las semillas {semillas} se pueden rotular como un rango")
+    return f"semillas {semillas[0]} a {semillas[-1]}"
+
+
+def datos_imagen_barras(cargar, imagen_sola):
+    """Rediseño, paso 2, gráfico 2: la pAUC media de los cuatro modelos de imagen
+    sin el sistema de fotografía corporal total, con M1 como referencia, cada uno
+    con sus semillas. La barra de la red de la 4e sale de la Fase 4f, que la
+    compara con «Imagen + básicos»; solo es la red de la Fase 4e si esa fase la
+    reproduce. Control: test_generar_demo.py, caso T2."""
+    red4c = cargar("fase4c-red-sola-vs-imagen")
+    f4f = cargar("fase4f-red4e-vs-imagen-basicos")
+    f4e = cargar("fase4e-red-vs-red4c")
+    afirmar(f4f["reproduccion_de_la_red"]["reproduce_fold_a_fold"]
+            and f4f["metricas"]["Red4eAjustada"]["pauc"]["media_global"]
+            == f4e["metricas"]["Red4eAjustada"]["pauc"]["media_global"],
+            "La barra de la red de la 4e es la red de la Fase 4e: fase4f-red4e-vs-imagen-basicos.json la reproduce")
+    sem_is = imagen_sola["esquema"]["semillas"]
+    barras = [
+        ("Imagen", "imagen-sola.json", "metricas.Imagen.pauc.media_global",
+         imagen_sola["metricas"]["Imagen"]["pauc"]["media_global"], sem_is, "esquema.semillas"),
+        ("Imagen + básicos", "imagen-sola.json", "metricas.Imagen + básicos.pauc.media_global",
+         imagen_sola["metricas"]["Imagen + básicos"]["pauc"]["media_global"], sem_is, "esquema.semillas"),
+        ("Red de la 4c", "fase4c-red-sola-vs-imagen.json", "metricas.Red.pauc.media_global",
+         red4c["metricas"]["Red"]["pauc"]["media_global"], red4c["semillas_corridas"], "semillas_corridas"),
+        ("Red de la 4e", "fase4f-red4e-vs-imagen-basicos.json", "metricas.Red4eAjustada.pauc.media_global",
+         f4f["metricas"]["Red4eAjustada"]["pauc"]["media_global"], f4f["semillas_corridas"], "semillas_corridas"),
+    ]
+    return {
+        "barras": [{"etiqueta": e, "archivo": a, "campo": c, "pauc": v, "semillas": rango_de_semillas(sem),
+                    "campo_semillas": cs} for e, a, c, v, sem, cs in barras],
+        "m1": {"pauc": imagen_sola["metricas"]["M1"]["pauc"]["media_global"], "semillas": rango_de_semillas(sem_is)},
+    }
+
+
 def datos_mecanismo(mecanismo, metrica):
     """borrador-v2.md, «Una decisión por defecto cambia el veredicto», el
     párrafo de cómo falla el 2a (outputs/mecanismo-2a.json). Los porcentajes
@@ -863,6 +901,7 @@ def construir_datos(outputs_dir, leidos):
         "mecanismo": datos_mecanismo(mecanismo, metrica),
         "particion": datos_particion(particion),
         "imagen_sola": datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion, tiempo),
+        "imagen_barras": datos_imagen_barras(cargar, imagen_sola),
         "posteriores": datos_fases_4d_a_5c(cargar),
         "verificacion": {
             "total": verificacion["numeros_en_borrador"],
@@ -1100,6 +1139,7 @@ __AVISO_EXPLORATORIO__
     <p class="pie-grafico" id="pie-paneles"></p>
     <h3>La imagen sola, sin el sistema de fotograf&iacute;a corporal total</h3>
     <p class="frase" id="frase-4b"></p>
+    <div class="lienzo"><canvas id="gr-imagen"></canvas></div>
     <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-4"></div></details>
   </div>
 </section>
@@ -1785,6 +1825,58 @@ const resto4b = P([
   `${icF("auc")}; sensibilidad top-15 ${mediaF("setop15")}, ${icF("setop15")}, y NNT80% SE ${mediaF("nnt80")}, ${icF("nnt80")}.`,
   `Por la regla, la recomendación para ese escenario pasó a la red, que además usa menos datos de entrada: solo la imagen, ` +
   `sin edad, sexo ni zona del cuerpo. Se midió sobre los recortes de SLICE-3D, no sobre fotos de teléfono.`]);
+// Rediseño, paso 2, gráfico 2: la pAUC media de los cuatro modelos de imagen, cada
+// uno con sus semillas, y M1 como línea de referencia. El tooltip de cada barra da
+// sus campos y los de M1.
+const GI = D.imagen_barras;
+const referenciaM1 = {
+  id: "referenciaM1",
+  afterDatasetsDraw(ch) {
+    const y = ch.scales.y.getPixelForValue(GI.m1.pauc), a = ch.chartArea, cx = ch.ctx;
+    cx.save();
+    cx.strokeStyle = "#b8341f"; cx.setLineDash([6, 4]); cx.lineWidth = 1.8;
+    cx.beginPath(); cx.moveTo(a.left, y); cx.lineTo(a.right, y); cx.stroke();
+    // El rótulo va a la izquierda, sobre las barras más bajas: a la derecha
+    // chocaba con el valor de la red de la 4e, que queda casi en la línea.
+    const texto = `M1, ${GI.m1.semillas}: ${dec(GI.m1.pauc)}`;
+    cx.font = "600 11px -apple-system, sans-serif"; cx.textAlign = "left";
+    const ancho = cx.measureText(texto).width, x = a.left + 6;
+    cx.fillStyle = "rgba(255,255,255,.85)"; cx.fillRect(x - 4, y - 18, ancho + 8, 15);
+    cx.fillStyle = "#b8341f"; cx.fillText(texto, x, y - 7);
+    // El valor de cada barra, encima de ella.
+    cx.fillStyle = "#16202b"; cx.textAlign = "center";
+    ch.getDatasetMeta(0).data.forEach((barra, i) => cx.fillText(dec(GI.barras[i].pauc), barra.x, barra.y - 6));
+    cx.restore();
+  }
+};
+new Chart(document.getElementById("gr-imagen"), {
+  type: "bar",
+  plugins: [referenciaM1],
+  data: {
+    labels: GI.barras.map(b => [b.etiqueta, b.semillas]),
+    datasets: [{ data: GI.barras.map(b => b.pauc), backgroundColor: ["#9db7cc", "#7fa3bf", "#4a7fa5", "#1f5f8b"],
+                 borderRadius: 4, maxBarThickness: 90 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: { y: { beginAtZero: true, suggestedMax: D.escala.maximo,
+                   title: { display: true, text: "pAUC media en el desarrollo" } } },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: it => `${GI.barras[it[0].dataIndex].etiqueta}, ${GI.barras[it[0].dataIndex].semillas}`,
+          label: it => "pAUC " + dec(GI.barras[it.dataIndex].pauc),
+          afterLabel: it => {
+            const b = GI.barras[it.dataIndex];
+            return [`${b.archivo} > ${b.campo}`, `${b.archivo} > ${b.campo_semillas}`,
+                    `M1, la línea: imagen-sola.json > metricas.M1.pauc.media_global y esquema.semillas`];
+          }
+        }
+      }
+    }
+  }
+});
 document.getElementById("det-4").innerHTML = resto4 + lectura4 +
   `<h3>La imagen sola, sin el sistema de fotografía corporal total</h3>` + resto4b;
 

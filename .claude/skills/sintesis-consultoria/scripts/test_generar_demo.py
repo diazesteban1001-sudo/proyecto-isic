@@ -87,6 +87,8 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      y el motivo tiene que ser esa condición.
      T1. Los cuatro paneles de 2b − 1: la pAUC de validacion-repetida.json con
          otro intervalo que el de efecto-particion.json.
+     T2. Las barras de la imagen sola: la red de la 4e de la Fase 4f sin
+         reproducir la de la Fase 4e.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -392,6 +394,9 @@ def main():
         ("T1. la pAUC de 2b − 1 con otro intervalo en validacion-repetida.json", "validacion-repetida",
          poner(["comparacion_pareada_2b_menos_1", "intervalo_t_95_nadeau_bengio"], [-0.0146, 0.0245]),
          "Los cuatro paneles de 2b − 1 son la misma comparación"),
+        ("T2. la Fase 4f sin reproducir la red de la Fase 4e", "fase4f-red4e-vs-imagen-basicos",
+         poner(["reproduccion_de_la_red", "reproduce_fold_a_fold"], False),
+         "La barra de la red de la 4e es la red de la Fase 4e"),
     ]
 
     corridas = {
