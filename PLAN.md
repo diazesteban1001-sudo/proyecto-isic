@@ -20,7 +20,10 @@ no lee el reservado y, solo si pasa entero, la apertura (Fase 5, «El programa y
 el ensayo»); el ensayo pasó, y la apertura corrió una sola vez el mismo día y
 escribió la puerta de la fase, `outputs/fase5-reservado.json`; la Fase 5b, el envío tardío a Kaggle, se abrió el mismo día, y
 el 2026-11-05 se hicieron sus cuatro envíos, los cuatro con puntuación, y cerró
-por su puerta, con su comparación descriptiva; de la Fase 6 hay trabajo hecho.** De la Fase 6:
+por su puerta, con su comparación descriptiva; el mismo día la persona abrió la
+Fase 5c, decidida después de ver la 5b: cuatro envíos más para descomponer la
+distancia al ganador, después de los cuales no se envía nada más a Kaggle; de la
+Fase 6 hay trabajo hecho.** De la Fase 6:
 `informe/borrador-v2.md`, las decisiones sobre la demo del 2026-10-02, las dos
 mediciones del 2026-10-04, el efecto de la partición y la imagen sola, y el
 análisis descriptivo de la potencia de la prueba, del 2026-11-04. La Fase 4 tiene fijados sus modelos y sus
@@ -54,7 +57,8 @@ resultado descriptivo que no cambia ninguna recomendación.* *2026-11-02: la
 Fase 4f cerró por su regla con su pregunta a favor.* *2026-11-04: la persona
 fijó la Fase 5b, el envío tardío a Kaggle, que va después de la Fase 5; no se
 envía nada antes.* *2026-11-04: la persona abrió la Fase 5.* *2026-11-05: la
-Fase 5b cerró por su puerta, con los cuatro envíos puntuados.*
+Fase 5b cerró por su puerta, con los cuatro envíos puntuados.* *2026-11-05: la
+persona abrió la Fase 5c, decidida después de ver los resultados de la 5b.*
 
 ## Cómo leer una puerta
 
@@ -3109,6 +3113,176 @@ los cuatro envíos, en `outputs/fase5b-envio-m3limpio.json`,
 presupuesto de tres días, así que el cuarto no se cayó. Ningún modelo se cambió
 después de ver las puntuaciones, y ninguno se vuelve a enviar: los cuatro
 tienen puntuación (arriba, «Los envíos»).
+
+---
+
+## Fase 5c — Descomponer la distancia al ganador en Kaggle — ABIERTA (2026-11-05)
+
+**Estado.** Fijada el 2026-11-05 por la persona, **después de ver los
+resultados de la Fase 5b**, y declarada así. Se escribió en un commit propio
+antes de entrenar nada.
+
+**Por qué existe.** En la Fase 5b, C7 quedó a −0,01404 del ganador en el
+tablero privado (`outputs/fase5b-comparacion.json >
+comparaciones_con_la_privada.c7_menos_ganador`). Entre los dos hay, entre
+otras, dos diferencias que la 5b no separó:
+- **El número de modelos.** La celda 25 del notebook del ganador llama a
+  `optimise_catboost` (celda 22), que entrena un CatBoost por cada pliegue de un
+  `StratifiedGroupKFold` de 5, agrupado por paciente, con las semillas 1 a 9
+  (`for random_seed in range(1, n_rounds)`, con `n_rounds=10` por defecto): 45
+  modelos. M3 limpio y C7 son un solo modelo.
+- **El hospital.** El ganador usa la etiqueta `attribution` (celdas 3 y 17), que
+  M3 limpio excluye por ser una columna de procedencia
+  (`outputs/auditoria-de-fugas.json > columnas_procedencia`).
+
+Esta fase mide en Kaggle lo que aporta cada una.
+
+**Qué se hace (decisión de la persona, 2026-11-05):**
+- **Un 2 × 2 de envíos nuevos:** {solo tabular, tabular + red de la 4e} × {sin
+  hospital, con hospital}:
+  - «M3 limpio promediado»;
+  - «M3 limpio promediado + hospital»;
+  - «C7 promediado»;
+  - «C7 promediado + hospital».
+- **«Promediado».** El CatBoost tabular se entrena como en el notebook del
+  ganador: 9 semillas × 5 pliegues, con `StratifiedGroupKFold` agrupado por
+  paciente y las semillas 1 a 9 (celdas 22 y 25 de
+  `referencias/novoselskiy-2024-isic2024/notebooks/top-model.ipynb`). Cada uno
+  de los 45 se ajusta sobre su pliegue de entrenamiento con la parada temprana de
+  M3 limpio, y la predicción es la media de las 45 probabilidades. Todos con los
+  1.042 pacientes.
+- **«Con hospital»:** la etiqueta `attribution` y los agregados por hospital tal
+  como los usa el ganador. Comprobado en el código del notebook el 2026-11-05,
+  buscando `attribution` en sus 28 celdas:
+  - **celda 3:** `attribution` está en `cat_cols`, y la celda 8 la convierte en
+    one-hot con las demás categóricas (`OneHotEncoder` con
+    `handle_unknown='ignore'`, ajustado sobre el entrenamiento);
+  - **celda 17:** estandariza las puntuaciones fuera de pliegue de los dos
+    modelos de imagen dentro de cada grupo de `['attribution',
+    'tbp_lv_location', 'age_approx']`: la puntuación menos la media del grupo,
+    dividida por su desviación. Solo agrega puntuaciones de imagen;
+  - **celda 7, línea 69 de la celda:** una normalización por hospital,
+    `_attribution_norm`, comentada. No corre, y no entra.
+
+  Así:
+  - en los dos modelos solo tabulares, el hospital entra solo por el one-hot: la
+    celda 17 no tiene nada que agregar;
+  - en «C7 promediado + hospital» entra, además, una variable: la puntuación de
+    la red de la 4e estandarizada por hospital, zona y edad.
+- **C7** usa las mismas puntuaciones fuera de pliegue de la red y el mismo
+  promedio de cinco redes al predecir que en la Fase 5b (arriba, Fase 5b, «Las
+  puntuaciones fuera de pliegue de la red, para C7»). No se entrena ninguna red.
+- **Los envíos.** Cada uno se manda una sola vez, y los cuatro se mandan pase lo
+  que pase, en este orden: «M3 limpio promediado», «M3 limpio promediado +
+  hospital», «C7 promediado» y «C7 promediado + hospital». La regla de fallos y
+  la huella son las de la Fase 5b (arriba, «Los envíos»):
+  - si Kaggle no da puntuación (un error del notebook), se corrige solo lo
+    técnico, se declara aquí y se reenvía, con la huella nueva declarada antes de
+    reenviar;
+  - si da puntuación, ese modelo no se vuelve a enviar nunca;
+  - la huella del conjunto de datos y de los cuatro notebooks se fija en
+    `outputs/fase5c-huella.json` antes del primer envío y se comprueba antes de
+    cada uno.
+- **Después de estos cuatro no se envía nada más a Kaggle en este proyecto.**
+  *Mecanismo:* `fase5b_kaggle.py` y `fase5c_kaggle.py` solo envían sus cuatro
+  modelos y se niegan a reenviar uno con puntuación; con los ocho puntuados,
+  ninguno de los dos envía nada. Nada impide escribir otro programa: la regla es
+  esta frase.
+- **Es descriptiva.** No da ningún resultado a favor ni en contra, no cambia
+  ninguna recomendación y no suma a la bitácora. Junto con los envíos de M3
+  limpio y C7 de la Fase 5b (`outputs/fase5b-envio-m3limpio.json` y
+  `outputs/fase5b-envio-c7.json`), se reporta, sin intervalo:
+  - **el efecto de promediar, sin hospital:** «M3 limpio promediado» − M3
+    limpio, y «C7 promediado» − C7;
+  - **el efecto del hospital:** sin imagen, «M3 limpio promediado + hospital» −
+    «M3 limpio promediado»; con imagen, «C7 promediado + hospital» − «C7
+    promediado»;
+  - **el efecto de la imagen:** sin hospital, «C7 promediado» − «M3 limpio
+    promediado»; con hospital, «C7 promediado + hospital» − «M3 limpio
+    promediado + hospital».
+
+*Elegido por el agente, declarado:*
+- **Las diferencias se calculan con la puntuación privada,** la del tablero
+  final, como en la Fase 5b, y las públicas se reportan al lado. Van a
+  `outputs/fase5c-efectos.json`, escritas por un programa, para que cada cifra
+  salga de `outputs/`.
+- **Las variables.** Como en la Fase 5b, las transformaciones de M3 limpio (la
+  mediana de la edad, el one-hot, el estandarizado, el k-means y las medias por
+  conglomerado) se ajustan sobre las 401.059 lesiones de entrenamiento y se
+  aplican a la prueba con la inferencia portátil. Los 45 modelos de un envío
+  comparten esas variables, como los del ganador comparten las de su `df_train`.
+  Sin hospital, son las del M3 limpio y el C7 de la Fase 5b, y el control lo
+  comprueba: entre M3 limpio y «M3 limpio promediado» solo cambia el CatBoost.
+- **La variable de la celda 17** se calcula con `fase4d.estandarizar`, la
+  función que en la Fase 4d copió la celda 17 sin el hospital, ahora con el
+  hospital:
+  - la media y la desviación de pandas (ddof=1) de cada grupo, sobre las
+    puntuaciones fuera de pliegue de las 401.059 lesiones de entrenamiento, se
+    aplican al entrenamiento y a la prueba;
+  - es NaN si el grupo no está en el entrenamiento, si tiene una sola lesión o
+    si su desviación es 0;
+  - la edad es la imputada de M3 limpio, como en la 4d y como en el ganador, que
+    la imputa en la celda 7;
+  - en la prueba, la puntuación es la media de las cinco redes.
+
+  *Cómo calculó el ganador esta variable en la prueba no se sabe:* el notebook
+  publicado no predice la prueba. Se buscó `df_test`, `submission` y `subm_path`
+  en sus 28 celdas. `df_test` solo aparece en las celdas 8 y 12, donde se lee y
+  se codifica, y los modelos que devuelve la celda 25 no se aplican a nada más.
+- **No entra la versión por conglomerado de la variable de la celda 17.** La
+  celda 19 también estandariza por conglomerado las dos variables de la celda 17
+  (`columns_for_cluster_culculations`). C7 no lleva las de la celda 19 sobre la
+  imagen, y la especificación es la de las celdas 3 y 17.
+- **Los hospitales que solo están en la prueba.** Según el descriptor de
+  SLICE-3D, dos centros, Alfred Hospital y FNQH Cairns, aportaron datos solo al
+  conjunto de prueba (`referencias/kurtansky-2024-slice3d-descriptor.md`, línea
+  320), y una de las tres filas de la prueba visible, `data/test-metadata.csv`,
+  es de FNQH Cairns. En esas lesiones el one-hot del hospital es todo ceros, como
+  con el `handle_unknown='ignore'` del ganador, y la variable de la celda 17 es
+  NaN.
+- **Los pliegues:** `construir_folds` con las semillas 1 a 9, es decir,
+  `StratifiedGroupKFold(5, shuffle=True, random_state=semilla)` sobre las filas
+  de `train-metadata.csv` en su orden, con la etiqueta y agrupado por paciente,
+  como en la celda 22. No se afirma que sean los mismos pliegues del ganador:
+  dependen del orden de las filas de su `df_train`.
+- **La parada temprana de M3 limpio** es `ganador_m3.ajustar_m3` con
+  `PARAMETROS_LIMPIO` y la semilla del pliegue: para sobre un 20 % interno del
+  pliegue de entrenamiento, agrupado por paciente, y remuestrea el resto. El
+  ganador para sobre el pliegue de validación (registro de incidentes de
+  `CLAUDE.md`, undécima fila).
+- **Los nombres:** los modos `M3limpioProm`, `M3limpioPromHosp`, `C7Prom` y
+  `C7PromHosp`, con sus kernels `estebandazz/isic2024-fase5c-<modo en
+  minúsculas>`.
+- **El conjunto de datos privado es nuevo,** `estebandazz/isic2024-fase5c-modelos`:
+  lleva las cinco redes de los pliegues de la 5b y no lleva DINOv2, que ningún
+  modelo de esta fase usa. El de la 5b no se toca, y su huella sigue siendo la
+  fijada.
+- **El código es nuevo** (`fase5c_*.py` e `inferencia_5c.py`) y usa el de la 5b
+  sin cambiarlo.
+- **El control:** los mismos 6 pacientes y 1.042 lesiones de la Fase 5b,
+  puntuados como filas nuevas por el entrenamiento. La inferencia portátil los
+  reproduce en el Mac y en Kaggle, y el notebook no escribe `submission.csv` si
+  no lo hace.
+
+**Salvedades:**
+- **Se decidió después de ver la Fase 5b.** Es una segunda mirada al mismo
+  conjunto de prueba, elegida por lo que dio la primera.
+- **Promediar cambia dos cosas a la vez.** El M3 limpio y el C7 de la 5b se
+  ajustan con todos los pacientes; cada uno de los 45 modelos, con cuatro
+  quintos. El efecto de promediar incluye los dos cambios, y no se separan.
+- **El hospital en la prueba.** En las lesiones de los dos centros que solo
+  están en la prueba, el hospital no aporta nada: el efecto que se mide es el de
+  la prueba tal como es.
+- **Sin intervalo:** Kaggle da una cifra por envío, y los efectos son restas
+  entre esas cifras.
+- **El C7 de esta fase hereda la salvedad del de la 5b:** al predecir usa el
+  promedio de cinco redes, y no la red del pliegue con que se evaluó en la
+  validación cruzada.
+
+**Puerta.** Las puntuaciones pública y privada de los cuatro envíos, en
+`outputs/fase5c-envio-<modelo>.json`, y los seis efectos, en
+`outputs/fase5c-efectos.json`. O bien la declaración de que un envío no se pudo
+hacer, y por qué.
 
 ---
 
