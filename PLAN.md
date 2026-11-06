@@ -3279,6 +3279,62 @@ Esta fase mide en Kaggle lo que aporta cada una.
   promedio de cinco redes, y no la red del pliegue con que se evaluó en la
   validación cruzada.
 
+**Lo comprobado antes de enviar** (2026-11-05):
+- **El entrenamiento** terminó en el Mac en 932,0 s
+  (`outputs/fase5c-entrenamiento.json > segundos`), con 45 CatBoost por envío y
+  una mediana de 145, 148, 129 y 137 árboles, en el orden de envío (`modelos`).
+  Antes de entrenar, sin hospital, las variables del control y los dos CatBoost
+  de la 5b dieron las puntuaciones que guardó la 5b, con diferencia 0
+  (`de_la_fase_5b.iguales_sin_hospital`). Con hospital entran 7 columnas de
+  one-hot, una por cada hospital del entrenamiento (`hospital.one_hot`), y la
+  variable de la celda 17 tiene 1.302 grupos y es NaN en 32 lesiones de
+  entrenamiento (`hospital.celda_17`).
+- **En el Mac** (`outputs/fase5c-paquete.json > controles`), 22 de 22 casos bien,
+  8 de ellos casos que deben fallar. La inferencia portátil reproduce con
+  diferencia 0 las variables con y sin hospital, los logits de las cinco redes,
+  la variable de la celda 17 y la puntuación de los cuatro envíos, la media de
+  sus 45 modelos. Con el primer modelo solo, en lugar de la media, la puntuación
+  se aparta en los cuatro.
+- **El conjunto de datos privado,** `estebandazz/isic2024-fase5c-modelos`. La
+  llamada de la CLI que lo crea devolvió un error 499 al terminar de subir los
+  archivos, pero Kaggle lo creó como versión 1. No se volvió a subir. Un minuto
+  después, ya procesado, se descargó y se comparó con lo subido: 194 archivos
+  servidos, 0 diferencias (`outputs/fase5c-huella.json >
+  diferencias_con_lo_subido`).
+- **En Kaggle,** la versión 1 del notebook de medición
+  (`outputs/fase5c-kaggle-medicion.json`), en una Tesla T4. El control dio 14 de
+  14 casos bien, 4 de ellos casos que deben fallar
+  (`salida_del_notebook.control`). Diferencia máxima con el Mac: 0 en los dos
+  envíos sin red, 2,2e-19 en «C7 promediado» y 1,1e-16 en «C7 promediado +
+  hospital»; de 3,3e-6 a 2,1e-4 en los logits de las cinco redes, y 4,7e-6 en la
+  variable de la celda 17.
+- **El tiempo,** proyectado a 500.000 lesiones frente al límite de 12 horas
+  (`salida_del_notebook.tiempo.proyeccion`): 0,04 h en los dos envíos sin red y
+  0,39 h en los dos con red. El notebook entero tardó 90,6 s.
+
+**La huella** (`outputs/fase5c-huella.json`, de `fase5c_kaggle.py --huella`),
+fijada antes del primer envío:
+- **El conjunto de datos:** versión 1, 194 archivos servidos, huella
+  `946047b2bb08e05bd7ffa9f47fa9e5deef50cbe4c9ffaeb0e4310bacc916510e`
+  (`conjunto_de_datos.huella_sha256`), con 0 diferencias con lo subido desde
+  `data/fase5c/kaggle-dataset`.
+- **Los cuatro notebooks de envío,** en el orden de envío, con el SHA-256 del
+  `.ipynb` (`notebooks.*.archivos`):
+  - «M3 limpio promediado», `isic2024-fase5c-m3limpioprom.ipynb`:
+    `ef2941cc4f3a1b3bfabe367eb62db5beb896d4a253094caefa4c8c0bee9420fa`;
+  - «M3 limpio promediado + hospital», `isic2024-fase5c-m3limpiopromhosp.ipynb`:
+    `d02cd24f97ff72cf253c4d3304a3179020e1cdba1d5251ad77687c3608bcdfc8`;
+  - «C7 promediado», `isic2024-fase5c-c7prom.ipynb`:
+    `c6ac951b8fa495c46c7e6bacba5f91b782ea547644c7f2054089c95f638603a2`;
+  - «C7 promediado + hospital», `isic2024-fase5c-c7promhosp.ipynb`:
+    `55546b617625bb2be531f3ad32cece32f85257780abb365ecbe1009ae512d55a`.
+
+  El de cada `kernel-metadata.json` está al lado, en el mismo campo. Los cuatro
+  salen de `fase5c_notebook.py` y solo cambian en la línea `MODO`.
+- **Los controles** (`controles`): 8 de 8 casos bien, 3 de ellos casos que deben
+  fallar. Además de los de la 5b, «M3limpioProm» no se confunde con
+  «M3limpioPromHosp», y un envío de la 5b no cuenta como de la 5c.
+
 **Puerta.** Las puntuaciones pública y privada de los cuatro envíos, en
 `outputs/fase5c-envio-<modelo>.json`, y los seis efectos, en
 `outputs/fase5c-efectos.json`. O bien la declaración de que un envío no se pudo

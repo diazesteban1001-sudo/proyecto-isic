@@ -1,0 +1,322 @@
+{
+  "que_es": "la huella de lo que se envía en la Fase 5c, fijada antes del primer envío (PLAN.md, Fase 5c): el conjunto de datos tal como lo sirve Kaggle y los cuatro notebooks de envío",
+  "orden_de_envio": [
+    "M3limpioProm",
+    "M3limpioPromHosp",
+    "C7Prom",
+    "C7PromHosp"
+  ],
+  "conjunto_de_datos": {
+    "id": "estebandazz/isic2024-fase5c-modelos",
+    "version": 1,
+    "ultima_actualizacion": "2026-11-06 02:35:01.883000",
+    "archivos_servidos": 194,
+    "huella_sha256": "946047b2bb08e05bd7ffa9f47fa9e5deef50cbe4c9ffaeb0e4310bacc916510e",
+    "archivos": {
+      "cbm-C7Prom-s1-p0.cbm": "4a3c82a65612cf67bff6c170dfe58fb21f94043582396fb0eac3ff04578d870d",
+      "cbm-C7Prom-s1-p1.cbm": "01c89cecc63c866d41722004d567599f537e170b5c7fc06b010216a8a2976713",
+      "cbm-C7Prom-s1-p2.cbm": "12c51e7705f3a334cffe138a993369b7532ac5dbbe9f3921a850d856eafc48fc",
+      "cbm-C7Prom-s1-p3.cbm": "a5133092256ae810ac1d9e2b53d49b53f108d8c7310520e8aca4b7c44709881d",
+      "cbm-C7Prom-s1-p4.cbm": "3a0b013cbe201d68aec2b632a54d1593169d7130475f39fa261dcbc4c8d60d0c",
+      "cbm-C7Prom-s2-p0.cbm": "10ec155facd7071f6b3e6ca2970ba365bc6a4ef563b90ad58cc64a0e4aa4e471",
+      "cbm-C7Prom-s2-p1.cbm": "0a79b28f627dde94c11ee1052eba7ac6eb7f7ccd72db4ceaffb63270cf4fb07f",
+      "cbm-C7Prom-s2-p2.cbm": "ed16df0f37e5dd63098ffafb9e0bc154951301e8abf4a23440aec15d3b0dc895",
+      "cbm-C7Prom-s2-p3.cbm": "b1485e123fe6dc9e3853a10b08993ae30fb70c01c9115c843eb4b355316aa3e4",
+      "cbm-C7Prom-s2-p4.cbm": "2d808874fad9908eac5c2e261310b4fadaf749a116c66b2d410216711f276871",
+      "cbm-C7Prom-s3-p0.cbm": "747073e7526c3dbde707bed4a815cadeb0a2688a63eac0ac6ba8aee5c0873131",
+      "cbm-C7Prom-s3-p1.cbm": "ffcfc7d54b3e13ddfe5f277f883e887fa32a993c98902d472ac776213cbf4b96",
+      "cbm-C7Prom-s3-p2.cbm": "59960bec836198b1f292b7c10994143132504d70bf22bded79cdcc6411bba6d9",
+      "cbm-C7Prom-s3-p3.cbm": "7ea350108d5ad3b71a92ea951a24e16c510c8964a3878e6f2cab9e77c07e0a8c",
+      "cbm-C7Prom-s3-p4.cbm": "7ec6086af6e7bc9f8a57d40396d0edd081a2636f24f33f57f1b6060292149ce4",
+      "cbm-C7Prom-s4-p0.cbm": "97ebad92440bcd288ac9045ce68831013b4dbae4b6a07a0941318a920315cb3c",
+      "cbm-C7Prom-s4-p1.cbm": "c0f38d7e1e1f781ca1b8e8c3d04413c5520d8748861cc2620995ed6daab3c491",
+      "cbm-C7Prom-s4-p2.cbm": "ed661671867f66c9e1ede106b31d05c26958ff7056c8d3ec47814becc29fbc07",
+      "cbm-C7Prom-s4-p3.cbm": "0c3923cd407a80fcdcf5bf64c1ba8709b7709ff9700af330ad44aa722b9ba1c1",
+      "cbm-C7Prom-s4-p4.cbm": "8dcc1d2378ab049c40cd085382971d02b507ac740863581a3f180ab79b2e8883",
+      "cbm-C7Prom-s5-p0.cbm": "2f22c508bf5e5398c1c2488cac1b1526095bb4d803353b0c94f5c5c04b1f2aea",
+      "cbm-C7Prom-s5-p1.cbm": "6418b6d3badbba0d9252a429c76294b0829dab419fa050d7651bc0490d9568da",
+      "cbm-C7Prom-s5-p2.cbm": "28eb30d0b3324fb0626cda9406dacdd995617465d643f560cdb8d0972e231605",
+      "cbm-C7Prom-s5-p3.cbm": "b135e4924f2b97822cd086dee98a17598b87d8def3531495b820fa604aff17d6",
+      "cbm-C7Prom-s5-p4.cbm": "590c0cd171f5b35269755edcb2572251b21631c4be4ad81a63d48a5be03964d4",
+      "cbm-C7Prom-s6-p0.cbm": "e335ccb1ec3e72b811db370d40dabf7252e7798a43199d8a11b042b246f7e8bf",
+      "cbm-C7Prom-s6-p1.cbm": "a35c0f9e4cf3561ddbb1e0acdd21b89f96b7253ca230c6e2ea99e9af778c4104",
+      "cbm-C7Prom-s6-p2.cbm": "d85aec150feb195abb197e0f15d944a0ab991ad7e02b574d47a8ddedfa78a993",
+      "cbm-C7Prom-s6-p3.cbm": "0eb8c8a32aa282f2d2913d46c816acc52a8854390c41cb4ffdf413188c3ac14b",
+      "cbm-C7Prom-s6-p4.cbm": "207c6c5efdd51e1043950e7fd3e195d188fe451c949a1b713c344ee26042d6a7",
+      "cbm-C7Prom-s7-p0.cbm": "c052900efcfab7c2b1416a031aa4c546bfece654a494760ce938c2d9fdd23223",
+      "cbm-C7Prom-s7-p1.cbm": "e4ff97aa08cac1d144bfc40208b83ff545f13ad2e6e49e453f6abdd498ef2b5a",
+      "cbm-C7Prom-s7-p2.cbm": "c509351196c36a414d856d99690e3665b4a710af865586d99495f99394dd1809",
+      "cbm-C7Prom-s7-p3.cbm": "a7fb47a982cbc8556261a00af8c32c4155701798bc6ffceeaa5731c4ec1e7d49",
+      "cbm-C7Prom-s7-p4.cbm": "427102426377b1f8953f254f99c3b766b98004a359d505b01a1d7b8b5cc356f4",
+      "cbm-C7Prom-s8-p0.cbm": "a7792458742314461cac8aa2e4017702d998cd87b2207e0bf3ff145fb6323765",
+      "cbm-C7Prom-s8-p1.cbm": "fc23cee51a46b03d7f4c37df3faad4d40c0aca58c1a10e6c5642fe3be3f2d521",
+      "cbm-C7Prom-s8-p2.cbm": "233c3f0de7847a8f605711b96ac4ba42f670e787c8578f47658fc5bd024b8e3c",
+      "cbm-C7Prom-s8-p3.cbm": "9c8c65afaee7987a97a17c6739b5476e4f341ba3f5dc2463338df3eee14f9bd6",
+      "cbm-C7Prom-s8-p4.cbm": "273f967e937caeba242d5ee9f9cfd1dccfe8b09bbdc46bb58c8cfa2dc4e7436d",
+      "cbm-C7Prom-s9-p0.cbm": "6aa459cd3e675a76d6eb51ba82b6faeb3083f73bd261ff15a07e89aa87608d9f",
+      "cbm-C7Prom-s9-p1.cbm": "e44b778460da04743af9bc4be80077e8a8feb6e8eb7f98f86dd46aab8e23ef74",
+      "cbm-C7Prom-s9-p2.cbm": "269799015cfb55f33a970c924120bcc4321fc62f1d71d2c57ad0eed61f2dfa6f",
+      "cbm-C7Prom-s9-p3.cbm": "4b98d51c36ea1d544f1a8175f77f22aeac68cab51d8b2b274da9afe5a45642ce",
+      "cbm-C7Prom-s9-p4.cbm": "c14239ee8de0a706a620e88e5a62211c843ce944782f42d6c9dd3590073d01a2",
+      "cbm-C7PromHosp-s1-p0.cbm": "9a0259655461b904cd0661f02f19f02aefd3cbe25d06531a4a98243d1e5f3c4b",
+      "cbm-C7PromHosp-s1-p1.cbm": "9047abf1bde823af64ecf14a290ba3d2c75ba2db33ee75213a3f9dbd20949dfe",
+      "cbm-C7PromHosp-s1-p2.cbm": "9b7e67b372253b3b95c37f4c0efbc762e00aecb475a5561e9c3f8b955e3e5bf4",
+      "cbm-C7PromHosp-s1-p3.cbm": "04edbeeed9a6a05efa3bf632a55e9f88a298e12ed29ae005b74d2cc86c0b9d41",
+      "cbm-C7PromHosp-s1-p4.cbm": "cea4db9699e1b44ca0bbae066cfc4f2f8dd3d9eb1c5b2def27570a42418d5bc9",
+      "cbm-C7PromHosp-s2-p0.cbm": "c36f7b8e0e03fb127d79caef2ca7ec7d3f2a95cf35f6d12ef3371b324b488db9",
+      "cbm-C7PromHosp-s2-p1.cbm": "0323b52c9b6af138bd77e55cef9445cfcd0650232dc8a85155b262a4964e2926",
+      "cbm-C7PromHosp-s2-p2.cbm": "c04670871b8818a5309d57987fb9a0f796079d6b6caba74a46e60fd49ee9b9b4",
+      "cbm-C7PromHosp-s2-p3.cbm": "42073c16262cc2fbd8be8af4d04fc0ddac5ab94cc6c147a604de326c7c55c839",
+      "cbm-C7PromHosp-s2-p4.cbm": "da7611f5157019ffcb3ba8c9165ddbf5d3a526ac437192c2b41be634243f076e",
+      "cbm-C7PromHosp-s3-p0.cbm": "5b4846552e6e5406f0f7c15aa3ac4a457a61ffb301129624ddf9ed52ad00ab51",
+      "cbm-C7PromHosp-s3-p1.cbm": "644c659619d175109cc78568cd78e5c1d484b1e01d30739bdb1f4273ea86506f",
+      "cbm-C7PromHosp-s3-p2.cbm": "12e10b488add80f788f9b8f7eae1b6fd7b1f00b483f2068289609451ed163be7",
+      "cbm-C7PromHosp-s3-p3.cbm": "22901d546dd6968a66136fa11d83fab8748d4d09e7f4d03c910f9645a7b83502",
+      "cbm-C7PromHosp-s3-p4.cbm": "d50bc788389f63f4df002d478877ca2a0184e5c68ab3b00a312db014ebb75015",
+      "cbm-C7PromHosp-s4-p0.cbm": "91586e3baac4557a4c78173b535bdb5971e8bbd108162531e3c5c359489d7acd",
+      "cbm-C7PromHosp-s4-p1.cbm": "103403bb5df97a8fafcef45388afc870e1527a4f527af8fdb801c61937d605e8",
+      "cbm-C7PromHosp-s4-p2.cbm": "64afde725054cba56d5dc5ef9ce3111c61e15f5fcfe4a11d13ef63f659376beb",
+      "cbm-C7PromHosp-s4-p3.cbm": "2acf14a0fea3bd2b64efc99031a5247ec4102c3c2a558c08376e19aac1efebec",
+      "cbm-C7PromHosp-s4-p4.cbm": "7730780ad4c1133fbc26a59c16bbbe99b0eecbfafd3b5ef3a2c02c3fb95a50ae",
+      "cbm-C7PromHosp-s5-p0.cbm": "8c636dfcebbf94c1ccca2e8e10c436ac5975f05803c18d2629a6c89f65683467",
+      "cbm-C7PromHosp-s5-p1.cbm": "bba0c8384c67f9e3377953128fe5b10cb5b1cb1bc2fb96be39adefd1577b8f65",
+      "cbm-C7PromHosp-s5-p2.cbm": "d760aa8b659ec022fae904e6dbdbe7660ff915d382599979170c7987179b5ce3",
+      "cbm-C7PromHosp-s5-p3.cbm": "3ebf4fc57d2c15f8c6a4874734586eb58b6b314c82b3238871218132c2e6a1a4",
+      "cbm-C7PromHosp-s5-p4.cbm": "36fbb06dd045770bd5436c2e63ef062f4298ae574b1e656b7e7222a58f123e50",
+      "cbm-C7PromHosp-s6-p0.cbm": "1d66db58f2a628b7dc514ea05f5dc4f659638e93f0ef007f513a1e3b92c7f478",
+      "cbm-C7PromHosp-s6-p1.cbm": "00066805ea002744267aca165452515a467a462bd2f17fffde44366a47635684",
+      "cbm-C7PromHosp-s6-p2.cbm": "8c9b3338db7ec632198f891e335847b5dd4682e99d8fb559204879b57d4c9564",
+      "cbm-C7PromHosp-s6-p3.cbm": "a74a097e44442cbe503e640e671adbb755462ed7fed38bac5113c255f642f54c",
+      "cbm-C7PromHosp-s6-p4.cbm": "49fef06910273b048d42de95b108682b04f6587b129930d20f937ff6afb660a5",
+      "cbm-C7PromHosp-s7-p0.cbm": "92894190df0f631d6615465f0d2b8efe251f626e567b4dcbda68db0b34899e07",
+      "cbm-C7PromHosp-s7-p1.cbm": "6bf91ca5b91246d8bebdf7caa80cab4b6f09d1005ffdedf983d6651b9a19d19e",
+      "cbm-C7PromHosp-s7-p2.cbm": "d72c574034fb44d91ee6f23eb15942d3fd58423a4f3e821b7e42e7d576c275eb",
+      "cbm-C7PromHosp-s7-p3.cbm": "4dc6fda2ae48c3e061075b7a5938ad41f2d515cac91d515df34724d3aebb320e",
+      "cbm-C7PromHosp-s7-p4.cbm": "5b5acb5d70591b84553ce9486834f4954f99c098f17be9c9d866898e4e339212",
+      "cbm-C7PromHosp-s8-p0.cbm": "79e86ff6a7630ad721ff4b31ae885859f689d7b939bc013a3f3643adb2d2f94d",
+      "cbm-C7PromHosp-s8-p1.cbm": "3031be537ba6e48b60ab8cebca45ebf80cca21e178985d3e6429be4c0893ef82",
+      "cbm-C7PromHosp-s8-p2.cbm": "304c067909a00cddfa071ed3085d79856b563fe1c2cf345fc60d5574f605940b",
+      "cbm-C7PromHosp-s8-p3.cbm": "dabb4d351965a728ec300e36642fec6deea547e24b2d53e27ee442af411a23e2",
+      "cbm-C7PromHosp-s8-p4.cbm": "e609bf6e7150f13a3e5a865e70b7203b32a3849cde6fe727fd8f5422b4535b51",
+      "cbm-C7PromHosp-s9-p0.cbm": "c837770fe59f7e5dcebe39a13bc8d0e33115fcc6fe9563808a1fbedde945110a",
+      "cbm-C7PromHosp-s9-p1.cbm": "bc6c8bc5bb58cc7017afae3ebc5690de5a7f16558890e1c98dcd9f1ae3612921",
+      "cbm-C7PromHosp-s9-p2.cbm": "d3997c56193614646e4fc8ccd158f4b27d15187d21464aa128b8303ebefd2422",
+      "cbm-C7PromHosp-s9-p3.cbm": "5b869cad6c47326ba5b638561fbc9370c32ac466e9521a8268a0e266dfd16669",
+      "cbm-C7PromHosp-s9-p4.cbm": "ce947a16681f806b16a29d9bea6aa1fe0e25fc70702b0fa0344b0a2f6d2a0b67",
+      "cbm-M3limpioProm-s1-p0.cbm": "55d75ebd801027d361e93ca8061386285dd8d7bfe4bfa8c20b39416a97e4cc04",
+      "cbm-M3limpioProm-s1-p1.cbm": "9b0dc2e783c11896f45eb568ae370023ad0c1b87e5607947caacd3109bac5baa",
+      "cbm-M3limpioProm-s1-p2.cbm": "50bd22be3029dc830e4f9139e5e06f7f003aa1c777faebf01222495afe24bce5",
+      "cbm-M3limpioProm-s1-p3.cbm": "56349148c10fc6c349dcd879fdcf1f1f67a6953de9a2f9e094e657d0ac0a596a",
+      "cbm-M3limpioProm-s1-p4.cbm": "2eb1a3a1c1083b816e6ae2cf7da005c14e72370e0402eec2cc71ae4fd5011b16",
+      "cbm-M3limpioProm-s2-p0.cbm": "c8edb4d682d9f9892243f12ffeb39993d82368ad276755e5cba7374ed46145b5",
+      "cbm-M3limpioProm-s2-p1.cbm": "c300c358b5787e47d6b1a95e5517a7dce569fedc9c50cbcf3cad08204c17ed9f",
+      "cbm-M3limpioProm-s2-p2.cbm": "82e25c33b38bf654c147495d460a5e0d6aed10c2c05d81f31db268870d6cf218",
+      "cbm-M3limpioProm-s2-p3.cbm": "ea2b73eb9ea27f0bc18c1846b8a71f98311f1679f73756d8909eac5510da31ef",
+      "cbm-M3limpioProm-s2-p4.cbm": "fbf10ca3ff4c49f256db7b9b18e91e21bf74b7dc9ab928b391c119b41e7dff6e",
+      "cbm-M3limpioProm-s3-p0.cbm": "c8a7a2006d2e9e4d6dc47471fb0ac273207b4a67f7118f3693584e97cb90d98a",
+      "cbm-M3limpioProm-s3-p1.cbm": "34e5ba2060da08528bbd452df5af11497a533365492385e4412529d721ea09e6",
+      "cbm-M3limpioProm-s3-p2.cbm": "efe9c48be50139b6f29d95afefc74facb1792633af91c0ce3824414cce89607f",
+      "cbm-M3limpioProm-s3-p3.cbm": "f32d07a139395434b096e2e7f2bab94fe005b50ebb3a58428275d33f3da9572d",
+      "cbm-M3limpioProm-s3-p4.cbm": "a3e545e5ff6891cf0ac1d11d36aefd239bbff848bee4c53a2f1d876e6b054215",
+      "cbm-M3limpioProm-s4-p0.cbm": "6e85dd3a24810643b7176576670c5f05b8d59f8c6f0ac015b52ad65761856768",
+      "cbm-M3limpioProm-s4-p1.cbm": "a306045398b69e298b185836e9bf0426e694b01b6af22e905162acfabb4812da",
+      "cbm-M3limpioProm-s4-p2.cbm": "c999e11287d5004c6da4a0cc6b6b5ca7906aa43f4673b3b779362c9acb74f977",
+      "cbm-M3limpioProm-s4-p3.cbm": "4e2999b47d7435d97eb799cd08fb2e710063c91c8f20ee29aba3daa6fee490c6",
+      "cbm-M3limpioProm-s4-p4.cbm": "04e51f4cf8f68378731722c7ca1d2a51f4f63091c15e5f98868ca52093e58f4d",
+      "cbm-M3limpioProm-s5-p0.cbm": "a7dd3f5fd745cdad8457c559a535f1027f26d2e5885bf019069ba9d2791450d9",
+      "cbm-M3limpioProm-s5-p1.cbm": "cedc5dd17598d8b714390006bdbf3bfadb3dee302cbd7f5601fd4b4e60b5513b",
+      "cbm-M3limpioProm-s5-p2.cbm": "939d9e54dccf64865fa16bfcb78aa0f0ebf7f7d5c813cb548aa39b1f7d789e7d",
+      "cbm-M3limpioProm-s5-p3.cbm": "206cec0b2be838c7d9f95fdfbd275f8f16a4508426d0f292885a3c5424d610f6",
+      "cbm-M3limpioProm-s5-p4.cbm": "065f68a4ba5875b8889502ea5df090b5c5df0c79d0bc8f52b232f7d58461be6a",
+      "cbm-M3limpioProm-s6-p0.cbm": "5fbc59df89923349608366b6acb3d66f0b24d874b7956e7da08e89c1121c1705",
+      "cbm-M3limpioProm-s6-p1.cbm": "45dafdb7a82b0dceac736f94e14004928e44ccc48579995aa1b5e7474f6293ca",
+      "cbm-M3limpioProm-s6-p2.cbm": "52b2e4c823ff77a249041f7fbf2686068888b01d5341d21cc05165f0b93b4e46",
+      "cbm-M3limpioProm-s6-p3.cbm": "cbac1e3e466c8edf3c0bbb835279aa41290c2c7f50c80dc8883d83ee76383ad4",
+      "cbm-M3limpioProm-s6-p4.cbm": "a0d29245d6aae5a2af85a1d9694687c7bfa6b9503b87086cd4c8d306faf30041",
+      "cbm-M3limpioProm-s7-p0.cbm": "fedda167b9290a1fc576c4d8b121ba21a96a9ba9c057d3e6acf52bdceae5657f",
+      "cbm-M3limpioProm-s7-p1.cbm": "fd9e40a767321b5b618f141e61b4c66c2a01708773889bfd1bfad0312703d96b",
+      "cbm-M3limpioProm-s7-p2.cbm": "97326621630ddb13db5fc7c06824893caf2e0d0f1c0c2dc3f0105def29e344d2",
+      "cbm-M3limpioProm-s7-p3.cbm": "6fa59701e3069214e5ffbb47e3c6051c1eb2015dc92e452f32c00cb0f2132882",
+      "cbm-M3limpioProm-s7-p4.cbm": "f1205c70430d5f743d82aca9f52167e3120608d84c46272c5463d22211552d0c",
+      "cbm-M3limpioProm-s8-p0.cbm": "e4d58cb485dff4ce4fbcb151c3c734f2b444a599f454ad0eda5f5c963764b9a8",
+      "cbm-M3limpioProm-s8-p1.cbm": "237ccfb62eb9bf9138c698fad2b2c661fab2834a025af74a57f8f13aa5988115",
+      "cbm-M3limpioProm-s8-p2.cbm": "92ee4ebdbc228d08d127a3295d51bb709e0e973c9548c39fac14246b125d99e2",
+      "cbm-M3limpioProm-s8-p3.cbm": "c2c9e578000664a4755c5e947f2a82c9cf9c3c3ae99defa35ce5353fe6ce839b",
+      "cbm-M3limpioProm-s8-p4.cbm": "adb797d0a54e27d788b376a742fba35716a6d1756c995aa5ec919719011aaec4",
+      "cbm-M3limpioProm-s9-p0.cbm": "df4c2c75daf33e5fd95d881e92c6f25208a57d1ec034035b6beef8631c618868",
+      "cbm-M3limpioProm-s9-p1.cbm": "913853c1256037f24be24fdeaa388b30ff556134a2568cd98dd3d6764cbfd2b5",
+      "cbm-M3limpioProm-s9-p2.cbm": "a1be9f20a4830dea7e4d1874735a8b57e1cbe6cae259e7b9069b08f26ccbb768",
+      "cbm-M3limpioProm-s9-p3.cbm": "4f2a8f2947992596483051b8d584cd101843c38d5a74c3e6f5c925d31314af71",
+      "cbm-M3limpioProm-s9-p4.cbm": "d384733825a86c204fbb0f0520734be23befd5130b16c63298651d0b59d89ae3",
+      "cbm-M3limpioPromHosp-s1-p0.cbm": "99624d47ca3d605a94556b821d5730ced8a9d1cd2c8a810534ba1814da021285",
+      "cbm-M3limpioPromHosp-s1-p1.cbm": "aa044f8d6331f940acf2cf1872447673e203af1417716bb1159519035783880b",
+      "cbm-M3limpioPromHosp-s1-p2.cbm": "7af1958b69dc775cea3acef1760f1a131f7313297f2403d8ce447565f97c6033",
+      "cbm-M3limpioPromHosp-s1-p3.cbm": "219f2c248db9cf1d19a351ddd45d9a07398051a73314f17f0293d3b171302b57",
+      "cbm-M3limpioPromHosp-s1-p4.cbm": "41b9aa50afae9b6b05142e8373bd72710d2371c987e5fa3d742134f7decfbc88",
+      "cbm-M3limpioPromHosp-s2-p0.cbm": "f3d6f9859156e300be72c7959ee20debd0d21217f2130aa89827831838e05967",
+      "cbm-M3limpioPromHosp-s2-p1.cbm": "3d027e771afccbdff1ff6a865602715a1009763d49390de8cf9c1f9e5705ca0b",
+      "cbm-M3limpioPromHosp-s2-p2.cbm": "b1cdf5b3bcaca78685725b464b7ae9dc0e0f3bdae5450f7c23363ee6618f2000",
+      "cbm-M3limpioPromHosp-s2-p3.cbm": "b6034139b7dfab1f0cd379f696681e243a8d282fbedcacc540cd482c1c2de315",
+      "cbm-M3limpioPromHosp-s2-p4.cbm": "0ab5922c4456615d00f15417e155ed264f3b36f2f910d5b46f37cffa3cd58b6e",
+      "cbm-M3limpioPromHosp-s3-p0.cbm": "19a955148ebea2be1b9e2311ea1c113414eb1dc9436507ae60eea56bc1260179",
+      "cbm-M3limpioPromHosp-s3-p1.cbm": "0837a0c3b4b798dc77c5875911e5588bdc5f3eebca6b4ec7a8e53db5c52f320e",
+      "cbm-M3limpioPromHosp-s3-p2.cbm": "f3be51c8003bd49738fb783e050e201590ed35b12e1e35c5ea7f067eb76bcca9",
+      "cbm-M3limpioPromHosp-s3-p3.cbm": "a970f8695bf1378aef6810a3a811dd7601bbc4b1db101db548ce5c2017cd7925",
+      "cbm-M3limpioPromHosp-s3-p4.cbm": "e9fd4ff39fa4b76bceaa8a37c23d39e98867e2120d577924140db5b16fa2ce59",
+      "cbm-M3limpioPromHosp-s4-p0.cbm": "bc0bc5f32f088ceee364a15a6dfa47581c2abb3f68cb7e9cc26ef77ef130e342",
+      "cbm-M3limpioPromHosp-s4-p1.cbm": "36036c0cf2719c80f6a84bbaecc3d4d1a3e4e89b4d546845d0f46ebf0138450f",
+      "cbm-M3limpioPromHosp-s4-p2.cbm": "74ec09b9cadaf2551c04961abf986e9af91a0cb8b2f3e967bb3f0134e3b5a529",
+      "cbm-M3limpioPromHosp-s4-p3.cbm": "69203f2751d58e020f423f859f5dff36da42cf4785c5553106f375e616c3595b",
+      "cbm-M3limpioPromHosp-s4-p4.cbm": "4e164ba8dab77d893e45f28550b4154497687d56f9349270fa9f40f04e99c863",
+      "cbm-M3limpioPromHosp-s5-p0.cbm": "fcd9836170421d0878d918216ee5a8b7d8f9a7eb097d94e63627d5af9cac2669",
+      "cbm-M3limpioPromHosp-s5-p1.cbm": "813b47e4a8929c283fafef02a528582a73059994135bea1c5faf1fc17c9aa9be",
+      "cbm-M3limpioPromHosp-s5-p2.cbm": "4684999f5908700fb5851cd23806b9fe6926b7f1420152587e60eec595617328",
+      "cbm-M3limpioPromHosp-s5-p3.cbm": "a46fe82de2ec1329870323c607ca9cf4e1987833aac9c4645d3c2c6e2888a374",
+      "cbm-M3limpioPromHosp-s5-p4.cbm": "213dc15082451532593c353b4fb4ede798eae3ef63fc85a6b1d10f89d37d7f89",
+      "cbm-M3limpioPromHosp-s6-p0.cbm": "3185c4b439b5613d289ec7df7fbef6816a6d68de69b10a7a6fdd20f4881e314a",
+      "cbm-M3limpioPromHosp-s6-p1.cbm": "42ca2bfa97aa300d956248e888adde8e5c02e8c753bffe1c3c852883aed88411",
+      "cbm-M3limpioPromHosp-s6-p2.cbm": "c146cf97ec67b82f8a5ea2dacf189f045ca18a99bd4836783724a048a41c5375",
+      "cbm-M3limpioPromHosp-s6-p3.cbm": "d76d7c2f64221409ca5e332af91b40fb0af5552714a54e4eae2b109b5874bb15",
+      "cbm-M3limpioPromHosp-s6-p4.cbm": "2c59708af3794d9bdb4b831bf2f459019cbe1203751903bf07c60a51df88b61a",
+      "cbm-M3limpioPromHosp-s7-p0.cbm": "8eede01360635d7ef47c79835004cd092a22c184930cdb4c37f906aac93b7473",
+      "cbm-M3limpioPromHosp-s7-p1.cbm": "4d7a1fd6d4a91669f770ce36ec29ec6934c5d5cb06651952d680b0c20951749c",
+      "cbm-M3limpioPromHosp-s7-p2.cbm": "7cec199cd314a34006b31a912fc298c10a087339d6aa0db8eb4d387588323fce",
+      "cbm-M3limpioPromHosp-s7-p3.cbm": "57ab9dc0c3b9e65e16450ccc7ca2d74a99b4eea023d8bfd1172ef860f802c598",
+      "cbm-M3limpioPromHosp-s7-p4.cbm": "ccc75ce514c932fadf3197c52bebde2a5ad04ae15e1dff8faaa7990f41ad5b10",
+      "cbm-M3limpioPromHosp-s8-p0.cbm": "03eff97c01cfb94a90628287aa7e54d94d9a932e0d7a38f044ba36a02f4bf17d",
+      "cbm-M3limpioPromHosp-s8-p1.cbm": "356a6e9afadcc1773c7c90d519a6c9c00b0162685eb53d011401dba2ef70dda3",
+      "cbm-M3limpioPromHosp-s8-p2.cbm": "1bf3031f7459b18a2aa8a673eea03531bcb40a28876223d9e108c671e2093be5",
+      "cbm-M3limpioPromHosp-s8-p3.cbm": "c47d352fcaa5ff5201cbc86d5cb301385f3027b6b52bb332494f41bc7e557d88",
+      "cbm-M3limpioPromHosp-s8-p4.cbm": "8ec6d248fcfb39635996407e87733727e9c05a0da67e02ede2750d61515a5e7f",
+      "cbm-M3limpioPromHosp-s9-p0.cbm": "7063a7dbe69eb91c8a6bf860f2efebde483c3c3af4d26644bf6d7bf8ed1e0884",
+      "cbm-M3limpioPromHosp-s9-p1.cbm": "7bc6fd81faf07227b994f9a43dcb379002992df514a3b505c17f8dd4640cacbd",
+      "cbm-M3limpioPromHosp-s9-p2.cbm": "d3764b58041995d6fdc9457fd4758cb59de3b61f9947c8c13e19666c2f6ee90b",
+      "cbm-M3limpioPromHosp-s9-p3.cbm": "ed6780cdc01d29e9bc81a6a9defee771c0cd74bff74a6ac85d1a5dd8960ab55b",
+      "cbm-M3limpioPromHosp-s9-p4.cbm": "c2eef739f5a63e2f2f9392847067391d8747d349d4434fef35242cc09c33f56d",
+      "celda17.json": "23c23766cdb5236b84213d4347f9476523a76755ad8bdca8802c4b1af3002793",
+      "control.npz": "3ac9b19c0452c3b69f20a73e5296e2a88d51baaf310976d6d38cd07c05dabc1b",
+      "ganador_m3.py": "5569719323be1ed4e8e6be31028feef6969c9a71dc24099b0251fdf626a7336f",
+      "inferencia_5b.py": "ac69781e0231046156a51241e336f7cda490d154856e6861c10e45e08c7e6374",
+      "inferencia_5c.py": "9e84ddaefbd8c20ee25133c922560f3ba97c8f9eec448dc014373d9911d347f7",
+      "m3limpio-ajuste.json": "9d4f3594b7671d49af052923873c252bac11b30350c650f89eca81438441fdc1",
+      "m3limpio-ajuste.npz": "57b45b657d1a35dd293073ea2ee7e5115de8135f1968579e58ea2e26f3b32772",
+      "m3limpio-hospital-ajuste.json": "cd9118d500f6801a477b7e58861b4e8e3f00050471340fe9855b42c0189f4cf0",
+      "m3limpio-hospital-ajuste.npz": "fee6cdcca6bd4be7a4254d4461e190582a57332004ba9b73a031c737ae2b9b91",
+      "red-pliegue-0.pt": "1d99e0d5496243c9fcb0510a10b9cc6fc57e05651ff64d0d5f2b1e5a13bf1a0d",
+      "red-pliegue-1.pt": "c880203d325223a2310eb962da9726f65eed472e7ba67a7f0d13a1c50b7fad8a",
+      "red-pliegue-2.pt": "d8ec59a6e6a369e52983a924a8bc3e00d3d458b7a6f703102936d53a0946086a",
+      "red-pliegue-3.pt": "16d045b1eae3af570c8c12de5637dfcc12f15d2bea78b45b8608b24e74d96ad7",
+      "red-pliegue-4.pt": "c0f6462f8bb6e2692a7675031253740f28150397278154e672e02dc0aaa54542"
+    }
+  },
+  "lo_subido": {
+    "directorio": "data/fase5c/kaggle-dataset",
+    "archivos_esperados": 194,
+    "huella_sha256": "946047b2bb08e05bd7ffa9f47fa9e5deef50cbe4c9ffaeb0e4310bacc916510e"
+  },
+  "diferencias_con_lo_subido": [],
+  "notebooks": {
+    "M3limpioProm": {
+      "kernel": "estebandazz/isic2024-fase5c-m3limpioprom",
+      "directorio": "data/fase5c-kernel-m3limpioprom",
+      "archivos": {
+        "isic2024-fase5c-m3limpioprom.ipynb": {
+          "bytes": 14305,
+          "sha256": "ef2941cc4f3a1b3bfabe367eb62db5beb896d4a253094caefa4c8c0bee9420fa"
+        },
+        "kernel-metadata.json": {
+          "bytes": 427,
+          "sha256": "8dfd8e76643d06ed93f8503728117dc85ec813397d1dccc4449895ad9f95c1a7"
+        }
+      }
+    },
+    "M3limpioPromHosp": {
+      "kernel": "estebandazz/isic2024-fase5c-m3limpiopromhosp",
+      "directorio": "data/fase5c-kernel-m3limpiopromhosp",
+      "archivos": {
+        "isic2024-fase5c-m3limpiopromhosp.ipynb": {
+          "bytes": 14309,
+          "sha256": "d02cd24f97ff72cf253c4d3304a3179020e1cdba1d5251ad77687c3608bcdfc8"
+        },
+        "kernel-metadata.json": {
+          "bytes": 439,
+          "sha256": "b3f061ebfc3493af60d3d66bb1b5f7750a706d7148063e8ef4809bf047c081ed"
+        }
+      }
+    },
+    "C7Prom": {
+      "kernel": "estebandazz/isic2024-fase5c-c7prom",
+      "directorio": "data/fase5c-kernel-c7prom",
+      "archivos": {
+        "isic2024-fase5c-c7prom.ipynb": {
+          "bytes": 14299,
+          "sha256": "c6ac951b8fa495c46c7e6bacba5f91b782ea547644c7f2054089c95f638603a2"
+        },
+        "kernel-metadata.json": {
+          "bytes": 409,
+          "sha256": "251e8f6f1654d0d52fbb8aab208c29a66ecd6be09cc41de635462c82e43a724e"
+        }
+      }
+    },
+    "C7PromHosp": {
+      "kernel": "estebandazz/isic2024-fase5c-c7promhosp",
+      "directorio": "data/fase5c-kernel-c7promhosp",
+      "archivos": {
+        "isic2024-fase5c-c7promhosp.ipynb": {
+          "bytes": 14303,
+          "sha256": "55546b617625bb2be531f3ad32cece32f85257780abb365ecbe1009ae512d55a"
+        },
+        "kernel-metadata.json": {
+          "bytes": 421,
+          "sha256": "40243f16b7d02b5f64764cc922a84c28e21273a5506627c05ab4803a4e269e1a"
+        }
+      }
+    }
+  },
+  "controles": {
+    "casos": [
+      {
+        "caso": "lo que sirve Kaggle es lo subido",
+        "ok": true,
+        "debe_fallar": false
+      },
+      {
+        "caso": "con un archivo subido alterado, una diferencia",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "con un archivo alterado, la huella cambia",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "un modelo con un envío puntuado no se vuelve a enviar",
+        "ok": true,
+        "debe_fallar": true
+      },
+      {
+        "caso": "un envío con error no cuenta como puntuado",
+        "ok": true,
+        "debe_fallar": false
+      },
+      {
+        "caso": "el envío puntuado de otro modelo no cuenta",
+        "ok": true,
+        "debe_fallar": false
+      },
+      {
+        "caso": "«M3limpioProm» no se confunde con «M3limpioPromHosp»",
+        "ok": true,
+        "debe_fallar": false
+      },
+      {
+        "caso": "un envío de la 5b no cuenta como de la 5c",
+        "ok": true,
+        "debe_fallar": false
+      }
+    ],
+    "fallos": 0
+  },
+  "fecha": "2026-11-05T21:40:28-0500"
+}
