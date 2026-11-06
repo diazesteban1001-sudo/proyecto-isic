@@ -81,6 +81,12 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
      4d a 5c: con una puntuación de fase5c-efectos.json que no sale de un
      registro de envío, o con una comparación de potencia-nadeau-bengio.json que
      no sale de un archivo del desarrollo, la página sale con el aviso.
+  T. Los gráficos del rediseño, paso 2 (2026-11-06). Cada uno junta datos de
+     más de un archivo, o los ordena de una forma que solo vale si se cumple una
+     condición; con un archivo alterado para romperla, no se escribe la página,
+     y el motivo tiene que ser esa condición.
+     T1. Los cuatro paneles de 2b − 1: la pAUC de validacion-repetida.json con
+         otro intervalo que el de efecto-particion.json.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -382,6 +388,12 @@ def main():
          "cambia de signo entre la puntuación pública y la privada"),
     ]
 
+    casos_t = [
+        ("T1. la pAUC de 2b − 1 con otro intervalo en validacion-repetida.json", "validacion-repetida",
+         poner(["comparacion_pareada_2b_menos_1", "intervalo_t_95_nadeau_bengio"], [-0.0146, 0.0245]),
+         "Los cuatro paneles de 2b − 1 son la misma comparación"),
+    ]
+
     corridas = {
         "A": generar("A"),
         "B": generar("B", lambda d: cambiar(d, "fase4-m3limpio-vs-m2", intervalo_que_cruza)),
@@ -404,6 +416,8 @@ def main():
         corridas[f"O{i}"] = generar(f"O{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
     for i, (_, archivo, cambio, _) in enumerate(casos_r):
         corridas[f"R{i}"] = generar(f"R{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
+    for i, (_, archivo, cambio, _) in enumerate(casos_t):
+        corridas[f"T{i}"] = generar(f"T{i}", lambda d, a=archivo, c=cambio: cambiar(d, a, c))
     corridas["S1"] = generar("S1", lambda d: cambiar(d, "fase5c-efectos", poner(["kaggle", "C7", "fuente"], "outputs/otro.json")))
     corridas["S2"] = generar("S2", lambda d: cambiar(d, "potencia-nadeau-bengio",
                                                      poner(["comparaciones", "C4", "archivo"], "outputs/fase5c-entrenamiento.json")))
@@ -476,6 +490,10 @@ def main():
     ] + [
         ("S. una puntuación de fase5c-efectos.json que no sale de un envío: escribe con aviso", *escrita("S1", True)),
         ("S. una comparación de la potencia que no sale del desarrollo: escribe con aviso", *escrita("S2", True)),
+    ] + [
+        (f"{titulo}: no escribe, por esa condición",
+         not corridas[f"T{i}"][0] and frase in corridas[f"T{i}"][2], f"escrita: {corridas[f'T{i}'][0]}; {corridas[f'T{i}'][2]}")
+        for i, (titulo, _, _, frase) in enumerate(casos_t)
     ]
     fallos = 0
     for titulo, ok, detalle in casos:

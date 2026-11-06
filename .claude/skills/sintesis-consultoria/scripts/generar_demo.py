@@ -429,7 +429,10 @@ def datos_particion(particion):
     afirmar(fmp[n1]["setop15"]["diferencia_de_medias"] > 0 and fmp[n2b]["setop15"]["diferencia_de_medias"] > 0,
             "La sensibilidad top-15 sí sube con filas")
     return {
-        "otras": {k: {"media": cp[k]["media"], "ic": cp[k][clave_ic]} for k in ("auc", "setop15", "nnt80")},
+        "otras": {k: {"media": cp[k]["media"], "ic": cp[k][clave_ic],
+                      "folds": cp[k]["nivel_2b_mejor_en_pliegues"], "de_folds": cp[k]["de_pliegues"],
+                      "semillas": cp[k]["nivel_2b_mejor_en_semillas"], "de_semillas": cp[k]["de_semillas"]}
+                  for k in ("auc", "setop15", "nnt80")},
         "ic_paciente": cp["pauc"][clave_ic],
         "ic_filas": cf["pauc"][clave_ic],
         "semillas": len(particion["esquema"]["semillas"]),
@@ -724,6 +727,16 @@ def construir_datos(outputs_dir, leidos):
             and modelado["nivel_2a_gradient_boosting_sin_balancear"]["pauc_media"] < escala["azar"],
             "Las dos métricas discrepan sobre si el modelo supera al azar")
     afirmar(contiene_cero(pareada["intervalo_t_95_nadeau_bengio"]), "La ventaja no está establecida")
+    # Rediseño, paso 2, gráfico 1: los cuatro paneles de 2b − 1 toman la pAUC de
+    # validacion-repetida.json y las otras tres métricas de efecto-particion.json.
+    # Solo se pueden poner juntos si los dos archivos traen la misma comparación.
+    # Control: test_generar_demo.py, caso T1.
+    pauc_ep = particion["particiones"]["paciente"]["comparacion_2b_menos_1"]["pauc"]
+    afirmar(pareada["diferencias"] == pauc_ep["diferencias"] and pareada["media"] == pauc_ep["media"]
+            and pareada["intervalo_t_95_nadeau_bengio"] == pauc_ep["intervalo_t_95_nadeau_bengio"]
+            and pareada["gana_2b_en"] == pauc_ep["nivel_2b_mejor_en_pliegues"]
+            and pareada["semillas_a_favor_de_2b"] == pauc_ep["nivel_2b_mejor_en_semillas"],
+            "Los cuatro paneles de 2b − 1 son la misma comparación: la pAUC de validacion-repetida.json es la de efecto-particion.json")
     afirmar(n2b["std"] > n1["std"], "Con las 10 semillas el orden se invierte")
     afirmar(contiene_cero(c_proc["b_2b_con_menos_2b_sin"]["intervalo_t_95_nadeau_bengio"])
             and contiene_cero(c_proc["c_1_con_menos_1_sin"]["intervalo_t_95_nadeau_bengio"]),
@@ -991,6 +1004,8 @@ PLANTILLA = r"""<!DOCTYPE html>
   .panel { min-width: 0; }
   .panel h3 { margin: 0 0 6px; font-size: 14px; }
   .panel .lienzo { height: 230px; }
+  /* Paneles de una sola fila, como los de 2b − 1 en la sección 3. */
+  .paneles.uno .panel .lienzo { height: 96px; }
   .pie-grafico { font-size: 13px; color: var(--suave); margin-top: 14px; }
   .cifra-fuente { border-bottom: 1px dotted var(--suave); cursor: help; }
   footer {
@@ -1063,12 +1078,17 @@ __AVISO_EXPLORATORIO__
   <h2><span class="num">3</span>Una ventaja que la pAUC no ve</h2>
   <div class="tarjeta">
     <p class="frase" id="frase-3"></p>
-    <div class="lienzo"><canvas id="gr-pareada"></canvas></div>
+    <div class="paneles uno" id="paneles-2b1"></div>
+    <p class="pie-grafico" id="pie-paneles-2b1"></p>
     <h3>Las columnas de procedencia no explican la ventaja</h3>
     <p class="frase" id="frase-3b"></p>
     <h3>Partir por filas no cambia el veredicto</h3>
     <p class="frase" id="frase-3c"></p>
-    <details class="detalle"><summary>Detalle</summary><div class="texto" id="det-3"></div></details>
+    <details class="detalle"><summary>Detalle</summary>
+      <div class="texto" id="det-3a"></div>
+      <div class="lienzo"><canvas id="gr-pareada"></canvas></div>
+      <div class="texto" id="det-3b"></div>
+    </details>
   </div>
 </section>
 
@@ -1434,6 +1454,66 @@ new Chart(document.getElementById("gr-niveles"), {
   }
 });
 
+const NOMBRES = { pauc: "pAUC", auc: "AUC estándar", setop15: "Sensibilidad top-15", nnt80: "NNT80% SE" };
+// Marca de la media sobre cada barra de intervalo, y la línea del cero.
+const mediasYcero = {
+  id: "mediasYcero",
+  afterDatasetsDraw(ch) {
+    const ds = ch.data.datasets[0], meta = ch.getDatasetMeta(0), ejeX = ch.scales.x, cx = ch.ctx, a = ch.chartArea;
+    const x0 = ejeX.getPixelForValue(0);
+    cx.save(); cx.strokeStyle = "#16202b"; cx.setLineDash([4, 3]); cx.lineWidth = 1.2;
+    cx.beginPath(); cx.moveTo(x0, a.top); cx.lineTo(x0, a.bottom); cx.stroke();
+    cx.setLineDash([]); cx.lineWidth = 2.5;
+    meta.data.forEach((barra, i) => {
+      const x = ejeX.getPixelForValue(ds.medias[i]);
+      cx.beginPath(); cx.moveTo(x, barra.y - 9); cx.lineTo(x, barra.y + 9); cx.stroke();
+    });
+    cx.restore();
+  }
+};
+// Un panel por métrica: la barra es el intervalo, la marca, la media, y la línea
+// discontinua, el cero; en verde si el intervalo excluye el cero. Lo usan la
+// sección 4 y, desde el rediseño, paso 2, la 3.
+function panelesDeIntervalos(contenedor, etiquetas, filasDe, fuenteDe) {
+  ["pauc", "auc", "setop15", "nnt80"].forEach(k => {
+    const div = document.createElement("div");
+    div.className = "panel";
+    div.innerHTML = `<h3>${NOMBRES[k]}</h3><div class="lienzo"><canvas></canvas></div>`;
+    contenedor.appendChild(div);
+    const filas = filasDe(k);
+    const distinguible = filas.map(m => !(m.ic[0] <= 0 && 0 <= m.ic[1]));
+    const d = k === "nnt80" ? 2 : undefined;
+    new Chart(div.querySelector("canvas"), {
+      type: "bar",
+      plugins: [mediasYcero],
+      data: {
+        labels: etiquetas,
+        datasets: [{
+          data: filas.map(m => m.ic), medias: filas.map(m => m.media),
+          backgroundColor: distinguible.map(x => x ? "rgba(30,122,82,.55)" : "rgba(91,107,124,.35)"),
+          borderSkipped: false, borderRadius: 3, barPercentage: .55
+        }]
+      },
+      options: {
+        indexAxis: "y", responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: it => {
+                const m = filas[it.dataIndex];
+                return `${firmado(m.media, d)}, [${d ? fijo(m.ic[0], d) : dec(m.ic[0])}; ${d ? fijo(m.ic[1], d) : dec(m.ic[1])}] ` +
+                       `(${m.folds} de ${m.de_folds}; ${m.semillas} de ${m.de_semillas})`;
+              },
+              afterLabel: it => fuenteDe(k, it.dataIndex)
+            }
+          }
+        }
+      }
+    });
+  });
+}
+
 /* ---------- 3. una ventaja que la pAUC no ve ---------- */
 const PA = VR.pareada, EP = D.particion;
 const fEP = c => "efecto-particion.json > particiones.paciente.comparacion_2b_menos_1." + c;
@@ -1495,9 +1575,25 @@ const resto3c = P([
   `${cifra(dec(DI.naive_pct) + "%", fDis("comparacion_particion_naive.pct_grupos_con_fuga"))} de los pacientes quede a los dos ` +
   `lados no se traduce en una métrica inflada. Lo medido vale para la logística y el boosting balanceados; no se probó con ` +
   `el contexto de paciente ni con M3 limpio.`]);
-document.getElementById("det-3").innerHTML = resto3 +
+// Los 50 pliegues de 2b − 1 pasan al «Detalle», debajo del resto de su párrafo
+// (rediseño, paso 2).
+document.getElementById("det-3a").innerHTML = resto3;
+document.getElementById("det-3b").innerHTML =
   `<h3>Las columnas de procedencia no explican la ventaja</h3>` + resto3b +
   `<h3>Partir por filas no cambia el veredicto</h3>` + resto3c;
+
+// Rediseño, paso 2, gráfico 1: 2b − 1 en las cuatro métricas, con el estilo de la
+// sección 4. La pAUC sale de validacion-repetida.json, la de la frase de arriba;
+// las otras tres, de efecto-particion.json, que reproduce esa comparación pliegue
+// a pliegue (lo comprueba construir_datos).
+const fPareada = "validacion-repetida.json > comparacion_pareada_2b_menos_1 (media, intervalo_t_95_nadeau_bengio, gana_2b_en, de, semillas_a_favor_de_2b; semillas_corridas)";
+panelesDeIntervalos(document.getElementById("paneles-2b1"), ["2b − 1"],
+  k => [k === "pauc" ? {media: PA.media, ic: PA.ic, folds: PA.gana, de_folds: PA.de, semillas: PA.semillas, de_semillas: VR.semillas}
+                     : EP.otras[k]],
+  k => k === "pauc" ? fPareada
+    : `efecto-particion.json > particiones.paciente.comparacion_2b_menos_1.${k} (media, intervalo_t_95_nadeau_bengio, ` +
+      `nivel_2b_mejor_en_pliegues, de_pliegues, nivel_2b_mejor_en_semillas, de_semillas)`);
+document.getElementById("pie-paneles-2b1").innerHTML = esc(D.nota_nnt);
 
 // Líneas horizontales: el cero, la media y el intervalo corregido.
 const lineasH = {
@@ -1548,61 +1644,9 @@ new Chart(document.getElementById("gr-pareada"), {
 document.getElementById("frase-4").innerHTML =
   `<b>El criterio:</b> una diferencia se da por establecida solo si su intervalo corregido al ${nivelIC} no contiene el cero.`;
 const resto4 = P([`Junto al intervalo se reportan los pliegues y las semillas en que gana cada modelo.`]);
-const NOMBRES = { pauc: "pAUC", auc: "AUC estándar", setop15: "Sensibilidad top-15", nnt80: "NNT80% SE" };
-// Marca de la media sobre cada barra de intervalo, y la línea del cero.
-const mediasYcero = {
-  id: "mediasYcero",
-  afterDatasetsDraw(ch) {
-    const ds = ch.data.datasets[0], meta = ch.getDatasetMeta(0), ejeX = ch.scales.x, cx = ch.ctx, a = ch.chartArea;
-    const x0 = ejeX.getPixelForValue(0);
-    cx.save(); cx.strokeStyle = "#16202b"; cx.setLineDash([4, 3]); cx.lineWidth = 1.2;
-    cx.beginPath(); cx.moveTo(x0, a.top); cx.lineTo(x0, a.bottom); cx.stroke();
-    cx.setLineDash([]); cx.lineWidth = 2.5;
-    meta.data.forEach((barra, i) => {
-      const x = ejeX.getPixelForValue(ds.medias[i]);
-      cx.beginPath(); cx.moveTo(x, barra.y - 9); cx.lineTo(x, barra.y + 9); cx.stroke();
-    });
-    cx.restore();
-  }
-};
-const paneles = document.getElementById("paneles");
-["pauc", "auc", "setop15", "nnt80"].forEach(k => {
-  const div = document.createElement("div");
-  div.className = "panel";
-  div.innerHTML = `<h3>${NOMBRES[k]}</h3><div class="lienzo"><canvas></canvas></div>`;
-  paneles.appendChild(div);
-  const filas = D.comparaciones.map(c => c.metricas[k]);
-  const distinguible = filas.map(m => !(m.ic[0] <= 0 && 0 <= m.ic[1]));
-  const d = k === "nnt80" ? 2 : undefined;
-  new Chart(div.querySelector("canvas"), {
-    type: "bar",
-    plugins: [mediasYcero],
-    data: {
-      labels: D.comparaciones.map(c => c.etiqueta),
-      datasets: [{
-        data: filas.map(m => m.ic), medias: filas.map(m => m.media),
-        backgroundColor: distinguible.map(x => x ? "rgba(30,122,82,.55)" : "rgba(91,107,124,.35)"),
-        borderSkipped: false, borderRadius: 3, barPercentage: .55
-      }]
-    },
-    options: {
-      indexAxis: "y", responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: it => {
-              const m = filas[it.dataIndex];
-              return `${firmado(m.media, d)}, [${d ? fijo(m.ic[0], d) : dec(m.ic[0])}; ${d ? fijo(m.ic[1], d) : dec(m.ic[1])}] ` +
-                     `(${m.folds} de ${m.de_folds}; ${m.semillas} de ${m.de_semillas})`;
-            },
-            afterLabel: it => `${D.comparaciones[it.dataIndex].archivo} > comparaciones_nuevo_menos_base.${k}`
-          }
-        }
-      }
-    }
-  });
-});
+panelesDeIntervalos(document.getElementById("paneles"), D.comparaciones.map(c => c.etiqueta),
+  k => D.comparaciones.map(c => c.metricas[k]),
+  (k, i) => `${D.comparaciones[i].archivo} > comparaciones_nuevo_menos_base.${k}`);
 document.getElementById("pie-paneles").innerHTML = esc(D.nota_nnt);
 // borrador-v2.md, «Resultados», «La métrica principal no agota lo que pidió el cliente»,
 // «Añadida al modelo con contexto de paciente, la imagen no justifica su costo» y «El modelo recomendado».
