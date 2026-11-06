@@ -2345,7 +2345,10 @@ y 4f, y la potencia de la prueba»):
   sus campos y 8 que citan un documento del proyecto. Los 101 números nuevos
   quedan respaldados por su campo.
 - **El analizador:** 231 comentarios `F:`, 163 que entran en la gramática y 68
-  que solo citan documentos del proyecto; ninguno que no entre.
+  que solo citan documentos del proyecto; ninguno que no entre. El mensaje
+  del commit, «Regenerar la verificación y el analizador con el bloque 1 en
+  el borrador», dice «Los 231 comentarios F: entran en la gramática»: cuenta
+  como dentro a los 68 que solo citan documentos, y no se reescribe.
 - **Las citas de `referencias/`:** suman una que apunta solo a líneas nuestras,
   las filas de la tabla de `referencias/isic-primary-metric-pauc.py.md`, y una
   que mezcla, las del 10.º puesto: tres líneas del README, que son cita, y doce
@@ -2365,7 +2368,10 @@ reservado y los envíos a Kaggle»):
   escrito sin signo, 0,01404 y 0,0066, y sus campos los guardan con signo. Se
   escribieron con signo antes del commit del borrador.
 - **El analizador:** 249 comentarios `F:`, 179 que entran en la gramática y 70
-  que solo citan documentos del proyecto; ninguno que no entre.
+  que solo citan documentos del proyecto; ninguno que no entre. El mensaje
+  del commit, «Regenerar la verificación y el analizador con el bloque 2 en
+  el borrador», dice «Los 249 comentarios F: entran en la gramática»: cuenta
+  como dentro a los 70 que solo citan documentos, y no se reescribe.
 - **Las citas de `referencias/`:** suma una que apunta solo a líneas nuestras,
   las de `referencias/kaggle-code-requirements.md` que dicen qué no dice la
   página y qué no muestra la captura. Respalda que ninguna fuente versionada
@@ -2386,7 +2392,10 @@ puede afirmar», «Qué no se puede afirmar» y «Limitaciones» reemplazadas (c
   que traía el borrador del bloque, se quitó antes de insertarlo, porque no está
   en `outputs/`.
 - **El analizador:** 264 comentarios `F:`, 194 que entran en la gramática y 70
-  que solo citan documentos del proyecto; ninguno que no entre.
+  que solo citan documentos del proyecto; ninguno que no entre. El mensaje
+  del commit, «Regenerar la verificación y el analizador con el bloque 3 en
+  el borrador», dice «Los 264 comentarios F: entran en la gramática»: cuenta
+  como dentro a los 70 que solo citan documentos, y no se reescribe.
 - **Las citas de `referencias/`:** suma una que apunta solo a líneas nuestras,
   la segunda cita de las líneas 48 y 67–70 de
   `referencias/kaggle-code-requirements.md`, ahora en «Limitaciones». Su
@@ -2430,8 +2439,14 @@ m3.variables.salen.columns_to_drop_celda_24)`, y el «5» de «en 5 pliegues», 
   ninguno. Las otras cinco cifras de la fórmula siguen contando como que citan
   un documento: están en las líneas nuestras de la ficha, y `clase_de()`, en
   `por_campo.py`, lo comprueba antes de mirar si el comentario tiene rutas.
-- **El analizador:** salida idéntica a la versionada; 264 comentarios `F:`, 194
-  que entran en la gramática y ninguno que no entre.
+- **El analizador:** salida idéntica a la versionada. De sus 264 comentarios
+  `F:`, 194 entran en la gramática, 70 solo citan documentos del proyecto y
+  ninguno deja de entrar (`outputs/sintesis-comentarios-f.json >
+  resumen.comentarios_f`, `resumen.por_clase.entra`, `resumen.por_clase["solo
+  documentos del proyecto"]` y `no_entran`, que está vacía); el mensaje del
+  commit «Regenerar la verificación y la demo con el 22 y el 5 respaldados»,
+  que dice «264 comentarios F:, 194 en la gramática y ninguno fuera», omite los
+  70, y no se reescribe.
 - **La demo** muestra el total de números y los de los comentarios, así que se
   regeneró también; `test_generar_demo.py`, 61 de 61.
 
