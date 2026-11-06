@@ -93,6 +93,9 @@ corolario de la regla 6 de CLAUDE.md, cada condición se fuerza:
          distinto del de la tabla de fase5b-comparacion.json.
      T4. La cascada de la distancia al ganador: lo que cubre promediar,
          cambiado para que los pasos no lleguen a lo que queda.
+     T5. Las siete versiones frente a M3 limpio: la potencia calculada con
+         otra media de C5 que la de fase4d-c5-vs-m3limpio.json, así que la
+         banda del 80 % no sería la de las filas que tiene detrás.
 
 Uso:
     .venv/bin/python .claude/skills/sintesis-consultoria/scripts/test_generar_demo.py
@@ -407,6 +410,9 @@ def main():
         ("T4. una cascada que no cierra en fase5c-efectos.json", "fase5c-efectos",
          poner(["descomposicion_de_la_distancia_al_ganador", "cubre_promediar"], 0.006),
          "La cascada cierra"),
+        ("T5. la potencia con otra media de C5", "potencia-nadeau-bengio",
+         poner(["comparaciones", "C5", "media_observada"], 0.004),
+         "La banda del 80 % se calculó con las mismas comparaciones"),
     ]
 
     corridas = {

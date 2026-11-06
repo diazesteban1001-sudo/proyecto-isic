@@ -406,6 +406,42 @@ def datos_imagen_barras(cargar, imagen_sola):
     }
 
 
+# Rediseño, paso 2, gráfico 5: las siete versiones que se compararon con M3 limpio,
+# con el intervalo que usó la regla de su fase. En las fases 4b y 4c, el de
+# Bonferroni; en la 4d y la 4e, cuya regla es Holm sobre el valor p, el de Nadeau y
+# Bengio al 95 %, que no es el que decide.
+SIETE_VERSIONES = [
+    ("C1", "fase4b-c1-vs-m3limpio", CLAVE_BONFERRONI),
+    ("C2", "fase4b-c2-vs-m3limpio", CLAVE_BONFERRONI),
+    ("C3", "fase4b-c3-vs-m3limpio", CLAVE_BONFERRONI),
+    ("C4", "fase4c-c4-vs-m3limpio", CLAVE_BONFERRONI),
+    ("C5", "fase4d-c5-vs-m3limpio", "intervalo_t_95_nadeau_bengio"),
+    ("C6", "fase4d-c6-vs-m3limpio", "intervalo_t_95_nadeau_bengio"),
+    ("C7", "fase4e-c7-vs-m3limpio", "intervalo_t_95_nadeau_bengio"),
+]
+
+
+def datos_siete_versiones(cargar):
+    """Las filas del gráfico 5 y la banda de lo que la prueba alcanza a ver al 80 %
+    (potencia-nadeau-bengio.json > comparaciones.*.delta_80). La banda se calculó
+    con la variabilidad de C4 a C7, y solo vale para esas filas si son las mismas
+    comparaciones. Control: test_generar_demo.py, caso T5."""
+    filas = []
+    for nombre, archivo, clave in SIETE_VERSIONES:
+        o = cargar(archivo)
+        if (o["comparacion"]["nuevo"], o["comparacion"]["base"]) != (nombre, "M3limpio"):
+            raise SystemExit(f"{archivo}.json no compara {nombre} con M3 limpio. No se escribe la página.")
+        p = o["comparaciones_nuevo_menos_base"]["pauc"]
+        filas.append({"nombre": nombre, "archivo": f"{archivo}.json", "media": p["media"], "ic": p[clave], "clave_ic": clave,
+                      "confianza": p.get("confianza_bonferroni") if clave == CLAVE_BONFERRONI else None})
+    pc = cargar("potencia-nadeau-bengio")["comparaciones"]
+    medias = {f["nombre"]: f["media"] for f in filas}
+    afirmar(sorted(pc) == ["C4", "C5", "C6", "C7"] and all(pc[k]["media_observada"] == medias[k] for k in pc),
+            "La banda del 80 % se calculó con las mismas comparaciones que el gráfico muestra de C4 a C7")
+    d80 = [v for k in pc for v in pc[k]["delta_80"].values()]
+    return {"filas": filas, "banda": [min(d80), max(d80)], "banda_de": sorted(pc)}
+
+
 def datos_mecanismo(mecanismo, metrica):
     """borrador-v2.md, «Una decisión por defecto cambia el veredicto», el
     párrafo de cómo falla el 2a (outputs/mecanismo-2a.json). Los porcentajes
@@ -923,6 +959,7 @@ def construir_datos(outputs_dir, leidos):
         "imagen_sola": datos_imagen_sola(imagen_sola, escala, modelado, fase4, extraccion, tiempo),
         "imagen_barras": datos_imagen_barras(cargar, imagen_sola),
         "posteriores": datos_fases_4d_a_5c(cargar),
+        "siete": datos_siete_versiones(cargar),
         "verificacion": {
             "total": verificacion["numeros_en_borrador"],
             "con": verificacion["numeros_con_respaldo_en_outputs"],
@@ -1066,6 +1103,11 @@ PLANTILLA = r"""<!DOCTYPE html>
   /* Paneles de una sola fila, como los de 2b − 1 en la sección 3. */
   .paneles.uno .panel .lienzo { height: 96px; }
   .pie-grafico { font-size: 13px; color: var(--suave); margin-top: 14px; }
+  /* Leyenda en HTML: se parte en líneas a 375 px, y la de Chart.js cortaba los
+     rótulos largos. */
+  .leyenda { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--suave); margin-top: 10px; }
+  .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+  .leyenda i { display: inline-block; width: 22px; height: 11px; border-radius: 2px; flex: 0 0 22px; box-sizing: border-box; }
   .cifra-fuente { border-bottom: 1px dotted var(--suave); cursor: help; }
   footer {
     margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--linea);
@@ -1194,6 +1236,11 @@ __AVISO_EXPLORATORIO__
 
 <section>
   <h2><span class="num">7</span>Recomendaci&oacute;n</h2>
+  <div class="tarjeta" style="margin-bottom:18px">
+    <div class="lienzo"><canvas id="gr-siete"></canvas></div>
+    <div class="leyenda" id="leyenda-siete"></div>
+    <p class="pie-grafico" id="pie-siete"></p>
+  </div>
   <div class="duo">
     <div class="medida ok reco">
       <div class="det">Con fotograf&iacute;a corporal total</div>
@@ -1245,6 +1292,8 @@ const mil = v => v.toLocaleString("es", {useGrouping: "always"});
 const cifra = (v, fuente) => `<span class="cifra-fuente" title="${esc(fuente)}">${v}</span>`;
 const P = ps => ps.map(p => `<p>${p}</p>`).join("");
 const L = ls => `<ul>${ls.map(l => `<li>${l}</li>`).join("")}</ul>`;
+const leyenda = (id, items) => document.getElementById(id).innerHTML =
+  items.map(([estilo, texto]) => `<span><i style="${estilo}"></i>${texto}</span>`).join("");
 
 const E = D.eda, R = D.extraccion.reservado, DS = D.extraccion.desarrollo, DI = D.diseno, A = D.auditoria;
 const VR = D.vr, PR = D.procedencia, V = D.verificacion;
@@ -2144,6 +2193,96 @@ document.getElementById("det-6").innerHTML = P([
   `Lo caro, con diferencia, es la imagen, y ni M4 ni M4b mejoraron a M2 en la métrica principal de forma distinguible.`]);
 
 /* ---------- 7. recomendacion ---------- */
+// Rediseño, paso 2, gráfico 5: las siete versiones frente a M3 limpio. Cada fila
+// lleva el intervalo de la regla de su fase, rotulado y en otro color: el de
+// Bonferroni en C1 a C4 y el de Nadeau y Bengio al 95 % en C5 a C7. La banda
+// sombreada, detrás de C4 a C7, es lo que la prueba distingue con un 80 % de
+// probabilidad, calculado con la variabilidad de esas cuatro.
+const SV = D.siete;
+const esBonf = f => f.confianza !== null;
+const rotuloIC = f => esBonf(f) ? `Bonferroni, ${dec(Math.round(f.confianza * 1000) / 10)} %` : "95 %, Nadeau y Bengio";
+const bandaYmedias = {
+  id: "bandaYmedias",
+  beforeDatasetsDraw(ch) {
+    const x = ch.scales.x, y = ch.scales.y, cx = ch.ctx;
+    const filas = SV.filas.map((f, i) => SV.banda_de.includes(f.nombre) ? i : null).filter(i => i !== null);
+    const paso = (y.getPixelForValue(1) - y.getPixelForValue(0)) / 2;
+    const arriba = y.getPixelForValue(filas[0]) - paso, abajo = y.getPixelForValue(filas[filas.length - 1]) + paso;
+    const izq = x.getPixelForValue(SV.banda[0]), der = x.getPixelForValue(SV.banda[1]);
+    cx.save();
+    cx.fillStyle = "rgba(201,139,122,.22)"; cx.fillRect(izq, arriba, der - izq, abajo - arriba);
+    // El rótulo, justo encima de la banda: dentro chocaba con la barra de C4. Sin
+    // salirse por la derecha, que a 375 px lo cortaba.
+    cx.font = "600 11px -apple-system, sans-serif"; cx.fillStyle = "#8a4a3a"; cx.textAlign = "center";
+    const rotulo = "δ al 80 %", medio = cx.measureText(rotulo).width / 2;
+    cx.fillText(rotulo, Math.min((izq + der) / 2, ch.chartArea.right - medio - 2), arriba - 4);
+    cx.restore();
+  },
+  afterDatasetsDraw(ch) {
+    const x = ch.scales.x, y = ch.scales.y, a = ch.chartArea, cx = ch.ctx;
+    cx.save();
+    const x0 = x.getPixelForValue(0);
+    cx.strokeStyle = "#16202b"; cx.setLineDash([4, 3]); cx.lineWidth = 1.2;
+    cx.beginPath(); cx.moveTo(x0, a.top); cx.lineTo(x0, a.bottom); cx.stroke();
+    cx.font = "600 11px -apple-system, sans-serif"; cx.fillStyle = "#16202b"; cx.textAlign = "left";
+    cx.fillText("M3 limpio", x0 + 4, a.top + 11);
+    cx.setLineDash([]); cx.lineWidth = 2.5;
+    SV.filas.forEach((f, i) => {
+      const xm = x.getPixelForValue(f.media), ym = y.getPixelForValue(i);
+      cx.beginPath(); cx.moveTo(xm, ym - 8); cx.lineTo(xm, ym + 8); cx.stroke();
+    });
+    cx.restore();
+  }
+};
+new Chart(document.getElementById("gr-siete"), {
+  type: "bar",
+  plugins: [bandaYmedias],
+  data: {
+    labels: SV.filas.map(f => [f.nombre, rotuloIC(f)]),
+    datasets: [
+      { label: "Intervalo de Bonferroni, la regla de las fases 4b y 4c",
+        data: SV.filas.map(f => esBonf(f) ? f.ic : null), backgroundColor: "rgba(91,107,124,.45)" },
+      { label: "Intervalo al 95 % de Nadeau y Bengio; la regla de las fases 4d y 4e es Holm",
+        data: SV.filas.map(f => esBonf(f) ? null : f.ic), backgroundColor: "rgba(255,255,255,0)",
+        borderColor: "#1f5f8b", borderWidth: 2 }
+    ].map(ds => ({ ...ds, grouped: false, borderSkipped: false, borderRadius: 3, barPercentage: .55 }))
+  },
+  options: {
+    indexAxis: "y", responsive: true, maintainAspectRatio: false,
+    scales: { x: { title: { display: true, text: "Diferencia de pAUC con M3 limpio" } },
+              // Sin saltar rótulos: a 375 px Chart.js dejaba sin nombre a C2, C4 y C6.
+              y: { ticks: { autoSkip: false, font: c => ({ size: c.chart.width < 500 ? 10 : 12 }) } } },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        filter: it => it.raw !== null,
+        callbacks: {
+          label: it => {
+            const f = SV.filas[it.dataIndex];
+            return `${f.nombre}: ${firmado(f.media)}, [${dec(f.ic[0])}; ${dec(f.ic[1])}], ${rotuloIC(f)}`;
+          },
+          afterLabel: it => {
+            const f = SV.filas[it.dataIndex];
+            const campos = [`${f.archivo} > comparaciones_nuevo_menos_base.pauc.media y .${f.clave_ic}`];
+            if (esBonf(f)) campos.push(`${f.archivo} > comparaciones_nuevo_menos_base.pauc.confianza_bonferroni`);
+            if (SV.banda_de.includes(f.nombre))
+              campos.push(`Banda: potencia-nadeau-bengio.json > comparaciones.*.delta_80, de ${SV.banda_de[0]} a ${SV.banda_de[SV.banda_de.length - 1]}`);
+            return campos;
+          }
+        }
+      }
+    }
+  }
+});
+leyenda("leyenda-siete", [
+  ["background:rgba(91,107,124,.45)", "Intervalo de Bonferroni, la regla de las fases 4b y 4c"],
+  ["border:2px solid #1f5f8b;background:#fff", "Intervalo al 95 % de Nadeau y Bengio; la regla de las fases 4d y 4e es Holm"],
+  ["background:rgba(201,139,122,.35)", `δ al 80 %, calculado con la variabilidad de ${SV.banda_de[0]} a ${SV.banda_de[SV.banda_de.length - 1]}`]]);
+// borrador-v2.md, «Limitaciones», la viñeta de lo que la prueba distingue.
+document.getElementById("pie-siete").innerHTML =
+  `La prueba no distingue mejoras pequeñas frente a M3 limpio. Con la variabilidad observada, para dar su resultado a ` +
+  `favor con un ${pctObj("delta_80")} de probabilidad necesita una mejora real de entre ${cifra(dec(POT.d80[0]), fPot("comparaciones.*.delta_80"))} ` +
+  `y ${cifra(dec(POT.d80[1]), fPot("comparaciones.*.delta_80"))} de pAUC, y más semillas casi no bajan ese umbral.`;
 // Las dos recomendaciones, en dos tarjetas: la de M3 limpio sale de la constante
 // comprobada; la de la red, de la regla de la Fase 4f, que la página comprueba al
 // generarse (datos_fases_4d_a_5c).
